@@ -2,6 +2,8 @@
 
 class StatesController extends AdminBaseController
 {
+    protected $modelClass = 'States';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -17,7 +19,7 @@ class StatesController extends AdminBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditStates();
-        $this->modelObj = (new ReflectionClass('States'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));
     }
@@ -30,14 +32,17 @@ class StatesController extends AdminBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->setModel();
+        $actionItemsData = HtmlHelper::setActionItemsData($this->modelObj, $fields);
+
         $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-
+        $this->set("actionItemsData", $actionItemsData);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->getListingData();
 
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function getSearchForm($fields = [])

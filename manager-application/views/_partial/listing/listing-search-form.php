@@ -1,17 +1,22 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
 $keywordPlaceholder = isset($keywordPlaceholder) ? $keywordPlaceholder : Labels::getLabel('FRM_SEARCH', $siteLangId);
-$onSubmit = $onSubmit ?? 'searchRecords(this); return(false);';
 
 $frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
-$frmSearch->setFormTagAttribute('onsubmit', $onSubmit);
+
+if (!$frmSearch->getFormTagAttribute('onsubmit')) {
+    $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
+}
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('class', 'form');
 
 $keyWordFld = $frmSearch->getField('keyword');
 if (null != $keyWordFld) {
     $keyWordFld->addFieldtagAttribute('class', 'form-control');
-    $keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
+    /* if (!$keyWordFld->getFieldTagAttribute('placeholder')) {
+        $keyWordFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_SEARCH', $siteLangId));
+    } */
+    $keyWordFld->setFieldTagAttribute('placeholder', $keywordPlaceholder);
 }
 
 $frmFields = [

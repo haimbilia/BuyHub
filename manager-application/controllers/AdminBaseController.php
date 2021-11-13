@@ -850,7 +850,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $this->setLangTemplateData();     
+        $this->setLangTemplateData();
         $langFrm = $this->getLangForm($this->mainTableRecordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
@@ -963,7 +963,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
     {
         $fields = $this->getFormColumns();
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($this->getFormColumns()));
-        
+
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
@@ -1072,8 +1072,19 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
             LibHelper::exitWithError(Labels::getLabel($this->modelObj->getError(), $this->siteLangId), true);
         }
         */
-        Product::updateMinPrices();        
+        Product::updateMinPrices();
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    /**
+     * setModel - This function is used to set related model class and used by its parent class.
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setModel(array $constructorArgs = []): void
+    {
+        $this->modelObj = (new ReflectionClass($this->modelClass))->newInstanceArgs($constructorArgs);
     }
 }
