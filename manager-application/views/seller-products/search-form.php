@@ -28,50 +28,53 @@ if (null != $userNameFld) {
 echo $frmSearch->getFormTag();
 HtmlHelper::renderHiddenFields($frmSearch);
 ?>
-<div class="card">
-    <div class="card-body">
+<div class="card-head">
+    <div class="card-head-label">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="input-group">
                     <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                    <a class="btn advanced-trigger ml-2" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                        <svg class="svg" width="22" height="22">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
+                            </use>
+                        </svg>
+                    </a>
                     <div class="input-group-append">
                         <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <a class="btn btn-link collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Advanced
-                    Search</a>
+        </div>
+    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-head.php'); ?>
+</div>
+<div class="advanced-search collapse" id="collapseKeyword">
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"><?php echo $userFld->getCaption(); ?></label>
+                <?php echo $frmSearch->getFieldHtml('user_id'); ?>
             </div>
         </div>
-        <div class="collapse" id="collapseExample">
-            <div class="separator separator-dashed my-4"></div>
-            <div class="row">
-
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"><?php echo $userFld->getCaption(); ?></label>
-                        <?php echo $frmSearch->getFieldHtml('user_id'); ?>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label">
-                            <?php $fld = $frmSearch->getField('prodcat_id');
-                            echo $fld->getCaption(); ?>
-                        </label>
-                        <?php echo $frmSearch->getFieldHtml('prodcat_id'); ?>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="label"></label>
-                        <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
-                    </div>
-                </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label">
+                    <?php $fld = $frmSearch->getField('prodcat_id');
+                    echo $fld->getCaption(); ?>
+                </label>
+                <?php echo $frmSearch->getFieldHtml('prodcat_id'); ?>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="label"></label>
+                <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
             </div>
         </div>
     </div>
+    <div class="separator separator-dashed my-4"></div>
 </div>
 </form>
 <?php echo $frmSearch->getExternalJS(); ?>

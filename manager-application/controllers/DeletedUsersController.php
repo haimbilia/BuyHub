@@ -12,11 +12,14 @@ class DeletedUsersController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_DELETED_USERS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_Manage_Deleted_Users', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js'));

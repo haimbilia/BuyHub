@@ -1,39 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_ORIGINAL_AND_CUSTOM', $siteLangId); ?>
-<main class="main mainJs">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'url-rewriting/search-form.php'); ?>
-                <div class="card">
-                    <?php $data = [
-                        'canEdit' => $canEdit,
-                        'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_SEO_URLS', $siteLangId),
-                        'newRecordBtn' => true,
-                        'deleteButton' => true,
-                    ];
-
-                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
-                    <div class="card-body">
-                        <div class="table-responsive listingTableJs">
-                            <?php
-                            require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'url-rewriting/search.php');
-
-                            $data = [
-                                'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'performBulkAction' => true, /* Used in case of performing bulk action. */
-                                'formAction' => 'deleteSelected'
-                            ];
-                            $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
-                        </div>
-                    </div>
-                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-foot.php'); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
- 
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_ORIGINAL_AND_CUSTOM', $siteLangId);
+$statusButtons = false;
+$newRecordBtn = true;
+$deleteButton = true;
+$performBulkAction = true;
+$formAction = 'deleteSelected';
+$searchFrmTemplate = FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search-form.php';
+require_once(CONF_THEME_PATH . '_partial/listing/index.php');

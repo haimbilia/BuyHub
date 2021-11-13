@@ -12,12 +12,14 @@ class ImportInstructionsController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_IMPORT_INSTRUCTIONS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('canEdit', $this->objPrivilege->canEditImportInstructions($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_IMPORT_INSTRUCTIONS', $this->siteLangId));
         $this->getListingData();
-
         $this->set('includeEditor', true);
         $this->_template->render();
     }

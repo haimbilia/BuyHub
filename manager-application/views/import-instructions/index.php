@@ -3,16 +3,16 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TITLE', $siteLangId); ?>
 
 <main class="main mainJs">
     <div class="container">
+        <?php $data = [
+            'siteLangId' => $siteLangId,
+            'newRecordBtn' => false,
+            'canEdit' => $canEdit
+        ];
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', $data, false); ?>
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                 <div class="card">
-                    <?php $data = [
-                        'canEdit' => $canEdit,
-                        'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_IMPORT_INSTRUCTIONS', $siteLangId),
-                    ];
-                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
@@ -34,9 +34,11 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TITLE', $siteLangId); ?>
 </main>
 
 <script>
-    resetToDefaultContent = function () {
-		var agree = confirm(langLbl.confirmReplaceCurrentToDefault);
-		if (!agree) { return false; }
-		oUtil.obj.putHTML($("#editor_default_content").html());
-	};
+    resetToDefaultContent = function() {
+        var agree = confirm(langLbl.confirmReplaceCurrentToDefault);
+        if (!agree) {
+            return false;
+        }
+        oUtil.obj.putHTML($("#editor_default_content").html());
+    };
 </script>

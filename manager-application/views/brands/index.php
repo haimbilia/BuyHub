@@ -1,22 +1,20 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_NAME', $siteLangId); ?>
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_NAME', $siteLangId);
+$deleteButton = true;
+$statusButtons = true; ?>
 
 <main class="main mainJs">
     <div class="container">
+        <?php $data = [
+            'canEdit' => $canEdit,
+            'newRecordBtn' => true,
+            'siteLangId' => $siteLangId
+        ];
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', $data, false); ?>
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'brands/search-form.php'); ?>
                 <div class="card">
-                    <?php $data = [
-                        'canEdit' => $canEdit,
-                        'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_BRANDS', $siteLangId),
-                        'newRecordBtn' => true,
-                        'statusButtons' => true,
-                        'deleteButton' => true
-                    ];
-
-                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <?php require_once(CONF_THEME_PATH . 'brands/search-form.php'); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
@@ -36,5 +34,3 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_NAME', $siteLangId); ?>
         </div>
     </div>
 </main>
-
- 

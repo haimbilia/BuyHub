@@ -2,7 +2,7 @@
 
 $canEdit = isset($canEdit) ? $canEdit : false;
 
-$ul = new HtmlElement("ul", array("class" => "actions"));
+$ul = new HtmlElement("ul", array());
 if (isset($htmlContent) && $htmlContent != '') {
     $ul->appendElement('li', [], $htmlContent, true);
 }
@@ -15,15 +15,15 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'toolbar-btn-js disabled',
-            'title' => Labels::getLabel('LBL_ACTIVE', $siteLangId),
+            'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+            'title' => Labels::getLabel('BTN_ACTIVE', $siteLangId),
             'onclick' => "toggleBulkStatues(1, '" . $msg . "')"
         ],
         '<svg class="svg" width="18" height="18">
             <use
                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#active">
             </use>
-        </svg>',
+        </svg><span>' . Labels::getLabel('BTN_ACTIVE', $siteLangId) . '</span>',
         true
     );
 
@@ -32,15 +32,15 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'toolbar-btn-js disabled',
-            'title' => Labels::getLabel('LBL_IN-ACTIVE', $siteLangId),
+            'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+            'title' => Labels::getLabel('BTN_IN-ACTIVE', $siteLangId),
             'onclick' => "toggleBulkStatues(0, '" . $msg . "')"
         ],
         '<svg class="svg" width="18" height="18">
             <use
                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#in-active">
             </use>
-        </svg>',
+        </svg><span>' . Labels::getLabel('BTN_IN-ACTIVE', $siteLangId) . '</span>',
         true
     );
 }
@@ -51,20 +51,20 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'toolbar-btn-js disabled',
-            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
+            'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+            'title' => Labels::getLabel('BTN_DELETE', $siteLangId),
             'onclick' => "deleteSelected()"
         ],
         '<svg class="svg" width="18" height="18">
             <use
                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
             </use>
-        </svg>',
+        </svg><span>' . Labels::getLabel('BTN_DELETE', $siteLangId) . '</span>',
         true
     );
 }
 
-if (isset($otherButtons) && is_array($otherButtons) && $canEdit) {
+if (isset($otherButtons) && is_array($otherButtons)) {
     foreach ($otherButtons as $attr) {
         $li = $ul->appendElement('li');
         $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);
@@ -92,30 +92,6 @@ if (!empty($columnButtons)) {
 
     $li->appendElement('div', ['class' => 'dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y'], $columnButtons, true);
 }
-
-if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
-    $href = "javascript:void(0)";
-    $onclick = "addNew()";
-    $title = Labels::getLabel('BTN_NEW', $siteLangId);
-    $label = $title;
-    if (isset($newRecordBtnAttrs) && 0 < count($newRecordBtnAttrs)) {
-        $href = $newRecordBtnAttrs['attr']['href'] ?? $href;
-        $onclick = $newRecordBtnAttrs['attr']['onclick'] ?? $onclick;
-        $title = $newRecordBtnAttrs['attr']['title'] ?? $title;
-        $label = $newRecordBtnAttrs['label'] ?? $label;
-    }
-
-?>
-    <a href="<?php echo $href; ?>" class="btn btn-icon btn-outline-brand btn-add" onclick="<?php echo $onclick; ?>" title="<?php echo $title; ?>">
-        <svg class="svg" width="18" height="18">
-            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
-            </use>
-        </svg>
-        <span><?php echo $label; ?></span>
-    </a>
-<?php
-}
-
 if (!empty($htmlContent) || !empty($statusButtons) || !empty($deleteButton) || !empty($otherButtons) || !empty($columnButtons)) {
     echo $ul->getHtml();
 }

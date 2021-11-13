@@ -1,21 +1,20 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$statusButtons = true;
+$deleteButton = true;
 $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_EMAIL_NAME_AND_SUBJECT', $siteLangId); ?>
 
 <main class="main mainJs">
     <div class="container">
+        <?php $data = [
+            'siteLangId' => $siteLangId,
+            'newRecordBtn' => false,
+            'canEdit' => $canEdit
+        ];
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', $data, false); ?>
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                 <div class="card">
-                    <?php $data = [
-                        'canEdit' => $canEdit,
-                        'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_EMAIL_TEMPLATES', $siteLangId),
-                        'newRecordBtn' => false,
-                        'statusButtons' => true,
-                        'deleteButton' => false
-                    ];
-                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
@@ -35,5 +34,3 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_EMAIL_NAME_AND_SUBJECT', $
         </div>
     </div>
 </main>
-
- 
