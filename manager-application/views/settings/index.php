@@ -195,7 +195,7 @@
                                     </span>
                                 </div>
                                 <div class="setting__detail">
-                                    <h6><?php echo Labels::getLabel('NAV_ZONES', $siteLangId); ?></h6>
+                                    <h6><?php echo Labels::getLabel('NAV_MANAGE_SHIPPING_ZONES', $siteLangId); ?></h6>
                                     <span>Manage country zones</span>
                                 </div>
                             </a>

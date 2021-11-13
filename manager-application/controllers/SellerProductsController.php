@@ -22,10 +22,14 @@ class SellerProductsController extends AdminBaseController
             $frmSearch->fill($post);
         }
 
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_INVENTORIES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->getListingData();
         $this->set('canEdit', $this->objPrivilege->canEditSellerProducts($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_SELLER_INVENTORIES', $this->siteLangId));
         $this->set('includeEditor', true);
         $this->set("productId", $productId);
         $this->_template->addJs(array('js/select2.js'));

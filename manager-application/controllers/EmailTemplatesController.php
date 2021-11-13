@@ -13,9 +13,12 @@ class EmailTemplatesController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('EMAIL_TEMPLATES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_EMAIL_TEMPLATES', $this->siteLangId));
         $this->getListingData();
         $this->set('includeEditor', true);
         // $this->_template->addCss('css/cropper.css');

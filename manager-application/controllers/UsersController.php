@@ -20,8 +20,12 @@ class UsersController extends AdminBaseController
         }
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_USERS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_Manage_Users_Addresses', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js'));

@@ -1,47 +1,31 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_SYSTEM_CODE_AND_CAPTION', $siteLangId);
-
-$otherButtons = [
-    [
-        'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => 'updateFile()',
-            'title' => Labels::getLabel('LBL_UPDATE_WEB_LABEL_FILE', $siteLangId)
-        ],
-        'label' => '<i class="fas fa-laptop-code"></i>'
-    ],
-    [
-        'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => "updateFile(" . Labels::TYPE_APP . ")",
-            'title' => Labels::getLabel('LBL_UPDATE_APP_LABEL_FILE', $siteLangId)
-        ],
-        'label' => '<i class="fas fa-mobile-alt"></i>'
-    ],
-]
+<?php
+$searchFrmTemplate = $searchFrmTemplate ?? '_partial/listing/listing-search-form.php';
+$searchListing = $searchListing ?? FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php';
 ?>
-
 <main class="main mainJs">
     <div class="container">
         <?php $data = [
             'siteLangId' => $siteLangId,
-            'newRecordBtn' => false,
-            'canEdit' => $canEdit
+            'newRecordBtn' => $newRecordBtn ?? false,
+            'canEdit' => $canEdit ?? false
         ];
         $this->includeTemplate('_partial/header/header-breadcrumb.php', $data, false); ?>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <?php require_once(CONF_THEME_PATH . 'labels/search-form.php'); ?>
+                    <?php require_once(CONF_THEME_PATH . $searchFrmTemplate); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
+                            $tableId = "orderStatuses";
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
-                            require_once(CONF_THEME_PATH . 'labels/search.php');
+                            require_once(CONF_THEME_PATH . $searchListing);
 
                             $data = [
                                 'tbl' => $tbl, /* Received from listing-column-head.php file. */
-                                'performBulkAction' => true /* Used in case of performing bulk action. */
+                                'performBulkAction' => $performBulkAction ?? false, /* Used in case of performing bulk action. */
+                                'formAction' => $formAction ?? 'toggleBulkStatuses',
+                                'formFields' => $formFields ?? ''
                             ];
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $data, false); ?>
                         </div>

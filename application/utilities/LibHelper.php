@@ -50,7 +50,7 @@ class LibHelper extends FatUtility
         if (true === $redirect) {
             Message::addErrorMessage($message);
         }
-        
+
         if (true === $isHtml) {
             FatUtility::dieWithError(HtmlHelper::getErrorMessageHtml($message));
         }
@@ -335,8 +335,14 @@ class LibHelper extends FatUtility
         CommonHelper::redirectUserReferer();
     }
 
-    public static function getControllerName()
+    public static function getControllerName($titleCase = false)
     {
-        return str_replace('Controller', '', FatApp::getController());
+        if (false === $titleCase) {
+            return str_replace('Controller', '', FatApp::getController());
+        }
+
+        $arr = explode('-', FatUtility::camel2dashed(FatApp::getController()));
+        array_pop($arr);
+        return ucfirst(implode(' ', $arr));
     }
 }

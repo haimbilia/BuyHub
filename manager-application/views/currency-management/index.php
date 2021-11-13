@@ -1,35 +1,31 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_CURRENCY', $siteLangId); ?>
+$statusButtons = true;
+$keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_CURRENCY', $siteLangId);
+
+if (!empty($currencyPlugins) && 0 < count($currencyPlugins) && false !== $currencyConverter) {
+    $otherButtons[] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => "updateCurrencyRates('" . $currencyConverter . "')",
+            'title' => Labels::getLabel('LBL_UPDATE_CURRENCY', $siteLangId)
+        ],
+        'label' => '<i class="fas fa-file-download"></i>'
+    ];
+}
+?>
 
 <main class="main mainJs">
     <div class="container">
+        <?php $data = [
+            'siteLangId' => $siteLangId,
+            'newRecordBtn' => true,
+            'canEdit' => $canEdit
+        ];
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', $data, false); ?>
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                 <div class="card">
-                    <?php $data = [
-                        'canEdit' => $canEdit,
-                        'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_CURRENCY', $siteLangId),
-                        'newRecordBtn' => true,
-                        'statusButtons' => true
-                    ];
-
-                    $currencyPlugins = Plugin::getNamesByType(Plugin::TYPE_CURRENCY_CONVERTER, $siteLangId);
-                    $obj = new Currency();
-                    $currencyConverter = $obj->getCurrencyConverterApi();
-                    if (!empty($currencyPlugins) && 0 < count($currencyPlugins) && false !== $currencyConverter) {
-                        $data['otherButtons'][] = [
-                            'attr' => [
-                                'href' => 'javascript:void(0)',
-                                'onclick' => "updateCurrencyRates('" . $currencyConverter . "')",
-                                'title' => Labels::getLabel('LBL_UPDATE_CURRENCY', $siteLangId)
-                            ],
-                            'label' => '<i class="fas fa-file-download"></i>'
-                        ];
-                    }
-
-                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php
@@ -63,7 +59,7 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_CURRENCY', $siteLangId); ?
         if (1 > $('[data-field="dragdrop"]').length) {
             return;
         }
-        
+
         $("#currencyIds > tbody").sortable({
             update: function(event, ui) {
                 fcom.displayProcessing();
