@@ -33,7 +33,7 @@ class StatesController extends AdminBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
-        $actionItemsData = HtmlHelper::setActionItemsData($this->modelObj, $fields);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($this->modelObj, $fields);
 
         $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);

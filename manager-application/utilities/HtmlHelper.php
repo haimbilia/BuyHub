@@ -14,7 +14,7 @@ class HtmlHelper
                 </div>';
     }
 
-    public static function setActionItemsData(object $obj, array $fields, int $langId = 0)
+    public static function getDefaultActionItems(object $obj, array $fields, int $langId = 0)
     {
         if (1 > $langId) {
             $langId = CommonHelper::getLangId();
