@@ -16,10 +16,19 @@ class ProductsReportController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('PRODUCTS_REPORTS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->set('defaultColumns', $this->getDefaultColumns());
+        $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
+        $actionItemsData = array_merge($actionItemsData, [
+            'newRecordBtn' => false,
+            'formColumns' => $formColumns,
+            'columnButtons' => true,
+            'defaultColumns' => $this->getDefaultColumns(),
+            'searchFrmTemplate' => 'products-report/search-form.php'
+        ]);
+
         $this->set('frmSearch', $frmSearch);
         $this->set('formColumns', $formColumns);
         $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false);
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));

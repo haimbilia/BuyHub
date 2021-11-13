@@ -15,11 +15,18 @@ class CatalogReportController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('SALES_REPORT', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
+        $actionItemsData = array_merge($actionItemsData, [
+            'newRecordBtn' => false,
+            'formColumns' => $formColumns,
+            'columnButtons' => true,
+            'defaultColumns' => $this->getDefaultColumns(),
+            'searchFrmTemplate' => 'catalog-report/search-form.php'
+        ]);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
-        $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('formColumns', $formColumns);
+        $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false);
         $this->_template->render();
     }

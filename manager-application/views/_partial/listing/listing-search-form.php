@@ -37,7 +37,7 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
         if (null == $keyWordFld && empty($firstElement) && 'btn_clear' != $frmFld->getName()) {
             $firstElement = [
                 'name' => $frmFld->getName(),
-                'caption' => $frmFld->getCaption()
+                'caption' => $frmFld->getCaption(),
             ];
         } else {
             if ('btn_clear' != $frmFld->getName() && false === $haveExtraFlds) {
@@ -74,6 +74,8 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                         <?php if (null != $keyWordFld) {
                             echo $frmSearch->getFieldHtml('keyword');
                         } else {
+                            $fld = $frmSearch->getField($firstElement['name']);
+                            $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
                             echo $frmSearch->getFieldHtml($firstElement['name']);
                         }
                         ?>
@@ -81,6 +83,8 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                     <div class="col-md-4">
                         <?php
                         $flds = current($frmFields['advSrchFlds'][0]);
+                        $fld = $frmSearch->getField($flds['name']);
+                        $fld->setFieldtagAttribute('placeholder', $flds['caption']);
                         echo $frmSearch->getFieldHtml($flds['name']); ?>
                     </div>
                     <div class="col-md-2">

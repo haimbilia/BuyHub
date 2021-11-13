@@ -19,6 +19,7 @@ class SalesReportController extends ListingBaseController
         $actionItemsData = array_merge($actionItemsData, [
             'newRecordBtn' => false,
             'formColumns' => $formColumns,
+            'columnButtons' => true,
             'defaultColumns' => $this->getDefaultColumns($orderDate),
         ]);
 

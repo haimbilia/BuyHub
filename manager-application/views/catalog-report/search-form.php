@@ -21,17 +21,12 @@ HtmlHelper::renderHiddenFields($frmSearch);
 <div class="card-head">
     <div class="card-head-label">
         <div class="row">
-            <div class="col-md-8">
-                <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="input-group">
-                    <?php echo $frmSearch->getFieldHtml('btn_submit');
-                    if (empty($orderDate)) { ?>
-                        <div class="input-group-append">
-                            <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
-                        </div>
-                    <?php } ?>
+                    <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                    <div class="input-group-append">
+                        <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                    </div>
                 </div>
             </div>
         </div>
