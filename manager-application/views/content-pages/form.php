@@ -9,16 +9,16 @@ $fld->htmlAfterField = '<span class="form-text text-muted">' . UrlHelper::genera
 $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
 
 $pageLayout = $frm->getField('cpage_layout');
-$pageLayout->setFieldTagAttribute('onchange', "showLayout($(this))");
+// $pageLayout->setFieldTagAttribute('onchange', "showLayout($(this))");
 
 $otherButtons = [
     [
        'attr' => [
             'href' => 'javascript:void(0)',
             'onclick' => 'mediaForm(' . $recordId . ')',
-            'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+            'title' => Labels::getLabel('LBL_BACKGROUND_IMAGE', $siteLangId),
         ],
-        'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+        'label' => Labels::getLabel('LBL_BACKGROUND_IMAGE', $siteLangId),
         'isActive' => false
     ]
 ]; 
