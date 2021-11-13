@@ -48,7 +48,7 @@ class BrandRequestsController extends AdminBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
-            $this->addSortingElements($frm,'brand_name');
+            $this->addSortingElements($frm,'brand_requested_on');
         }
         $frm->addSelectBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId), 'user_id', []); 
         HtmlHelper::addSearchButton($frm);
@@ -81,7 +81,7 @@ class BrandRequestsController extends AdminBaseController
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current($allowedKeysForSorting);
         }
-
+         
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $searchForm = $this->getSearchForm($fields);
@@ -97,8 +97,7 @@ class BrandRequestsController extends AdminBaseController
         $srch->joinTable(Brand::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'brandlang_brand_id = b.brand_id AND brandlang_lang_id = ' . $this->siteLangId, 'bl');
         $srch->addMultipleFields(array('b.*', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name', 'bl.brand_name'));
         $srch->addCondition('brand_status', '=', applicationConstants::NO);
-        $srch->addCondition('brand_seller_id', '>', 0);
-        $srch->addOrder('b.brand_id', 'desc');
+        $srch->addCondition('brand_seller_id', '>', 0); 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('bl.brand_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -114,15 +113,14 @@ class BrandRequestsController extends AdminBaseController
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $srch->addOrder($sortBy, $sortOrder);   
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -465,6 +463,6 @@ class BrandRequestsController extends AdminBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['brand_logo', 'brand_name', 'brand_requested_on', 'sbrandreq_status'], Common::excludeKeysForSort());
+        return array_diff($fields, ['brand_logo', 'brand_name', 'sbrandreq_status'], Common::excludeKeysForSort());
     }
 }

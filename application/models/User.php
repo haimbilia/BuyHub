@@ -597,7 +597,7 @@ class User extends MyAppModel
         return false;
     }
 
-    public function getUserSupplierRequestsObj($requestId = 0)
+    public function getUserSupplierRequestsObj($requestId = 0,$applyActive=true)
     {
         $requestId = FatUtility::int($requestId);
 
@@ -609,18 +609,14 @@ class User extends MyAppModel
             'u'
         );
         $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
-        /* $srch = $this->getUserSearchObj();
-        $srch->joinTable(static::DB_TBL_USR_SUPP_REQ,'INNER JOIN',
-        'tusr.'.static::DB_TBL_USR_SUPP_REQ_PREFIX.'user_id = u.'.static::DB_TBL_PREFIX.'id','tusr'); */
-
-        $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
-
         if ($this->mainTableRecordId > 0) {
             $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
         }
-
         if ($requestId > 0) {
             $srch->addCondition('tusr.' . static::DB_TBL_USR_SUPP_REQ_PREFIX . 'id', '=', $requestId);
+        }
+        if($applyActive){
+            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
         }
 
         $srch->addMultipleFields(
