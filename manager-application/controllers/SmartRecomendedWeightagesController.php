@@ -35,7 +35,7 @@ class SmartRecomendedWeightagesController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $post = FatApp::getPostedData();
 

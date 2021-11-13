@@ -55,7 +55,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData() {
+    private function getListingData() {
         $this->objPrivilege->canEditProductCategories();
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
@@ -407,7 +407,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         return $arr;
     }
 
-    private function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array {
         return [
             'select_all',
             'listSerial',

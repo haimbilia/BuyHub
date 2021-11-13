@@ -174,7 +174,7 @@ class ProductProfitReportController extends SellerBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['product_name', 'category_name', 'sellerCost', 'sellerEarnings'];
     }

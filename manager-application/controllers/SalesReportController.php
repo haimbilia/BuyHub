@@ -62,7 +62,7 @@ class SalesReportController extends ListingBaseController
         return $frm;
     }
 
-    protected function getListingData($type = false, $orderDate = '')
+    private function getListingData($type = false, $orderDate = '')
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();

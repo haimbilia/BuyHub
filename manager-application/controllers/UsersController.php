@@ -2,6 +2,9 @@
 
 class UsersController extends ListingBaseController
 {
+    protected $modelClass = 'User';
+    protected $pageKey = 'MANAGE_USERS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -11,20 +14,24 @@ class UsersController extends ListingBaseController
     public function index()
     {
         $fields = $this->getFormColumns();
-        $frmSearch = $this->getUserSearchForm($fields);
-        $this->set('frmSearch', $frmSearch);
-        $this->set('defaultColumns', $this->getDefaultColumns());
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_USERS', $this->siteLangId);
+        $frmSearch = $this->getSearchForm($fields);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('languages', Language::getAllNames());
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME', $this->siteLangId));
         $this->getListingData();
-
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -37,7 +44,7 @@ class UsersController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');

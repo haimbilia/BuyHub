@@ -96,7 +96,7 @@ class PromotionsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();

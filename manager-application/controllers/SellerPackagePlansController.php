@@ -74,7 +74,7 @@ class SellerPackagePlansController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData(int $spackageId)
+    private function getListingData(int $spackageId)
     {
 
         $fields = $this->getFormColumns();

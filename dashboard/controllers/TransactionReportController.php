@@ -189,7 +189,7 @@ class TransactionReportController extends SellerBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['utxn_date', 'utxn_id', 'utxn_status', 'utxn_order_id', 'transactionAmount'];
     }

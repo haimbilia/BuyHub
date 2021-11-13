@@ -12,23 +12,6 @@ class ListingBaseController extends AdminBaseController
         parent::__construct($action);
     }
 
-    public function commonIndex()
-    {
-        $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
-
-        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
-        $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
-
-        $this->set('pageData', $pageData);
-        $this->set('pageTitle', $pageTitle);
-        $this->set('actionItemsData', $actionItemsData);
-        $this->set("frmSearch", $frmSearch);
-    }
-
     public function langForm($autoFillLangData = 0)
     {
         $this->mainTableRecordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);

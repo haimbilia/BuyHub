@@ -34,7 +34,7 @@ class BlogContributionsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $db = FatApp::getDb();
 
