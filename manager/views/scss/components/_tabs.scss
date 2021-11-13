@@ -2,6 +2,11 @@
      display: flex;
      justify-content: flex-start;
      align-items: center;
+     .nav-item {
+         +.nav-item {
+             padding-#{$start-direction}: 2rem;
+         }
+     }
      .nav-link {
          background-position: 50% 100%;
          background-repeat: no-repeat;

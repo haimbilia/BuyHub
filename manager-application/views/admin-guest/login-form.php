@@ -50,20 +50,17 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
                         <label class="label"><?php echo $passwordFld->getCaption() ?></label>
                         <?php echo $passwordFld->getHTML('password'); ?>
                     </div>
-                    <div class="row py-3">
-                        <div class="col-12">
-                            <label class="switch switch-sm remember-me">
-                                <?php echo $frm->getFieldHTML('rememberme'); ?>
-                                <span class="input-helper"></span><?php echo Labels::getlabel('LBL_Remember_me', $siteLangId); ?>
-                            </label>
-                        </div>
+                    <div class="form-group">
+                        <label class="switch switch-sm remember-me">
+                            <?php echo $frm->getFieldHTML('rememberme'); ?>
+                            <span class="input-helper"></span><?php echo Labels::getlabel('LBL_Remember_me', $siteLangId); ?>
+                        </label>
 
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <?php echo $frm->getFieldHTML('btn_submit'); ?>
-                        </div>
+                    <div class="form-group">
+                        <?php echo $frm->getFieldHTML('btn_submit'); ?>
                     </div>
+
                     <?php echo $frm->getExternalJS(); ?>
                     </form>
                 </div>

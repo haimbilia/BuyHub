@@ -22,8 +22,7 @@ if (null != $captchaFld) {
 <div id="particles-js"></div>
 <div class="login-page login-1">
     <div class="container">
-        <div class="row align-item-center justify-content-center">
-            <div class="col-md-4">
+        <div class="login-block">            
                 <div class="card">
                     <div class="card-head">
                         <div class="logo">
@@ -40,7 +39,7 @@ if (null != $captchaFld) {
                     <div class="card-body">
                         <div class="title">
                             <h2><?php echo Labels::getLabel('LBL_Forgot_Your_Password?', CommonHelper::getLangId()); ?></h2>
-                            <p><?php echo Labels::getLabel('LBL_Enter_The_E-mail_Address_Associated_With_Your_Account', $siteLangId) ?></p>
+                            <p class="text-muted"><?php echo Labels::getLabel('LBL_Enter_The_E-mail_Address_Associated_With_Your_Account', $siteLangId) ?></p>
                         </div>                        
                         <?php echo $frm->getFormHtml(); ?>                       
                     </div>
@@ -53,7 +52,7 @@ if (null != $captchaFld) {
                     </div>
                 </div>
                 <p class="version"><?php $this->includeTemplate('_partial/footer/copyright-text.php', $this->variables, false); ?></p>
-            </div>
+            
         </div>
     </div>
     <?php
