@@ -1,6 +1,6 @@
 <?php
 
-class CommissionReportController extends AdminBaseController
+class CommissionReportController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

@@ -1,6 +1,6 @@
 <?php
 
-class OrderCancelReasonsController extends AdminBaseController
+class OrderCancelReasonsController extends ListingBaseController
 {
     public function __construct($action)
     {

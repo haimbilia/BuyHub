@@ -1,6 +1,6 @@
 <?php
 
-class RelatedProductsController extends AdminBaseController
+class RelatedProductsController extends ListingBaseController
 {
     public function __construct($action)
     {

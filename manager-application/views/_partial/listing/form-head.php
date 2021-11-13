@@ -6,6 +6,7 @@ $formTitle = !empty($formTitle) ? $formTitle : Labels::getLabel('LBL_SETUP', $si
 $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 $includeTabs = $includeTabs ?? true;
 $languages = $languages ?? [];
+$displayLangTab = $displayLangTab ?? true;
 ?>
 
 <div class="modal-header">
@@ -18,13 +19,13 @@ $languages = $languages ?? [];
 </div>
 <div class="modal-body form-edit"> <!-- Closing tag must be added inside the files who include this file. -->
     <?php 
-    if ($includeTabs && (0 < count($languages) || isset($otherButtons))) { ?>
+    if ($includeTabs && (1 < count($languages) || isset($otherButtons))) { ?>
         <div class="form-edit-head">
             <nav class="nav nav-tabs navTabsJs">
                 <a class="nav-link <?php echo $activeGentab; ?>" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);" title="<?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>">
                     <?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>
                 </a>
-                <?php if (0 < count($languages)) { ?>
+                <?php if (1 < count($languages) && true === $displayLangTab) { ?>
                     <a class="nav-link <?php echo $activeLangtab . $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . array_key_first($languages) . ");'" : ""; ?> title="<?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>">
                         <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
                     </a>

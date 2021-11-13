@@ -1,6 +1,6 @@
 <?php
 
-class LabelsController extends AdminBaseController
+class LabelsController extends ListingBaseController
 {
     public function __construct($action)
     {

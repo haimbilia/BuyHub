@@ -1,6 +1,6 @@
 <?php
 
-class HelpCenterController extends AdminBaseController
+class HelpCenterController extends ListingBaseController
 {   
     /**
      * __construct

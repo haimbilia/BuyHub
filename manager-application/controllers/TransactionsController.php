@@ -1,6 +1,6 @@
 <?php
 
-class TransactionsController extends AdminBaseController
+class TransactionsController extends ListingBaseController
 {
     public function __construct($action)
     {

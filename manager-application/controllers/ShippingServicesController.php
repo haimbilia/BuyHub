@@ -1,6 +1,6 @@
 <?php
 
-class ShippingServicesController extends AdminBaseController
+class ShippingServicesController extends ListingBaseController
 {    
     use ShippingServices;
     

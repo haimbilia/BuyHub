@@ -1,6 +1,6 @@
 <?php
 
-class AdminUsersController extends AdminBaseController
+class AdminUsersController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

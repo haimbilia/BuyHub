@@ -1,6 +1,6 @@
 <?php
 
-class UsersAddressesController extends AdminBaseController
+class UsersAddressesController extends ListingBaseController
 {
     public function __construct($action)
     {

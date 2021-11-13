@@ -1,6 +1,6 @@
 <?php
 
-class FilterGroupsController extends AdminBaseController
+class FilterGroupsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

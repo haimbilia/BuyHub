@@ -1,6 +1,6 @@
 <?php
 
-class SettingsController extends AdminBaseController
+class SettingsController extends ListingBaseController
 {
     public function __construct($action)
     {

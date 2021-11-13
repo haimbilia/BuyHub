@@ -1,6 +1,6 @@
 <?php
 
-class TestController extends AdminBaseController
+class TestController extends ListingBaseController
 {
     public function checkEditor()
     {

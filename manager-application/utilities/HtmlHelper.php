@@ -14,12 +14,44 @@ class HtmlHelper
                 </div>';
     }
 
+    public static function getDefaultActionItems(array $fields, object $obj = null, int $langId = 0)
+    {
+        if (1 > $langId) {
+            $langId = CommonHelper::getLangId();
+        }
+
+        $actionBtnArr = [
+            'newRecordBtn' => true,
+            'deleteButton' => false,
+            'columnButtons' => false,
+            'performBulkAction' => false,
+            'formAction' => 'toggleBulkStatuses',
+            'siteLangId' => $langId,
+            'otherButtons' => [],
+            'searchFrmTemplate' => '_partial/listing/listing-search-form.php',
+            'searchListingPage' => FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php'
+        ];
+       
+        if (null == $obj) {
+            return $actionBtnArr;
+        }
+
+        if (array_key_exists($obj::tblFld('active'), $fields)) {
+            $actionBtnArr = array_merge($actionBtnArr, ['performBulkAction' => true, 'statusButtons' => true]);
+        }
+
+        if (array_key_exists($obj::tblFld('deleted'), $fields)) {
+            $actionBtnArr = array_merge($actionBtnArr, ['performBulkAction' => true, 'deleteButton' => true]);
+        }
+        return $actionBtnArr;
+    }
+
     public static function getDefaultSortingClass($key, $sortBy, $sortOrder)
     {
         if ($key != $sortBy) {
             return '';
         }
-        
+
         return (($sortOrder == applicationConstants::SORT_ASC) ? 'sorting_desc' : 'sorting_asc');
     }
 
@@ -306,25 +338,20 @@ class HtmlHelper
         return   $str;
     }
 
-    public static function imageListCard(int $type,  int $recordId, int $recordSubid = 0, $updatedOn = NULL)
+    public static function imageListCard(int $imageType, string $defaultImageName, int $recordId, int $recordSubid = 0, $updatedOn = NULL)
     {
-
-        switch ($type) {
-            case AttachedFile::FILETYPE_PRODUCT_IMAGE:
-                $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, "SMALL", 0, 0, $siteLangId), CONF_WEBROOT_FRONTEND);
-                break;
-            default:
-        }
-
-
         $images = AttachedFile::getMultipleAttachments($imageType, $recordId, $recordSubid, 0,  true,  0, 4);
-        print_r($images);
-        die();
         $str = '<div class="media-group">';
+        $count  = 0;
         foreach ($images as $key => $image) {
+            switch ($imageType) {
+                case AttachedFile::FILETYPE_PRODUCT_IMAGE:
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    break;
+                default:
+            }
 
-
-            if ($key > 2) {
+            if ($count > 2) {
                 $str .= ' 
                 <a href="javascript:void(0)" class="media media-sm media-circle"
                     data-toggle="tooltip" data-skin="brand"
@@ -333,32 +360,30 @@ class HtmlHelper
                 </a>';
                 break;
             }
-            $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], "SMALL", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND);
             if ($updatedOn) {
                 $uploadedTime = AttachedFile::setTimeParam($updatedOn);
                 $imgSrc  = UrlHelper::getCachedUrl($imgSrc . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             }
-
-            $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], "SMALL", $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $str .= '
                 <a href="javascript:void(0)" class="media media-sm media-circle"
                     data-toggle="tooltip" data-skin="brand"
-                    data-placement="top" title=""
-                    data-original-title="avocado">
+                    data-placement="top" title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '"
+                    data-original-title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '">
                     <img data-aspect-ratio="1:1"
-                        src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg"
-                        alt="image">
+                        src="' . $imgSrc . '"
+                        alt="' . ($image['afile_attribute_alt'] ?? $defaultImageName) . '">
                 </a>';
+            $count++;
         }
         if (!count($images)) {
             $str .= '
             <a href="javascript:void(0)" class="media media-sm media-circle"
                 data-toggle="tooltip" data-skin="brand"
-                data-placement="top" title=""
-                data-original-title="avocado">
+                data-placement="top" 
+                data-original-title="' . $defaultImageName . '">
                 <img data-aspect-ratio="1:1"
-                    src="' . CONF_WEBROOT_URL . 'images/products/product_default_image.jpg"
-                    alt="image">
+                    src="' . CONF_WEBROOT_FRONTEND . 'images/defaults/product_default_image.jpg"
+                    alt="' . $defaultImageName . '">
             </a>';
         }
 

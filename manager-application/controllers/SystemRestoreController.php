@@ -1,6 +1,6 @@
 <?php
 
-class SystemRestoreController extends AdminBaseController
+class SystemRestoreController extends ListingBaseController
 {
     public function __construct($action)
     {

@@ -1,6 +1,6 @@
 <?php
 
-class ShopReportsController extends AdminBaseController
+class ShopReportsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

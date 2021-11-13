@@ -209,7 +209,7 @@ class BuyersReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['buyerName', 'totOrders', 'totQtys', 'totRefundedQtys', 'grossSales',  'taxTotal', 'shippingTotal', 'discountTotal', 'refundedAmount', 'orderNetAmount'];
     }

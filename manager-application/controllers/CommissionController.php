@@ -1,6 +1,6 @@
 <?php
 
-class CommissionController extends AdminBaseController
+class CommissionController extends ListingBaseController
 {
     public function __construct($action)
     {

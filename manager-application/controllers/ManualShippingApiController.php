@@ -1,6 +1,6 @@
 <?php
 
-class ManualShippingApiController extends AdminBaseController
+class ManualShippingApiController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

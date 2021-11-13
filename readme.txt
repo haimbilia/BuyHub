@@ -304,6 +304,7 @@ Admin UI/UX Enhancements pages:
    => Manage Languages
    => login and forgot password 
    => Admin Profile info 
+   => Content Pages Management  
 
     
 Known Issues and Problems :

@@ -1,5 +1,5 @@
 <?php
-class ShippingPackagesController extends AdminBaseController
+class ShippingPackagesController extends ListingBaseController
 {
     public function __construct($action)
     {

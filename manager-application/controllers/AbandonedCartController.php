@@ -1,6 +1,6 @@
 <?php
 
-class AbandonedCartController extends AdminBaseController
+class AbandonedCartController extends ListingBaseController
 {
     public function __construct($action)
     {

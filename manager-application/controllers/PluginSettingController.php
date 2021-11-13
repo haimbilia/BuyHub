@@ -1,6 +1,6 @@
 <?php
 
-class PluginSettingController extends AdminBaseController
+class PluginSettingController extends ListingBaseController
 {
     use PluginHelper;
 

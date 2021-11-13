@@ -1,5 +1,5 @@
 <?php
-class EmptyCartItemsController extends AdminBaseController
+class EmptyCartItemsController extends ListingBaseController
 {
     public function __construct($action)
     {

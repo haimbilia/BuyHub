@@ -2,7 +2,7 @@
 
 use Braintree\Collection;
 
-class CollectionsController extends AdminBaseController
+class CollectionsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

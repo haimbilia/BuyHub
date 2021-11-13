@@ -1,6 +1,6 @@
 <?php
 
-class BannersController extends AdminBaseController
+class BannersController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

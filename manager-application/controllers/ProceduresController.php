@@ -1,6 +1,6 @@
 <?php
 
-class ProceduresController extends AdminBaseController
+class ProceduresController extends ListingBaseController
 {
     public function createProcedures()
     {

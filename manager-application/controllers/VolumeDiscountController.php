@@ -1,6 +1,6 @@
 <?php
 
-class VolumeDiscountController extends AdminBaseController
+class VolumeDiscountController extends ListingBaseController
 {
     public function __construct($action)
     {

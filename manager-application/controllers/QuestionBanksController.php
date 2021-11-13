@@ -1,6 +1,6 @@
 <?php
 
-class QuestionBanksController extends AdminBaseController
+class QuestionBanksController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

@@ -1,6 +1,6 @@
 <?php
 
-class LanguagesController extends AdminBaseController
+class LanguagesController extends ListingBaseController
 {
     public function __construct($action)
     {

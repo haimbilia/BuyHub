@@ -1,5 +1,5 @@
 <?php
-class TrackingCodeRelationController extends AdminBaseController
+class TrackingCodeRelationController extends ListingBaseController
 {
     
     public function __construct($action)

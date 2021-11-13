@@ -1,6 +1,6 @@
 <?php
 
-class ImportExportController extends AdminBaseController
+class ImportExportController extends ListingBaseController
 {
     public function __construct($action)
     {

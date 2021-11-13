@@ -181,7 +181,7 @@ class AffiliatesReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['name', 'user_regdate', 'totAffiliatedUsers', 'availableBalance', 'totAffilateRevenue', 'totAffilateSignupRevenue', 'totAffilateOrdersRevenue', 'affiliateLink'];
     }

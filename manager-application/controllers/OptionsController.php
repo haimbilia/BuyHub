@@ -1,6 +1,6 @@
 <?php
 
-class OptionsController extends AdminBaseController
+class OptionsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

@@ -187,7 +187,7 @@ class AdvertisersReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['name', 'user_regdate', 'user_is_supplier', 'promotionsCount', 'activePromotions', 'promotionCharged', 'availableBalance'];
     }

@@ -1,5 +1,5 @@
 <?php
-class RecomendedTagProductsController extends AdminBaseController
+class RecomendedTagProductsController extends ListingBaseController
 {
     public function __construct($action)
     {

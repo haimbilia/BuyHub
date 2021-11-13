@@ -1,6 +1,6 @@
 <?php
 
-class AttributesController extends AdminBaseController
+class AttributesController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

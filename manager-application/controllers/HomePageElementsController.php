@@ -1,6 +1,6 @@
 <?php
 
-class HomePageElementsController extends AdminBaseController
+class HomePageElementsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

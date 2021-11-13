@@ -1,6 +1,6 @@
 <?php
 
-class SmsTemplatesController extends AdminBaseController
+class SmsTemplatesController extends ListingBaseController
 {
     private $stplCode;
 

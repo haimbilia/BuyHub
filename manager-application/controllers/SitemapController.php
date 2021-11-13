@@ -1,6 +1,6 @@
 <?php
 
-class SitemapController extends AdminBaseController
+class SitemapController extends ListingBaseController
 {
     public function generate()
     {

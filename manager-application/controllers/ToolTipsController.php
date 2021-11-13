@@ -1,6 +1,6 @@
 <?php
 
-class ToolTipsController extends AdminBaseController
+class ToolTipsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

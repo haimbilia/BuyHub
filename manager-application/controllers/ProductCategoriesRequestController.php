@@ -1,6 +1,6 @@
 <?php
 
-class ProductCategoriesRequestController extends AdminBaseController {
+class ProductCategoriesRequestController extends ListingBaseController {
 
     public function __construct($action) {
         parent::__construct($action);
@@ -407,7 +407,7 @@ class ProductCategoriesRequestController extends AdminBaseController {
         return $arr;
     }
 
-    private function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array {
         return [
             'select_all',
             'listSerial',

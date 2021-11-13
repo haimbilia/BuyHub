@@ -1,6 +1,6 @@
 <?php
 
-class BrandRequestsController extends AdminBaseController
+class BrandRequestsController extends ListingBaseController
 {
 
     public function __construct($action)
@@ -449,7 +449,7 @@ class BrandRequestsController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return [
             'select_all',

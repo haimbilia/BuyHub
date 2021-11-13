@@ -1,5 +1,5 @@
 <?php
-class MetaTagsController extends AdminBaseController
+class MetaTagsController extends ListingBaseController
 {
     private array $tabsArr = [];
     private array $postedData = [];

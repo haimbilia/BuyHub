@@ -158,7 +158,7 @@ class PayoutReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['orderDate', 'rewardDiscount', 'affiliateCommissionCharged', 'discountTotal', 'totalAmount'];
     }

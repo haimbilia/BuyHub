@@ -1,6 +1,6 @@
 <?php
 
-class SystemLogController extends AdminBaseController
+class SystemLogController extends ListingBaseController
 {
     public function __construct($action)
     {   

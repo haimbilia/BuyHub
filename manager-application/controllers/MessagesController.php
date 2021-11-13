@@ -1,6 +1,6 @@
 <?php
 
-class MessagesController extends AdminBaseController
+class MessagesController extends ListingBaseController
 {
     private $canView;
 

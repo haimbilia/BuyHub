@@ -1,6 +1,6 @@
 <?php
 
-class SmartRecomendedWeightagesController extends AdminBaseController
+class SmartRecomendedWeightagesController extends ListingBaseController
 {
     public function __construct($action)
     {

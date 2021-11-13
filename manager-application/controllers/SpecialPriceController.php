@@ -1,6 +1,6 @@
 <?php
 
-class SpecialPriceController extends AdminBaseController
+class SpecialPriceController extends ListingBaseController
 {
     public function __construct($action)
     {

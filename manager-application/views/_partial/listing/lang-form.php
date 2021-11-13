@@ -2,13 +2,19 @@
 
 HtmlHelper::formatFormFields($langFrm);
 $langFrm->setFormTagAttribute('id', 'frmLangJs');
-$langFrm->setFormTagAttribute('data-onclear', 'editLangData(' . $recordId . ',' . $lang_id . ')');
+if (!$langFrm->getFormTagAttribute('data-onclear')) {
+    $langFrm->setFormTagAttribute('data-onclear', 'editLangData(' . $recordId . ',' . $lang_id . ')');
+}
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
 $langFrm->setFormTagAttribute('dir', $formLayout);
-$langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#frmLangJs")); return(false);');
+if (!$langFrm->getFormTagAttribute('onsubmit')) {
+    $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#frmLangJs")); return(false);');
+}
 
 $langFld = $langFrm->getField('lang_id');
-$langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
+if (!$langFld->getfieldTagAttribute('onChange')) {
+    $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
+}
 $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
@@ -23,8 +29,8 @@ if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
 
 $activeLangtab = true;
 require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
-    <div class="form-edit-body loaderContainerJs">
-        <?php echo $langFrm->getFormHtml(); ?>
-    </div>
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+<div class="form-edit-body loaderContainerJs">
+    <?php echo $langFrm->getFormHtml(); ?>
+</div>
+<?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->

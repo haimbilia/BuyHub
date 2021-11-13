@@ -1,6 +1,6 @@
 <?php
 
-class ImportInstructionsController extends AdminBaseController
+class ImportInstructionsController extends ListingBaseController
 {
     public function __construct($action)
     {

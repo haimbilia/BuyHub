@@ -1,6 +1,6 @@
 <?php
 
-class AbusiveWordsController extends AdminBaseController
+class AbusiveWordsController extends ListingBaseController
 {
     public function __construct($action)
     {

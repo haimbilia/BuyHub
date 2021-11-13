@@ -1,6 +1,6 @@
 <?php
 
-class UploadBulkImagesController extends AdminBaseController
+class UploadBulkImagesController extends ListingBaseController
 {
     public function __construct($action)
     {

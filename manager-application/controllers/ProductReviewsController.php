@@ -1,6 +1,6 @@
 <?php
 
-class ProductReviewsController extends AdminBaseController
+class ProductReviewsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

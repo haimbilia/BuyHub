@@ -1,5 +1,5 @@
 <?php
-class PatchUpdateController extends AdminBaseController
+class PatchUpdateController extends ListingBaseController
 {
     public function __construct($action)
     {

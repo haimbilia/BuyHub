@@ -196,16 +196,21 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
 
     $("." + $.ykmodal.element).removeAttr('tabindex');
 };
-
-redirectfunc = function (url, id, nid, newTab) {
+/**
+ * hiddenfields object = { fieldname : fieldValue}
+ */
+redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
     newTab = (typeof newTab != "undefined") ? newTab : true;
     if (nid > 0) {
         fcom.displayProcessing();      
         markRead(nid, url, id);
     } else {
         var target = (newTab) ? ' target="_blank" ' : ' ';
-        var form = '<input type="hidden" name="id" value="' + id + '">';
-        $('<form' + target + 'action="' + url + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+        let inputs = '';
+        $.each(hiddenfields, function( index, value ) {
+            inputs += '<input type="hidden" name="'+index+'" value="' + value + '">';
+        });       
+        $('<form' + target + 'action="' + url + '" method="POST">' + inputs + '</form>').appendTo($(document.body)).submit();
     }
 };
 

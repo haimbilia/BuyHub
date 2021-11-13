@@ -1,6 +1,6 @@
 <?php
 
-class TaxStructureController extends AdminBaseController
+class TaxStructureController extends ListingBaseController
 {
     public function __construct($action)
     {

@@ -1,6 +1,6 @@
 <?php
 
-class CurrencyManagementController extends AdminBaseController
+class CurrencyManagementController extends ListingBaseController
 {
     public function __construct($action)
     {

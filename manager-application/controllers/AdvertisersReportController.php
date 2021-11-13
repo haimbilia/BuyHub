@@ -1,6 +1,6 @@
 <?php
 
-class AdvertisersReportController extends AdminBaseController
+class AdvertisersReportController extends ListingBaseController
 {
 
     public function __construct($action)

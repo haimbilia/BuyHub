@@ -1,6 +1,6 @@
 <?php
 
-class SentEmailsController extends AdminBaseController
+class SentEmailsController extends ListingBaseController
 {
     public function __construct($action)
     {

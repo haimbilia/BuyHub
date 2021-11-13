@@ -1,6 +1,6 @@
 <?php
 
-class DummyController extends AdminBaseController
+class DummyController extends ListingBaseController
 {
     public function index()
     {
