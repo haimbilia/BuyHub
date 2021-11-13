@@ -14,13 +14,17 @@ class UsersController extends ListingBaseController
     public function index()
     {
         $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
+        $frmSearch = $this->getUserSearchForm($fields);
 
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['searchFrmTemplate'] = 'users/search-form.php';
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['deleteButton'] = true;
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -31,7 +35,7 @@ class UsersController extends ListingBaseController
         $this->getListingData();
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render(true, true, '_partial/listing/index.php');
+        $this->_template->render();
     }
 
     public function search()

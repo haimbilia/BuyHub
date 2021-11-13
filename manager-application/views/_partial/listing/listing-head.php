@@ -26,7 +26,5 @@ if (isset($formColumns) && !empty($formColumns)) {
 ?>
 
 <div class="card-toolbar">
-    <?php
-    $this->includeTemplate('_partial/listing/action-buttons.php', $actionItemsData, false);
-    ?>
+    <?php $this->includeTemplate('_partial/listing/action-buttons.php', $actionItemsData, false); ?>
 </div>
