@@ -71,7 +71,12 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
             <div class="row">
                 <?php if (count($frmFields['advSrchFlds']) == 1) { ?>
                     <div class="col-md-4">
-                        <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                        <?php if (null != $keyWordFld) {
+                            echo $frmSearch->getFieldHtml('keyword');
+                        } else {
+                            echo $frmSearch->getFieldHtml($firstElement['name']);
+                        }
+                        ?>
                     </div>
                     <div class="col-md-4">
                         <?php

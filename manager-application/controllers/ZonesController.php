@@ -3,12 +3,20 @@ class ZonesController extends ListingBaseController
 {
     protected $modelClass = 'Zone';
     protected $pageKey = 'MANAGE_SHIPPING_ZONES';
-    protected $keyworldFldPlaceholder = 'FRM_SEARCH_BY_ZONE_NAME';
 
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewZones();
+    }
+
+    public function index()
+    {
+        $this->commonIndex();
+        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ZONE_NAME', $this->siteLangId));
+        $this->getListingData();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     /**

@@ -4,12 +4,20 @@ class StatesController extends ListingBaseController
 {
     protected $modelClass = 'States';
     protected $pageKey = 'MANAGE_STATES';
-    protected $keyworldFldPlaceholder = 'FRM_SEARCH_STATES';
 
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewStates();
+    }
+
+    public function index()
+    {
+        $this->commonIndex();
+        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_STATES', $this->siteLangId));
+        $this->getListingData();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     /**

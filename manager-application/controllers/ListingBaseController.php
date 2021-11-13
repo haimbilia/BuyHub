@@ -12,7 +12,7 @@ class ListingBaseController extends AdminBaseController
         parent::__construct($action);
     }
 
-    public function index()
+    public function commonIndex()
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
@@ -26,11 +26,7 @@ class ListingBaseController extends AdminBaseController
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
-        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('keywordPlaceholder', Labels::getLabel($this->keyworldFldPlaceholder, $this->siteLangId));
-        $this->getListingData();
-        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function langForm($autoFillLangData = 0)
