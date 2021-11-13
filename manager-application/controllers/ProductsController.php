@@ -40,11 +40,14 @@ class ProductsController extends AdminBaseController
         $frmSearch = $this->getSearchForm($fields);    
       
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_PRODUCTS', $this->siteLangId));
-        $this->getListingData();       
-
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_PRODUCTS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        
+        $this->getListingData();    
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);       
         $this->_template->render();
     }
 
@@ -666,7 +669,7 @@ class ProductsController extends AdminBaseController
     public function deleteSelected()
     {
         $this->objPrivilege->canEditProducts();
-        $productIdsArr = FatUtility::int(FatApp::getPostedData('product_ids'));
+        $productIdsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
 
         if (empty($productIdsArr)) {
             FatUtility::dieWithError(
@@ -2162,13 +2165,15 @@ class ProductsController extends AdminBaseController
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_PRODUCTS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {
             case 'index':
-                $this->nodes = [                    
-                    ['title' => Labels::getLabel('LBL_PRODUCTS', $this->siteLangId)]
+                $this->nodes = [
+                    ['title' => $pageTitle]
                 ];
         }
         return $this->nodes;
-    }
+    }   
 }

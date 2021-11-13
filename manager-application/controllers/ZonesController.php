@@ -28,9 +28,12 @@ class ZonesController extends AdminBaseController
 
         $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_ZONES', $this->siteLangId));
-        $this->getListingData();
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->getListingData();
         $this->_template->render();
     }
 
@@ -129,7 +132,7 @@ class ZonesController extends AdminBaseController
 
         $recordId = FatUtility::int($post['zone_id']);
         unset($post['zone_id']);
- 
+
         $recordObj = new Zone($recordId);
         $post['zone_identifier'] = $post['zone_name'];
         $recordObj->assignValues($post);
@@ -137,9 +140,9 @@ class ZonesController extends AdminBaseController
         if (!$recordObj->save()) {
             LibHelper::exitWithError($recordObj->getError(), true);
         }
-        
+
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
-         
+
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -260,12 +263,14 @@ class ZonesController extends AdminBaseController
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_ZONES', $this->siteLangId)]
+                    ['title' => $pageTitle]
                 ];
         }
         return $this->nodes;

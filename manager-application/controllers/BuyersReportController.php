@@ -12,10 +12,14 @@ class BuyersReportController extends AdminBaseController
     {
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
+        $pageData = PageLanguageData::getAttributesByKey('BUYERS_REPORT', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('formColumns', $formColumns);
-        $this->set('pageTitle', Labels::getLabel('LBL_Buyers_Report', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render();
     }

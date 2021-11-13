@@ -12,10 +12,14 @@ class TransactionReportController extends AdminBaseController
     {
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
+        $pageData = PageLanguageData::getAttributesByKey('TRANSACTION_REPORT', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('formColumns', $formColumns);
-        $this->set('pageTitle', Labels::getLabel('LBL_Transaction_Report', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render();
     }
@@ -42,10 +46,7 @@ class TransactionReportController extends AdminBaseController
             $sortBy = current(array_keys($fields));
         }
 
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
-            $sortOrder = applicationConstants::SORT_DESC;
-        }
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $srchFrm = $this->getSearchForm($fields);
 
@@ -140,7 +141,8 @@ class TransactionReportController extends AdminBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
+        $rs = $srch->getResultSet();   
+        echo $srch->getError();    
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $arrListing);

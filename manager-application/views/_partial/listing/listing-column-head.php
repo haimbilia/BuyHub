@@ -15,12 +15,11 @@ $tbl = new HtmlElement(
 );
 $th = $tbl->appendElement('thead', ['class' => 'tableHeadJs'])->appendElement('tr');
 foreach ($fields as $key => $val) {
-    $headColumData = HtmlHelper::getListingHeaderColumnHtml($key, $sortBy, $sortOrder);
+    $defaultSortingClass = HtmlHelper::getDefaultSortingClass($key, $sortBy, $sortOrder);
+    
     $cls = '';
-    $html = '';
     if (in_array($key, $allowedKeysForSorting)) {
-        $cls .= 'headerColumnJs sorting ' . $headColumData['class'];
-        $html = $headColumData['html'];
+        $cls .= 'headerColumnJs sorting ' . $defaultSortingClass;
     }
 
     if ('action' == strtolower($key)) {
@@ -54,7 +53,7 @@ foreach ($fields as $key => $val) {
             $span->appendElement('plaintext', [], '<label class="checkbox"><input title="' . $val . '" type="checkbox" ' . $disableSelectAll . ' onclick="selectAll(this)" class="selectAllJs"><i class="input-helper"></i></label>', true);
             break;
         default:
-            $span->appendElement('plaintext', [], $val . $html, true);
+            $span->appendElement('plaintext', [], $val, true);
             break;
     }
 }

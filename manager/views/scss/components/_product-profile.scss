@@ -21,8 +21,8 @@
         display: flex;
         align-items: center;
         overflow: hidden;
-        //background: $bg-placeholder;
-        @include placeholder;
+        background: $bg-placeholder;
+        // @include placeholder;
         // &[data-ratio="1:1"] {
         //     padding-bottom: calc(100%/(var(--aspect-ratio1)));
         // }

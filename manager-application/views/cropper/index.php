@@ -9,8 +9,8 @@
     ';
 
     $footer = '
-    <div class="rotator-actions " id="actions">
-        <div class="docs-buttons d-flex justify-content-between">
+    <div class="rotator-actions mediaCropButtonsJs" id="actions">
+        
             <ul class="actions">
                 <li>
                     <a href="javascript:void(0)" class="docs-tooltip"  data-method="rotate" data-option="-90" data-toggle="tooltip"  title="' . Labels::getLabel('LBL_Rotate_Left', $siteLangId) . '">
@@ -51,7 +51,7 @@
                 <button type="button" data-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300 mr-1">Cancel</button>
                 <button type="button" class="btn btn-brand btn-wide " data-method="getCroppedCanvas">' . Labels::getLabel('LBL_APPLY', $siteLangId) . '</button>
             </div>
-        </div>
+       
     </div>';
 
     FatUtility::dieJsonSuccess(['body' => $body, 'footer' => $footer]);

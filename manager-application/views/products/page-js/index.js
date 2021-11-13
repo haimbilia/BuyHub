@@ -2,5 +2,5 @@ $(document).ready(function () {
     select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), {'joinShop' : 1, 'user_is_supplier' : 1}, '', function () {
         clearSearch();
     });
-    $("#prodcatIdJs").select2({allowClear: true,placeholder: "Select a State",});    
+    $("#prodcatIdJs").select2({allowClear: true,placeholder: $("#prodcatIdJs").attr('placeholder')});    
 });

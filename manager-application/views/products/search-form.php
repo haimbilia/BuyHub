@@ -7,6 +7,4 @@ $fld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_BY_USER_N
 $fld = $frmSearch->getField('prodcat_id');
 $fld->setFieldtagAttribute('id', 'prodcatIdJs');
 $fld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_BY_CATEGORY', $siteLangId));
-
-
 require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>

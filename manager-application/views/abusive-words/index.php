@@ -1,5 +1,6 @@
-<?php  defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_ABUSIVE_KEYWORD', $siteLangId);
+$deleteButton = true;
 
 $langLayout = [];
 foreach ($languages as $langId => $langName) {
@@ -8,19 +9,16 @@ foreach ($languages as $langId => $langName) {
 } ?>
 <main class="main mainJs">
     <div class="container">
+        <?php $data = [
+            'canEdit' => $canEdit,
+            'siteLangId' => $siteLangId,
+            'newRecordBtn' => true
+        ];
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', $data, false); ?>
         <div class="row">
             <div class="col-md-12">
-                <?php require_once(CONF_THEME_PATH . 'abusive-words/search-form.php'); ?>
                 <div class="card">
-                    <?php $data = [
-                        'canEdit' => $canEdit,
-                        'siteLangId' => $siteLangId,
-                        'cardHeadTitle' => Labels::getLabel('LBL_ABUSIVE_KEYWORDS', $siteLangId),
-                        'newRecordBtn' => true,
-                        'deleteButton' => true
-                    ];
-
-                    $this->includeTemplate('_partial/listing/listing-head.php', $data, false); ?>
+                    <?php require_once(CONF_THEME_PATH . 'abusive-words/search-form.php'); ?>
                     <div class="card-body">
                         <div class="table-responsive listingTableJs">
                             <?php

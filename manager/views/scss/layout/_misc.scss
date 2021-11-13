@@ -57,7 +57,10 @@
     .alert {
         width: 100%;
         margin: 0;
-        padding: 0 2rem;
+        padding: 10px 2rem;
+        .alert-icon i {
+            font-size: 1.4rem;
+        }
     }
 }
 
@@ -439,5 +442,16 @@
                 transform: translate(-3px, 0) rotate( -45deg);
             }
         }
+    }
+}
+
+.users-addresses {
+    display: flex;
+    li {    flex: 0 0 33%;
+        max-width: 33%;
+        padding:0;
+       
+        +li{ padding-#{$start-direction}: 1.5rem;}
+       
     }
 }

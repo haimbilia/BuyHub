@@ -12,11 +12,15 @@ class UsersAddressesController extends AdminBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_USERS_ADDRESSES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
 
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('languages', Language::getAllNames());
-        $this->set('pageTitle', Labels::getLabel('LBL_Manage_Users_Addresses', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js'));
@@ -276,9 +280,9 @@ class UsersAddressesController extends AdminBaseController
 
     protected function getFormColumns(): array
     {
-        $userAddressesTblHeadingCols = CacheHelper::get('userAddressesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($userAddressesTblHeadingCols) {
-            return json_decode($userAddressesTblHeadingCols);
+        $usersAddressesTblHeadingCols = CacheHelper::get('usersAddressesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($usersAddressesTblHeadingCols) {
+            return json_decode($usersAddressesTblHeadingCols);
         }
 
         $arr = [
@@ -291,7 +295,7 @@ class UsersAddressesController extends AdminBaseController
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 
-        CacheHelper::create('userAddressesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('usersAddressesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
