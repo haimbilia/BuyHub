@@ -54,10 +54,7 @@ class CatalogReportController extends ListingBaseController
             $sortBy = current(array_keys($fields));
         }
 
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
-            $sortOrder = applicationConstants::SORT_DESC;
-        }
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $srchFrm = $this->getSearchForm($fields);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
