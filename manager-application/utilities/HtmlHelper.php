@@ -22,6 +22,7 @@ class HtmlHelper
 
         $actionBtnArr = [
             'newRecordBtn' => true,
+            'newRecordBtnAttrs' => [],
             'deleteButton' => false,
             'statusButtons' => false,
             'columnButtons' => false,

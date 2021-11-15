@@ -2,8 +2,6 @@
 
 class OrderStatusController extends ListingBaseController
 {
-    protected $modelClass = 'OrderStatus';
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -32,8 +30,7 @@ class OrderStatusController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_STATUS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
         $actionItemsData['searchFrmTemplate'] = 'order-status/search-form.php';

@@ -9,6 +9,7 @@ class BrandRequestsController extends ListingBaseController {
         parent::__construct($action);
         $this->objPrivilege->canEditBrandRequests();
         $this->rewriteUrl = Brand::REWRITE_URL_PREFIX;
+        $this->checkMediaExist = true;
     }
 
     public function index() {
@@ -143,10 +144,10 @@ class BrandRequestsController extends ListingBaseController {
             $frm->fill($data);
         }
 
-        
+
         $this->set('recordId', $recordId);
-        $this->set('frm', $frm); 
-        $this->_template->render(false, false); 
+        $this->set('frm', $frm);
+        $this->_template->render(false, false);
     }
 
     public function setup() {
@@ -177,18 +178,7 @@ class BrandRequestsController extends ListingBaseController {
             LibHelper::exitWithError($brand->getError(), true);
         }
 
-        $recordId = $brand->getMainTableRecordId();
-        if (!$brand->updateLangData(CommonHelper::getDefaultFormLangId(), ['brand_name' => $data['brand_name']])) {
-            LibHelper::exitWithError($record->getError(), true);
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
+        $this->setLangData($brand, [$brand::tblFld('name') => $post[$brand::tblFld('name')]]);
 
         /* url data[ */
         $brandOriginalUrl = $this->rewriteUrl . $recordId;
@@ -209,11 +199,6 @@ class BrandRequestsController extends ListingBaseController {
                 }
             }
         }
-
-        if ($newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
-            $this->set('openMediaForm', true);
-        }
-
         Product::updateMinPrices(0, 0, $recordId);
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
@@ -275,7 +260,6 @@ class BrandRequestsController extends ListingBaseController {
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
 
-        
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
