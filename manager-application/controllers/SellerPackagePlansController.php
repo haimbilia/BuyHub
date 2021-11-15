@@ -1,6 +1,6 @@
 <?php
 
-class SellerPackagePlansController extends AdminBaseController
+class SellerPackagePlansController extends ListingBaseController
 {
 
     public function __construct($action)

@@ -46,7 +46,7 @@
         }
     }
     &-inner {
-        display: flex;
+        display: flex; 
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
@@ -58,6 +58,10 @@
         width: 100%;
         margin: 0;
         padding: 10px 2rem;
+        &.alert-solid-warning {
+            background: lighten($warning-color, 30);
+            color: darken($warning-color, 30);
+        }
         .alert-icon i {
             font-size: 1.4rem;
         }
@@ -447,11 +451,12 @@
 
 .users-addresses {
     display: flex;
-    li {    flex: 0 0 33%;
+    li {
+        flex: 0 0 33%;
         max-width: 33%;
-        padding:0;
-       
-        +li{ padding-#{$start-direction}: 1.5rem;}
-       
+        padding: 0;
+        +li {
+            padding-#{$start-direction}: 1.5rem;
+        }
     }
 }

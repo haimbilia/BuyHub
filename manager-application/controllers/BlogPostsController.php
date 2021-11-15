@@ -1,6 +1,6 @@
 <?php
 
-class BlogPostsController extends AdminBaseController
+class BlogPostsController extends ListingBaseController
 {
     public function __construct($action)
     {

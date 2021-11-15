@@ -192,7 +192,7 @@ class TransactionReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['utxn_date', 'utxn_id', 'user_name', 'utxn_status', 'utxn_order_id', 'transactionAmount'];
     }

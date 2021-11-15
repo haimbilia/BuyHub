@@ -1,6 +1,6 @@
 <?php
 
-class DeletedUsersController extends AdminBaseController
+class DeletedUsersController extends ListingBaseController
 {
     public function __construct($action)
     {

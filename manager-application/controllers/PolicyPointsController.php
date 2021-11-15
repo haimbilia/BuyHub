@@ -1,6 +1,6 @@
 <?php
 
-class PolicyPointsController extends AdminBaseController
+class PolicyPointsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

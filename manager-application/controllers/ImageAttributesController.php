@@ -1,6 +1,6 @@
 <?php
 
-class ImageAttributesController extends AdminBaseController
+class ImageAttributesController extends ListingBaseController
 {
     public function __construct($action)
     {

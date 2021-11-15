@@ -1,6 +1,6 @@
 <?php
 
-class CustomProductsController extends AdminBaseController
+class CustomProductsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

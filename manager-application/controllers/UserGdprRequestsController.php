@@ -1,6 +1,6 @@
 <?php
 
-class UserGdprRequestsController extends AdminBaseController
+class UserGdprRequestsController extends ListingBaseController
 {
     public function __construct($action)
     {

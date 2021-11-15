@@ -1,9 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$frm->setFormTagAttribute('onsubmit', 'saveRecord(this, "addBankInfoForm"); return(false);');
+
 $dobFld = $frm->getField('user_dob');
 $dobFld->setFieldTagAttribute('class', 'user_dob_js');
 
-if ($user_id > 0) {
+if ($recordId > 0) {
     $fld = $frm->getField('credential_username');
     $fld->setFieldTagAttribute('disabled', 'disabled');
 
@@ -50,4 +52,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     $(document).ready(function() {
         getCountryStates($("#addrCountryIdJs").val(), <?php echo $stateId; ?>, '#addrStateIdJs');
     });
+
+    setTimeout(() => {
+        stylePhoneNumberFld('.phoneJs');
+    }, 200);
 </script>

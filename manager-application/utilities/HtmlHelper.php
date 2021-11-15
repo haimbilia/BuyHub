@@ -14,12 +14,44 @@ class HtmlHelper
                 </div>';
     }
 
+    public static function getDefaultActionItems(array $fields, object $obj = null, int $langId = 0)
+    {
+        if (1 > $langId) {
+            $langId = CommonHelper::getLangId();
+        }
+
+        $actionBtnArr = [
+            'newRecordBtn' => true,
+            'deleteButton' => false,
+            'columnButtons' => false,
+            'performBulkAction' => false,
+            'formAction' => 'toggleBulkStatuses',
+            'siteLangId' => $langId,
+            'otherButtons' => [],
+            'searchFrmTemplate' => '_partial/listing/listing-search-form.php',
+            'searchListingPage' => FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php'
+        ];
+       
+        if (null == $obj) {
+            return $actionBtnArr;
+        }
+
+        if (array_key_exists($obj::tblFld('active'), $fields)) {
+            $actionBtnArr = array_merge($actionBtnArr, ['performBulkAction' => true, 'statusButtons' => true]);
+        }
+
+        if (array_key_exists($obj::tblFld('deleted'), $fields)) {
+            $actionBtnArr = array_merge($actionBtnArr, ['performBulkAction' => true, 'deleteButton' => true]);
+        }
+        return $actionBtnArr;
+    }
+
     public static function getDefaultSortingClass($key, $sortBy, $sortOrder)
     {
         if ($key != $sortBy) {
             return '';
         }
-        
+
         return (($sortOrder == applicationConstants::SORT_ASC) ? 'sorting_desc' : 'sorting_asc');
     }
 

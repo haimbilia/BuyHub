@@ -1,6 +1,6 @@
 <?php
 
-class SuccessStoriesController extends AdminBaseController
+class SuccessStoriesController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

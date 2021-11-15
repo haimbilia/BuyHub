@@ -1,6 +1,6 @@
 <?php
 
-class FaqCategoriesController extends AdminBaseController
+class FaqCategoriesController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

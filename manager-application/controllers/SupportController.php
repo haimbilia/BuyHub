@@ -1,6 +1,6 @@
 <?php
 
-class SupportController extends AdminBaseController
+class SupportController extends ListingBaseController
 {
     public function __construct($action)
     {

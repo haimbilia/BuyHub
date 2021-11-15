@@ -1,6 +1,6 @@
 <?php
 
-class MobileAppSettingsController extends AdminBaseController
+class MobileAppSettingsController extends ListingBaseController
 {
     private const APP_IMAGES = [
         AttachedFile::FILETYPE_APP_MAIN_SCREEN_IMAGE,

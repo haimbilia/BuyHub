@@ -1,6 +1,6 @@
 <?php
 
-class UrlRewritingController extends AdminBaseController
+class UrlRewritingController extends ListingBaseController
 {
     public function __construct($action)
     {

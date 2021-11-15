@@ -1,6 +1,6 @@
 <?php
 
-class ShippingDurationsController extends AdminBaseController
+class ShippingDurationsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

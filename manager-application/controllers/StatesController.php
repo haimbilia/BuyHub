@@ -1,11 +1,35 @@
 <?php
 
-class StatesController extends AdminBaseController
+class StatesController extends ListingBaseController
 {
+    protected $modelClass = 'States';
+
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewStates();
+    }
+
+    public function index()
+    {
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_STATES', $this->siteLangId));
+        $this->getListingData();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     /**
@@ -17,27 +41,9 @@ class StatesController extends AdminBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditStates();
-        $this->modelObj = (new ReflectionClass('States'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));
-    }
-
-    public function index()
-    {
-        $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
-
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
-        $this->set('canEdit', $this->objPrivilege->canEditStates($this->admin_id, true));
-        $this->set("frmSearch", $frmSearch);
-
-        $this->set('pageData', $pageData);
-        $this->set('pageTitle', $pageTitle);
-        $this->getListingData();
-
-        $this->_template->render();
     }
 
     public function getSearchForm($fields = [])

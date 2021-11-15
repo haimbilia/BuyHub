@@ -1,6 +1,6 @@
 <?php
 
-class SellerProductsController extends AdminBaseController
+class SellerProductsController extends ListingBaseController
 {
     use ProductsDigitalDownloads;
 

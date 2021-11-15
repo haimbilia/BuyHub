@@ -91,151 +91,120 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $img, true);
                 break;
             case 'action':
-                /* $data = [
+                $data = [
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['user_id']
                 ];
-
                 if ($canEdit) {
-                    $data['editButton'] = [];
-                    $data['deleteButton'] = [];
-                    $data['otherButtons'] = [
+                    $data['dropdownButtons']['editButton'] = [];
+                    $data['dropdownButtons']['deleteButton'] = [];
+
+                    $data['dropdownButtons']['otherButtons'] = [
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => 'changePasswordForm(' . $row['user_id'] . ')',
+                                'onclick' => 'changeUserPassword(' . $row['user_id'] . ')',
                                 'title' => Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId),
                             ],
-                            'label' => '<svg class="svg" width="18" height="18">
-                                            <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password">
-                                            </use>
-                                        </svg>'
+                            'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#password">
+                                                </use>
+                                            </svg>
+                                        </i>' . Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId),
                         ],
                         [
                             'attr' => [
-                                'href' => 'javascript:void(0)',
-                                'onclick' => 'changePasswordForm(' . $row['user_id'] . ')',
+                                'href' => UrlHelper::generateUrl('Users', 'login', array($row['user_id'])),
+                                'target' => '_blank',
+                                'id' => 'redirectJs',
                                 'title' => Labels::getLabel('LBL_LOGIN_TO_USER_PROFILE', $siteLangId),
                             ],
-                            'label' => '<svg class="svg" width="18" height="18">
-                                            <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#login">
-                                            </use>
-                                        </svg>'
+                            'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#login">
+                                                </use>
+                                            </svg>
+                                        </i>' . Labels::getLabel('LBL_LOGIN_TO_USER_PROFILE', $siteLangId),
                         ]
                     ];
 
+
                     if (!empty($row['credential_email'])) {
-                        $data['otherButtons'][] = [
+                        $data['dropdownButtons']['otherButtons'][] = [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'onclick' => 'changePasswordForm(' . $row['user_id'] . ')',
+                                'onclick' => 'sendMailToUser(' . $row['user_id'] . ')',
                                 'title' => Labels::getLabel('LBL_EMAIL_USER', $siteLangId),
                             ],
-                            'label' => '<svg class="svg" width="18" height="18">
-                                            <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#send-email">
-                                            </use>
-                                        </svg>'
+                            'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#send-email">
+                                                </use>
+                                            </svg>
+                                        </i>' . Labels::getLabel('LBL_EMAIL_USER', $siteLangId),
                         ];
                     }
-                    
+
                     if (!empty($row['credential_password'])) {
-                        $data['otherButtons'][] = [
+                        $data['dropdownButtons']['otherButtons'][] = [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => 'sendSetPasswordEmail(' . $row['user_id'] . ')',
                                 'title' => Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $siteLangId),
                             ],
-                            'label' => '<svg class="svg" width="18" height="18">
-                                            <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password-email">
-                                            </use>
-                                        </svg>'
+                            'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#password-email">
+                                                </use>
+                                            </svg>
+                                        </i>' . Labels::getLabel('LBL_RESEND_SET_PASSWORD_EMAIL', $siteLangId),
                         ];
                     }
-                } */
-                $btnHtml = '<ul class="actions">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="/admin/images/retina/sprite.yokart.svg#more-dots">
-                                            </use>
-                                        </svg>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim">
-                                        <a class="dropdown-item" href="#">
-                                            <i class="icn"><svg class="svg" width="18" height="18">
-                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
-                                                    </use>
-                                                </svg>
-                                            </i> New Report</a> 
-                                            
-                                            <a class="dropdown-item" href="#">
-                                            <i class="icn"><svg class="svg" width="18" height="18">
-                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
-                                                    </use>
-                                                </svg>
-                                            </i> New Report</a> 
-                                            
-                                            <a class="dropdown-item" href="#">
-                                            <i class="icn"><svg class="svg" width="18" height="18">
-                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password">
-                                                    </use>
-                                                </svg>
-                                            </i> New Report</a>
 
-                                            <a class="dropdown-item" href="#">
-                                            <i class="icn"><svg class="svg" width="18" height="18">
-                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#password-email">
-                                                    </use>
-                                                </svg>
-                                            </i> New Report</a>
-                                            
-                                             <a class="dropdown-item" href="#">
-                                            <i class="icn"><svg class="svg" width="18" height="18">
-                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#send-email">
-                                                    </use>
-                                                </svg>
-                                            </i> New Report</a>
-
-                                        <div class="dropdown-divider"></div>
-
-                                        <a class="dropdown-item" href="#">
-                                            <i class="icn"><svg class="svg" width="18" height="18">
-                                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#login">
-                                                    </use>
-                                                </svg>
-                                            </i> login to user</a>
-
-                                       
-                                    </div>
-
-                                </li>
-                            </ul>';
-                        // $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
-                        $td->appendElement('plaintext', $tdAttr, $btnHtml, true);
-                        break;
-                    default:
-                        $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-                        break;
+                    if ($row['user_is_supplier'] && !$row['user_is_buyer']) {
+                        $data['dropdownButtons']['otherButtons'][] = [
+                            'attr' => [
+                                'href' => 'javascript:void(0)',
+                                'onclick' => 'markSellerAsBuyer(' . $row['user_id'] . ')',
+                                'title' => Labels::getLabel('LBL_MARK_AS_BUYER', $siteLangId),
+                            ],
+                            'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-users">
+                                                </use>
+                                            </svg>
+                                        </i>' . Labels::getLabel('LBL_MARK_AS_BUYER', $siteLangId),
+                        ];
+                    }
                 }
-            }
-            $serialNo--;
+                $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                $td->appendElement('plaintext', $tdAttr, $actionItems, true);
+                break;
+            default:
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
+                break;
         }
+    }
+    $serialNo--;
+}
 
-        if (count($arrListing) == 0) {
-            $tbody->appendElement('tr')->appendElement(
-                'td',
-                array(
-                    'colspan' => count($fields),
-                    'class' => 'noRecordFoundJs'
-                ),
-                Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-            );
-        }
+if (count($arrListing) == 0) {
+    $tbody->appendElement('tr')->appendElement(
+        'td',
+        array(
+            'colspan' => count($fields),
+            'class' => 'noRecordFoundJs'
+        ),
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
+    );
+}
 
-        if ($printData) {
-            echo $tbody->getHtml();
-        }
+if ($printData) {
+    echo $tbody->getHtml();
+}

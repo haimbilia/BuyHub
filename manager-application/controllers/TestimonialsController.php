@@ -1,6 +1,6 @@
 <?php
 
-class TestimonialsController extends AdminBaseController
+class TestimonialsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

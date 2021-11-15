@@ -1,6 +1,6 @@
 <?php
 
-class AffiliateCommissionController extends AdminBaseController
+class AffiliateCommissionController extends ListingBaseController
 {
     public function __construct($action)
     {

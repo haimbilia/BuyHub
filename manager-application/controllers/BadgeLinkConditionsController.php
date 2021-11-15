@@ -1,6 +1,6 @@
 <?php
 
-class BadgeLinkConditionsController extends AdminBaseController
+class BadgeLinkConditionsController extends ListingBaseController
 {
     private $recordData = [];
     private $badgeLinkCondId = 0;

@@ -38,7 +38,7 @@ backgroundImage = function (recordId, langId) {
 
 deleteBackgroundImage = function (recordId, afileId ,langId) {
     if (!confirm(langLbl.confirmDelete)) { return; }
-    fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'removeMedia', [recordId,'image', afileId]), '', function (t) {
+    fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'removeMedia', [recordId,'THUMB', afileId]), '', function (t) {
         backgroundImage(recordId, langId);
         reloadList();
     });

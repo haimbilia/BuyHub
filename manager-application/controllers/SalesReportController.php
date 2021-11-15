@@ -1,6 +1,6 @@
 <?php
 
-class SalesReportController extends AdminBaseController
+class SalesReportController extends ListingBaseController
 {
     public function __construct($action)
     {
@@ -15,12 +15,19 @@ class SalesReportController extends AdminBaseController
         $pageData = PageLanguageData::getAttributesByKey('SALES_REPORT', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
+        $actionItemsData = array_merge($actionItemsData, [
+            'newRecordBtn' => false,
+            'formColumns' => $formColumns,
+            'columnButtons' => true,
+            'defaultColumns' => $this->getDefaultColumns($orderDate),
+        ]);
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('orderDate', $orderDate);
-        $this->set('defaultColumns', $this->getDefaultColumns($orderDate));
-        $this->set('formColumns', $formColumns);
+        $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false, $orderDate);
         $this->_template->render();
     }

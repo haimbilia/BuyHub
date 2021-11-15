@@ -1,6 +1,6 @@
 <?php
 
-class SearchController extends AdminBaseController
+class SearchController extends ListingBaseController
 {
     public function __construct($action)
     {

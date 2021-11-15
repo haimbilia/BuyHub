@@ -1,5 +1,5 @@
 <?php
-class RatingTypesController extends AdminBaseController
+class RatingTypesController extends ListingBaseController
 {
     public function __construct($action)
     {

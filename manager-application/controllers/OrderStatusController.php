@@ -1,6 +1,6 @@
 <?php
 
-class OrderStatusController extends AdminBaseController
+class OrderStatusController extends ListingBaseController
 {
     public function __construct($action)
     {

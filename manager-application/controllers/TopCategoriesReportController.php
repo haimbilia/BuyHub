@@ -1,6 +1,6 @@
 <?php
 
-class TopCategoriesReportController extends AdminBaseController
+class TopCategoriesReportController extends ListingBaseController
 {
     private $canView;
     private $canEdit;

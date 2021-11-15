@@ -1,6 +1,6 @@
 <?php
 
-class PluginsController extends AdminBaseController
+class PluginsController extends ListingBaseController
 {
     public function __construct($action)
     {

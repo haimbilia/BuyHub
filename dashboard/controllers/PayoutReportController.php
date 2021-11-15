@@ -204,7 +204,7 @@ class PayoutReportController extends SellerBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['date', 'promotionCharged', 'sellerTaxTotal', 'sellerShippingTotal', 'totalAmount'];
     }

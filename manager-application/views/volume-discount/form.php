@@ -1,6 +1,5 @@
 <?php 
-$formOnSubmit = 'saveRecord(this, "closeForm"); return(false);';
-
+$frm->setFormTagAttribute('onsubmit', 'saveRecord(this, "closeForm"); return(false);');
 $fld = $frm->getField('voldiscount_min_qty');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 

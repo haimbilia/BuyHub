@@ -1,6 +1,6 @@
 <?php
 
-class RewardsController extends AdminBaseController
+class RewardsController extends ListingBaseController
 {
     public function __construct($action)
     {
