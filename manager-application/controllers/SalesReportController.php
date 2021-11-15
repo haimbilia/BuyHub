@@ -20,8 +20,7 @@ class SalesReportController extends ListingBaseController
             'newRecordBtn' => false,
             'formColumns' => $formColumns,
             'columnButtons' => true,
-            'defaultColumns' => $this->getDefaultColumns($orderDate)/* ,
-            'searchFrmTemplate' => 'sales-report/search-form.php', */
+            'defaultColumns' => $this->getDefaultColumns($orderDate)
         ]);
 
         $this->set('pageData', $pageData);
@@ -30,7 +29,7 @@ class SalesReportController extends ListingBaseController
         $this->set('orderDate', $orderDate);
         $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false, $orderDate);
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
 
     public function search($type = false)
