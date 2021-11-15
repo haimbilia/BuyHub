@@ -62,6 +62,13 @@
                                     </a>
                                 </li>
                             <?php } ?>
+                            <?php if ($objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('sellerApprovalRequests'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_Seller_Approval_Requests', $siteLangId); ?></span>
+                                    </a>
+                                </li> 
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
@@ -133,25 +140,25 @@
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
                         <h6 class=""><?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></h6>
                         <ul class="nav">
-                                    <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Rewards'); ?>">
-        <?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Transactions'); ?>">
-        <?php echo Labels::getLabel('NAV_TRANSACTIONS', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_TRANSACTIONS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('DeletedUsers'); ?>">
-        <?php echo Labels::getLabel('NAV_DELETED_USERS', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_DELETED_USERS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('UsersAddresses'); ?>">
-                                <?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -198,48 +205,48 @@
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
                         <h6 class=""><?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?></h6>
                         <ul class="nav">
-    <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('SpecialPrice'); ?>">
-                                <?php echo Labels::getLabel('NAV_SPECIAL_PRICE', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_SPECIAL_PRICE', $siteLangId); ?>
                                     </a>
                                 </li>
-                                    <?php } ?>
+                            <?php } ?>
 
-    <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('VolumeDiscount'); ?>">
-                                <?php echo Labels::getLabel('NAV_VOLUME_DISCOUNT', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_VOLUME_DISCOUNT', $siteLangId); ?>
                                     </a>
                                 </li>
-                                    <?php } ?>
+                            <?php } ?>
 
-    <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('RelatedProducts'); ?>">
-                                <?php echo Labels::getLabel('NAV_RELATED_PRODUCTS', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_RELATED_PRODUCTS', $siteLangId); ?>
                                     </a>
                                 </li>
-                                    <?php } ?>
+                            <?php } ?>
 
-    <?php if ($objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('promotions'); ?>">
-        <?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>
                                     </a>
                                 </li>
-    <?php } ?>
+                            <?php } ?>
 
 
-    <?php if ($objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('RewardsOnPurchase'); ?>">
-                                <?php echo Labels::getLabel('NAV_REWARDS_ON_PURCHASE', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_REWARDS_ON_PURCHASE', $siteLangId); ?>
                                     </a>
                                 </li>
-                                    <?php } ?>
+                            <?php } ?>
 
-    <?php if ($objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('SmartRecomendedWeightages'); ?>">
                                         <?php echo Labels::getLabel('NAV_MANAGE_WEIGHTAGES', $siteLangId); ?>
@@ -247,10 +254,10 @@
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('RecomendedTagProducts'); ?>">
-        <?php echo Labels::getLabel('NAV_RECOMMENDED_TAG_PRODUCTS_WEIGHTAGES', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_RECOMMENDED_TAG_PRODUCTS_WEIGHTAGES', $siteLangId); ?>
                                     </a>
                                 </li>
-                <?php } ?>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
@@ -276,34 +283,34 @@
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
                         <h6 class=""><?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?></h6>
                         <ul class="nav">
-    <?php if ($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('BlogPostCategories'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_POST_CATEGORIES', $siteLangId); ?></span>
                                     </a>
                                 </li>
-    <?php } ?>
-    <?php if ($objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('BlogPosts'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_POSTS', $siteLangId); ?></span>
                                     </a>
                                 </li>
-    <?php } ?>
-    <?php if ($objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('BlogContributions'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_CONTRIBUTIONS', $siteLangId); ?></span>
                                     </a>
                                 </li>
-    <?php } ?>
-    <?php if ($objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('BlogComments'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_COMMENTS', $siteLangId); ?></span>
                                     </a>
                                 </li>
-                <?php } ?>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
@@ -354,41 +361,41 @@
                                     </a>
                                     <div id="salesReportNav" class="panel-collapse collapse collapseJs">
                                         <ul class="nav">
-        <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                            <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>">
                                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_SALES_OVER_TIME', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
-        <?php } ?>
-        <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                            <?php } ?>
+                                            <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>">
                                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
-        <?php } ?>
-        <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                            <?php } ?>
+                                            <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>">
                                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_VARIENTS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
-        <?php } ?>
-        <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                            <?php } ?>
+                                            <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>">
                                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_Shops', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
-        <?php } ?>
-        <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                            <?php } ?>
+                                            <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('BuyersReport'); ?>">
                                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_CUSTOMERS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
-                                <?php } ?>
+                                            <?php } ?>
                                         </ul>
                                     </div>
                                 </li>
@@ -457,7 +464,7 @@
                               </div>
                               </li>
                               <?php } */ ?>
-    <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item hasNestedChildJs">
                                     <a class="nav_link navLinkJs" data-toggle="collapse" data-parent="#financialReportNav" href="#financialReportNav" aria-expanded="true">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_FINANCIAL_REPORT', $siteLangId); ?></span>
@@ -493,8 +500,8 @@
                                         </ul>
                                     </div>
                                 </li>
-    <?php } ?>
-    <?php if ($objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item hasNestedChildJs">
                                     <a class="nav_link navLinkJs" data-toggle="collapse" data-parent="#subscriptionReportNav" href="#subscriptionReportNav" aria-expanded="true">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?></span>
@@ -515,7 +522,7 @@
                                         </ul>
                                     </div>
                                 </li>
-                <?php } ?>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
@@ -567,23 +574,23 @@
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
                         <h6 class=""><?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?></h6>
                         <ul class="nav">
-    <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('UrlRewriting'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_URL_REWRITING', $siteLangId); ?></span>
                                     </a>
                                 </li>
-                                    <?php } ?>
+                            <?php } ?>
 
-    <?php if ($objPrivilege->canViewImageAttributes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewImageAttributes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ImageAttributes'); ?>">
-                                <?php echo Labels::getLabel('NAV_Image_Attributes', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_Image_Attributes', $siteLangId); ?>
                                     </a>
                                 </li>
-    <?php } ?>
+                            <?php } ?>
 
-    <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('sitemap', 'generate'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?></span>
@@ -599,19 +606,19 @@
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_VIEW_XML', $siteLangId); ?></span>
                                     </a>
                                 </li>
-    <?php } ?>
+                            <?php } ?>
 
-    <?php if ($objPrivilege->canViewMetaTags(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewMetaTags(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('MetaTags'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_META_TAGS_MANAGEMENT', $siteLangId); ?></span>
                                     </a>
                                 </li>
-                <?php } ?>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
-<?php } ?>
+            <?php } ?>
         </ul>
     </div>
     <div class="sidebar-foot">

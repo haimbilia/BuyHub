@@ -1,7 +1,9 @@
 <?php
 
-class SellerApprovalRequestsController extends AdminBaseController {
+class SellerApprovalRequestsController extends ListingBaseController {
 
+    protected $modelClass = 'User';
+    protected $pageKey = 'MANAGE_SELLER_APPROVAL_REQUEST';
     public function __construct($action) {
         parent::__construct($action);
         $this->objPrivilege->canViewSellerApprovalRequests();
@@ -24,9 +26,11 @@ class SellerApprovalRequestsController extends AdminBaseController {
     public function index() {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         $this->set('canEdit', $this->objPrivilege->canEditSellerApprovalRequests($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_Manage_Seller_Approval_Requests', $this->siteLangId));
+        $this->set('pageTitle', $pageTitle); 
         $this->getListingData();
         $this->_template->render();
     }
