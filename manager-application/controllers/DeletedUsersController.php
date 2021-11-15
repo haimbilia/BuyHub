@@ -62,8 +62,9 @@ class DeletedUsersController extends ListingBaseController
 
         $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
-
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        
+        $postedData = FatApp::getPostedData();
+        $post = $srchFrm->getFormDataFromArray($postedData);
         $post['user_id'] = $userId;
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -126,7 +127,9 @@ class DeletedUsersController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
