@@ -2,12 +2,12 @@
     <div class="container-fluid">
         <div class="main-header-inner">
             <div class="page-title">                
-                    <button class="btn side-bar-trigger" type="button" data-trigger-cart="side-bar">
+                    <button class="btn sidebar-trigger" type="button" data-trigger="sidebar" >
                         <svg class="svg" width="20" height="20">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#menu">
                             </use>
-                        </svg>
-                    </button>
+                        </svg> 
+                    </button> 
                     <div>
                         <h1>Page title goes here</h1>
                         <span class="page-title-sub"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto

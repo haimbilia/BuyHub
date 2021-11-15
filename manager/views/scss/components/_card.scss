@@ -743,7 +743,7 @@ $card:'card';
     &.ui-sortable-helper {
         border: $border;
     }
-    @media (min-width: 1025px) {
+    @include media-breakpoint-up(md){
         &#{&}-height-fluid {
             height: calc(100% - 20px);
             #{$selfBody} {
@@ -756,12 +756,12 @@ $card:'card';
             }
         }
     }
-    @media (max-width: 1024px) {
+    @include media-breakpoint-down(md){
         & {
             margin-bottom: 20px;
             #{$selfHead} {
-                padding: 0 15px;
-                min-height: 50px;
+               //padding: 0 15px;
+                //min-height: 50px; 
                 &#{$selfHead}-sm {
                     min-height: 40px;
                 }
@@ -861,7 +861,7 @@ $card:'card';
             }
         }
     }
-    @media (max-width: 768px) {
+    @include media-breakpoint-down(sm){
         &#{&}-head-break-sm {
             #{$selfHead} {
                 padding-top: 15px;
