@@ -31,9 +31,9 @@ class UsersAddressesController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->getListingData();
 
-        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addJs(array('js/select2.js', 'users-addresses/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
