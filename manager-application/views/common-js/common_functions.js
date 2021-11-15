@@ -192,7 +192,7 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
         if ('function' == typeof callbackOnUnSelect) {
             callbackOnUnSelect(e);
         }
-    });
+    });  
 
     $("." + $.ykmodal.element).removeAttr('tabindex');
 };
