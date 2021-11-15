@@ -30,9 +30,9 @@ class DeletedUsersController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->getListingData();
 
-        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addJs(array('js/select2.js', 'deleted-users/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -62,8 +62,9 @@ class DeletedUsersController extends ListingBaseController
 
         $userId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
-
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        
+        $postedData = FatApp::getPostedData();
+        $post = $srchFrm->getFormDataFromArray($postedData);
         $post['user_id'] = $userId;
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -126,7 +127,9 @@ class DeletedUsersController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

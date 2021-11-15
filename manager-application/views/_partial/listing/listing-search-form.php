@@ -55,18 +55,36 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
     }
 }
 
+$advSrchFldsCount = count($frmFields['advSrchFlds']); /* Any addition field except first fields and submit and clear button */
 echo $frmSearch->getFormTag();
 foreach ($frmFields['hidden'] as $fldName) {
     echo $frmSearch->getFieldHtml($fldName);
 }
 if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
-
-    $colnumber = (count($frmFields['advSrchFlds']) == 1) ? 6 : 12;
 ?>
     <div class="card-head">
         <div class="card-head-label">
             <div class="row">
-                <?php if (count($frmFields['advSrchFlds']) == 1) { ?>
+                <?php if (0 == $advSrchFldsCount || (1 == $advSrchFldsCount && false == $haveExtraFlds)) { ?>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <?php if (null != $keyWordFld) {
+                                echo $frmSearch->getFieldHtml('keyword');
+                            } else {
+                                $fld = $frmSearch->getField($firstElement['name']);
+                                if (!$fld->getFieldtagAttribute('placeholder')) {
+                                    $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
+                                }
+                                echo $frmSearch->getFieldHtml($firstElement['name']);
+                            }
+                            ?>
+                            <div class="input-group-append">
+                                <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php } else if (1 == $advSrchFldsCount && true == $haveExtraFlds) { ?>
+
                     <div class="col-md-4">
                         <?php if (null != $keyWordFld) {
                             echo $frmSearch->getFieldHtml('keyword');
@@ -94,6 +112,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                     <div class="col-md-2">
                         <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
                     </div>
+
                 <?php } else { ?>
                     <div class="col-md-12">
                         <div class="input-group">
@@ -107,7 +126,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                                 echo $frmSearch->getFieldHtml($firstElement['name']);
                             }
                             ?>
-                            <?php if ($haveExtraFlds && count($frmFields['advSrchFlds']) > 1) { ?>
+                            <?php if ($haveExtraFlds && $advSrchFldsCount > 1) { ?>
                                 <a class="btn advanced-trigger ml-2" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                                     <svg class="svg" width="22" height="22">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">

@@ -80,6 +80,12 @@ class PluginsController extends ListingBaseController
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
+
+        $searchForm = $this->getSearchForm($fields);
+        $postedData = FatApp::getPostedData();
+        $post = $searchForm->getFormDataFromArray($postedData);
+
+
         $attr = array(
             'plg.*',
             'plg_l.*',
@@ -129,8 +135,10 @@ class PluginsController extends ListingBaseController
 
         $this->set("arrListing", $arrListing);
         $this->set('recordCount', $srch->recordCount());
-        $this->set('postedData', FatApp::getPostedData());
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
+        
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
