@@ -11,9 +11,7 @@
 <script src="<?php echo JS_PATH; ?>jquery.min.js"></script>
 <script src="<?php echo JS_PATH; ?>popper.min.js"></script>
 <script src="<?php echo JS_PATH; ?>bootstrap.min.js"></script>
-<script src="<?php echo JS_PATH; ?>vendors/stellarnav.min.js"></script>
-<script src="<?php echo JS_PATH; ?>vendors/particles.min.js"></script>
-<script src="<?php echo JS_PATH; ?>vendors/scroll-hint.min.js"></script>
-<script src="<?php echo JS_PATH; ?>vendors/script.js"></script>
+<script src="<?php echo JS_PATH; ?>vendors/stellarnav.min.js"></script>  
+<script src="<?php echo JS_PATH; ?>vendors/scroll-hint.min.js"></script> 
 <script src="<?php echo JS_PATH; ?>vendors/toastr.js"></script>
 <script src="<?php echo JS_PATH; ?>ui-functions.js"></script>

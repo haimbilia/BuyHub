@@ -1,19 +1,25 @@
 <header class="main-header">
     <div class="container-fluid">
         <div class="main-header-inner">
-            <div class="page-title">
-                <h1>Page title goes here</h1>
-                <span class="page-title-sub"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
-                    repudiandae, nesciunt
-                    veritatis.</span>
-
-            </div>
+            <div class="page-title">                
+                    <button class="btn side-bar-trigger" type="button" data-trigger-cart="side-bar">
+                        <svg class="svg" width="20" height="20">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#menu">
+                            </use>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1>Page title goes here</h1>
+                        <span class="page-title-sub"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
+                            repudiandae, nesciunt
+                            veritatis.</span>
+                    </div>            </div>
             <div class="main-header-toolbar">
                 <div class="header-action">
                     <div class="header-action__item">
                         <a href="#" class="btn btn-icon btn-outline-brand btn-add mr-2">
                             <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                 </use>
                             </svg>
                             <span>New Product</span>
@@ -21,12 +27,10 @@
                     </div>
 
                     <div class="header-action__item">
-                        <a class="header-action__trigger" href="javascript:void(0);" data-toggle="modal"
-                            data-target="#search-main">
+                        <a class="header-action__trigger" href="javascript:void(0);" data-toggle="modal" data-target="#search-main">
                             <span class="icon">
                                 <svg class="svg" width="20" height="20">
-                                    <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-search">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-search">
                                     </use>
                                 </svg>
                             </span>
@@ -38,8 +42,7 @@
                                         <div class="quick-search">
                                             <form method="get" class="form form--quick-search">
                                                 <div class="quick-search__form">
-                                                    <input type="search" class="form-control omni-search"
-                                                        placeholder="Go to...">
+                                                    <input type="search" class="form-control omni-search" placeholder="Go to...">
                                                 </div>
                                                 <div class="quick-search__wrapper">
                                                     <ul class="list list--search-result">
@@ -48,68 +51,56 @@
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                         </li>
                                                         <li>
@@ -117,68 +108,56 @@
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                         </li>
                                                         <li>
@@ -186,68 +165,56 @@
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                         </li>
                                                         <li>
@@ -255,68 +222,56 @@
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                         </li>
                                                         <li>
@@ -324,68 +279,56 @@
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                             <div class="search-result">
                                                                 <span class="search-result__icon">
                                                                     <svg class="svg" width="16" height="16">
-                                                                        <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-link">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
                                                                         </use>
                                                                     </svg>
                                                                 </span>
-                                                                <a class="search-result__link"
-                                                                    href="javascript:;">Br<b>a</b>nds</a>
+                                                                <a class="search-result__link" href="javascript:;">Br<b>a</b>nds</a>
                                                             </div>
                                                         </li>
                                                     </ul>
@@ -408,8 +351,7 @@
                         <a class="header-action__trigger" href="" title="View Store">
                             <span class="icon">
                                 <svg class="svg" width="20" height="20">
-                                    <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-store">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
                                     </use>
                                 </svg>
                             </span>
@@ -419,8 +361,7 @@
                         <a class="header-action__trigger" href="" title="Clear Cache">
                             <span class="icon">
                                 <svg class="svg" width="20" height="20">
-                                    <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-cache">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-cache">
                                     </use>
                                 </svg>
                             </span>
@@ -430,8 +371,7 @@
                         <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="">
                             <span class="icon">
                                 <svg class="svg" width="20" height="20">
-                                    <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
                                     </use>
                                 </svg>
                             </span>
@@ -454,8 +394,7 @@
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                 </use>
                                                             </svg>
                                                         </span>
@@ -471,8 +410,7 @@
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                 </use>
                                                             </svg>
                                                         </span>
@@ -488,8 +426,7 @@
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                 </use>
                                                             </svg>
                                                         </span>
@@ -505,8 +442,7 @@
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                 </use>
                                                             </svg>
                                                         </span>
@@ -522,8 +458,7 @@
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                 </use>
                                                             </svg>
                                                         </span>
@@ -539,8 +474,7 @@
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                 </use>
                                                             </svg>
                                                         </span>
@@ -556,8 +490,7 @@
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                 </use>
                                                             </svg>
                                                         </span>
@@ -573,8 +506,7 @@
                                                     <div class="notification__img">
                                                         <span class="icon">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use
-                                                                    xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite.yokart.svg#icon-notification-alert">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
                                                                 </use>
                                                             </svg>
                                                         </span>
@@ -599,8 +531,7 @@
                                                     <a href="#" class="btn btn-sm btn-primary">Upgrade</a>
                                                 </div>
                                                 <div class="update__img">
-                                                    <img
-                                                        src="<?php echo CONF_WEBROOT_URL;?>images/misc/update-img.png" />
+                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/misc/update-img.png" />
                                                 </div>
                                             </div>
                                         </div>
@@ -717,15 +648,14 @@
                     <div class="header-action__item dropdown header-account">
                         <a class=" dropdown-toggle no-after" data-toggle="dropdown" href="">
                             <span class="header-account__img">
-                                <img aria-expanded="false" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg"
-                                    alt="">
+                                <img aria-expanded="false" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="">
                             </span>
                         </a>
                         <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
                             <div class="header-account__avtar">
                                 <div class="profile">
                                     <div class="profile__img">
-                                        <img alt="" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg">
+                                        <img alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg">
                                     </div>
                                     <div class="profile__detail">
                                         <h6>Hi, Michael Williams <h6>
@@ -746,8 +676,7 @@
                                     <span class="selected-language">
                                         English
                                         <span>
-                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/flags/009-australia.svg"
-                                                alt=""></span>
+                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/flags/009-australia.svg" alt=""></span>
                                     </span>
                                     <div class="languages">
                                         <span onclick="">English</span>
