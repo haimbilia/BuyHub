@@ -142,7 +142,7 @@ class OrderStatusController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));

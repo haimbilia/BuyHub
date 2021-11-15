@@ -101,7 +101,7 @@ class ShopReportReasonsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditShopReportReasons($this->admin_id, true));
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
     }
 
     public function form()
@@ -118,7 +118,7 @@ class ShopReportReasonsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->siteLangId));

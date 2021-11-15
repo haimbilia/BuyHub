@@ -159,7 +159,7 @@ class ContentPagesController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -321,7 +321,7 @@ class ContentPagesController extends ListingBaseController
             }
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $this->mainTableRecordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
@@ -512,14 +512,14 @@ class ContentPagesController extends ListingBaseController
         $cbgForm = $this->getMediaContentForm($recordId, $this->siteLangId);
         $cbgForm->fill($data);
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         
         $cpageData = ContentPage::getAttributesByLangId($langId, $recordId, NULL, TRUE);
         $this->set('contentPageDetails', $cpageData);
         $this->set('cbgForm', $cbgForm);
         $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->_template->render(false, false);
     }
 

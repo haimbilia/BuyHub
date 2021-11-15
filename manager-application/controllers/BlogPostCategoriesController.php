@@ -100,7 +100,7 @@ class BlogPostCategoriesController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);

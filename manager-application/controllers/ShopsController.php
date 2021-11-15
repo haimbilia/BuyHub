@@ -242,7 +242,7 @@ class ShopsController extends ListingBaseController {
         if (1 == count($languages)) {
             $langId = array_key_first($languages);
         }
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $shop_id);
         $shopDetails = Shop::getAttributesById($shop_id);
         $shopLayoutTemplateId = $shopDetails['shop_ltemplate_id'];
@@ -255,7 +255,7 @@ class ShopsController extends ListingBaseController {
         $this->set('logoFrm', $shopLogoFrm);
         $this->set('shopBannerFrm', $shopBannerFrm);
         $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->_template->render(false, false);
     }
 

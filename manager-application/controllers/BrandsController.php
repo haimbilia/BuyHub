@@ -126,7 +126,7 @@ class BrandsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -268,7 +268,7 @@ class BrandsController extends ListingBaseController
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);

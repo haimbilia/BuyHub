@@ -169,7 +169,7 @@ class PluginsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
