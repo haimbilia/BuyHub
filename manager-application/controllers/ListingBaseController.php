@@ -45,7 +45,6 @@ class ListingBaseController extends AdminBaseController
             }
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $this->mainTableRecordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);

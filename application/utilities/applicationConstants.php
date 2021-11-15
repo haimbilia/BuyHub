@@ -260,9 +260,9 @@ class applicationConstants {
         );
     }
 
-    public static function allowedMimeTypes() {
-        $mimeTypes = array('text/plain', 'image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp', 'image/tiff', 'image/svg+xml', 'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/rar', 'application/x-rar', 'application/x-rar-compressed', 'application/octet-stream', 'audio/mpeg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword', 'text/plain', 'image/x-icon');
-
+    public static function allowedMimeTypes()
+    {
+        $mimeTypes = array('text/plain', 'image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp', 'image/tiff', 'image/svg+xml', 'application/zip', 'application/x-zip', 'application/x-zip-compressed', 'application/rar', 'application/x-rar', 'application/x-rar-compressed', 'application/octet-stream', 'audio/mpeg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword', 'text/plain', 'image/x-icon', 'application/vnd.openxmlformats-officedocument.wordprocessingml.documentapplication/vnd.openxmlformats-officedocument.wordprocessingml.document');
         return array_merge($mimeTypes, static::allowedVideoMimeTypes());
     }
 
