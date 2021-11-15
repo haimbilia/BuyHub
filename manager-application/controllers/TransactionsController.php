@@ -16,7 +16,6 @@ class TransactionsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_USER_TRANSACTIONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['searchFrmTemplate'] = 'transactions/search-form.php';
 

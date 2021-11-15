@@ -16,7 +16,6 @@ class DeletedUsersController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_DELETED_USERS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['newRecordBtn'] = false;
         $actionItemsData['searchFrmTemplate'] = 'deleted-users/search-form.php';
