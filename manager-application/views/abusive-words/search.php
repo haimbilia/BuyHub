@@ -28,7 +28,7 @@ foreach ($arrListing as $sn => $row) {
 
                 if ($canEdit) {
                     $attr = [];
-                    if (1 > count($languages)) {
+                    if (1 === count($languages)) {
                         $attr = [
                             'onClick' => 'editRecord(' . $row['abusive_id'] . ', true)'
                         ];

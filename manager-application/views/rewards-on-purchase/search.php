@@ -27,13 +27,9 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $attr = [];
-                    if (1 > count($languages)) {
-                        $attr = [
-                            'onClick' => 'editRecord(' . $row['rop_id'] . ')'
-                        ];
-                    }
-                    $data['editButton'] = $attr;
+                    $data['editButton'] = [
+                        'onClick' => 'editRecord(' . $row['rop_id'] . ', true)'
+                    ];
                     $data['deleteButton'] = [];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

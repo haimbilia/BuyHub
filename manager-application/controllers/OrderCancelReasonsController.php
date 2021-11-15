@@ -2,8 +2,6 @@
 
 class OrderCancelReasonsController extends ListingBaseController
 {
-    protected $modelClass = 'OrderCancelReason';
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -32,8 +30,7 @@ class OrderCancelReasonsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_CANCEL_REASONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';

@@ -32,8 +32,7 @@ class OrderReturnReasonsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_RETURN_REASONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';

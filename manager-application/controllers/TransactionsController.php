@@ -2,8 +2,6 @@
 
 class TransactionsController extends ListingBaseController
 {
-    protected $modelClass = 'Transactions';
-    
     public function __construct($action)
     {
         parent::__construct($action);
@@ -19,7 +17,7 @@ class TransactionsController extends ListingBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['searchFrmTemplate'] = 'transactions/search-form.php';
 
         $this->set('pageData', $pageData);

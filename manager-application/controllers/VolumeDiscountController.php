@@ -2,8 +2,6 @@
 
 class VolumeDiscountController extends ListingBaseController
 {
-    protected $modelClass = 'SellerProduct';
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -18,8 +16,7 @@ class VolumeDiscountController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_VOLUME_DISCOUNT', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['searchFrmTemplate'] = 'volume-discount/search-form.php';

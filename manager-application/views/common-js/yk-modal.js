@@ -1,6 +1,6 @@
 (function ($) {
     var displayInPopup = false;
-    $.ykmodal = function (data, popupView = false, dialogClassParm = "", modalClassParm = "", bodyClass = "") {
+    $.ykmodal = function (data, popupView = '', dialogClassParm = "", modalClassParm = "", bodyClass = "") {
         modalClass = 'fixed-right ' + modalClassParm;
         var dialogClass = 'modal-dialog-vertical ' + dialogClassParm;
         var bodyClass = 'pd-0 ' + bodyClass;

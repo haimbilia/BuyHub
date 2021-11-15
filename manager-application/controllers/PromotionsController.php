@@ -4,6 +4,7 @@ class PromotionsController extends ListingBaseController
 {
     private int $minWidth = 1200;
     private int $minHeight = 360;
+    protected $modelClass = 'Promotion';
 
     public function __construct($action)
     {
@@ -24,17 +25,6 @@ class PromotionsController extends ListingBaseController
         } else {
             $this->objPrivilege->canEditPromotions();
         }
-    }
-
-    /**
-     * setModel - This function is used to set related model class and used by its parent class.
-     *
-     * @param  array $constructorArgs
-     * @return void
-     */
-    protected function setModel(array $constructorArgs = []): void
-    {
-        $this->modelObj = (new ReflectionClass('Promotion'))->newInstanceArgs($constructorArgs);
     }
 
     /**
@@ -71,21 +61,30 @@ class PromotionsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_PROMOTIONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('languages', Language::getAllNames());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PROMOTION_NAME', $this->siteLangId));
         $this->getListingData();
-
+        
         $this->_template->addCss(['css/select2.min.css', 'css/cropper.css']);
         $this->_template->addJs(['js/select2.js', 'js/cropper.js', 'js/cropper-main.js']);
         $this->_template->render();
     }
-
+    
     public function search()
     {
         $this->getListingData();

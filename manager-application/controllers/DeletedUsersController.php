@@ -2,8 +2,6 @@
 
 class DeletedUsersController extends ListingBaseController
 {
-    protected $modelClass = 'User';
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -19,7 +17,7 @@ class DeletedUsersController extends ListingBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['newRecordBtn'] = false;
         $actionItemsData['searchFrmTemplate'] = 'deleted-users/search-form.php';
 
