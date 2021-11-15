@@ -155,11 +155,11 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         searchRecords(document.frmRecordSearchPaging);
     };
 
-    exportReport = function () {
+    /* exportReport = function () {
         setColumnsData(document.frmRecordSearch);
         document.frmRecordSearch.action = fcom.makeUrl(controllerName, 'search', ['export']);
         document.frmRecordSearch.submit();
-    }
+    } */
 
     searchRecords = function (frm) {
         if (false === checkControllerName()) {
@@ -171,7 +171,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (frm) {
             data = fcom.frmData(frm);
         }
-
+        console.log(frm);
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function (res) {
@@ -204,7 +204,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     clearSearch = function (loadRowsOnly = false) {
         document.frmRecordSearch.reset();
-        $("input:checkbox[name=listingColumns]:checked").each(function () {
+        $("input:checkbox[name=listingFld]:checked").each(function () {
             if ($(this).attr("disabled") != "disabled") {
                 $(this).prop("checked", false);
             }
@@ -219,7 +219,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         listingColumns = [];
-        $("input:checkbox[name=listingColumns]:checked").each(function () {
+        $("input:checkbox[name=listingFld]:checked").each(function () {
             listingColumns.push($(this).val());
         });
 
