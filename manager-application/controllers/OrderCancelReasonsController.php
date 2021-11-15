@@ -22,7 +22,7 @@ class OrderCancelReasonsController extends ListingBaseController
         $this->modelObj = (new ReflectionClass('OrderCancelReason'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title')];
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_CANCEL_REASON_SETUP', $this->siteLangId));
-    }  
+    }
 
     public function index()
     {

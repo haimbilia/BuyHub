@@ -2,6 +2,8 @@
 
 class OrderReturnReasonsController extends ListingBaseController
 {
+    protected $modelClass = 'OrderReturnReason';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -26,13 +28,22 @@ class OrderReturnReasonsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_RETURN_REASONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();

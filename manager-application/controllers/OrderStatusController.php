@@ -2,6 +2,8 @@
 
 class OrderStatusController extends ListingBaseController
 {
+    protected $modelClass = 'OrderStatus';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -26,13 +28,22 @@ class OrderStatusController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_STATUS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['searchFrmTemplate'] = 'order-status/search-form.php';
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->addJs('js/jquery.tablednd.js');
@@ -323,6 +334,6 @@ class OrderStatusController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'orderstatus_is_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop'], Common::excludeKeysForSort());
     }
 }
