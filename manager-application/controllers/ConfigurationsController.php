@@ -17,13 +17,13 @@ class ConfigurationsController extends ListingBaseController
 
     public function index()
     {
-        $this->setGeneralForm(Configurations::FORM_GENERAL, $this->getDefaultFormLangId());
+        $this->setGeneralForm(Configurations::FORM_GENERAL, CommonHelper::getDefaultFormLangId());
         $svgIconNames = Configurations::getSvgIconNames();
         $this->set('svgIconNames', $svgIconNames);
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs('js/cropper.js');
         $this->_template->addJs('js/cropper-main.js');
-        $this->set('defaultLangId', $this->getDefaultFormLangId());
+        $this->set('defaultLangId', CommonHelper::getDefaultFormLangId());
         $this->set('activeTab', Configurations::FORM_GENERAL);
         $this->_template->addJs('js/jscolor.js');
         $this->_template->render();
@@ -79,7 +79,7 @@ class ConfigurationsController extends ListingBaseController
     public function form(int $frmType, int $langId = 0)
     {
         if (1 > $langId) {
-            $langId = $this->getDefaultFormLangId();
+            $langId = CommonHelper::getDefaultFormLangId();
         }
         $this->setGeneralForm($frmType, $langId);
         $this->_template->render(false, false);

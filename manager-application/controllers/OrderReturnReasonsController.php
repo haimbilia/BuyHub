@@ -109,7 +109,7 @@ class OrderReturnReasonsController extends ListingBaseController
         $frm = $this->getForm();
 
         if (0 < $recordId) {
-            $data = OrderReturnReason::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('orreason_id', 'orreason_title'), true);
+            $data = OrderReturnReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('orreason_id', 'orreason_title'), true);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -167,7 +167,7 @@ class OrderReturnReasonsController extends ListingBaseController
     {
         $frm = new Form('frmOrderReturnReasonLang');
         $frm->addHiddenField('', 'orreason_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'orreason_title');
         return $frm;
     }   

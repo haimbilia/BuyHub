@@ -566,7 +566,7 @@ class PromotionsController extends ListingBaseController
 
             $frm->fill($promotionDetails);
         }
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         $enableTabs = (in_array($promotionType, [Promotion::TYPE_BANNER, Promotion::TYPE_SLIDES]) || 0 < count($languages));
         $this->set('promotionType', $promotionType);
         $this->set('recordId', $recordId);
@@ -798,7 +798,7 @@ class PromotionsController extends ListingBaseController
         $frm = new Form('frmPromotionLang');
         $frm->addHiddenField('', 'promotion_id', $recordId);
 
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $langId, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_promotion_name', $langId), 'promotion_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);

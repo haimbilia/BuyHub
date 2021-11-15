@@ -134,7 +134,7 @@ class OrderStatusController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = OrderStatus::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('orderstatus_id', 'orderstatus_name', 'orderstatus_is_active', 'orderstatus_is_digital', 'orderstatus_color_class'), true);
+            $data = OrderStatus::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('orderstatus_id', 'orderstatus_name', 'orderstatus_is_active', 'orderstatus_is_digital', 'orderstatus_color_class'), true);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -214,7 +214,7 @@ class OrderStatusController extends ListingBaseController
     {
         $frm = new Form('frmorderstatuslang');
         $frm->addHiddenField('', 'orderstatus_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->siteLangId), 'orderstatus_name');       
         return $frm;
     }

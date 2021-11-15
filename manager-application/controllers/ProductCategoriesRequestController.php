@@ -118,7 +118,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
-            $data = ProductCategory::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('prodcat_parent', 'prodcat_name', 'prodcat_id', 'prodcat_identifier', 'prodcat_active', 'prodcat_status'), true);
+            $data = ProductCategory::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('prodcat_parent', 'prodcat_name', 'prodcat_id', 'prodcat_identifier', 'prodcat_active', 'prodcat_status'), true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -156,7 +156,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         }
 
         $recordId = $record->getMainTableRecordId();
-        if (!$record->updateLangData($this->getDefaultFormLangId(), ['prodcat_name' => $data['prodcat_name']])) {
+        if (!$record->updateLangData(CommonHelper::getDefaultFormLangId(), ['prodcat_name' => $data['prodcat_name']])) {
             LibHelper::exitWithError($record->getError(), true);
         }
 
@@ -169,7 +169,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         }
 
         $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
                 if (!ProductCategory::getAttributesByLangId($langId, $recordId)) {
@@ -213,7 +213,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
     protected function getLangForm($recordId = 0, $lang_id = 0) {
         $frm = new Form('frmProdCategoryLang', array('id' => 'frmProdCategoryLang'));
         $frm->addHiddenField('', 'prodcat_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $this->siteLangId), 'prodcat_name');
         return $frm;
     }

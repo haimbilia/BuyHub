@@ -107,7 +107,7 @@ class BrandsController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = Brand::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'brand_name'), true);
+            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_id', 'brand_active', 'brand_name'), true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -167,7 +167,7 @@ class BrandsController extends ListingBaseController
 
         $recordId = $brand->getMainTableRecordId();
 
-        if (!$brand->updateLangData($this->getDefaultFormLangId(), ['brand_name' => $data['brand_name']])) {
+        if (!$brand->updateLangData(CommonHelper::getDefaultFormLangId(), ['brand_name' => $data['brand_name']])) {
             LibHelper::exitWithError($record->getError(), true);
         }
 
@@ -189,7 +189,7 @@ class BrandsController extends ListingBaseController
         /* ] */
 
         $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
                 if (!Brand::getAttributesByLangId($langId, $recordId)) {
@@ -239,7 +239,7 @@ class BrandsController extends ListingBaseController
     {
         $frm = new Form('frmProdBrandLang', array('id' => 'frmProdBrandLang'));
         $frm->addHiddenField('', 'brand_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_Brand_Name', $this->siteLangId), 'brand_name');
         return $frm;
     }

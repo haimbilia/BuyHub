@@ -1936,7 +1936,7 @@ class CommonHelper extends FatUtility
         } else {
             $url = $row['urlrewrite_original'];
         }
-        
+
         return array_values(array_filter(explode('/', $url)));
     }
 
@@ -2100,5 +2100,10 @@ class CommonHelper extends FatUtility
     public static function isFieldEncrypted($data)
     {
         return (strpos($data, '*') !== false);
+    }
+
+    public static function getDefaultFormLangId()
+    {
+        return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
     }
 }
