@@ -205,7 +205,7 @@ class EarningsReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['date', 'subscriptionCharges', 'promotionCharged', 'adminSalesEarnings', 'totalEarning'];
     }

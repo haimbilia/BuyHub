@@ -35,7 +35,7 @@ class AbusiveWordsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -91,7 +91,7 @@ class AbusiveWordsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditAbusiveWords($this->admin_id, true));
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
     }
 
     public function form()

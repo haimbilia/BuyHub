@@ -2,6 +2,8 @@
 
 class DeletedUsersController extends ListingBaseController
 {
+    protected $modelClass = 'User';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,14 +14,20 @@ class DeletedUsersController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_DELETED_USERS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['searchFrmTemplate'] = 'deleted-users/search-form.php';
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('languages', Language::getAllNames());
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js'));
@@ -37,7 +45,7 @@ class DeletedUsersController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');

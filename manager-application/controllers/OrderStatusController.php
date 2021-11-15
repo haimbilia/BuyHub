@@ -66,7 +66,7 @@ class OrderStatusController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
@@ -142,7 +142,7 @@ class OrderStatusController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));

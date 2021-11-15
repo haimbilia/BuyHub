@@ -289,4 +289,28 @@ class Transactions extends MyAppModel
         }
         return true;
     }
+
+    public static function getStatusHtml(int $langId, int $status): string
+    {
+        $arr = Transactions::getStatusArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::STATUS_PENDING : 
+                $status = HtmlHelper::INFO;
+                break;
+            case static::STATUS_COMPLETED : 
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::STATUS_DECLINED : 
+                $status = HtmlHelper::DANGER;
+                break;
+            case applicationConstants::DRAFT:
+                $status = HtmlHelper::INFO;
+                break;
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
 }

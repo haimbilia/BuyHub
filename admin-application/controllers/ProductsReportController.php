@@ -319,7 +319,7 @@ class ProductsReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['product_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
     }

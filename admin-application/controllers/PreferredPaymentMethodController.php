@@ -176,7 +176,7 @@ class PreferredPaymentMethodController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['orderDate', 'pluginName', 'billingAddress', 'transactionAmount'];
     }

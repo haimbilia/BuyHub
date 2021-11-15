@@ -1,12 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $actionItemsData['columnButtons'] = '';
 
-if (isset($formColumns) && !empty($formColumns)) {
+if (isset($actionItemsData['formColumns']) && !empty($actionItemsData['formColumns'])) {
     $actionItemsData['columnButtons'] = '<ul class="list-checkbox list-drag-drop ui-sortable" id="sortable">';
-    foreach ($formColumns as $key => $label) {
+    foreach ($actionItemsData['formColumns'] as $key => $label) {
         $disabled = '';
         $checked = '';
-        if (in_array($key, $defaultColumns)) {
+        if (in_array($key, $actionItemsData['defaultColumns'])) {
             $disabled = 'disabled';
             $checked = 'checked="checked"';
         }
@@ -26,7 +26,5 @@ if (isset($formColumns) && !empty($formColumns)) {
 ?>
 
 <div class="card-toolbar">
-    <?php
-    $this->includeTemplate('_partial/listing/action-buttons.php', $actionItemsData, false);
-    ?>
+    <?php $this->includeTemplate('_partial/listing/action-buttons.php', $actionItemsData, false); ?>
 </div>

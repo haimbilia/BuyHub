@@ -23,6 +23,7 @@ class HtmlHelper
         $actionBtnArr = [
             'newRecordBtn' => true,
             'deleteButton' => false,
+            'statusButtons' => false,
             'columnButtons' => false,
             'performBulkAction' => false,
             'formAction' => 'toggleBulkStatuses',
@@ -31,7 +32,7 @@ class HtmlHelper
             'searchFrmTemplate' => '_partial/listing/listing-search-form.php',
             'searchListingPage' => FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php'
         ];
-
+       
         if (null == $obj) {
             return $actionBtnArr;
         }
@@ -40,9 +41,6 @@ class HtmlHelper
             $actionBtnArr = array_merge($actionBtnArr, ['performBulkAction' => true, 'statusButtons' => true]);
         }
 
-        if (array_key_exists($obj::tblFld('deleted'), $fields)) {
-            $actionBtnArr = array_merge($actionBtnArr, ['performBulkAction' => true, 'deleteButton' => true]);
-        }
         return $actionBtnArr;
     }
 

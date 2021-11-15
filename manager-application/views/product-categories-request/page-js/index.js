@@ -10,8 +10,8 @@
         });
     };
 
-    images = function (brandId, fileType, slide_screen, langId) {
-        fcom.ajax(fcom.makeUrl('ProductCategoriesRequest', 'images', [brandId, fileType, langId, slide_screen]), '', function (t) {
+    images = function (recordId, fileType, slide_screen, langId) {
+        fcom.ajax(fcom.makeUrl('ProductCategoriesRequest', 'images', [recordId, fileType, langId, slide_screen]), '', function (t) {
             if (fileType == 'logo') {
                 $('#logoListingJs').html(t);
             } else {
@@ -32,14 +32,14 @@
 
     $(document).on('change', '#logoLanguageJs', function () {
         var lang_id = $(this).val();
-        var brand_id = $(this).closest("form").find('input[name="prodcat_id"]').val();
-        images(ProductCategoriesRequest, 'logo', 1, lang_id);
+        var recordId = $(this).closest("form").find('input[name="prodcat_id"]').val();
+        images(recordId, 'logo', 1, lang_id);
     });
     $(document).on('change', '#imageLanguageJs', function () {
         var lang_id = $(this).val();
-        var brand_id = $(this).closest("form").find('input[name="prodcat_id"]').val();
+        var recordId = $(this).closest("form").find('input[name="prodcat_id"]').val();
         var slide_screen = $("#slideScreenJs").val();
-        images(ProductCategoriesRequest, 'image', slide_screen, lang_id);
+        images(recordId, 'image', slide_screen, lang_id);
     });
      
 

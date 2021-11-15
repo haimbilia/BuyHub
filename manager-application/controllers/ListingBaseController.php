@@ -12,27 +12,6 @@ class ListingBaseController extends AdminBaseController
         parent::__construct($action);
     }
 
-    public function index()
-    {
-        $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
-
-        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
-        $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
-
-        $this->set('pageData', $pageData);
-        $this->set('pageTitle', $pageTitle);
-        $this->set('actionItemsData', $actionItemsData);
-        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
-        $this->set("frmSearch", $frmSearch);
-        $this->set('keywordPlaceholder', Labels::getLabel($this->keyworldFldPlaceholder, $this->siteLangId));
-        $this->getListingData();
-        $this->_template->render(true, true, '_partial/listing/index.php');
-    }
-
     public function langForm($autoFillLangData = 0)
     {
         $this->mainTableRecordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -66,7 +45,6 @@ class ListingBaseController extends AdminBaseController
             }
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
         $this->set('recordId', $this->mainTableRecordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);

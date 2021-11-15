@@ -35,7 +35,7 @@ class SmartRecomendedWeightagesController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $post = FatApp::getPostedData();
 
@@ -87,7 +87,7 @@ class SmartRecomendedWeightagesController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditRecomendedWeightages($this->admin_id, true));
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
     }
 
     public function setup()

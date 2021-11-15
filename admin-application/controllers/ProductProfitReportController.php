@@ -178,7 +178,7 @@ class ProductProfitReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['product_name', 'category_name', 'transactionAmount', 'adminSalesEarnings'];
     }

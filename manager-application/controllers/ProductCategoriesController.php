@@ -144,7 +144,7 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('frm', $frm);     
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->set('canEditRating', $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));        
+                
         $this->_template->render(false, false);
     }
 
@@ -163,7 +163,7 @@ class ProductCategoriesController extends ListingBaseController
         $frm = $this->getImagesFrm($recordId);    
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->_template->render(false, false);
     }
 

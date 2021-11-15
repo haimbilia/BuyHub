@@ -167,7 +167,7 @@ class SubscriptionPlanReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns(): array
+    protected function getDefaultColumns(): array
     {
         return ['spackage_name', 'spackageSold', 'activeSubscribers', 'spRenewalPendings', 'spRenewals', 'spackageCancelled', 'spplan_price'];
     }

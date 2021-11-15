@@ -96,7 +96,7 @@ class PromotionsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();
@@ -204,7 +204,7 @@ class PromotionsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditPromotions($this->admin_id, true));
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('typeArr', Promotion::getTypeArr($this->siteLangId));
@@ -571,7 +571,7 @@ class PromotionsController extends ListingBaseController
         $this->set('promotionType', $promotionType);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('includeTabs', $enableTabs);
         $this->set('activeTab', 'GENERAL');
         $this->set('formTitle', Labels::getLabel('LBL_PROMOTION_SETUP', $this->siteLangId));
@@ -634,7 +634,7 @@ class PromotionsController extends ListingBaseController
         $this->set('bannerHeight', $bannerHeight);
         $this->set('promotionType', $promotionType);
         $this->set('recordId', $recordId);
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('mediaFrm', $mediaFrm);
         $this->set('screen', applicationConstants::SCREEN_DESKTOP);
         $this->_template->render(false, false);

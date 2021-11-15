@@ -35,7 +35,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $post = FatApp::getPostedData();
 
@@ -91,7 +91,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditRewardsOnPurchase($this->admin_id, true));
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
     }
 
     public function form()

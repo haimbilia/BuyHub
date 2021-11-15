@@ -2,13 +2,33 @@
 class ZonesController extends ListingBaseController
 {
     protected $modelClass = 'Zone';
-    protected $pageKey = 'MANAGE_SHIPPING_ZONES';
-    protected $keyworldFldPlaceholder = 'FRM_SEARCH_BY_ZONE_NAME';
 
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewZones();
+    }
+
+    public function index()
+    {
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ZONE_NAME', $this->siteLangId));
+        $this->getListingData();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     /**
@@ -35,7 +55,7 @@ class ZonesController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
@@ -102,7 +122,7 @@ class ZonesController extends ListingBaseController
             }
             $frm->fill($data);
         }
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        /*  */
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->siteLangId));
@@ -251,7 +271,7 @@ class ZonesController extends ListingBaseController
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
-        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {

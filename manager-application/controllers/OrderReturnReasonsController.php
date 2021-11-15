@@ -48,7 +48,7 @@ class OrderReturnReasonsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();
@@ -100,7 +100,7 @@ class OrderReturnReasonsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditOrderReturnReasons($this->admin_id, true));
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
     }
 
     public function form()
@@ -117,7 +117,7 @@ class OrderReturnReasonsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));

@@ -233,7 +233,7 @@ class SalesReportController extends AdminBaseController
         return $arr;
     }
 
-    private function getDefaultColumns($orderDate = ''): array
+    protected function getDefaultColumns($orderDate = ''): array
     {
         $arr = ['orderDate', 'totQtys', 'grossSales', 'couponDiscount', 'refundedAmount', 'shippingTotal', 'taxTotal', 'orderNetAmount'];
         if (!empty($orderDate)) {

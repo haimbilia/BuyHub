@@ -55,7 +55,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData() {
+    private function getListingData() {
         $this->objPrivilege->canEditProductCategories();
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
@@ -124,7 +124,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
             }
             $frm->fill($data);
         }
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -239,7 +239,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
         $imageFrm = $this->getImageForm($recordId);
         $imageFrm->fill($data);
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
@@ -407,7 +407,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         return $arr;
     }
 
-    private function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array {
         return [
             'select_all',
             'listSerial',

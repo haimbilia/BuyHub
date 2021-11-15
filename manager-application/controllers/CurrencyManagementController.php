@@ -54,7 +54,7 @@ class CurrencyManagementController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
@@ -138,7 +138,7 @@ class CurrencyManagementController extends ListingBaseController
         $frm = $this->getForm($defaultCurrency);
         $frm->fill($data);
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->siteLangId));

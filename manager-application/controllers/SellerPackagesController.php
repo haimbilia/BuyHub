@@ -73,7 +73,7 @@ class SellerPackagesController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    protected function getListingData()
+    private function getListingData()
     {
         $db = FatApp::getDb();
 
@@ -146,7 +146,7 @@ class SellerPackagesController extends ListingBaseController
             }
             $frm->fill($data);
         }
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->siteLangId));

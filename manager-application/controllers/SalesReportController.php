@@ -19,6 +19,7 @@ class SalesReportController extends ListingBaseController
         $actionItemsData = array_merge($actionItemsData, [
             'newRecordBtn' => false,
             'formColumns' => $formColumns,
+            'columnButtons' => true,
             'defaultColumns' => $this->getDefaultColumns($orderDate),
         ]);
 
@@ -62,7 +63,7 @@ class SalesReportController extends ListingBaseController
         return $frm;
     }
 
-    protected function getListingData($type = false, $orderDate = '')
+    private function getListingData($type = false, $orderDate = '')
     {
         $db = FatApp::getDb();
         $post = FatApp::getPostedData();
