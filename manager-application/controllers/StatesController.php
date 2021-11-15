@@ -3,7 +3,6 @@
 class StatesController extends ListingBaseController
 {
     protected $modelClass = 'States';
-    protected $pageKey = 'MANAGE_STATES';
 
     public function __construct($action)
     {
@@ -16,7 +15,7 @@ class StatesController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
