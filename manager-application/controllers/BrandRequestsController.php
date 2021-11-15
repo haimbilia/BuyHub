@@ -135,7 +135,7 @@ class BrandRequestsController extends ListingBaseController {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
-            $data = Brand::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('brand_name', 'brand_id', 'brand_identifier', 'brand_active', 'brand_featured', 'brand_status', 'brand_seller_id'), true);
+            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_name', 'brand_id', 'brand_identifier', 'brand_active', 'brand_featured', 'brand_status', 'brand_seller_id'), true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -143,7 +143,7 @@ class BrandRequestsController extends ListingBaseController {
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm); 
         $this->_template->render(false, false); 
@@ -178,7 +178,7 @@ class BrandRequestsController extends ListingBaseController {
         }
 
         $recordId = $brand->getMainTableRecordId();
-        if (!$brand->updateLangData($this->getDefaultFormLangId(), ['brand_name' => $data['brand_name']])) {
+        if (!$brand->updateLangData(CommonHelper::getDefaultFormLangId(), ['brand_name' => $data['brand_name']])) {
             LibHelper::exitWithError($record->getError(), true);
         }
 
@@ -200,7 +200,7 @@ class BrandRequestsController extends ListingBaseController {
         /* ] */
 
         $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
                 if (!Brand::getAttributesByLangId($langId, $recordId)) {
@@ -247,7 +247,7 @@ class BrandRequestsController extends ListingBaseController {
     protected function getLangForm($recordId = 0, $lang_id = 0) {
         $frm = new Form('frmProdBrandLang', array('id' => 'frmProdBrandLang'));
         $frm->addHiddenField('', 'brand_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_Brand_Name', $this->siteLangId), 'brand_name');
         return $frm;
     }
@@ -275,7 +275,7 @@ class BrandRequestsController extends ListingBaseController {
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);

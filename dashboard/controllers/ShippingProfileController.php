@@ -3,11 +3,7 @@ class ShippingProfileController extends SellerBaseController
 {
     public function __construct($action)
     {
-        parent::__construct($action);
-        if (!FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            CommonHelper::redirectUserReferer();
-        }
+        parent::__construct($action);        
         $this->userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId());
     }
 

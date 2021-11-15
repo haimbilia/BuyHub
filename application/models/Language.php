@@ -101,14 +101,14 @@ class Language extends MyAppModel
             return $langData['language_layout_direction'];
         }
     }
-    
+
     /**
      * getDropDownList
      *
      * @param  mixed $langIdToRemove - default system lang
      * @return void
      */
-    public static function getDropDownList(int $langIdToRemove = 0) : array
+    public static function getDropDownList(int $langIdToRemove = 0): array
     {
         $arr = self::getAllNames();
         if (0 < $langIdToRemove) {

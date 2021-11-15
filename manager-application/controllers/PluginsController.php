@@ -150,7 +150,7 @@ class PluginsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
-        $data = Plugin::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
+        $data = Plugin::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
         $pluginType = $data['plugin_type'];
         $frm = $this->getForm($pluginType, $recordId);
         $identifier = '';
@@ -169,7 +169,7 @@ class PluginsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
@@ -380,7 +380,7 @@ class PluginsController extends ListingBaseController
         $frm = new Form('frmPluginLang');
         $frm->addHiddenField('', 'plugin_id', $recordId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->siteLangId), 'plugin_name');
         $frm->addHtmlEditor(Labels::getLabel('LBL_EXTRA_INFO', $this->siteLangId), 'plugin_description');
 

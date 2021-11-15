@@ -94,9 +94,9 @@ class ShopsController extends ListingBaseController {
         $this->checkEditPrivilege();
         $shop_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($shop_id);
-        $lang = Language::getDropDownList($this->getDefaultFormLangId());
+        $lang = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < $shop_id) {
-            $data = Shop::getAttributesByLangId($this->getDefaultFormLangId(), $shop_id, null, true);
+            $data = Shop::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $shop_id, null, true);
             if ($data === false) {
                 FatUtility::dieWithError($this->str_invalid_request);
             }
@@ -139,7 +139,7 @@ class ShopsController extends ListingBaseController {
         }
 
         $recordId = $shop->getMainTableRecordId();
-        if (!$shop->updateLangData($this->getDefaultFormLangId(), [
+        if (!$shop->updateLangData(CommonHelper::getDefaultFormLangId(), [
                     'shop_name' => $post['shop_name'],
                     'shop_city' => $post['shop_city'],
                     'shop_contact_person' => $post['shop_contact_person'],
@@ -242,7 +242,7 @@ class ShopsController extends ListingBaseController {
         if (1 == count($languages)) {
             $langId = array_key_first($languages);
         }
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $shop_id);
         $shopDetails = Shop::getAttributesById($shop_id);
         $shopLayoutTemplateId = $shopDetails['shop_ltemplate_id'];
@@ -255,7 +255,7 @@ class ShopsController extends ListingBaseController {
         $this->set('logoFrm', $shopLogoFrm);
         $this->set('shopBannerFrm', $shopBannerFrm);
         $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->_template->render(false, false);
     }
 
@@ -482,7 +482,7 @@ class ShopsController extends ListingBaseController {
     protected function getLangForm($shop_id = 0, $lang_id = 0) {
         $frm = new Form('frmShopLang', array('id' => 'frmShopLang'));
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Shop_Name', $lang_id), 'shop_name');
         $this->appendLangFormFields($frm);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));

@@ -2,7 +2,6 @@
 class ZonesController extends ListingBaseController
 {
     protected $modelClass = 'Zone';
-    protected $pageKey = 'MANAGE_SHIPPING_ZONES';
 
     public function __construct($action)
     {
@@ -15,7 +14,7 @@ class ZonesController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
@@ -117,13 +116,13 @@ class ZonesController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
         if (0 < $recordId) {
-            $data = Zone::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
+            $data = Zone::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        /*  */
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->siteLangId));
@@ -165,7 +164,7 @@ class ZonesController extends ListingBaseController
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'zone_active', $activeInactiveArr, '', array(), '');
 
-        $languageArr = Language::getDropDownList();
+        $languageArr = Language::getAllNames(true);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
@@ -178,7 +177,7 @@ class ZonesController extends ListingBaseController
     {
         $frm = new Form('frmZoneLang');
         $frm->addHiddenField('', 'zone_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->siteLangId), 'zone_name');
         return $frm;
     }
@@ -272,7 +271,7 @@ class ZonesController extends ListingBaseController
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
-        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHIPPING_ZONES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {

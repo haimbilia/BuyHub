@@ -32,7 +32,7 @@ $plugin = new Plugin();
         } ?>
         <div class="js-hamburger hamburger-toggle <?php echo $isOpened; ?>"><span class="bar-top"></span><span class="bar-mid"></span><span class="bar-bot"></span></div>
     </div>
-    <div class="sidebar__content custom-scrollbar scroll scroll-y" id="scrollElement-js" >
+    <div class="sidebar__content custom-scrollbar scroll scroll-y" id="scrollElement-js">
         <nav class="dashboard-menu">
             <ul>
                 <?php
@@ -79,7 +79,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'producttags') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Product_Tags', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'productTags'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#product-tags" >
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#product-tags">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Product_Tags', $siteLangId); ?></span></a>
@@ -113,7 +113,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'sellerrequests' && $action == 'index') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_Requests', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('SellerRequests'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#requests" >
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#requests">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_Requests', $siteLangId); ?></span></a>
@@ -126,17 +126,16 @@ $plugin = new Plugin();
                 <?php } ?>
 
                 <?php if (
-                    FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0) &&
-                    ($userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId(), true) ||
-                        $userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true))
+                    $userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId(), true) ||
+                    $userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true)
                 ) { ?>
                     <li class="menu__item">
                         <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_Shipping', $siteLangId); ?></span></div>
                     </li>
-                    <?php 
+                    <?php
                     $shippingObj = new Shipping($siteLangId);
-                    if ($userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId(), true) && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && (!$shippingObj->getShippingApiObj($userParentId) || Shop::getAttributesByUserId($userParentId, 'shop_use_manual_shipping_rates') )) { 
-                        ?>                    
+                    if ($userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId(), true) && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && (!$shippingObj->getShippingApiObj($userParentId) || Shop::getAttributesByUserId($userParentId, 'shop_use_manual_shipping_rates'))) {
+                    ?>
                         <li class="menu__item <?php echo ($controller == 'shippingprofile') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
                                 <a title="<?php echo Labels::getLabel('LBL_Shipping_Profiles', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
@@ -149,7 +148,7 @@ $plugin = new Plugin();
                             </div>
                         </li>
                     <?php } ?>
-                    <?php if ($userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) { ?>
+                    <?php if ($userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1) && FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
                         <li class="menu__item <?php echo ($controller == 'shippingpackages') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
                                 <a title="<?php echo Labels::getLabel('LBL_Shipping_Packages', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
@@ -309,14 +308,14 @@ $plugin = new Plugin();
                     <?php } ?>
                     <li class="divider"></li>
                 <?php } ?>
-                <?php 
-                    $marketPlaceChannels = (array) Plugin::getDataByType(Plugin::TYPE_MARKETPLACE_CHANNELS, $siteLangId);
-                    if ($userPrivilege->canViewMarketplaceChannel(UserAuthentication::getLoggedUserId(), true) && 0 < count($marketPlaceChannels)) { ?>
+                <?php
+                $marketPlaceChannels = (array) Plugin::getDataByType(Plugin::TYPE_MARKETPLACE_CHANNELS, $siteLangId);
+                if ($userPrivilege->canViewMarketplaceChannel(UserAuthentication::getLoggedUserId(), true) && 0 < count($marketPlaceChannels)) { ?>
                     <li class="menu__item">
-                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_OMNI_CHANNEL_MANAGEMENT', $siteLangId);?></span></div>
+                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_OMNI_CHANNEL_MANAGEMENT', $siteLangId); ?></span></div>
                     </li>
                     <?php
-                    foreach ($marketPlaceChannels as $channel) { 
+                    foreach ($marketPlaceChannels as $channel) {
                         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PLUGIN_LOGO, $channel['plugin_id']);
                         $uploadedTime = '';
                         $aspectRatio = '';
@@ -324,15 +323,15 @@ $plugin = new Plugin();
                             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                             $aspectRatio = ($fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) ? $aspectRatioArr[$fileData['afile_aspect_ratio']] : '';
                         }
-                        ?>
+                    ?>
                         <li class="menu__item <?php echo ($controller == strtolower($channel['plugin_code'])) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
-                                <a title="<?php echo $channel['plugin_name'];?>" href="<?php echo UrlHelper::generateUrl($channel['plugin_code']); ?>">
+                                <a title="<?php echo $channel['plugin_name']; ?>" href="<?php echo UrlHelper::generateUrl($channel['plugin_code']); ?>">
                                     <i class="icn shop"><svg class="svg">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#<?php echo strtolower($channel['plugin_code']); ?>"></use>
                                         </svg>
                                     </i>
-                                    <span class="menu-item__title"><?php echo $channel['plugin_name'];?></span>
+                                    <span class="menu-item__title"><?php echo $channel['plugin_name']; ?></span>
                                 </a>
                             </div>
                         </li>
@@ -351,7 +350,7 @@ $plugin = new Plugin();
                             <div class="menu__item__inner">
                                 <a title="<?php echo Labels::getLabel('LBL_Meta_Tags', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'productSeo'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#meta-tags" >
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#meta-tags">
                                             </use>
                                         </svg>
                                     </i>
@@ -364,7 +363,7 @@ $plugin = new Plugin();
                         <li class="menu__item <?php echo ($controller == 'seller' && $action == 'producturlrewriting') ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_URL_Rewriting', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'productUrlRewriting'); ?>">
                                     <i class="icn shop"><svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#URL-rewriting" >
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#URL-rewriting">
                                             </use>
                                         </svg>
                                     </i><span class="menu-item__title"><?php echo Labels::getLabel('LBL_URL_Rewriting', $siteLangId); ?></span></a>
@@ -518,7 +517,7 @@ $plugin = new Plugin();
                 <li class="menu__item <?php echo ($controller == 'account' && $action == 'profileinfo') ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner"><a title="<?php echo Labels::getLabel('LBL_My_Account', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo'); ?>">
                             <i class="icn shop"><svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-account" >
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-account">
                                     </use>
                                 </svg>
                             </i><span class="menu-item__title"><?php echo Labels::getLabel("LBL_My_Account", $siteLangId); ?></span></a>
@@ -569,17 +568,17 @@ $plugin = new Plugin();
                     </div>
                 </li>
 
-                <?php if ($userPrivilege->canViewSellerPlugins(UserAuthentication::getLoggedUserId(), true)) { ?>                
-                    <li class="divider"></li>                                    
-                        <li class="menu__item">
-                            <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_Plugins', $siteLangId); ?></span></div>
-                        </li>
-                        <?php foreach(SellerPlugin::getAllowedTypeArr($siteLangId) as $type => $name) { 
-                            $canUseShippingApi = Shipping::canUseShippingApi(UserAuthentication::getLoggedUserId(0));
-                            if (false === $canUseShippingApi && Plugin::TYPE_SHIPPING_SERVICES == $type) {
-                                continue;
-                            }
-                            ?>  
+                <?php if ($userPrivilege->canViewSellerPlugins(UserAuthentication::getLoggedUserId(), true)) { ?>
+                    <li class="divider"></li>
+                    <li class="menu__item">
+                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel('LBL_Plugins', $siteLangId); ?></span></div>
+                    </li>
+                    <?php foreach (SellerPlugin::getAllowedTypeArr($siteLangId) as $type => $name) {
+                        $canUseShippingApi = Shipping::canUseShippingApi(UserAuthentication::getLoggedUserId(0));
+                        if (false === $canUseShippingApi && Plugin::TYPE_SHIPPING_SERVICES == $type) {
+                            continue;
+                        }
+                    ?>
                         <li class="menu__item <?php echo ($controller == 'sellerplugins' && $action == 'index' && is_array($params) && current($params) == $type) ? 'is-active' : ''; ?>">
                             <div class="menu__item__inner">
                                 <a title="<?php echo $name; ?>" href="<?php echo UrlHelper::generateUrl('sellerPlugins', 'index', [$type]); ?>">
@@ -591,9 +590,9 @@ $plugin = new Plugin();
                                     <span class="menu-item__title"><?php echo $name; ?></span>
                                 </a>
                             </div>
-                        </li>                   
-                    <?php }                    
-                    } ?>
+                        </li>
+                <?php }
+                } ?>
 
                 <?php if ($userPrivilege->canViewImportExport(UserAuthentication::getLoggedUserId(), true)) { ?>
                     <li class="divider"></li>

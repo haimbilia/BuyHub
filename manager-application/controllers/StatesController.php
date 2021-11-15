@@ -3,7 +3,6 @@
 class StatesController extends ListingBaseController
 {
     protected $modelClass = 'States';
-    protected $pageKey = 'MANAGE_STATES';
 
     public function __construct($action)
     {
@@ -16,7 +15,7 @@ class StatesController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
@@ -156,14 +155,14 @@ class StatesController extends ListingBaseController
         $frm = $this->getForm();
 
         if (0 < $recordId) {
-            $data = States::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
+            $data = States::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));
@@ -226,7 +225,7 @@ class StatesController extends ListingBaseController
         $this->objPrivilege->canViewStates();
         $frm = new Form('frmStateLang');
         $frm->addHiddenField('', 'state_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_State_Name', $this->siteLangId), 'state_name');
         return $frm;
     }

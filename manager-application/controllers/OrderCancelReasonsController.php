@@ -2,6 +2,8 @@
 
 class OrderCancelReasonsController extends ListingBaseController
 {
+    protected $modelClass = 'OrderCancelReason';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -26,13 +28,22 @@ class OrderCancelReasonsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_CANCEL_REASONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -101,7 +112,7 @@ class OrderCancelReasonsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditOrderCancelReasons($this->admin_id, true));
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
     }
 
     public function form()
@@ -111,7 +122,7 @@ class OrderCancelReasonsController extends ListingBaseController
         $frm = $this->getForm();
 
         if (0 < $recordId) {  
-            $data = OrderCancelReason::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('ocreason_id', 'ocreason_identifier', 'ocreason_title'), true);        
+            $data = OrderCancelReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('ocreason_id', 'ocreason_identifier', 'ocreason_title'), true);        
             
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -119,7 +130,7 @@ class OrderCancelReasonsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_CANCEL_REASON_SETUP', $this->siteLangId));
@@ -172,7 +183,7 @@ class OrderCancelReasonsController extends ListingBaseController
     {
         $frm = new Form('frmOrderCancelReasonLang');
         $frm->addHiddenField('', 'ocreason_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'ocreason_title');
         // $frm->addTextarea('Reason Description', 'ocreason_description');
         return $frm;

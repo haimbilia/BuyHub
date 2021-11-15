@@ -2,6 +2,7 @@
 
 class ContentPagesController extends ListingBaseController
 {
+    protected $modelClass = 'ContentPage';
     public function __construct($action)
     {
         parent::__construct($action);
@@ -11,31 +12,46 @@ class ContentPagesController extends ListingBaseController
     public function index()
     {
         $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm(false, $fields);
-        $this->set('canEdit', $this->objPrivilege->canEditContentPages($this->admin_id, true));
-        $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_MANAGE_CONTENT_PAGES', $this->admin_id));
-        $this->getListingData();
+        $frmSearch = $this->getSearchForm($fields);
 
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CONTENT_PAGES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['deleteButton'] = true;
+       
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
+        $this->getListingData();
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js']);
         $this->set('includeEditor', true);
-        $this->_template->render();
+        $this->_template->render(true, true);
     }
 
-    public function getSearchForm($request = false, $fields = [])
+     /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setLangTemplateData(array $constructorArgs = []): void
     {
-        $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Page_Title', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld->overrideFldType('search');
-
-        if (!empty($fields)) {
-            $this->addSortingElements($frm, 'cpage_title');
-        }
-
-        HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
-        return $frm;
+        $this->objPrivilege->canEditContentPages();
+        $this->modelObj = (new ReflectionClass('ContentPage'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [
+            $this->modelObj::tblFld('title'), 
+            $this->modelObj::tblFld('image_title'),
+            $this->modelObj::tblFld('image_content'),
+        ];
+        $this->set('formTitle', Labels::getLabel('LBL_CONTENT_PAGE_SETUP', $this->siteLangId));
     }
 
     public function search()
@@ -124,7 +140,7 @@ class ContentPagesController extends ListingBaseController
                 'cpage_id', 'cpage_identifier', 'cpage_content','cpage_title', 'cpage_layout', 
                 'cpage_image_content', 'cpage_image_title'
             );
-            $data = ContentPage::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, $arrayFlds, true);
+            $data = ContentPage::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, $arrayFlds, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -143,7 +159,7 @@ class ContentPagesController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -305,7 +321,7 @@ class ContentPagesController extends ListingBaseController
             }
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $this->mainTableRecordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
@@ -395,23 +411,6 @@ class ContentPagesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-     /**
-     * setLangTemplateData - This function is use to automate load langform and save it. 
-     *
-     * @param  array $constructorArgs
-     * @return void
-     */
-    protected function setLangTemplateData(array $constructorArgs = []): void
-    {
-        $this->objPrivilege->canEditContentPages();
-        $this->modelObj = (new ReflectionClass('ContentPage'))->newInstanceArgs($constructorArgs);
-        $this->formLangFields = [
-            $this->modelObj::tblFld('title'), 
-            $this->modelObj::tblFld('image_title'),
-            $this->modelObj::tblFld('image_content'),
-        ];
-        $this->set('formTitle', Labels::getLabel('LBL_CONTENT_PAGE_SETUP', $this->siteLangId));
-    }
 
     /**
      * Undocumented function
@@ -470,7 +469,7 @@ class ContentPagesController extends ListingBaseController
      * @param integer $lang_id
      * @return void
      */
-    public function images($recordId, $file_type = 'IMAGE', $lang_id = 0)
+    public function images($recordId, $file_type = 'THUMB', $lang_id = 0)
     {
         $languages = Language::getAllNames();
         $recordId = FatUtility::int($recordId);
@@ -513,14 +512,14 @@ class ContentPagesController extends ListingBaseController
         $cbgForm = $this->getMediaContentForm($recordId, $this->siteLangId);
         $cbgForm->fill($data);
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         
         $cpageData = ContentPage::getAttributesByLangId($langId, $recordId, NULL, TRUE);
         $this->set('contentPageDetails', $cpageData);
         $this->set('cbgForm', $cbgForm);
         $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->_template->render(false, false);
     }
 

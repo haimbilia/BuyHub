@@ -34,9 +34,10 @@ foreach ($arrListing as $sn => $row) {
             case 'utxn_comments':								
                 $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionComments($row[$key]),true);
             break;
-            case 'utxn_status':								
-                $td->appendElement('plaintext', $tdAttr, $statusArr[$row[$key]],true);
-            break;							
+            case 'utxn_status':
+                $statusHtm = Transactions::getStatusHtml($siteLangId, $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
+                break;						
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
             break;

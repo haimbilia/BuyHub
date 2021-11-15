@@ -204,7 +204,7 @@ class PromotionsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditPromotions($this->admin_id, true));
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('typeArr', Promotion::getTypeArr($this->siteLangId));
@@ -566,12 +566,12 @@ class PromotionsController extends ListingBaseController
 
             $frm->fill($promotionDetails);
         }
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         $enableTabs = (in_array($promotionType, [Promotion::TYPE_BANNER, Promotion::TYPE_SLIDES]) || 0 < count($languages));
         $this->set('promotionType', $promotionType);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('includeTabs', $enableTabs);
         $this->set('activeTab', 'GENERAL');
         $this->set('formTitle', Labels::getLabel('LBL_PROMOTION_SETUP', $this->siteLangId));
@@ -634,7 +634,7 @@ class PromotionsController extends ListingBaseController
         $this->set('bannerHeight', $bannerHeight);
         $this->set('promotionType', $promotionType);
         $this->set('recordId', $recordId);
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('mediaFrm', $mediaFrm);
         $this->set('screen', applicationConstants::SCREEN_DESKTOP);
         $this->_template->render(false, false);
@@ -798,7 +798,7 @@ class PromotionsController extends ListingBaseController
         $frm = new Form('frmPromotionLang');
         $frm->addHiddenField('', 'promotion_id', $recordId);
 
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $langId, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_promotion_name', $langId), 'promotion_name');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);

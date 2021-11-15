@@ -101,7 +101,7 @@ class ShopReportReasonsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditShopReportReasons($this->admin_id, true));
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
     }
 
     public function form()
@@ -110,7 +110,7 @@ class ShopReportReasonsController extends ListingBaseController
         $frm = $this->getForm();
 
         if (0 < $recordId) {
-            $data = ShopReportReason::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('reportreason_id', 'reportreason_title'), true);
+            $data = ShopReportReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('reportreason_id', 'reportreason_title'), true);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -118,7 +118,7 @@ class ShopReportReasonsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getDropDownList($this->getDefaultFormLangId()));
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->siteLangId));
@@ -171,7 +171,7 @@ class ShopReportReasonsController extends ListingBaseController
     {
         $frm = new Form('frmShopReportReasonLang');
         $frm->addHiddenField('', 'reportreason_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'reportreason_title');
         return $frm;
     }

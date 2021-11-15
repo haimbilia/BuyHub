@@ -3,7 +3,6 @@
 class UsersController extends ListingBaseController
 {
     protected $modelClass = 'User';
-    protected $pageKey = 'MANAGE_USERS';
 
     public function __construct($action)
     {
@@ -16,7 +15,7 @@ class UsersController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getUserSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_USERS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
