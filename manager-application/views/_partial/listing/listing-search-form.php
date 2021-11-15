@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
-$keywordPlaceholder = isset($keywordPlaceholder) ? $keywordPlaceholder : Labels::getLabel('FRM_SEARCH', $siteLangId);
+$keywordPlaceholder = $keywordPlaceholder ?? Labels::getLabel('FRM_SEARCH', $siteLangId);
 
 $frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
 
@@ -13,9 +13,6 @@ $frmSearch->setFormTagAttribute('class', 'form');
 $keyWordFld = $frmSearch->getField('keyword');
 if (null != $keyWordFld) {
     $keyWordFld->addFieldtagAttribute('class', 'form-control');
-    /* if (!$keyWordFld->getFieldTagAttribute('placeholder')) {
-        $keyWordFld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_SEARCH', $siteLangId));
-    } */
     $keyWordFld->setFieldTagAttribute('placeholder', $keywordPlaceholder);
 }
 
@@ -75,7 +72,9 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             echo $frmSearch->getFieldHtml('keyword');
                         } else {
                             $fld = $frmSearch->getField($firstElement['name']);
-                            $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
+                            if (!$fld->getFieldtagAttribute('placeholder')) {
+                                $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
+                            }
                             echo $frmSearch->getFieldHtml($firstElement['name']);
                         }
                         ?>
@@ -84,7 +83,9 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                         <?php
                         $flds = current($frmFields['advSrchFlds'][0]);
                         $fld = $frmSearch->getField($flds['name']);
-                        $fld->setFieldtagAttribute('placeholder', $flds['caption']);
+                        if (!$fld->getFieldtagAttribute('placeholder')) {
+                            $fld->setFieldtagAttribute('placeholder', $flds['caption']);
+                        }
                         echo $frmSearch->getFieldHtml($flds['name']); ?>
                     </div>
                     <div class="col-md-2">
@@ -99,6 +100,10 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             <?php if (null != $keyWordFld) {
                                 echo $frmSearch->getFieldHtml('keyword');
                             } else {
+                                $fld = $frmSearch->getField($firstElement['name']);
+                                if (!$fld->getFieldtagAttribute('placeholder')) {
+                                    $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
+                                }
                                 echo $frmSearch->getFieldHtml($firstElement['name']);
                             }
                             ?>

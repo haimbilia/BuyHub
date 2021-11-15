@@ -133,20 +133,25 @@
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
                         <h6 class=""><?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></h6>
                         <ul class="nav">
-                                    <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Users'); ?>">
+                                        <?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>
+                                    </a>
+                                </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Rewards'); ?>">
-        <?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Transactions'); ?>">
-        <?php echo Labels::getLabel('NAV_TRANSACTIONS', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_TRANSACTIONS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('DeletedUsers'); ?>">
-        <?php echo Labels::getLabel('NAV_DELETED_USERS', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_DELETED_USERS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
