@@ -46,7 +46,7 @@ class OrderCancelReasonsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()

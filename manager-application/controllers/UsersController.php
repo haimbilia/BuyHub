@@ -32,9 +32,10 @@ class UsersController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME', $this->siteLangId));
         $this->getListingData();
-        $this->_template->addJs(array('js/select2.js'));
+
+        $this->_template->addJs(array('js/select2.js', 'users/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -66,6 +67,10 @@ class UsersController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $searchForm = $this->getUserSearchForm($fields);
+        $postedData = FatApp::getPostedData();
+        $post = $searchForm->getFormDataFromArray($postedData);
 
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(null, true);
@@ -140,7 +145,9 @@ class UsersController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', FatApp::getPostedData());
+        
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

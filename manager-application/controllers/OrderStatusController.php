@@ -46,8 +46,9 @@ class OrderStatusController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addJs('js/jquery.tablednd.js');
-        $this->_template->render();
+        $this->_template->addJs(['js/jquery.tablednd.js', 'order-status/page-js/index.js']);
+        
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function getSearchForm($fields = [])
@@ -98,7 +99,9 @@ class OrderStatusController extends ListingBaseController
         
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+        
+        $postedData = FatApp::getPostedData();
+        $post = $searchForm->getFormDataFromArray($postedData);
 
         $srch = OrderStatus::getSearchObject(false, $this->siteLangId);
 
@@ -121,14 +124,16 @@ class OrderStatusController extends ListingBaseController
         $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-
+        
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
         
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
