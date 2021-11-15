@@ -2,8 +2,6 @@
 
 class UsersController extends ListingBaseController
 {
-    protected $modelClass = 'User';
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -18,8 +16,7 @@ class UsersController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_USERS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['searchFrmTemplate'] = 'users/search-form.php';
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;

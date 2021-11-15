@@ -171,7 +171,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (frm) {
             data = fcom.frmData(frm);
         }
-        console.log(frm);
+        
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function (res) {
@@ -253,7 +253,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             .submit();
     };
 
-    addNew = function () {
+    addNew = function (displayInPopup = false, dialogClass = '') {
         if (false === checkControllerName()) {
             return false;
         }
@@ -262,9 +262,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
         fcom.ajax(fcom.makeUrl(controllerName, "form"), "", function (t) {
-            $.ykmodal(t);
+            $.ykmodal(t, displayInPopup, dialogClass);
             fcom.removeLoader();
         });
     };
@@ -352,7 +352,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
-            $('.submitBtnJs').removeClass('loading');
+            $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
             fcom.removeLoader();
             var t = JSON.parse(res);
             if (t.status == 0) {
@@ -369,6 +369,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             } else if ('' != callback) {
                 window[callback](t.recordId);
             }
+            return;
         });
     };
 

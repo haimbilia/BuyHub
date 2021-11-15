@@ -70,7 +70,7 @@ class SpecialPriceController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
         
         $postedData = FatApp::getPostedData();
-        $post = $srchFrm->getFormDataFromArray($postedData);
+        $post = $searchForm->getFormDataFromArray($postedData);
 
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');

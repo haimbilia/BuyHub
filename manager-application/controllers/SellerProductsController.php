@@ -2500,7 +2500,7 @@ class SellerProductsController extends ListingBaseController
         }
     }
 
-    public function changeStatus()
+    public function updateStatus()
     {
         $this->objPrivilege->canEditSellerProducts();
         $selprodId = FatApp::getPostedData('selprodId', FatUtility::VAR_INT, 0);
