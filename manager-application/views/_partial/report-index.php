@@ -66,7 +66,7 @@ if (!empty($fields)) {
                                 [
                                     'attr' => [
                                         'href' => 'javascript:void(0)',
-                                        'onclick' => 'exportReport()',
+                                        'onclick' => 'exportRecords()',
                                         'title' => Labels::getLabel('LBL_Export', $siteLangId)
                                     ],
                                     'label' => '<i class="fas fa-file-export"></i>'

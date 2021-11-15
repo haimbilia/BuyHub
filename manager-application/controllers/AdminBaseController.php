@@ -75,7 +75,7 @@ class AdminBaseController extends FatController
 
         $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
         $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
-
+        $languages = Language::getAllNames(false);
         $jsAdminVariablesCache = FatCache::get('jsAdminVariablesCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$jsAdminVariablesCache) {
             $jsVariables = array(
@@ -176,8 +176,7 @@ class AdminBaseController extends FatController
                 'clickToCopy' => Labels::getLabel('LBL_CLICK_TO_COPY', $this->siteLangId),
                 'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                 'confirmSellerAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MAKE_SELLER_AS_BUYER', $this->siteLangId),
-            );
-            $languages = Language::getAllNames(false);
+            );            
             foreach ($languages as $val) {
                 if (empty($val)) {
                     continue;
@@ -211,7 +210,7 @@ class AdminBaseController extends FatController
         $this->set('siteDefaultCurrencyCode', $this->siteDefaultCurrencyCode);
         $this->set('jsVariables', $jsVariables);
         $this->set('notifyCount', $notifyCount);
-        $this->set('languages', Language::getAllNames(false));
+        $this->set('languages', $languages);
         $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
         $this->set('layoutDirection', $this->layoutDirection);
         $this->set('bodyClass', 'fb-body');
@@ -819,9 +818,5 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
     {
         $this->_template->render(false, false, '_partial/record-info-section.php');
     }
-
-    public function getDefaultFormLangId()
-    {
-        return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-    }
+    
 }

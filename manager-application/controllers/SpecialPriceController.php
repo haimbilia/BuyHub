@@ -2,6 +2,8 @@
 
 class SpecialPriceController extends ListingBaseController
 {
+    protected $modelClass = 'SellerProduct';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,16 +14,27 @@ class SpecialPriceController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SPECIAL_PRICE', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['searchFrmTemplate'] = 'special-price/search-form.php';
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->getListingData();
+
+        $this->_template->addJs(['js/select2.js', 'special-price/page-js/index.js']);        
         $this->_template->addCss(['css/select2.min.css']);
-        $this->_template->addJs(['js/select2.js']);
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -55,7 +68,9 @@ class SpecialPriceController extends ListingBaseController
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+        
+        $postedData = FatApp::getPostedData();
+        $post = $searchForm->getFormDataFromArray($postedData);
 
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
@@ -74,7 +89,9 @@ class SpecialPriceController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+        
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
 
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);

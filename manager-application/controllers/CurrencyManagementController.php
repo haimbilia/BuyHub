@@ -125,7 +125,7 @@ class CurrencyManagementController extends ListingBaseController
         $defaultCurrency = 0;
         if ($recordId > 0) {
             $data = Currency::getAttributesByLangId(
-                $this->getDefaultFormLangId(),
+                CommonHelper::getDefaultFormLangId(),
                 $recordId,
                 array('currency_id', 'currency_code', 'currency_active', 'currency_symbol_left', 'currency_symbol_right', 'currency_value', 'currency_name'),
                 true
@@ -222,7 +222,7 @@ class CurrencyManagementController extends ListingBaseController
     {
         $frm = new Form('frmCurrencyLang');
         $frm->addHiddenField('', 'currency_id', $currencyId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->siteLangId), 'currency_name');
         return $frm;
     }

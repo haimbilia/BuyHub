@@ -140,7 +140,7 @@ class ContentPagesController extends ListingBaseController
                 'cpage_id', 'cpage_identifier', 'cpage_content','cpage_title', 'cpage_layout', 
                 'cpage_image_content', 'cpage_image_title'
             );
-            $data = ContentPage::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, $arrayFlds, true);
+            $data = ContentPage::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, $arrayFlds, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }

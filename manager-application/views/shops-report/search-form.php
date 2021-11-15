@@ -96,6 +96,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
         <div class="col-md-4">
         </div>
     </div>
+    <div class="separator separator-dashed my-2"></div>
 </div>
 </form>
 <?php echo $frmSearch->getExternalJS(); ?>
