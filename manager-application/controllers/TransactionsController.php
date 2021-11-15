@@ -2,6 +2,8 @@
 
 class TransactionsController extends ListingBaseController
 {
+    protected $modelClass = 'Transactions';
+    
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,14 +14,19 @@ class TransactionsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_USER_TRANSACTIONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['searchFrmTemplate'] = 'transactions/search-form.php';
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('languages', Language::getAllNames());
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js'));
@@ -63,21 +70,22 @@ class TransactionsController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = Transactions::getSearchObject();
-        if (0 < $userId) {
-            $srch->addCondition('utxn.utxn_user_id', '=', $userId);
-        }
-
         $balSrch = Transactions::getSearchObject();
         $balSrch->doNotCalculateRecords();
         $balSrch->doNotLimitRecords();
-        $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
-        $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'uc');
-        $balSrch->addMultipleFields(['utxn.*', "utxn_credit - utxn_debit as bal"]);
+        $balSrch->addMultipleFields(['utxn.utxn_id', "utxn_credit - utxn_debit as bal"]);
         if (0 < $userId) {
             $balSrch->addCondition('utxn_user_id', '=', $userId);
         }
         $balSrch->addCondition('utxn_status', '=', 1);
+        
+        $srch = Transactions::getSearchObject();
+        $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.credential_user_id = u.user_id', 'uc');
+        if (0 < $userId) {
+            $srch->addCondition('utxn.utxn_user_id', '=', $userId);
+        }
+
         $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
 
         $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));

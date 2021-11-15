@@ -2,6 +2,8 @@
 
 class RewardsController extends ListingBaseController
 {
+    protected $modelClass = 'UserRewards';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,14 +14,19 @@ class RewardsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_USER_REWARD_POINTS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['searchFrmTemplate'] = 'rewards/search-form.php';
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('languages', Language::getAllNames());
         $this->getListingData();
 
         $this->_template->addJs(array('js/select2.js'));

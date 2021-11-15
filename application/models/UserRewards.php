@@ -1,7 +1,5 @@
 <?php
 
-use Stripe\Order;
-
 class UserRewards extends MyAppModel
 {
     public const DB_TBL = 'tbl_user_reward_points';
