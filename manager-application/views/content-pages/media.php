@@ -14,9 +14,9 @@ $otherButtons = [
         'attr' => [
             'href' => 'javascript:void(0)',
             'onclick' => 'mediaForm(' . $recordId . ')',
-            'title' => Labels::getLabel('LBL_BACKGROUND_IMAGE', $siteLangId),
+            'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
-        'label' => Labels::getLabel('LBL_BACKGROUND_IMAGE', $siteLangId),
+        'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         'isActive' => true
     ]
 ];

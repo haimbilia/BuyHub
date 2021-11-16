@@ -12,7 +12,7 @@ function getNotifications() {
     });
 }
 
-function getHelpCenterContent(controller, action = "") {    
+function getHelpCenterContent(controller, action = "") {
     fcom.ajax(fcom.makeUrl('HelpCenter', 'getContent', [controller, action]), '', function (t) {
         var res = JSON.parse(t);
         if (0 == res.status) {
@@ -192,7 +192,8 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
         if ('function' == typeof callbackOnUnSelect) {
             callbackOnUnSelect(e);
         }
-    });
+    }).data('select2').$container.addClass("select2-width");
+
 
     $("." + $.ykmodal.element).removeAttr('tabindex');
 };
@@ -202,14 +203,14 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
 redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
     newTab = (typeof newTab != "undefined") ? newTab : true;
     if (nid > 0) {
-        fcom.displayProcessing();      
+        fcom.displayProcessing();
         markRead(nid, url, id);
     } else {
         var target = (newTab) ? ' target="_blank" ' : ' ';
         let inputs = '';
-        $.each(hiddenfields, function( index, value ) {
-            inputs += '<input type="hidden" name="'+index+'" value="' + value + '">';
-        });       
+        $.each(hiddenfields, function (index, value) {
+            inputs += '<input type="hidden" name="' + index + '" value="' + value + '">';
+        });
         $('<form' + target + 'action="' + url + '" method="POST">' + inputs + '</form>').appendTo($(document.body)).submit();
     }
 };

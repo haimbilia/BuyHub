@@ -384,15 +384,15 @@ class ShopsController extends ListingBaseController {
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'shop_name');
-        }
-        HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        }        
         $frm->addHiddenField('', 'shop_id');
         $frm->addSelectBox(Labels::getLabel('LBL_Featured', $this->siteLangId), 'shop_featured', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'shop_active', array('-1' => 'Does not Matter') + applicationConstants::getActiveInactiveArr($this->siteLangId), -1, array(), '');
         $frm->addSelectBox(Labels::getLabel('LBL_Shop_Status_By_Seller', $this->siteLangId), 'shop_supplier_display_status', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getOnOffArr($this->siteLangId), -1, array(), '');
         $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 

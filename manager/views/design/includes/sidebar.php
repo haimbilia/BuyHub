@@ -1,4 +1,4 @@
-<sidebar class="sidebar">
+<sidebar class="sidebar" id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">
         <a href="#">
             <img src="<?php echo CONF_WEBROOT_URL;?>images/logos/logo.png" alt="">

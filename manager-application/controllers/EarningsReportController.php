@@ -16,12 +16,18 @@ class EarningsReportController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('EARNINGS_REPORT', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
+        $actionItemsData = array_merge($actionItemsData, [
+            'newRecordBtn' => false,
+            'formColumns' => $formColumns,
+            'columnButtons' => true,
+            'defaultColumns' => $this->getDefaultColumns()
+        ]);
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-
         $this->set('frmSearch', $frmSearch);
-        $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('formColumns', $formColumns);
+        $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false);
         $this->_template->render();
     }

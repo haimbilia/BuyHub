@@ -94,10 +94,9 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
-                                    <form class="form" action="#">
+                                    <form class="form form-search" action="#">
                                         <div class="card-head">
                                             <div class="card-head-label">
-
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="input-group">

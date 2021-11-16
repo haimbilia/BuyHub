@@ -20,15 +20,14 @@ class CatalogReportController extends ListingBaseController
             'newRecordBtn' => false,
             'formColumns' => $formColumns,
             'columnButtons' => true,
-            'defaultColumns' => $this->getDefaultColumns(),
-            'searchFrmTemplate' => 'catalog-report/search-form.php'
+            'defaultColumns' => $this->getDefaultColumns()
         ]);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false);
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
 
     public function search($type = false)
