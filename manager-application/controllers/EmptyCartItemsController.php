@@ -109,7 +109,7 @@ class EmptyCartItemsController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = EmptyCartItems::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
+            $data = EmptyCartItems::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -274,7 +274,7 @@ class EmptyCartItemsController extends ListingBaseController
     {
         $frm = new Form('frmEmptyCartItemLang');
         $frm->addHiddenField('', 'emptycartitem_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $langId, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_Title', $langId), 'emptycartitem_title');
         return $frm;
     }

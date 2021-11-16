@@ -26,8 +26,8 @@
         } ?>
     </ul>
     <?php
-    $newRecordBtn = isset($newRecordBtn) ? $newRecordBtn : false;
-    $newRecordBtnAttrs = isset($newRecordBtnAttrs) ? $newRecordBtnAttrs : [];
+    $newRecordBtn = $newRecordBtn ?? false;
+    $newRecordBtnAttrs = $newRecordBtnAttrs ?? [];
     if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
         $href = "javascript:void(0)";
         $onclick = "addNew()";

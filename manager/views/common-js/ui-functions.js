@@ -1,3 +1,5 @@
+
+
 /* 
 STARTS triggers & toggles[
 
@@ -47,8 +49,13 @@ $("body").mouseup(function (event) {
 /*
 ] ENDS triggers & toggles
 */
-
-new ScrollHint(".js--table-scrollable");
+$(document).ready(function () {
+  new ScrollHint(".js-scrollable", {
+      i18n: {
+          scrollable: ' ',
+      },
+  });
+});
 
 jQuery(document).ready(function ($) {
   jQuery(".stellarnav").stellarNav({
@@ -150,3 +157,7 @@ _tab.each(function () {
     });
   });
 });
+  
+  
+ 
+ 

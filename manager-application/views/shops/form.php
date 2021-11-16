@@ -2,7 +2,7 @@
 <div class="generalForm"></div>
 <?php 
 $frm->setFormTagAttribute('class', 'web_form form_horizontal');
-$frm->setFormTagAttribute('onsubmit', 'setupShop(this); return(false);');
+$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 $countryFld = $frm->getField('shop_country_code');

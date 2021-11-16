@@ -13,7 +13,11 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-left: 80px;
+    padding-#{$start-direction}: 80px;
+    //transition: all 0.5s ease-out;
+    @include media-breakpoint-down(md) {
+        padding-#{$start-direction}: 0;
+    }
 }
 
 .main {
@@ -26,9 +30,9 @@
     background-color: #fff;
     // position: fixed;
     // top: 0;
-    // right: 0;
+    // right: 0; 
     // left: 100px;
-    // z-index: 100;
+    // z-index: 100; 
     box-shadow: 0 10px 30px 0 rgba(82, 63, 105, 0.05);
     // height: 80px;
     display: flex;
@@ -36,7 +40,7 @@
     flex-direction: column;
     .page-title {
         display: flex;
-        flex-direction: column;
+        // flex-direction: column;
         h1 {
             font-size: 1.2rem;
             color: #000;
@@ -46,13 +50,16 @@
         }
     }
     &-inner {
-        display: flex; 
+        display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
     }
     &-toolbar {
         margin-#{$start-direction}: auto;
+        @include media-breakpoint-down(md) {
+            display: none;
+        }
     }
     .alert {
         width: 100%;
@@ -459,4 +466,43 @@
             padding-#{$start-direction}: 1.5rem;
         }
     }
+}
+
+.card-aside {
+    @include media-breakpoint-down(md) {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        opacity: 0;
+        left: -100%;
+        visibility: hidden;
+    }
+    &--on & {
+        opacity: 1;
+        visibility: visible;
+        left: 0;
+    }
+}.float-btn {
+    will-change: transform, opacity;
+    border: none;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
+    overflow: hidden;
+    background-color: $brand-color;
+    color: $brand-color-inverse;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    bottom: 0;
+    position: fixed;
+    margin: 1em;
+    z-index: 998;
+    #{$end-direction}:1.5rem;
+    bottom:6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .1s ease-out;
 }

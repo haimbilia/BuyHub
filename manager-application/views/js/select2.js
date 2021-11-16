@@ -5594,3 +5594,5 @@ $.fn.select2.defaults.set( 'language', {
         return langLbl.processing;
     }
 });
+
+$('select').select2().data('select2').$dropdown.addClass('my-container');

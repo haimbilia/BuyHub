@@ -26,17 +26,26 @@ class OrderStatusController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_STATUS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['searchFrmTemplate'] = 'order-status/search-form.php';
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addJs('js/jquery.tablednd.js');
-        $this->_template->render();
+        $this->_template->addJs(['js/jquery.tablednd.js', 'order-status/page-js/index.js']);
+        
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function getSearchForm($fields = [])
@@ -87,7 +96,9 @@ class OrderStatusController extends ListingBaseController
         
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+        
+        $postedData = FatApp::getPostedData();
+        $post = $searchForm->getFormDataFromArray($postedData);
 
         $srch = OrderStatus::getSearchObject(false, $this->siteLangId);
 
@@ -110,14 +121,16 @@ class OrderStatusController extends ListingBaseController
         $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-
+        
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
         
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -134,7 +147,7 @@ class OrderStatusController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = OrderStatus::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, array('orderstatus_id', 'orderstatus_name', 'orderstatus_is_active', 'orderstatus_is_digital', 'orderstatus_color_class'), true);
+            $data = OrderStatus::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('orderstatus_id', 'orderstatus_name', 'orderstatus_is_active', 'orderstatus_is_digital', 'orderstatus_color_class'), true);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -214,7 +227,7 @@ class OrderStatusController extends ListingBaseController
     {
         $frm = new Form('frmorderstatuslang');
         $frm->addHiddenField('', 'orderstatus_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->siteLangId), 'orderstatus_name');       
         return $frm;
     }
@@ -323,6 +336,6 @@ class OrderStatusController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'orderstatus_is_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop'], Common::excludeKeysForSort());
     }
 }

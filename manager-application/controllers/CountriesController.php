@@ -117,7 +117,7 @@ class CountriesController extends ListingBaseController
         $frm = $this->getForm();
 
         if (0 < $recordId) {
-            $data = Countries::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
+            $data = Countries::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -199,7 +199,7 @@ class CountriesController extends ListingBaseController
     {
         $frm = new Form('frmCountryLang');
         $frm->addHiddenField('', 'country_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->siteLangId), 'country_name');
         return $frm;
     }

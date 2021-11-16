@@ -22,6 +22,7 @@ $shopFld->addFieldtagAttribute('id', 'shop_id');
 
 $brandFld = $frmSearch->getField('brand_id');
 $brandFld->addFieldtagAttribute('id', 'brand_id');
+$brandFld->addFieldtagAttribute('class', 'brand_id');
 
 $sortByFld = $frmSearch->getField('sortBy');
 $sortByFld->setFieldTagAttribute('id', 'sortBy');
@@ -98,6 +99,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
             </div>
         </div>
     </div>
+    <div class="separator separator-dashed my-2"></div>
 </div>
 </form>
 <?php echo $frmSearch->getExternalJS(); ?>

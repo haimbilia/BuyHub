@@ -20,7 +20,7 @@ class SalesReportController extends ListingBaseController
             'newRecordBtn' => false,
             'formColumns' => $formColumns,
             'columnButtons' => true,
-            'defaultColumns' => $this->getDefaultColumns($orderDate),
+            'defaultColumns' => $this->getDefaultColumns($orderDate)
         ]);
 
         $this->set('pageData', $pageData);
@@ -29,7 +29,7 @@ class SalesReportController extends ListingBaseController
         $this->set('orderDate', $orderDate);
         $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false, $orderDate);
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
 
     public function search($type = false)
@@ -79,10 +79,7 @@ class SalesReportController extends ListingBaseController
             $sortBy = current(array_keys($fields));
         }
 
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
-            $sortOrder = applicationConstants::SORT_DESC;
-        }
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
         $srchFrm = $this->getSearchForm($fields, $orderDate);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
@@ -125,6 +122,7 @@ class SalesReportController extends ListingBaseController
 
         $srch->setOrderBy($sortBy, $sortOrder);
         $srch->setDateCondition($fromDate, $toDate);
+
 
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
