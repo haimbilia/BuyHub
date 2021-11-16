@@ -16,11 +16,11 @@ class AbusiveWordsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ABUSIVE_KEYWORDS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
+        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
                 'href' => "javascript:void(0)",

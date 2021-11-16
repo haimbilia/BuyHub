@@ -31,6 +31,15 @@ class BlogPostsController extends ListingBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'href' => "javascript:void(0)",
+                'onclick' => 'addNew(false, "modal-dialog-vertical-md")',
+                'title' => $btnTitle,
+            ],
+            'label' => $btnTitle,
+        ];
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
@@ -45,6 +54,7 @@ class BlogPostsController extends ListingBaseController
 
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'blog-posts/page-js/index.js']);
         $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css']);
+        $this->set('includeEditor', true);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
