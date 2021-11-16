@@ -55,7 +55,6 @@ $urlFld = $frm->getField('banner_url');
 $urlFld->setWrapperAttribute('class', 'banner_url_fld');
 $urlFld->htmlAfterField = '<span class="form-text">' . Labels::getLabel('LBL_Note:_Used_to_promote_through_banner.', $siteLangId) . '</span>';
 
-
 $slideUrlFld = $frm->getField('slide_url');
 $slideUrlFld->setWrapperAttribute('class', 'slide_url_fld');
 $slideUrlFld->htmlAfterField = '<span class="form-text">' . Labels::getLabel('LBL_Note:_Used_to_promote_through_slider.', $siteLangId) . '</span>';

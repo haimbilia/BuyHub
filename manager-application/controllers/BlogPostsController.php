@@ -26,18 +26,26 @@ class BlogPostsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_BLOG_POSTS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+        $actionItemsData['performBulkAction'] = true;
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set("frmSearch", $frmSearch);        
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_POST_TITLE', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js']);
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'blog-posts/page-js/index.js']);
         $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css']);
-        $this->set('includeEditor', true);
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -114,7 +122,7 @@ class BlogPostsController extends ListingBaseController
 
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
-            $data = BlogPost::getAttributesById($recordId);
+            $data = BlogPost::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
             }
@@ -182,6 +190,7 @@ class BlogPostsController extends ListingBaseController
             $categories = $post['categories'];
             unset($post['categories']);
         }
+        $post['post_identifier'] = $post['post_title'];
 
         $record = new BlogPost($recordId);
         $record->assignValues($post);
@@ -191,6 +200,14 @@ class BlogPostsController extends ListingBaseController
         }
         $recordId = $record->getMainTableRecordId();
 
+        $langData = [
+            'post_title' => $post['post_title'],
+            'post_author_name' => $post['post_author_name'],
+            'post_description' => $post['post_description'],
+        ];
+        if (!$record->updateLangData(CommonHelper::getDefaultFormLangId(), $langData)) {
+            LibHelper::exitWithError($record->getError(), true);
+        }
         /* link blog post to blog post categories[ */
         if (!empty($categories) && true === LibHelper::isJson($categories)) {
             $categories = array_column(json_decode($categories, true), 'id');
@@ -339,7 +356,7 @@ class BlogPostsController extends ListingBaseController
     public function uploadMedia()
     {
         $this->objPrivilege->canEditBlogPosts();
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId) {
@@ -420,7 +437,7 @@ class BlogPostsController extends ListingBaseController
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BLOG_POST_IMAGE);
         $frm->addHiddenField('', 'min_width');
         $frm->addHiddenField('', 'min_height');
-        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'post_image', array('accept' => 'image/*', 'data-frm' => 'frmRecordImage'));
+        $frm->addHtml('', 'post_image', '');
         return $frm;
     }
 
@@ -429,7 +446,9 @@ class BlogPostsController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
         $frm = new Form('frmBlogPost', array('id' => 'frmBlogPost'));
         $frm->addHiddenField('', 'post_id', 0);
-        $frm->addRequiredField(Labels::getLabel('FRM_POST_IDENTIFIER', $this->siteLangId), 'post_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_POST_TITLE', $this->siteLangId), 'post_title');
+        $frm->addRequiredField(Labels::getLabel('FRM_POST_AUTHOR_NAME', $this->siteLangId), 'post_author_name');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $this->siteLangId), 'post_description')->requirements()->setRequired(true);
         $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
         $postStatusArr = BlogPost::getBlogPostStatusArr($this->siteLangId);
@@ -446,13 +465,7 @@ class BlogPostsController extends ListingBaseController
         $frm = new Form('frmBlogPostCatLang', array('id' => 'frmBlogPostCatLang'));
         $frm->addHiddenField('', 'post_id', $recordId);
 
-        $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId, array(), '');
-        } else {
-            $langId = array_key_first($languages);
-            $frm->addHiddenField('', 'lang_id', $langId);
-        }
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'post_title');
         $frm->addRequiredField(Labels::getLabel('FRM_POST_AUTHOR_NAME', $this->siteLangId), 'post_author_name');
@@ -480,7 +493,7 @@ class BlogPostsController extends ListingBaseController
         $fld->overrideFldType('search');
 
         $postStatusArr = BlogPost::getBlogPostStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_POST_STATUS', $this->siteLangId), 'post_published', $postStatusArr, '', array(), Labels::getLabel('FRM_POST_STATUS', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_POST_STATUS', $this->siteLangId), 'post_published', $postStatusArr, '', array('class' => 'form-control'), Labels::getLabel('FRM_POST_STATUS', $this->siteLangId));
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -573,6 +586,6 @@ class BlogPostsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['post_published'], Common::excludeKeysForSort());
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

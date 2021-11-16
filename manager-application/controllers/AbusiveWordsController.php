@@ -12,14 +12,31 @@ class AbusiveWordsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ABUSIVE_KEYWORDS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['searchFrmTemplate'] = 'abusive-words/search-form.php';
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'href' => "javascript:void(0)",
+                'onclick' => "addNew(true)",
+                'title' => $btnTitle,
+            ],
+            'label' => $btnTitle,
+        ];
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('languages', Language::getAllNames());        
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ABUSIVE_KEYWORD', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -53,7 +70,7 @@ class AbusiveWordsController extends ListingBaseController
         $srchFrm = $this->getSearchForm($fields);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
 
@@ -62,7 +79,7 @@ class AbusiveWordsController extends ListingBaseController
         $srch = Abusive::getSearchObject();
         $srch->addMultipleFields(['aw.*', 'tl.*']);
         $srch->joinTable('tbl_languages', 'inner join', 'abusive_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE, 'tl');
-        
+
         $srch->addOrder($sortBy, $sortOrder);
 
         $srch->setPageNumber($page);
@@ -91,7 +108,6 @@ class AbusiveWordsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditAbusiveWords($this->admin_id, true));
-        
     }
 
     public function form()
@@ -126,12 +142,12 @@ class AbusiveWordsController extends ListingBaseController
         $post = $frm->getFormDataFromArray($data);
 
         $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = $post['abusive_lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-			 $post['abusive_lang_id'] = $lang_id;
-		}
+        if (count($languages) > 1) {
+            $lang_id = $post['abusive_lang_id'];
+        } else {
+            $lang_id = array_key_first($languages);
+            $post['abusive_lang_id'] = $lang_id;
+        }
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
@@ -208,12 +224,12 @@ class AbusiveWordsController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'abusive_keyword');
         }
-        
+
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $languages = Language::getAllNames();
-        if(1 < count($languages)){           
+        if (1 < count($languages)) {
             $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
         }
         HtmlHelper::addSearchButton($frm);
@@ -225,15 +241,18 @@ class AbusiveWordsController extends ListingBaseController
     {
         $frm = new Form('frmAbusiveWord');
         $frm->addHiddenField('', 'abusive_id', $recordId);
-        $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'abusive_lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'abusive_lang_id', $lang_id);
-		}
         
-        $frm->addTextbox('Keyword', 'abusive_keyword');
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $fld = $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'abusive_lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
+            $fld->requirements()->setRequired(true);
+        } else {
+            $lang_id = array_key_first($languages);
+            $frm->addHiddenField('', 'abusive_lang_id', $lang_id);
+        }
+
+        $frm->addRequiredField(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'abusive_keyword');
+
         return $frm;
     }
 
@@ -252,7 +271,7 @@ class AbusiveWordsController extends ListingBaseController
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 
-        if(count(Language::getAllNames()) < 2 ){
+        if (count(Language::getAllNames()) < 2) {
             unset($arr['language_name']);
         }
 
@@ -262,7 +281,7 @@ class AbusiveWordsController extends ListingBaseController
 
     protected function getDefaultColumns(): array
     {
-        return [    
+        return [
             'select_all',
             'listSerial',
             'abusive_keyword',

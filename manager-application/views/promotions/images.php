@@ -1,4 +1,6 @@
-<?php if (!empty($bannerImgArr)) { ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+if (!empty($bannerImgArr)) { ?>
     <?php
     foreach ($bannerImgArr as $afile_id => $bannerImg) {
         $imgUrl =  '';
