@@ -12,16 +12,51 @@ class LabelsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_LABELS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['otherButtons'] = [
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js',
+                    'onclick' => 'updateFile()',
+                    'title' => Labels::getLabel('LBL_UPDATE_WEB_LABEL_FILE', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#laptop">
+                                </use>
+                            </svg><span>' . Labels::getLabel('BTN_WEB', $this->siteLangId) . '</span>',
+            ],
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js',
+                    'onclick' => "updateFile(" . Labels::TYPE_APP . ")",
+                    'title' => Labels::getLabel('LBL_UPDATE_APP_LABEL_FILE', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#mobile">
+                                </use>
+                            </svg><span>' . Labels::getLabel('BTN_APP', $this->siteLangId) . '</span>',
+            ],
+        ];
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('canEdit', $this->objPrivilege->canEditLanguageLabels($this->admin_id, true));
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_SYSTEM_CODE_AND_CAPTION', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->render();
+        $this->_template->addJs(['labels/page-js/index.js']);
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()

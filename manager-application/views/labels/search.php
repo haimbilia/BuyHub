@@ -24,9 +24,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, nl2br($row[$key]), true);
                 break;
             case 'label_type':
-                $typeArr = Labels::getTypeArr($siteLangId);
-                $type = 1 > FatUtility::int($row[$key]) ? Labels::TYPE_WEB : $row[$key];
-                $td->appendElement('plaintext', $tdAttr, $typeArr[$type], true);
+                $statusHtm = Labels::getTypeBtnHtml($siteLangId, $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
                 break;
             case 'action':
 

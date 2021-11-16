@@ -1,5 +1,17 @@
 <?php
 
+/**
+ *
+ * ERR - ERROR Messages
+ * SUC- Success Messages
+ * LBL - LABLES (General labels)
+ * FRM - Form fields (Labels, Place holders)
+ * MSG - Messages
+ * VLBL- Form Validations
+ * TXT - Text
+ * NAV - Navigation
+ * CON - confiramtion
+ */
 class Labels extends MyAppModel
 {
     public const DB_TBL = 'tbl_language_labels';
@@ -30,6 +42,25 @@ class Labels extends MyAppModel
             static::TYPE_WEB => self::getLabel('LBL_Web', $langId),
             static::TYPE_APP => self::getLabel('LBL_App', $langId)
         );
+    }
+
+    public static function getTypeBtnHtml(int $langId, int $status): string
+    {
+        $arr = self::getTypeArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::TYPE_WEB:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::TYPE_APP:
+                $status = HtmlHelper::WARNING;
+                break;
+
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
     }
 
     public static function getPrefixTypes($langId)
@@ -323,15 +354,3 @@ class Labels extends MyAppModel
         return FatApp::getDb()->fetchAllAssoc($rs);
     }
 }
-
-/*
-ERR - ERROR Messages
-SUC- Success Messages
-LBL - LABLES (General labels)
-FRM - Form fields (Labels, Place holders)
-MSG - Messages
-VLBL- Form Validations
-TXT - Text
-NAV - Navigation
-CON - confiramtion
-*/

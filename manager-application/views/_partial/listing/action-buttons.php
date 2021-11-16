@@ -67,7 +67,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
 if (isset($otherButtons) && is_array($otherButtons)) {
     foreach ($otherButtons as $attr) {
         $li = $ul->appendElement('li');
-        $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);
+        $li->appendElement('a', $attr['attr'], (string) html_entity_decode($attr['label'], ENT_QUOTES, 'utf-8') , true);
     }
 }
 
