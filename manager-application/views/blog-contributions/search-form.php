@@ -15,10 +15,6 @@ $sortByFld->setFieldTagAttribute('id', 'sortBy');
 $sortOrderFld = $frmSearch->getField('sortOrder');
 $sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
 
-/* Extra Field */
-$fld = $frmSearch->getField('bcontributions_status');
-$fld->addFieldtagAttribute('class', 'form-control');
-/* Extra Field */
 
 echo $frmSearch->getFormTag();
 HtmlHelper::renderHiddenFields($frmSearch);

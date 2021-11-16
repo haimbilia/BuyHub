@@ -33,7 +33,6 @@ class OrderStatusController extends ListingBaseController
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
-        $actionItemsData['searchFrmTemplate'] = 'order-status/search-form.php';
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);

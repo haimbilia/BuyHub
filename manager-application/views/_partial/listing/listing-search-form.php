@@ -25,9 +25,7 @@ $i = $x = 0;
 $haveExtraFlds = false;
 $firstElement = [];
 $extraFldCount = 0;
-// CommonHelper::printArray($frmSearch->getAllFields());
 foreach ($frmSearch->getAllFields() as $key => $frmFld) {
-
     if ('btn_submit' == $frmFld->getName() || 'keyword' == $frmFld->getName()) {
         continue;
     } else if ('hidden' == $frmFld->fldType) {
@@ -77,6 +75,12 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                                 echo $frmSearch->getFieldHtml('keyword');
                             } else {
                                 $fld = $frmSearch->getField($firstElement['name']);
+                                
+                                $class = (string) $fld->getFieldtagAttribute('class');
+                                $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                                $class = ltrim($class, ' ');
+                                $fld->setFieldtagAttribute('class', $class);
+
                                 if (!$fld->getFieldtagAttribute('placeholder')) {
                                     $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
                                 }
@@ -94,6 +98,11 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             echo $frmSearch->getFieldHtml('keyword');
                         } else {
                             $fld = $frmSearch->getField($firstElement['name']);
+                                
+                            $class = (string) $fld->getFieldtagAttribute('class');
+                            $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                            $class = ltrim($class, ' ');
+                            $fld->setFieldtagAttribute('class', $class);
                             if (!$fld->getFieldtagAttribute('placeholder')) {
                                 $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
                             }
@@ -105,6 +114,11 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                         <?php
                         $flds = current($frmFields['advSrchFlds'][0]);
                         $fld = $frmSearch->getField($flds['name']);
+                        $class = (string) $fld->getFieldtagAttribute('class');
+                        $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                        $class = ltrim($class, ' ');
+                        $fld->setFieldtagAttribute('class', $class);
+
                         if (!$fld->getFieldtagAttribute('placeholder')) {
                             $fld->setFieldtagAttribute('placeholder', $flds['caption']);
                         }
@@ -124,6 +138,10 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                                 echo $frmSearch->getFieldHtml('keyword');
                             } else {
                                 $fld = $frmSearch->getField($firstElement['name']);
+                                $class = (string) $fld->getFieldtagAttribute('class');
+                                $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                                $class = ltrim($class, ' ');
+                                $fld->setFieldtagAttribute('class', $class);
                                 if (!$fld->getFieldtagAttribute('placeholder')) {
                                     $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
                                 }
@@ -154,7 +172,14 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
             <?php
             foreach ($frmFields['advSrchFlds'] as $itr => $fldsGroup) { ?>
                 <div class="row">
-                    <?php foreach ($fldsGroup as $frmFld) { ?>
+                    <?php foreach ($fldsGroup as $frmFld) { 
+                        $fld = $frmSearch->getField($frmFld['name']);
+                        $class = (string) $fld->getFieldtagAttribute('class');
+                        $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                        $class = ltrim($class, ' ');
+
+                        $fld->setFieldtagAttribute('class', $class);
+                        ?>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="label"><?php echo $frmFld['caption']; ?></label>

@@ -18,7 +18,6 @@ class AbusiveWordsController extends ListingBaseController
 
         $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
-        $actionItemsData['searchFrmTemplate'] = 'abusive-words/search-form.php';
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
@@ -28,7 +27,7 @@ class AbusiveWordsController extends ListingBaseController
                 'onclick' => "addNew(true)",
                 'title' => $btnTitle,
             ],
-            'label' => $btnTitle,
+            'label' => $btnTitle,   
         ];
 
         $this->set('pageData', $pageData);
