@@ -59,7 +59,7 @@ class SellerProductsController extends ListingBaseController
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 

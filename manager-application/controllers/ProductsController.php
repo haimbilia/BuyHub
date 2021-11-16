@@ -501,7 +501,7 @@ class ProductsController extends ListingBaseController
         $frm->addHiddenField('', 'product_id');    
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
     
         return $frm;
     }

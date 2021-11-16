@@ -12,16 +12,23 @@ class LanguagesController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_LANGUAGES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['performBulkAction'] = true;
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('canEdit', $this->objPrivilege->canEditLanguage($this->admin_id, true));
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_LANGUAGE_CODE_AND_NAME', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -53,7 +60,7 @@ class LanguagesController extends ListingBaseController
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $searchForm = $this->getSearchForm($fields);
-        
+
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
@@ -81,7 +88,7 @@ class LanguagesController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        
+
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -118,16 +125,16 @@ class LanguagesController extends ListingBaseController
         $this->objPrivilege->canEditLanguage();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-		
-		$recordId = FatApp::getPostedData('language_id', FatUtility::VAR_INT, 0);
-		unset($post['language_id']);
+
+        $recordId = FatApp::getPostedData('language_id', FatUtility::VAR_INT, 0);
+        unset($post['language_id']);
 
         $status = FatApp::getPostedData('language_active', FatUtility::VAR_INT, 0);
-        if($status == applicationConstants::INACTIVE && 1 > count(Language::getAllNames()) ){
+        if ($status == applicationConstants::INACTIVE && 1 > count(Language::getAllNames())) {
             LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
         }
 
@@ -150,7 +157,7 @@ class LanguagesController extends ListingBaseController
     private function getForm($recordId = 0)
     {
         $recordId = FatUtility::int($recordId);
-        
+
         $siteLangId = $this->siteLangId;
         if (0 < $recordId) {
             $siteLangId = $recordId;
@@ -168,14 +175,13 @@ class LanguagesController extends ListingBaseController
             array('class' => 'list-inline')
         );
 
-		$countryObj = new Countries();
+        $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($siteLangId, true, 'country_code');
         $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $siteLangId), 'language_country_code', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $siteLangId));
         $fld->requirement->setRequired(true);
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($siteLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $siteLangId), 'language_active', $activeInactiveArr, '', array(), '');
-        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $siteLangId));
         return $frm;
     }
 
@@ -192,6 +198,10 @@ class LanguagesController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
+        if ($status == applicationConstants::INACTIVE && 1 == count(Language::getAllNames())) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
+        }
+
         $this->changeStatus($recordId, $status);
 
         FatUtility::dieJsonSuccess($this->str_update_record);
@@ -206,6 +216,10 @@ class LanguagesController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
+        if ($status == applicationConstants::INACTIVE && count($recordIdsArr) == count(Language::getAllNames())) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
+        }
+
         foreach ($recordIdsArr as $recordId) {
             if (1 > $recordId) {
                 continue;
@@ -213,7 +227,7 @@ class LanguagesController extends ListingBaseController
 
             $this->changeStatus($recordId, $status);
         }
-        
+
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
 
@@ -225,10 +239,6 @@ class LanguagesController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if($status == applicationConstants::INACTIVE && 1 > count(Language::getAllNames()) ){
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
-        } 
-
         $countryObj = new Language($recordId);
         if (!$countryObj->changeStatus($status)) {
             LibHelper::exitWithError($countryObj->getError(), true);
@@ -239,14 +249,14 @@ class LanguagesController extends ListingBaseController
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $firstActivelangData = FatApp::getDb()->fetch($srch->getResultSet());
-            if (!empty($firstActivelangData)) {                
+            if (!empty($firstActivelangData)) {
                 $configuration = new Configurations();
                 $dataToUpdate = [];
-                if(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)  == $recordId){
-                    $dataToUpdate['CONF_DEFAULT_SITE_LANG'] = $firstActivelangData['language_id']; 
+                if (FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)  == $recordId) {
+                    $dataToUpdate['CONF_DEFAULT_SITE_LANG'] = $firstActivelangData['language_id'];
                 }
-                if(FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1)  == $recordId){
-                    $dataToUpdate['CONF_ADMIN_DEFAULT_LANG'] = $firstActivelangData['language_id']; 
+                if (FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1)  == $recordId) {
+                    $dataToUpdate['CONF_ADMIN_DEFAULT_LANG'] = $firstActivelangData['language_id'];
                     $_COOKIE['defaultAdminSiteLang'] = $firstActivelangData['language_id'];
                 }
                 if (!$configuration->update($dataToUpdate)) {
@@ -272,7 +282,7 @@ class LanguagesController extends ListingBaseController
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('languagesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        
+
         return $arr;
     }
 

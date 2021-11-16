@@ -9,7 +9,6 @@ $screenFld = $mediaFrm->getField('banner_screen');
 $screenFld->addFieldTagAttribute('class', 'displayJs');
 
 $fld = $mediaFrm->getField('banner_image');
-$imageArr = [];
 $fld->value = HtmlHelper::getfileInputHtml(
     [
         'onChange' => 'loadImageCropper(this)',
@@ -20,7 +19,7 @@ $fld->value = HtmlHelper::getfileInputHtml(
     $siteLangId,
     '',
     '',
-    $imageArr,
+    [],
     'dropzone-custom dropzoneContainerJs'
 );
 

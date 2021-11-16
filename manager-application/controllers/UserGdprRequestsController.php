@@ -187,24 +187,24 @@ class UserGdprRequestsController extends ListingBaseController {
 
     protected function getSearchForm($fields = []) {
         $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'ureq_date');
-        } 
-        HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
-        $frm->addSelectBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId), 'user_id', [], '',
+        }         
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', [], '',
                 [
                     'class' => 'form-control',
                     'id' => 'searchFrmUserIdJs',
-                    'placeholder' => Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId)
+                    'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
                 ]
         );
-        $requestType = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + UserGdprRequest::getUserRequestTypesArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Request_Type', $this->siteLangId), 'request_type', $requestType, -1, array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'user_request_from');
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'user_request_to');
+        $requestType = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + UserGdprRequest::getUserRequestTypesArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_TYPE', $this->siteLangId), 'request_type', $requestType, -1, array(), '');
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_request_from');
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_request_to');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 

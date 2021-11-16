@@ -4,7 +4,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage');
 $frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
-$frmSearch->setFormTagAttribute('class', 'form');
+$frmSearch->setFormTagAttribute('class', 'form form-search');
 
 $keyWordFld = $frmSearch->getField('keyword');
 $keyWordFld->addFieldtagAttribute('class', 'form-control');
@@ -32,7 +32,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
             <div class="col-md-12">
                 <div class="input-group">
                     <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-                    <a class="btn advanced-trigger ml-2" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                    <a class="btn advanced-trigger ml-2 collapsed" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                         <svg class="svg" width="22" height="22">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
                             </use>
@@ -47,7 +47,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
     </div>
     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-head.php'); ?>
 </div>
-<div class="advanced-search collapse" id="collapseKeyword">
+<div class="advanced-search collapse advancedSearchJs" id="collapseKeyword">
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">

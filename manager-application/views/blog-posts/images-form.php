@@ -1,14 +1,28 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($imagesFrm);
-$imagesFrm->setFormTagAttribute('data-onclear', 'postImages(' . $recordId . ')');
+$imagesFrm->setFormTagAttribute('data-onclear', 'mediaForm(' . $recordId . ')');
 $imagesFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
-$imagesFrm->setFormTagAttribute('data-callback', 'postImages(' . $recordId . ')');
+
 $fld = $imagesFrm->getField('post_image');
-$fld->addFieldTagAttribute('onChange', 'loadImageCropper(this)');
+$fld->value = HtmlHelper::getfileInputHtml(
+    [
+        'onChange' => 'loadImageCropper(this)',
+        'accept' => 'image/*',
+        'data-name' => Labels::getLabel("FRM_BLOG_POST_IMAGE", $siteLangId),
+        'data-frm'=> $imagesFrm->getFormTagAttribute('name')
+    ],
+    $siteLangId,
+    '',
+    '',
+    [],
+    'dropzone-custom dropzoneContainerJs'
+);
+
 $htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), '1000*563') . '</span>';
 $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
+
 
 $langFld = $imagesFrm->getField('lang_id');
 $langFld->addFieldTagAttribute('onchange', 'loadImages(' . $recordId . ', this.value);');
@@ -17,7 +31,7 @@ $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'postImages(' . $recordId . ')',
+            'onclick' => 'mediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -49,7 +63,7 @@ $formTitle = Labels::getLabel('LBL_BLOG_POST_SETUP', $siteLangId); ?>
                 var sort = mysortarr.join('-');
                 data = '&post_id=' + post_id + '&ids=' + sort;
                 fcom.updateWithAjax(fcom.makeUrl('BlogPosts', 'setImageOrder'), data, function(t) {
-                    postImages(post_id);
+                    mediaForm(post_id);
                 });
             }
         }).disableSelection();

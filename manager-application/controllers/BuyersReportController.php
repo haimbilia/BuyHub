@@ -178,7 +178,7 @@ class BuyersReportController extends ListingBaseController
             $this->addSortingElements($frm, 'buyerName', applicationConstants::SORT_ASC);
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         HtmlHelper::addSearchButton($frm);

@@ -248,7 +248,7 @@ class ShopsReportController extends ListingBaseController
         $fld->htmlAfterField = Labels::getLabel('FRM_SHOP_CREATED_DATE_TO', $this->siteLangId);
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
