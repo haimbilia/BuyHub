@@ -235,10 +235,10 @@ class LabelsController extends ListingBaseController
             $this->addSortingElements($frm, 'label_key');
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->siteLangId), 'label_type', array('-1' => Labels::getLabel('LBL_SELECT_PLATFORM', $this->siteLangId)) + Labels::getTypeArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'label_type', array('-1' => Labels::getLabel('LBL_SELECT_PLATFORM', $this->siteLangId)) + Labels::getTypeArr($this->siteLangId), -1, array(), '');
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);

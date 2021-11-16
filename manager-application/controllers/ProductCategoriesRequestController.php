@@ -42,20 +42,20 @@ class ProductCategoriesRequestController extends ListingBaseController {
 
     public function getSearchForm($fields = []) {
         $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'prodcat_name');
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId), 'user_id', [], '',
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', [], '',
                 [
                     'class' => 'form-control',
                     'id' => 'searchFrmUserIdJs',
-                    'placeholder' => Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId)
+                    'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
                 ]
         );
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 

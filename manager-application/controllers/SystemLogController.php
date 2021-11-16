@@ -114,10 +114,10 @@ class SystemLogController extends ListingBaseController
             $this->addSortingElements($frm, 'slog_title');
         }
         
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'log_type', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + SystemLog::getTypes(), -1, array(), ''); 
-        $frm->addSelectBox(Labels::getLabel('LBL_Module_Type', $this->siteLangId), 'module_type', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + SystemLog::getModuleTypes(), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'log_type', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + SystemLog::getTypes(), -1, array(), ''); 
+        $frm->addSelectBox(Labels::getLabel('FRM_MODULE_TYPE', $this->siteLangId), 'module_type', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + SystemLog::getModuleTypes(), -1, array(), '');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         

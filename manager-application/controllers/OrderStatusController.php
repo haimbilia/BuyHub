@@ -54,11 +54,11 @@ class OrderStatusController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'orderstatus_name');
         }
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_ORDER_STATUS_TYPE', $this->siteLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ORDER_STATUS_TYPE', $this->siteLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
         
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
