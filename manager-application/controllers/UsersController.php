@@ -2,8 +2,6 @@
 
 class UsersController extends ListingBaseController
 {
-    protected $modelClass = 'User';
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -18,8 +16,7 @@ class UsersController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_USERS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['searchFrmTemplate'] = 'users/search-form.php';
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
@@ -32,9 +29,10 @@ class UsersController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME', $this->siteLangId));
         $this->getListingData();
-        $this->_template->addJs(array('js/select2.js'));
+
+        $this->_template->addJs(array('js/select2.js', 'users/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -66,6 +64,10 @@ class UsersController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $searchForm = $this->getUserSearchForm($fields);
+        $postedData = FatApp::getPostedData();
+        $post = $searchForm->getFormDataFromArray($postedData);
 
         $userObj = new User();
         $srch = $userObj->getUserSearchObj(null, true);
@@ -140,7 +142,9 @@ class UsersController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', FatApp::getPostedData());
+        
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -568,6 +572,11 @@ class UsersController extends ListingBaseController
             $cond = $srch->addCondition('uc.credential_username', 'like', '%' . $keyword . '%');
             $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
+            
+            if (0 < $joinShop) {
+                $cond->attachCondition('shp.shop_identifier', 'LIKE', '%' . $keyword . '%');
+                $cond->attachCondition('s_l.shop_name', 'LIKE', '%' . $keyword . '%');
+            }
         }
 
         if (!empty($post['user_is_buyer'])) {

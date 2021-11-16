@@ -1,6 +1,9 @@
 <?php
 
-class SellerApprovalRequestsController extends AdminBaseController {
+class SellerApprovalRequestsController extends ListingBaseController {
+
+    protected $modelClass = 'User';
+    protected $pageKey = 'MANAGE_SELLER_APPROVAL_REQUEST';
 
     public function __construct($action) {
         parent::__construct($action);
@@ -15,20 +18,28 @@ class SellerApprovalRequestsController extends AdminBaseController {
      */
     protected function setLangTemplateData(array $constructorArgs = []): void {
         $this->objPrivilege->canEditSellerApprovalRequests();
-        $this->modelObj = (new ReflectionClass('User'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_Manage_Seller_Approval_Requests_Setup', $this->siteLangId));
         $this->checkMediaExist = true;
     }
 
-    public function index() {
+    public function index() { 
         $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $this->setModel();
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle); 
         $this->set('canEdit', $this->objPrivilege->canEditSellerApprovalRequests($this->admin_id, true));
-        $this->set("frmSearch", $frmSearch);
-        $this->set('pageTitle', Labels::getLabel('LBL_Manage_Seller_Approval_Requests', $this->siteLangId));
+        $this->set("frmSearch", $this->getSearchForm($fields));  
+        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
+            'newRecordBtn' => false
+        ]);
+        $this->set('actionItemsData',$actionItemsData);
         $this->getListingData();
-        $this->_template->render();
+        $this->_template->addJs(['seller-approval-requests/page-js/index.js']);
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function getSearchForm($fields = []) {
@@ -38,11 +49,11 @@ class SellerApprovalRequestsController extends AdminBaseController {
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'usuprequest_status');
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', ['-1' => Labels::getLabel('LBL_All', $this->siteLangId)] + User::getSupplierReqStatusArr($this->siteLangId), '', array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', ['-1' => Labels::getLabel('FRM_ALL', $this->siteLangId)] + User::getSupplierReqStatusArr($this->siteLangId), '', array(), '');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 

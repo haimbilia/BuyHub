@@ -82,7 +82,7 @@ class BlogPostCategoriesController extends ListingBaseController
         $frm = $this->getForm($recordId);
 
         if (0 < $recordId) {
-            $data = BlogPostCategory::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);
+            $data = BlogPostCategory::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -142,7 +142,7 @@ class BlogPostCategoriesController extends ListingBaseController
         }
         /* ] */
 
-        if (!$record->updateLangData($this->getDefaultFormLangId(), ['bpcategory_name' => $data['bpcategory_name']])) {
+        if (!$record->updateLangData(CommonHelper::getDefaultFormLangId(), ['bpcategory_name' => $data['bpcategory_name']])) {
             LibHelper::exitWithError($record->getError(), true);
         }
 
@@ -155,7 +155,7 @@ class BlogPostCategoriesController extends ListingBaseController
         }
 
         $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
                 if (!Brand::getAttributesByLangId($langId, $recordId)) {
@@ -235,7 +235,7 @@ class BlogPostCategoriesController extends ListingBaseController
     {
         $frm = new Form('frmBlogPostCatLang', array('id' => 'frmBlogPostCatLang'));
         $frm->addHiddenField('', 'bpcategory_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_Category_Name', $this->siteLangId), 'bpcategory_name');
         return $frm;
     }

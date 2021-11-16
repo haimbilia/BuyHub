@@ -1,26 +1,19 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$statusButtons = true;
-$newRecordBtn = true;
-$performBulkAction = true;
+$(document).ready(function () {
+    bindSortable();
+});
 
-$searchFrmTemplate = FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search-form.php';
-require_once(CONF_THEME_PATH . '_partial/listing/index.php');
-?>
-<script>
-    $(document).ready(function() {
-        bindSortable();
-    });
-    $(document).ajaxComplete(function() {
-        bindSortable();
-    });
+$(document).ajaxComplete(function () {
+    bindSortable();
+});
 
-    function bindSortable() {
+(function () {
+    bindSortable = function () {
         if (1 > $('[data-field="dragdrop"]').length) {
             return;
         }
 
         $("#orderStatuses > tbody").sortable({
-            update: function(event, ui) {
+            update: function (event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
 
@@ -36,8 +29,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/index.php');
                     resolve(data);
                 });
                 bindData.then(
-                    function(value) {
-                        fcom.ajax(fcom.makeUrl('OrderStatus', 'setOrderStatusesOrder'), value, function(res) {
+                    function (value) {
+                        fcom.ajax(fcom.makeUrl('OrderStatus', 'setOrderStatusesOrder'), value, function (res) {
                             fcom.removeLoader();
                             $.ykmsg.close();
                             var ans = JSON.parse(res);
@@ -48,7 +41,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/index.php');
                             $.ykmsg.error(ans.msg);
                         });
                     },
-                    function(error) {
+                    function (error) {
                         fcom.removeLoader();
                         $.ykmsg.close();
                     }
@@ -57,4 +50,5 @@ require_once(CONF_THEME_PATH . '_partial/listing/index.php');
         });
         $("#orderStatuses > tbody").disableSelection();
     }
-</script>
+
+})();

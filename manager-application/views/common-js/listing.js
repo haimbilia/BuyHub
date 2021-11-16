@@ -1,4 +1,8 @@
 $(document).on("click", ".headerColumnJs", function (e) {
+    if (1 == $('.listingRecordJs tr').length) {
+        return;
+    }
+
     var fld = $(this).attr("data-field");
     var frm = document.frmRecordSearchPaging;
     var sortingUp =
@@ -155,11 +159,11 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         searchRecords(document.frmRecordSearchPaging);
     };
 
-    exportReport = function () {
+    /* exportReport = function () {
         setColumnsData(document.frmRecordSearch);
         document.frmRecordSearch.action = fcom.makeUrl(controllerName, 'search', ['export']);
         document.frmRecordSearch.submit();
-    }
+    } */
 
     searchRecords = function (frm) {
         if (false === checkControllerName()) {
@@ -204,7 +208,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     clearSearch = function (loadRowsOnly = false) {
         document.frmRecordSearch.reset();
-        $("input:checkbox[name=listingColumns]:checked").each(function () {
+        $("input:checkbox[name=listingFld]:checked").each(function () {
             if ($(this).attr("disabled") != "disabled") {
                 $(this).prop("checked", false);
             }
@@ -219,7 +223,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         listingColumns = [];
-        $("input:checkbox[name=listingColumns]:checked").each(function () {
+        $("input:checkbox[name=listingFld]:checked").each(function () {
             listingColumns.push($(this).val());
         });
 
@@ -253,7 +257,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             .submit();
     };
 
-    addNew = function () {
+    addNew = function (displayInPopup = false, dialogClass = '') {
         if (false === checkControllerName()) {
             return false;
         }
@@ -262,9 +266,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
         fcom.ajax(fcom.makeUrl(controllerName, "form"), "", function (t) {
-            $.ykmodal(t);
+            $.ykmodal(t, displayInPopup, dialogClass);
             fcom.removeLoader();
         });
     };
@@ -352,7 +356,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
-            $('.submitBtnJs').removeClass('loading');
+            $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
             fcom.removeLoader();
             var t = JSON.parse(res);
             if (t.status == 0) {
@@ -369,6 +373,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             } else if ('' != callback) {
                 window[callback](t.recordId);
             }
+            return;
         });
     };
 
@@ -659,20 +664,11 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
                     if ("" != callback) {
-                        window[callback]();
-                    } else if (
-                        0 < $(".navTabsJs").length &&
-                        0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length
-                    ) {
-                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']")
-                            .val(langId)
-                            .change();
-                    } else if (
-                        0 < $(".navTabsJs").length &&
-                        0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length
-                    ) {
-                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']")
-                            .change();
+                        eval(callback);
+                    } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length) {
+                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();
+                    } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length) {
+                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").change();
                     } else {
                         mediaForm(ans.recordId, imageType, langId, slideScreen);
                     }
@@ -753,6 +749,9 @@ $(document).on("click", ".selectItemJs", function () {
     var tr = $(this).closest('tr');
     if ($(this).prop("checked") == false) {
         $("#" + parentForm + " .selectAllJs").prop("checked", false);
+        tr.removeClass('selected');
+    } else {
+        tr.addClass('selected');
     }
 
     if ($("#" + parentForm + " .selectItemJs").length == $("#" + parentForm + " .selectItemJs:checked").length) {
@@ -762,10 +761,8 @@ $(document).on("click", ".selectItemJs", function () {
     var faceboxActionBtns = 0 < $("#facebox").length && $("#facebox").is(":visible") ? "#facebox " : "";
     if ($("#" + parentForm + " .selectItemJs:checked").length == 0) {
         $(faceboxActionBtns + " .toolbar-btn-js").addClass("disabled").removeClass("selected");
-        tr.removeClass('selected');
     } else {
         $(faceboxActionBtns + " .toolbar-btn-js").removeClass("disabled").addClass("selected");
-        tr.addClass('selected');
     }
 });
 

@@ -59,7 +59,7 @@ class SellerProductsController extends ListingBaseController
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -2500,7 +2500,7 @@ class SellerProductsController extends ListingBaseController
         }
     }
 
-    public function changeStatus()
+    public function updateStatus()
     {
         $this->objPrivilege->canEditSellerProducts();
         $selprodId = FatApp::getPostedData('selprodId', FatUtility::VAR_INT, 0);

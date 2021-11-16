@@ -1,38 +1,63 @@
 <?php
 
-class UserGdprRequestsController extends ListingBaseController
-{
-    public function __construct($action)
-    {
+class UserGdprRequestsController extends ListingBaseController {
+
+    protected $modelClass = 'UserGdprRequest';
+    protected $pageKey = 'MANAGE_USER_REQUEST';
+
+    public function __construct($action) {
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewUserRequests($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditUserRequests($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewUserRequests();
     }
 
-    public function index()
-    {
-        $this->objPrivilege->canViewUserRequests();
-        $frmSearch = $this->getUsersRequestSearchForm();
+    public function index() {
+        $fields = $this->getFormColumns();
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $this->setModel();
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('canEdit', $this->objPrivilege->canEditUserRequests($this->admin_id, true));
+        $this->set("frmSearch", $this->getSearchForm($fields));
+        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
+            'newRecordBtn' => false
+        ]);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->getListingData();
+         $this->_template->addCss(['css/select2.min.css']);
+        $this->_template->addJs(['js/select2.js', 'user-gdpr-requests/page-js/index.js']); 
+        $this->_template->render(true, true, '_partial/listing/index.php');
+    }
+
+    public function search() {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'user-gdpr-requests/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    private function getListingData() {
+        $this->objPrivilege->canEditUserRequests();
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
-        if ($data) {
-            $frmSearch->fill($data);
-        }
-        $this->set('frmSearch', $frmSearch);
-        $this->_template->render();
-    }
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
 
-    public function userRequestsSearch()
-    {
-        $this->objPrivilege->canViewUserRequests();
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        if ($page < 2) {
-            $page = 1;
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
         }
 
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $searchForm = $this->getSearchForm($fields);
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
+        $post = $searchForm->getFormDataFromArray($data);
         $srch = new UserGdprRequestSearch();
         $srch->joinUser();
         $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email', 'credential_username', 'ureq_id', 'ureq_status', 'ureq_type', 'ureq_date'));
@@ -61,84 +86,57 @@ class UserGdprRequestsController extends ListingBaseController
         if (!empty($user_request_to)) {
             $srch->addCondition('ureq_date', '<=', $user_request_to . ' 23:59:59');
         }
-        $srch->addOrder('ureq_date', 'DESC');
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $userRequestTypeArr = UserGdprRequest::getUserRequestTypesArr($this->siteLangId);
-        $userRequestStatusArr = UserGdprRequest::getUserRequestStatusesArr($this->siteLangId);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
-        $this->set("userRequestTypeArr", $userRequestTypeArr);
-        $this->set("userRequestStatusArr", $userRequestStatusArr);
         $this->set('pageCount', $srch->pages());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
         $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set("arrListing", $records);
+        $this->set("userRequestTypeArr", UserGdprRequest::getUserRequestTypesArr($this->siteLangId));
+        $this->set("userRequestStatusArr", UserGdprRequest::getUserRequestStatusesArr($this->siteLangId));
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('reqStatusArr', User::getSupplierReqStatusArr($this->siteLangId));
+        $this->set('canEdit', $this->objPrivilege->canEditSellerApprovalRequests($this->admin_id, true));
     }
 
-    private function getUsersRequestSearchForm()
-    {
-        $frm = new Form('frmUserRequestSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        /* $keyword->setFieldTagAttribute('onKeyUp','usersAutocomplete(this)'); */
-        $requestType = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + UserGdprRequest::getUserRequestTypesArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Request_Type', $this->siteLangId), 'request_type', $requestType, -1, array(), '');
-
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'user_request_from');
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'user_request_to');
-
-        $frm->addHiddenField('', 'page', 1);
-        $frm->addHiddenField('', 'user_id', 0);
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
-
-    public function updateRequestStatus()
-    {
+    public function updateRequestStatus() {
         $this->objPrivilege->canEditUserRequests();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $userReqId = FatUtility::int($post['reqId']);
         $status = FatUtility::int($post['status']);
-
         if (1 > $userReqId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->siteLangId)) {
-            Message::addErrorMessage($emailNotificationObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        $userRequest = new UserGdprRequest($userReqId);
-        if (!$userRequest->updateRequestStatus($status)) {
-            Message::addErrorMessage($userRequest->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($emailNotificationObj->getError(), true);
         }
 
-        $this->set('msg', $this->str_update_record);
+        $userRequest = new UserGdprRequest($userReqId);
+        if (!$userRequest->updateRequestStatus($status)) {
+            LibHelper::exitWithError($userRequest->getError(), true);
+        }
+        $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewUserRequest($userReqId)
-    {
-        $this->objPrivilege->canViewUserRequests();
+    public function viewUserRequest($userReqId) {
         $userReqId = FatUtility::int($userReqId);
-
         if (1 > $userReqId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $srch = new UserGdprRequestSearch();
@@ -149,47 +147,17 @@ class UserGdprRequestsController extends ListingBaseController
         $rs = $srch->getResultSet();
         $userRequest = FatApp::getDb()->fetch($rs);
         if ($userRequest == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
         $this->set('userRequest', $userRequest);
         $this->_template->render(false, false);
     }
 
-    /* public function deleteUserRequest(){
-    $this->objPrivilege->canEditUserRequests();
-    $post = FatApp::getPostedData();
-    if(empty($post)){
-    Message::addErrorMessage($this->str_invalid_request);
-    FatUtility::dieJsonError(Message::getHtml());
-    }
-
-    $userReqId = FatUtility::int($post['reqId']);
-
-    if( 1 > $userReqId ){
-    Message::addErrorMessage($this->str_invalid_request_id);
-    FatUtility::dieJsonError(Message::getHtml());
-    }
-
-    $userObj = new UserGdprRequest();
-    if (!$userObj->deleteRequest()) {
-    Message::addErrorMessage($userObj->getError());
-    FatUtility::dieJsonError( Message::getHtml() );
-    }
-
-    $this->set('userReqId', $userReqId);
-    $this->set('msg', Labels::getLabel('LBL_Updated_Successfully',$this->siteLangId));
-    $this->_template->render(false, false, 'json-success.php');
-    } */
-
-    public function truncateUserData()
-    {
+    public function truncateUserData() {
         $this->objPrivilege->canEditUserRequests();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $userId = FatUtility::int($post['userId']);
@@ -197,27 +165,18 @@ class UserGdprRequestsController extends ListingBaseController
 
         $userObj = new User($userId);
         if (!$userObj->truncateUserInfo()) {
-            Message::addErrorMessage(Labels::getLabel("MSG_USER_INFO_COULD_NOT_BE_DELETED", $this->siteLangId) . $userObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel("MSG_USER_INFO_COULD_NOT_BE_DELETED", $this->siteLangId) . $userObj->getError(), true);
         }
 
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->siteLangId)) {
-            Message::addErrorMessage(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId), true);
         }
 
-        /* Update request status to complete [ */
-        $assignValues = array(
-            'ureq_status' => UserGdprRequest::STATUS_COMPLETE,
-            'ureq_approved_date' => date('Y-m-d H:i:s'),
-        );
-
         $userReqObj = new UserGdprRequest($userReqId);
-        $userReqObj->assignValues($assignValues);
+        $userReqObj->assignValues(['ureq_status' => UserGdprRequest::STATUS_COMPLETE, 'ureq_approved_date' => date('Y-m-d H:i:s')]);
         if (!$userReqObj->save()) {
-            Message::addErrorMessage($userReqObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($userReqObj->getError(), true);
         }
         /* ] */
 
@@ -225,4 +184,61 @@ class UserGdprRequestsController extends ListingBaseController
         $this->set('msg', Labels::getLabel('LBL_Successfully_Deleted_User_data', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
+
+    protected function getSearchForm($fields = []) {
+        $frm = new Form('frmRecordSearch');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld->overrideFldType('search');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'ureq_date');
+        }         
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', [], '',
+                [
+                    'class' => 'form-control',
+                    'id' => 'searchFrmUserIdJs',
+                    'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
+                ]
+        );
+        $requestType = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + UserGdprRequest::getUserRequestTypesArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_TYPE', $this->siteLangId), 'request_type', $requestType, -1, array(), '');
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_request_from');
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_request_to');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
+        return $frm;
+    }
+
+    private function getFormColumns(): array {
+        $shopsTblHeadingCols = CacheHelper::get('gdprRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($shopsTblHeadingCols) {
+            return json_decode($shopsTblHeadingCols);
+        }
+
+        $arr = [
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'user' => Labels::getLabel('LBL_User', $this->siteLangId),
+            'ureq_type' => Labels::getLabel('LBL_Request_Type', $this->siteLangId),
+            'ureq_date' => Labels::getLabel('LBL_Request_Date', $this->siteLangId),
+            'ureq_status' => Labels::getLabel('LBL_Request_Status', $this->siteLangId),
+            'action' => '',
+        ];
+        CacheHelper::create('gdprRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array {
+        return [
+            'listSerial',
+            'user',
+            'ureq_date',
+            'ureq_type',
+            'ureq_status',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array {
+        return array_diff($fields, ['user'], Common::excludeKeysForSort());
+    }
+
 }

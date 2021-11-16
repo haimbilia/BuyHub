@@ -12,17 +12,33 @@ class RewardsOnPurchaseController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_REWARDS_ON_PURCHASE', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'href' => "javascript:void(0)",
+                'onclick' => "addNew(true)",
+                'title' => $btnTitle,
+            ],
+            'label' => $btnTitle,
+        ];
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('languages', Language::getAllNames());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PURCHASE_AMOUNT', $this->siteLangId));
         $this->getListingData();
-
-        $this->_template->render();
+        
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()

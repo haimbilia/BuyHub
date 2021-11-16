@@ -8,7 +8,7 @@ if (!$frmSearch->getFormTagAttribute('onsubmit')) {
     $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 }
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
-$frmSearch->setFormTagAttribute('class', 'form');
+$frmSearch->setFormTagAttribute('class', 'form form-search');
 
 $keyWordFld = $frmSearch->getField('keyword');
 if (null != $keyWordFld) {
@@ -24,21 +24,25 @@ $frmFields = [
 $i = $x = 0;
 $haveExtraFlds = false;
 $firstElement = [];
-
+$extraFldCount = 0;
 foreach ($frmSearch->getAllFields() as $key => $frmFld) {
     if ('btn_submit' == $frmFld->getName() || 'keyword' == $frmFld->getName()) {
         continue;
     } else if ('hidden' == $frmFld->fldType) {
         $frmFields['hidden'][] = $frmFld->getName();
     } else {
-        if (null == $keyWordFld && empty($firstElement) && 'btn_clear' != $frmFld->getName()) {
+        if (null == $keyWordFld && empty($firstElement) && 'btn_clear' != strtolower($frmFld->getName())) {
             $firstElement = [
                 'name' => $frmFld->getName(),
                 'caption' => $frmFld->getCaption(),
             ];
         } else {
-            if ('btn_clear' != $frmFld->getName() && false === $haveExtraFlds) {
+            if ('btn_clear' != strtolower($frmFld->getName()) && false === $haveExtraFlds) {
                 $haveExtraFlds = true;
+            }
+
+            if ('btn_clear' != strtolower($frmFld->getName())) {
+                $extraFldCount++;
             }
 
             $frmFields['advSrchFlds'][$x][] = [
@@ -55,23 +59,51 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
     }
 }
 
+$advSrchFldsCount = count($frmFields['advSrchFlds']); /* Any addition field except first fields and submit and clear button */
 echo $frmSearch->getFormTag();
 foreach ($frmFields['hidden'] as $fldName) {
     echo $frmSearch->getFieldHtml($fldName);
 }
 if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
-
-    $colnumber = (count($frmFields['advSrchFlds']) == 1) ? 6 : 12;
 ?>
     <div class="card-head">
         <div class="card-head-label">
             <div class="row">
-                <?php if (count($frmFields['advSrchFlds']) == 1) { ?>
+                <?php if (0 == $extraFldCount) { ?>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <?php if (null != $keyWordFld) {
+                                echo $frmSearch->getFieldHtml('keyword');
+                            } else {
+                                $fld = $frmSearch->getField($firstElement['name']);
+                                
+                                $class = (string) $fld->getFieldtagAttribute('class');
+                                $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                                $class = ltrim($class, ' ');
+                                $fld->setFieldtagAttribute('class', $class);
+
+                                if (!$fld->getFieldtagAttribute('placeholder')) {
+                                    $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
+                                }
+                                echo $frmSearch->getFieldHtml($firstElement['name']);
+                            }
+                            ?>
+                            <div class="input-group-append">
+                                <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php } else if (1 == $extraFldCount) { ?>
                     <div class="col-md-4">
                         <?php if (null != $keyWordFld) {
                             echo $frmSearch->getFieldHtml('keyword');
                         } else {
                             $fld = $frmSearch->getField($firstElement['name']);
+                                
+                            $class = (string) $fld->getFieldtagAttribute('class');
+                            $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                            $class = ltrim($class, ' ');
+                            $fld->setFieldtagAttribute('class', $class);
                             if (!$fld->getFieldtagAttribute('placeholder')) {
                                 $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
                             }
@@ -83,6 +115,11 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                         <?php
                         $flds = current($frmFields['advSrchFlds'][0]);
                         $fld = $frmSearch->getField($flds['name']);
+                        $class = (string) $fld->getFieldtagAttribute('class');
+                        $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                        $class = ltrim($class, ' ');
+                        $fld->setFieldtagAttribute('class', $class);
+
                         if (!$fld->getFieldtagAttribute('placeholder')) {
                             $fld->setFieldtagAttribute('placeholder', $flds['caption']);
                         }
@@ -94,6 +131,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                     <div class="col-md-2">
                         <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
                     </div>
+
                 <?php } else { ?>
                     <div class="col-md-12">
                         <div class="input-group">
@@ -101,14 +139,18 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                                 echo $frmSearch->getFieldHtml('keyword');
                             } else {
                                 $fld = $frmSearch->getField($firstElement['name']);
+                                $class = (string) $fld->getFieldtagAttribute('class');
+                                $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                                $class = ltrim($class, ' ');
+                                $fld->setFieldtagAttribute('class', $class);
                                 if (!$fld->getFieldtagAttribute('placeholder')) {
                                     $fld->setFieldtagAttribute('placeholder', $firstElement['caption']);
                                 }
                                 echo $frmSearch->getFieldHtml($firstElement['name']);
                             }
                             ?>
-                            <?php if ($haveExtraFlds && count($frmFields['advSrchFlds']) > 1) { ?>
-                                <a class="btn advanced-trigger ml-2" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                            <?php if ($haveExtraFlds && $extraFldCount > 1) { ?>
+                                <a class="btn advanced-trigger ml-2 collapsed" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                                     <svg class="svg" width="22" height="22">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
                                         </use>
@@ -126,12 +168,19 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
         </div>
         <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-head.php'); ?>
     </div>
-    <?php if ($haveExtraFlds && count($frmFields['advSrchFlds']) > 1) { ?>
-        <div class="advanced-search collapse" id="collapseKeyword">
+    <?php if ($haveExtraFlds && $extraFldCount > 1) { ?>
+        <div class="advanced-search collapse advancedSearchJs" id="collapseKeyword">
             <?php
             foreach ($frmFields['advSrchFlds'] as $itr => $fldsGroup) { ?>
                 <div class="row">
-                    <?php foreach ($fldsGroup as $frmFld) { ?>
+                    <?php foreach ($fldsGroup as $frmFld) { 
+                        $fld = $frmSearch->getField($frmFld['name']);
+                        $class = (string) $fld->getFieldtagAttribute('class');
+                        $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
+                        $class = ltrim($class, ' ');
+
+                        $fld->setFieldtagAttribute('class', $class);
+                        ?>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="label"><?php echo $frmFld['caption']; ?></label>
@@ -141,6 +190,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                     <?php } ?>
                 </div>
             <?php } ?>
+            <div class="separator separator-dashed my-4"></div>
         </div>
 <?php }
 } ?>

@@ -12,6 +12,10 @@
     display: flex;
     flex-direction: column;
     box-shadow: 0 0 80px 50px rgba(206, 213, 225, 0.12);
+    transition: transform 0.3s ease-out;
+    @include media-breakpoint-down(md) {
+        transform: translateX(-100%);
+    }
     &-logo {
         max-width: 30px;
         margin: 1rem auto;
@@ -20,6 +24,20 @@
         flex: 1;
     }
     &-foot {}
+}
+
+.sidebar--on {
+    .sidebar {
+        transform: translateX(0);
+    }
+}
+
+.sidebar-trigger {
+    display: none;
+    margin-#{$end-direction}: 10px;
+    @include media-breakpoint-down(md) {
+        display: block;
+    }
 }
 
 .menu {

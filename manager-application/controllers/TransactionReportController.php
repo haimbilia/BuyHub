@@ -14,14 +14,20 @@ class TransactionReportController extends ListingBaseController
         $frmSearch = $this->getSearchForm($formColumns);
         $pageData = PageLanguageData::getAttributesByKey('TRANSACTION_REPORT', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
+        $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
+        $actionItemsData = array_merge($actionItemsData, [
+            'newRecordBtn' => false,
+            'formColumns' => $formColumns,
+            'columnButtons' => true,
+            'defaultColumns' => $this->getDefaultColumns()
+        ]);
+        
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
-        $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('formColumns', $formColumns);
+        $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false);
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
 
     public function search($type = false)
@@ -141,8 +147,8 @@ class TransactionReportController extends ListingBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();   
-        echo $srch->getError();    
+        $rs = $srch->getResultSet();
+        echo $srch->getError();
         $arrListing = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $arrListing);
@@ -168,14 +174,14 @@ class TransactionReportController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'utxn_date', applicationConstants::SORT_DESC);
         }
-        $fld = $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel("FRM_KEYWORD", $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
 
         return $frm;
     }

@@ -48,14 +48,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'currency_code':
-                if ($row['currency_name'] != '') {
-                    $default = ($row['currency_id'] == $defaultCurrencyId) ? '<span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_DEFAULT', $siteLangId) . '</span>' : '';
-                    $td->appendElement('plaintext', $tdAttr, $row['currency_name'], true);
-                    $td->appendElement('br', $tdAttr);
-                    $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ') ' . $default, true);
-                } else {
-                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-                }
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
             case 'action':
                 $data = [

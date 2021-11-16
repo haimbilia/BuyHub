@@ -22,6 +22,7 @@ class HtmlHelper
 
         $actionBtnArr = [
             'newRecordBtn' => true,
+            'newRecordBtnAttrs' => [],
             'deleteButton' => false,
             'statusButtons' => false,
             'columnButtons' => false,
@@ -32,7 +33,7 @@ class HtmlHelper
             'searchFrmTemplate' => '_partial/listing/listing-search-form.php',
             'searchListingPage' => FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php'
         ];
-       
+
         if (null == $obj) {
             return $actionBtnArr;
         }
@@ -137,11 +138,10 @@ class HtmlHelper
         $frm->addHtml('', 'btn_submit', self::addButtonHtml($lbl, 'submit', 'btn_submit'));
     }
 
-    public static function addClearButton(Form &$frm, string $lbl = '')
+    public static function addClearButton(Form &$frm, string $btnClass = 'btn btn-link', string $lbl = '')
     {
         $lbl = empty($lbl) ? Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()) : $lbl;
-        // $frm->addHtml('', 'btn_clear', '<a class="btn btn-link" onClick="clearSearch()">' . $lbl . '</a>');
-        $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', 'btn btn-link', 'clearSearch()'));
+        $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', $btnClass, 'clearSearch()'));
     }
 
     public static function renderHiddenFields(Form $frmSearch)

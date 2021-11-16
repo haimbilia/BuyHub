@@ -173,7 +173,7 @@ class ProductCategoriesController extends ListingBaseController
 
         $frm = new Form('frmProdCategory');
         $frm->addHiddenField('', 'prodcat_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name[' . $this->getDefaultFormLangId() . ']');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name[' . CommonHelper::getDefaultFormLangId() . ']');
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_IDENTIFIER', $this->siteLangId), 'prodcat_identifier');
 
         $prodCat = new ProductCategory();
@@ -200,7 +200,7 @@ class ProductCategoriesController extends ListingBaseController
     {
         $frm = new Form('frmEmptyCartItemLang');
         $frm->addHiddenField('', 'prodcat_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $langId, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name');
         return $frm;
     }
@@ -263,7 +263,7 @@ class ProductCategoriesController extends ListingBaseController
         }
 
         $newTabLangId = 0;
-        $languages = Language::getDropDownList($this->getDefaultFormLangId());
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
                 if (!Brand::getAttributesByLangId($langId, $recordId)) {

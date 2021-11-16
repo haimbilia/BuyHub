@@ -15,11 +15,19 @@ class ShopsReportController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('SHOPS_REPORT', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
+        $actionItemsData = array_merge($actionItemsData, [
+            'newRecordBtn' => false,
+            'formColumns' => $formColumns,
+            'columnButtons' => true,
+            'defaultColumns' => $this->getDefaultColumns(),
+            'searchFrmTemplate' => 'shops-report/search-form.php'
+        ]);
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
-        $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('formColumns', $formColumns);
+        $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false);
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
@@ -51,10 +59,7 @@ class ShopsReportController extends ListingBaseController
             $sortBy = current(array_keys($fields));
         }
 
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC);
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
-            $sortOrder = applicationConstants::SORT_DESC;
-        }
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
         $srchFrm = $this->getSearchForm($fields);
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -243,7 +248,7 @@ class ShopsReportController extends ListingBaseController
         $fld->htmlAfterField = Labels::getLabel('FRM_SHOP_CREATED_DATE_TO', $this->siteLangId);
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 

@@ -69,7 +69,7 @@ if ($printData) {
             return;
         }
 
-        var recomendedSelprodId = e.detail.tag.id;
+        var recomendedSelprodId = e.detail.data.id;
         if ('' == recomendedSelprodId) {
             e.detail.tag.remove();
             return false;
@@ -134,7 +134,7 @@ if ($printData) {
                         })
                     }
                 }
-            }).on('add', bindProduct).on('input', getProducts).on('focus', getProducts);
+            }).on('input', getProducts).on('focus', getProducts).on('dropdown:select', bindProduct);
         });
     };
 

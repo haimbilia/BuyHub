@@ -2,8 +2,6 @@
 
 class RewardsController extends ListingBaseController
 {
-    protected $modelClass = 'UserRewards';
-
     public function __construct($action)
     {
         parent::__construct($action);
@@ -18,8 +16,7 @@ class RewardsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_USER_REWARD_POINTS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['searchFrmTemplate'] = 'rewards/search-form.php';
 
         $this->set('pageData', $pageData);
@@ -29,9 +26,9 @@ class RewardsController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->getListingData();
 
-        $this->_template->addJs(array('js/select2.js'));
+        $this->_template->addJs(array('js/select2.js', 'rewards/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -61,8 +58,9 @@ class RewardsController extends ListingBaseController
         
         $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
-
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        
+        $postedData = FatApp::getPostedData();
+        $post = $srchFrm->getFormDataFromArray($postedData);
         $post['urp_user_id'] = $userId;
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -90,7 +88,9 @@ class RewardsController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+        
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

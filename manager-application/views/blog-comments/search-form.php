@@ -3,7 +3,7 @@
 $frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
-$frmSearch->setFormTagAttribute('class', 'form');
+$frmSearch->setFormTagAttribute('class', 'form form-search');
 
 $keyWordFld = $frmSearch->getField('keyword');
 $keyWordFld->addFieldtagAttribute('class', 'form-control');

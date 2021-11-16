@@ -6,22 +6,31 @@ class BlogContributionsController extends ListingBaseController
     {
         parent::__construct($action);
         $this->objPrivilege->canViewBlogContributions();
-
     }
 
     public function index()
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_BLOG_CONTRIBUTIONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+        $actionItemsData['performBulkAction'] = true;
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_AUTHOR_NAME,_EMAIL_AND_PHONE', $this->siteLangId));
         $this->getListingData();
-        $this->_template->render();
+
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -244,11 +253,11 @@ class BlogContributionsController extends ListingBaseController
             $this->addSortingElements($frm, 'author_name');
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_CONTRIBUTION_STATUS', $this->siteLangId));        
+        $frm->addSelectBox(Labels::getLabel('FRM_CONTRIBUTION_STATUS', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_CONTRIBUTION_STATUS', $this->siteLangId));        
         
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);

@@ -139,7 +139,7 @@ class SellerPackagesController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {  
-            $data = SellerPackages::getAttributesByLangId($this->getDefaultFormLangId(), $recordId, null, true);  
+            $data = SellerPackages::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);  
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);

@@ -811,7 +811,7 @@ $mykart:'mykart';
             align-items: center;
             justify-content: center;
             border-radius: $radius-common;
-            background-color: #fff;
+            
             position: relative;
             &::before {
                 background: lighten($brand-color, 55);

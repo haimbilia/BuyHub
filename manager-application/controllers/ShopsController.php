@@ -2,6 +2,9 @@
 
 class ShopsController extends ListingBaseController {
 
+    protected $modelClass = 'Shop';
+    protected $pageKey = 'MANAGE_SHOPS';
+
     public function __construct($action) {
         parent::__construct($action);
         $this->objPrivilege->canViewShops();
@@ -21,30 +24,24 @@ class ShopsController extends ListingBaseController {
         }
     }
 
-    /**
-     * setModel - This function is used to set related model class and used by its parent class.
-     *
-     * @param  array $constructorArgs
-     * @return void
-     */
-    protected function setModel(array $constructorArgs = []): void {
-        $this->modelObj = (new ReflectionClass('Shop'))->newInstanceArgs($constructorArgs);
-    }
-
     public function index() {
         $this->search();
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHOPS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
+        $this->setModel([0, 0, 0]);
         $this->set('pageData', $pageData);
-        $this->set('pageTitle', $pageTitle);
+        $this->set('pageTitle', $pageTitle); 
         $this->set('canEdit', $this->objPrivilege->canEditShops($this->admin_id, true));
         $this->set("frmSearch", $this->getSearchForm($this->getFormColumns()));
         $this->set('canViewShopReports', $this->objPrivilege->canViewShopReports(0, true));
-        $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));
+        $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));  
+        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($this->getFormColumns(), $this->modelObj), [
+            'newRecordBtn' => false
+        ]);
+        $this->set('actionItemsData', $actionItemsData);
         $this->_template->addCss('css/cropper.css');
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js']);
-        $this->_template->render();
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'shops/page-js/index.js']);
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search() {
@@ -94,13 +91,12 @@ class ShopsController extends ListingBaseController {
         $this->checkEditPrivilege();
         $shop_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($shop_id);
-        $lang = Language::getDropDownList($this->getDefaultFormLangId());
+        $lang = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < $shop_id) {
-            $data = Shop::getAttributesByLangId($this->getDefaultFormLangId(), $shop_id, null, true);
+            $data = Shop::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $shop_id, null, true);
             if ($data === false) {
                 FatUtility::dieWithError($this->str_invalid_request);
             }
-
             $data['urlrewrite_custom'] = AdminShopSearch::getUrlRewrite('shops/view/' . $shop_id);
             $data['shop_country_code'] = Countries::getCountryById($data['shop_country_id'], $this->siteLangId, 'country_code');
             $stateObj = new States();
@@ -137,29 +133,17 @@ class ShopsController extends ListingBaseController {
         if (!$shop->save()) {
             LibHelper::exitWithError($shop->getError(), true);
         }
-
-        $recordId = $shop->getMainTableRecordId();
-        if (!$shop->updateLangData($this->getDefaultFormLangId(), [
-                    'shop_name' => $post['shop_name'],
-                    'shop_city' => $post['shop_city'],
-                    'shop_contact_person' => $post['shop_contact_person'],
-                    'shop_description' => $post['shop_description'],
-                    'shop_payment_policy' => $post['shop_payment_policy'],
-                    'shop_delivery_policy' => $post['shop_delivery_policy'],
-                    'shop_refund_policy' => $post['shop_refund_policy'],
-                    'shop_additional_info' => $post['shop_additional_info'],
-                    'shop_seller_info' => $post['shop_seller_info'],
-                ])) {
-            LibHelper::exitWithError($shop->getError(), true);
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(Brand::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
+        $this->setLangData($shop, [
+            'shop_name' => $post['shop_name'],
+            'shop_city' => $post['shop_city'],
+            'shop_contact_person' => $post['shop_contact_person'],
+            'shop_description' => $post['shop_description'],
+            'shop_payment_policy' => $post['shop_payment_policy'],
+            'shop_delivery_policy' => $post['shop_delivery_policy'],
+            'shop_refund_policy' => $post['shop_refund_policy'],
+            'shop_additional_info' => $post['shop_additional_info'],
+            'shop_seller_info' => $post['shop_seller_info'],
+        ]);
 
         $post['ss_shop_id'] = $shop_id;
         $shopSpecificsObj = new ShopSpecifics($shop_id);
@@ -209,7 +193,7 @@ class ShopsController extends ListingBaseController {
             $this->modelObj::tblFld('name'),
             $this->modelObj::tblFld('city'),
             $this->modelObj::tblFld('contact_person'),
-            $this->modelObj::tblFld('shop_description'),
+            $this->modelObj::tblFld('description'),
             $this->modelObj::tblFld('payment_policy'),
             $this->modelObj::tblFld('delivery_policy'),
             $this->modelObj::tblFld('refund_policy'),
@@ -242,7 +226,7 @@ class ShopsController extends ListingBaseController {
         if (1 == count($languages)) {
             $langId = array_key_first($languages);
         }
-        
+
         $this->set('recordId', $shop_id);
         $shopDetails = Shop::getAttributesById($shop_id);
         $shopLayoutTemplateId = $shopDetails['shop_ltemplate_id'];
@@ -255,7 +239,7 @@ class ShopsController extends ListingBaseController {
         $this->set('logoFrm', $shopLogoFrm);
         $this->set('shopBannerFrm', $shopBannerFrm);
         $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
-        
+
         $this->_template->render(false, false);
     }
 
@@ -400,15 +384,15 @@ class ShopsController extends ListingBaseController {
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'shop_name');
-        }
-        HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        }        
         $frm->addHiddenField('', 'shop_id');
-        $frm->addSelectBox(Labels::getLabel('LBL_Featured', $this->siteLangId), 'shop_featured', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'shop_active', array('-1' => 'Does not Matter') + applicationConstants::getActiveInactiveArr($this->siteLangId), -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Shop_Status_By_Seller', $this->siteLangId), 'shop_supplier_display_status', array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getOnOffArr($this->siteLangId), -1, array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addSelectBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'shop_featured', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'shop_active', array('-1' => 'Does not Matter') + applicationConstants::getActiveInactiveArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_SHOP_STATUS_BY_SELLER', $this->siteLangId), 'shop_supplier_display_status', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getOnOffArr($this->siteLangId), -1, array(), '');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -482,7 +466,7 @@ class ShopsController extends ListingBaseController {
     protected function getLangForm($shop_id = 0, $lang_id = 0) {
         $frm = new Form('frmShopLang', array('id' => 'frmShopLang'));
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList($this->getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Shop_Name', $lang_id), 'shop_name');
         $this->appendLangFormFields($frm);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));

@@ -12,19 +12,25 @@ class RelatedProductsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_RELATED_PRODUCTS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->getListingData();
-
+        
+        $this->_template->addJs(['js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'related-products/page-js/index.js']);
         $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);
-        $this->_template->addJs(['js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js']);
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
-
+    
     public function search()
     {
         $this->getListingData();

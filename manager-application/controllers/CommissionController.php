@@ -12,18 +12,26 @@ class CommissionController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_COMMISSION', $this->siteLangId);
+
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CURRENCIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+        $actionItemsData['performBulkAction'] = true;
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_CATEGORY,_SELLER_AND_PRODUCT', $this->siteLangId));
         $this->getListingData();
-        $this->_template->addJs(array('js/select2.js'));
+
+        $this->_template->addJs(['js/select2.js', 'commission/page-js/index.js']);
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -56,7 +64,8 @@ class CommissionController extends ListingBaseController
 
         $srchFrm = $this->getSearchForm($fields);
 
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $postedData = FatApp::getPostedData();
+        $post = $srchFrm->getFormDataFromArray($postedData);
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
 
@@ -94,7 +103,9 @@ class CommissionController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -140,11 +151,10 @@ class CommissionController extends ListingBaseController
                 $selectedCatName = $prodCat->getParentTreeStructure($data['commsetting_prodcat_id'], 0, '', $this->siteLangId);
                 $catArr[$data['commsetting_prodcat_id']] = html_entity_decode($selectedCatName);
             }
-           
         }
 
         $frm = $this->getForm($recordId, $userArr, $prodArr, $catArr);
-        if(!empty($data)){
+        if (!empty($data)) {
             $frm->fill($data);
         }
 
@@ -191,6 +201,7 @@ class CommissionController extends ListingBaseController
         if (!$record->addUpdateData($post)) {
             LibHelper::exitWithError($record->getError(), true);
         }
+        
         $insertId = $record->getMainTableRecordId();
         if (!$insertId) {
             $insertId = FatApp::getDb()->getInsertId();
@@ -291,47 +302,6 @@ class CommissionController extends ListingBaseController
         }
     }
 
-    public function userAutoComplete()
-    {
-        $pagesize = 20;
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        if ($page < 2) {
-            $page = 1;
-        }
-
-        $userObj = new User();
-        $srch = $userObj->getUserSearchObj(array('u.user_name', 'u.user_id', 'credential_username', 'COALESCE(s_l.shop_name, shop.shop_identifier) as shop_name'));
-        $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
-        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
-        $srch->addCondition('user_is_supplier', '=', 1);
-
-        $post = FatApp::getPostedData();
-        if (!empty($post['keyword'])) {
-            $cnd = $srch->addCondition('u.user_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd->attachCondition('uc.credential_username', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd->attachCondition('shop.shop_identifier', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd->attachCondition('s_l.shop_name', 'LIKE', '%' . $post['keyword'] . '%');
-        }
-
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-
-        $rs = $srch->getResultSet();
-        $users = FatApp::getDb()->fetchAll($rs, 'user_id');
-
-        $json = array(
-            'pageCount' => $srch->pages()
-        );
-        foreach ($users as $key => $user) {
-            $shopName = $user['shop_name'];
-            $json['results'][] = array(
-                'id' => $key,
-                'text' => $shopName . ' ( ' . strip_tags(html_entity_decode($user['credential_username'], ENT_QUOTES, 'UTF-8')) . ' )'
-            );
-        }
-        die(FatUtility::convertToJson($json));
-    }
-
     public function productAutoComplete()
     {
         $pagesize = 20;
@@ -350,7 +320,7 @@ class CommissionController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $srch->addMultipleFields(array('product_id', 'IFNULL(product_name,product_identifier) as product_name'));
-  
+
         $products = FatApp::getDb()->fetchAll($srch->getResultSet(), 'product_id');
         $json = array(
             'pageCount' => $srch->pages()
