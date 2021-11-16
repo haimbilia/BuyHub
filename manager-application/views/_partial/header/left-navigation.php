@@ -166,6 +166,11 @@
                                         <?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?>
                                     </a>
                                 </li>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>">
+                                        <?php echo Labels::getLabel('LBL_Users_GDPR_Requests', $siteLangId); ?>
+                                    </a>
+                                </li>
                             <?php } ?>
                             <?php /* if ($objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) || $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li class="nav_item navItemJs">
