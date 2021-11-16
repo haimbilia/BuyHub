@@ -49,7 +49,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
     </div>
     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-head.php'); ?>
 </div>
-<div class="advanced-search collapse" id="collapseKeyword">
+<div class="advanced-search collapse advancedSearchJs" id="collapseKeyword">
     <div class="row">
 
         <div class="col-md-4">

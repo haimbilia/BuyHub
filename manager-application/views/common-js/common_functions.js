@@ -192,7 +192,13 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
         if ('function' == typeof callbackOnUnSelect) {
             callbackOnUnSelect(e);
         }
-    }).data('select2').$container.addClass("w-100");
+    });
+    
+    if (0 < ele.closest('.advancedSearchJs').length) {
+        ele.data('select2').$container.addClass("w-100");
+    }
+
+    $advanced-search
 
 
     $("." + $.ykmodal.element).removeAttr('tabindex');

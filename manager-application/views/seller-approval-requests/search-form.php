@@ -36,7 +36,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
             </div>  
         </div>
     </div>
-    <div class="advanced-search collapse" id="collapseKeyword">
+    <div class="advanced-search collapse advancedSearchJs" id="collapseKeyword">
         <div class="row"> 
             <div class="col-md-3">
                 <div class="form-group">

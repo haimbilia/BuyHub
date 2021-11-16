@@ -169,7 +169,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
         <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-head.php'); ?>
     </div>
     <?php if ($haveExtraFlds && $extraFldCount > 1) { ?>
-        <div class="advanced-search collapse" id="collapseKeyword">
+        <div class="advanced-search collapse advancedSearchJs" id="collapseKeyword">
             <?php
             foreach ($frmFields['advSrchFlds'] as $itr => $fldsGroup) { ?>
                 <div class="row">
