@@ -287,7 +287,7 @@ class LabelsController extends ListingBaseController
         $frm->addHiddenField('', 'label_key', $label_key);
         $frm->addHiddenField('', 'label_type', $label_type);
         $languages = Language::getAllNames();
-        $frm->addTextbox(Labels::getLabel('LBL_Key', $this->siteLangId), 'key', $label_key);
+        $frm->addTextbox(Labels::getLabel('FRM_Key', $this->siteLangId), 'key', $label_key);
         foreach ($languages as $langId => $langName) {
             $fld = $frm->addTextArea($langName, 'label_caption' . $langId);
             $fld->requirements()->setRequired();
