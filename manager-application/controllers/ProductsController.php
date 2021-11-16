@@ -47,8 +47,8 @@ class ProductsController extends ListingBaseController
         $this->checkEditPrivilege(true);
         $this->getListingData();
 
-        $this->_template->addJs(array('js/select2.js','products/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->addJs(array('products/page-js/index.js','js/select2.js'));   
         $this->_template->render(true, true, '_partial/listing/index.php');
     } 
 
@@ -209,8 +209,8 @@ class ProductsController extends ListingBaseController
         // $this->set('productType', $productType);
         // $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->set("frm", $frm);
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
-        $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css']);
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js','js/select2.js'));
+        $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css','css/select2.min.css']);
         $this->set("includeEditor", true);
         $this->_template->render();
     }
@@ -220,7 +220,8 @@ class ProductsController extends ListingBaseController
     {        
         $frm = new Form('frmProduct');
 
-        $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $this->siteLangId), 'product_type', Product::getProductTypes($this->siteLangId), Product::PRODUCT_TYPE_PHYSICAL);
+        $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $this->siteLangId), 'product_type', Product::getProductTypes($this->siteLangId), Product::PRODUCT_TYPE_PHYSICAL);
+        $fld->requirements()->setRequired();
         $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_IDENTIFIER', $this->siteLangId), 'product_identifier');
         $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_NAME', $this->siteLangId), 'product_name');
 
@@ -230,7 +231,7 @@ class ProductsController extends ListingBaseController
             $fld->requirements()->setRequired();
         }
 
-        $frm->addSelectBox(Labels::getLabel('FRM_BRAND', $this->siteLangId), 'ptc_prodcat_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'ptc_prodcat_id', []);
         $fld = $frm->addTextBox(Labels::getLabel('FRM_MODEL', $this->siteLangId), 'product_model');
         if (FatApp::getConfig("CONF_PRODUCT_MODEL_MANDATORY", FatUtility::VAR_INT, 1)) {
             $fld->requirements()->setRequired();

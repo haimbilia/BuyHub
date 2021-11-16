@@ -388,4 +388,81 @@ class HtmlHelper
         $str .= '</div>';
         return  $str;
     }
+    /**
+     * getFieldHtml
+     *
+     * @param  mixed $frm
+     * @param  mixed $fldName
+     * @param  mixed $col
+     * @param  mixed $setFieldTagAttrs 
+     * @param  mixed $labelInfoText 
+     * @param  mixed $labelArr = [
+     *        'attr' => [
+     *            'href' => 'javascript:void(0)',
+     *            'onclick' => 'FN()',
+     *            'title' => <TITLE>
+     *        ],
+     *        'label' => <LABEL>
+     *    ]
+     * @return void
+     */
+    public static function getFieldHtml($frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [], string $labelInfoText = '', array $labelExtraArr = [])
+    {
+
+        $fld = $frm->getField($fldName);
+
+        foreach ($setFieldTagAttrs as $attrkey => $attrVal) {
+            $fld->setfieldTagAttribute($attrkey, $attrVal);
+        }
+        $caption = $fld->getCaption();
+
+        switch ($fld->fldType) {
+            case 'radio':
+                $fld->addOptionListTagAttribute('class', 'list-radio');
+                HtmlHelper::configureSwitchForRadio($fld);
+                break;
+        }
+
+        $mainDiv = new HtmlElement("div", [
+            'class' => 'col-md-' . $col,
+        ]);
+
+        $div1 =  $div = $mainDiv->appendElement('div', [
+            'class' => 'form-group',
+        ]);
+
+        if (!empty($labelExtraArr)) {
+            $div =  $div->appendElement('div', [
+                'class' => 'd-flex justify-content-between',
+            ]);
+        }
+
+        $label = $div->appendElement('label', [
+            'class' => 'label',
+        ], $caption);
+
+        if ($fld->requirements()->isRequired()) {
+            $label->appendElement('span', [
+                'class' => 'spn_must_field',
+            ], '*');
+        }
+
+        if (!empty($labelInfoText)) {
+            $label->appendElement('i', [
+                'class' => 'fas fa-exclamation-circle',
+                'data-toggle' => 'tooltip',
+                'data-original-title' => $labelInfoText,
+            ]);
+        }
+
+        if (isset($labelExtraArr['attr']) && isset($labelExtraArr['label'])) {
+            $div->appendElement('a', $labelExtraArr['attr'], $labelExtraArr['label']);
+        }
+
+        $div1->appendElement('plaintext', [], $fld->getHtml(), true);
+
+        return $mainDiv->getHtml();
+    }
+
+
 }

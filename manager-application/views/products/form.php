@@ -7,8 +7,7 @@ $frm->setFormTagAttribute('class', 'form');
 <main class="main mainJs">
     <div class="container">
         <?php
-        $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
-     
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>     
         <?php  echo $frm->getFormTag(); ?>
         <div class="add-stock">
             
@@ -147,43 +146,35 @@ $frm->setFormTagAttribute('class', 'form');
                     </div>
                     <div class="card-body">                        
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <?php $fld = $frm->getField('product_type'); ?> 
-                                        <label class="label required">
-                                            <?php echo $fld->getCaption(); ?> 
-                                        </label>
-                                        <?php
-                                        $fld->addOptionListTagAttribute('class','list-radio'); 
-                                        HtmlHelper::configureSwitchForRadio($fld);
-                                        
-                                        echo $fld->getHtml('product_type') ?>                                      
-                                    </div>
-                                </div>
-                            </div>
+                                <?php 
+                                echo HtmlHelper::getFieldHtml($frm,'product_type',12);  
+                                echo HtmlHelper::getFieldHtml($frm,'product_identifier',12 ,[],'Lorem ipsum dolor sit amet consectetur adipisicing elit');
+                                echo HtmlHelper::getFieldHtml($frm,'product_name',12 ,[],'Lorem ipsum dolor sit amet consectetur adipisicing elit');                            
+                                echo HtmlHelper::getFieldHtml($frm,'product_brand_id',6 ,['id' => 'product_brand_id'],'',['label'=>Labels::getLabel('FRM_ADD_BRAND', $siteLangId),'attr' => ['href'=>'javascript:void(0)','onclick' =>'addBrand()','class' =>'link']]);
+                                echo HtmlHelper::getFieldHtml($frm,'ptc_prodcat_id',6 ,['id' => 'ptc_prodcat_id'],'',['label'=>Labels::getLabel('FRM_ADD_BRAND', $siteLangId),'attr' => ['href'=>'javascript:void(0)','onclick' =>'addBrand()','class' =>'link']]);
+                                
+                                ?>    
+                            </div>                                                      
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="label required">
-                                            Product name
-
-
-
-                                            product_name
-                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-toggle="tooltip" title="" data-original-title="Lorem ipsum dolor sit amet consectetur adipisicing elit" aria-label="Lorem ipsum dolor sit amet consectetur adipisicing elit"></i>
-                                        </label>
-                                        <input type="text" placeholder="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
+                      
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="d-flex justify-content-between">
-                                            <label class="label required "> Brand </label> <a class="link" href="">Add brand</a>
+                                            <label class="label required "> Brand </label> 
+                                            <a class="link" href="">Add brand</a>
                                         </div>
                                         <input type="text" placeholder="">
                                     </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="label">Brand</label>
+                                        <a href="javascript:void(0)" onclick="addBrand()" class="link">add brand</a>
+                                        <select data-field-caption="Brand" data-fatreq="{&quot;required&quot;:true}" name="product_brand_id">
+                                            <option value="">Select</option></select>
+                                        </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">

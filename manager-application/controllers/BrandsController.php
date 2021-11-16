@@ -528,42 +528,30 @@ class BrandsController extends ListingBaseController
 
     public function autoComplete()
     {
-        $this->objPrivilege->canViewBrands();
-
-        $pagesize = 5;
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         if ($page < 2) {
             $page = 1;
         }
-
+        $pagesize = 20;
         $post = FatApp::getPostedData();
-        $brand = new Brand();
-        $srch = $brand->getSearchObject();
-        $srch->joinTable(
-            Brand::DB_TBL . '_lang',
-            'LEFT OUTER JOIN',
-            'brandlang_brand_id = brand_id AND brandlang_lang_id = ' . $this->siteLangId
-        );
+
+        $srch = Brand::getSearchObject($this->siteLangId, true, true);
         $srch->addMultipleFields(array('brand_id, IFNULL(brand_name, brand_identifier) as brand_name'));
 
         if (!empty($post['keyword'])) {
-            $srch->addCondition('brand_name', 'LIKE', '%' . $post['keyword'] . '%')
-                ->attachCondition('brand_identifier', 'LIKE', '%' . $post['keyword'] . '%');
+            $cond = $srch->addCondition('brand_name', 'LIKE', '%' . $post['keyword'] . '%');
+            $cond->attachCondition('brand_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
-        $srch->addCondition('brand_active', '=', applicationConstants::YES);
-        $srch->addCondition('brand_deleted', '=', applicationConstants::NO);
+
+        if (isset($post['brand_active'])) {
+            $srch->addCondition('brand_active', '=', $post['brand_active']);
+        }
+
+        $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 
-        /* $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
-          $alreadyAdded = Collections::getRecords($collectionId);
-          if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
-          $srch->addCondition('brand_id', 'NOT IN', array_keys($alreadyAdded));
-          } */
-
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $brands = $db->fetchAll($rs, 'brand_id');
+        $brands = FatApp::getDb()->fetchAll($srch->getResultSet(), 'brand_id');
 
         $json = array(
             'pageCount' => $srch->pages()
