@@ -544,8 +544,8 @@ class ContentPagesController extends ListingBaseController
             $frm->addHiddenField('', 'lang_id', $land_id);
         }
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE);
-        $frm->addHiddenField('', 'min_width');
-        $frm->addHiddenField('', 'min_height');
+        $frm->addHiddenField('', 'min_width', 1300);
+        $frm->addHiddenField('', 'min_height', 400);
         $frm->addHTML('', 'cpage_bg_image', '');
 
         return $frm;
