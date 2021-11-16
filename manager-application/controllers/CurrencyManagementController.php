@@ -221,22 +221,22 @@ class CurrencyManagementController extends ListingBaseController
     {
         $frm = new Form('frmCurrency');
         $frm->addHiddenField('', 'currency_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->siteLangId), 'currency_name');
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_code', $this->siteLangId), 'currency_code');
-        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Left', $this->siteLangId), 'currency_symbol_left');
-        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Right', $this->siteLangId), 'currency_symbol_right');
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Currency_Conversion_Value', $this->siteLangId), 'currency_value');
+        $frm->addRequiredField(Labels::getLabel('FRM_Currency_Name', $this->siteLangId), 'currency_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_Currency_code', $this->siteLangId), 'currency_code');
+        $frm->addTextbox(Labels::getLabel('FRM_Currency_Symbol_Left', $this->siteLangId), 'currency_symbol_left');
+        $frm->addTextbox(Labels::getLabel('FRM_Currency_Symbol_Right', $this->siteLangId), 'currency_symbol_right');
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_Currency_Conversion_Value', $this->siteLangId), 'currency_value');
         if ($defaultCurrency) {
-            $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_This_is_your_default_currency', $this->siteLangId) . '</small>';
+            $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_This_is_your_default_currency', $this->siteLangId) . '</small>';
         }
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'currency_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_Status', $this->siteLangId), 'currency_active', $activeInactiveArr, '', array(), '');
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -246,8 +246,8 @@ class CurrencyManagementController extends ListingBaseController
     {
         $frm = new Form('frmCurrencyLang');
         $frm->addHiddenField('', 'currency_id', $currencyId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->siteLangId), 'currency_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_Currency_Name', $this->siteLangId), 'currency_name');
         return $frm;
     }
 
