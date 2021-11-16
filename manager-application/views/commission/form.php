@@ -34,7 +34,7 @@ if (null != $fld) {
 </div>
 
 <script type="text/javascript">
-    $("document").ready(function() {
+    $(document).ready(function() {
         if ($('#commsetting_user_id').length) {
             select2('commsetting_user_id', fcom.makeUrl('Commission', 'userAutoComplete'));
         }

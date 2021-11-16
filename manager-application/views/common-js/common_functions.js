@@ -198,9 +198,6 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
         ele.data('select2').$container.addClass("w-100");
     }
 
-    $advanced-search
-
-
     $("." + $.ykmodal.element).removeAttr('tabindex');
 };
 /**

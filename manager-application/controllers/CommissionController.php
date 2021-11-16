@@ -12,18 +12,26 @@ class CommissionController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_COMMISSION', $this->siteLangId);
+
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CURRENCIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+        $actionItemsData['performBulkAction'] = true;
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_CATEGORY,_SELLER_AND_PRODUCT', $this->siteLangId));
         $this->getListingData();
-        $this->_template->addJs(array('js/select2.js'));
+
+        $this->_template->addJs(['js/select2.js', 'commission/page-js/index.js']);
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
