@@ -26,22 +26,46 @@ class CurrencyManagementController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_CURRENCIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $currencyPlugins = Plugin::getNamesByType(Plugin::TYPE_CURRENCY_CONVERTER, $this->siteLangId);
         $currency = new Currency();
+        $currencyConverter = $currency->getCurrencyConverterApi();
 
-        $this->set('currencyPlugins', $currencyPlugins);
-        $this->set('currencyConverter', $currency->getCurrencyConverterApi());
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['performBulkAction'] = true;
+
+        if (!empty($currencyPlugins) && 0 < count($currencyPlugins) && false !== $currencyConverter) {
+            $actionItemsData['otherButtons'] = [
+                [
+                    'attr' => [
+                        'href' => 'javascript:void(0)',
+                        'class' => 'btn btn-outline-brand btn-icon',
+                        'onclick' => "updateCurrencyRates('" . $currencyConverter . "')",
+                        'title' => Labels::getLabel('LBL_SYNC_CURRENCY_VALUE', $this->siteLangId)
+                    ],
+                    'label' => '<svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync-currency">
+                                    </use>
+                                </svg><span>' . Labels::getLabel('BTN_SYNC', $this->siteLangId) . '</span>',
+                ]
+            ];
+        }
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('canEdit', $this->objPrivilege->canEditCurrencyManagement($this->admin_id, true));
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
-        $this->_template->addJs('js/jquery.tablednd.js');
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_CURRENCY', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->render();
+        $this->_template->addJs(['js/jquery.tablednd.js', 'currency-management/page-js/index.js']);
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -295,7 +319,8 @@ class CurrencyManagementController extends ListingBaseController
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'currency_code' => Labels::getLabel('LBL_Currency', $this->siteLangId),
+            'currency_name' => Labels::getLabel('LBL_CURRENCY_NAME', $this->siteLangId),
+            'currency_code' => Labels::getLabel('LBL_CURRENCY_CODE', $this->siteLangId),
             'currency_symbol_left' => Labels::getLabel('LBL_Symbol_Left', $this->siteLangId),
             'currency_symbol_right' => Labels::getLabel('LBL_Symbol_Right', $this->siteLangId),
             'currency_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
@@ -312,6 +337,7 @@ class CurrencyManagementController extends ListingBaseController
             'dragdrop',
             'select_all',
             'listSerial',
+            'currency_name',
             'currency_code',
             'currency_symbol_left',
             'currency_symbol_right',

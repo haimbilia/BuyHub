@@ -22,7 +22,7 @@ class LabelsController extends ListingBaseController
             [
                 'attr' => [
                     'href' => 'javascript:void(0)',
-                    'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js',
+                    'class' => 'btn btn-outline-brand btn-icon',
                     'onclick' => 'updateFile()',
                     'title' => Labels::getLabel('LBL_UPDATE_WEB_LABEL_FILE', $this->siteLangId)
                 ],
@@ -35,7 +35,7 @@ class LabelsController extends ListingBaseController
             [
                 'attr' => [
                     'href' => 'javascript:void(0)',
-                    'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js',
+                    'class' => 'btn btn-outline-brand btn-icon',
                     'onclick' => "updateFile(" . Labels::TYPE_APP . ")",
                     'title' => Labels::getLabel('LBL_UPDATE_APP_LABEL_FILE', $this->siteLangId)
                 ],
