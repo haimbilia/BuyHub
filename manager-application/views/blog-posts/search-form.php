@@ -15,6 +15,14 @@ $sortByFld->setFieldTagAttribute('id', 'sortBy');
 $sortOrderFld = $frmSearch->getField('sortOrder');
 $sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
 
+/* Extra Field */
+$fld = $frmSearch->getField('post_published');
+if (null != $fld) {
+    $fld->addFieldtagAttribute('class', 'form-control');
+}
+
+/* Extra Field */
+
 echo $frmSearch->getFormTag();
 HtmlHelper::renderHiddenFields($frmSearch);
 ?>
@@ -24,13 +32,15 @@ HtmlHelper::renderHiddenFields($frmSearch);
             <div class="col-md-4">
                 <?php echo $frmSearch->getFieldHtml('keyword'); ?>
             </div>
+            <?php if (null != $fld) { ?>
+                <div class="col-md-4">
+                    <?php echo $frmSearch->getFieldHtml('post_published'); ?>
+                </div>
+            <?php } ?>
             <div class="col-md-4">
-                <?php echo $frmSearch->getFieldHtml('country'); ?>
-            </div>
-            <div class="col-md-2">
                 <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
             </div>
         </div>

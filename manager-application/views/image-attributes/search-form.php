@@ -9,6 +9,9 @@ $keyWordFld = $frmSearch->getField('keyword');
 $keyWordFld->addFieldtagAttribute('class', 'form-control');
 $keyWordFld->setFieldtagAttribute('placeholder', $keywordPlaceholder);
 
+$moduleFld = $frmSearch->getField('select_module');
+$moduleFld->addFieldtagAttribute('class', 'form-control');
+
 $sortByFld = $frmSearch->getField('sortBy');
 $sortByFld->setFieldTagAttribute('id', 'sortBy');
 
@@ -25,7 +28,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
                 <?php echo $frmSearch->getFieldHtml('keyword'); ?>
             </div>
             <div class="col-md-4">
-                <?php echo $frmSearch->getFieldHtml('country'); ?>
+                <?php echo $frmSearch->getFieldHtml('select_module'); ?>
             </div>
             <div class="col-md-2">
                 <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>

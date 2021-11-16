@@ -8,7 +8,7 @@ if (!$frmSearch->getFormTagAttribute('onsubmit')) {
     $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 }
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
-$frmSearch->setFormTagAttribute('class', 'form');
+$frmSearch->setFormTagAttribute('class', 'form form-search');
 
 $keyWordFld = $frmSearch->getField('keyword');
 if (null != $keyWordFld) {
@@ -30,7 +30,7 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
         continue;
     } else if ('hidden' == $frmFld->fldType) {
         $frmFields['hidden'][] = $frmFld->getName();
-    } else {        
+    } else {
         if (null == $keyWordFld && empty($firstElement) && 'btn_clear' != strtolower($frmFld->getName())) {
             $firstElement = [
                 'name' => $frmFld->getName(),
@@ -58,6 +58,7 @@ foreach ($frmSearch->getAllFields() as $key => $frmFld) {
         }
     }
 }
+
 $advSrchFldsCount = count($frmFields['advSrchFlds']); /* Any addition field except first fields and submit and clear button */
 echo $frmSearch->getFormTag();
 foreach ($frmFields['hidden'] as $fldName) {
@@ -149,7 +150,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             }
                             ?>
                             <?php if ($haveExtraFlds && $extraFldCount > 1) { ?>
-                                <a class="btn advanced-trigger ml-2" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                                <a class="btn advanced-trigger ml-2 collapsed" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                                     <svg class="svg" width="22" height="22">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
                                         </use>

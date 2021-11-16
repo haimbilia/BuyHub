@@ -50,7 +50,7 @@ class SalesReportController extends ListingBaseController
             $this->addSortingElements($frm, 'orderDate', applicationConstants::SORT_DESC);
         }
         $frm->addHiddenField('', 'orderDate', $orderDate);
-
+       
         if (empty($orderDate)) {
             $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
             $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));

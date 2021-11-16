@@ -258,7 +258,7 @@ class UrlRewritingController extends ListingBaseController
             $this->addSortingElements($frm, 'urlrewrite_original');
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $langArr = Language::getAllNames();
@@ -268,7 +268,7 @@ class UrlRewritingController extends ListingBaseController
         }
 
         if (count($langArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $langArr, FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $langArr, FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
         } else {
             $lang_id = array_key_first($langArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);

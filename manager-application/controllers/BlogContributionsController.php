@@ -253,11 +253,11 @@ class BlogContributionsController extends ListingBaseController
             $this->addSortingElements($frm, 'author_name');
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Contribution_Status', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_CONTRIBUTION_STATUS', $this->siteLangId));        
+        $frm->addSelectBox(Labels::getLabel('FRM_CONTRIBUTION_STATUS', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_CONTRIBUTION_STATUS', $this->siteLangId));        
         
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);

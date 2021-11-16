@@ -273,12 +273,12 @@ class ImageAttributesController extends ListingBaseController
     public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $attachedFile = new AttachedFile();
         $attachementArr = $attachedFile->getImgAttrTypeArray($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE);
+        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE);
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'record_name');

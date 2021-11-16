@@ -16,10 +16,8 @@ $sortOrderFld = $frmSearch->getField('sortOrder');
 $sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
 
 /* Extra Field */
-$userNameFld = $frmSearch->getField('user_name');
-if (null != $userNameFld) {
-    $userNameFld->addFieldtagAttribute('class', 'form-control');
-}
+$fld = $frmSearch->getField('lang_id');
+$fld->addFieldtagAttribute('class', 'form-control');
 /* Extra Field */
 
 echo $frmSearch->getFormTag();
@@ -28,19 +26,12 @@ HtmlHelper::renderHiddenFields($frmSearch);
 <div class="card-head">
     <div class="card-head-label">
         <div class="row">
-            <div class="col-md-8">
-                <div class="input-group">
-                    <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-                    <?php if (null == $userNameFld) { ?>
-                        <div class="input-group-append">
-                            <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-                        </div>
-                    <?php } ?>
-                </div>
-            </div>
-            <?php if (null != $userNameFld) { ?>
+            <?php if (count($languages) > 1) { ?>
                 <div class="col-md-4">
-                    <?php echo $frmSearch->getFieldHtml('user_name'); ?>
+                    <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                </div>
+                <div class="col-md-4">
+                    <?php echo $frmSearch->getFieldHtml('lang_id'); ?>
                 </div>
                 <div class="col-md-2">
                     <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
@@ -48,6 +39,16 @@ HtmlHelper::renderHiddenFields($frmSearch);
                 <div class="col-md-2">
                     <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
                 </div>
+            <?php } else { ?>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+                        <div class="input-group-append">
+                            <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
+                        </div>
+                    </div>
+                </div>
+
             <?php } ?>
         </div>
     </div>

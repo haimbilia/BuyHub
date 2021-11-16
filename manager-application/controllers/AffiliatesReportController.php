@@ -158,8 +158,8 @@ class AffiliatesReportController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'name', applicationConstants::SORT_ASC);
         }
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FMR_REG._DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FMR_REG._DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);

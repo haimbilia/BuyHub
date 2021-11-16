@@ -15,6 +15,11 @@ $sortByFld->setFieldTagAttribute('id', 'sortBy');
 $sortOrderFld = $frmSearch->getField('sortOrder');
 $sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
 
+/* Extra Field */
+$fld = $frmSearch->getField('bpcomment_approved');
+$fld->addFieldtagAttribute('class', 'form-control');
+/* Extra Field */
+
 echo $frmSearch->getFormTag();
 HtmlHelper::renderHiddenFields($frmSearch);
 ?>
@@ -25,7 +30,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
                 <?php echo $frmSearch->getFieldHtml('keyword'); ?>
             </div>
             <div class="col-md-4">
-                <?php echo $frmSearch->getFieldHtml('country'); ?>
+                <?php echo $frmSearch->getFieldHtml('bpcomment_approved'); ?>
             </div>
             <div class="col-md-2">
                 <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>

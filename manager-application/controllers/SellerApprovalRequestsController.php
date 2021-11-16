@@ -49,11 +49,11 @@ class SellerApprovalRequestsController extends ListingBaseController {
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'usuprequest_status');
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', ['-1' => Labels::getLabel('LBL_All', $this->siteLangId)] + User::getSupplierReqStatusArr($this->siteLangId), '', array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', ['-1' => Labels::getLabel('FRM_ALL', $this->siteLangId)] + User::getSupplierReqStatusArr($this->siteLangId), '', array(), '');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 

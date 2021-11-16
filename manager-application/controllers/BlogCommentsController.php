@@ -244,11 +244,11 @@ class BlogCommentsController extends ListingBaseController
             $this->addSortingElements($frm, 'bpcomment_author_name');
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $statusArr = BlogComment::getBlogCommentStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Comment_Status', $this->siteLangId), 'bpcomment_approved', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_COMMENT_STATUS', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_COMMENT_STATUS', $this->siteLangId), 'bpcomment_approved', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_COMMENT_STATUS', $this->siteLangId));
         
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);

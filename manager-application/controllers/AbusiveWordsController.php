@@ -224,12 +224,12 @@ class AbusiveWordsController extends ListingBaseController
             $this->addSortingElements($frm, 'abusive_keyword');
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $languages = Language::getAllNames();
         if (1 < count($languages)) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
         }
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -243,14 +243,14 @@ class AbusiveWordsController extends ListingBaseController
         
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'abusive_lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'abusive_lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
             $fld->requirements()->setRequired(true);
         } else {
             $lang_id = array_key_first($languages);
             $frm->addHiddenField('', 'abusive_lang_id', $lang_id);
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'abusive_keyword');
+        $frm->addRequiredField(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'abusive_keyword');
 
         return $frm;
     }

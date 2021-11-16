@@ -837,7 +837,7 @@ class PromotionsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'type', array('-1' => Labels::getLabel('FRM_All_Type', $this->siteLangId)) + Promotion::getTypeArr($this->siteLangId), '', array(), '');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
