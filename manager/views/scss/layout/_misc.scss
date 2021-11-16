@@ -476,16 +476,15 @@
         left: 0;
         right: 0;
         z-index: 99;
-        opacity: 0;
-        left: -100%;
-        visibility: hidden;
+        transition: transform 0.3s ease-out;
+        transform: translateX(100%);
     }
     &--on & {
-        opacity: 1;
-        visibility: visible;
-        left: 0;
+        transform: translateX(0);
     }
-}.float-btn {
+}
+
+.float-btn {
     will-change: transform, opacity;
     border: none;
     box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
@@ -499,8 +498,8 @@
     position: fixed;
     margin: 1em;
     z-index: 998;
-    #{$end-direction}:1.5rem;
-    bottom:6rem;
+    #{$end-direction}: 1.5rem;
+    bottom: 6rem;
     display: flex;
     align-items: center;
     justify-content: center;
