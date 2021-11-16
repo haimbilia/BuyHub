@@ -13,10 +13,11 @@ class BlogContributionsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_BLOG_POSTS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_BLOG_CONTRIBUTIONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtn'] = false;
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
@@ -26,27 +27,10 @@ class BlogContributionsController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_POST_TITLE', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_AUTHOR_NAME,_EMAIL_AND_PHONE', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'blog-posts/page-js/index.js']);
-        $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css']);
         $this->_template->render(true, true, '_partial/listing/index.php');
-    }
-
-    public function index()
-    {
-        $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_BLOG_CONTRIBUTIONS', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
-        $this->set('pageData', $pageData);
-        $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
-        $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->getListingData();
-        $this->_template->render();
     }
 
     public function search()
