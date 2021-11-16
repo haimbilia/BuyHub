@@ -1,34 +1,35 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if( !empty($images) ){ ?>
-<ul class="grids--onethird" id="<?php if($canEdit){ ?>sortable<?php } ?>">
-    <?php
-		$count=1;
-		foreach( $images as $afile_id => $row ){ 
-		$uploadedTime = AttachedFile::setTimeParam($row['afile_updated_at']); ?>
-    <li id="<?php echo $row['afile_id']; ?>">
-        <div class="logoWrap">
-            <div class="logothumb"> <img
-                    src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image','blogPostAdmin', array($row['afile_record_id'], $row['afile_lang_id'], "THUMB", 0, $row['afile_id']),CONF_WEBROOT_FRONT_URL). $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
-                    title="<?php echo $row['afile_name'];?>" alt="<?php echo $row['afile_name'];?>">
-                <?php if($canEdit){ ?> <a class="deleteLink white" href="javascript:void(0);"
-                    title="Delete <?php echo $row['afile_name'];?>"
-                    onclick="deleteImage(<?php echo $row['afile_record_id']; ?>, <?php echo $row['afile_id']; ?>, <?php echo $row['afile_lang_id']; ?>);"
-                    class="delete"><i class="ion-close-round"></i></a>
-                <?php } ?>
-            </div>
-            <?php if(isset($imgTypesArr) && !empty($imgTypesArr[$row['afile_record_subid']])){
-							echo '<small class=""><strong>'.Labels::getLabel('LBL_Type',$siteLangId).': </strong> '.$imgTypesArr[$row['afile_record_subid']].'</small><br/>';
-						}
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-						$lang_name = Labels::getLabel('LBL_All',$siteLangId);
-						if( $row['afile_lang_id'] > 0 ){
-							$lang_name = $languages[$row['afile_lang_id']];
-						?>
+if (!empty($images)) { ?>
+    <?php
+    foreach ($images as $afile_id => $row) {
+        $uploadedTime = AttachedFile::setTimeParam($row['afile_updated_at']);
+        $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'blogPostAdmin', array($row['afile_record_id'], $row['afile_lang_id'], "THUMB", 0, $row['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    ?>
+        <div class="dropzone-uploaded dropzoneUploadedJs">
+            <img src="<?php echo $imgUrl; ?>" title="<?php echo $row['afile_name']; ?>" alt="<?php echo $row['afile_name']; ?>">
+            <?php if ($canEdit) { ?>
+                <div class="dropzone-uploaded-action">
+                    <ul class="actions">
+                        <li>
+                            <a href="javascript:void(0)" onclick="editDropZoneImages(this)" data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $siteLangId); ?>">
+                                <svg class="svg" width="18" height="18">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                    </use>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" onclick="deleteImage(<?php echo  $recordId; ?>, <?php echo $row['afile_id']; ?>, <?php echo $row['afile_lang_id']; ?>);" data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('FRM_CLICK_HERE_TO_REMOVE', $siteLangId); ?>">
+                                <svg class="svg" width="18" height="18">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                    </use>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             <?php } ?>
-            <small class=""><strong> <?php echo Labels::getLabel('LBL_Language',$siteLangId); ?>:</strong>
-                <?php echo $lang_name; ?></small>
         </div>
-    </li>
-    <?php $count++; } ?>
-</ul>
-<?php }	?>
+<?php }
+} ?>

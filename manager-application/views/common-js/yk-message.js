@@ -41,11 +41,12 @@
             setOptions('error', message);
         },
         close: function () {
+            $('.toast').remove();
             toastr.clear();
         }
     });
 })(jQuery);
 
-$(document).ready(function () {
+jQuery(function () {
     setOptions();
 });

@@ -12,14 +12,30 @@ class AbusiveWordsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ABUSIVE_KEYWORDS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+        $actionItemsData['performBulkAction'] = true;
+        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'href' => "javascript:void(0)",
+                'onclick' => "addNew(true)",
+                'title' => $btnTitle,
+            ],
+            'label' => $btnTitle,   
+        ];
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('languages', Language::getAllNames());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ABUSIVE_KEYWORD', $this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();
@@ -224,15 +240,18 @@ class AbusiveWordsController extends ListingBaseController
     {
         $frm = new Form('frmAbusiveWord');
         $frm->addHiddenField('', 'abusive_id', $recordId);
+        
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'abusive_lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'abusive_lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
+            $fld->requirements()->setRequired(true);
         } else {
             $lang_id = array_key_first($languages);
             $frm->addHiddenField('', 'abusive_lang_id', $lang_id);
         }
 
-        $frm->addTextbox('Keyword', 'abusive_keyword');
+        $frm->addRequiredField(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'abusive_keyword');
+
         return $frm;
     }
 

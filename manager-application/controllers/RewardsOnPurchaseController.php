@@ -18,7 +18,6 @@ class RewardsOnPurchaseController extends ListingBaseController
 
         $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
-        $actionItemsData['searchFrmTemplate'] = 'rewards-on-purchase/search-form.php';
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
                 'href' => "javascript:void(0)",
