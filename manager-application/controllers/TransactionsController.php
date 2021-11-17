@@ -2,6 +2,8 @@
 
 class TransactionsController extends ListingBaseController
 {
+    protected $pageKey = 'TRANSACTIONS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,7 +15,7 @@ class TransactionsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_USER_TRANSACTIONS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -58,7 +60,7 @@ class TransactionsController extends ListingBaseController
 
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
-        
+
         $postedData = FatApp::getPostedData();
         $post = $srchFrm->getFormDataFromArray($postedData);
         $post['utxn_user_id'] = $userId;
@@ -76,7 +78,7 @@ class TransactionsController extends ListingBaseController
             $balSrch->addCondition('utxn_user_id', '=', $userId);
         }
         $balSrch->addCondition('utxn_status', '=', 1);
-        
+
         $srch = Transactions::getSearchObject();
         $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.credential_user_id = u.user_id', 'uc');
@@ -102,7 +104,7 @@ class TransactionsController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        
+
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 
@@ -210,7 +212,7 @@ class TransactionsController extends ListingBaseController
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),          
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
             'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
@@ -247,13 +249,14 @@ class TransactionsController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
-                    ['title' => Labels::getLabel('LBL_TRANSACTIONS', $this->siteLangId)]
+                    ['title' => $pageTitle]
                 ];
         }
         return $this->nodes;
