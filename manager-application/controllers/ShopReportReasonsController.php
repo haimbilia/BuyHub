@@ -26,16 +26,36 @@ class ShopReportReasonsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHOP_REPORT_REASONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['formAction'] = 'deleteSelected';
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['performBulkAction'] = true;
+        $languages = Language::getAllNames();
+        if (1 === count($languages)) {
+            $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
+            $actionItemsData['newRecordBtnAttrs'] = [
+                'attr' => [
+                    'href' => "javascript:void(0)",
+                    'onclick' => "addNew(true)",
+                    'title' => $btnTitle,
+                ],
+                'label' => $btnTitle,   
+            ];
+        }
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -109,6 +129,11 @@ class ShopReportReasonsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
 
+        $languages = Language::getAllNames();
+        if (1 === count($languages)) {
+            $frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ', true)');
+        }
+
         if (0 < $recordId) {
             $data = ShopReportReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('reportreason_id', 'reportreason_title'), true);
 
@@ -117,7 +142,6 @@ class ShopReportReasonsController extends ListingBaseController
             }
             $frm->fill($data);
         }
-
         
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
@@ -137,6 +161,11 @@ class ShopReportReasonsController extends ListingBaseController
         }
 
         $recordId = FatUtility::int($post['reportreason_id']);
+
+        $checkExists = ShopReportReason::getAttributesByIdentifier($post['reportreason_title'], 'reportreason_id');
+        if (1 > $recordId && !empty($checkExists)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_CHOOSE_ANOTHER_TITLE', $this->siteLangId), true);
+        }
 
         $recordObj = new ShopReportReason($recordId);
         $post['reportreason_identifier'] = $post['reportreason_title'];
@@ -259,12 +288,13 @@ class ShopReportReasonsController extends ListingBaseController
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
-
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHOP_REPORT_REASONS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_SHOP_REPORT_REASONS', $this->siteLangId)]
+                    ['title' => $pageTitle]
                 ];
         }
         return $this->nodes;

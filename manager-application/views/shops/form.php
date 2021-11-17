@@ -15,7 +15,7 @@ $stateFld->setFieldTagAttribute('id', 'geo_state_code');
 $stateFld->setFieldTagAttribute('class', 'addressSelection-js');
 
 $fld = $frm->getField('shop_featured');
-$fld->htmlAfterField = '<small><br>' . Labels::getLabel('LBL_Featured_Shops_will_be_listed_on_Featured_Shops_Page._Featured_Shops_will_get_priority,', $siteLangId) . '</small>';
+$fld->htmlAfterField = '<small><br>' . Labels::getLabel('LBL_FEATURED_SHOPS_WILL_BE_LISTED_ON_FEATURED_SHOPS_PAGE._FEATURED_SHOPS_WILL_GET_PRIORITY,', $siteLangId) . '</small>';
 $urlFld = $frm->getField('urlrewrite_custom');
 $urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
 $urlFld->htmlAfterField = "<small class='text--small'>" . UrlHelper::generateFullUrl('shops', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '</small>';

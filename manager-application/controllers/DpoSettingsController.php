@@ -7,7 +7,7 @@ class DpoSettingsController extends PaymentMethodSettingsController
         $frm = new Form('frmDpo');
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
 
         $frm->addTextBox(Labels::getLabel('LBL_COMPANY_TOKEN', $langId), 'company_token');

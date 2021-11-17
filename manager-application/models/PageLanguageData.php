@@ -37,8 +37,7 @@ class PageLanguageData extends MyAppModel
             }
         }
 
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
 
         if (!is_array($row)) {
             return [];

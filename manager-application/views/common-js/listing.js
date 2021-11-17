@@ -58,13 +58,6 @@ $(document).on("search", "input[name='keyword']", function () {
     }
 });
 
-$(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
-    e.stopImmediatePropagation();
-    if (e.keyCode === 13) {
-        $('.' + $.ykmodal.element + " .submitBtnJs").click();
-    }
-});
-
 $(document).on("click", ".resetModalFormJs", function (e) {
     if (0 > $(".navTabsJs .nav-link").length) {
         $(".navTabsJs .nav-link.active").click();
@@ -302,7 +295,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         );
     };
 
-    updateStatus = function (e, obj, recordId, status) {
+    updateStatus = function (e, obj, recordId, status, callback = "") {
         if (false === checkControllerName()) {
             return false;
         }
@@ -324,19 +317,16 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         data = "recordId=" + recordId + "&status=" + status;
-        fcom.ajax(
-            fcom.makeUrl(controllerName, "updateStatus"),
-            data,
+        fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
             function (res) {
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
                     $.ykmsg.success(ans.msg);
-                    $(obj).attr({
-                        onclick:
-                            "updateStatus(event, this, " + recordId + ", " + oldStatus + ")",
-                        "data-old-status": status,
-                    });
+                    $(obj).attr({onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + ")", "data-old-status": status});
+                    if ("" != callback) {
+                        eval(callback);
+                    } 
                 } else {
                     $(obj).prop("checked", 1 == oldStatus);
                     $.ykmsg.error(ans.msg);
@@ -427,22 +417,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             }
         });
 
-        var faceboxActionBtns =
-            0 < $("#facebox").length && $("#facebox").is(":visible")
-                ? "#facebox "
-                : "";
-
-        if (0 < $(faceboxActionBtns + ".toolbar-btn-js").length) {
-            if ($(obj).prop("checked") == false) {
-                $(faceboxActionBtns + ".toolbar-btn-js")
-                    .addClass("disabled")
-                    .removeClass("selected");
-            } else {
-                $(faceboxActionBtns + ".toolbar-btn-js")
-                    .removeClass("disabled")
-                    .addClass("selected");
-            }
-        }
+        showActionsBtns();
     };
 
     formAction = function (frm, callback) {
@@ -471,7 +446,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             } else {
                 $.ykmsg.success(t.msg);
             }
-            $(".toolbar-btn-js").addClass("disabled").removeClass("selected");
+            $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
         });
     };
 
@@ -499,9 +474,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     showActionsBtns = function () {
         if (typeof $(".selectItemJs:checked").val() === "undefined") {
-            $(".toolbar-btn-js").addClass("disabled").removeClass("selected");
+            $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
         } else {
-            $(".toolbar-btn-js").removeClass("disabled").addClass("selected");
+            $(".toolbarBtnJs").removeClass("btn-outline-gray disabled").addClass("btn-outline-brand selected");
         }
     };
 
@@ -757,13 +732,7 @@ $(document).on("click", ".selectItemJs", function () {
     if ($("#" + parentForm + " .selectItemJs").length == $("#" + parentForm + " .selectItemJs:checked").length) {
         $("#" + parentForm + " .selectAllJs").prop("checked", true);
     }
-
-    var faceboxActionBtns = 0 < $("#facebox").length && $("#facebox").is(":visible") ? "#facebox " : "";
-    if ($("#" + parentForm + " .selectItemJs:checked").length == 0) {
-        $(faceboxActionBtns + " .toolbar-btn-js").addClass("disabled").removeClass("selected");
-    } else {
-        $(faceboxActionBtns + " .toolbar-btn-js").removeClass("disabled").addClass("selected");
-    }
+    showActionsBtns();
 });
 
 $(document).ready(function () {

@@ -525,9 +525,9 @@ $(document).ready(function () {
 
         var faceboxActionBtns = (0 < $("#facebox").length && $("#facebox").is(":visible")) ? "#facebox " : '';
         if ($("#" + parentForm + " .selectItemJs:checked").length == 0) {
-            $(faceboxActionBtns + " .toolbar-btn-js").addClass('d-none');
+            $(faceboxActionBtns + " .toolbarBtnJs").addClass('d-none');
         } else {
-            $(faceboxActionBtns + " .toolbar-btn-js").removeClass('d-none');
+            $(faceboxActionBtns + " .toolbarBtnJs").removeClass('d-none');
         }
     });
 
@@ -574,9 +574,9 @@ function selectAll(obj) {
     var faceboxActionBtns = (0 < $("#facebox").length && $("#facebox").is(":visible")) ? "#facebox " : '';
 
     if ($(obj).prop("checked") == false) {
-        $(faceboxActionBtns + ".toolbar-btn-js").addClass('d-none');
+        $(faceboxActionBtns + ".toolbarBtnJs").addClass('d-none');
     } else {
-        $(faceboxActionBtns + ".toolbar-btn-js").removeClass('d-none');
+        $(faceboxActionBtns + ".toolbarBtnJs").removeClass('d-none');
     }
 }
 
@@ -617,9 +617,9 @@ function toggleBulkStatues(status, msg = '') {
 
 function showActionsBtns() {
     if (typeof $(".selectItemJs:checked").val() === 'undefined') {
-        $(".toolbar-btn-js").addClass('d-none');
+        $(".toolbarBtnJs").addClass('d-none');
     } else {
-        $(".toolbar-btn-js").removeClass('d-none');
+        $(".toolbarBtnJs").removeClass('d-none');
     }
 }
 

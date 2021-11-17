@@ -65,7 +65,7 @@ $frmSearch->addHiddenField('', 'product_id', $product_id);
                                         'href' => 'javascript:void(0)',
                                         'onclick' => 'addSpecialPrice(0)',
                                         'title' => Labels::getLabel('LBL_Add_Special_Price', $adminLangId),
-                                        'class' => 'toolbar-btn-js d-none'
+                                        'class' => 'toolbarBtnJs d-none'
                                     ],
                                     'label' => '<i class="fas fa-dollar-sign"></i>'
                                 ],
@@ -74,7 +74,7 @@ $frmSearch->addHiddenField('', 'product_id', $product_id);
                                         'href' => 'javascript:void(0)',
                                         'onclick' => 'addVolumeDiscount(0)',
                                         'title' => Labels::getLabel('LBL_Add_Volume_Discount', $adminLangId),
-                                        'class' => 'toolbar-btn-js d-none'
+                                        'class' => 'toolbarBtnJs d-none'
                                     ],
                                     'label' => '<i class="fas fa-percent"></i>'
                                 ],

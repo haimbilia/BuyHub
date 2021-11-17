@@ -539,8 +539,8 @@ class OrderReturnRequestsController extends ListingBaseController
         if (count($requestType) > 1) {
             $frm->addSelectBox(Labels::getLabel('LBL_Request_Type', $this->siteLangId), 'orrequest_type', OrderReturnRequest::getRequestTypeArr($langId), '', array(), Labels::getLabel('LBL_All_Request_Type', $this->siteLangId));
         }
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orrequest_id');
