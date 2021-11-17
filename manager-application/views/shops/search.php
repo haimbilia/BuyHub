@@ -92,7 +92,7 @@ if (count($arrListing) == 0) {
             'colspan' => count($fields),
             'class' => 'noRecordFoundJs'
         ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
+        Labels::getLabel('MSG_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

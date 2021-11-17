@@ -209,7 +209,15 @@ class ProductsController extends ListingBaseController
         // $this->set('productType', $productType);
         // $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
         $this->set("frm", $frm);
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js','js/select2.js'));
+
+        $codEnabled = true;
+        $paymentMethod = new PaymentMethods();
+        if (!$paymentMethod->cashOnDeliveryIsActive()) {
+            $codEnabled = false;
+        }
+        $this->set("codEnabled", $codEnabled);
+
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js','js/select2.js','js/tagify.min.js', 'js/tagify.polyfills.min.js'));
         $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css','css/select2.min.css']);
         $this->set("includeEditor", true);
         $this->_template->render();
@@ -240,10 +248,12 @@ class ProductsController extends ListingBaseController
         $fld = $frm->addFloatField(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'product_min_selling_price', '');
         $fld->requirements()->setPositive();
 
+        
+
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_WARRANTY', $this->siteLangId), 'product_warranty');
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
-
+        $frm->addHiddenField('', 'product_warranty_type', current(Product::getWarrantyTypes($this->siteLangId)));
 
         $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $this->siteLangId), 'product_description');
         $frm->addTextBox(Labels::getLabel('FRM_YOUTUBE_VIDEO_URL', $this->siteLangId), 'product_youtube_video');
@@ -262,16 +272,27 @@ class ProductsController extends ListingBaseController
         
 
 
-        $languageArr = Language::getDropDownList();
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        } 
+        // $languageArr = Language::getDropDownList();
+        // $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        // if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+        //     $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        // } 
+
+
+
+
+        $frm->addCheckBox(Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED', $this->siteLangId), 'product_featured', 1, array(), false, 0);
 
         // $approveUnApproveArr = Product::getApproveUnApproveArr($this->siteLangId);
         // $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL_STATUS', $this->siteLangId), 'product_approved', $approveUnApproveArr, Product::APPROVED, array(), '');
 
-       
+
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_PRODUCT_IS_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', $this->siteLangId), 'product_cod_enabled', 1, array(), false, 0);
+               
+
+        $frm->addCheckBox(Labels::getLabel("LBL_ACTIVE", $this->siteLangId), 'product_active', applicationConstants::YES, array(), true, 0); 
+
+        $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_TAGS', $this->siteLangId), 'product_tags');      
         $frm->addHiddenField('', 'product_id', $productId);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_AND_NEXT', $this->siteLangId));
  
@@ -1205,10 +1226,8 @@ class ProductsController extends ListingBaseController
         $fldMinSelPrice->requirements()->setPositive();
 
         $approveUnApproveArr = Product::getApproveUnApproveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Approval_Status', $this->siteLangId), 'product_approved', $approveUnApproveArr, Product::APPROVED, array(), '');
-
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'product_active', $activeInactiveArr, applicationConstants::YES, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_Approval_Status', $this->siteLangId), 'product_approved', $approveUnApproveArr, Product::APPROVED, array(), '');           
+        
         $frm->addHiddenField('', 'product_id', $productId);
         $frm->addHiddenField('', 'product_brand_id');
         $frm->addHiddenField('', 'ptt_taxcat_id');
@@ -1348,7 +1367,7 @@ class ProductsController extends ListingBaseController
         $warrantyFld = $frm->addRequiredField(Labels::getLabel('LBL_PRODUCT_WARRANTY', $this->siteLangId), 'product_warranty');
         $warrantyFld->requirements()->setInt();
         $warrantyFld->requirements()->setPositive();
-        $frm->addCheckBox(Labels::getLabel('LBL_Mark_This_Product_As_Featured?', $this->siteLangId), 'product_featured', 1, array(), false, 0);
+        
          
         $productType = Product::getAttributesById($productId, 'product_type');
         if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
@@ -1587,12 +1606,7 @@ class ProductsController extends ListingBaseController
             }
             /* $frm->addCheckBox(Labels::getLabel('LBL_Product_Is_Eligible_For_Free_Shipping?', $this->siteLangId), 'ps_free', 1, array(), false, 0); */
 
-            $codFld = $frm->addCheckBox(Labels::getLabel('LBL_Product_Is_Available_for_Cash_on_Delivery_(COD)?', $this->siteLangId), 'product_cod_enabled', 1, array(), false, 0);
-            $paymentMethod = new PaymentMethods();
-            if (!$paymentMethod->cashOnDeliveryIsActive()) {
-                $codFld->addFieldTagAttribute('disabled', 'disabled');
-                $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_COD_option_is_disabled_in_payment_gateway_settings', $this->siteLangId) . '</small>';
-            }
+           
             /* ] */            
             $shippingObj = new Shipping($this->siteLangId);
             $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, $shippedByUserId, true, true);        

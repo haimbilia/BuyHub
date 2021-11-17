@@ -511,9 +511,9 @@ class ProductCategoriesController extends ListingBaseController
         $categories = $prodCateObj->getProdCatAutoSuggest($search_keyword, 10, $this->siteLangId, $collectionId);
         $json = array();
         foreach ($categories as $key => $val) {
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($val, ENT_QUOTES, 'UTF-8'))
+                'text' => strip_tags(html_entity_decode($val, ENT_QUOTES, 'UTF-8'))
             );
         }
         echo json_encode($json);

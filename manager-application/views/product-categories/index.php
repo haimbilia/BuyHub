@@ -24,3 +24,6 @@ $actionItemsData = $actionItemsData + [
         </div>
     </div>
 </main>
+<script>
+    var addNewRatingType = '<?php echo Labels::getLabel('LBL_ADD_NEW_RATING_TYPE?', $siteLangId); ?>';
+</script>
