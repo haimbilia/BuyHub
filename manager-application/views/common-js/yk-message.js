@@ -3,6 +3,8 @@
         setOptions(fn, msg, closeButton, progressBar, positionClass);
     };
 
+    var autoCloseTimeOut = "5000";
+
     setOptions = function (fn, msg, closeButton = true, progressBar = true, positionClass = 'toast-bottom-center') {
         toastr.options = {
             "closeButton": closeButton,
@@ -14,7 +16,7 @@
             "onclick": null,
             "showDuration": "300",
             "hideDuration": "1000",
-            "timeOut": "5000",
+            "timeOut": autoCloseTimeOut,
             "extendedTimeOut": "1000",
             "showEasing": "swing",
             "hideEasing": "linear",
@@ -28,16 +30,20 @@
     }
 
     $.extend($.ykmsg, {
-        success: function (message) {
+        success: function (message, timeOut = "5000") {
+            autoCloseTimeOut = timeOut;
             setOptions('success', message);
         },
-        info: function (message) {
+        info: function (message, timeOut = "5000") {
+            autoCloseTimeOut = timeOut;
             setOptions('info', message);
         },
-        warning: function (message) {
+        warning: function (message, timeOut = "5000") {
+            autoCloseTimeOut = timeOut;
             setOptions('warning', message);
         },
-        error: function (message) {
+        error: function (message, timeOut = "5000") {
+            autoCloseTimeOut = timeOut;
             setOptions('error', message);
         },
         close: function () {
