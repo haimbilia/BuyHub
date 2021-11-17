@@ -120,7 +120,7 @@ class ThresholdProductsController extends ListingBaseController {
     }
 
     private function getFormColumns(): array {
-        $shopsTblHeadingCols = CacheHelper::get('approvalRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $shopsTblHeadingCols = CacheHelper::get('productsthresholdTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
         }
@@ -133,7 +133,7 @@ class ThresholdProductsController extends ListingBaseController {
             'earch_sent_on' => Labels::getLabel('LBL_Last_Email_Sent', $this->siteLangId),
             'action' => '',
         ];
-        CacheHelper::create('approvalRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('productsthresholdTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
