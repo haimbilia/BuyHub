@@ -26,16 +26,23 @@ class CountriesController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_COUNTRIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['performBulkAction'] = true;
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_COUNTRY_NAME_OR_CODE', $this->siteLangId));
         $this->getListingData();
-
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -140,6 +147,11 @@ class CountriesController extends ListingBaseController
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
+        $checkCountryCode = Countries::getCountryByCode($post['country_code'], 'country_id');
+        if (!empty($checkCountryCode)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_COUNTRY_CODE_ALREADY_EXISTS'), true);
         }
 
         $recordId = $post['country_id'];
@@ -283,7 +295,7 @@ class CountriesController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['country_active'], Common::excludeKeysForSort());
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)
