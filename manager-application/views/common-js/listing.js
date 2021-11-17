@@ -58,13 +58,6 @@ $(document).on("search", "input[name='keyword']", function () {
     }
 });
 
-$(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
-    e.stopImmediatePropagation();
-    if (e.keyCode === 13) {
-        $('.' + $.ykmodal.element + " .submitBtnJs").click();
-    }
-});
-
 $(document).on("click", ".resetModalFormJs", function (e) {
     if (0 > $(".navTabsJs .nav-link").length) {
         $(".navTabsJs .nav-link.active").click();
