@@ -44,33 +44,10 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                     e.detail.tag.remove();
                     return;
                 }
-                if (!confirm(langLbl.addNewRatingType)) {
+                if (!confirm(addNewRatingType)) {
                     return;
-                }
-                /*
-                var data = 'ratingtype_active=1&ratingtype_id=0&ratingtype_identifier=' + ratingtype_name
-                fcom.ajax(fcom.makeUrl('RatingTypes', 'setup'), data, function(t) {
-                    var ans = JSON.parse(t);
-                    var newRtId = ans.rtId;
-                    var dataLang = 'ratingtypelang_ratingtype_id=' + newRtId + '&ratingtype_name=' +
-                        ratingtype_name + '&ratingtypelang_lang_id=<?php echo $siteLangId; ?>';
-                    fcom.ajax(fcom.makeUrl('RatingTypes', 'langSetup'), dataLang, function(t2) {
-                        var ans = JSON.parse(t2);
-                        fcom.updateWithAjax(fcom.makeUrl('ProductCategories',
-                                'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId +
-                            '&prt_ratingtype_id=' + newRtId,
-                            function(t3) {
-                                $('tag[value="' + e.detail.data.value + '"]').attr('id',
-                                    newRtId);
-                            });
-                    });
-                });
-                */
-            } else {
-                /*      
-                fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'updateRatingTypes'), 'prt_prodcat_id=' + prodCatId + '&prt_ratingtype_id=' + rt_id, function(t) {});
-                */
-            }
+                }              
+            } 
         }
 
         removeRatingType = function(e) {

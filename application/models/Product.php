@@ -82,6 +82,10 @@ class Product extends MyAppModel
     public const FILTER_TYPE_PRICE = 5;
     /* For API */
 
+    public const WARRANTY_TYPE_DAY = 1;
+    public const WARRANTY_TYPE_MONTH = 2;
+    public const WARRANTY_TYPE_YEAR = 3;
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -280,6 +284,15 @@ class Product extends MyAppModel
         return array(
             self::PRODUCT_TYPE_PHYSICAL => Labels::getLabel('LBL_Physical', $langId),
             self::PRODUCT_TYPE_DIGITAL => Labels::getLabel('LBL_Digital', $langId)
+        );
+    }
+
+    public static function getWarrantyTypes(int $langId): array
+    {
+        return array(
+            self::WARRANTY_TYPE_DAY => Labels::getLabel('LBL_DAYS', $langId),
+            self::WARRANTY_TYPE_MONTH => Labels::getLabel('LBL_MONTHS', $langId),
+            self::WARRANTY_TYPE_YEAR => Labels::getLabel('LBL_YEARS', $langId)
         );
     }
 
@@ -2108,4 +2121,5 @@ END,   special_price_found ) as special_price_found'
         }
         return HtmlHelper::getStatusHtml($status, $msg);
     }
+
 }
