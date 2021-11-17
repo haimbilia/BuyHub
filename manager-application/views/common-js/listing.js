@@ -295,7 +295,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         );
     };
 
-    updateStatus = function (e, obj, recordId, status) {
+    updateStatus = function (e, obj, recordId, status, callback = "") {
         if (false === checkControllerName()) {
             return false;
         }
@@ -317,19 +317,16 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         data = "recordId=" + recordId + "&status=" + status;
-        fcom.ajax(
-            fcom.makeUrl(controllerName, "updateStatus"),
-            data,
+        fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
             function (res) {
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
                     $.ykmsg.success(ans.msg);
-                    $(obj).attr({
-                        onclick:
-                            "updateStatus(event, this, " + recordId + ", " + oldStatus + ")",
-                        "data-old-status": status,
-                    });
+                    $(obj).attr({onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + ")", "data-old-status": status});
+                    if ("" != callback) {
+                        eval(callback);
+                    } 
                 } else {
                     $(obj).prop("checked", 1 == oldStatus);
                     $.ykmsg.error(ans.msg);
