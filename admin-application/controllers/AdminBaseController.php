@@ -84,6 +84,7 @@ class AdminBaseController extends FatController
 
         $defultCountryId = FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0);
         $defaultCountryCode = Countries::getAttributesById($defultCountryId, 'country_code');
+        $languages = Language::getAllNames(false);
 
         $jsAdminVariablesCache = CacheHelper::get('jsAdminVariablesCache' . $this->adminLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$jsAdminVariablesCache) {
@@ -179,8 +180,7 @@ class AdminBaseController extends FatController
                 'remove' => Labels::getLabel('LBL_REMOVE', $this->adminLangId),
                 'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->adminLangId),
                 'invalidSeller' => Labels::getLabel('MSG_PLEASE_SELECT_THE_SELLER_FIRST', $this->adminLangId),
-            );
-            $languages = Language::getAllNames(false);
+            );            
             foreach ($languages as $val) {
                 $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
             }
@@ -211,7 +211,7 @@ class AdminBaseController extends FatController
         $this->set('siteDefaultCurrencyCode', $this->siteDefaultCurrencyCode);
         $this->set('jsVariables', $jsVariables);
         $this->set('notifyCount', $notifyCount);
-        $this->set('languages', Language::getAllNames(false));
+        $this->set('languages', $languages);
         $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
         $this->set('layoutDirection', $this->layoutDirection);
 
@@ -470,7 +470,7 @@ class AdminBaseController extends FatController
             $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0, true, true);
             if ($type == 'REQUESTED_CATALOG_PRODUCT') { 
                 $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
-                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibility-js'], Labels::getLabel('LBL_Select', $this->adminLangId));
+                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibilityJs'], Labels::getLabel('LBL_Select', $this->adminLangId));
                 $fulFillmentTypeFld->requirements()->setRequired();                        
             }
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();

@@ -2,6 +2,7 @@
 
 class SellerPackagesController extends ListingBaseController
 {
+    protected $modelClass = 'SellerPackages';
     public function __construct($action)
     {
         parent::__construct($action);
@@ -24,17 +25,6 @@ class SellerPackagesController extends ListingBaseController
     }
 
     /**
-     * setModel - This function is used to set related model class and used by its parent class.
-     *
-     * @param  array $constructorArgs
-     * @return void
-     */
-    protected function setModel(array $constructorArgs = []): void
-    {
-        $this->modelObj = (new ReflectionClass('SellerPackages'))->newInstanceArgs($constructorArgs);
-    }
-
-    /**
      * setLangTemplateData - This function is use to automate load langform and save it. 
      *
      * @param  array $constructorArgs
@@ -42,7 +32,7 @@ class SellerPackagesController extends ListingBaseController
      */
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
-        $this->checkEditPrivilege();      
+        $this->checkEditPrivilege();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->siteLangId));
@@ -52,15 +42,24 @@ class SellerPackagesController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SUBSCRIPTION_PACKAGES', $this->siteLangId);
+
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_PACKAGES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['performBulkAction'] = true;
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('frmSearch', $frmSearch);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PACKAGE_NAME', $this->siteLangId));
         $this->getListingData();
-        $this->_template->render();
+
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -138,15 +137,15 @@ class SellerPackagesController extends ListingBaseController
         $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
-        if (0 < $recordId) {  
-            $data = SellerPackages::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);  
+        if (0 < $recordId) {
+            $data = SellerPackages::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
-        
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->siteLangId));
@@ -155,16 +154,16 @@ class SellerPackagesController extends ListingBaseController
 
     public function setup()
     {
-        $this->checkEditPrivilege();     
+        $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('spackage_id', FatUtility::VAR_INT, 0);
-        
+
         $frm = $this->getForm($recordId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-      
+
         $recordObj = new SellerPackages($recordId);
         $post['spackage_identifier'] = $post['spackage_name'];
         $recordObj->assignValues($post);
@@ -173,13 +172,13 @@ class SellerPackagesController extends ListingBaseController
         }
 
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);
-      
+
         $this->_template->render(false, false, 'json-success.php');
     }
 
     private function getForm($recordId)
     {
-        $recordId = FatUtility::int($recordId);       
+        $recordId = FatUtility::int($recordId);
         $frm = new Form('frmSellerPackage');
         $frm->addHiddenField('', 'spackage_id');
         $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'name');
@@ -207,15 +206,15 @@ class SellerPackagesController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_Package_Status', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'active', applicationConstants::getActiveInactiveArr($this->siteLangId), applicationConstants::ACTIVE, array(), '');
 
         $fld = $frm->addRequiredField(Labels::getLabel('LBL_Package_Display_Order', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'display_order');
-        $fld->requirements()->setIntPositive();    
-        
+        $fld->requirements()->setIntPositive();
+
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
-    }    
+    }
 
     protected function getLangForm($recordId = 0, $lang_id = 0)
     {
@@ -226,7 +225,7 @@ class SellerPackagesController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'name');
         $frm->addTextarea(Labels::getLabel('LBL_Package_Description', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'text');
         return $frm;
-    }    
+    }
 
     public function autoComplete()
     {
@@ -268,8 +267,8 @@ class SellerPackagesController extends ListingBaseController
             );
         }
         die(json_encode($json));
-    }   
-    
+    }
+
     protected function getFormColumns(): array
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -280,7 +279,7 @@ class SellerPackagesController extends ListingBaseController
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'spackage_identifier' => Labels::getLabel('LBL_PACKAGE_NAME', $this->siteLangId),
+            'spackage_name' => Labels::getLabel('LBL_PACKAGE_NAME', $this->siteLangId),
             'spackage_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => '',
         ];
@@ -293,7 +292,7 @@ class SellerPackagesController extends ListingBaseController
         return [
             'select_all',
             'listSerial',
-            'spackage_identifier',
+            'spackage_name',
             'spackage_active',
             'action',
         ];
@@ -307,12 +306,13 @@ class SellerPackagesController extends ListingBaseController
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
-
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_PACKAGES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {
-            case 'index':
+            case 'index':               
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES', $this->siteLangId)]
+                    ['title' => $pageTitle]
                 ];
         }
         return $this->nodes;

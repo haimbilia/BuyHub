@@ -327,7 +327,8 @@ class StatesController extends ListingBaseController
     {
         parent::getBreadcrumbNodes($action);
 
-        $pageTitle = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId, 'plang_title');
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {
             case 'index':

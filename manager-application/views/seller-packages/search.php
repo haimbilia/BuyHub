@@ -17,19 +17,13 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="' . SellerPackages::DB_TBL_PREFIX . 'ids[]" value=' . $row[SellerPackages::DB_TBL_PREFIX . 'id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row[SellerPackages::DB_TBL_PREFIX . 'id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'spackage_identifier':
-                if ($row[SellerPackages::DB_TBL_PREFIX . 'name'] != '') {
-                    $td->appendElement('plaintext', $tdAttr, $row[SellerPackages::DB_TBL_PREFIX . 'name'], true);
-                    $td->appendElement('br', $tdAttr);
-                    $td->appendElement('plaintext', $tdAttr, '(' . $row[$key] . ')', true);
-                } else {
-                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-                }
+            case 'spackage_name':
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
             case 'spackage_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row[SellerPackages::DB_TBL_PREFIX . 'id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';

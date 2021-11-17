@@ -7,7 +7,7 @@ class TaxJarTaxSettingsController extends TaxSettingsController
         $frm = new Form('frmPayPal');
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
 
         $signupLink = '<a href="https://app.taxjar.com/api_sign_up" target="_blank">' . Labels::getLabel('LBL_SIGN_UP', $langId) . '</a>';
