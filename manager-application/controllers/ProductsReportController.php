@@ -284,7 +284,7 @@ class ProductsReportController extends ListingBaseController
         $frm->addTextBox(Labels::getLabel('FRM_PRICE_TO', $this->siteLangId), 'price_to');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 

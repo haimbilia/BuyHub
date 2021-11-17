@@ -7,7 +7,7 @@ class MpesaSettingsController extends PaymentMethodSettingsController
         $frm = new Form('frmMpesa');
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
 
         $frm->addRequiredField(Labels::getLabel('LBL_CONSUMER_KEY', $langId), 'consumer_key');

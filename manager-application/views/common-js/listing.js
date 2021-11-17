@@ -1,4 +1,8 @@
 $(document).on("click", ".headerColumnJs", function (e) {
+    if (1 == $('.listingRecordJs tr').length) {
+        return;
+    }
+
     var fld = $(this).attr("data-field");
     var frm = document.frmRecordSearchPaging;
     var sortingUp =
@@ -51,13 +55,6 @@ $(function () {
 $(document).on("search", "input[name='keyword']", function () {
     if ("" == $(this).val()) {
         searchRecords(document.frmRecordSearch);
-    }
-});
-
-$(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
-    e.stopImmediatePropagation();
-    if (e.keyCode === 13) {
-        $('.' + $.ykmodal.element + " .submitBtnJs").click();
     }
 });
 
@@ -171,7 +168,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (frm) {
             data = fcom.frmData(frm);
         }
-        
+
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function (res) {
@@ -298,7 +295,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         );
     };
 
-    updateStatus = function (e, obj, recordId, status) {
+    updateStatus = function (e, obj, recordId, status, callback = "") {
         if (false === checkControllerName()) {
             return false;
         }
@@ -320,19 +317,16 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         data = "recordId=" + recordId + "&status=" + status;
-        fcom.ajax(
-            fcom.makeUrl(controllerName, "updateStatus"),
-            data,
+        fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
             function (res) {
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
                     $.ykmsg.success(ans.msg);
-                    $(obj).attr({
-                        onclick:
-                            "updateStatus(event, this, " + recordId + ", " + oldStatus + ")",
-                        "data-old-status": status,
-                    });
+                    $(obj).attr({onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + ")", "data-old-status": status});
+                    if ("" != callback) {
+                        eval(callback);
+                    } 
                 } else {
                     $(obj).prop("checked", 1 == oldStatus);
                     $.ykmsg.error(ans.msg);
@@ -660,20 +654,11 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
                     if ("" != callback) {
-                        window[callback]();
-                    } else if (
-                        0 < $(".navTabsJs").length &&
-                        0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length
-                    ) {
-                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']")
-                            .val(langId)
-                            .change();
-                    } else if (
-                        0 < $(".navTabsJs").length &&
-                        0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length
-                    ) {
-                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']")
-                            .change();
+                        eval(callback);
+                    } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length) {
+                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();
+                    } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length) {
+                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").change();
                     } else {
                         mediaForm(ans.recordId, imageType, langId, slideScreen);
                     }
@@ -754,6 +739,9 @@ $(document).on("click", ".selectItemJs", function () {
     var tr = $(this).closest('tr');
     if ($(this).prop("checked") == false) {
         $("#" + parentForm + " .selectAllJs").prop("checked", false);
+        tr.removeClass('selected');
+    } else {
+        tr.addClass('selected');
     }
 
     if ($("#" + parentForm + " .selectItemJs").length == $("#" + parentForm + " .selectItemJs:checked").length) {
@@ -763,10 +751,8 @@ $(document).on("click", ".selectItemJs", function () {
     var faceboxActionBtns = 0 < $("#facebox").length && $("#facebox").is(":visible") ? "#facebox " : "";
     if ($("#" + parentForm + " .selectItemJs:checked").length == 0) {
         $(faceboxActionBtns + " .toolbar-btn-js").addClass("disabled").removeClass("selected");
-        tr.removeClass('selected');
     } else {
         $(faceboxActionBtns + " .toolbar-btn-js").removeClass("disabled").addClass("selected");
-        tr.addClass('selected');
     }
 });
 

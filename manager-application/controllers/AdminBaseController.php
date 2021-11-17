@@ -176,7 +176,7 @@ class AdminBaseController extends FatController
                 'clickToCopy' => Labels::getLabel('LBL_CLICK_TO_COPY', $this->siteLangId),
                 'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                 'confirmSellerAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MAKE_SELLER_AS_BUYER', $this->siteLangId),
-            );            
+            );
             foreach ($languages as $val) {
                 if (empty($val)) {
                     continue;
@@ -323,24 +323,24 @@ class AdminBaseController extends FatController
             $this->addSortingElements($frm, 'user_name');
         }
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'user_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'user_id', []);
 
-        $arr_options = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $arr_options1 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
+        $arr_options = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $arr_options1 = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
 
-        $arr_options2 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + User::getUserTypesArr($this->siteLangId);
-        $arr_options2 = $arr_options2 + array(User::USER_TYPE_BUYER_SELLER => Labels::getLabel('LBL_Buyer', $this->siteLangId) . '+' . Labels::getLabel('LBL_Seller', $this->siteLangId));
-        $arr_options2 = $arr_options2 + array(User::USER_TYPE_SUB_USER => Labels::getLabel('LBL_Sub_User', $this->siteLangId));
+        $arr_options2 = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + User::getUserTypesArr($this->siteLangId);
+        $arr_options2 = $arr_options2 + array(User::USER_TYPE_BUYER_SELLER => Labels::getLabel('FRM_BUYER', $this->siteLangId) . '+' . Labels::getLabel('FRM_SELLER', $this->siteLangId));
+        $arr_options2 = $arr_options2 + array(User::USER_TYPE_SUB_USER => Labels::getLabel('FRM_SUB_USER', $this->siteLangId));
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Active_Users', $this->siteLangId), 'user_active', $arr_options, -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Email_Verified', $this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->siteLangId), 'type', $arr_options2, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE_USERS', $this->siteLangId), 'user_active', $arr_options, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_EMAIL_VERIFIED', $this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_USER_TYPE', $this->siteLangId), 'type', $arr_options2, -1, array(), '');
 
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -471,7 +471,7 @@ $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants:
             $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true);
             if ($type == 'REQUESTED_CATALOG_PRODUCT') {
                 $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
-                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibility-js'], Labels::getLabel('LBL_Select', $this->siteLangId));
+                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibilityJs'], Labels::getLabel('LBL_Select', $this->siteLangId));
                 $fulFillmentTypeFld->requirements()->setRequired();
             }
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
@@ -818,5 +818,4 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
     {
         $this->_template->render(false, false, '_partial/record-info-section.php');
     }
-    
 }

@@ -28,15 +28,15 @@ class SellerPackages extends MyAppModel
     public static function getPackageClass()
     {
         return array(
-        '1' => SellerPackages::CLASS_ONE,
-        '2' => SellerPackages::CLASS_TWO,
-        '3' => SellerPackages::CLASS_THREE,
-        '4' => SellerPackages::CLASS_ONE,
-        '5' => SellerPackages::CLASS_TWO,
-        '6' => SellerPackages::CLASS_THREE,
-        '7' => SellerPackages::CLASS_ONE,
-        '8' => SellerPackages::CLASS_TWO,
-        '9' => SellerPackages::CLASS_THREE,
+            '1' => SellerPackages::CLASS_ONE,
+            '2' => SellerPackages::CLASS_TWO,
+            '3' => SellerPackages::CLASS_THREE,
+            '4' => SellerPackages::CLASS_ONE,
+            '5' => SellerPackages::CLASS_TWO,
+            '6' => SellerPackages::CLASS_THREE,
+            '7' => SellerPackages::CLASS_ONE,
+            '8' => SellerPackages::CLASS_TWO,
+            '9' => SellerPackages::CLASS_THREE,
         );
     }
     public static function getSearchObject($langId = 0)
@@ -57,13 +57,8 @@ class SellerPackages extends MyAppModel
     public static function getSellerPackages($langId = 0)
     {
         $srch = self::getSearchObject($langId);
-        $srch->addMultipleFields(array( "sp.spackage_id", "IFNULL( spl.spackage_name, sp.spackage_identifier ) as spackage_name"));
-
-        $rs = $srch->getResultSet();
-        $records = array();
-        $records = FatApp::getDb()->fetchAllAssoc($rs);
-
-        return $records;
+        $srch->addMultipleFields(array("sp.spackage_id", "IFNULL( spl.spackage_name, sp.spackage_identifier ) as spackage_name"));
+        return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
     }
 
     public static function getSellerVisiblePackages($langId = 0, $includeFreePackages = true)
@@ -72,7 +67,8 @@ class SellerPackages extends MyAppModel
         $srch->joinTable(SellerPackagePlans::DB_TBL, 'INNER JOIN', 'sp.spackage_id =spp.spplan_spackage_id', 'spp');
         $srch->addMultipleFields(
             array(
-            "sp.spackage_id", "IFNULL( spl.spackage_name, sp.spackage_identifier ) as spackage_name", "spackage_text", "spackage_products_allowed", "spackage_inventory_allowed", "spackage_images_per_product", "spackage_commission_rate", "spackage_type")
+                "sp.spackage_id", "IFNULL( spl.spackage_name, sp.spackage_identifier ) as spackage_name", "spackage_text", "spackage_products_allowed", "spackage_inventory_allowed", "spackage_images_per_product", "spackage_commission_rate", "spackage_type"
+            )
         );
         $srch->addGroupBy('sp.spackage_id');
         $srch->addCondition('sp.spackage_active', '=', applicationConstants::YES);
@@ -80,26 +76,22 @@ class SellerPackages extends MyAppModel
         if (!$includeFreePackages) {
             $srch->addCondition('sp.spackage_type', '=', SellerPackages::PAID_TYPE);
         }
-        $rs = $srch->getResultSet();
-        $records = array();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        return $records;
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     public static function getPackageTypes()
     {
         return array(
-        '' => Labels::getLabel('LBL_Select_Plan', CommonHelper::getLangId()),
-        SellerPackages::FREE_TYPE => Labels::getLabel('LBL_Free_Plan', CommonHelper::getLangId()),
-        SellerPackages::PAID_TYPE => Labels::getLabel('LBL_Paid_Plan', CommonHelper::getLangId()),
+            '' => Labels::getLabel('LBL_Select_Plan', CommonHelper::getLangId()),
+            SellerPackages::FREE_TYPE => Labels::getLabel('LBL_Free_Plan', CommonHelper::getLangId()),
+            SellerPackages::PAID_TYPE => Labels::getLabel('LBL_Paid_Plan', CommonHelper::getLangId()),
         );
     }
     public static function getAllowedLimit($userId, $langId, $key = '')
     {
         $columns = array("ossubs_products_allowed", "ossubs_inventory_allowed", "ossubs_images_allowed");
-        $currentActivePlan = OrderSubscription:: getUserCurrentActivePlanDetails($langId, $userId, $columns);
-        
+        $currentActivePlan = OrderSubscription::getUserCurrentActivePlanDetails($langId, $userId, $columns);
+
         if (!empty($key)) {
             return is_array($currentActivePlan) ? $currentActivePlan[$key] : 0;
         }

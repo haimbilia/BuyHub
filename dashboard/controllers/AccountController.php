@@ -1526,6 +1526,8 @@ class AccountController extends LoggedUserController
             }
         }
 
+        $this->updateFavConfTime(); 
+
         $this->set('productIsInAnyList', $productIsInAnyList);
         $this->set('action', $action);
         $this->set('wish_list_id', $wish_list_id);
@@ -2189,6 +2191,8 @@ class AccountController extends LoggedUserController
             FatUtility::dieWithError(Message::getHtml());
         }
 
+        $this->updateFavConfTime();
+
         if (false === $renderView) {
             return true;
         }
@@ -2214,6 +2218,8 @@ class AccountController extends LoggedUserController
             Message::addErrorMessage($message);
             FatUtility::dieWithError(Message::getHtml());
         }
+
+        $this->updateFavConfTime();
 
         if (false === $renderView) {
             return true;
@@ -3838,5 +3844,22 @@ class AccountController extends LoggedUserController
         //$pdf->Output($saveFile, 'F');
         $pdf->Output('tax-invoice.pdf', 'I');
         return true;
+    }
+
+    private function updateFavConfTime()
+    {
+        $arrToUpdate = [
+            'conf_name' => 'LAST_FAV_MARK_TIME',
+            'conf_val' => time()
+        ];
+        if (!FatApp::getDb()->insertFromArray(
+            'tbl_configurations',
+            $arrToUpdate,
+            false,
+            array(),
+            $arrToUpdate
+        )) {
+            echo "2424";
+        }
     }
 }

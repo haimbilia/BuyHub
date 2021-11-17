@@ -122,7 +122,7 @@ class PluginSettingController extends AdminBaseController
         $frm = new Form('frm' . $keyName);
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
         foreach ($labelsArr as $colName => $colLabel) {
             $htmlAfterField = "";

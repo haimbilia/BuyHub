@@ -134,4 +134,13 @@
             // alert('l;l');
         });
     });
+
+
+    /* Submit Form on Enter Key Press. For sidebar forms. */
+    $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
+        e.stopImmediatePropagation();
+        if (e.keyCode === 13 && false === displayInPopup) {
+            $('.' + $.ykmodal.element + " .submitBtnJs").click();
+        }
+    });
 })(jQuery);

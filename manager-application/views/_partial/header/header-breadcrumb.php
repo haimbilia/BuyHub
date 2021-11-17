@@ -12,14 +12,12 @@
                 <?php if (!empty($nodes['href'])) { ?>
                     <li class="breadcrumb-item">
                         <a href="<?php echo $nodes['href']; ?>" <?php echo (!empty($nodes['other'])) ? $nodes['other'] : ''; ?>>
-                            <?php $title = str_replace(' ', '_', $nodes['title']);
-                            echo Labels::getLabel('LBL_' . $title, $siteLangId); ?>
+                            <?php echo $nodes['title'] ?? '';?>
                         </a>
                     </li>
                 <?php } else { ?>
                     <li class="breadcrumb-item">
-                        <?php $title = str_replace(' ', '_', $nodes['title']);
-                        echo (isset($nodes['title'])) ? Labels::getLabel('LBL_' . $title, $siteLangId) : ''; ?>
+                        <?php echo $nodes['title'] ?? ''; ?>
                     </li>
         <?php }
             }

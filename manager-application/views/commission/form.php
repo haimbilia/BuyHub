@@ -34,9 +34,9 @@ if (null != $fld) {
 </div>
 
 <script type="text/javascript">
-    $("document").ready(function() {
+    $(document).ready(function() {
         if ($('#commsetting_user_id').length) {
-            select2('commsetting_user_id', fcom.makeUrl('Commission', 'userAutoComplete'));
+            select2('commsetting_user_id', fcom.makeUrl('Users', 'autoComplete'), {'joinShop' : 1, 'user_is_supplier' : 1});
         }
         if ($('#commsetting_product_id').length) {
             select2('commsetting_product_id', fcom.makeUrl('Commission', 'productAutoComplete'));

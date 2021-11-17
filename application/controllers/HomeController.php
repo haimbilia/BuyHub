@@ -97,6 +97,7 @@ class HomeController extends MyAppController
         $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
         $geoAddress = Address::getYkGeoData();
         $cacheKey = $this->siteLangId . '-' . $this->siteCurrencyId . '-' . $apiCall . '-' . serialize($geoAddress);
+        $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
 
         $collectionTemplates = array();
         foreach ($collections as $collection) {
@@ -540,6 +541,8 @@ class HomeController extends MyAppController
         $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
         $geoAddress = Address::getYkGeoData();
         $cacheKey = $langId . '_' . $this->siteCurrencyId . '_' . $apiCall . '_' . serialize($geoAddress);
+        $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
+
 
         $collectionCache = CacheHelper::get('collectionCache_' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
 

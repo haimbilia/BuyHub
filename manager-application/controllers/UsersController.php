@@ -572,6 +572,11 @@ class UsersController extends ListingBaseController
             $cond = $srch->addCondition('uc.credential_username', 'like', '%' . $keyword . '%');
             $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
+            
+            if (0 < $joinShop) {
+                $cond->attachCondition('shp.shop_identifier', 'LIKE', '%' . $keyword . '%');
+                $cond->attachCondition('s_l.shop_name', 'LIKE', '%' . $keyword . '%');
+            }
         }
 
         if (!empty($post['user_is_buyer'])) {
