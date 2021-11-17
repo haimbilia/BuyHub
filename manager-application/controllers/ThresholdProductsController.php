@@ -1,0 +1,156 @@
+<?php
+
+class ThresholdProductsController extends ListingBaseController {
+
+    protected $modelClass = 'SellerProduct';
+    protected $pageKey = 'MANAGE_THRESHOLD_PRODUCTS';
+
+    public function __construct($action) {
+        parent::__construct($action);
+        $this->objPrivilege->canViewSellerProducts();
+    }
+
+    public function index() {
+        $fields = $this->getFormColumns();
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $this->setModel();
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('canEdit', false);
+        $this->set("frmSearch", $this->getSearchForm($fields));
+        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
+            'newRecordBtn' => false
+        ]);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->getListingData();
+        $this->_template->addJs(['threshold-products/page-js/index.js']);
+        $this->_template->render(true, true, '_partial/listing/index.php');
+    }
+
+    public function getSearchForm($fields = []) {
+        $frm = new Form('frmRecordSearch');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld->overrideFldType('search');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'selprod_id');
+        }
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        return $frm;
+    }
+
+    public function search() {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'threshold-products/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    private function getListingData() {
+        $this->objPrivilege->canEditProductCategories();
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+        $data = FatApp::getPostedData();
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $searchForm = $this->getSearchForm($fields);
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
+        $post = $searchForm->getFormDataFromArray($data);
+
+        $srch = SellerProduct::getSearchObject($this->siteLangId);
+        $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
+        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'cred.credential_user_id = selprod_user_id', 'cred');
+        $srch->joinTable('tbl_email_archives', 'LEFT OUTER JOIN', 'arch.earch_to_email = cred.credential_email', 'arch');
+        if (!empty($post['keyword'])) {
+            $condition = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
+            $condition->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%');
+        }
+
+        $srch->addDirectCondition('selprod_stock <= selprod_threshold_stock_level');
+        $srch->addDirectCondition('selprod_track_inventory = ' . Product::INVENTORY_TRACK);
+        $srch->addMultipleFields(array('selprod_id', 'selprod_user_id', 'IF(selprod_title is NULL or selprod_title = "" ,product_name, selprod_title) as product_name', 'selprod_stock', 'selprod_threshold_stock_level', 'earch_sent_on'));
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addGroupBy('selprod_id');
+        $srch->addOrder('selprod_id', 'DESC');
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->set("arrListing", $records);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', false);
+    }
+
+    public function sendMailThresholdStock($user_id, $selprod_id) { 
+        $user_id = FatUtility::int($user_id);
+        $selprod_id = FatUtility::int($selprod_id);
+
+        $userObj = new User($user_id);
+        $user = $userObj->getUserInfo(null, false, false);
+        if (!$user) {
+            LibHelper::exitWithError($this->str_invalid_request_id);
+        }
+
+        $emailNotificationObj = new EmailHandler();
+        if (!$emailNotificationObj->sendProductStockAlert($selprod_id, $this->siteLangId)) {
+            LibHelper::exitWithError($emailNotificationObj->getError());
+        }
+
+        $this->set('msg', Labels::getLabel('LBL_Your_message_sent_to', $this->siteLangId) . ' - ' . $user["credential_email"]);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function getFormColumns(): array {
+        $shopsTblHeadingCols = CacheHelper::get('approvalRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($shopsTblHeadingCols) {
+            return json_decode($shopsTblHeadingCols);
+        }
+
+        $arr = [
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'product_name' => Labels::getLabel('LBL_Product_Name', $this->siteLangId),
+            'selprod_stock' => Labels::getLabel('LBL_Stock_left', $this->siteLangId),
+            'selprod_threshold_stock_level' => Labels::getLabel('LBL_Threshold_Stock', $this->siteLangId),
+            'earch_sent_on' => Labels::getLabel('LBL_Last_Email_Sent', $this->siteLangId),
+            'action' => '',
+        ];
+        CacheHelper::create('approvalRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    private function getDefaultColumns(): array {
+        return [
+            'listSerial',
+            'product_name',
+            'selprod_stock',
+            'selprod_threshold_stock_level',
+            'earch_sent_on',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array {
+        return array_diff($fields, ['product_name', 'selprod_stock', 'selprod_threshold_stock_level', 'earch_sent_on'], Common::excludeKeysForSort());
+    }
+
+}

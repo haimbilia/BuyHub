@@ -584,7 +584,7 @@ class User extends MyAppModel
         if ($joinUserCredentials) {
             $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
         }
-
+        //echo $srch->getQuery();die;
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
 
