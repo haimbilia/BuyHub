@@ -30,7 +30,7 @@ class StripeConnectSettingsController extends PaymentMethodSettingsController
         $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_STRIPE_CONNECT_MONTH_DAY_DESC', $langId) . '</small>';
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
 
         $frm->addTextBox(Labels::getLabel('LBL_CLIENT_ID', $langId), 'client_id');

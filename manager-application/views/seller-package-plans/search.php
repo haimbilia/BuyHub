@@ -24,7 +24,10 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'spplan_price':
-                $td->appendElement('plaintext', array(), SellerPackagePlans::getPlanPriceWithPeriod($row, $row['spplan_price']), true);
+                $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key]));
+                break;
+            case 'spplan_interval':
+                $td->appendElement('plaintext', array(), SellerPackagePlans::getPlanPeriod($row), true);
                 break;
             case 'spplan_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['spplan_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';

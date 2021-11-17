@@ -470,7 +470,7 @@ class AdminBaseController extends FatController
             $shipProfileArr = ShippingProfile::getProfileArr($this->adminLangId, 0, true, true);
             if ($type == 'REQUESTED_CATALOG_PRODUCT') { 
                 $fulFillmentArr = Shipping::getFulFillmentArr($this->adminLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
-                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibility-js'], Labels::getLabel('LBL_Select', $this->adminLangId));
+                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->adminLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibilityJs'], Labels::getLabel('LBL_Select', $this->adminLangId));
                 $fulFillmentTypeFld->requirements()->setRequired();                        
             }
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->adminLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->adminLangId))->requirements()->setRequired();

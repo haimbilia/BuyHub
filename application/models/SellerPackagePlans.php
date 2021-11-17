@@ -23,9 +23,7 @@ class SellerPackagePlans extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'spp');
-
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'spp');
     }
 
 
@@ -117,7 +115,7 @@ class SellerPackagePlans extends MyAppModel
         $frequency = isset($plan[SellerPackagePlans::DB_TBL_PREFIX . 'frequency']) ? $plan[SellerPackagePlans::DB_TBL_PREFIX . 'frequency'] : '';
         $period = isset($subcriptionPeriodArr[$frequency]) ? $subcriptionPeriodArr[$frequency] : '';
 
-        $planText = ($type == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", CommonHelper::getLangId()) : Labels::getLabel("LBL_For", CommonHelper::getLangId());
+        $planText = ($type == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", CommonHelper::getLangId()) : " " . Labels::getLabel("LBL_For", CommonHelper::getLangId());
         return CommonHelper::displayMoneyFormat($price) . $planText . " " . (($interval > 0) ? $interval : '') . "  " . $period;
     }
 

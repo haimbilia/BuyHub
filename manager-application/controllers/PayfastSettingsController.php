@@ -7,7 +7,7 @@ class PayfastSettingsController extends PaymentMethodSettingsController
         $frm = new Form('frmPayfast');
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
 
         $fld = $frm->addRequiredField(Labels::getLabel('LBL_PASSPHRASE', $langId), 'passphrase');

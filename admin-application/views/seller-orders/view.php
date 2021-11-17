@@ -724,7 +724,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             $manualFld = $frm->getField('manual_shipping');
 
                             $statusFld = $frm->getField('op_status_id');
-                            $statusFld->setFieldTagAttribute('class', 'status-js fieldsVisibility-js');
+                            $statusFld->setFieldTagAttribute('class', 'status-js fieldsVisibilityJs');
                             $statusFld->developerTags['col'] = (null != $manualFld) ? 4 : 6;
 
                             $notiFld = $frm->getField('customer_notified');
@@ -732,7 +732,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                             $notiFld->developerTags['col'] = (null != $manualFld) ? 4 : 6;
 
                             if (null != $manualFld) {
-                                $manualFld->setFieldTagAttribute('class', 'manualShipping-js fieldsVisibility-js');
+                                $manualFld->setFieldTagAttribute('class', 'manualShipping-js fieldsVisibilityJs');
                                 $manualFld->developerTags['col'] = 4;
 
                                 $fldTracking = $frm->getField('tracking_number');
