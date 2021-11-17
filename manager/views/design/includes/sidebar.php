@@ -3,12 +3,7 @@
         <a href="#">
             <img src="<?php echo CONF_WEBROOT_URL; ?>images/logos/logo.png" width="34" height="34" alt="" >
         </a>
-        <button class="btn sidebar-close" data-target-close="sidebar">
-            <svg class="svg" width="24" height="24">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
-                </use>
-            </svg>
-        </button>
+        
     </div>
     <div class="sidebar-menu">
         <ul class="menu">
@@ -268,6 +263,9 @@
             </li>
         </ul>
     </div>
+    <button class="btn sidebar-close" data-target-close="sidebar">
+            Close
+        </button>
     <div class="sidebar-foot">
         <ul class="menu">
             <li class="menu-item dropdown">

@@ -133,10 +133,10 @@ class SpecialPriceController extends ListingBaseController
         $fld->requirement->setRequired(true);
         $fld = $frm->addFloatField(Labels::getLabel('FRM_Special_Price', $this->siteLangId) . CommonHelper::concatCurrencySymbolWithAmtLbl(), 'splprice_price');
         $fld->requirements()->setPositive();
-        $fld = $frm->addDateField(Labels::getLabel('FRM_Price_Start_Date', $this->siteLangId), 'splprice_start_date', '', array('readonly' => 'readonly'));
+        $fld = $frm->addDateField(Labels::getLabel('FRM_Price_Start_Date', $this->siteLangId), 'splprice_start_date', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $fld->requirements()->setRequired();
 
-        $fld = $frm->addDateField(Labels::getLabel('FRM_Price_End_Date', $this->siteLangId), 'splprice_end_date', '', array('readonly' => 'readonly'));
+        $fld = $frm->addDateField(Labels::getLabel('FRM_Price_End_Date', $this->siteLangId), 'splprice_end_date', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $fld->requirements()->setRequired();
         $fld->requirements()->setCompareWith('splprice_start_date', 'ge', Labels::getLabel('FRM_Price_Start_Date', $this->siteLangId));
 

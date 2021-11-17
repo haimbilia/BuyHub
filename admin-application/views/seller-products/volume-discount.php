@@ -52,7 +52,7 @@ $cancelBtnFld->setFieldTagAttribute('onclick', 'clearSearch(' . $selProd_id . ')
                                             'href' => 'javascript:void(0)',
                                             'onclick' => 'deleteVolumeDiscountRows()',
                                             'title' => Labels::getLabel('LBL_Remove_Volume_Discount', $adminLangId),
-                                            'class' => 'd-none toolbar-btn-js'
+                                            'class' => 'd-none toolbarBtnJs'
                                         ],
                                         'label' => '<i class="fas fa-trash"></i>'
                                     ],

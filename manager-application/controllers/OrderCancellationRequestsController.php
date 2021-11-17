@@ -273,8 +273,8 @@
             $frm->addSelectBox(Labels::getLabel('LBL_Cancel_Reason', $this->siteLangId), 'ocrequest_ocreason_id', OrderCancelReason::getOrderCancelReasonArr($langId), '', array(), Labels::getLabel('LBL_All_Order_Cancel_Reason', $this->siteLangId));
             $frm->addTextBox(Labels::getLabel('LBL_Buyer_Details', $this->siteLangId), 'buyer');
             $frm->addTextBox(Labels::getLabel('LBL_Seller_Details', $this->siteLangId), 'seller');
-            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly'));
-            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly'));
+            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
 
             $frm->addHiddenField('', 'page');
             $frm->addHiddenField('', 'ocrequest_id', 0);

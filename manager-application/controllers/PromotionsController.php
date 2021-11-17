@@ -951,8 +951,8 @@ class PromotionsController extends ListingBaseController
         $fld->requirements()->setRequired();
         $fld->requirements()->setFloatPositive(true);
 
-        $frm->addDateField(Labels::getLabel('FRM_START_DATE', $this->siteLangId), 'promotion_start_date', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly'))->requirements()->setRequired();
-        $frm->addDateField(Labels::getLabel('FRM_END_DATE', $this->siteLangId), 'promotion_end_date', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly'))->requirements()->setRequired();
+        $frm->addDateField(Labels::getLabel('FRM_START_DATE', $this->siteLangId), 'promotion_start_date', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'))->requirements()->setRequired();
+        $frm->addDateField(Labels::getLabel('FRM_END_DATE', $this->siteLangId), 'promotion_end_date', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'))->requirements()->setRequired();
 
         $frm->addRequiredField(Labels::getLabel('FRM_PROMOTION_START_TIME', $this->siteLangId), 'promotion_start_time', '', array('class' => 'time', 'readonly' => 'readonly'));
         $frm->addRequiredField(Labels::getLabel('FRM_PROMOTION_END_TIME', $this->siteLangId), 'promotion_end_time', '', array('class' => 'time', 'readonly' => 'readonly'));

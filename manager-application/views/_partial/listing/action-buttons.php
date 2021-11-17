@@ -15,7 +15,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+            'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
             'title' => Labels::getLabel('BTN_ACTIVE', $siteLangId),
             'onclick' => "toggleBulkStatues(1, '" . $msg . "')"
         ],
@@ -32,7 +32,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+            'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
             'title' => Labels::getLabel('BTN_IN-ACTIVE', $siteLangId),
             'onclick' => "toggleBulkStatues(0, '" . $msg . "')"
         ],
@@ -51,7 +51,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+            'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
             'title' => Labels::getLabel('BTN_DELETE', $siteLangId),
             'onclick' => "deleteSelected()"
         ],

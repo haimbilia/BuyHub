@@ -8,10 +8,10 @@
 </footer>
 <div class="footer-action">
     <div class="footer-action__item">
-        <a href="#" href="javascript:void(0);" class="footer-action__trigger">
+        <a href="#" href="javascript:void(0);" class="footer-action__trigger" data-trigger="sidebar">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#menu">
                     </use>
                 </svg>
             </span>
@@ -114,5 +114,5 @@
 <script src="<?php echo JS_PATH; ?>bootstrap.min.js"></script>
 <script src="<?php echo JS_PATH; ?>vendors/stellarnav.min.js"></script>
 <script src="<?php echo JS_PATH; ?>vendors/scroll-hint.min.js"></script>
-<script src="<?php echo JS_PATH; ?>vendors/toastr.js"></script> 
-<script src="<?php echo JS_PATH; ?>ui-functions.js"></script> 
+<script src="<?php echo JS_PATH; ?>vendors/toastr.js"></script>
+<script src="<?php echo JS_PATH; ?>ui-functions.js"></script>
