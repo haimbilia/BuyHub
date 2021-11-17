@@ -345,8 +345,8 @@ class AdminBaseController extends FatController
         $frm->addSelectBox(Labels::getLabel('FRM_EMAIL_VERIFIED', $this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_USER_TYPE', $this->siteLangId), 'type', $arr_options2, -1, array(), '');
 
-        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
@@ -363,7 +363,7 @@ class AdminBaseController extends FatController
         $frm->addHiddenField('', 'user_type');
         $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
         $frm->addRequiredField(Labels::getLabel('LBL_Customer_name', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('LBL_Date_of_birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_of_birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
@@ -400,8 +400,8 @@ class AdminBaseController extends FatController
         $frm->addTextBox(Labels::getLabel('LBL_Seller/Shop', $this->siteLangId), 'shop_name');
         /* $frm->addTextBox(Labels::getLabel('LBL_Customer',$this->siteLangId),'customer_name'); */
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly'));
+        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Order_From', $this->siteLangId) . ' [' . $currencySymbol . ']'));
         $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Order_To', $this->siteLangId) . ' [' . $currencySymbol . ']'));
 
@@ -724,7 +724,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
             $fld->requirements()->setRequired();
         }
 
-        $frm->addDateField(Labels::getLabel('LBL_Date_Available', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly'))->requirements()->setRequired();
+        $frm->addDateField(Labels::getLabel('LBL_Date_Available', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'))->requirements()->setRequired();
 
         /* $frm->addDateTimeField( Labels::getLabel('LBL_Date_Available', $this->siteLangId), 'selprod_available_from', '' , array('readonly' => 'readonly')); */
 

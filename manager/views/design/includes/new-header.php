@@ -1,19 +1,11 @@
 <header class="main-header">
     <div class="container-fluid">
         <div class="main-header-inner">
-            <div class="page-title">                
-                    <button class="btn sidebar-trigger" type="button" data-trigger="sidebar" >
-                        <svg class="svg" width="20" height="20">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#menu">
-                            </use>
-                        </svg> 
-                    </button> 
-                    <div>
-                        <h1>Page title goes here</h1>
-                        <span class="page-title-sub"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
-                            repudiandae, nesciunt
-                            veritatis.</span>
-                    </div>            </div>
+            <div class="page-title">
+                <h1>Page title goes here</h1>
+                <span class="page-title-sub"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
+                    repudiandae,</span>
+            </div>
             <div class="main-header-toolbar">
                 <div class="header-action">
                     <div class="header-action__item">
@@ -25,7 +17,6 @@
                             <span>New Product</span>
                         </a>
                     </div>
-
                     <div class="header-action__item">
                         <a class="header-action__trigger" href="javascript:void(0);" data-toggle="modal" data-target="#search-main">
                             <span class="icon">

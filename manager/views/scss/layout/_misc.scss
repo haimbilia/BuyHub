@@ -37,10 +37,10 @@
     // height: 80px;
     display: flex;
     align-items: center;
-    flex-direction: column; 
+    flex-direction: column;
     .page-title {
         display: flex;
-          flex-direction: column;
+        flex-direction: column;
         h1 {
             font-size: 1.2rem;
             color: #000;
@@ -73,11 +73,22 @@
         margin: 0;
         padding: 10px 2rem;
         &.alert-solid-warning {
-            background: lighten($warning-color, 30);
-            color: darken($warning-color, 30);
+            background: lighten($warning-color, 25);
+            color: darken($warning-color, 20);
+        }
+        &.alert-solid-success {
+            // background: lighten($success-color, 10);  
+            // color: darken($success-color, 30);  
         }
         .alert-icon i {
             font-size: 1.4rem;
+            color: currentColor !important;
+        }
+        .alert-close i {
+            color: currentColor !important;
+        }
+        .alert-text {
+            color: currentColor !important;
         }
     }
 }
@@ -487,7 +498,7 @@
         transform: translateX(100%);
     }
     &-close {
-        @include media-breakpoint-up(lg) { 
+        @include media-breakpoint-up(lg) {
             display: none;
         }
     }
