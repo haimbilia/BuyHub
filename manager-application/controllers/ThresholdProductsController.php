@@ -115,7 +115,7 @@ class ThresholdProductsController extends ListingBaseController {
             LibHelper::exitWithError($emailNotificationObj->getError());
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Your_message_sent_to', $this->siteLangId) . ' - ' . $user["credential_email"]);
+        $this->set('msg', Labels::getLabel('SUC_YOUR_MESSAGE_SENT_TO', $this->siteLangId) . ' - ' . $user["credential_email"]);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -127,10 +127,10 @@ class ThresholdProductsController extends ListingBaseController {
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'product_name' => Labels::getLabel('LBL_Product_Name', $this->siteLangId),
-            'selprod_stock' => Labels::getLabel('LBL_Stock_left', $this->siteLangId),
-            'selprod_threshold_stock_level' => Labels::getLabel('LBL_Threshold_Stock', $this->siteLangId),
-            'earch_sent_on' => Labels::getLabel('LBL_Last_Email_Sent', $this->siteLangId),
+            'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
+            'selprod_stock' => Labels::getLabel('LBL_STOCK_LEFT', $this->siteLangId),
+            'selprod_threshold_stock_level' => Labels::getLabel('LBL_THRESHOLD_STOCK', $this->siteLangId),
+            'earch_sent_on' => Labels::getLabel('LBL_LAST_EMAIL_SENT', $this->siteLangId),
             'action' => '',
         ];
         CacheHelper::create('productsthresholdTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
