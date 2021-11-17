@@ -3,6 +3,7 @@
 class BrandsController extends ListingBaseController
 {
     protected $modelClass = 'Brand';
+    protected $pageKey = 'MANAGE_BRANDS';
 
     public function __construct($action)
     {
@@ -15,7 +16,7 @@ class BrandsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_BRANDS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
@@ -133,7 +134,7 @@ class BrandsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -275,7 +276,7 @@ class BrandsController extends ListingBaseController
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
 
-        
+
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
