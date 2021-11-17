@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
@@ -70,7 +70,7 @@
             <main class="main">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-lg-4">
                             <button class="float-btn" type="button" data-trigger="card-aside">
                                 <svg class="svg" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
@@ -87,11 +87,11 @@
                                                     </use>
                                                 </svg>
                                             </a>
-                                            General Settings
+                                            General Settings 
                                         </h3>
                                     </div>
                                     <div class="card-toolbar">
-                                        <button class="btn btn-gray" data-target-close="card-aside">
+                                        <button class="btn btn-gray card-aside-close" data-target-close="card-aside">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
                                                 </use>
@@ -312,7 +312,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-lg-8">
                             <div class="card">
                                 <div class="card-head">
                                     <div class="card-head-label">

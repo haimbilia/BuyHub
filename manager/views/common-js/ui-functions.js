@@ -50,11 +50,7 @@ $("body").mouseup(function (event) {
 ] ENDS triggers & toggles
 */
 $(document).ready(function () {
-  new ScrollHint(".js-scrollable", {
-      i18n: {
-          scrollable: ' ',
-      },
-  });
+  new ScrollHint('.js-scrollable');
 });
 
 jQuery(document).ready(function ($) {

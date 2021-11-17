@@ -683,7 +683,7 @@
                                         <span onclick="">Arabic</span>
                                     </div>
                                 </a>
-                                <a href="#">Account Setting</a>
+                                <a href="#">System Setting</a>
                                 <a href="#">Sign out</a>
                             </nav>
                         </div>
