@@ -244,7 +244,16 @@ class AdminBaseController extends FatController
         array_pop($arr);
         $urlController = implode('-', $arr);
         $className = ucwords(implode(' ', $arr));
-        if ($action == 'index') {
+
+        $pageTitle = '';
+        if (isset($this->pageKey)) {
+            $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+            $pageTitle = $pageData['plang_title'] ?? '';
+        }
+
+        if (!empty($pageTitle)) {
+            $this->nodes[] = array('title' => $pageTitle);
+        } else if ($action == 'index') {
             $this->nodes[] = array('title' => $className);
         } else {
             $arr = explode('-', FatUtility::camel2dashed($action));
