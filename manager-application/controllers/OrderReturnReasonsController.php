@@ -3,6 +3,7 @@
 class OrderReturnReasonsController extends ListingBaseController
 {
     protected $modelClass = 'OrderReturnReason';
+    protected $pageKey = 'MANAGE_ORDER_RETURN_REASONS';
 
     public function __construct($action)
     {
@@ -17,9 +18,9 @@ class OrderReturnReasonsController extends ListingBaseController
      * @return void
      */
     protected function setLangTemplateData(array $constructorArgs = []): void
-    {        
+    {
         $this->objPrivilege->canEditOrderReturnReasons();
-        $this->modelObj = (new ReflectionClass('OrderReturnReason'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title')];
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));
     }
@@ -29,7 +30,7 @@ class OrderReturnReasonsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_RETURN_REASONS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -110,7 +111,6 @@ class OrderReturnReasonsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditOrderReturnReasons($this->admin_id, true));
-        
     }
 
     public function form()
@@ -127,7 +127,7 @@ class OrderReturnReasonsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_RETURN_REASON_SETUP', $this->siteLangId));
@@ -180,7 +180,7 @@ class OrderReturnReasonsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'orreason_title');
         return $frm;
-    }   
+    }
 
     public function deleteRecord()
     {
