@@ -216,7 +216,7 @@ class LanguagesController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if ($status == applicationConstants::INACTIVE && count($recordIdsArr) == count(Language::getAllNames())) {
+        if ($status == applicationConstants::INACTIVE && count($recordIdsArr) >= count(Language::getAllNames())) {
             LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
         }
 

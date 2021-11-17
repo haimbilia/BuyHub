@@ -26,15 +26,15 @@ class ShopsController extends ListingBaseController {
 
     public function index() {
         $this->search();
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHOPS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         $this->setModel([0, 0, 0]);
         $this->set('pageData', $pageData);
-        $this->set('pageTitle', $pageTitle); 
+        $this->set('pageTitle', $pageTitle);
         $this->set('canEdit', $this->objPrivilege->canEditShops($this->admin_id, true));
         $this->set("frmSearch", $this->getSearchForm($this->getFormColumns()));
         $this->set('canViewShopReports', $this->objPrivilege->canViewShopReports(0, true));
-        $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));  
+        $this->set('canViewSellerProducts', $this->objPrivilege->canViewSellerProducts(0, true));
         $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($this->getFormColumns(), $this->modelObj), [
             'newRecordBtn' => false
         ]);
@@ -95,7 +95,7 @@ class ShopsController extends ListingBaseController {
         if (0 < $shop_id) {
             $data = Shop::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $shop_id, null, true);
             if ($data === false) {
-                LibHelper::exitWithError($this->str_invalid_request, true); 
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $data['urlrewrite_custom'] = AdminShopSearch::getUrlRewrite('shops/view/' . $shop_id);
             $data['shop_country_code'] = Countries::getCountryById($data['shop_country_id'], $this->siteLangId, 'country_code');
@@ -162,10 +162,10 @@ class ShopsController extends ListingBaseController {
             $shop->rewriteUrlTopProducts($post['urlrewrite_custom']);
             $shop->rewriteUrlContact($post['urlrewrite_custom']);
             $shop->rewriteUrlpolicy($post['urlrewrite_custom']);
-        } 
+        }
         Product::updateMinPrices(0, $shop_id);
         $this->set('msg', Labels::getLabel("SUC_SETUP_SUCCESSFUL", $this->siteLangId));
-        $this->set('shopId', $shop_id); 
+        $this->set('shopId', $shop_id);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -367,7 +367,7 @@ class ShopsController extends ListingBaseController {
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'shop_name');
-        }        
+        }
         $frm->addHiddenField('', 'shop_id');
         $frm->addSelectBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'shop_featured', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'shop_active', array('-1' => 'Does not Matter') + applicationConstants::getActiveInactiveArr($this->siteLangId), -1, array(), '');
@@ -465,7 +465,6 @@ class ShopsController extends ListingBaseController {
         $frm->addTextarea(Labels::getLabel('FRM_REFUND_POLICY', $lang_id), 'shop_refund_policy');
         $frm->addTextarea(Labels::getLabel('FRM_ADDITIONAL_INFORMATION', $lang_id), 'shop_additional_info');
         $frm->addTextarea(Labels::getLabel('FRM_SELLER_INFORMATION', $lang_id), 'shop_seller_info');
-
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
