@@ -102,4 +102,10 @@ class DummyController extends ListingBaseController
             fwrite($stream, $file);
             fclose($stream);
     }
+
+    public function tt1(){
+
+        Product::updateMinPrices();
+    }
+
 }       
