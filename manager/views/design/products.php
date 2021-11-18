@@ -292,7 +292,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="table-responsive js-scrollable">                                           
+                                        <div class="table-responsive table-scrollable  js-scrollable">                                           
                                             <table width="100%" class="table">
                                                 <thead>
                                                     <tr>

@@ -40,20 +40,20 @@ HtmlHelper::renderHiddenFields($frmSearch);
         <div class="row"> 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="label"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></label>
+                    <label class="label"><?php echo Labels::getLabel('FRM_STATUS', $siteLangId); ?></label>
                     <?php echo $frmSearch->getFieldHtml('status'); ?>
                 </div>
             </div> 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="label"><?php echo Labels::getLabel('LBL_Date_From', $siteLangId); ?></label>
+                    <label class="label"><?php echo Labels::getLabel('FRM_DATE_FROM', $siteLangId); ?></label>
                     <?php echo $frmSearch->getFieldHtml('date_from'); ?>
 
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="label"><?php echo Labels::getLabel('LBL_Date_To', $siteLangId); ?></label>
+                    <label class="label"><?php echo Labels::getLabel('FRM_DATE_TO', $siteLangId); ?></label>
                     <?php echo $frmSearch->getFieldHtml('date_to'); ?>
 
                 </div>

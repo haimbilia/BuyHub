@@ -53,7 +53,7 @@ if (0 < $selProd_id) {
                                             'href' => 'javascript:void(0)',
                                             'onclick' => 'deleteSpecialPriceRows()',
                                             'title' => Labels::getLabel('LBL_Delete_Special_Price', $adminLangId),
-                                            'class' => 'd-none toolbar-btn-js'
+                                            'class' => 'd-none toolbarBtnJs'
                                         ],
                                         'label' => '<i class="fas fa-trash"></i>'
                                     ],

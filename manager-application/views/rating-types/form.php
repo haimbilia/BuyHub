@@ -2,12 +2,9 @@
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
-  
- 
-$otherButtons = [
-     
+$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);'); 
+$otherButtons = [ 
 ]; 
 
-$formTitle = Labels::getLabel('LBL_SELLER_APPROVAL_REQUEST', $siteLangId);
+$formTitle = Labels::getLabel('LBL_RATING_TYPES_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

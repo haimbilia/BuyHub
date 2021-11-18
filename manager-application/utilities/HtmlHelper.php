@@ -411,6 +411,9 @@ class HtmlHelper
     {
 
         $fld = $frm->getField($fldName);
+        if(null == $fld){
+            return;
+        }
 
         foreach ($setFieldTagAttrs as $attrkey => $attrVal) {
             $fld->setfieldTagAttribute($attrkey, $attrVal);
