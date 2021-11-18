@@ -40,7 +40,7 @@ class AdminPermissionsController extends ListingBaseController
             [
                 'attr' => [
                     'href' => 'javascript:void(0)',
-                    'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+                    'class' => 'btn btn-outline-brand btn-icon toolbarBtnJs disabled',
                     'onclick' => "updateBulkPermissions(" . AdminPrivilege::PRIVILEGE_NONE . ")",
                     'title' => Labels::getLabel('LBL_NO_PERMISSION', $this->siteLangId)
                 ],
@@ -53,7 +53,7 @@ class AdminPermissionsController extends ListingBaseController
             [
                 'attr' => [
                     'href' => 'javascript:void(0)',
-                    'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+                    'class' => 'btn btn-outline-brand btn-icon toolbarBtnJs disabled',
                     'onclick' => "updateBulkPermissions(" . AdminPrivilege::PRIVILEGE_READ . ")",
                     'title' => Labels::getLabel('LBL_READ_PERMISSION', $this->siteLangId)
                 ],
@@ -66,7 +66,7 @@ class AdminPermissionsController extends ListingBaseController
             [
                 'attr' => [
                     'href' => 'javascript:void(0)',
-                    'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+                    'class' => 'btn btn-outline-brand btn-icon toolbarBtnJs disabled',
                     'onclick' => "updateBulkPermissions(" . AdminPrivilege::PRIVILEGE_WRITE . ")",
                     'title' => Labels::getLabel('LBL_READ_AND_WRITE_PERMISSION', $this->siteLangId)
                 ],
