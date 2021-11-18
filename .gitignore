@@ -11,6 +11,7 @@
 /application/views/innovas
 /application/controllers/DummyController.php
 /admin-application/controllers/DummyController.php
+/manager-application/controllers/DummyController.php
 /conf
 /index.php
 /library/core
