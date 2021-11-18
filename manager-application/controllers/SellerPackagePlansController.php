@@ -36,7 +36,7 @@ class SellerPackagePlansController extends ListingBaseController
         $packageData =  SellerPackages::getAttributesByLangId($this->siteLangId, $spackageId, ['spackage_name', 'spackage_identifier'], true);
 
         if ($packageData === false) {
-            Message::addErrorMessage($this->str_invalid_request);
+            Message::addErrorMessage($this->str_invalid_request_id);
             FatApp::redirectUser(UrlHelper::generateUrl('SellerPackages'));
         }
 

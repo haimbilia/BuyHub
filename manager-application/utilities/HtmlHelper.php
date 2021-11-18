@@ -27,6 +27,7 @@ class HtmlHelper
             'statusButtons' => false,
             'columnButtons' => false,
             'performBulkAction' => false,
+            'bulkActionFormHiddenFields' => ['status' => ''],
             'formAction' => 'toggleBulkStatuses',
             'siteLangId' => $langId,
             'otherButtons' => [],

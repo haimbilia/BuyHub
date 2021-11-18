@@ -2,6 +2,8 @@
 
 class ProductCategoriesController extends ListingBaseController
 {
+    protected $modelClass = 'ProductCategory';
+    
     public function __construct($action)
     {
         parent::__construct($action);
@@ -21,17 +23,6 @@ class ProductCategoriesController extends ListingBaseController
         } else {
             $this->objPrivilege->canEditProductCategories();
         }
-    }
-
-    /**
-     * setModel - This function is used to set related model class and used by its parent class.
-     *
-     * @param  array $constructorArgs
-     * @return void
-     */
-    protected function setModel(array $constructorArgs = []): void
-    {
-        $this->modelObj = (new ReflectionClass('ProductCategory'))->newInstanceArgs($constructorArgs);
     }
 
     protected function setLangTemplateData(array $constructorArgs = []): void

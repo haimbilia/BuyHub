@@ -466,11 +466,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     };
 
     toggleBulkStatues = function (status, msg = "") {
-        var element = 0 < $("#facebox").length ? "#facebox " : "";
-        if ($(element).is(":hidden")) {
-            element = "";
-        }
-        element = element + "form.actionButtonsJs";
+        var element = "form.actionButtonsJs";
         if (1 > $(element).length) {
             $.ykmsg.error(langLbl.actionButtonsClass);
             return false;
@@ -479,10 +475,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (!confirm(msg)) {
             return false;
         } */
-        $(element).attr(
-            "action",
-            fcom.makeUrl(controllerName, "toggleBulkStatuses")
-        );
+        $(element).attr("action", fcom.makeUrl(controllerName, "toggleBulkStatuses"));
         $(element + " input[name='status']").val(status);
         $(element).submit();
     };

@@ -2,7 +2,8 @@
 
 class BlogPostCategoriesController extends ListingBaseController
 {
-
+    protected $modelClass = 'BlogPostCategory';
+    
     public function __construct($action)
     {
         parent::__construct($action);
@@ -22,17 +23,6 @@ class BlogPostCategoriesController extends ListingBaseController
         } else {
             $this->objPrivilege->canEditBlogPostCategories();
         }
-    }
-
-    /**
-     * setModel - This function is used to set related model class and used by its parent class.
-     *
-     * @param  array $constructorArgs
-     * @return void
-     */
-    protected function setModel(array $constructorArgs = []): void
-    {
-        $this->modelObj = (new ReflectionClass('BlogPostCategory'))->newInstanceArgs($constructorArgs);
     }
 
     /**
