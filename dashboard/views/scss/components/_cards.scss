@@ -19,7 +19,7 @@
         align-items: center;
         padding: 1rem;
         margin-bottom: 0.5rem;
-        color: $body-color;
+        color: $txt-body;
         background: none;
         border: none;
         &~.card-body {
@@ -40,7 +40,7 @@
         font-weight: 400;
         font-size: 1.1rem;
         a {
-            color: $body-color;
+            color: $txt-body;
         }
     }
 }
