@@ -1,4 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$frm->setFormTagAttribute('id', 'frmAddBlock');
+$frm->setFormTagAttribute('onsubmit', 'saveRecord($("#frmAddBlock")); return(false);');
 
 $fld = $frm->getField('epage_label');
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','epage_id');getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");

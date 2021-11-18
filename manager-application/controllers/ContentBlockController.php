@@ -50,6 +50,7 @@ class ContentBlockController extends ListingBaseController
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
+        $actionItemsData['newRecordBtn'] = false;
         
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -134,26 +135,6 @@ class ContentBlockController extends ListingBaseController
         $this->set('canEdit', $this->canEdit);
     }
 
-    public function getBreadcrumbNodes($action)
-    {
-        $nodes = array();
-
-        switch ($action) {
-            case 'index':
-                $className = get_class($this);
-                $arr = explode('-', FatUtility::camel2dashed($className));
-                array_pop($arr);
-                $urlController = implode('-', $arr);
-                $className = ucwords(implode(' ', $arr));
-                $nodes[] = array('title' => $className);
-                break;
-            default:
-                $nodes[] = array('title' => $action);
-                break;
-        }
-        return $nodes;
-    }
-
     public function search()
     {
         $this->getListingData();
@@ -205,11 +186,11 @@ class ContentBlockController extends ListingBaseController
     private function getForm($recordId = 0)
     {
         $recordId = FatUtility::int($recordId);
-        $frm = new Form('frmBlock');
+        $frm = new Form('frmAddBlock');
         $frm->addHiddenField('', 'epage_id', $recordId);
         $frm->addHiddenField('', 'lang_id', $this->siteLangId );
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $this->siteLangId), 'epage_label');
-        $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         // $fld->requirements()->setRequired();
 
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'epage_active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', array(), '');
@@ -327,7 +308,6 @@ class ContentBlockController extends ListingBaseController
         $frm = $this->getForm(0, $this->siteLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
-        // print_rr($post, 1);
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
@@ -351,7 +331,7 @@ class ContentBlockController extends ListingBaseController
             'epagelang_lang_id' => $languageId,
             'epagelang_epage_id' => $recordId,
             'epage_label' => $post['epage_label'],
-            'epage_content' => $post['epage_content'],
+            // 'epage_content' => $post['epage_content'],
         );
         unset($post['lang_id'], $post['epage_content'], $post['epage_label'], $post['urlrewrite_custom']);
 
