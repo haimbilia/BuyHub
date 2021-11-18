@@ -2,6 +2,7 @@
 
 class SellerPackagePlansController extends ListingBaseController
 {
+    protected $modelClass = 'SellerPackagePlans';
 
     public function __construct($action)
     {
@@ -24,17 +25,6 @@ class SellerPackagePlansController extends ListingBaseController
         }
     }
 
-    /**
-     * setModel - This function is used to set related model class and used by its parent class.
-     *
-     * @param  array $constructorArgs
-     * @return void
-     */
-    protected function setModel(array $constructorArgs = []): void
-    {
-        $this->modelObj = (new ReflectionClass('SellerPackagePlans'))->newInstanceArgs($constructorArgs);
-    }
-
     public function index()
     {
         Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_SELLER_PACKAGE_FIRST', $this->siteLangId));
@@ -46,20 +36,41 @@ class SellerPackagePlansController extends ListingBaseController
         $packageData =  SellerPackages::getAttributesByLangId($this->siteLangId, $spackageId, ['spackage_name', 'spackage_identifier'], true);
 
         if ($packageData === false) {
-            Message::addErrorMessage($this->str_invalid_request);
+            Message::addErrorMessage($this->str_invalid_request_id);
             FatApp::redirectUser(UrlHelper::generateUrl('SellerPackages'));
         }
 
-        $this->set('defaultColumns', $this->getDefaultColumns());
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SUBSCRIPTION_PACKAGE_PLANS', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+        $frmSearch->fill(['spackageId' => $spackageId]);
+
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_PACKAGE_PLANS', $this->siteLangId);
+        $pageTitle = !empty($packageData['spackage_name']) ? $packageData['spackage_name'] : $packageData['spackage_identifier'];
+
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['performBulkAction'] = true;
+
+        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'href' => "javascript:void(0)",
+                'onclick' => 'addNewPlan(' . $spackageId . ')',
+                'title' => $btnTitle,
+            ],
+            'label' => $btnTitle,
+        ];
 
         $this->set('pageData', $pageData);
+        $this->set("frmSearch", $frmSearch);
         $this->set('pageTitle', $pageTitle);
-        $packageData =  SellerPackages::getAttributesByLangId($this->siteLangId, $spackageId, ['spackage_name', 'spackage_identifier'], true);
-        $this->set('packageName', $packageData['spackage_name']  ??  $packageData['spackage_identifier']);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PLAN_PRICE', $this->siteLangId));
         $this->getListingData($spackageId);
-        $this->_template->render();
+        $this->_template->addJs(['seller-package-plans/page-js/list.js']);
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -76,6 +87,7 @@ class SellerPackagePlansController extends ListingBaseController
 
     private function getListingData(int $spackageId)
     {
+        $spackageId = FatApp::getPostedData('spackageId', FatUtility::VAR_INT, $spackageId);
 
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -92,7 +104,9 @@ class SellerPackagePlansController extends ListingBaseController
 
         $srchFrm = $this->getSearchForm($fields);
 
+        $postedData = FatApp::getPostedData();
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+
         $post['spackageId'] = $spackageId;
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -107,6 +121,10 @@ class SellerPackagePlansController extends ListingBaseController
             $sortOrder = applicationConstants::SORT_ASC;
         }
 
+        if (!empty($post['keyword'])) {
+            $srch->addCondition('spp.spplan_price', 'like', $post['keyword'] . '%');
+        }
+
         $srch->addOrder($sortBy, $sortOrder);
 
         $srch->setPageNumber($page);
@@ -119,7 +137,8 @@ class SellerPackagePlansController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
 
         $this->set('sortBy', $sortBy);
@@ -128,6 +147,24 @@ class SellerPackagePlansController extends ListingBaseController
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('spackageId', $spackageId);
         $this->set('canEdit', $this->objPrivilege->canEditSellerPackages($this->admin_id, true));
+    }
+
+    public function getSearchForm($fields = [])
+    {
+        $fields = $this->getFormColumns();
+
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'spackageId');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'spplan_price');
+        }
+
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
     }
 
     public function form()
@@ -164,10 +201,17 @@ class SellerPackagePlansController extends ListingBaseController
         $frm->addHiddenField('', SellerPackagePlans::tblFld('spackage_id'));
 
         $subsPeriodOption = SellerPackagePlans::getSubscriptionPeriods($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_PERIOD', $this->siteLangId), 'spplan_frequency', $subsPeriodOption, '', array(), '');
+        $subsPeriodFld = $frm->addSelectBox(Labels::getLabel('FRM_PERIOD', $this->siteLangId), 'spplan_frequency', $subsPeriodOption, '', ['class' => 'fieldsVisibilityJs'], '');
 
-        $fld = $frm->addIntegerField(Labels::getLabel('FRM_TIME_INTERVAL_(FREQUENCY)', $this->siteLangId), 'spplan_interval');
-        $fld->requirements()->setIntPositive();
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_TIME_INTERVAL_(FREQUENCY)', $this->siteLangId), 'spplan_interval');
+        $fld->requirements()->setIntPositive();        
+        $intervalFld = new FormFieldRequirement('spplan_interval', Labels::getLabel('FRM_TIME_INTERVAL_(FREQUENCY)', $this->siteLangId));
+        $intervalFld->setRequired(false);
+        $reqIntervalFld = new FormFieldRequirement('spplan_interval', Labels::getLabel('FRM_TIME_INTERVAL_(FREQUENCY)', $this->siteLangId));
+        $reqIntervalFld->setRequired(true);
+
+        $subsPeriodFld->requirements()->addOnChangerequirementUpdate(SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED, 'eq', 'spplan_interval', $intervalFld);
+        $subsPeriodFld->requirements()->addOnChangerequirementUpdate(SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED, 'ne', 'spplan_interval', $reqIntervalFld);
 
         if (SellerPackages::getAttributesById($spackageId, SellerPackages::tblFld('type'))  != SellerPackages::FREE_TYPE) {
             $frm->addFloatField(Labels::getLabel('FRM_PRICE', $this->siteLangId), 'spplan_price')->requirements()->setRange('0.01', '9999999999');
@@ -215,7 +259,7 @@ class SellerPackagePlansController extends ListingBaseController
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     protected function getFormColumns(): array
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgPlanTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -227,6 +271,7 @@ class SellerPackagePlansController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'spplan_price' => Labels::getLabel('LBL_PLAN_PRICE', $this->siteLangId),
+            'spplan_interval' => Labels::getLabel('LBL_INTERVAL', $this->siteLangId),
             'spplan_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => '',
         ];
@@ -240,6 +285,7 @@ class SellerPackagePlansController extends ListingBaseController
             'select_all',
             'listSerial',
             'spplan_price',
+            'spplan_interval',
             'spplan_active',
             'action',
         ];
@@ -247,19 +293,31 @@ class SellerPackagePlansController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['spplan_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['spplan_interval', 'spplan_active'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
 
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_PACKAGES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_SELLER_PACKAGES', $this->siteLangId);
+
+        $url = FatApp::getQueryStringData('url');
+        $urlParts = explode('/', $url);
+        $title = Labels::getLabel('LBL_SUBSCRIPTION_PACKAGE_PLANS', $this->siteLangId);
+        if (isset($urlParts[2])) {
+            $attr = ['COALESCE(spackage_name, spackage_identifier) as spackage_name'];
+            $data = SellerPackages::getAttributesByLangId($this->siteLangId, $urlParts[2], $attr, true);
+            $title = $data['spackage_name'];
+        }
+
         switch ($action) {
             case 'list':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES', $this->siteLangId), 'href' => UrlHelper::generateUrl('SellerPackages')],
-                    ['title' => Labels::getLabel('LBL_SUBSCRIPTION_PACKAGE_PLANS', $this->siteLangId)]
+                    ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('SellerPackages')],
+                    ['title' => $title]
                 ];
         }
         return $this->nodes;

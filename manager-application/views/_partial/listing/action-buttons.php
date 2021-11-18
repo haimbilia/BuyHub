@@ -15,7 +15,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+            'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
             'title' => Labels::getLabel('BTN_ACTIVE', $siteLangId),
             'onclick' => "toggleBulkStatues(1, '" . $msg . "')"
         ],
@@ -32,7 +32,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+            'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
             'title' => Labels::getLabel('BTN_IN-ACTIVE', $siteLangId),
             'onclick' => "toggleBulkStatues(0, '" . $msg . "')"
         ],
@@ -51,7 +51,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
         'a',
         [
             'href' => 'javascript:void(0)',
-            'class' => 'btn btn-outline-brand btn-icon toolbar-btn-js disabled',
+            'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
             'title' => Labels::getLabel('BTN_DELETE', $siteLangId),
             'onclick' => "deleteSelected()"
         ],
@@ -67,7 +67,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
 if (isset($otherButtons) && is_array($otherButtons)) {
     foreach ($otherButtons as $attr) {
         $li = $ul->appendElement('li');
-        $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);
+        $li->appendElement('a', $attr['attr'], (string) html_entity_decode($attr['label'], ENT_QUOTES, 'utf-8') , true);
     }
 }
 

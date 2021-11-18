@@ -8,19 +8,17 @@
 </footer>
 <div class="footer-action">
     <div class="footer-action__item">
-        <a href="#" href="javascript:void(0);" class="footer-action__trigger">
+        <a href="#" href="javascript:void(0);" class="footer-action__trigger" data-trigger="sidebar">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#menu">
                     </use>
                 </svg>
             </span>
-
         </a>
     </div>
-
     <div class="footer-action__item">
-        <a class="footer-action__trigger" href="javascript:void(0);" data-toggle="modal" data-target="#search-main">
+        <a class="footer-action__trigger" href="javascript:void(0);">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-search">
@@ -99,7 +97,7 @@
                         <span onclick="">Arabic</span>
                     </div>
                 </a>
-                <a href="#">Account Setting</a>
+                <a href="#">System Setting</a>
                 <a href="#">Sign out</a>
             </nav>
         </div>
@@ -114,5 +112,5 @@
 <script src="<?php echo JS_PATH; ?>bootstrap.min.js"></script>
 <script src="<?php echo JS_PATH; ?>vendors/stellarnav.min.js"></script>
 <script src="<?php echo JS_PATH; ?>vendors/scroll-hint.min.js"></script>
-<script src="<?php echo JS_PATH; ?>vendors/toastr.js"></script> 
-<script src="<?php echo JS_PATH; ?>ui-functions.js"></script> 
+<script src="<?php echo JS_PATH; ?>vendors/toastr.js"></script>
+<script src="<?php echo JS_PATH; ?>ui-functions.js"></script>

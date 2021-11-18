@@ -1,4 +1,8 @@
 $(document).on("click", ".headerColumnJs", function (e) {
+    if (1 == $('.listingRecordJs tr').length) {
+        return;
+    }
+
     var fld = $(this).attr("data-field");
     var frm = document.frmRecordSearchPaging;
     var sortingUp =
@@ -51,13 +55,6 @@ $(function () {
 $(document).on("search", "input[name='keyword']", function () {
     if ("" == $(this).val()) {
         searchRecords(document.frmRecordSearch);
-    }
-});
-
-$(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
-    e.stopImmediatePropagation();
-    if (e.keyCode === 13) {
-        $('.' + $.ykmodal.element + " .submitBtnJs").click();
     }
 });
 
@@ -171,7 +168,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (frm) {
             data = fcom.frmData(frm);
         }
-        
+
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function (res) {
@@ -273,6 +270,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
+        fcom.resetEditorInstance();
         $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
         data = "recordId=" + recordId;
         fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
@@ -285,7 +283,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-
+        fcom.resetEditorInstance();
         $.ykmodal(fcom.getLoader());
         data = "recordId=" + recordId + "&langId=" + langId;
         fcom.ajax(
@@ -298,7 +296,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         );
     };
 
-    updateStatus = function (e, obj, recordId, status) {
+    updateStatus = function (e, obj, recordId, status, callback = "") {
         if (false === checkControllerName()) {
             return false;
         }
@@ -320,19 +318,16 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         data = "recordId=" + recordId + "&status=" + status;
-        fcom.ajax(
-            fcom.makeUrl(controllerName, "updateStatus"),
-            data,
+        fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
             function (res) {
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
                     $.ykmsg.success(ans.msg);
-                    $(obj).attr({
-                        onclick:
-                            "updateStatus(event, this, " + recordId + ", " + oldStatus + ")",
-                        "data-old-status": status,
-                    });
+                    $(obj).attr({onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + ")", "data-old-status": status});
+                    if ("" != callback) {
+                        eval(callback);
+                    } 
                 } else {
                     $(obj).prop("checked", 1 == oldStatus);
                     $.ykmsg.error(ans.msg);
@@ -346,7 +341,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-
         if (!$(frm).validate()) { return; }
         $.ykmodal(fcom.getLoader());
 
@@ -423,22 +417,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             }
         });
 
-        var faceboxActionBtns =
-            0 < $("#facebox").length && $("#facebox").is(":visible")
-                ? "#facebox "
-                : "";
-
-        if (0 < $(faceboxActionBtns + ".toolbar-btn-js").length) {
-            if ($(obj).prop("checked") == false) {
-                $(faceboxActionBtns + ".toolbar-btn-js")
-                    .addClass("disabled")
-                    .removeClass("selected");
-            } else {
-                $(faceboxActionBtns + ".toolbar-btn-js")
-                    .removeClass("disabled")
-                    .addClass("selected");
-            }
-        }
+        showActionsBtns();
     };
 
     formAction = function (frm, callback) {
@@ -467,16 +446,12 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             } else {
                 $.ykmsg.success(t.msg);
             }
-            $(".toolbar-btn-js").addClass("disabled").removeClass("selected");
+            $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
         });
     };
 
     toggleBulkStatues = function (status, msg = "") {
-        var element = 0 < $("#facebox").length ? "#facebox " : "";
-        if ($(element).is(":hidden")) {
-            element = "";
-        }
-        element = element + "form.actionButtonsJs";
+        var element = "form.actionButtonsJs";
         if (1 > $(element).length) {
             $.ykmsg.error(langLbl.actionButtonsClass);
             return false;
@@ -485,19 +460,16 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (!confirm(msg)) {
             return false;
         } */
-        $(element).attr(
-            "action",
-            fcom.makeUrl(controllerName, "toggleBulkStatuses")
-        );
+        $(element).attr("action", fcom.makeUrl(controllerName, "toggleBulkStatuses"));
         $(element + " input[name='status']").val(status);
         $(element).submit();
     };
 
     showActionsBtns = function () {
         if (typeof $(".selectItemJs:checked").val() === "undefined") {
-            $(".toolbar-btn-js").addClass("disabled").removeClass("selected");
+            $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
         } else {
-            $(".toolbar-btn-js").removeClass("disabled").addClass("selected");
+            $(".toolbarBtnJs").removeClass("btn-outline-gray disabled").addClass("btn-outline-brand selected");
         }
     };
 
@@ -660,20 +632,11 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
                     if ("" != callback) {
-                        window[callback]();
-                    } else if (
-                        0 < $(".navTabsJs").length &&
-                        0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length
-                    ) {
-                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']")
-                            .val(langId)
-                            .change();
-                    } else if (
-                        0 < $(".navTabsJs").length &&
-                        0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length
-                    ) {
-                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']")
-                            .change();
+                        eval(callback);
+                    } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length) {
+                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();
+                    } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length) {
+                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").change();
                     } else {
                         mediaForm(ans.recordId, imageType, langId, slideScreen);
                     }
@@ -754,20 +717,15 @@ $(document).on("click", ".selectItemJs", function () {
     var tr = $(this).closest('tr');
     if ($(this).prop("checked") == false) {
         $("#" + parentForm + " .selectAllJs").prop("checked", false);
+        tr.removeClass('selected');
+    } else {
+        tr.addClass('selected');
     }
 
     if ($("#" + parentForm + " .selectItemJs").length == $("#" + parentForm + " .selectItemJs:checked").length) {
         $("#" + parentForm + " .selectAllJs").prop("checked", true);
     }
-
-    var faceboxActionBtns = 0 < $("#facebox").length && $("#facebox").is(":visible") ? "#facebox " : "";
-    if ($("#" + parentForm + " .selectItemJs:checked").length == 0) {
-        $(faceboxActionBtns + " .toolbar-btn-js").addClass("disabled").removeClass("selected");
-        tr.removeClass('selected');
-    } else {
-        $(faceboxActionBtns + " .toolbar-btn-js").removeClass("disabled").addClass("selected");
-        tr.addClass('selected');
-    }
+    showActionsBtns();
 });
 
 $(document).ready(function () {

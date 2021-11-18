@@ -513,8 +513,8 @@ class QuestionnairesController extends ListingBaseController
         $this->objPrivilege->canViewQuestionnaires();
         $frm = new Form('frmQuestionnaireSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
-        $frm->addDateField(Labels::getLabel('LBL_From_Date', $this->siteLangId), 'from_date', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_To_Date', $this->siteLangId), 'to_date', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_From_Date', $this->siteLangId), 'from_date', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_To_Date', $this->siteLangId), 'to_date', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
@@ -562,8 +562,8 @@ class QuestionnairesController extends ListingBaseController
         $frm = new Form('frmQuestionnaire');
         $frm->addHiddenField('', 'questionnaire_id', 0);
         $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'questionnaire_identifier');
-        $frm->addDateField(Labels::getLabel('LBL_Start_Date', $this->siteLangId), 'questionnaire_start_date', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_End_Date', $this->siteLangId), 'questionnaire_end_date', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_Start_Date', $this->siteLangId), 'questionnaire_start_date', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('LBL_End_Date', $this->siteLangId), 'questionnaire_end_date', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'questionnaire_active', $activeInactiveArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));

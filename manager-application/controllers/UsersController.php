@@ -361,7 +361,7 @@ class UsersController extends ListingBaseController
             $fld->requirements()->setUsername();
         }
         $frm->addRequiredField(Labels::getLabel('FRM_Customer_Name', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('FRM_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('FRM_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
@@ -572,6 +572,11 @@ class UsersController extends ListingBaseController
             $cond = $srch->addCondition('uc.credential_username', 'like', '%' . $keyword . '%');
             $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
+            
+            if (0 < $joinShop) {
+                $cond->attachCondition('shp.shop_identifier', 'LIKE', '%' . $keyword . '%');
+                $cond->attachCondition('s_l.shop_name', 'LIKE', '%' . $keyword . '%');
+            }
         }
 
         if (!empty($post['user_is_buyer'])) {

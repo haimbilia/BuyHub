@@ -1,4 +1,6 @@
 //default colors
+ 
+$dark-color:#888;
 $blue:var(--brand-color);
 $primary:#ff3a59;
 //dynamic theme colors
@@ -11,9 +13,9 @@ $secondary-color-inverse: #FFFFFF;
 $third-color: var(--third-color);
 $third-color-inverse:var(--third-color-inverse);
 //fixed theme colors 
-$body-color: #000;
-$txt-body:#000;
-$txt-gray:#888;
+$txt-body:rgba(0, 0, 0, .87);
+$txt-gray:rgba(0, 0, 0, .67);
+$text-muted:#888888 !default;
 //border colors
 $border-color:#dee2e6;
 $border: solid 1px $border-color;

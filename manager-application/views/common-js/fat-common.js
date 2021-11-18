@@ -218,7 +218,7 @@ var fcom = {
 
     displayProcessing: function () {
         $.ykmsg.close();
-        $.ykmsg.info(langLbl.processing);
+        $.ykmsg.info(langLbl.processing, 0);
     }
 };
 

@@ -12,16 +12,51 @@ class LabelsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_LABELS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['otherButtons'] = [
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-outline-brand btn-icon',
+                    'onclick' => 'updateFile()',
+                    'title' => Labels::getLabel('LBL_UPDATE_WEB_LABEL_FILE', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#laptop">
+                                </use>
+                            </svg><span>' . Labels::getLabel('BTN_WEB', $this->siteLangId) . '</span>',
+            ],
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-outline-brand btn-icon',
+                    'onclick' => "updateFile(" . Labels::TYPE_APP . ")",
+                    'title' => Labels::getLabel('LBL_UPDATE_APP_LABEL_FILE', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#mobile">
+                                </use>
+                            </svg><span>' . Labels::getLabel('BTN_APP', $this->siteLangId) . '</span>',
+            ],
+        ];
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('canEdit', $this->objPrivilege->canEditLanguageLabels($this->admin_id, true));
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_SYSTEM_CODE_AND_CAPTION', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->render();
+        $this->_template->addJs(['labels/page-js/index.js']);
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -235,10 +270,10 @@ class LabelsController extends ListingBaseController
             $this->addSortingElements($frm, 'label_key');
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_TYPE', $this->siteLangId), 'label_type', array('-1' => Labels::getLabel('LBL_SELECT_PLATFORM', $this->siteLangId)) + Labels::getTypeArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'label_type', array('-1' => Labels::getLabel('LBL_SELECT_PLATFORM', $this->siteLangId)) + Labels::getTypeArr($this->siteLangId), -1, array(), '');
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -252,7 +287,7 @@ class LabelsController extends ListingBaseController
         $frm->addHiddenField('', 'label_key', $label_key);
         $frm->addHiddenField('', 'label_type', $label_type);
         $languages = Language::getAllNames();
-        $frm->addTextbox(Labels::getLabel('LBL_Key', $this->siteLangId), 'key', $label_key);
+        $frm->addTextbox(Labels::getLabel('FRM_Key', $this->siteLangId), 'key', $label_key);
         foreach ($languages as $langId => $langName) {
             $fld = $frm->addTextArea($langName, 'label_caption' . $langId);
             $fld->requirements()->setRequired();
@@ -311,12 +346,13 @@ class LabelsController extends ListingBaseController
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
-
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_LABELS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_MANAGE_LABELS', $this->siteLangId)]
+                    ['title' => $pageTitle]
                 ];
         }
         return $this->nodes;

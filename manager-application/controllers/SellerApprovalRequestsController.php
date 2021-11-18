@@ -10,33 +10,19 @@ class SellerApprovalRequestsController extends ListingBaseController {
         $this->objPrivilege->canViewSellerApprovalRequests();
     }
 
-    /**
-     * setLangTemplateData - This function is use to automate load langform and save it. 
-     *
-     * @param  array $constructorArgs
-     * @return void
-     */
-    protected function setLangTemplateData(array $constructorArgs = []): void {
-        $this->objPrivilege->canEditSellerApprovalRequests();
-        $this->setModel($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_Manage_Seller_Approval_Requests_Setup', $this->siteLangId));
-        $this->checkMediaExist = true;
-    }
-
-    public function index() { 
+    public function index() {
         $fields = $this->getFormColumns();
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         $this->setModel();
         $this->set('pageData', $pageData);
-        $this->set('pageTitle', $pageTitle); 
+        $this->set('pageTitle', $pageTitle);
         $this->set('canEdit', $this->objPrivilege->canEditSellerApprovalRequests($this->admin_id, true));
-        $this->set("frmSearch", $this->getSearchForm($fields));  
+        $this->set("frmSearch", $this->getSearchForm($fields));
         $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
             'newRecordBtn' => false
         ]);
-        $this->set('actionItemsData',$actionItemsData);
+        $this->set('actionItemsData', $actionItemsData);
         $this->getListingData();
         $this->_template->addJs(['seller-approval-requests/page-js/index.js']);
         $this->_template->render(true, true, '_partial/listing/index.php');
@@ -49,11 +35,11 @@ class SellerApprovalRequestsController extends ListingBaseController {
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'usuprequest_status');
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', ['-1' => Labels::getLabel('LBL_All', $this->siteLangId)] + User::getSupplierReqStatusArr($this->siteLangId), '', array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', ['-1' => Labels::getLabel('FRM_ALL', $this->siteLangId)] + User::getSupplierReqStatusArr($this->siteLangId), '', array(), '');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -190,7 +176,7 @@ class SellerApprovalRequestsController extends ListingBaseController {
         $supplierRequest['usuprequest_comments'] = $post['comments'];
         if (!$email->sendSupplierRequestStatusChangeNotification($this->siteLangId, $supplierRequest)) {
             FatApp::getDb()->rollbackTransaction();
-            LibHelper::exitWithError(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_EMAIL_COULD_NOT_BE_SENT', $this->siteLangId));
         }
         FatApp::getDb()->commitTransaction();
         $this->set('msg', $this->str_setup_successful);
@@ -226,7 +212,7 @@ class SellerApprovalRequestsController extends ListingBaseController {
         $frm->addHiddenField('', 'usuprequest_id');
         $statusArr = User::getSupplierReqStatusArr($this->siteLangId);
         unset($statusArr[User::SUPPLIER_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'usuprequest_status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'usuprequest_status', $statusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
         $frm->addTextArea('', 'comments', '');
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -244,11 +230,11 @@ class SellerApprovalRequestsController extends ListingBaseController {
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'usuprequest_reference' => Labels::getLabel('LBL_Reference_Number', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_Name', $this->siteLangId),
-            'user_details' => Labels::getLabel('LBL_Username/Email', $this->siteLangId),
-            'usuprequest_date' => Labels::getLabel('LBL_Requested_On', $this->siteLangId),
-            'usuprequest_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
+            'usuprequest_reference' => Labels::getLabel('LBL_REFERENCE_NUMBER', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
+            'user_details' => Labels::getLabel('LBL_USERNAME/EMAIL', $this->siteLangId),
+            'usuprequest_date' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
+            'usuprequest_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => '',
         ];
         CacheHelper::create('approvalRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);

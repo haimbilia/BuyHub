@@ -108,7 +108,7 @@ class PreferredPaymentMethodController extends ListingBaseController
                 $arr = [];
                 foreach ($fields as $key => $val) {
                     switch ($key) {
-                        case 'listserial':
+                        case 'listSerial':
                             $arr[] = $count;
                             break;
                         case 'orderDate':
@@ -159,10 +159,10 @@ class PreferredPaymentMethodController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'product_name', applicationConstants::SORT_ASC);
         }
-        $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel("FRM_KEYWORD", $this->siteLangId), 'keyword');
 
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
 

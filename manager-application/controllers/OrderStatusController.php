@@ -33,7 +33,6 @@ class OrderStatusController extends ListingBaseController
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
-        $actionItemsData['searchFrmTemplate'] = 'order-status/search-form.php';
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -54,11 +53,11 @@ class OrderStatusController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'orderstatus_name');
         }
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_ORDER_STATUS_TYPE', $this->siteLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ORDER_STATUS_TYPE', $this->siteLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
         
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);

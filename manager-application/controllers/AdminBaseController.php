@@ -156,8 +156,7 @@ class AdminBaseController extends FatController
                 'selectTimeslotDay' => Labels::getLabel('LBL_ATLEAST_ONE_DAY_AND_TIMESLOT_NEEDS_TO_BE_CONFIGURED', $this->siteLangId),
                 'invalidTimeSlot' => Labels::getLabel('LBL_PLEASE_CONFIGURE_FROM_AND_TO_TIME', $this->siteLangId),
                 'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
-                'disableChildCategories' => Labels::getLabel('LBL_DISABLE_CHILD_CATEGORY_VALIDATION', $this->siteLangId),
-                'addNewRatingType' => Labels::getLabel('LBL_ADD_NEW_RATING_TYPE?', $this->siteLangId),
+                'disableChildCategories' => Labels::getLabel('LBL_DISABLE_CHILD_CATEGORY_VALIDATION', $this->siteLangId),             
                 'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->siteLangId),
                 'enableParentCategories' => Labels::getLabel('LBL_ENABLE_PARENT_CATEGORIES_VALIDATION', $this->siteLangId),
                 'defaultCountryCode' => $defaultCountryCode,
@@ -176,7 +175,7 @@ class AdminBaseController extends FatController
                 'clickToCopy' => Labels::getLabel('LBL_CLICK_TO_COPY', $this->siteLangId),
                 'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                 'confirmSellerAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MAKE_SELLER_AS_BUYER', $this->siteLangId),
-            );            
+            );
             foreach ($languages as $val) {
                 if (empty($val)) {
                     continue;
@@ -244,7 +243,16 @@ class AdminBaseController extends FatController
         array_pop($arr);
         $urlController = implode('-', $arr);
         $className = ucwords(implode(' ', $arr));
-        if ($action == 'index') {
+
+        $pageTitle = '';
+        if (isset($this->pageKey)) {
+            $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+            $pageTitle = $pageData['plang_title'] ?? '';
+        }
+
+        if (!empty($pageTitle)) {
+            $this->nodes[] = array('title' => $pageTitle);
+        } else if ($action == 'index') {
             $this->nodes[] = array('title' => $className);
         } else {
             $arr = explode('-', FatUtility::camel2dashed($action));
@@ -323,24 +331,24 @@ class AdminBaseController extends FatController
             $this->addSortingElements($frm, 'user_name');
         }
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'user_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'user_id', []);
 
-        $arr_options = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $arr_options1 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
+        $arr_options = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $arr_options1 = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
 
-        $arr_options2 = array('-1' => Labels::getLabel('LBL_Does_Not_Matter', $this->siteLangId)) + User::getUserTypesArr($this->siteLangId);
-        $arr_options2 = $arr_options2 + array(User::USER_TYPE_BUYER_SELLER => Labels::getLabel('LBL_Buyer', $this->siteLangId) . '+' . Labels::getLabel('LBL_Seller', $this->siteLangId));
-        $arr_options2 = $arr_options2 + array(User::USER_TYPE_SUB_USER => Labels::getLabel('LBL_Sub_User', $this->siteLangId));
+        $arr_options2 = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + User::getUserTypesArr($this->siteLangId);
+        $arr_options2 = $arr_options2 + array(User::USER_TYPE_BUYER_SELLER => Labels::getLabel('FRM_BUYER', $this->siteLangId) . '+' . Labels::getLabel('FRM_SELLER', $this->siteLangId));
+        $arr_options2 = $arr_options2 + array(User::USER_TYPE_SUB_USER => Labels::getLabel('FRM_SUB_USER', $this->siteLangId));
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Active_Users', $this->siteLangId), 'user_active', $arr_options, -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Email_Verified', $this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_User_Type', $this->siteLangId), 'type', $arr_options2, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE_USERS', $this->siteLangId), 'user_active', $arr_options, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_EMAIL_VERIFIED', $this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_USER_TYPE', $this->siteLangId), 'type', $arr_options2, -1, array(), '');
 
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly'));
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -354,7 +362,7 @@ class AdminBaseController extends FatController
         $frm->addHiddenField('', 'user_type');
         $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
         $frm->addRequiredField(Labels::getLabel('LBL_Customer_name', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('LBL_Date_of_birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly'));
+        $frm->addDateField(Labels::getLabel('LBL_Date_of_birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addHiddenField('', 'user_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
@@ -391,8 +399,8 @@ class AdminBaseController extends FatController
         $frm->addTextBox(Labels::getLabel('LBL_Seller/Shop', $this->siteLangId), 'shop_name');
         /* $frm->addTextBox(Labels::getLabel('LBL_Customer',$this->siteLangId),'customer_name'); */
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly'));
+        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('LBL_Order_From', $this->siteLangId) . ' [' . $currencySymbol . ']'));
         $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('LBL_Order_To', $this->siteLangId) . ' [' . $currencySymbol . ']'));
 
@@ -471,7 +479,7 @@ $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants:
             $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true);
             if ($type == 'REQUESTED_CATALOG_PRODUCT') {
                 $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
-                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibility-js'], Labels::getLabel('LBL_Select', $this->siteLangId));
+                $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('LBL_FULFILLMENT_METHOD', $this->siteLangId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibilityJs'], Labels::getLabel('LBL_Select', $this->siteLangId));
                 $fulFillmentTypeFld->requirements()->setRequired();
             }
             $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
@@ -715,7 +723,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
             $fld->requirements()->setRequired();
         }
 
-        $frm->addDateField(Labels::getLabel('LBL_Date_Available', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly'))->requirements()->setRequired();
+        $frm->addDateField(Labels::getLabel('LBL_Date_Available', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'))->requirements()->setRequired();
 
         /* $frm->addDateTimeField( Labels::getLabel('LBL_Date_Available', $this->siteLangId), 'selprod_available_from', '' , array('readonly' => 'readonly')); */
 
@@ -818,5 +826,4 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
     {
         $this->_template->render(false, false, '_partial/record-info-section.php');
     }
-    
 }

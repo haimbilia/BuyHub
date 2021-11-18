@@ -4,7 +4,7 @@ HtmlHelper::formatFormFields($frm);
 
 $frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
 $frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
-$frm->setFormTagAttribute('id', 'frmAbusiveWord');
+$frm->setFormTagAttribute('id', 'frmAbusiveWordJs');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 	
 $fld = $frm->getField('abusive_lang_id');

@@ -1,4 +1,4 @@
-<sidebar class="sidebar">
+<sidebar class="sidebar"  id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">
         <a href="#">
             <?php
@@ -6,7 +6,7 @@
             $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
             ?>
-            <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
+            <img  width="34" height="34"  <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
         </a>
     </div>
     <div class="sidebar-menu sidebarMenuJs">
@@ -14,6 +14,7 @@
             <?php
             if (
                     $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
@@ -36,36 +37,79 @@
                                     </a>
                                 </li>
                             <?php } ?>
-                            <?php if ($objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                <li class="nav_item">
-                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('brandRequests'); ?>">
-                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_Brand_Request', $siteLangId); ?></span>
-                                    </a>
-                                </li> 
-                            <?php } ?>
+
                             <?php if ($objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Shops'); ?>">
-                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_Shops', $siteLangId); ?></span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
                                     </a>
-                                </li> 
+                                </li>
                             <?php } ?>
                             <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ProductCategories'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></span>
                                     </a>
-                                </li> 
+                                </li>
+                            <?php } ?>
+
+                        </ul>
+                    </div>
+                </li>
+            <?php } ?>
+
+            <?php
+            if (
+                    $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
+            ) {
+                ?>
+                <li class="menu-item dropdown">
+                    <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
+                        <span class="menu-icon">
+                            <svg class="svg" width="24" height="24">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
+                            </use>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                        <h6 class=""><?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?></h6>
+                        <ul class="nav">
+                            <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('brandRequests'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?><?php if ($brandReqCount) { ?>(<?php echo $brandReqCount; ?>)<?php } ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ProductCategoriesRequest'); ?>">
-                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?></span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?> <?php if ($categoryReqCount) { ?>(<?php echo $categoryReqCount; ?>)<?php } ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
                             <?php if ($objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('sellerApprovalRequests'); ?>">
-                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_Seller_Approval_Requests', $siteLangId); ?></span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?><?php if ($supReqCount) { ?>(<?php echo $supReqCount; ?>)<?php } ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('thresholdProducts'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?></span>
+                                    </a>
+                                </li> 
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('RatingTypes'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_RATING_TYPES', $siteLangId); ?></span>
                                     </a>
                                 </li> 
                             <?php } ?>
@@ -140,12 +184,12 @@
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
                         <h6 class=""><?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></h6>
                         <ul class="nav">
-                            <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>  
+                            <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Users'); ?>">
                                         <?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>
                                     </a>
-                                </li> 
+                                </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Rewards'); ?>">
                                         <?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?>
@@ -164,6 +208,11 @@
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('UsersAddresses'); ?>">
                                         <?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?>
+                                    </a>
+                                </li>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>">
+                                        <?php echo Labels::getLabel('LBL_Users_GDPR_Requests', $siteLangId); ?>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -195,7 +244,10 @@
 
             <?php
             if (
-                    $objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
                 <li class="menu-item dropdown">
@@ -216,17 +268,13 @@
                                         <?php echo Labels::getLabel('NAV_SPECIAL_PRICE', $siteLangId); ?>
                                     </a>
                                 </li>
-                            <?php } ?>
 
-                            <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('VolumeDiscount'); ?>">
                                         <?php echo Labels::getLabel('NAV_VOLUME_DISCOUNT', $siteLangId); ?>
                                     </a>
                                 </li>
-                            <?php } ?>
 
-                            <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('RelatedProducts'); ?>">
                                         <?php echo Labels::getLabel('NAV_RELATED_PRODUCTS', $siteLangId); ?>

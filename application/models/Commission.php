@@ -13,7 +13,7 @@ class Commission extends MyAppModel
         $this->db = FatApp::getDb();
         $this->objMainTableRecord->setSensitiveFields(
             array(
-            'commsetting_is_mandatory'
+                'commsetting_is_mandatory'
             )
         );
     }
@@ -36,15 +36,27 @@ class Commission extends MyAppModel
 
     public function addUpdateData($data)
     {
+        $srch = self::getSearchObject();
+        $srch->addCondition('commsetting_product_id', '=', $data['commsetting_product_id']);
+        $srch->addCondition('commsetting_user_id', '=', $data['commsetting_user_id']);
+        $srch->addCondition('commsetting_prodcat_id', '=', $data['commsetting_prodcat_id']);
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        $arrListing = $this->db->fetchAll($rs);
+        if (!empty($arrListing)) {
+            $this->error = Labels::getLabel('ERR_ALREADY_ADDED');
+            return false;
+        }
+
         unset($data['commsetting_id']);
 
         $assignValues = array(
-        'commsetting_product_id' => $data['commsetting_product_id'],
-        'commsetting_user_id' => $data['commsetting_user_id'],
-        'commsetting_prodcat_id' => $data['commsetting_prodcat_id'],
-        'commsetting_fees' => $data['commsetting_fees'],
-        'commsetting_by_package' => isset($data['commsetting_by_package']) ? $data['commsetting_by_package'] : 0,
-        'commsetting_deleted' => 0,
+            'commsetting_product_id' => $data['commsetting_product_id'],
+            'commsetting_user_id' => $data['commsetting_user_id'],
+            'commsetting_prodcat_id' => $data['commsetting_prodcat_id'],
+            'commsetting_fees' => $data['commsetting_fees'],
+            'commsetting_by_package' => isset($data['commsetting_by_package']) ? $data['commsetting_by_package'] : 0,
+            'commsetting_deleted' => 0,
         );
 
         if ($this->mainTableRecordId > 0) {
@@ -62,14 +74,14 @@ class Commission extends MyAppModel
     {
         $data = Commission::getAttributesById($commissionId);
         $assignValues = array(
-        'csh_commsetting_id' => $data['commsetting_id'],
-        'csh_commsetting_product_id' => $data['commsetting_product_id'],
-        'csh_commsetting_user_id' => $data['commsetting_user_id'],
-        'csh_commsetting_prodcat_id' => $data['commsetting_prodcat_id'],
-        'csh_commsetting_fees' => $data['commsetting_fees'],
-        'csh_commsetting_is_mandatory' => $data['commsetting_is_mandatory'],
-        'csh_commsetting_deleted' => $data['commsetting_deleted'],
-        'csh_added_on' => date('Y-m-d H:i:s'),
+            'csh_commsetting_id' => $data['commsetting_id'],
+            'csh_commsetting_product_id' => $data['commsetting_product_id'],
+            'csh_commsetting_user_id' => $data['commsetting_user_id'],
+            'csh_commsetting_prodcat_id' => $data['commsetting_prodcat_id'],
+            'csh_commsetting_fees' => $data['commsetting_fees'],
+            'csh_commsetting_is_mandatory' => $data['commsetting_is_mandatory'],
+            'csh_commsetting_deleted' => $data['commsetting_deleted'],
+            'csh_added_on' => date('Y-m-d H:i:s'),
         );
         if ($this->db->insertFromArray(static::DB_TBL_HISTORY, $assignValues)) {
             return true;
@@ -128,10 +140,10 @@ class Commission extends MyAppModel
 
         $srch->addMultipleFields(
             array(
-            'tcsh.*',
-            'IFNULL(tp_l.product_name,tp.product_identifier)as product_name',
-            'IFNULL(tpc_l.prodcat_name,tpc.prodcat_identifier)as prodcat_name',
-            'CONCAT(tu.user_name," [",tuc.credential_username,"]") as vendor'
+                'tcsh.*',
+                'IFNULL(tp_l.product_name,tp.product_identifier)as product_name',
+                'IFNULL(tpc_l.prodcat_name,tpc.prodcat_identifier)as prodcat_name',
+                'CONCAT(tu.user_name," [",tuc.credential_username,"]") as vendor'
             )
         );
 

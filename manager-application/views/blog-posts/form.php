@@ -1,10 +1,20 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
+
+$frm->setFormTagAttribute('id', 'frmBlogPostJs');
+$frm->setFormTagAttribute('onsubmit', 'saveRecord($("#frmBlogPostJs"));');
+
+$fld = $frm->getField('post_author_name');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld = $frm->getField('post_published');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
 $fld = $frm->getField('categories');
 $fld->addFieldTagAttribute('class', 'tagifyJs');
 
-$fld = $frm->getField('post_identifier');
+$fld = $frm->getField('post_title');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','brand_id');
 getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
 
@@ -12,6 +22,7 @@ $fld = $frm->getField('post_id');
 $fld->setFieldTagAttribute('id', "post_id");
 
 $fld = $frm->getField('urlrewrite_custom');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld->setFieldTagAttribute('id', "urlrewrite_custom");
 $fld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Blog', 'postDetail', array($recordId), CONF_WEBROOT_FRONT_URL) . '</span>';
 $fld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value)");
@@ -20,7 +31,7 @@ $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'postImages(' . $recordId . ')',
+            'onclick' => 'mediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),

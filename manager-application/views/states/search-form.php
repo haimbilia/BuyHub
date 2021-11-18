@@ -3,7 +3,7 @@
 $frmSearch->setFormTagAttribute('name', 'frmRecordSearch');
 $frmSearch->setFormTagAttribute('onsubmit', 'searchRecords(this); return(false);');
 $frmSearch->setFormTagAttribute('id', 'frmRecordSearch');
-$frmSearch->setFormTagAttribute('class', 'form');
+$frmSearch->setFormTagAttribute('class', 'form form-search');
 
 $keyWordFld = $frmSearch->getField('keyword');
 $keyWordFld->addFieldtagAttribute('class', 'form-control');
@@ -14,11 +14,6 @@ $sortByFld->setFieldTagAttribute('id', 'sortBy');
 
 $sortOrderFld = $frmSearch->getField('sortOrder');
 $sortOrderFld->setFieldTagAttribute('id', 'sortOrder');
-
-/* Extra Field */
-$fld = $frmSearch->getField('country');
-$fld->addFieldtagAttribute('class', 'form-control');
-/* Extra Field */
 
 echo $frmSearch->getFormTag();
 HtmlHelper::renderHiddenFields($frmSearch);

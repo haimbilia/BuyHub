@@ -97,7 +97,7 @@ class SubscriptionPlanReportController extends ListingBaseController
                 $arr = [];
                 foreach ($fields as $key => $val) {
                     switch ($key) {
-                        case 'listserial':
+                        case 'listSerial':
                             $arr[] = $count;
                             break;
                         case 'spplan_price':
@@ -153,7 +153,7 @@ class SubscriptionPlanReportController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'spackage_name', applicationConstants::SORT_ASC);
         }
-        $fld = $frm->addTextBox(Labels::getLabel("LBL_Keyword", $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel("FRM_KEYWORD", $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);

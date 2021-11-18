@@ -27,13 +27,14 @@ class HtmlHelper
             'statusButtons' => false,
             'columnButtons' => false,
             'performBulkAction' => false,
+            'bulkActionFormHiddenFields' => ['status' => ''],
             'formAction' => 'toggleBulkStatuses',
             'siteLangId' => $langId,
             'otherButtons' => [],
             'searchFrmTemplate' => '_partial/listing/listing-search-form.php',
             'searchListingPage' => FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php'
         ];
-       
+
         if (null == $obj) {
             return $actionBtnArr;
         }
@@ -138,11 +139,10 @@ class HtmlHelper
         $frm->addHtml('', 'btn_submit', self::addButtonHtml($lbl, 'submit', 'btn_submit'));
     }
 
-    public static function addClearButton(Form &$frm, string $lbl = '')
+    public static function addClearButton(Form &$frm, string $btnClass = 'btn btn-link', string $lbl = '')
     {
         $lbl = empty($lbl) ? Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()) : $lbl;
-        // $frm->addHtml('', 'btn_clear', '<a class="btn btn-link" onClick="clearSearch()">' . $lbl . '</a>');
-        $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', 'btn btn-link', 'clearSearch()'));
+        $frm->addHtml('', 'btn_clear', self::addButtonHtml($lbl, 'button', 'btn_clear', $btnClass, 'clearSearch()'));
     }
 
     public static function renderHiddenFields(Form $frmSearch)
@@ -389,4 +389,84 @@ class HtmlHelper
         $str .= '</div>';
         return  $str;
     }
+    /**
+     * getFieldHtml
+     *
+     * @param  mixed $frm
+     * @param  mixed $fldName
+     * @param  mixed $col
+     * @param  mixed $setFieldTagAttrs 
+     * @param  mixed $labelInfoText 
+     * @param  mixed $labelArr = [
+     *        'attr' => [
+     *            'href' => 'javascript:void(0)',
+     *            'onclick' => 'FN()',
+     *            'title' => <TITLE>
+     *        ],
+     *        'label' => <LABEL>
+     *    ]
+     * @return void
+     */
+    public static function getFieldHtml($frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [], string $labelInfoText = '', array $labelExtraArr = [])
+    {
+
+        $fld = $frm->getField($fldName);
+        if(null == $fld){
+            return;
+        }
+
+        foreach ($setFieldTagAttrs as $attrkey => $attrVal) {
+            $fld->setfieldTagAttribute($attrkey, $attrVal);
+        }
+        $caption = $fld->getCaption();
+
+        switch ($fld->fldType) {
+            case 'radio':
+                $fld->addOptionListTagAttribute('class', 'list-radio');
+                HtmlHelper::configureSwitchForRadio($fld);
+                break;
+        }
+
+        $mainDiv = new HtmlElement("div", [
+            'class' => 'col-md-' . $col,
+        ]);
+
+        $div1 =  $div = $mainDiv->appendElement('div', [
+            'class' => 'form-group',
+        ]);
+
+        if (!empty($labelExtraArr)) {
+            $div =  $div->appendElement('div', [
+                'class' => 'd-flex justify-content-between',
+            ]);
+        }
+
+        $label = $div->appendElement('label', [
+            'class' => 'label',
+        ], $caption);
+
+        if ($fld->requirements()->isRequired()) {
+            $label->appendElement('span', [
+                'class' => 'spn_must_field',
+            ], '*');
+        }
+
+        if (!empty($labelInfoText)) {
+            $label->appendElement('i', [
+                'class' => 'fas fa-exclamation-circle',
+                'data-toggle' => 'tooltip',
+                'data-original-title' => $labelInfoText,
+            ]);
+        }
+
+        if (isset($labelExtraArr['attr']) && isset($labelExtraArr['label'])) {
+            $div->appendElement('a', $labelExtraArr['attr'], $labelExtraArr['label']);
+        }
+
+        $div1->appendElement('plaintext', [], $fld->getHtml(), true);
+
+        return $mainDiv->getHtml();
+    }
+
+
 }

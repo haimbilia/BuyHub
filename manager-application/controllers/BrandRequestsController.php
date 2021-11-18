@@ -9,7 +9,6 @@ class BrandRequestsController extends ListingBaseController {
         parent::__construct($action);
         $this->objPrivilege->canEditBrandRequests();
         $this->rewriteUrl = Brand::REWRITE_URL_PREFIX;
-        $this->checkMediaExist = true;
     }
 
     public function index() {
@@ -20,27 +19,35 @@ class BrandRequestsController extends ListingBaseController {
         $this->setModel();
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('actionItemsData', HtmlHelper::getDefaultActionItems($fields, $this->modelObj));
+        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
+            'newRecordBtn' => false
+        ]);
+        $this->set('actionItemsData', $actionItemsData);
         $this->set('canEdit', $this->objPrivilege->canEditBrandRequests($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $this->_template->addCss(['css/cropper.css', 'css/select2.min.css']);
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'brand-requests/page-js/index.js']);
+        $this->_template->addJs([
+            'js/cropper.js',
+            'js/cropper-main.js',
+            'js/select2.js',
+            'brand-requests/page-js/index.js'
+        ]);
         $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function getSearchForm($fields = []) {
         $frm = new Form('frmRecordSearch');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'brand_requested_on');
         }
-        $frm->addSelectBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId), 'user_id', [], '',
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', [], '',
                 [
                     'class' => 'form-control',
                     'id' => 'searchFrmUserIdJs',
-                    'placeholder' => Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId)
+                    'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
                 ]
         );
         HtmlHelper::addSearchButton($frm);
@@ -128,7 +135,8 @@ class BrandRequestsController extends ListingBaseController {
         $this->objPrivilege->canEditBrandRequests();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_PRODUCT_BRAND_REQUEST_SETUP', $this->siteLangId));
+        $this->checkMediaExist = true;
     }
 
     public function form() {
@@ -187,29 +195,16 @@ class BrandRequestsController extends ListingBaseController {
         } else {
             $brand->rewriteUrl($post['urlrewrite_custom']);
         }
-        /* ] */
-
-        $newTabLangId = 0;
-        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
-        if (0 < count($languages)) {
-            foreach ($languages as $langId => $langName) {
-                if (!Brand::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        }
+        /* ] */ 
         Product::updateMinPrices(0, 0, $recordId);
         $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $this->set('recordId', $recordId); 
         $this->_template->render(false, false, 'json-success.php');
     }
 
     private function getForm($recordId = 0) {
         $this->objPrivilege->canEditBrands();
         $recordId = FatUtility::int($recordId);
-
         $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
         $frm->addHiddenField('', 'brand_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('FRM_Brand_Name', $this->siteLangId), 'brand_name');
@@ -307,7 +302,7 @@ class BrandRequestsController extends ListingBaseController {
         $this->objPrivilege->canEditBrands();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
         }
         $brand_id = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, 0);
         $languages = Language::getAllNames();
@@ -325,7 +320,7 @@ class BrandRequestsController extends ListingBaseController {
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_File', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();

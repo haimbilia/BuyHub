@@ -192,8 +192,11 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
         if ('function' == typeof callbackOnUnSelect) {
             callbackOnUnSelect(e);
         }
-    }).data('select2').$container.addClass("select2-width");
-
+    });
+    
+    if (0 < ele.closest('.advancedSearchJs').length) {
+        ele.data('select2').$container.addClass("w-100");
+    }
 
     $("." + $.ykmodal.element).removeAttr('tabindex');
 };

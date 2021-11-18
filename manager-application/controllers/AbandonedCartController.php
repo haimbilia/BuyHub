@@ -20,8 +20,8 @@ class AbandonedCartController extends ListingBaseController
         $frm = new Form('frmAbandonedCartSearch');
         $frm->addTextBox(Labels::getLabel('LBL_User', $this->siteLangId), 'user_name');
         $frm->addTextBox(Labels::getLabel('LBL_Seller_Product', $this->siteLangId), 'seller_product');
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly' ));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly' ));
+        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('LBL_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender' ));
+        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('LBL_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender' ));
         $frm->addHiddenField('', 'abandonedcart_user_id');
         $frm->addHiddenField('', 'abandonedcart_selprod_id');
         $frm->addHiddenField('', 'abandonedcart_action');

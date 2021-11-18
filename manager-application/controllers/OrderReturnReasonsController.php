@@ -33,6 +33,18 @@ class OrderReturnReasonsController extends ListingBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $languages = Language::getAllNames();
+        if (1 === count($languages)) {
+            $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
+            $actionItemsData['newRecordBtnAttrs'] = [
+                'attr' => [
+                    'href' => "javascript:void(0)",
+                    'onclick' => "addNew(true)",
+                    'title' => $btnTitle,
+                ],
+                'label' => $btnTitle,   
+            ];
+        }
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
@@ -117,6 +129,10 @@ class OrderReturnReasonsController extends ListingBaseController
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm();
+        $languages = Language::getAllNames();
+        if (1 === count($languages)) {
+            $frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ', true)');
+        }
 
         if (0 < $recordId) {
             $data = OrderReturnReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('orreason_id', 'orreason_title'), true);

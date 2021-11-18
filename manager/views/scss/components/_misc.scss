@@ -2046,6 +2046,7 @@ strong {
 .help-btn {
     box-shadow: 0 .1rem 1rem .25rem rgba(0, 0, 0, .05);
     position: fixed;
+    z-index: 9;
     #{$end-direction}: 0;
     top: 50%;
     transform: rotate( 90deg);
@@ -2269,3 +2270,6 @@ strong {
         }
     }
 }
+ 
+
+ 

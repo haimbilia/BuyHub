@@ -9,5 +9,5 @@ $otherButtons = [
      
 ]; 
 
-$formTitle = Labels::getLabel('LBL_Seller_Approval_Request', $siteLangId);
+$formTitle = Labels::getLabel('LBL_SELLER_APPROVAL_REQUEST', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

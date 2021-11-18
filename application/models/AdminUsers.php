@@ -5,6 +5,8 @@ class AdminUsers extends MyAppModel
     public const DB_TBL = 'tbl_admin';
     public const DB_TBL_PREFIX = 'admin_';
 
+    public const DB_TBL_PERMISSIONS = 'tbl_admin_permissions';
+
     public function __construct($adminId = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $adminId);
@@ -13,7 +15,7 @@ class AdminUsers extends MyAppModel
 
     public static function getSearchObject($isActive = true)
     {
-        $srch = new SearchBase(static::DB_TBL);
+        $srch = new SearchBase(static::DB_TBL, 'adu');
         if ($isActive == true) {
             $srch->addCondition(static::DB_TBL_PREFIX . 'active', '=', 1);
         }
@@ -22,7 +24,7 @@ class AdminUsers extends MyAppModel
 
     public static function getUserPermissions($admperm_admin_id = 0)
     {
-        $srch = new SearchBase('tbl_admin_permissions');
+        $srch = new SearchBase(self::DB_TBL_PERMISSIONS);
         $srch->addCondition('admperm_admin_id', '=', $admperm_admin_id);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'admperm_section_id');
@@ -39,7 +41,7 @@ class AdminUsers extends MyAppModel
             foreach ($permissionModules as $key => $val) {
                 $assignValues['admperm_section_id'] = $key;
                 if (!FatApp::getDb()->insertFromArray(
-                    'tbl_admin_permissions',
+                    self::DB_TBL_PERMISSIONS,
                     $assignValues,
                     false,
                     array(),
@@ -50,7 +52,7 @@ class AdminUsers extends MyAppModel
             }
         } else {
             if (!FatApp::getDb()->insertFromArray(
-                'tbl_admin_permissions',
+                self::DB_TBL_PERMISSIONS,
                 $assignValues,
                 false,
                 array(),

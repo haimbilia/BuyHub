@@ -40,13 +40,17 @@
     flex-direction: column;
     .page-title {
         display: flex;
-        // flex-direction: column;
+        flex-direction: column;
         h1 {
             font-size: 1.2rem;
             color: #000;
         }
         &-sub {
             font-size: 0.85rem;
+            // white-space: nowrap;
+            // display: block;
+            // overflow: hidden;
+            // text-overflow: ellipsis;
         }
     }
     &-inner {
@@ -54,6 +58,9 @@
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
+        @include media-breakpoint-down(md) {
+            padding: 1rem 0;
+        }
     }
     &-toolbar {
         margin-#{$start-direction}: auto;
@@ -66,11 +73,22 @@
         margin: 0;
         padding: 10px 2rem;
         &.alert-solid-warning {
-            background: lighten($warning-color, 30);
-            color: darken($warning-color, 30);
+            background: lighten($warning-color, 25);
+            color: darken($warning-color, 20);
+        }
+        &.alert-solid-success {
+            // background: lighten($success-color, 10);  
+            // color: darken($success-color, 30);  
         }
         .alert-icon i {
             font-size: 1.4rem;
+            color: currentColor !important;
+        }
+        .alert-close i {
+            color: currentColor !important;
+        }
+        .alert-text {
+            color: currentColor !important;
         }
     }
 }
@@ -476,16 +494,20 @@
         left: 0;
         right: 0;
         z-index: 99;
-        opacity: 0;
-        left: -100%;
-        visibility: hidden;
+        transition: transform 0.3s ease-out;
+        transform: translateX(100%);
+    }
+    &-close {
+        @include media-breakpoint-up(lg) {
+            display: none;
+        }
     }
     &--on & {
-        opacity: 1;
-        visibility: visible;
-        left: 0;
+        transform: translateX(0);
     }
-}.float-btn {
+}
+
+.float-btn {
     will-change: transform, opacity;
     border: none;
     box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
@@ -495,14 +517,16 @@
     border-radius: 50%;
     width: 45px;
     height: 45px;
-    bottom: 0;
     position: fixed;
     margin: 1em;
-    z-index: 998;
-    #{$end-direction}:1.5rem;
-    bottom:6rem;
+    z-index: 9;
+    #{$end-direction}:0.5rem;
+    bottom: 6rem;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all .1s ease-out;
+    @include media-breakpoint-up(lg) {
+        display: none;
+    }
 }

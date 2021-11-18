@@ -26,22 +26,46 @@ class CurrencyManagementController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_CURRENCIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $currencyPlugins = Plugin::getNamesByType(Plugin::TYPE_CURRENCY_CONVERTER, $this->siteLangId);
         $currency = new Currency();
+        $currencyConverter = $currency->getCurrencyConverterApi();
 
-        $this->set('currencyPlugins', $currencyPlugins);
-        $this->set('currencyConverter', $currency->getCurrencyConverterApi());
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['performBulkAction'] = true;
+
+        if (!empty($currencyPlugins) && 0 < count($currencyPlugins) && false !== $currencyConverter) {
+            $actionItemsData['otherButtons'] = [
+                [
+                    'attr' => [
+                        'href' => 'javascript:void(0)',
+                        'class' => 'btn btn-outline-brand btn-icon',
+                        'onclick' => "updateCurrencyRates('" . $currencyConverter . "')",
+                        'title' => Labels::getLabel('LBL_SYNC_CURRENCY_VALUE', $this->siteLangId)
+                    ],
+                    'label' => '<svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#sync-currency">
+                                    </use>
+                                </svg><span>' . Labels::getLabel('BTN_SYNC', $this->siteLangId) . '</span>',
+                ]
+            ];
+        }
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('canEdit', $this->objPrivilege->canEditCurrencyManagement($this->admin_id, true));
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
-        $this->_template->addJs('js/jquery.tablednd.js');
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_CURRENCY', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->render();
+        $this->_template->addJs(['js/jquery.tablednd.js', 'currency-management/page-js/index.js']);
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
@@ -197,22 +221,22 @@ class CurrencyManagementController extends ListingBaseController
     {
         $frm = new Form('frmCurrency');
         $frm->addHiddenField('', 'currency_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->siteLangId), 'currency_name');
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_code', $this->siteLangId), 'currency_code');
-        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Left', $this->siteLangId), 'currency_symbol_left');
-        $frm->addTextbox(Labels::getLabel('LBL_Currency_Symbol_Right', $this->siteLangId), 'currency_symbol_right');
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Currency_Conversion_Value', $this->siteLangId), 'currency_value');
+        $frm->addRequiredField(Labels::getLabel('FRM_Currency_Name', $this->siteLangId), 'currency_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_Currency_code', $this->siteLangId), 'currency_code');
+        $frm->addTextbox(Labels::getLabel('FRM_Currency_Symbol_Left', $this->siteLangId), 'currency_symbol_left');
+        $frm->addTextbox(Labels::getLabel('FRM_Currency_Symbol_Right', $this->siteLangId), 'currency_symbol_right');
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_Currency_Conversion_Value', $this->siteLangId), 'currency_value');
         if ($defaultCurrency) {
-            $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_This_is_your_default_currency', $this->siteLangId) . '</small>';
+            $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_This_is_your_default_currency', $this->siteLangId) . '</small>';
         }
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'currency_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_Status', $this->siteLangId), 'currency_active', $activeInactiveArr, '', array(), '');
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -222,8 +246,8 @@ class CurrencyManagementController extends ListingBaseController
     {
         $frm = new Form('frmCurrencyLang');
         $frm->addHiddenField('', 'currency_id', $currencyId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Currency_Name', $this->siteLangId), 'currency_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_Currency_Name', $this->siteLangId), 'currency_name');
         return $frm;
     }
 
@@ -295,7 +319,8 @@ class CurrencyManagementController extends ListingBaseController
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'currency_code' => Labels::getLabel('LBL_Currency', $this->siteLangId),
+            'currency_name' => Labels::getLabel('LBL_CURRENCY_NAME', $this->siteLangId),
+            'currency_code' => Labels::getLabel('LBL_CURRENCY_CODE', $this->siteLangId),
             'currency_symbol_left' => Labels::getLabel('LBL_Symbol_Left', $this->siteLangId),
             'currency_symbol_right' => Labels::getLabel('LBL_Symbol_Right', $this->siteLangId),
             'currency_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
@@ -312,6 +337,7 @@ class CurrencyManagementController extends ListingBaseController
             'dragdrop',
             'select_all',
             'listSerial',
+            'currency_name',
             'currency_code',
             'currency_symbol_left',
             'currency_symbol_right',
@@ -333,12 +359,13 @@ class CurrencyManagementController extends ListingBaseController
     public function getBreadcrumbNodes($action)
     {
         parent::getBreadcrumbNodes($action);
-
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CURRENCIES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => Labels::getLabel('LBL_CURRENCY', $this->siteLangId)]
+                    ['title' => $pageTitle]
                 ];
         }
         return $this->nodes;

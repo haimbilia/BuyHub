@@ -17,18 +17,18 @@
 }
 
 .footer-action {
-    $self: '.footer-action';
-    position: sticky;
+    $self: '.footer-action';  
+    position: sticky; 
     bottom: 0;
     left: 0;
     right: 0;
-    background: $brand-color;
-    color: $brand-color-inverse;
+    background:  darken($brand-color, 10);   
+    color: $brand-color-inverse; 
     z-index: 99;
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
-    display: none;
+    display: none; 
     @include media-breakpoint-down(md) {
         display: flex;
     }

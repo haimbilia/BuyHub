@@ -4,8 +4,12 @@
             <input id="quickSearch" type="search" class="form-control" placeholder="<?php echo Labels::getLabel('LBL_GO_TO..', $siteLangId); ?>">
         </div>
         <div class="quick-search__wrapper">
-            <ul class="list list--search-result navMenuItems" style="display: none;">
-                <?php if ($objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+            <ul class="list list--search-result navMenuItems">
+                <?php if (
+                    $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
+                ) { ?>
                     <li>
                         <h6 class="title"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></h6>
                         <?php if ($objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true)) { ?>
@@ -19,11 +23,255 @@
                                 <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('Brands'); ?>"><?php echo Labels::getLabel('NAV_BRANDS', $siteLangId); ?></a>
                             </div>
                         <?php } ?>
+                        <?php if ($objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('Shops'); ?>"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('ProductCategories'); ?>"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
                     </li>
                 <?php } ?>
                 <?php if (
-                    $objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true) || 
-                    $objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true) ||                    
+                    $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
+                ) { ?>
+                    <li>
+                        <h6 class="title"><?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?></h6>
+                        <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('brandRequests'); ?>"><?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('ProductCategoriesRequest'); ?>"><?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('sellerApprovalRequests'); ?>"><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                    </li>
+                <?php } ?>
+                <?php if (
+                    $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
+                ) { ?>
+                    <li>
+                        <h6 class="title"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></h6>
+                        <?php if ($objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('OrderCancelReasons'); ?>"><?php echo Labels::getLabel('NAV_ORDER_CANCEL_REASONS', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('OrderReturnReasons'); ?>"><?php echo Labels::getLabel('NAV_ORDER_RETURN_REASONS', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('OrderStatus'); ?>"><?php echo Labels::getLabel('NAV_ORDER_STATUSES', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                    </li>
+                <?php } ?>
+                <?php if (
+                    $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)
+                ) { ?>
+                    <li>
+                        <h6 class="title"><?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></h6>
+                        <?php if ($objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('Users'); ?>"><?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></a>
+                            </div>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('Rewards'); ?>"><?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?></a>
+                            </div>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('Transactions'); ?>"><?php echo Labels::getLabel('NAV_TRANSACTIONS', $siteLangId); ?></a>
+                            </div>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('DeletedUsers'); ?>"><?php echo Labels::getLabel('NAV_DELETED_USERS', $siteLangId); ?></a>
+                            </div>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('UsersAddresses'); ?>"><?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                    </li>
+                <?php } ?>
+                <?php if (
+                    $objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)
+                ) { ?>
+                    <li>
+                        <h6 class="title"><?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?></h6>
+                        <?php if ($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('SpecialPrice'); ?>"><?php echo Labels::getLabel('NAV_SPECIAL_PRICE', $siteLangId); ?></a>
+                            </div>
+
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('VolumeDiscount'); ?>"><?php echo Labels::getLabel('NAV_VOLUME_DISCOUNT', $siteLangId); ?></a>
+                            </div>
+
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('RelatedProducts'); ?>"><?php echo Labels::getLabel('NAV_RELATED_PRODUCTS', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('promotions'); ?>"><?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('RewardsOnPurchase'); ?>"><?php echo Labels::getLabel('NAV_REWARDS_ON_PURCHASE', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('SmartRecomendedWeightages'); ?>"><?php echo Labels::getLabel('NAV_MANAGE_WEIGHTAGES', $siteLangId); ?></a>
+                            </div>
+                            <div class="search-result">
+                                <span class="search-result__icon">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('RecomendedTagProducts'); ?>"><?php echo Labels::getLabel('NAV_RECOMMENDED_TAG_PRODUCTS_WEIGHTAGES', $siteLangId); ?></a>
+                            </div>
+                        <?php } ?>
+                    </li>
+                <?php } ?>
+
+                <?php if (
+                    $objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
@@ -75,48 +323,7 @@
                         <?php } ?>
                     </li>
                 <?php } ?>
-                <?php if (
-                    $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
-                ) { ?>
-                    <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></h6>
-                        <?php if ($objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                            <div class="search-result">
-                                <span class="search-result__icon">
-                                    <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
-                                        </use>
-                                    </svg>
-                                </span>
-                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('OrderCancelReasons'); ?>"><?php echo Labels::getLabel('NAV_ORDER_CANCEL_REASONS', $siteLangId); ?></a>
-                            </div>
-                        <?php } ?>
-                        <?php if ($objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                            <div class="search-result">
-                                <span class="search-result__icon">
-                                    <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
-                                        </use>
-                                    </svg>
-                                </span>
-                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('OrderReturnReasons'); ?>"><?php echo Labels::getLabel('NAV_ORDER_RETURN_REASONS', $siteLangId); ?></a>
-                            </div>
-                        <?php } ?>
-                        <?php if ($objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                            <div class="search-result">
-                                <span class="search-result__icon">
-                                    <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
-                                        </use>
-                                    </svg>
-                                </span>
-                                <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('OrderStatus'); ?>"><?php echo Labels::getLabel('NAV_ORDER_STATUSES', $siteLangId); ?></a>
-                            </div>
-                        <?php } ?>
-                    </li>
-                <?php } ?>
+
                 <?php if (
                     $objPrivilege->canViewImportExport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>

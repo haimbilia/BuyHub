@@ -67,7 +67,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $row[$key] . $htm, true);
                 break;
             case 'plugin_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['plugin_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['plugin_id'] . ', ' . ((int) !$row[$key]) . ', \'reloadList()\')' : 'return false;';
                 if (!empty($otherPluginTypes) && $canEdit) {
                     if (empty($msg)) {
                         $msg = Labels::getLabel("MSG_TURNING_ON_{PLUGIN-TYPE}_WILL_TURN_OFF_{OTHER-PLUGIN-TYPE}_PLUGINS._DO_YOU_WANT_TO_CONTINUE_?", $siteLangId);
@@ -103,7 +103,7 @@ foreach ($arrListing as $sn => $row) {
                                 'title' => Labels::getLabel('LBL_SETTINGS', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="20" height="20">
-                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-system-setting">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-setting">
                                             </use>
                                         </svg>'
                         ],
@@ -158,7 +158,7 @@ $frm->addHiddenField('', 'status'); ?>
     </div>
 </div>
 <div class="card-body">
-    <div class="table-responsive listingTableJs">
+    <div class="table-responsive table-scrollable js-scrollable listingTableJs">
         <?php
         echo $frm->getFormTag();
         echo $frm->getFieldHtml('plugin_type');

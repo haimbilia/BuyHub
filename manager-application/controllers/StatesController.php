@@ -52,13 +52,13 @@ class StatesController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'state_identifier');
         }
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId, true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'country', $countriesArr, '', [], Labels::getLabel('LBL_SELECT_COUNTRY', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'country', $countriesArr, '', [], Labels::getLabel('FRM_SELECT_COUNTRY', $this->siteLangId));
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -327,7 +327,8 @@ class StatesController extends ListingBaseController
     {
         parent::getBreadcrumbNodes($action);
 
-        $pageTitle = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId, 'plang_title');
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {
             case 'index':

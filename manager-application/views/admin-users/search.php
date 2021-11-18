@@ -1,42 +1,38 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$arr_flds = array(
-        'select_all' => Labels::getLabel('LBL_Select_all', $siteLangId),
-        'listserial' => Labels::getLabel('LBL_#', $siteLangId),
-        'admin_name' => Labels::getLabel('LBL_Full_Name', $siteLangId),
-        'admin_username' => Labels::getLabel('LBL_Username', $siteLangId),
-        'admin_email' => Labels::getLabel('LBL_Email', $siteLangId),
-        'admin_active' => Labels::getLabel('LBL_Status', $siteLangId),
-        'action' => '',
-    );
-
-if (!$canEdit) {
-    unset($arr_flds['select_all'], $arr_flds['action']);
+$printData = false;
+if (!isset($tbody)) {
+    $printData = true;
+    $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive'));
-$th = $tbl->appendElement('thead')->appendElement('tr');
-foreach ($arr_flds as $key => $val) {
-    if ('select_all' == $key) {
-        $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
-    } else {
-        $e = $th->appendElement('th', array(), $val);
-    }
-}
-
-$sr_no = $recordCount;
+$serialNo = ($page - 1) * $pageSize + 1;
 foreach ($arrListing as $sn => $row) {
-    $tr = $tbl->appendElement('tr');
-
-    foreach ($arr_flds as $key => $val) {
-        $td = $tr->appendElement('td');
+    $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
+    foreach ($fields as $key => $val) {
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+        $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="admin_ids[]" value=' . $row['admin_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['admin_id'] . '><i class="input-helper"></i></label>', true);
                 break;
-            case 'listserial':
-                $td->appendElement('plaintext', array(), $sr_no);
+            case 'listSerial':
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'action':
+            case 'admin_active':
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['admin_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+                $statusClass = ($canEdit) ? '' : 'disabled';
+                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
+
+                $htm = '<span class="switch switch-sm switch-icon">
+                                    <label>
+                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['admin_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                                        <span class="input-helper"></span>
+                                    </label>
+                                </span>';
+                $td->appendElement('plaintext', $tdAttr, $htm, true);
+                break;
+            case 'action1':
                 if ($canEdit) {
                     $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "editAdminUserForm(" . $row['admin_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
 
@@ -47,39 +43,67 @@ foreach ($arrListing as $sn => $row) {
                     }
                 }
                 break;
-            case 'admin_active':
-                if ($row['admin_id'] > 1) {
-                    $active = "active";
-                    if (!$row['admin_active']) {
-                        $active = '';
+            case 'action':
+                $data = [
+                    'siteLangId' => $siteLangId,
+                    'recordId' => $row['admin_id']
+                ];
+                if ($canEdit) {
+                    $data['editButton'] = [];
+
+                    $data['otherButtons'] = [
+                        [
+                            'attr' => [
+                                'href' => 'javascript:void(0)',
+                                'onclick' => 'changeUserPassword(' . $row['admin_id'] . ')',
+                                'title' => Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId),
+                            ],
+                            'label' => '<svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#password">
+                                                </use>
+                                            </svg>',
+                        ]
+                    ];
+
+
+                    if ($row['admin_id'] > 1 && $row['admin_id'] != $adminLoggedInId) {
+                        $data['otherButtons'][] = [
+                            'attr' => [
+                                'href' => UrlHelper::generateUrl('AdminPermissions', 'list', [$row['admin_id']]),
+                                'title' => Labels::getLabel('LBL_PERMISSIONS', $siteLangId),
+                            ],
+                            'label' => '<svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#user-permission">
+                                                </use>
+                                            </svg>',
+                        ];
                     }
-                    $statucAct = ($canEdit === true) ? 'toggleStatus(this)' : '';
-                    $str = '<label id="' . $row['admin_id'] . '" class="statustab ' . $active . '" onclick="' . $statucAct . '">
-                          <span data-off="' . Labels::getLabel('LBL_Active', $siteLangId) . '" data-on="' . Labels::getLabel('LBL_Inactive', $siteLangId) . '" class="switch-labels"></span>
-                          <span class="switch-handles"></span>
-                        </label>';
-                    $td->appendElement('plaintext', array(), $str, true);
                 }
+                $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
+            
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }
-    $sr_no--;
+    $serialNo++;
 }
+
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds),
-    'class' => 'noRecordFoundJs'), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
+    $tbody->appendElement('tr')->appendElement(
+        'td',
+        array(
+            'colspan' => count($fields),
+            'class' => 'noRecordFoundJs'
+        ),
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
+    );
 }
 
-$frm = new Form('frmAdmUsersListing', array('id' => 'frmAdmUsersListing'));
-$frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');
-$frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
-$frm->setFormTagAttribute('action', UrlHelper::generateUrl('AdminUsers', 'toggleBulkStatuses'));
-$frm->addHiddenField('', 'status');
-
-echo $frm->getFormTag();
-echo $frm->getFieldHtml('status');
-echo $tbl->getHtml(); ?>
-</form>
+if ($printData) {
+    echo $tbody->getHtml();
+}
