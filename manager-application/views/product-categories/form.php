@@ -46,7 +46,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 }
                 if (!confirm(addNewRatingType)) {
                     return;
-                }              
+                }               
             } 
         }
 

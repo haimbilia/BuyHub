@@ -2,6 +2,9 @@
 
 HtmlHelper::formatFormFields($frm);
 
+$frm->setFormTagAttribute('id', 'frmBlogPostJs');
+$frm->setFormTagAttribute('onsubmit', 'saveRecord($("#frmBlogPostJs"));');
+
 $fld = $frm->getField('post_author_name');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('post_published');

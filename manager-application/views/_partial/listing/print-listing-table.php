@@ -2,6 +2,7 @@
 
 $formFields = isset($formFields) ? $formFields : [];
 $performBulkAction = $performBulkAction ?? false;
+$bulkActionFormHiddenFields = $bulkActionFormHiddenFields ?? ['status' => ''];
 
 if (false === $performBulkAction) {
     echo $tbl->getHtml();
@@ -13,10 +14,12 @@ if (false === $performBulkAction) {
         'action' => UrlHelper::generateUrl(LibHelper::getControllerName(), $formAction),
     ];
     $frm = new Form('listingForm', $attr);
-    $frm->addHiddenField('', 'status');
-
     echo $frm->getFormTag();
-    echo $frm->getFieldHtml('status');
+
+    foreach ($bulkActionFormHiddenFields as $fldName => $fldValue) {
+        $frm->addHiddenField('', $fldName, $fldValue);
+        echo $frm->getFieldHtml($fldName);
+    }
     echo $tbl->getHtml(); 
     echo '</form>';
 } 

@@ -22,7 +22,7 @@
         <?php /* if( isset($arrListing) && count($arrListing) ){ */
         $arr_flds = array(
             'dragdrop' => '',
-            'listserial' => Labels::getLabel('LBL_#', $siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
             'nlink_identifier' => Labels::getLabel('LBL_caption', $siteLangId),
             'action' => '',
         );
@@ -51,7 +51,7 @@
                                                                 </use>
                                                             </svg>', true);
                         break;
-                    case 'listserial':
+                    case 'listSerial':
                         $td->appendElement('plaintext', array(), $sr_no);
                         break;
                     case 'nlink_identifier':

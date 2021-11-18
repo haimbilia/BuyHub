@@ -1,8 +1,9 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
-if(!isset($product)){
-    $product = SellerProduct::getSelProdDataById($selProdId,true,['selprod_id','selprod_product_id','product_updated_on','selprod_title','product_name','product_identifier']);
-}
+
+// if(!isset($product)){
+    $product = SellerProduct::getSelProdDataById($selProdId,$siteLangId,true,['selprod_id','selprod_product_id','product_updated_on','selprod_title','product_name','product_identifier']);    
+// }
 
 $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
 //$prodUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND);

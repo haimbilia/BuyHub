@@ -1,7 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($langFrm);
-$langFrm->setFormTagAttribute('id', 'frmLangJs');
+if (!$langFrm->getFormTagAttribute('id')) {
+    $langFrm->setFormTagAttribute('id', 'frmLangJs');
+}
+
 if (!$langFrm->getFormTagAttribute('data-onclear')) {
     $langFrm->setFormTagAttribute('data-onclear', 'editLangData(' . $recordId . ',' . $lang_id . ')');
 }

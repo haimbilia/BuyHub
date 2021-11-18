@@ -27,13 +27,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'post_title':
-                if ($row['post_title'] != '') {
-                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-                    $td->appendElement('br', $tdAttr);
-                    $td->appendElement('plaintext', $tdAttr, '(' . $row['post_identifier'] . ')', true);
-                } else {
-                    $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-                }
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
             case 'post_published':
                 $statusHtm = BlogPost::getStatusHtml($siteLangId, $row[$key]);

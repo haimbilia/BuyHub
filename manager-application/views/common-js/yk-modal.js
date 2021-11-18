@@ -120,26 +120,33 @@
 
     $(document).on("click", ".submitBtnJs", function () {
         if ($('.' + $.ykmodal.element).hasClass("show")) {
-            $('.' + $.ykmodal.element + ' form').submit();
+            var form = $('.' + $.ykmodal.element + ' form');
+            if (true === extendEditorJs) {
+                var onSubmit = form.attr('onsubmit');
+                if ('undefined' != typeof onSubmit) {
+                    onSubmit = onSubmit.replace("return(false);", "");
+                    eval(onSubmit);
+                }
+            } else {
+                form.submit();
+            }
             // $(this).addClass('loading');
         }
     });
 
-    $('.' + $.ykmodal.element).on("scroll", function () {
+    /* $('.' + $.ykmodal.element).on("scroll", function () {
         console.log("Scrolling");
     });
-
     $(document).on("shown.bs.modal", "." + $.ykmodal.element, function () {
         $(this).on("scroll", function () {
-            // alert('l;l');
         });
-    });
+    }); */
 
 
     /* Submit Form on Enter Key Press. For sidebar forms. */
     $(document).on("keyup", ".modalFormJs, .modalLangFormJs", function (e) {
         e.stopImmediatePropagation();
-        if (e.keyCode === 13 && false === displayInPopup) {
+        if (e.keyCode === 13 && (false === displayInPopup)) {
             $('.' + $.ykmodal.element + " .submitBtnJs").click();
         }
     });
