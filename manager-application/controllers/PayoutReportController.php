@@ -91,7 +91,7 @@ class PayoutReportController extends ListingBaseController
                 $arr = [];
                 foreach ($fields as $key => $val) {
                     switch ($key) {
-                        case 'listserial':
+                        case 'listSerial':
                             $arr[] = $count;
                             break;
                         case 'orderDate':

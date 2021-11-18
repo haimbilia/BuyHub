@@ -7,7 +7,7 @@ $arr_flds = array(
     'child_count' => Labels::getLabel('LBL_Subcategories', $siteLangId),
     'action' => Labels::getLabel('LBL_Action', $siteLangId),
 );
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive', 'id' => 'prodcat'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive table-scrollable js-scrollable', 'id' => 'prodcat'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $val) {
     $e = $th->appendElement('th', array(), $val);

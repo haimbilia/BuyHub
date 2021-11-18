@@ -1,5 +1,3 @@
-
-
 /* 
 STARTS triggers & toggles[
 
@@ -12,6 +10,7 @@ $("body")
   .find("*[data-trigger]")
   .click(function () {
     var targetElmId = $(this).data("trigger");
+
     var elmToggleClass = targetElmId + "--on";
     if ($("body").hasClass(elmToggleClass)) {
       $("body").removeClass(elmToggleClass);
@@ -50,7 +49,7 @@ $("body").mouseup(function (event) {
 ] ENDS triggers & toggles
 */
 $(document).ready(function () {
-  new ScrollHint('.js-scrollable');
+  new ScrollHint(".js-scrollable");
 });
 
 jQuery(document).ready(function ($) {
@@ -153,7 +152,3 @@ _tab.each(function () {
     });
   });
 });
-  
-  
- 
- 

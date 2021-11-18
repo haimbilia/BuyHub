@@ -21,39 +21,17 @@
         margin: 1rem auto;
     }
     &-close {
-        @include media-breakpoint-up(lg) {  
+        @include media-breakpoint-up(lg) {
             display: none;
         }
     }
     &-menu {
         flex: 1;
+        //overflow: auto;
     }
     &-foot {}
     &--on & {
         transform: translateX(0);
-        width: 100%;
-        &-logo {
-            display: flex;
-            justify-content: space-between;
-            max-width: inherit;
-            padding: 1rem 0;
-        }
-        .menu {
-            flex-direction: row;
-            flex-wrap: wrap;
-            >li {
-                flex: 0 0 33%;
-                max-width: 33%;
-                list-style: none;
-            }
-            & .dropdown-menu {
-                left: auto !important;
-                top: auto !important;
-            }
-        }
-        .menu-link {
-            border: solid 1px rgba(255, 255, 255, 0.08);
-        }
     }
 }
 

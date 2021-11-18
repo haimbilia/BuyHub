@@ -796,12 +796,14 @@ form.custom-form {
 }
 
 .select-language {
-    background-color: darken($input-bg, 5%);
+    background-color: darken($input-bg, 5%); 
 }
 
 .form-search {
     .card-head-label {
-        max-width: 60%;
-        flex: 0 0 60%;
+        @include media-breakpoint-up(lg) {
+            max-width: 60%;
+            flex: 0 0 60%;
+        }
     }
 }

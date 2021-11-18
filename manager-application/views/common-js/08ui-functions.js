@@ -5,10 +5,12 @@ data-trigger => value = target element id to be opened
 data-target-close => value = target element id to be closed
 data-close-on-click-outside => value 
 */
-
+ 
+$(document).ready(function () {
 $("body")
   .find("*[data-trigger]")
   .click(function () {
+    
     var targetElmId = $(this).data("trigger");
     var elmToggleClass = targetElmId + "--on";
     if ($("body").hasClass(elmToggleClass)) {
@@ -44,10 +46,11 @@ $("body").mouseup(function (event) {
     });
 });
 
-/*
-] ENDS triggers & toggles
-*/
-new ScrollHint(".js--table-scrollable");
+ 
+
+  new ScrollHint('.js-scrollable');
+});
+
 jQuery(document).ready(function ($) {
   jQuery(".stellarnav").stellarNav({
     theme: "custom",
