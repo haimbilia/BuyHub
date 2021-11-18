@@ -14,7 +14,7 @@ $keywordPlaceholder = Labels::getLabel('FRM_SEARCH_BY_TITLE', $siteLangId); ?>
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body">
-                        <div class="table-responsive listingTableJs">
+                        <div class="table-responsive table-scrollable js-scrollable listingTableJs">
                             <?php
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
                             require_once(CONF_THEME_PATH . 'import-instructions/search.php');

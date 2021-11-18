@@ -34,7 +34,18 @@ class OrderCancelReasonsController extends ListingBaseController
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
-
+        $languages = Language::getAllNames();
+        if (1 === count($languages)) {
+            $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
+            $actionItemsData['newRecordBtnAttrs'] = [
+                'attr' => [
+                    'href' => "javascript:void(0)",
+                    'onclick' => "addNew(true)",
+                    'title' => $btnTitle,
+                ],
+                'label' => $btnTitle,   
+            ];
+        }
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
@@ -117,6 +128,10 @@ class OrderCancelReasonsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
         $frm = $this->getForm();
+        $languages = Language::getAllNames();
+        if (1 === count($languages)) {
+            $frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ', true)');
+        }
 
         if (0 < $recordId) {  
             $data = OrderCancelReason::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('ocreason_id', 'ocreason_identifier', 'ocreason_title'), true);        

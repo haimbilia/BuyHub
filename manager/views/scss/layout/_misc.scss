@@ -520,7 +520,7 @@
     position: fixed;
     margin: 1em;
     z-index: 9;
-    #{$end-direction}: 1.5rem;
+    #{$end-direction}:0.5rem;
     bottom: 6rem;
     display: flex;
     align-items: center;

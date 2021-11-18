@@ -13,7 +13,7 @@ $actionItemsData = $actionItemsData + [
                 <div class="card">
                     <?php require_once(CONF_THEME_PATH . $actionItemsData['searchFrmTemplate']); ?>
                     <div class="card-body">
-                        <div class="table-responsive listingTableJs">
+                        <div class="table-responsive table-scrollable js-scrollable listingTableJs">
                             <?php
                             $tableId = "orderStatuses";
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');

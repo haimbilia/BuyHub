@@ -2,17 +2,26 @@
 
 class AdminUsersController extends ListingBaseController
 {
-    private $canView;
-    private $canEdit;
-
+    protected $modelClass = 'AdminUsers';
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewAdminUsers($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditAdminUsers($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewAdminUsers();
+    }
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditAdminUsers($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditAdminUsers();
+        }
     }
 
     public function setProcedurePermission(){
@@ -142,54 +151,118 @@ class AdminUsersController extends ListingBaseController
 
     public function index()
     {
-        $this->objPrivilege->canViewAdminUsers();
-        $this->_template->render();
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_ADMIN_SUB_USERS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['statusButtons'] = true;
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME,_USERNAME_OR_EMAIL', $this->siteLangId));
+        $this->getListingData();
+
+        $this->_template->addJs(array('js/select2.js', 'admin-users/page-js/index.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewAdminUsers();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'admin-users/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    private function getListingData()
+    {
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $searchForm = $this->getSearchForm($fields);
+        $postedData = FatApp::getPostedData();
+        $post = $searchForm->getFormDataFromArray($postedData);
 
         $srch = AdminUsers::getSearchObject(false);
 
-        $srch->addFld('*');
-        $srch->addOrder('admin_id', 'DESC');
-        $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        if (!empty($keyword)) {
+            $cond = $srch->addCondition('adu.admin_username', 'like', '%' . $keyword . '%');
+            $cond->attachCondition('adu.admin_name', 'like', '%' . $keyword . '%', 'OR');
+            $cond->attachCondition('adu.admin_email', 'like', '%' . $keyword . '%');
         }
 
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
+        $srch->addMultipleFields(array('*'));
+        
+        $srch->addOrder($sortBy, $sortOrder);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetchAll($rs);
+        
         $this->set("arrListing", $records);
-
+        $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
+        
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('adminLoggedInId', $this->admin_id);
-
-        $this->_template->render(false, false);
+        $this->set('canEdit', $this->objPrivilege->canEditAdminUsers($this->admin_id, true));
     }
 
-    public function form($adminId = 0)
+    public function form()
     {
-        $this->objPrivilege->canViewAdminUsers();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
 
-        $adminId = FatUtility::int($adminId);
-
-        $frm = $this->getForm($adminId);
-
-        if (0 < $adminId) {
-            $data = AdminUsers::getAttributesById($adminId);
+        if (0 < $recordId) {
+            $data = AdminUsers::getAttributesById($recordId);
 
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
 
         $this->set('languages', Language::getAllNames());
-        $this->set('admin_id', $adminId);
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_ADMIN_USER_SETUP', $this->siteLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -198,21 +271,20 @@ class AdminUsersController extends ListingBaseController
 
         $post = FatApp::getPostedData();
 
-        $adminId = FatUtility::int($post['admin_id']);
+        $recordId = FatUtility::int($post['admin_id']);
 
-        $frm = $this->getForm($adminId);
+        $frm = $this->getForm($recordId);
         $post = $frm->getFormDataFromArray($post);
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         unset($post['admin_id']);
-        $record = new AdminUsers($adminId);
+        $record = new AdminUsers($recordId);
 
-        if (0 < $adminId) {
-            $data = AdminUsers::getAttributesById($adminId);
+        if (0 < $recordId) {
+            $data = AdminUsers::getAttributesById($recordId);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request_id, true);
             }
             $post['admin_username'] = $data['admin_username'];
         } else {
@@ -221,61 +293,54 @@ class AdminUsersController extends ListingBaseController
             $post['admin_password'] = $encryptedPassword;
         }
 
-
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $this->siteLangId));
-        $this->set('adminId', $adminId);
-
+        $this->set('recordId', $record->getMainTableRecordId());
+        $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function changePassword($adminId = 0)
+    public function changePassword($recordId)
     {
-        $this->objPrivilege->canViewAdminUsers();
-        $adminId = FatUtility::int($adminId);
-        $frm = $this->getChangePasswordForm($adminId);
+        $recordId = FatUtility::int($recordId);
+        $frm = $this->getChangePasswordForm($recordId);
 
-        if (0 >= $adminId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        if (0 >= $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        $data = AdminUsers::getAttributesById($adminId);
+        $data = AdminUsers::getAttributesById($recordId);
 
-        $this->set('admin_id', $adminId);
-        $this->set('adminProfile', $data);
         $this->set('frm', $frm);
-
+        $this->set('recordId', $recordId);
+        $this->set('adminProfile', $data);
+        $this->set('includeTabs', false);
         $this->_template->render(false, false);
     }
 
-    public function setupChangePassword()
+    public function updatePassword()
     {
         $this->objPrivilege->canEditAdminUsers();
 
         $post = FatApp::getPostedData();
-        $adminId = FatUtility::int($post['admin_id']);
+        $recordId = FatUtility::int($post['admin_id']);
         unset($post['admin_id']);
 
-        if (0 >= $adminId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        if (0 >= $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getChangePasswordForm($adminId);
+        $frm = $this->getChangePasswordForm($recordId);
         $post = $frm->getFormDataFromArray($post);
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $record = new AdminUsers($adminId);
+        $record = new AdminUsers($recordId);
 
         $password = $post['password'];
         $encryptedPassword = UserAuthentication::encryptPassword($password);
@@ -284,231 +349,99 @@ class AdminUsersController extends ListingBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Password_Changed_Successfully', $this->siteLangId));
-        $this->set('adminId', $adminId);
-
+        
+        $this->set('recordId', $recordId);
+        $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function changeStatus()
+    private function getForm(int $recordId = 0)
     {
-        $this->objPrivilege->canEditAdminUsers();
-        $adminId = FatApp::getPostedData('adminId', FatUtility::VAR_INT, 0);
-        if (0 >= $adminId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $data = AdminUsers::getAttributesById($adminId, array('admin_id', 'admin_active'));
-
-        if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $status = ($data['admin_active'] == applicationConstants::ACTIVE) ? 0 : 1;
-
-        $this->updateAdminUserStatus($adminId, $status);
-
-        FatUtility::dieJsonSuccess($this->str_update_record);
-    }
-
-    public function toggleBulkStatuses()
-    {
-        $this->objPrivilege->canEditAdminUsers();
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $adminIdsArr = FatUtility::int(FatApp::getPostedData('admin_ids'));
-        if (empty($adminIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        foreach ($adminIdsArr as $adminId) {
-            if (1 > $adminId) {
-                continue;
-            }
-
-            $this->updateAdminUserStatus($adminId, $status);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function updateAdminUserStatus($adminId, $status)
-    {
-        $status = FatUtility::int($status);
-        $adminId = FatUtility::int($adminId);
-        if (1 > $adminId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        $adminObj = new AdminUsers($adminId);
-        if (!$adminObj->changeStatus($status)) {
-            Message::addErrorMessage($adminObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-    }
-
-    public function permissions($adminId = 0)
-    {
-        $this->objPrivilege->canViewAdminPermissions();
-        $adminId = FatUtility::int($adminId);
-        if (1 > $adminId || $adminId == 1 || $adminId == $this->admin_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatApp::redirectUser(UrlHelper::generateUrl('adminUsers'));
-        }
-        $frm = $this->searchForm();
-        $allAccessfrm = $this->getAllAccessForm();
-
-        $data = AdminUsers::getAttributesById($adminId);
-
-
-        $frm->fill(array('admin_id' => $adminId));
-
-        $this->set('admin_id', $adminId);
-        $this->set('frm', $frm);
-        $this->set('allAccessfrm', $allAccessfrm);
-        $this->set('data', $data);
-        $this->_template->render();
-    }
-
-    public function roles()
-    {
-        $this->objPrivilege->canViewAdminPermissions();
-        $frmSearch = $this->searchForm();
-        $post = $frmSearch->getFormDataFromArray(FatApp::getPostedData());
-        $adminId = FatUtility::int($post['admin_id']);
-
-        $userData = array();
-        if ($adminId > 0) {
-            $userData = AdminUsers::getUserPermissions($adminId);
-        }
-
-        $permissionModules = AdminPrivilege::getPermissionModulesArr();
-        /* $permissionModules = array(0 => Labels::getLabel('MSG_All_Modules',$this->siteLangId)) + $permissionModules; */
-        $this->set('arrListing', $permissionModules);
-        $this->set('userData', $userData);
-        $this->set('canViewAdminPermissions', $this->objPrivilege->canViewAdminPermissions(AdminAuthentication::getLoggedAdminId(), true));
-        $this->_template->render(false, false);
-    }
-
-    public function updatePermission($moduleId, $permission)
-    {
-        $this->objPrivilege->canEditAdminPermissions();
-
-        $moduleId = FatUtility::int($moduleId);
-        $permission = FatUtility::int($permission);
-
-        $frmSearch = $this->searchForm();
-        $post = $frmSearch->getFormDataFromArray(FatApp::getPostedData());
-
-        $adminId = FatUtility::int($post['admin_id']);
-
-        if (2 > $adminId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        $data = array(
-            'admperm_admin_id' => $adminId,
-            'admperm_section_id' => $moduleId,
-            'admperm_value' => $permission,
-        );
-        $obj = new AdminUsers();
-        if ($moduleId == 0) {
-            if (!$obj->updatePermissions($data, true)) {
-                Message::addErrorMessage($obj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-        } else {
-            $permissionModules = AdminPrivilege::getPermissionModulesArr();
-            $permissionArr = AdminPrivilege::getPermissionArr();
-            if (!array_key_exists($moduleId, $permissionModules) || !array_key_exists($permission, $permissionArr)) {
-                Message::addErrorMessage($this->str_invalid_request);
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-            if (!$obj->updatePermissions($data)) {
-                Message::addErrorMessage($obj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Updated_Successfully', $this->siteLangId));
-        $this->set('moduleId', $moduleId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function searchForm()
-    {
-        $frm = new Form('frmAdminSrchFrm');
-        $frm->addHiddenField('', 'admin_id');
-        return $frm;
-    }
-
-    private function getForm($adminId = 0)
-    {
-        $this->objPrivilege->canViewAdminUsers();
-        $adminId = FatUtility::int($adminId);
-
         $frm = new Form('frmAdminUser');
-        $frm->addHiddenField('', 'admin_id', $adminId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Full_Name', $this->siteLangId), 'admin_name');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'admin_username', '', array('id' => 'admin_username'));
+        $frm->addHiddenField('', 'admin_id', $recordId);
+        $frm->addRequiredField(Labels::getLabel('FRM_FULL_NAME', $this->siteLangId), 'admin_name');
+
+        $attr = [];
+        if (0 < $recordId) {
+            $attr = ['disabled' => 'disabled'];
+        }
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'admin_username', '', $attr);
         $fld->setUnique(AdminUsers::DB_TBL, AdminUsers::DB_TBL_PREFIX . 'username', 'admin_id', 'admin_id', 'admin_id');
         $fld->requirements()->setRequired();
         $fld->requirements()->setUsername();
-        $emailFld = $frm->addRequiredField(Labels::getLabel('LBL_Email', $this->siteLangId), 'admin_email', '', array('id' => 'admin_username'));
+        $emailFld = $frm->addRequiredField(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'admin_email', '', array('id' => 'admin_username'));
         $emailFld->setUnique(AdminUsers::DB_TBL, AdminUsers::DB_TBL_PREFIX . 'email', 'admin_id', 'admin_id', 'admin_id');
 
-        if ($adminId == 0) {
-            $fld = $frm->addPasswordField(Labels::getLabel('LBL_Password', $this->siteLangId), 'password');
+        if ($recordId == 0) {
+            $fld = $frm->addPasswordField(Labels::getLabel('FRM_PASSWORD', $this->siteLangId), 'password');
             $fld->requirements()->setRequired();
             $fld->requirements()->setPassword();
-            $fld = $frm->addPasswordField(Labels::getLabel('LBL_Confirm_Password', $this->siteLangId), 'confirm_password');
+            $fld = $frm->addPasswordField(Labels::getLabel('FRM_CONFIRM_PASSWORD', $this->siteLangId), 'confirm_password');
             $fld->requirements()->setRequired();
             $fld->requirements()->setCompareWith('password', 'eq', '');
         }
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        if ($adminId != 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'admin_active', $activeInactiveArr, '', array(), '');
+        if ($recordId != 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'admin_active', $activeInactiveArr, '', array(), '');
         }
 
-        $frm->addCheckBox(Labels::getLabel('LBL_Send_Email_Notification', $this->siteLangId), 'admin_email_notification', applicationConstants::YES, array(), false, applicationConstants::NO);
+        $frm->addCheckBox(Labels::getLabel('FRM_SEND_EMAIL_NOTIFICATION', $this->siteLangId), 'admin_email_notification', applicationConstants::YES, array(), false, applicationConstants::NO);
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
 
-    private function getAllAccessForm()
-    {
-        $this->objPrivilege->canViewAdminUsers();
-        $permissionArr = AdminPrivilege::getPermissionArr();
-        $frm = new Form('frmAllAccess');
-        $frm->setFormTagAttribute('class', 'web_form form_horizontal');
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Select_permission_for_all_modules', $this->siteLangId), 'permissionForAll', $permissionArr, '', array('class' => 'permissionForAll'), Labels::getLabel('LBL_Select', $this->siteLangId));
-        $fld->requirements()->setRequired();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Apply_to_All', $this->siteLangId), array('onclick' => 'updatePermission(0);return false;'));
-        return $frm;
-    }
-
-    private function getChangePasswordForm($adminId)
+    private function getChangePasswordForm($recordId)
     {
         $frm = new Form('frmAdminUserChangePassword');
-        $frm->addHiddenField('', 'admin_id', $adminId);
-        $fld = $frm->addPasswordField(Labels::getLabel('LBL_New_Password', $this->siteLangId), 'password');
+        $frm->addHiddenField('', 'admin_id', $recordId);
+        $fld = $frm->addPasswordField(Labels::getLabel('FRM_NEW_PASSWORD', $this->siteLangId), 'password');
         $fld->requirements()->setRequired(true);
         $fld->requirements()->setLength(4, 20);
-        $fld = $frm->addPasswordField(Labels::getLabel('LBL_Confirm_Password', $this->siteLangId), 'confirm_password');
+        $fld = $frm->addPasswordField(Labels::getLabel('FRM_CONFIRM_PASSWORD', $this->siteLangId), 'confirm_password');
         $fld->requirements()->setRequired();
         $fld->requirements()->setCompareWith('password', 'eq', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
+    }
+
+    protected function getFormColumns(): array
+    {
+        $adminUsersTblHeadingCols = CacheHelper::get('adminUsersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($adminUsersTblHeadingCols) {
+            return json_decode($adminUsersTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId),
+            'admin_name' => Labels::getLabel('LBL_FULL_NAME', $this->siteLangId),
+            'admin_username' => Labels::getLabel('LBL_USERNAME', $this->siteLangId),
+            'admin_email' => Labels::getLabel('LBL_EMAIL', $this->siteLangId),
+            'admin_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+
+        CacheHelper::create('adminUsersTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'admin_name',
+            'admin_username',
+            'admin_email',
+            'admin_active',
+            'action',
+        ];
+    }
+
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

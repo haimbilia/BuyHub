@@ -158,7 +158,7 @@ $frm->addHiddenField('', 'status'); ?>
     </div>
 </div>
 <div class="card-body">
-    <div class="table-responsive listingTableJs">
+    <div class="table-responsive table-scrollable js-scrollable listingTableJs">
         <?php
         echo $frm->getFormTag();
         echo $frm->getFieldHtml('plugin_type');

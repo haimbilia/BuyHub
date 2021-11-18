@@ -22,14 +22,14 @@
         <?php /* if( isset($arrListing) && count($arrListing) ){ */
         $arr_flds = array(
             'dragdrop' => '',
-            'listserial' => Labels::getLabel('LBL_#', $siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
             'nlink_identifier' => Labels::getLabel('LBL_caption', $siteLangId),
             'action' => '',
         );
         if (!$canEdit) {
             unset($arr_flds['dragdrop'], $arr_flds['action']);
         }
-        $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive table--hovered', 'id' => 'pageList'));
+        $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive table-scrollable js-scrollable table--hovered', 'id' => 'pageList'));
         $th = $tbl->appendElement('thead')->appendElement('tr');
         foreach ($arr_flds as $val) {
             $e = $th->appendElement('th', array(), $val);
@@ -51,7 +51,7 @@
                                                                 </use>
                                                             </svg>', true);
                         break;
-                    case 'listserial':
+                    case 'listSerial':
                         $td->appendElement('plaintext', array(), $sr_no);
                         break;
                     case 'nlink_identifier':
