@@ -1139,7 +1139,7 @@ class AttachedFile extends MyAppModel
             }
         }
 
-        if ($fileId) {
+        if (0 < $fileId) {
             /* delete single file */
             $deleteStatementArr = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id=?', 'vals' => array($fileType, $recordId, $fileId));
         }
