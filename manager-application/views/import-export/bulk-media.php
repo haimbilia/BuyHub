@@ -4,7 +4,7 @@
     <?php echo HtmlHelper::getDropZoneHtml(FatUtility::generateUrl('ImportExport', 'upload')); ?>
 
     <?php echo $frmSearch->getFormHtml(); ?>
-    <div class="table-responsive listingTableJs">
+    <div class="table-responsive table-scrollable js-scrollable listingTableJs">
         <?php
         require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
         require_once(CONF_THEME_PATH . 'import-export/search.php');
