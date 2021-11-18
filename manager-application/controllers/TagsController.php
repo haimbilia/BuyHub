@@ -31,15 +31,15 @@ class TagsController extends ListingBaseController
         $this->_template->render();
     }
 
-    public function getSearchForm()
-    {
-        $frm = new Form('frmTagSearch', array('id' => 'frmTagSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Product_Name', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearTagSearch();'));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
+    // public function getSearchForm()
+    // {
+    //     $frm = new Form('frmTagSearch', array('id' => 'frmTagSearch'));
+    //     $f1 = $frm->addTextBox(Labels::getLabel('LBL_Product_Name', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+    //     $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
+    //     $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearTagSearch();'));
+    //     $fld_submit->attachField($fld_cancel);
+    //     return $frm;
+    // }
 
     public function search()
     {

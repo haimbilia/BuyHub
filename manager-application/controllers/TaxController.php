@@ -445,46 +445,44 @@ class TaxController extends ListingBaseController
         return $frm;
     }
 
-    public function autoCompleteTaxCategories()
+    public function autoComplete()
     {
-        $pagesize = 10;
-        $post = FatApp::getPostedData();
-        $this->objPrivilege->canViewTax();
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+        $keyword = FatApp::getPostedData('keyword');
         $srch = Tax::getSearchObject($this->siteLangId, true);
         $srch->addCondition('taxcat_deleted', '=', 0);
         $activatedTaxServiceId = Tax::getActivatedServiceId();
 
         $srch->addFld('taxcat_id');
         if ($activatedTaxServiceId) {
-            $srch->addFld('concat(IFNULL(taxcat_name,taxcat_identifier), " (",taxcat_code,")")as taxcat_name');
+            $srch->addFld('concat(IFNULL(taxcat_name,taxcat_identifier), " (",taxcat_code,")") as taxcat_name');
         } else {
             $srch->addFld('IFNULL(taxcat_name,taxcat_identifier)as taxcat_name');
         }
         $srch->addCondition('taxcat_plugin_id', '=', $activatedTaxServiceId);
 
-        if (!empty($post['keyword'])) {
-            $srch->addCondition('taxcat_name', 'LIKE', '%' . $post['keyword'] . '%')
-                ->attachCondition('taxcat_identifier', 'LIKE', '%' . $post['keyword'] . '%')
-                ->attachCondition('taxcat_code', 'LIKE', '%' . $post['keyword'] . '%');
+        if (!empty($keyword)) {
+            $srch->addCondition('taxcat_name', 'LIKE', '%' . $keyword . '%')
+                ->attachCondition('taxcat_identifier', 'LIKE', '%' . $keyword . '%')
+                ->attachCondition('taxcat_code', 'LIKE', '%' . $keyword . '%');
         }
         $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $taxCategories = $db->fetchAll($rs, 'taxcat_id');
-        $json = array();
-        $defaultStringLength = applicationConstants::DEFAULT_STRING_LENGTH;
+        $taxCategories = FatApp::getDb()->fetchAll($srch->getResultSet(), 'taxcat_id');
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($taxCategories as $key => $taxCategory) {
             $taxCatName = strip_tags(html_entity_decode($taxCategory['taxcat_name'], ENT_QUOTES, 'UTF-8'));
-            $taxCatName1 = substr($taxCatName, 0, $defaultStringLength);
-            if ($defaultStringLength < strlen($taxCatName)) {
-                $taxCatName1 .= '...';
-            }
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => $taxCatName1
+                'text' => $taxCatName
             );
         }
-        die(json_encode($json));
+        die(FatUtility::convertToJson($json));
     }
 
     public function ruleList($taxCatId)

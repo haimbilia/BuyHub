@@ -256,6 +256,42 @@ class CountriesController extends ListingBaseController
         LibHelper::dieJsonSuccess(['msg' => $this->str_update_record]);
     }
 
+    public function autoComplete()
+    {
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+        $pagesize = 20;
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $srch = Countries::getSearchObject(true, $this->siteLangId);
+        $srch->addMultipleFields(
+            array(
+                'country_id',
+                'COALESCE(country_name, country_code) as country_name',
+            )
+        );
+
+        if (!empty($keyword)) {
+            $cond = $srch->addCondition('country_name', 'LIKE', '%' . $keyword . '%');
+            $cond->attachCondition('country_code', 'LIKE', '%' . $keyword . '%', 'OR');
+        }
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'country_id');
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
+        foreach ($records as $key => $record) {
+            $json['results'][] = array(
+                'id' => $key,
+                'text' => strip_tags(html_entity_decode($record['country_name'], ENT_QUOTES, 'UTF-8'))
+            );
+        }
+        die(FatUtility::convertToJson($json));
+    }
+
     protected function changeStatus($recordId, $status)
     {
         if (1 > $recordId || -1 == $status) {

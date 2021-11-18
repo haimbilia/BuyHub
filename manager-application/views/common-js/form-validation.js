@@ -397,7 +397,7 @@
                 	}
                     break;
                 case 3:
-                	if(field.attr('type') && field.attr('type').toLowerCase()==='checkbox') {
+                	if(field.attr('type') && ( field.attr('type').toLowerCase()==='checkbox' || field.parent().hasClass('input-group') ) ) {
                 		field.parent().after(errorlist.empty());
                 	}
                 	else {
