@@ -2,6 +2,9 @@
 
 HtmlHelper::formatFormFields($langFrm);
 
+$langFrm->setFormTagAttribute('id', 'langFrmBlogPostJs');
+$langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#langFrmBlogPostJs"));');
+
 $fld = $langFrm->getField('post_title');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $langFrm->getField('post_author_name');

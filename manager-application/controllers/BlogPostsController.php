@@ -101,7 +101,7 @@ class BlogPostsController extends ListingBaseController
         if (isset($post['post_published']) && $post['post_published'] != '') {
             $srch->addCondition('bp.post_published', '=', $post['post_published']);
         }
-        $srch->addMultipleFields(array('*', 'ifnull(post_title,post_identifier) post_title', 'group_concat(ifnull(bpcategory_name ,bpcategory_identifier)) categories'));
+        $srch->addMultipleFields(array('*', 'COALESCE(post_title,post_identifier) post_title', 'group_concat(COALESCE(bpcategory_name ,bpcategory_identifier)) categories'));
         $srch->addGroupby('post_id');
 
         $srch->setPageNumber($page);
@@ -454,7 +454,7 @@ class BlogPostsController extends ListingBaseController
     private function getForm($recordId = 0)
     {
         $recordId = FatUtility::int($recordId);
-        $frm = new Form('frmBlogPost', array('id' => 'frmBlogPost'));
+        $frm = new Form('frmBlogPost');
         $frm->addHiddenField('', 'post_id', 0);
         $frm->addRequiredField(Labels::getLabel('FRM_POST_TITLE', $this->siteLangId), 'post_title');
         $frm->addRequiredField(Labels::getLabel('FRM_POST_AUTHOR_NAME', $this->siteLangId), 'post_author_name');

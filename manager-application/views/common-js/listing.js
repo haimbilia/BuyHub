@@ -270,6 +270,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
+        fcom.resetEditorInstance();
         $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
         data = "recordId=" + recordId;
         fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
@@ -282,7 +283,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-
+        fcom.resetEditorInstance();
         $.ykmodal(fcom.getLoader());
         data = "recordId=" + recordId + "&langId=" + langId;
         fcom.ajax(
@@ -340,7 +341,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-
         if (!$(frm).validate()) { return; }
         $.ykmodal(fcom.getLoader());
 

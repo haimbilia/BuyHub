@@ -120,7 +120,16 @@
 
     $(document).on("click", ".submitBtnJs", function () {
         if ($('.' + $.ykmodal.element).hasClass("show")) {
-            $('.' + $.ykmodal.element + ' form').submit();
+            var form = $('.' + $.ykmodal.element + ' form');
+            if (true === extendEditorJs) {
+                var onSubmit = form.attr('onsubmit');
+                if ('undefined' != typeof onSubmit) {
+                    onSubmit = onSubmit.replace("return(false);", "");
+                    eval(onSubmit);
+                }
+            } else {
+                form.submit();
+            }
             // $(this).addClass('loading');
         }
     });
