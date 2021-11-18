@@ -58,6 +58,8 @@ class ContentBlockController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
         $this->getListingData();
+        $this->_template->addCss('css/cropper.css');
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js']);
         $this->set('includeEditor', true);
         $this->_template->render();
     }
@@ -229,29 +231,16 @@ class ContentBlockController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $langId), 'epage_label');
 
+
         if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($langId))) {
-            if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
-                $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
-            } elseif ($recordId == Extrapage::ADVERTISER_BANNER_SLOGAN) {
-                $fileType = AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE;
-            } else {
-                $fileType = AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE;
-            }
-            $frm->addButton(
-                Labels::getLabel('LBL_Backgroud_Image', $langId),
-                'cblock_bg_image',
-                Labels::getLabel('LBL_Upload_Image', $langId),
-                array(
-                    'class' => 'bgImageFile-Js', 
-                    'id' => 'cblock_bg_image', 
-                    'data-file_type' => $fileType, 
-                    'data-frm' => 'frmBlock',
-                    'data-langId' => $langId
-                )
-            );
+            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('LBL_BACKGROUND_IMAGE', $this->siteLangId) );
+            $frm->addHTML('', 'cblock_bg_image', '');
+            $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE);
+            $frm->addHiddenField('', 'min_width', 1300);
+            $frm->addHiddenField('', 'min_height', 400);
         }
 
-        $frm->addHtmlEditor(Labels::getLabel('LBL_Page_Content', $langId), 'epage_content');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_CONTENT', $langId), 'epage_content');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -305,6 +294,17 @@ class ContentBlockController extends ListingBaseController
         
         $bgImages = AttachedFile::getMultipleAttachments($fileType, $recordId, 0, $langId);
         $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $universalImage = true;
+        } else {
+            $universalImage = false;
+            $langId = array_key_first($languages);
+        }
+        $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $langId, $universalImage);
+        $this->set('image', $cbgImage);
+        
+        $this->set('imageFunction', 'cblockBackgroundImage');
         $this->set('bgImages', $bgImages);
         $this->set('bannerTypeArr', $bannerTypeArr);
         $this->set('languages', Language::getAllNames());
@@ -315,7 +315,8 @@ class ContentBlockController extends ListingBaseController
         $this->set('epageData', $epageData);
         $this->set('contentBlockArrWithBg', Extrapage::getContentBlockArrWithBg($this->siteLangId));
         $this->set('activeLangtab', true);
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
+        $this->set('canEdit', $this->canEdit);
+        $this->_template->render(false, false);
     }
     
 
@@ -426,16 +427,14 @@ class ContentBlockController extends ListingBaseController
 
         $epageObj = new Extrapage($recordId);
         if (!$epageObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($epageObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($epageObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Extrapage::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -448,34 +447,69 @@ class ContentBlockController extends ListingBaseController
             }
         }
 
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $universalImage = true;
+            $lang_id = FatUtility::int($lang_id);
+        } else {
+            $universalImage = false;
+            $lang_id = array_key_first($languages);
+        }
+        if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
+            $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
+        } elseif ($recordId == Extrapage::ADVERTISER_BANNER_SLOGAN) {
+            $fileType = AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE;
+        } else {
+            $fileType = AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE;
+        }
+        $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $lang_id, $universalImage);
+        $this->set('image', $cbgImage);
+        $this->set('imageFunction', 'cblockBackgroundImage');
         $this->set('msg', Labels::getLabel('LBL_Setup_Successful', $this->siteLangId));
         $this->set('epageId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
+     /**
+     * Undocumented function
+     *
+     * @param [type] $recordId
+     * @param string $file_type
+     * @param integer $lang_id
+     * @return void
+     */
+    public function images($recordId, $file_type = 'THUMB', $lang_id = 0)
+    {
+        $recordId = FatUtility::int($recordId);
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $universalImage = true;
+            $lang_id = FatUtility::int($lang_id);
+        } else {
+            $universalImage = false;
+            $lang_id = array_key_first($languages);
+        }
+        $lang_id = $lang_id == 0 ?  $this->siteLangId : $lang_id;
 
-    // public function changeStatus()
-    // {
-    //     $this->objPrivilege->canEditContentBlocks();
-    //     $epageId = FatApp::getPostedData('epageId', FatUtility::VAR_INT, 0);
-    //     if (0 == $epageId) {
-    //         Message::addErrorMessage($this->str_invalid_request_id);
-    //         FatUtility::dieWithError(Message::getHtml());
-    //     }
-    //     $contentBlockData = Extrapage::getAttributesById($epageId, array('epage_active'));
+        if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
+            $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
+        } elseif ($recordId == Extrapage::ADVERTISER_BANNER_SLOGAN) {
+            $fileType = AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE;
+        } else {
+            $fileType = AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE;
+        }
 
-    //     if (!$contentBlockData) {
-    //         Message::addErrorMessage($this->str_invalid_request);
-    //         FatUtility::dieWithError(Message::getHtml());
-    //     }
+        $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $lang_id, $universalImage);
+        $this->set('image', $cbgImage);
+        $this->set('imageFunction', 'cblockBackgroundImage');
 
-    //     $status = ($contentBlockData['epage_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
+        $this->set('file_type', 'THUMB');
+        $this->set('recordId', $recordId);
+        $this->set('canEdit', $this->canEdit);
+        $this->_template->render(false, false);
+    }
 
-    //     $this->updateEPageStatus($epageId, $status);
-
-    //     FatUtility::dieJsonSuccess($this->str_update_record);
-    // }
 
     public function toggleBulkStatuses()
     {
@@ -484,9 +518,7 @@ class ContentBlockController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $epageIdsArr = FatUtility::int(FatApp::getPostedData('epage_ids'));
         if (empty($epageIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($epageIdsArr as $epageId) {
@@ -500,17 +532,15 @@ class ContentBlockController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function updateEPageStatus($epageId, $status)
+    private function updateEPageStatus($recordId, $status)
     {
         $status = FatUtility::int($status);
-        $epageId = FatUtility::int($epageId);
-        if (1 > $epageId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $EPageObj = new Extrapage($epageId);
+        $EPageObj = new Extrapage($recordId);
 
         if (!$EPageObj->changeStatus($status)) {
             Message::addErrorMessage($EPageObj->getError());
@@ -518,118 +548,96 @@ class ContentBlockController extends ListingBaseController
         }
     }
 
-
-  
-    private function old_getLangForm($epage_id = 0, $lang_id = 0)
+    public function uploadMedia()
     {
-        $frm = new Form('frmBlockLang');
-        $frm->addHiddenField('', 'epage_id', $epage_id);
-        $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-
-        $frm->addRequiredField(Labels::getLabel('LBL_Page_Title', $this->siteLangId), 'epage_label');
-
-        if (array_key_exists($epage_id, Extrapage::getContentBlockArrWithBg($this->siteLangId))) {
-            if ($epage_id == Extrapage::SELLER_BANNER_SLOGAN) {
-                $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
-            } elseif ($epage_id == Extrapage::ADVERTISER_BANNER_SLOGAN) {
-                $fileType = AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE;
-            } else {
-                $fileType = AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE;
-            }
-            $fld = $frm->addButton(
-                Labels::getLabel('LBL_Backgroud_Image', $this->siteLangId),
-                'cblock_bg_image',
-                Labels::getLabel('LBL_Upload_Image', $this->siteLangId),
-                array('class' => 'bgImageFile-Js', 'id' => 'cblock_bg_image', 'data-file_type' => $fileType, 'data-frm' => 'frmBlock')
-            );
-        }
-
-        $frm->addHtmlEditor(Labels::getLabel('LBL_Page_Content', $this->siteLangId), 'epage_content');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
-        return $frm;
-    }
-
-    public function setUpBgImage()
-    {
-        $post = FatApp::getPostedData();
+        // $post = FatApp::getPostedData();
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
-        $epage_id = FatApp::getPostedData('epage_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('epage_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        if (!$file_type || !$epage_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+        if (!$file_type || !$recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $allowedFileTypeArr = array(AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE, AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE, AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE);
+        $allowedFileTypeArr = array(
+            AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE, 
+            AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE, 
+            AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE
+        );
 
         if (!in_array($file_type, $allowedFileTypeArr)) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
-        if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+        $file = $_FILES['cropped_image'];
+        if (!is_uploaded_file($file['tmp_name'])) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
         if (!$res = $fileHandlerObj->saveImage(
-            $_FILES['file']['tmp_name'],
+            $file['tmp_name'],
             $file_type,
-            $epage_id,
+            $recordId,
             0,
-            $_FILES['file']['name'],
+            $file['name'],
             -1,
-            $unique_record = true,
+            true,
             $lang_id,
-            $_FILES['file']['type']
+            $file['type']
         )
         ) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-            // FatUtility::dieJsonError($fileHandlerObj->getError());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('file', $_FILES['file']['name']);
-        $this->set('epage_id', $epage_id);
+        if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
+            $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
+        } elseif ($recordId == Extrapage::ADVERTISER_BANNER_SLOGAN) {
+            $fileType = AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE;
+        } else {
+            $fileType = AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE;
+        }
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $universalImage = true;
+            $lang_id = FatUtility::int($lang_id);
+        } else {
+            $universalImage = false;
+            $lang_id = array_key_first($languages);
+        }
+
+        $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $lang_id, $universalImage);
+        $this->set('image', $cbgImage);
+        $this->set('imageFunction', 'cblockBackgroundImage');
+
+        $this->set('file', $file['name']);
+        $this->set('epage_id', $recordId);
         $this->set('file_type', $file_type);
         $this->set('lang_id', $lang_id);
-        $this->set('msg', $_FILES['file']['name'] . ' ' . Labels::getLabel('LBL_Uploaded_Successfully', $this->siteLangId));
+        $this->set('msg', $file['name'] . ' ' . Labels::getLabel('MSG_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function removeBgImage($epage_id = 0, $langId = 0, $file_type)
+    public function removeMedia($recordId = 0, $afileId = 0, $file_type, $langId = 0)
     {
-        $epage_id = FatUtility::int($epage_id);
+        $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
-        if (!$epage_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+        if (!$recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile($file_type, $epage_id, 0, 0, $langId)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+
+        if($langId == $this->siteLangId){
+            $fileHandlerObj->deleteFile($file_type, $recordId, 0, 0, 0);
+        }
+        if (!$fileHandlerObj->deleteFile($file_type, $recordId, 0, $afileId, $langId)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('LBL_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
+  
 
 
     /**

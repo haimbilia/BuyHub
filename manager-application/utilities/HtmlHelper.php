@@ -326,7 +326,7 @@ class HtmlHelper
                             </div>';
         }
 
-        $str .= '<input class="dropzone-input dropzoneInputJs ' . (count($imageArr) ? "hide" : "") . '" type="file"';
+        $str .= '<input name="dropzoneInput" data-fatreq="{&quot;required&quot;:false}" class="dropzone-input dropzoneInputJs ' . (count($imageArr) ? "hide" : "") . '" type="file"';
         foreach ($fileInputAttributes as $attrName => $attrVal) {
             $str .= ' ' . $attrName . '="' . $attrVal . '"';
         }
