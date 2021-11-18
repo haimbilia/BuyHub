@@ -13,7 +13,7 @@ if (!$canEdit) {
     unset($arr_flds['select_all'], $arr_flds['action']);
 }
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive'));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr');
 foreach ($arr_flds as $key => $val) {
     if ('select_all' == $key) {

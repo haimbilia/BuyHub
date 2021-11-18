@@ -29,7 +29,7 @@
         if (!$canEdit) {
             unset($arr_flds['dragdrop'], $arr_flds['action']);
         }
-        $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive table--hovered', 'id' => 'pageList'));
+        $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive table-scrollable js-scrollable table--hovered', 'id' => 'pageList'));
         $th = $tbl->appendElement('thead')->appendElement('tr');
         foreach ($arr_flds as $val) {
             $e = $th->appendElement('th', array(), $val);

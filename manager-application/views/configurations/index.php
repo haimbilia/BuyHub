@@ -3,30 +3,46 @@
 <main class="main">
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
-                <div class="card sticky-sidebar">
+            <div class="col-md-4"> <button class="float-btn" type="button" data-trigger="card-aside">
+                    <svg class="svg" width="20" height="20">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
+                        </use>
+                    </svg>
+                </button>
+                <div class="card  sticky-sidebar card-aside" id="card-aside" data-close-on-click-outside="card-aside">
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title">
                                 <a class="back" href="<?php echo UrlHelper::generateUrl('Settings'); ?>">
                                     <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                                        <use
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                                         </use>
                                     </svg>
                                 </a>
                                 <?php echo Labels::getLabel('LBL_GENERAL_SETTINGS', $siteLangId); ?>
                             </h3>
                         </div>
+                        <div class="card-toolbar">
+                            <button class="btn btn-gray card-aside-close" data-target-close="card-aside">
+                                <svg class="svg" width="24" height="24">
+                                    <use
+                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
+                                    </use>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="settings-inner">
                             <ul class="confTypesJs">
-                                <?php foreach ($tabs as $formType => $tabName) {    
-                                    $tabsId = 'tabJs-'.$formType;                   
+                                <?php foreach ($tabs as $formType => $tabName) {
+                                    $tabsId = 'tabJs-' . $formType;
                                 ?>
                                 <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>"
                                     data-listType="<?php echo $formType; ?>">
-                                    <a class="settings-inner-link" rel="<?php echo $tabsId; ?>" href="javascript:void(0)"
+                                    <a class="settings-inner-link" rel="<?php echo $tabsId; ?>"
+                                        href="javascript:void(0)"
                                         onclick="getForm(<?php echo $formType ?>, <?php echo $defaultLangId ?>);">
                                         <i class="settings-inner-icn">
                                             <svg class="svg" width="20" height="20">
@@ -57,7 +73,7 @@
 </main>
 
 <script>
-    var YES = <?php echo applicationConstants::YES; ?>;
-    var NO = <?php echo applicationConstants::NO; ?>;
-    var FORM_MEDIA = <?php echo Configurations::FORM_MEDIA; ?>;
+var YES = <?php echo applicationConstants::YES; ?>;
+var NO = <?php echo applicationConstants::NO; ?>;
+var FORM_MEDIA = <?php echo Configurations::FORM_MEDIA; ?>;
 </script>

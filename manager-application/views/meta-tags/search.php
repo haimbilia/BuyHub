@@ -117,7 +117,7 @@ if (1 > $loadRows) {
         <?php } ?>
     </div>
     <div class="card-body">
-        <div class="table-responsive">
+        <div class="table-responsive table-scrollable js-scrollable">
             <?php echo $tbl->getHtml(); ?>
         </div>
     </div>
