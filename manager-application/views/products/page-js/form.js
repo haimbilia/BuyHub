@@ -16,8 +16,8 @@
     select2('ptt_taxcat_id', fcom.makeUrl('Tax', 'autoComplete'));
     select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'));
 
-    setup = function (frm) { 
-        if (!$(frm).validate()) { return; }
+    setup = function (frm) {       
+        if (!$(frm).validate()) { return; } 
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl('Products', 'setup'), data, function (res) {
            
@@ -49,9 +49,8 @@
             fcom.removeLoader();
         });
     };
-    addTagData = function (e) {
-        let rt_id = e.detail.tag.id;
-        let tag_name = e.detail.tag.title;
+    addTagData = function (e) {   
+        let rt_id = e.detail.data.id;            
         if (rt_id == '') {
             if (1 > canEditTags) {
                 $.ykmsg.error(tagsEditErr);
@@ -93,7 +92,7 @@
             whitelist: [],
             delimiters: "#",
             editTags: false,
-        }).on('dropdown:select', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
+        }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
     };
     tagifyProducts();
 
@@ -106,11 +105,14 @@
             return;
         } 
 
+        let rowCount = $('#specificationsTableBodyJs tr').length;
+
         let html  = '<tr>';
-        html  += '<td>'+label+'<input type="hidden" value="specifications[]["label"]" /> </td>';
-        html  += '<td>'+value+'<input type="hidden" value="specifications[]["value"]" /> </td>';
-        html  += '<td>'+group+'<input type="hidden" value="specifications[]["group"]" /> </td>';
+        html  += '<td>'+label+'<input type="hidden" name="specifications['+rowCount+'][name]" value="'+label+'"  data-fatreq="{&quot;required&quot;:false}"/> </td>';
+        html  += '<td>'+value+'<input type="hidden" name="specifications['+rowCount+'][value]" value="'+value+'" data-fatreq="{&quot;required&quot;:false}" /> </td>';
+        html  += '<td>'+group+'<input type="hidden" name="specifications['+rowCount+'][group]"  value="'+group+'" data-fatreq="{&quot;required&quot;:false}" /> </td>';
         html +='<td class="align-right">'+
+                '<input type="hidden" name="specifications['+rowCount+'][id]" value="0"  data-fatreq="{&quot;required&quot;:false}"/>'+
                 '<a href="javascript:void(0)"  onclick="$(this).closest(\'tr\').remove()">'+
                 '<svg class="svg" width="18" height="18">'+
                     '<use xlink:href="'+siteConstants.webroot+'images/retina/sprite-actions.svg#delete">'+
@@ -118,9 +120,12 @@
                 '</svg>'+
                 '</a>'+
             '</td>';
-        html  += '<tr>';
+        html  += '</tr>';
 
         $('#specificationsTableBodyJs').append(html);
+        $('#sp_label').val('');
+        $('#sp_value').val('');
+        $('#sp_group').val('');
        
     };
     validateSpeficationForm = function () {
@@ -132,8 +137,8 @@
                 });
                 $(this).data('change-event-bind', 1);
             }            
-            $(this).siblings('ul').remove();
-            if ($(this).data('required') == 1 && '' == $(this).val()) {
+            $(this).siblings('ul').remove();            
+            if ($(this).data('required') ==  1 && '' == $(this).val()) {
                 let caption = $(this).siblings('label').text().trim();
                 errorlist = $(document.createElement("ul")).addClass('errorlist').append(
                     $(document.createElement('li')).append($(document.createElement('a')).html(caption + " " + langLbl.isMandatory,).attr({ 'href': 'javascript:void(0);' }))
