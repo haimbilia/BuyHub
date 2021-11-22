@@ -44,8 +44,8 @@ class TaxCategoriesRuleController extends ListingBaseController {
             'js/select2.js',
             'tax-categories-rule/page-js/index.js'
         ]);
-        $this->set('postedData', ['taxrule_taxcat_id'=>$ruleId]);
-        $this->set('recordId', $ruleId); 
+        $this->set('postedData', ['taxrule_taxcat_id' => $ruleId]);
+        $this->set('recordId', $ruleId);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -56,7 +56,7 @@ class TaxCategoriesRuleController extends ListingBaseController {
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'taxrule_name');
         }
-        
+
         $frm->addHiddenField('', 'taxrule_taxcat_id', $parentId);
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -361,6 +361,22 @@ class TaxCategoriesRuleController extends ListingBaseController {
 
     protected function excludeKeysForSort($fields = []): array {
         return array_diff($fields, ['trr_rate', 'taxstr_name'], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action) {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('NAV_TAX_CATEGORIES', $this->siteLangId), 'href' => UrlHelper::generateUrl('TaxCategories')],
+                    ['title' => $pageTitle]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
+        }
     }
 
 }
