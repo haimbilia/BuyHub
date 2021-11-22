@@ -105,7 +105,7 @@
             return;
         } 
 
-        let rowCount = $('#specificationsTableBodyJs tr').length;
+        let rowCount = $('#specificationsListJs tbody tr').length;
 
         let html  = '<tr>';
         html  += '<td>'+label+'<input type="hidden" name="specifications['+rowCount+'][name]" value="'+label+'"  data-fatreq="{&quot;required&quot;:false}"/> </td>';
@@ -122,7 +122,7 @@
             '</td>';
         html  += '</tr>';
 
-        $('#specificationsTableBodyJs').append(html);
+        $('#specificationsListJs tbody').append(html);
         $('#sp_label').val('');
         $('#sp_value').val('');
         $('#sp_group').val('');
@@ -149,7 +149,15 @@
         });  
         
         return validate; 
-    }
+    };
+        
+    prodSpecifications = function () {
+        var productId = $("#addProductfrm input[name='product_id']").val();
+        var langId = $("#addProductfrm [name='lang_id']").val();
+        fcom.ajax(fcom.makeUrl('Products', 'prodSpecifications'), { product_id: productId, langId: langId }, function (res) {
+            $('#specificationsListJS').html(res)
+        });
+    };
 
 
 })();

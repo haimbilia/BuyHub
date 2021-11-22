@@ -326,9 +326,6 @@ $frm->setFormTagAttribute('class', 'form');
                                 </tr>
                             </tbody>
                         </table>
-
-
-
                         <div class="separator separator-dashed my-4"></div>
                         <table class="table">
                             <thead>
@@ -357,7 +354,6 @@ $frm->setFormTagAttribute('class', 'form');
                                         </ul>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td>Red / Small </td>
                                     <td><input class="form-control" type="text" placeholder=""></td>
@@ -641,7 +637,7 @@ $frm->setFormTagAttribute('class', 'form');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="label">
-                                            <?php echo Labels::getLabel('FRM_LABEL_TEXT', $siteLangId); ?>
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $siteLangId); ?>
                                         </label>
                                         <input type="text" name="sp_label"  id="sp_label"value="" data-required="1" >
                                         <span class="form-text text-muted">Lorem ipsum dolor sit,
@@ -651,7 +647,7 @@ $frm->setFormTagAttribute('class', 'form');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="label"> 
-                                            <?php echo Labels::getLabel('FRM_VALUE', $siteLangId); ?>
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $siteLangId); ?>
                                         </label>
                                         <input type="text" name="sp_value" id="sp_value" value="" data-required ="1">
                                     </div>
@@ -661,7 +657,7 @@ $frm->setFormTagAttribute('class', 'form');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="label">
-                                            <?php echo Labels::getLabel('FRM_GROUP', $siteLangId); ?>
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $siteLangId); ?>
                                         </label>                                   
                                         <input type="text" name="sp_group" id="sp_group" value="" data-required ="0">
                                     </div>
@@ -677,20 +673,8 @@ $frm->setFormTagAttribute('class', 'form');
                             </div>
                         </div>
                         <div class="separator separator-dashed my-4"></div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th><?php echo Labels::getLabel('FRM_LABEL_TEXT', $siteLangId); ?></th>
-                                    <th><?php echo Labels::getLabel('FRM_VALUE', $siteLangId); ?></th>
-                                    <th> <?php echo Labels::getLabel('FRM_GROUP', $siteLangId); ?></th>
-                                    <th class="align-right">
-                                        <?php echo Labels::getLabel('FRM_ACTION', $siteLangId); ?>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="specificationsTableBodyJs">                              
-                            </tbody>
-                        </table>
+                        <div id="specificationsListJS">
+                        </div>                        
                     </div>
                 </div>
                 <div class="card" id="tax-shipping">
@@ -819,4 +803,8 @@ $frm->setFormTagAttribute('class', 'form');
 <script>  
     var canEditTags = <?php echo $canEditTags ? 1 : 0;?>;
     var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $siteLangId); ?>'; 
+    $(function() {
+        prodSpecifications();
+    });
+  
 </script>
