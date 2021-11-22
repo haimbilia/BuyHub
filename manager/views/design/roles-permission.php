@@ -181,7 +181,7 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th width="45%">Products</th>
+                                                <th width="45%">Promotions</th>
                                                 <th>
                                                     <label class="checkbox">
                                                         <input type="checkbox"> None
@@ -202,7 +202,7 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Brands</td>
+                                                <td>Special Prices</td>
                                                 <td>
                                                     <label class="checkbox">
                                                         <input type="checkbox" checked> None
@@ -221,7 +221,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Categories</td>
+                                                <td>Discount Coupons</td>
                                                 <td>
                                                     <label class="checkbox">
                                                         <input type="checkbox"> None
@@ -240,7 +240,8 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Option Groups
+                                                <td>Reward Points
+
                                                 </td>
                                                 <td>
                                                     <label class="checkbox">
@@ -260,7 +261,8 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Products</td>
+                                                <td>Buy Together Products
+                                                </td>
                                                 <td>
                                                     <label class="checkbox">
                                                         <input type="checkbox"> None
@@ -280,7 +282,8 @@
                                             </tr>
 
                                             <tr>
-                                                <td>Product Reviews
+                                                <td>Related Products
+
                                                 </td>
                                                 <td>
                                                     <label class="checkbox">
@@ -326,6 +329,229 @@
 
 
                         </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th width="45%">Orders</th>
+                                                <th>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> None
+                                                    </label>
+                                                </th>
+                                                <th>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Read
+
+                                                    </label>
+                                                </th>
+                                                <th class="align-right">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Write
+                                                    </label>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Orders
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked> None
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Read
+
+                                                    </label>
+                                                </td>
+                                                <td class="align-right">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Write
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Add Order
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> None
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked> Read
+
+                                                    </label>
+                                                </td>
+                                                <td class="align-right">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Write
+                                                    </label>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th width="45%">CMS</th>
+                                                <th>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> None
+                                                    </label>
+                                                </th>
+                                                <th>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Read
+
+                                                    </label>
+                                                </th>
+                                                <th class="align-right">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Write
+                                                    </label>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Pages</td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked> None
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Read
+
+                                                    </label>
+                                                </td>
+                                                <td class="align-right">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Write
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Blogs</td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> None
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked> Read
+
+                                                    </label>
+                                                </td>
+                                                <td class="align-right">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Write
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>FAQS
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked> None
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Read
+
+                                                    </label>
+                                                </td>
+                                                <td class="align-right">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Write
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Testimonials</td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> None
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked> Read
+
+                                                    </label>
+                                                </td>
+                                                <td class="align-right">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" checked> Write
+                                                    </label>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Email Templates </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> None
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Read
+
+                                                    </label>
+                                                </td>
+                                                <td class="align-right">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Write
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Sms Templates</td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> None
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Read
+
+                                                    </label>
+                                                </td>
+                                                <td class="align-right">
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"> Write
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-body">
@@ -483,7 +709,7 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th width="45%">Products</th>
+                                                <th width="45%">Promotions</th>
                                                 <th>
                                                     <label class="checkbox">
                                                         <input type="checkbox"> None
@@ -504,7 +730,7 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Brands</td>
+                                                <td>Special Prices</td>
                                                 <td>
                                                     <label class="checkbox">
                                                         <input type="checkbox" checked> None
@@ -523,7 +749,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Categories</td>
+                                                <td>Discount Coupons</td>
                                                 <td>
                                                     <label class="checkbox">
                                                         <input type="checkbox"> None
@@ -542,7 +768,8 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Option Groups
+                                                <td>Reward Points
+
                                                 </td>
                                                 <td>
                                                     <label class="checkbox">
@@ -562,7 +789,8 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Products</td>
+                                                <td>Buy Together Products
+                                                </td>
                                                 <td>
                                                     <label class="checkbox">
                                                         <input type="checkbox"> None
@@ -582,7 +810,8 @@
                                             </tr>
 
                                             <tr>
-                                                <td>Product Reviews
+                                                <td>Related Products
+
                                                 </td>
                                                 <td>
                                                     <label class="checkbox">
@@ -623,18 +852,9 @@
                                         </tbody>
                                     </table>
                                 </div>
-
                             </div>
-
-
                         </div>
-
-
-
-
-
                     </div>
-
                 </div>
             </main>
 
