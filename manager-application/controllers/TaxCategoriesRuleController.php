@@ -24,35 +24,40 @@ class TaxCategoriesRuleController extends ListingBaseController {
         }
     }
 
-    public function index() {
+    public function index($ruleId = 0) {
         $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
+        $frmSearch = $this->getSearchForm($fields, $ruleId);
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_TAX_CATEGORIES_RULE', $this->siteLangId);
         $this->setModel();
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageData['plang_title'] ?? LibHelper::getControllerName(true));
         $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
-        $this->set("frmSearch", $this->getSearchForm($fields));
-        $this->set('actionItemsData', HtmlHelper::getDefaultActionItems($fields, $this->modelObj));
-        $this->getListingData();
+        $this->set("frmSearch", $frmSearch);
+        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
+            'newRecordBtn' => (($ruleId) > 0 ? true : false),
+            'newRecordParent' => (($ruleId) > 0 ? $ruleId : 0),
+        ]);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->getListingData($ruleId);
         $this->_template->addCss(['css/select2.min.css']);
         $this->_template->addJs([
-            'js/cropper.js',
-            'js/cropper-main.js',
             'js/select2.js',
-            'tax-categories-requests/page-js/index.js'
+            'tax-categories-rule/page-js/index.js'
         ]);
+        $this->set('postedData', ['taxrule_taxcat_id'=>$ruleId]);
+        $this->set('recordId', $ruleId); 
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function getSearchForm($fields = []) {
+    public function getSearchForm($fields = [], $parentId = 0) {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'taxrule_name');
         }
-        $frm->addHiddenField('', 'taxrule_taxcat_id');
+        
+        $frm->addHiddenField('', 'taxrule_taxcat_id', $parentId);
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -67,7 +72,7 @@ class TaxCategoriesRuleController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    private function getListingData($ruleId = 0) {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -82,7 +87,7 @@ class TaxCategoriesRuleController extends ListingBaseController {
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
-        $searchForm = $this->getSearchForm($fields);
+        $searchForm = $this->getSearchForm($fields, $ruleId);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = TaxRule::getSearchObject();
@@ -96,6 +101,8 @@ class TaxCategoriesRuleController extends ListingBaseController {
 
         if (!empty($post['taxrule_taxcat_id'])) {
             $srch->addCondition('taxrule_taxcat_id', '=', $post['taxrule_taxcat_id']);
+        } else if (!empty($ruleId)) {
+            $srch->addCondition('taxrule_taxcat_id', '=', $ruleId);
         }
 
         $page = (empty($page) || $page <= 0) ? 1 : $page;
@@ -119,15 +126,19 @@ class TaxCategoriesRuleController extends ListingBaseController {
     public function form() {
         $this->objPrivilege->canEditTax();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $parantId = FatApp::getPostedData('parantId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
             $taxObj = new TaxRule($recordId);
-            $data = $taxObj->getRule($this->siteLangId); 
+            $data = $taxObj->getRule($this->siteLangId);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
             $ruleLocations = $taxObj->getLocations($data['taxrule_taxcat_id']);
+        }
+        if (0 < $parantId) {
+            $frm->fill(['taxrule_taxcat_id' => $parantId]);
         }
         $this->set('languages', []);
         $this->set('ruleLocations', $ruleLocations ?? []);
@@ -158,19 +169,86 @@ class TaxCategoriesRuleController extends ListingBaseController {
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        $recordId = $post['taxcat_id'];
-        unset($post['taxcat_id']);
-        $data = $post;
-        $data['taxcat_identifier'] = $data['taxcat_name'];
-        $tax = new Tax($recordId);
-        $tax->assignValues($data);
-        if (!$tax->save()) {
-            LibHelper::exitWithError($tax->getError(), true);
+        $post['taxruleloc_to_state_id'] = FatApp::getPostedData('taxruleloc_to_state_id');
+        $post['taxruleloc_from_state_id'] = FatApp::getPostedData('taxruleloc_from_state_id');
+        $combinedTaxDetails = FatApp::getPostedData('combinedTaxDetails') ?? [];
+        if (!empty($combinedTaxDetails)) {
+            $totalCombinedTax = 0;
+            array_walk($combinedTaxDetails, function ($value) use (&$totalCombinedTax) {
+                $totalCombinedTax += $value['taxruledet_rate'];
+            });
+            if ($totalCombinedTax != $post['trr_rate']) {
+                LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_COMBINED_TAX_COMBINATION', $this->siteLangId), true);
+            }
         }
-        $this->setLangData($tax, [$tax::tblFld('name') => $post[$tax::tblFld('name')]]);
+        $this->validateStateCountry($post);
+        $taxRuleObj = new TaxRule($post['taxrule_id']);
+        unset($post['taxrule_id']);
+        $taxRuleObj->assignValues($post);
+        if (!$taxRuleObj->save()) {
+            LibHelper::exitWithError(Message::getHtml());
+        }
+
+
+        if (!$taxRuleObj->addUpdateRate($post['trr_rate'])) {
+            LibHelper::exitWithError($taxRuleObj->getError());
+        }
+
+        $ruleId = $taxRuleObj->getMainTableRecordId();
+        /* [ update location data */
+        if (!$taxRuleObj->addUpdateLocationData($ruleId, $post)) {
+            LibHelper::exitWithError(Labels::getLabel('LBL_Unable_to_Update_Location_Data', $this->siteLangId));
+        }
+        /* ] */
+
+        /* [ UPDATE COMBINED TAX DETAILS */
+        if (!$taxRuleObj->addUpdateCombinedData($combinedTaxDetails, $ruleId)) {
+            LibHelper::exitWithError(Labels::getLabel('LBL_Unable_to_Update_Combined_Tax_Data', $this->siteLangId));
+        }
+        /* ] */
+
         $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $tax->getMainTableRecordId());
+        $this->set('recordId', $taxRuleObj->getMainTableRecordId());
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function validateStateCountry($post) {
+        $catLocations = TaxRuleLocation::getLocationsByCatId($post['taxrule_taxcat_id']);
+        if (!$catLocations) {
+            return;
+        }
+        $combination = [];
+        foreach ($catLocations as $location) {
+            if ($post['taxrule_id'] != $location['taxruleloc_taxrule_id']) {
+                $combination[] = $location['taxruleloc_from_country_id'] . "-" . $location['taxruleloc_from_state_id'] . "-" . $location['taxruleloc_to_country_id'] . "-" . $location['taxruleloc_to_state_id'] . "-" . $location['taxruleloc_type'];
+            }
+        }
+        foreach ($post['taxruleloc_from_state_id'] as $fromState) {
+            if (count($post['taxruleloc_from_state_id']) > 1 && $fromState == -1) {
+                continue;
+            }
+            foreach ($post['taxruleloc_to_state_id'] as $toState) {
+                if (count($post['taxruleloc_to_state_id']) > 1 && $toState == -1) {
+                    continue;
+                }
+                $isUnique = 1;
+                if ($post['taxruleloc_type'] == TaxRule::TYPE_EXCLUDE_STATES) {
+                    $isUnique = null;
+                }
+                $key = $post['taxruleloc_from_country_id'] . "-" . $fromState . "-" . $post['taxruleloc_to_country_id'] . "-" . $toState . "-" . $post['taxruleloc_type'] . "-" . $isUnique;
+                if (in_array($key, $combination)) {
+                    LibHelper::exitWithError(Labels::getLabel('LBL_COMBINATION_OF_COUNTRY_STATE_AND_STATE_TYPE_ALREADY_EXIST_IN_CATEGORY', $this->siteLangId), true);
+                }
+            }
+        }
+    }
+
+    public function getCombinedTaxes($taxStrId, $ruleId = 0) {
+        $taxStrId = FatUtility::int($taxStrId);
+        $ruleId = FatUtility::int($ruleId);
+        $this->set('taxStrId', $taxStrId);
+        $this->set('combTaxes', (new TaxStructure($taxStrId))->getCombinedTaxesByParent($this->siteLangId, $ruleId));
+        $this->_template->render(false, false);
     }
 
     public function deleteRecord() {
@@ -185,11 +263,11 @@ class TaxCategoriesRuleController extends ListingBaseController {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $taxObj = new Tax($recordId);
-        $taxObj->assignValues(array('taxcat_deleted' => applicationConstants::YES));
-        if (!$taxObj->save()) {
-            LibHelper::exitWithError($taxObj->getError(), true);
+        $taxRule = new TaxRule($recordId);
+        if (!$taxRule->deleteRelatedRecord()) {
+            LibHelper::exitWithError($taxRule->getError());
         }
+
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -213,9 +291,6 @@ class TaxCategoriesRuleController extends ListingBaseController {
         $fld = $frm->addFloatField(Labels::getLabel('FRM_TAX_RATE(%)', $this->siteLangId), 'trr_rate', '');
         $fld->requirements()->setPositive();
 
-        $taxStructures = TaxStructure::getAllAssoc($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TAX', $this->siteLangId), 'taxrule_taxstr_id', $taxStructures, '', array(), Labels::getLabel('FRM_Select_Tax', $this->siteLangId));
-        $fld->requirements()->setRequired();
         /* ] */
 
         /* [ TAX CATEGORY RULE LOCATIONS FORM */
@@ -240,16 +315,19 @@ class TaxCategoriesRuleController extends ListingBaseController {
         $fld->requirements()->setRequired();
         /* ] */
 
+        $taxStructures = TaxStructure::getAllAssoc($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TAX', $this->siteLangId), 'taxrule_taxstr_id', $taxStructures, '', array(), Labels::getLabel('FRM_Select_Tax', $this->siteLangId));
+        $fld->requirements()->setRequired();
+
         /* [ TAX GROUP RULE COMBINED DETAILS FORM */
-        $frm->addHiddenField('', 'combinedTaxDetails');
+        $frm->addHTML('', 'combinedTaxDetails', '<div class="combinedTaxDetails"></div>');
         /* ] */
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        $frm->addHTML('', 'space','');
-        $frm->addHtml('', 'space','');
+        $frm->addHTML('', 'space', '');
         return $frm;
     }
 
