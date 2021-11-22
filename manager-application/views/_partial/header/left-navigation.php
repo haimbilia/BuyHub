@@ -368,6 +368,43 @@
                     </div>
                 </li>
             <?php } ?>
+                
+                 <?php
+            if (
+                    $objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)
+                     
+            ) {
+                ?>
+                <li class="menu-item dropdown">
+                    <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>">
+                        <span class="menu-icon">
+                            <svg class="svg" width="24" height="24">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
+                            </use>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                        <h6 class=""><?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?></h6>
+                        <ul class="nav">
+                            <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('TaxCategories'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>  
+                                 <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('TaxCategoriesRule'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </li>
+            <?php } ?>
             <?php
             if (
                     $objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true) ||

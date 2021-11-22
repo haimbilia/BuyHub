@@ -1,4 +1,6 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php
+
+defined('SYSTEM_INIT') or die('Invalid Usage.');
 $printData = false;
 if (!isset($tbody)) {
     $printData = true;
@@ -17,13 +19,13 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="taxcat_ids[]" value=' . $row['taxcat_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['taxcat_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
-                break;      
-            case 'taxcat_identifier':               
-                if ($row['taxcat_name'] != '') {                   
+                break;
+            case 'taxcat_identifier':
+                if ($row['taxcat_name'] != '') {
                     $td->appendElement('plaintext', array(), $row['taxcat_name'], true);
                     $td->appendElement('br', array());
                     $td->appendElement('plaintext', array(), '(' . $row[$key] . ')', true);
@@ -49,11 +51,25 @@ foreach ($arrListing as $sn => $row) {
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['taxcat_id']
                 ];
-                
+
                 if ($canEdit) {
                     $data['editButton'] = [];
                     $data['deleteButton'] = [];
                 }
+                $data['otherButtons'] = [
+                    [
+                        'attr' => [
+                            'href' => UrlHelper::generateUrl('taxCategoriesRule', 'index', [$row['taxcat_id']]),
+                            'title' => Labels::getLabel('LBL_Tax_Categories_Rule', $siteLangId)
+                        ],
+                        'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use xlink:href="/admin/images/retina/sprite.yokart.svg#password">
+                                                </use>
+                                            </svg>
+                                        </i>'
+                    ]
+                ];
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
@@ -66,12 +82,12 @@ foreach ($arrListing as $sn => $row) {
 
 if (count($arrListing) == 0) {
     $tbody->appendElement('tr')->appendElement(
-        'td',
-        array(
-            'colspan' => count($fields),
-            'class' => 'noRecordFoundJs'
-        ),
-        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
+            'td',
+            array(
+                'colspan' => count($fields),
+                'class' => 'noRecordFoundJs'
+            ),
+            Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 
