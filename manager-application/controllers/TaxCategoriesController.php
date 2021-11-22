@@ -1,11 +1,13 @@
 <?php
 
-class TaxCategoriesController extends ListingBaseController {
+class TaxCategoriesController extends ListingBaseController
+{
 
     protected $modelClass = 'Tax';
     protected $pageKey = 'MANAGE_TAX_CATEGORIES';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewTax();
     }
@@ -16,7 +18,8 @@ class TaxCategoriesController extends ListingBaseController {
      * @param  bool $setVariable
      * @return void
      */
-    protected function checkEditPrivilege(bool $setVariable = false): void {
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
         if (true === $setVariable) {
             $this->set("canEdit", $this->objPrivilege->canEditTax($this->admin_id, true));
         } else {
@@ -24,9 +27,10 @@ class TaxCategoriesController extends ListingBaseController {
         }
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
+        // $frmSearch = $this->getSearchForm($fields);
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_TAX_CATEGORIES', $this->siteLangId);
         $this->setModel();
         $this->set('pageData', $pageData);
@@ -38,7 +42,8 @@ class TaxCategoriesController extends ListingBaseController {
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function getSearchForm($fields = []) {
+    public function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
@@ -50,7 +55,8 @@ class TaxCategoriesController extends ListingBaseController {
         return $frm;
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'tax-categories/search.php', true),
@@ -59,7 +65,8 @@ class TaxCategoriesController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    private function getListingData()
+    {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -108,22 +115,26 @@ class TaxCategoriesController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
     }
 
-    public function form() {
+    public function form()
+    {
         $this->objPrivilege->canEditTax();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         if (0 < $recordId) {
-            $data = Tax::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId,
-                            [
-                                'taxcat_id',
-                                'taxcat_code',
-                                'taxcat_parent',
-                                'taxcat_plugin_id',
-                                'taxcat_active',
-                                'taxcat_deleted',
-                                'taxcat_name'
-                            ]
-                            , true);
+            $data = Tax::getAttributesByLangId(
+                CommonHelper::getDefaultFormLangId(),
+                $recordId,
+                [
+                    'taxcat_id',
+                    'taxcat_code',
+                    'taxcat_parent',
+                    'taxcat_plugin_id',
+                    'taxcat_active',
+                    'taxcat_deleted',
+                    'taxcat_name'
+                ],
+                true
+            );
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
             }
@@ -140,7 +151,8 @@ class TaxCategoriesController extends ListingBaseController {
      * @param  array $constructorArgs
      * @return void
      */
-    protected function setLangTemplateData(array $constructorArgs = []): void {
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
         $this->objPrivilege->canEditBrandRequests();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
@@ -148,7 +160,8 @@ class TaxCategoriesController extends ListingBaseController {
         $this->checkMediaExist = false;
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditTax();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -171,7 +184,8 @@ class TaxCategoriesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteRecord() {
+    public function deleteRecord()
+    {
         $this->objPrivilege->canEditTax();
         $post = FatApp::getPostedData();
         if ($post == false) {
@@ -192,7 +206,8 @@ class TaxCategoriesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0) {
+    protected function getLangForm($recordId = 0, $lang_id = 0)
+    {
         $frm = new Form('frmTaxLang', array('id' => 'frmTaxLang'));
         $frm->addHiddenField('', 'taxcat_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id);
@@ -200,7 +215,8 @@ class TaxCategoriesController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getForm($taxcat_id = 0) {
+    protected function getForm($taxcat_id = 0)
+    {
         $this->objPrivilege->canEditTax();
         $frm = new Form('frmTax', array('id' => 'frmTax'));
         $frm->addHiddenField('', 'taxcat_id', FatUtility::int($taxcat_id));
@@ -223,7 +239,8 @@ class TaxCategoriesController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getFormColumns(): array {
+    protected function getFormColumns(): array
+    {
         $taxTblHeadingCols = CacheHelper::get('taxTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($taxTblHeadingCols) {
             return json_decode($taxTblHeadingCols);
@@ -241,7 +258,8 @@ class TaxCategoriesController extends ListingBaseController {
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             'select_all',
             'listSerial',
@@ -251,8 +269,25 @@ class TaxCategoriesController extends ListingBaseController {
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, ['taxcat_active'], Common::excludeKeysForSort());
     }
 
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => $pageTitle]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
+        }
+        return $this->nodes;
+    }
 }
