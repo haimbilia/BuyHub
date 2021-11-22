@@ -2106,4 +2106,20 @@ class CommonHelper extends FatUtility
     {
         return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
     }
+
+    public static function isSetCookie($cookieName)
+    {
+        if (isset($_COOKIE[$cookieName])) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function getCookie($cookieName)
+    {
+        if (isset($_COOKIE[$cookieName]) && !empty($_COOKIE[$cookieName])) {
+            return true;
+        }
+        return false;
+    }
 }

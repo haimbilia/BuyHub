@@ -193,7 +193,7 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
             callbackOnUnSelect(e);
         }
     });
-    
+
     if (0 < ele.closest('.advancedSearchJs').length) {
         ele.data('select2').$container.addClass("w-100");
     }
@@ -241,4 +241,11 @@ $(document).ready(function () {
         }
     });
     /* Active Sidebar Link. */
+
+    /* alert-text close */
+    /* $('.closeJs').on('click', function () {
+        $.cookie($(this).attr('data-name'), true);
+    }); */
+    /* alert-text close */
+
 });

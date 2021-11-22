@@ -204,7 +204,7 @@ class SellerPackagePlansController extends ListingBaseController
         $subsPeriodFld = $frm->addSelectBox(Labels::getLabel('FRM_PERIOD', $this->siteLangId), 'spplan_frequency', $subsPeriodOption, '', ['class' => 'fieldsVisibilityJs'], '');
 
         $fld = $frm->addTextBox(Labels::getLabel('FRM_TIME_INTERVAL_(FREQUENCY)', $this->siteLangId), 'spplan_interval');
-        $fld->requirements()->setIntPositive();        
+        $fld->requirements()->setIntPositive();
         $intervalFld = new FormFieldRequirement('spplan_interval', Labels::getLabel('FRM_TIME_INTERVAL_(FREQUENCY)', $this->siteLangId));
         $intervalFld->setRequired(false);
         $reqIntervalFld = new FormFieldRequirement('spplan_interval', Labels::getLabel('FRM_TIME_INTERVAL_(FREQUENCY)', $this->siteLangId));
@@ -298,27 +298,29 @@ class SellerPackagePlansController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_PACKAGES', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_SELLER_PACKAGES', $this->siteLangId);
-
-        $url = FatApp::getQueryStringData('url');
-        $urlParts = explode('/', $url);
-        $title = Labels::getLabel('LBL_SUBSCRIPTION_PACKAGE_PLANS', $this->siteLangId);
-        if (isset($urlParts[2])) {
-            $attr = ['COALESCE(spackage_name, spackage_identifier) as spackage_name'];
-            $data = SellerPackages::getAttributesByLangId($this->siteLangId, $urlParts[2], $attr, true);
-            $title = $data['spackage_name'];
-        }
-
         switch ($action) {
             case 'list':
+                $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_PACKAGES', $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_SELLER_PACKAGES', $this->siteLangId);
+
+                $url = FatApp::getQueryStringData('url');
+                $urlParts = explode('/', $url);
+                $title = Labels::getLabel('LBL_SUBSCRIPTION_PACKAGE_PLANS', $this->siteLangId);
+                if (isset($urlParts[2])) {
+                    $attr = ['COALESCE(spackage_name, spackage_identifier) as spackage_name'];
+                    $data = SellerPackages::getAttributesByLangId($this->siteLangId, $urlParts[2], $attr, true);
+                    $title = $data['spackage_name'];
+                }
+
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('SellerPackages')],
                     ['title' => $title]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

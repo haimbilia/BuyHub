@@ -45,7 +45,7 @@ class SellerPackagesController extends ListingBaseController
 
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_PACKAGES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-        
+
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['statusButtons'] = true;
@@ -305,15 +305,18 @@ class SellerPackagesController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_PACKAGES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {
-            case 'index':               
+            case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

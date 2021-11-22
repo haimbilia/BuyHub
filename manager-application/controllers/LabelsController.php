@@ -2,6 +2,8 @@
 
 class LabelsController extends ListingBaseController
 {
+    protected $pageKey = 'MANAGE_LABELS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,7 +15,7 @@ class LabelsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_LABELS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -109,6 +111,10 @@ class LabelsController extends ListingBaseController
             $srch->addCondition('label_type', '=', $type);
         }
 
+        /*  if (!empty($post['label_key'])) {
+            $srch->addCondition('label_key', 'like', "mysql_func_CONCAT(" . $post['label_key'] . ", '%')", 'AND', true);
+        } */
+
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('lbl.label_key', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('lbl.label_caption', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -135,6 +141,7 @@ class LabelsController extends ListingBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('labelPrefixes', Labels::getPrefixTypes($this->siteLangId));
         $this->set('canEdit', $this->objPrivilege->canEditLanguageLabels($this->admin_id, true));
     }
 
@@ -273,7 +280,9 @@ class LabelsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'label_type', array('-1' => Labels::getLabel('LBL_SELECT_PLATFORM', $this->siteLangId)) + Labels::getTypeArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_PLATFORM', $this->siteLangId), 'label_type', array('-1' => Labels::getLabel('FRM_SELECT_PLATFORM', $this->siteLangId)) + Labels::getTypeArr($this->siteLangId), -1, array(), '');
+
+        /* $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'label_key', array('' => Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId)) + Labels::getPrefixTypes($this->siteLangId), '', array(), ''); */
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -317,7 +326,7 @@ class LabelsController extends ListingBaseController
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'label_key' => Labels::getLabel('LBL_SYSTEM_CODE', $this->siteLangId),
+            'label_key' => Labels::getLabel('LBL_LABEL_TYPE', $this->siteLangId),
             'label_caption' => Labels::getLabel('LBL_CAPTION', $this->siteLangId),
             'label_type' => Labels::getLabel('LBL_PLATFORM', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION', $this->siteLangId),
@@ -331,8 +340,8 @@ class LabelsController extends ListingBaseController
     {
         return [
             'listSerial',
-            'label_key',
             'label_caption',
+            'label_key',
             'label_type',
             'action',
         ];
@@ -345,15 +354,18 @@ class LabelsController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_LABELS', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {
             case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

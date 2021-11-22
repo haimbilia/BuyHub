@@ -52,8 +52,8 @@ class ProfileController extends ListingBaseController
         $post = FatApp::getPostedData();
         $post = $frm->getFormDataFromArray($post);
 
-        if (false === $post) {       
-            LibHelper::exitWithError(current($frm->getValidationErrors()),true);
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         unset($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_name']);
         $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_name'] = $post['admin_name'];
@@ -99,7 +99,7 @@ class ProfileController extends ListingBaseController
     public function uploadProfileImage()
     {
         $post = FatApp::getPostedData();
-        if (empty($post)) {         
+        if (empty($post)) {
             LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
         }
         if (isset($_FILES['org_image']['tmp_name'])) {
@@ -153,17 +153,19 @@ class ProfileController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-
         switch ($action) {
             case 'index':
-                $this->nodes = [                   
+                $this->nodes = [
                     ['title' => Labels::getLabel('LBL_PROFILE', $this->siteLangId)]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }
-    
+
     public function changePassword()
     {
         $this->set('frm', $this->getPwdFrm());
@@ -224,12 +226,10 @@ class ProfileController extends ListingBaseController
         $session_element_name = AdminAuthentication::SESSION_ELEMENT_NAME;
         $cookie_name = $session_element_name . 'layout';
         if (setcookie($cookie_name, $post['layout'], time() + 86400 * 30, CONF_WEBROOT_FRONT_URL)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Setting_Updated_Successfully', $this->siteLangId) ,true);
-          
+            LibHelper::exitWithError(Labels::getLabel('LBL_Setting_Updated_Successfully', $this->siteLangId), true);
         } else {
-            LibHelper::exitWithError($this->str_invalid_request,true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-     
     }
 
     private function getPwdFrm()
