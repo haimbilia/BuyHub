@@ -323,8 +323,7 @@ class AffiliateCommissionController extends ListingBaseController
     }
 
     public function getBreadcrumbNodes($action)
-    {
-        parent::getBreadcrumbNodes($action);
+    {        
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_AFFILIATE_COMMISSION', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 

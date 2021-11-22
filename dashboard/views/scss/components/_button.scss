@@ -82,7 +82,7 @@
      &.btn-outline-gray {
          background: none;
          border-color: $border-color;
-         color: $body-color;
+         color: $txt-body;
      }
      &.btn-block {
          display: block;
@@ -108,7 +108,7 @@
      }
      &.btn-link {
          text-decoration: none;
-         color: $body-color;
+         color: $txt-body;
          padding: 0;
          .arrow {
              display: inline-block;

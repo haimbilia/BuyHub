@@ -280,12 +280,9 @@ Updates/Fixes :
     => 058807 - Unable to change the URL for a sellers collection    
     => 059263 - On order product search with lang there is query issue 
     => 059798 - invalid mime type error coming while uploading doc file in blog contribution
-<<<<<<< HEAD
-=======
     => 059422 - Seller: Admin disable the "Allow Sellers To Add Products" option and then, "Add Seller's Shipping profile" option is not showing to add the shipping for the marketplace product
     => 059821 - new tag unable to add in catalog
     => 059913 - on home page favorite icon not updating
->>>>>>> 48c32724e... bug-059913 - on home page favorite icon not updatingq
 
 
 New Features:  
@@ -312,6 +309,7 @@ Admin UI/UX Enhancements pages:
    => login and forgot password 
    => Admin Profile info 
    => Content Pages Management  
+   => Content Block Integration
 
     
 Known Issues and Problems :

@@ -94,7 +94,7 @@ class TagsController extends ListingBaseController {
         $srch->addGroupBy('product_id');
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet()); 
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());

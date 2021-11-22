@@ -17,7 +17,7 @@
         <?php 
         $arr_flds = array(
             'select_all' => Labels::getLabel('LBL_Select_all', $siteLangId),
-            'listserial' => Labels::getLabel('LBL_#', $siteLangId),
+            'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
             'nav_identifier' => Labels::getLabel('LBL_Title', $siteLangId),
             'nav_active'    =>    Labels::getLabel('LBL_Status', $siteLangId),
             'action' => '',
@@ -25,7 +25,7 @@
         if (!$canEdit) {
             unset($arr_flds['select_all'], $arr_flds['action']);
         }
-        $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive table--hovered'));
+        $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive table-scrollable js-scrollable table--hovered'));
         $th = $tbl->appendElement('thead')->appendElement('tr');
         foreach ($arr_flds as $key => $val) {
             if ('select_all' == $key) {
@@ -43,9 +43,9 @@
                 $td = $tr->appendElement('td');
                 switch ($key) {
                     case 'select_all':
-                        $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItem--js" type="checkbox" name="nav_ids[]" value=' . $row['nav_id'] . '><i class="input-helper"></i></label>', true);
+                        $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="nav_ids[]" value=' . $row['nav_id'] . '><i class="input-helper"></i></label>', true);
                         break;
-                    case 'listserial':
+                    case 'listSerial':
                         $td->appendElement('plaintext', array(), $sr_no);
                         break;
                     case 'nav_identifier':

@@ -50,7 +50,7 @@ class SalesReportController extends ListingBaseController
             $this->addSortingElements($frm, 'orderDate', applicationConstants::SORT_DESC);
         }
         $frm->addHiddenField('', 'orderDate', $orderDate);
-       
+
         if (empty($orderDate)) {
             $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
             $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
@@ -137,7 +137,7 @@ class SalesReportController extends ListingBaseController
                 $arr = [];
                 foreach ($fields as $key => $val) {
                     switch ($key) {
-                        case 'listserial':
+                        case 'listSerial':
                             $arr[] = $count;
                             break;
                         case 'orderDate':
@@ -262,13 +262,15 @@ class SalesReportController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_SALES_OVER_TIME', $this->siteLangId)]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

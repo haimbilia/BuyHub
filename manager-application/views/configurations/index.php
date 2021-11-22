@@ -2,9 +2,16 @@
 
 <main class="main">
     <div class="container">
+        <?php
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
         <div class="row">
-            <div class="col-md-4">
-                <div class="card sticky-sidebar">
+            <div class="col-lg-4"> <button class="float-btn" type="button" data-trigger="card-aside">
+                    <svg class="svg" width="20" height="20">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
+                        </use>
+                    </svg>
+                </button>
+                <div class="card  sticky-sidebar card-aside" id="card-aside" data-close-on-click-outside="card-aside">
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title">
@@ -17,39 +24,44 @@
                                 <?php echo Labels::getLabel('LBL_GENERAL_SETTINGS', $siteLangId); ?>
                             </h3>
                         </div>
+                        <div class="card-toolbar">
+                            <button class="btn btn-gray card-aside-close" data-target-close="card-aside">
+                                <svg class="svg" width="24" height="24">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
+                                    </use>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="settings-inner">
                             <ul class="confTypesJs">
-                                <?php foreach ($tabs as $formType => $tabName) {    
-                                    $tabsId = 'tabJs-'.$formType;                   
+                                <?php foreach ($tabs as $formType => $tabName) {
+                                    $tabsId = 'tabJs-' . $formType;
                                 ?>
-                                <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>"
-                                    data-listType="<?php echo $formType; ?>">
-                                    <a class="settings-inner-link" rel="<?php echo $tabsId; ?>" href="javascript:void(0)"
-                                        onclick="getForm(<?php echo $formType ?>, <?php echo $defaultLangId ?>);">
-                                        <i class="settings-inner-icn">
-                                            <svg class="svg" width="20" height="20">
-                                                <use
-                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-system-setting' ?>">
-                                                </use>
-                                            </svg>
-                                        </i>
-                                        <div>
-                                            <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
-                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
-                                                consectetur adipisicing
-                                                elit. Suscipit est quos </span>
-                                        </div>
-                                    </a>
-                                </li>
+                                    <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>" data-listType="<?php echo $formType; ?>">
+                                        <a class="settings-inner-link" rel="<?php echo $tabsId; ?>" href="javascript:void(0)" onclick="getForm(<?php echo $formType ?>, <?php echo $defaultLangId ?>);">
+                                            <i class="settings-inner-icn">
+                                                <svg class="svg" width="20" height="20">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-system-setting' ?>">
+                                                    </use>
+                                                </svg>
+                                            </i>
+                                            <div>
+                                                <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
+                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                    consectetur adipisicing
+                                                    elit. Suscipit est quos </span>
+                                            </div>
+                                        </a>
+                                    </li>
                                 <?php } ?>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8" id="frmBlockJs">
+            <div class="col-lg-8" id="frmBlockJs">
                 <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
             </div>
         </div>

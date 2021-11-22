@@ -15,10 +15,8 @@
                     </use>
                 </svg>
             </span>
-
         </a>
     </div>
-
     <div class="footer-action__item">
         <a class="footer-action__trigger" href="javascript:void(0);">
             <span class="icon">

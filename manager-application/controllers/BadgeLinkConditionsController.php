@@ -14,13 +14,12 @@ class BadgeLinkConditionsController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
         switch ($action) {
             case 'list':
                 $title = Labels::getLabel('LBL_BADGES', $this->siteLangId);
                 $type = Badge::TYPE_BADGE;
                 $segments = explode('/', current($_GET));
-                if (Badge::TYPE_RIBBON == end($segments)){
+                if (Badge::TYPE_RIBBON == end($segments)) {
                     $title = Labels::getLabel('LBL_RIBBONS', $this->siteLangId);
                     $type = Badge::TYPE_RIBBON;
                 }
@@ -33,7 +32,7 @@ class BadgeLinkConditionsController extends ListingBaseController
                 $title = Labels::getLabel('LBL_BADGES', $this->siteLangId);
                 $type = Badge::TYPE_BADGE;
                 $segments = explode('/', current($_GET));
-                if (Badge::TYPE_RIBBON == $segments[2]){
+                if (Badge::TYPE_RIBBON == $segments[2]) {
                     $title = Labels::getLabel('LBL_RIBBONS', $this->siteLangId);
                     $type = Badge::TYPE_RIBBON;
                 }
@@ -42,6 +41,9 @@ class BadgeLinkConditionsController extends ListingBaseController
                     ['title' => Labels::getLabel('LBL_BIND_CONDITIONS', $this->siteLangId), 'href' =>  UrlHelper::generateUrl('BadgeLinkConditions', 'list', [$segments[3], $type])],
                     ['title' => Labels::getLabel('LBL_CONDITION_FORM', $this->siteLangId)],
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
                 break;
         }
         return $this->nodes;
@@ -53,7 +55,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $frmSearch = $this->getSearchForm($badgeType, $conditionType);
         $frmSearch->fill(['blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
-        
+
         $this->set('badgeName', $this->getBadgeName($badgeId));
         $this->set("frmSearch", $frmSearch);
         $this->set("badgeId", $badgeId);
@@ -77,7 +79,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         /* Bind Records */
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        
+
         if (!empty($keyword)) {
             $srch->addHaving('record_name', 'LIKE', '%' . $keyword . '%');
         }
@@ -174,7 +176,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         if (!empty($recordType)) {
             $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'record_type', '=',  $recordType);
         }
-        
+
         $position = FatApp::getPostedData('blinkcond_position');
         if (!empty($position)) {
             $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'position', '=',  $position);
@@ -195,7 +197,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         /* $srch->getResultSet();
         echo $srch->getError();die; */
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        
+
         $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
         $this->set('recordCondition', $recordCondition);
         $this->set('badgeConditionType', $badgeConditionType);
@@ -342,7 +344,7 @@ class BadgeLinkConditionsController extends ListingBaseController
     {
         $frmSearch = "";
         $recordType = 0;
-        
+
         if (0 < $badgeLinkCondId) {
             $recordType = BadgeLinkCondition::getAttributesById($badgeLinkCondId, 'blinkcond_record_type');
             if (BadgeLinkCondition::RECORD_TYPE_SHOP != $recordType) {
@@ -359,7 +361,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
         $this->set('frmSearch', $frmSearch);
         $this->_template->addJs(array('js/select2.js'));
-        $this->_template->addCss(array('css/select2.min.css'));       
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->_template->render();
     }
 
@@ -533,8 +535,8 @@ class BadgeLinkConditionsController extends ListingBaseController
             $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId));
         } else {
             $frm->addSelectBox(Labels::getLabel('LBL_CONDITION', $this->siteLangId), 'blinkcond_condition_type', BadgeLinkCondition::getConditionTypesArr($this->siteLangId));
-        }            
-        
+        }
+
         if (Badge::TYPE_RIBBON == $badgeType) {
             $frm->addSelectBox(Labels::getLabel('LBL_POSITION', $this->siteLangId), 'blinkcond_position', Badge::getRibbonPostionArr($this->siteLangId));
         }

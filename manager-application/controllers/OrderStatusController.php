@@ -2,6 +2,9 @@
 
 class OrderStatusController extends ListingBaseController
 {
+    protected $modelClass = 'OrderStatus';
+    protected $pageKey = 'MANAGE_ORDER_STATUS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -17,7 +20,7 @@ class OrderStatusController extends ListingBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditOrderStatus();
-        $this->modelObj = (new ReflectionClass('OrderStatus'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_STATUS_SETUP', $this->siteLangId));
     }
@@ -27,7 +30,7 @@ class OrderStatusController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDER_STATUS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);

@@ -63,23 +63,35 @@ class Labels extends MyAppModel
         return HtmlHelper::getStatusHtml($status, $msg);
     }
 
-    public static function getPrefixTypes($langId)
+    public static function getPrefixTypes(int $langId)
     {
-        return
+        $labelsPrefixes = CacheHelper::get('labelsPrefixes' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($labelsPrefixes) {
+            return json_decode($labelsPrefixes);
+        }
+
+        $arr =
             [
-                'GEN' => self::getLabel('GEN_GENERAL', $langId),
-                'TXT' => self::getLabel('GEN_TEXT', $langId),
-                'LBL' => self::getLabel('GEN_LABELS', $langId),
-                'MSG' => self::getLabel('GEN_SYSTEM_MESSAGES', $langId),
-                'APP' => self::getLabel('GEN_APP', $langId),
-                'API' => self::getLabel('GEN_THIRD_PARTY_API', $langId),
-                'BTN' => self::getLabel('GEN_BUTTONS', $langId),
+                'GEN' => self::getLabel('GEN_GENERAL_LABELS', $langId),
+                'TXT' => self::getLabel('TXT_TEXT_MESSAGES', $langId),
+                'NAV' => self::getLabel('NAV_NAVIGATION_LABELS', $langId),
+                'LBL' => self::getLabel('LBL_GENERAL_LABELS', $langId),
+                'FRM' => self::getLabel('FRM_FORM_FIELDS_&_LABELS', $langId),
+                'MSG' => self::getLabel('MSG_SYSTEM_MESSAGES', $langId),
+                'APP' => self::getLabel('APP_APP_LABELS', $langId),
+                'API' => self::getLabel('API_API_LABELS', $langId),
+                'BTN' => self::getLabel('BTN_BUTTON_LABELS', $langId),
                 'INV' => self::getLabel('GEN_ORDER_OR_INVOICES', $langId),
-                'VLBL' => self::getLabel('GEN_VALIDATION_LABELS', $langId),
-                'USER' => self::getLabel('GEN_USER_NOTIFICATION', $langId),
-                'L' => self::getLabel('GEN_LABELS', $langId),
-                'M' => self::getLabel('GEN_SYSTEM_MESSAGES', $langId),
+                'VLBL' => self::getLabel('VLBL_FORM_VALIDATION_LABELS', $langId),
+                'USER' => self::getLabel('USER_USER_NOTIFICATIONS', $langId),
+                'L' => self::getLabel('L_GENERAL_LABELS', $langId),
+                'M' => self::getLabel('M_SYSTEM_MESSAGES', $langId),
+                'ERR' => self::getLabel('ERR_ERROR_MESSAGES', $langId),
+                'SUC' => self::getLabel('SUC_SUCCESS_MESSAGES', $langId),
+                'CON' => self::getLabel('CON_CONFIRMATION_MESSAGES', $langId),
             ];
+        CacheHelper::create('abusiveWordsTblHeadingCols' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
     }
 
     public static function getSearchObject($langId = 0, $attr = '', $setOrderBy = true)
@@ -352,5 +364,16 @@ class Labels extends MyAppModel
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAllAssoc($rs);
+    }
+
+    public static function displayPrefixType(string $key, int $langId)
+    {
+        $key =  strtoupper(strstr($key, '_', true));
+        $arr = self::getPrefixTypes($langId);
+        if (!array_key_exists($key, $arr)) {
+            return $key;
+        }
+
+        return $arr[$key];
     }
 }
