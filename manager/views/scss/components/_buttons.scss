@@ -17,11 +17,14 @@
 }
 
 .btn {
-    padding: 0.6rem 1.3rem;
+    padding: $input-padding;
+    height: $input-height;
     font-size: 0.85rem;
     line-height: 1.5;
     border-width: 2px;
     border-radius: $radius-common !important;
+    display: flex;
+    align-items: center;
     &:focus {
         outline: none !important;
     }

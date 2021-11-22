@@ -248,14 +248,16 @@ class CatalogReportController extends ListingBaseController
     }
 
     public function getBreadcrumbNodes($action)
-    {
-        parent::getBreadcrumbNodes($action);
-
+    {       
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_PRODUCT_SALES_REPORT', $this->siteLangId)]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

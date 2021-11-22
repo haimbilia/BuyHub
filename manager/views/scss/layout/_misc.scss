@@ -4,9 +4,9 @@
 }
 
 .app {
-    display: flex;
-    flex: 1 0 auto;
-    flex-direction: row;
+    // display: flex;
+    // flex: 1 0 auto;
+    // flex-direction: row;
 }
 
 .wrap {
@@ -94,6 +94,8 @@
 }
 
 .advanced-trigger {
+    display: flex;
+    align-items: center;
     background-color: $bg-gray;
     border: solid 1px transparent;
     color: $txt-gray;
@@ -497,9 +499,12 @@
         transition: transform 0.3s ease-out;
         transform: translateX(100%);
     }
-    &-close {
+    .card-head {
+        flex-direction: row;
+    }
+    &-close { 
         @include media-breakpoint-up(lg) {
-            display: none;
+            display: none !important;
         }
     }
     &--on & {
@@ -520,7 +525,7 @@
     position: fixed;
     margin: 1em;
     z-index: 9;
-    #{$end-direction}:0.5rem;
+    #{$end-direction}: 0.5rem;
     bottom: 6rem;
     display: flex;
     align-items: center;

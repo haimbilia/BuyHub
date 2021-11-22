@@ -2,6 +2,8 @@
 
 class SettingsController extends ListingBaseController
 {
+    protected $pageKey = 'SETTINGS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -19,7 +21,13 @@ class SettingsController extends ListingBaseController
         $nodes = array();
         switch ($action) {
             case 'index':
-                $nodes[] = array('title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId));
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $nodes[] = array('title' => $pageTitle);
+                break;
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
                 break;
         }
         return $nodes;

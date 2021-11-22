@@ -40,7 +40,7 @@ class PluginsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $frmSearch->fill(['type' => Plugin::TYPE_CURRENCY_CONVERTER]);
-        
+
         $this->set('frmSearch', $frmSearch);
         $this->set('svgIconNames', Plugin::getSvgIconNames());
         $this->set('activeTab', Plugin::TYPE_CURRENCY_CONVERTER);
@@ -136,7 +136,7 @@ class PluginsController extends ListingBaseController
         $this->set("arrListing", $arrListing);
         $this->set('recordCount', $srch->recordCount());
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
-        
+
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 
@@ -157,7 +157,7 @@ class PluginsController extends ListingBaseController
         if (0 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        
+
         $data = Plugin::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
         $pluginType = $data['plugin_type'];
         $frm = $this->getForm($pluginType, $recordId);
@@ -177,7 +177,7 @@ class PluginsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        
+
         $this->set('recordId', $recordId);
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
@@ -497,15 +497,19 @@ class PluginsController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_PLUGINS', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
         switch ($action) {
             case 'index':
+                $pageData = PageLanguageData::getAttributesByKey('MANAGE_PLUGINS', $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

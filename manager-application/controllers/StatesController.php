@@ -162,7 +162,7 @@ class StatesController extends ListingBaseController
             $frm->fill($data);
         }
 
-        
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_STATE_SETUP', $this->siteLangId));
@@ -325,8 +325,6 @@ class StatesController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_STATES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
@@ -336,6 +334,10 @@ class StatesController extends ListingBaseController
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

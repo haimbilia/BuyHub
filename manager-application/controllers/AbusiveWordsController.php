@@ -295,8 +295,7 @@ class AbusiveWordsController extends ListingBaseController
     }
 
     public function getBreadcrumbNodes($action)
-    {
-        parent::getBreadcrumbNodes($action);
+    {        
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ABUSIVE_KEYWORDS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 

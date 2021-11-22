@@ -4,7 +4,11 @@
             <div class="page-title">
                 <h1>Page title goes here</h1>
                 <span class="page-title-sub"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
-                    repudiandae,</span>
+                    repudiandae, 
+                  <a href=""><i class="fas fa-lightbulb"></i></a>  
+                  <a href="">  <i class="fas fa-external-link-alt"></i> </a>
+                  <a href=""> <i class="fas fa-exclamation-triangle"></i> </a>
+                </span>
             </div>
             <div class="main-header-toolbar">
                 <div class="header-action">
@@ -684,7 +688,7 @@
         </div>
     </div>
     <div class="alert alert-solid-warning fade show" role="alert">
-        <div class="alert-icon"><i class="flaticon-warning"></i></div>
+        <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="alert-text">A simple warning alert—check it out!</div>
         <div class="alert-close">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -693,7 +697,7 @@
         </div>
     </div>
     <div class="alert alert-solid-success  fade show" role="alert">
-        <div class="alert-icon"><i class="flaticon-warning"></i></div>
+        <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="alert-text">A simple warning alert—check it out!</div>
         <div class="alert-close">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">

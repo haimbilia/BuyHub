@@ -43,7 +43,7 @@ class ShopReportReasonsController extends ListingBaseController
                     'onclick' => "addNew(true)",
                     'title' => $btnTitle,
                 ],
-                'label' => $btnTitle,   
+                'label' => $btnTitle,
             ];
         }
 
@@ -121,7 +121,6 @@ class ShopReportReasonsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditShopReportReasons($this->admin_id, true));
-        
     }
 
     public function form()
@@ -142,7 +141,7 @@ class ShopReportReasonsController extends ListingBaseController
             }
             $frm->fill($data);
         }
-        
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->siteLangId));
@@ -286,8 +285,7 @@ class ShopReportReasonsController extends ListingBaseController
 
 
     public function getBreadcrumbNodes($action)
-    {
-        parent::getBreadcrumbNodes($action);
+    {       
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SHOP_REPORT_REASONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {
@@ -296,6 +294,10 @@ class ShopReportReasonsController extends ListingBaseController
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }
