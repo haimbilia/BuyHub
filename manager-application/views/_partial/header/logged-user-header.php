@@ -1,7 +1,7 @@
 <div class="app">
     <?php $this->includeTemplate('_partial/header/left-navigation.php') ?>
     <div class="wrap">
-        <header class="main-header">
+        <header class="main-header mainHeaderJs">
             <div class="container-fluid">
                 <div class="main-header-inner">
                     <div class="page-title">
@@ -14,7 +14,7 @@
                             } ?>
                         </h1>
                         <?php if (isset($pageData['plang_summary'])) { ?>
-                            <span class="page-title-sub"> <?php echo $pageData['plang_summary']; ?></span>
+                            <span class="page-title-sub"> <?php echo $pageData['plang_summary']; ?> <a href="javascript:void(0)" class="openAlertJs" data-pageid="<?php echo $pageData['plang_id']; ?>" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>"><i class="fas fa-lightbulb"></i></a></span>
                         <?php } ?>
 
                     </div>
@@ -410,7 +410,7 @@
                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
                     <div class="alert-text"><?php echo $pageData['plang_warring_msg']; ?></div>
                     <div class="alert-close">
-                        <button type="button" class="close closeJs" data-dismiss="alert" aria-label="Close" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>">
+                        <button type="button" class="close closeAlertJs <?php echo 'alert_' . $pageData['plang_id']; ?>" data-dismiss="alert" aria-label="Close" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>">
                             <span aria-hidden="true"><i class="la la-close"></i></span>
                         </button>
                     </div>

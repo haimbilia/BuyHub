@@ -243,9 +243,19 @@ $(document).ready(function () {
     /* Active Sidebar Link. */
 
     /* alert-text close */
-    /* $('.closeJs').on('click', function () {
+    $('.closeAlertJs').on('click', function () {
         $.cookie($(this).attr('data-name'), true);
-    }); */
+    });
     /* alert-text close */
+
+    $('.openAlertJs').on('click', function () {
+        $.removeCookie($(this).attr('data-name'));
+        if ($('.mainHeaderJs').find('.closeAlertJs').length == 0) {
+            data = 'id=' + $(this).attr('data-pageid');
+            fcom.updateWithAjax(fcom.makeUrl('PageLanguageData', 'displayAlert'), data, function (t) {
+                $('.mainHeaderJs').append(t.html);
+            });
+        }
+    });
 
 });
