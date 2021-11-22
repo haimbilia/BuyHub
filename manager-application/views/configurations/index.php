@@ -5,7 +5,7 @@
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
         <div class="row">
-            <div class="col-md-4"> <button class="float-btn" type="button" data-trigger="card-aside">
+            <div class="col-lg-4"> <button class="float-btn" type="button" data-trigger="card-aside">
                     <svg class="svg" width="20" height="20">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
                         </use>
@@ -61,7 +61,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-8" id="frmBlockJs">
+            <div class="col-lg-8" id="frmBlockJs">
                 <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
             </div>
         </div>
