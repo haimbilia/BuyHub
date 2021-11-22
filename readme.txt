@@ -309,6 +309,7 @@ Admin UI/UX Enhancements pages:
    => login and forgot password 
    => Admin Profile info 
    => Content Pages Management  
+   => Content Block Integration
 
     
 Known Issues and Problems :

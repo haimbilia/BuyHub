@@ -206,7 +206,7 @@
     }
     &_foot {
         padding-bottom: 15px;
-        color: $body-color;
+        color: $txt-body;
         .actions {
             margin-top: 0.5rem;
         }
@@ -504,7 +504,7 @@
             margin-#{$end-direction}: 10px;
         }
         .item__title {
-            color: $body-color;
+            color: $txt-body;
             margin: 0 0 4px 0;
             font-weight: 600;
             overflow-wrap: break-word;

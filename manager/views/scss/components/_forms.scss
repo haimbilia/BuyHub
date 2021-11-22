@@ -2,12 +2,15 @@ $input-height: 2.625rem;
 $input-padding: 0.6rem 0.75rem;
 $input-line-height: 1.5;
 $input-font-size: 0.85rem;
+$input-border-style:solid;
+$input-border-width:2px;
+$input-border-color: transparent;
 $input-border: none;
 $input-border-radius: 1px;
 $input-bg: $bg-gray;
 $input-color: #474747;
 @mixin input {
-    border: $input-border;
+    border: $input-border-style 0 $input-border-color;
     background-color: $input-bg;
     color: $input-color;
     height: $input-height;
@@ -57,7 +60,7 @@ $input-color: #474747;
     padding: $input-padding;
     min-width: 64px;
     text-align: center;
-    border: $input-border;
+    border: $input-border-style $input-border-width $input-border-color;
     height: $input-height;
     font-size: $input-font-size;
     line-height: $input-line-height;
@@ -257,7 +260,7 @@ $input-color: #474747;
 }
 
 .input-group-text {
-    border: $input-border;
+    border: $input-border-style $input-border-width $input-border-color;
     border-radius: $input-border-radius;
     background-color: $bg-gray;
 }
@@ -796,10 +799,15 @@ form.custom-form {
 }
 
 .select-language {
-    background-color: darken($input-bg, 5%); 
+    background-color: darken($input-bg, 5%);
 }
 
 .form-search {
+    .card-head {
+        @include media-breakpoint-down(lg) { 
+            align-items: inherit;
+        }
+    }
     .card-head-label {
         @include media-breakpoint-up(lg) {
             max-width: 60%;

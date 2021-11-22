@@ -7,10 +7,12 @@ $frm->setFormTagAttribute('class', 'form');
 <main class="main mainJs">
     <div class="container">
         <?php
-        $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
-        <?php echo $frm->getFormTag(); ?>
-        <div class="add-stock">
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false);
+        $frm->setFormTagAttribute('id', 'addProductfrm');      
+       $frm->setFormTagAttribute('onsubmit', 'setup($(\'#addProductfrm\'));return false;');
 
+        echo $frm->getFormTag(); ?>
+        <div class="add-stock">
             <div class="add-stock-column column-nav">
                 <div class="sticky-top">
                     <div class="card">
@@ -618,7 +620,7 @@ $frm->setFormTagAttribute('class', 'form');
                     </div>
                 </div>
                 <div class="card" id="specifications">
-                    <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block3" aria-expanded="false" aria-controls="stock-block3">
+                    <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Specifications
                             </h3>
@@ -627,59 +629,61 @@ $frm->setFormTagAttribute('class', 'form');
                                 <span class="input-helper"></span>section</span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="stock-block3">
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="label">Label Text</label>
-                                    <input type="text" value="">
-                                    <span class="form-text text-muted"> Lorem ipsum dolor sit,
-                                        amet consectetur adipisicing elit. </span>
+                    <div class="card-body show" id="specifications-block">
+                        <div id="specificationsFormJs">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo Labels::getLabel('FRM_LABEL_TEXT', $siteLangId); ?>
+                                        </label>
+                                        <input type="text" name="sp_label"  id="sp_label"value="" data-required ="1" >
+                                        <span class="form-text text-muted">Lorem ipsum dolor sit,
+                                            amet consectetur adipisicing elit. </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label"> 
+                                            <?php echo Labels::getLabel('FRM_VALUE', $siteLangId); ?>
+                                        </label>
+                                        <input type="text" name="sp_value" id="sp_value" value="" data-required ="1">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="label"> Value</label>
-                                    <input type="text" value="">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo Labels::getLabel('FRM_GROUP', $siteLangId); ?>
+                                        </label>                                   
+                                        <input type="text" name="sp_group" id="sp_group" value="" data-required ="0">
 
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label"></label> 
+                                        <button type="button" class="btn btn-brand btn-wide" onclick="addSpecifiction()">
+                                            <?php echo Labels::getLabel('BTN_ADD', $siteLangId); ?>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="label">Group </label>
-                                    <input type="text" value="">
-
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="label"></label> <button type="submit" class="btn btn-brand btn-wide">Add</button>
-                                </div>
-                            </div>
-
-                        </div>
-
-
-
                         <div class="separator separator-dashed my-4"></div>
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Label Text</th>
-                                    <th>Value</th>
-                                    <th class="align-right">Group</th>
+                                    <th><?php echo Labels::getLabel('FRM_LABEL_TEXT', $siteLangId); ?></th>
+                                    <th><?php echo Labels::getLabel('FRM_VALUE', $siteLangId); ?></th>
+                                    <th> <?php echo Labels::getLabel('FRM_GROUP', $siteLangId); ?></th>
+                                    <th class="align-right">
+                                        <?php echo Labels::getLabel('FRM_ACTION', $siteLangId); ?>
+                                    </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Lorem ipsum dolor sit amet, consectetur </td>
-                                    <td>tenetur aspernatur
-                                        magni voluptas natus maxime quasi</td>
-                                    <td class="align-right">similique asperiores </td>
-                                </tr>
+                            <tbody id="specificationsTableBodyJs">                              
                             </tbody>
                         </table>
                     </div>
@@ -695,51 +699,24 @@ $frm->setFormTagAttribute('class', 'form');
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
                     <div class="card-body show" id="stock-block4">
-
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <div class="d-flex justify-content-between">
-                                        <label class="label">Tax category</label>
-                                        <a class="link" href="">Add Tax Category</a>
-                                    </div>
-                                    <select name="" id=""></select>
-
-                                </div>
-                            </div>
-
+                        <?php 
+                            echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $siteLangId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);      
+                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6); 
+                            echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6,['id' => 'ps_from_country_id']);      
+                            echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);            
+                        ?>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="label">Order Fulfllment Method</label>
-                                    <select name="" id=""></select>
-
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="label">Country of origin </label>
-                                    <input type="text" value="">
-
-                                </div>
-                            </div>
-
-
-                        </div>
-
-
-
                     </div>
                 </div>
-
-
             </div>
             <div class="add-stock-column column-actions">
                 <div class="sticky-top">
                     <div class="card">
                         <div class="card-body">
-                            <button type="button" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SAVE', $siteLangId); ?></button>                           
+                            <button type="submit" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SAVE', $siteLangId); ?></button>                           
                             <div class="mt-3">
                                 <?php 
                                     $fld = $frm->getField('product_active');                                      
@@ -791,7 +768,7 @@ $frm->setFormTagAttribute('class', 'form');
                                                 <div class="alert-icon"><i class="flaticon-warning"></i>
                                                 </div>
                                                 <div class="alert-text text-xs">
-                                                     <?php echo Labels::getLabel('FRM_DISCLAIMER', $siteLangId);?>: <?php echo Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $siteLangId);?>
+                                                     <?php echo Labels::getLabel('MSG_DISCLAIMER', $siteLangId);?>: <?php echo Labels::getLabel('MSG_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $siteLangId);?>
                                                 </div>
                                             </div>
                                             <?php }else{ ?>
@@ -827,13 +804,13 @@ $frm->setFormTagAttribute('class', 'form');
                     </div>
                     <?php } ?>
                 </div>
-            </div>
-            <!--  -->
+            </div>       
         </div>
         </form>
     </div>
 </main>
-
-<script>
-    var addNewTagConf = '<?php echo Labels::getLabel('LBL_ADD_NEW_PRODUCT_TAG?', $siteLangId); ?>';
+<?php echo $frm->getExternalJS(); ?>
+<script>  
+    var canEditTags = <?php echo $canEditTags ? 1 : 0;?>;
+    var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $siteLangId); ?>'; 
 </script>

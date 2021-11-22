@@ -1138,6 +1138,8 @@ class SellerProduct extends MyAppModel
     {
         $srch = static::getSearchObject($langId);
         $srch->addCondition('selprod_id', '=', $selProdId);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
 
         if (0 < count($attr)) {
             $srch->addMultipleFields($attr);
@@ -1148,8 +1150,7 @@ class SellerProduct extends MyAppModel
             if (0 < $langId) {
                 $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
             }
-        }
-    
+        }    
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 

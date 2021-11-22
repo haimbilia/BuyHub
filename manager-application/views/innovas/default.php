@@ -28,7 +28,6 @@ Default Example | <a href="default_full.htm">More Examples</a> | <a href="docs.h
 </textarea>
 
 <script language="javascript" type="text/javascript">
-
     var oEdit1 = new InnovaEditor("oEdit1");
 
     /*Apply stylesheet for the editing content*/
