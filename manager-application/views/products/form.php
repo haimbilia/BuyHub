@@ -9,8 +9,7 @@ $frm->setFormTagAttribute('class', 'form');
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false);
         $frm->setFormTagAttribute('id', 'addProductfrm');      
-       $frm->setFormTagAttribute('onsubmit', 'setup($(\'#addProductfrm\'));return false;');
-
+        $frm->setFormTagAttribute('onsubmit', 'setup($(\'#addProductfrm\'));return false;');
         echo $frm->getFormTag(); ?>
         <div class="add-stock">
             <div class="add-stock-column column-nav">
@@ -117,25 +116,32 @@ $frm->setFormTagAttribute('class', 'form');
                         <span class="text-muted"> <span class="required"></span> required
                             information</span>
                     </div>
+
+                    <?php 
+                    $fld =  $frm->getField('lang_id');                    
+                    if(null != $fld ){
+                        $fld->setfieldTagAttribute('class','form-control form-select select-language');                        
+                    ?> 
                     <div class="add-stock-column-head-action">
                         <div class="input-group">
-                            <select class="form-control form-select select-language">
-                                <option value="1" selected="selected">English
-                                </option>
-                                <option value="2">Arabic</option>
-                            </select>
-                            <div class="input-group-append">
-                                <a href="javascript:void(0)" class="btn btn-brand">
-                                    <svg class="svg" width="18" height="18">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-translate">
-                                        </use>
-                                    </svg>
-                                </a>
-                            </div>
-
+                            <?php 
+                                echo $fld->getHtml(); 
+                                $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');                             
+                                if (!empty($translatorSubscriptionKey) && $siteLangId != CommonHelper::getDefaultFormLangId()) {
+                                    $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
+                                    $langFld->htmlAfterField = '<div class="input-group-append">
+                                                                    <a href="javascript:void(0);" onclick="editLangData(' . $recordId . ', ' . $lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
+                                                                        <svg class="svg" width="18" height="18">
+                                                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
+                                                                            </use>
+                                                                        </svg>
+                                                                    </a>
+                                                                </div>';
+                                }                               
+                            ?>
                         </div>
-
                     </div>
+                    <?php } ?>
 
                 </div>
 
@@ -320,9 +326,6 @@ $frm->setFormTagAttribute('class', 'form');
                                 </tr>
                             </tbody>
                         </table>
-
-
-
                         <div class="separator separator-dashed my-4"></div>
                         <table class="table">
                             <thead>
@@ -351,7 +354,6 @@ $frm->setFormTagAttribute('class', 'form');
                                         </ul>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td>Red / Small </td>
                                     <td><input class="form-control" type="text" placeholder=""></td>
@@ -635,9 +637,9 @@ $frm->setFormTagAttribute('class', 'form');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="label">
-                                            <?php echo Labels::getLabel('FRM_LABEL_TEXT', $siteLangId); ?>
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $siteLangId); ?>
                                         </label>
-                                        <input type="text" name="sp_label"  id="sp_label"value="" data-required ="1" >
+                                        <input type="text" name="sp_label"  id="sp_label"value="" data-required="1" >
                                         <span class="form-text text-muted">Lorem ipsum dolor sit,
                                             amet consectetur adipisicing elit. </span>
                                     </div>
@@ -645,7 +647,7 @@ $frm->setFormTagAttribute('class', 'form');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="label"> 
-                                            <?php echo Labels::getLabel('FRM_VALUE', $siteLangId); ?>
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $siteLangId); ?>
                                         </label>
                                         <input type="text" name="sp_value" id="sp_value" value="" data-required ="1">
                                     </div>
@@ -655,10 +657,9 @@ $frm->setFormTagAttribute('class', 'form');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="label">
-                                            <?php echo Labels::getLabel('FRM_GROUP', $siteLangId); ?>
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $siteLangId); ?>
                                         </label>                                   
                                         <input type="text" name="sp_group" id="sp_group" value="" data-required ="0">
-
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -672,20 +673,8 @@ $frm->setFormTagAttribute('class', 'form');
                             </div>
                         </div>
                         <div class="separator separator-dashed my-4"></div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th><?php echo Labels::getLabel('FRM_LABEL_TEXT', $siteLangId); ?></th>
-                                    <th><?php echo Labels::getLabel('FRM_VALUE', $siteLangId); ?></th>
-                                    <th> <?php echo Labels::getLabel('FRM_GROUP', $siteLangId); ?></th>
-                                    <th class="align-right">
-                                        <?php echo Labels::getLabel('FRM_ACTION', $siteLangId); ?>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="specificationsTableBodyJs">                              
-                            </tbody>
-                        </table>
+                        <div id="specificationsListJS">
+                        </div>                        
                     </div>
                 </div>
                 <div class="card" id="tax-shipping">
@@ -706,7 +695,8 @@ $frm->setFormTagAttribute('class', 'form');
                             echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6,['id' => 'ps_from_country_id']);      
                             echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);            
+                            echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);    
+                            echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6);         
                         ?>
                         </div>
                     </div>
@@ -813,4 +803,8 @@ $frm->setFormTagAttribute('class', 'form');
 <script>  
     var canEditTags = <?php echo $canEditTags ? 1 : 0;?>;
     var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $siteLangId); ?>'; 
+    $(function() {
+        prodSpecifications();
+    });
+  
 </script>

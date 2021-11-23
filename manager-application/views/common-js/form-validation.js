@@ -293,6 +293,7 @@
             }
         },
         validate : function() {
+            console.log(this.field);
             var clname='erlist_' + this.field.attr('name').replace(/\[/g, '_').replace(/\]/g, '_');
             if (this.field.attr('data-fat-arr-index')) {
             	clname += '_' + this.field.attr('data-fat-arr-index');

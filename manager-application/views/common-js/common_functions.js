@@ -198,6 +198,10 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
         ele.data('select2').$container.addClass("w-100");
     }
 
+    if (0 < ele.closest('.form-group').length) {
+        ele.data('select2').$container.addClass("w-100");
+    }
+
     $("." + $.ykmodal.element).removeAttr('tabindex');
 };
 /**
@@ -243,9 +247,19 @@ $(document).ready(function () {
     /* Active Sidebar Link. */
 
     /* alert-text close */
-    /* $('.closeJs').on('click', function () {
+    $('.closeAlertJs').on('click', function () {
         $.cookie($(this).attr('data-name'), true);
-    }); */
+    });
     /* alert-text close */
+
+    $('.openAlertJs').on('click', function () {
+        $.removeCookie($(this).attr('data-name'));
+        if ($('.mainHeaderJs').find('.closeAlertJs').length == 0) {
+            data = 'id=' + $(this).attr('data-pageid');
+            fcom.updateWithAjax(fcom.makeUrl('PageLanguageData', 'displayAlert'), data, function (t) {
+                $('.mainHeaderJs').append(t.html);
+            });
+        }
+    });
 
 });

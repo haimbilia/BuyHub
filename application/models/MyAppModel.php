@@ -225,7 +225,7 @@ class MyAppModel extends FatModel {
         return $row;
     }
 
-    public static function getAttributesByLangId($langId, $recordId, $attr = null, bool $includePrimaryTable = false) {
+    public static function getAttributesByLangId($langId, $recordId, $attr = null, bool $includePrimaryTable = false, $active = NULL, $deleted =  NULL) {
         $recordId = FatUtility::convertToType($recordId, FatUtility::VAR_INT);
         $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
         $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
@@ -242,10 +242,21 @@ class MyAppModel extends FatModel {
             $srch->addCondition(static::tblFld('id'), '=', $recordId);
             $cond = $srch->addCondition('ln.' . $prefix . 'lang_lang_id', '=', FatUtility::int($langId));
             $cond->attachCondition('ln.' . $prefix . 'lang_lang_id', 'is', 'mysql_func_NULL', 'OR', true);
+            
+            if(NULL !== $active){
+                $srch->addCondition(static::tblFld('active'), '=', $active);
+            }
+
+            if(NULL !== $deleted){
+                $srch->addCondition(static::tblFld('deleted'), '=', $deleted);
+            }
+
         } else {
             $srch->addCondition('ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', $recordId);
             $srch->addCondition('ln.' . $prefix . 'lang_lang_id', '=', FatUtility::int($langId));
         }
+
+        
 
         if (null != $attr) {
             if (is_array($attr)) {

@@ -1,4 +1,4 @@
-<sidebar class="sidebar"  id="sidebar" data-close-on-click-outside="sidebar">
+<sidebar class="sidebar" id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">
         <a href="#">
             <?php
@@ -6,7 +6,7 @@
             $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
             ?>
-            <img  width="34" height="34"  <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
+            <img width="34" height="34" <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
         </a>
     </div>
     <div class="sidebar-menu sidebarMenuJs">
@@ -63,6 +63,7 @@
                     $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
@@ -104,14 +105,14 @@
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('thresholdProducts'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?></span>
                                     </a>
-                                </li> 
+                                </li>
                             <?php } ?>
                             <?php if ($objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('RatingTypes'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_RATING_TYPES', $siteLangId); ?></span>
                                     </a>
-                                </li> 
+                                </li>
                             <?php } ?>
                         </ul>
                     </div>
@@ -212,7 +213,7 @@
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>">
-                                        <?php echo Labels::getLabel('LBL_Users_GDPR_Requests', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_GDPR_REQUESTS', $siteLangId); ?>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -397,7 +398,7 @@
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('TaxCategories'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?></span>
                                     </a>
-                                </li>
+                                </li> 
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('TaxCategoriesRule'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?></span>
@@ -408,6 +409,44 @@
                     </div>
                 </li>
             <?php } ?>
+
+            <?php
+            if (
+                    $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)
+            ) {
+                ?>
+                <li class="menu-item dropdown">
+                    <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>">
+                        <span class="menu-icon">
+                            <svg class="svg" width="24" height="24">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
+                            </use>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                        <h6 class=""><?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?></h6>
+                        <ul class="nav">
+                            <?php if ($objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ContentPages'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_CONTENT_PAGES', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ContentBlock'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_CONTENT_BLOCK', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </li>
+            <?php } ?>
+
             <?php
             if (
                     $objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true) ||
@@ -427,7 +466,7 @@
             ) {
                 ?>
                 <li class="menu-item dropdown">
-                    <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
+                    <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-reports">
@@ -478,7 +517,7 @@
                                             <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>">
-                                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_Shops', $siteLangId); ?></span>
+                                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
@@ -678,7 +717,7 @@
                             <?php if ($objPrivilege->canViewImageAttributes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ImageAttributes'); ?>">
-                                        <?php echo Labels::getLabel('NAV_Image_Attributes', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_IMAGE_ATTRIBUTES', $siteLangId); ?>
                                     </a>
                                 </li>
                             <?php } ?>

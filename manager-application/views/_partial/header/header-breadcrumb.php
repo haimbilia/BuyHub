@@ -9,18 +9,18 @@
         <?php
         if (!empty($this->variables['nodes'])) {
             foreach ($this->variables['nodes'] as $nodes) {
-                ?>
-        <?php if (!empty($nodes['href'])) { ?>
+        ?>
+                <?php if (!empty($nodes['href'])) { ?>
                     <li class="breadcrumb-item">
                         <a href="<?php echo $nodes['href']; ?>" <?php echo (!empty($nodes['other'])) ? $nodes['other'] : ''; ?>>
-            <?php echo $nodes['title'] ?? ''; ?>
+                            <?php echo $nodes['title'] ?? ''; ?>
                         </a>
                     </li>
-                    <?php } else { ?>
+                <?php } else { ?>
                     <li class="breadcrumb-item">
-                    <?php echo $nodes['title'] ?? ''; ?>
+                        <?php echo $nodes['title'] ?? ''; ?>
                     </li>
-                <?php
+        <?php
                 }
             }
         }
@@ -41,15 +41,15 @@
             $title = $newRecordBtnAttrs['attr']['title'] ?? $title;
             $label = $newRecordBtnAttrs['label'] ?? $label;
         }
-        ?>
+    ?>
         <a href="<?php echo $href; ?>" class="btn btn-icon btn-outline-brand btn-add" onclick="<?php echo $onclick; ?>" title="<?php echo $title; ?>">
             <svg class="svg" width="18" height="18">
-            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
-            </use>
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
+                </use>
             </svg>
             <span><?php echo $label; ?></span>
         </a>
-        <?php
+    <?php
     }
     ?>
 </div>

@@ -21,3 +21,7 @@ $(document).on('change', '#imageLanguageJs', function() {
     var recordId = $(this).closest("form").find('input[name="epage_id"]').val();
     backgroundImage(recordId, 'THUMB',lang_id);
 });
+
+mediaForm = (recordId, imageType, langId, slideScreen) => {
+    backgroundImage(recordId, 'THUMB' ,langId);
+}

@@ -23,8 +23,7 @@ class SettingsController extends ListingBaseController
             case 'index':
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
-                $nodes[] = array('title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId));
+                $nodes[] = array('title' => $pageTitle);
                 break;
                 break;
             default:
