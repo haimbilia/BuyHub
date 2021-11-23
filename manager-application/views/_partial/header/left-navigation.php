@@ -1,4 +1,4 @@
-<sidebar class="sidebar"  id="sidebar" data-close-on-click-outside="sidebar">
+<sidebar class="sidebar" id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">
         <a href="#">
             <?php
@@ -6,24 +6,24 @@
             $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
             ?>
-            <img  width="34" height="34"  <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
+            <img width="34" height="34" <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
         </a>
     </div>
     <div class="sidebar-menu sidebarMenuJs">
         <ul class="menu">
             <?php
             if (
-                    $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
             ) {
-                ?>
+            ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-catelog">
-                            </use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-catelog">
+                                </use>
                             </svg>
                         </span>
                     </button>
@@ -60,18 +60,19 @@
 
             <?php
             if (
-                    $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
             ) {
-                ?>
+            ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
-                            </use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
+                                </use>
                             </svg>
                         </span>
                     </button>
@@ -104,14 +105,14 @@
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('thresholdProducts'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?></span>
                                     </a>
-                                </li> 
+                                </li>
                             <?php } ?>
                             <?php if ($objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('RatingTypes'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_RATING_TYPES', $siteLangId); ?></span>
                                     </a>
-                                </li> 
+                                </li>
                             <?php } ?>
                         </ul>
                     </div>
@@ -120,17 +121,17 @@
 
             <?php
             if (
-                    $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
             ) {
-                ?>
+            ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
-                            </use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
+                                </use>
                             </svg>
                         </span>
                     </button>
@@ -165,19 +166,19 @@
 
             <?php
             if (
-                    $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) /* ||
+                $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) /* ||
               $objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true) ||
               $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
               $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) ||
               $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true) */
             ) {
-                ?>
+            ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-users">
-                            </use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-users">
+                                </use>
                             </svg>
                         </span>
                     </button>
@@ -212,7 +213,7 @@
                                 </li>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>">
-                                        <?php echo Labels::getLabel('LBL_Users_GDPR_Requests', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_GDPR_REQUESTS', $siteLangId); ?>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -244,18 +245,18 @@
 
             <?php
             if (
-                    $objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)
             ) {
-                ?>
+            ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-promotions">
-                            </use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-promotions">
+                                </use>
                             </svg>
                         </span>
                     </button>
@@ -318,18 +319,18 @@
 
             <?php
             if (
-                    $objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)
             ) {
-                ?>
+            ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-import-export">
-                            </use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-import-export">
+                                </use>
                             </svg>
                         </span>
                     </button>
@@ -368,19 +369,19 @@
                     </div>
                 </li>
             <?php } ?>
-                
-                 <?php
+
+            <?php
             if (
-                    $objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)
-                     
+                $objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)
+
             ) {
-                ?>
+            ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
-                            </use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
+                                </use>
                             </svg>
                         </span>
                     </button>
@@ -393,8 +394,8 @@
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?></span>
                                     </a>
                                 </li>
-                            <?php } ?>  
-                                 <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('TaxCategoriesRule'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?></span>
@@ -405,30 +406,69 @@
                     </div>
                 </li>
             <?php } ?>
+
             <?php
             if (
-                    $objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewUsersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    /* $objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                      $objPrivilege->canViewCommissionReport(AdminAuthentication::getLoggedAdminId(), true) || */
-                    $objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)
+
             ) {
-                ?>
+            ?>
                 <li class="menu-item dropdown">
-                    <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
+                    <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-reports">
-                            </use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
+                                </use>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
+                        <h6 class=""><?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?></h6>
+                        <ul class="nav">
+                            <?php if ($objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ContentPages'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_CONTENT_PAGES', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ContentBlock'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_CONTENT_BLOCK', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </li>
+            <?php } ?>
+
+            <?php
+            if (
+                $objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewUsersReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                /* $objPrivilege->canViewTaxReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                      $objPrivilege->canViewCommissionReport(AdminAuthentication::getLoggedAdminId(), true) || */
+                $objPrivilege->canViewPerformanceReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)
+            ) {
+            ?>
+                <li class="menu-item dropdown">
+                    <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?>">
+                        <span class="menu-icon">
+                            <svg class="svg" width="24" height="24">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-reports">
+                                </use>
                             </svg>
                         </span>
                     </button>
@@ -437,13 +477,13 @@
                         <ul class="nav" id="reportsNav">
                             <?php
                             if (
-                                    $objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                    $objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                    $objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                    $objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                                    $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)
+                                $objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)
                             ) {
-                                ?>
+                            ?>
                                 <li class="nav_item hasNestedChildJs">
                                     <a class="nav_link navLinkJs" data-toggle="collapse" data-parent="#reportsNav" href="#salesReportNav" aria-expanded="true">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_SALES_REPORTS', $siteLangId); ?></span>
@@ -475,7 +515,7 @@
                                             <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>">
-                                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_Shops', $siteLangId); ?></span>
+                                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
@@ -619,15 +659,15 @@
             <?php } ?>
             <?php
             if (
-                    $objPrivilege->canViewImportExport(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewImportExport(AdminAuthentication::getLoggedAdminId(), true)
             ) {
-                ?>
+            ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-import-export">
-                            </use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-import-export">
+                                </use>
                             </svg>
                         </span>
                     </button>
@@ -647,17 +687,17 @@
 
             <?php
             if (
-                    $objPrivilege->canViewSitemap(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewMetaTags(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewSitemap(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewMetaTags(AdminAuthentication::getLoggedAdminId(), true)
             ) {
-                ?>
+            ?>
                 <li class="menu-item dropdown">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-sitemap">
-                            </use>
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-sitemap">
+                                </use>
                             </svg>
                         </span>
                     </button>
@@ -675,7 +715,7 @@
                             <?php if ($objPrivilege->canViewImageAttributes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ImageAttributes'); ?>">
-                                        <?php echo Labels::getLabel('NAV_Image_Attributes', $siteLangId); ?>
+                                        <?php echo Labels::getLabel('NAV_IMAGE_ATTRIBUTES', $siteLangId); ?>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -717,8 +757,8 @@
                 <button type="button" class="menu-link menuLinkJs" onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
-                        </use>
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
+                            </use>
                         </svg>
                     </span>
                 </button>
