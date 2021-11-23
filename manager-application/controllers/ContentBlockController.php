@@ -14,7 +14,6 @@ class ContentBlockController extends ListingBaseController
         $this->canEdit = $this->objPrivilege->canEditContentBlocks($this->admin_id, true);
     }
 
-
      /**
      * setLangTemplateData - This function is use to automate load langform and save it. 
      *
@@ -190,7 +189,6 @@ class ContentBlockController extends ListingBaseController
             $fileType = AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE;
         }
         $bgImages = AttachedFile::getMultipleAttachments($fileType, $recordId, 0, $this->siteLangId);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
             $universalImage = true;
@@ -226,7 +224,6 @@ class ContentBlockController extends ListingBaseController
             $frm->addHiddenField('', 'min_width', 1300);
             $frm->addHiddenField('', 'min_height', 400);
         }
-
         $frm->addHtmlEditor(Labels::getLabel('LBL_Page_Content', $this->siteLangId), 'epage_content');
 
 
@@ -247,8 +244,6 @@ class ContentBlockController extends ListingBaseController
         $frm->addHiddenField('', 'epage_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $langId), 'epage_label');
-
-
         if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($langId))) {
             $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('LBL_BACKGROUND_IMAGE', $this->siteLangId) );
             $frm->addHTML('', 'cblock_bg_image', '');
@@ -256,9 +251,7 @@ class ContentBlockController extends ListingBaseController
             $frm->addHiddenField('', 'min_width', 1300);
             $frm->addHiddenField('', 'min_height', 400);
         }
-
         $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_CONTENT', $langId), 'epage_content');
-
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
@@ -515,7 +508,6 @@ class ContentBlockController extends ListingBaseController
         $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $langId, $universalImage);
         $this->set('image', $cbgImage);
         $this->set('imageFunction', 'cblockBackgroundImage');
-
         $this->set('file_type', 'THUMB');
         $this->set('recordId', $recordId);
         $this->set('canEdit', $this->canEdit);
@@ -562,7 +554,6 @@ class ContentBlockController extends ListingBaseController
 
     public function uploadMedia()
     {
-        // $post = FatApp::getPostedData();
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $recordId = FatApp::getPostedData('epage_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
@@ -630,8 +621,7 @@ class ContentBlockController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function removeMedia($recordId = 0, $afileId = 0, $file_type, $langId = 0)
-    {
+    public function removeMedia($recordId = 0, $afileId = 0, $file_type, $langId = 0) {
         $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
         if (!$recordId) {
@@ -651,37 +641,6 @@ class ContentBlockController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
   
-
-    /**
-     * Undocumented function
-     *
-     * @param [type] $recordId
-     * @return void
-     */
-    // public function media($recordId) {
-    //     $this->objPrivilege->canEditContentPages($this->admin_id, true);
-    //     $recordId = FatUtility::int($recordId);
-    //     $languages = Language::getAllNames();
-    //     if (1 == count($languages)) {
-    //         $langId = array_key_first($languages);
-    //     }else{
-    //         $langId = $this->siteLangId;
-    //     }
-    //     $data['lang_id'] = $langId;
-
-    //     $cbgForm = $this->getMediaContentForm($recordId, $this->siteLangId);
-    //     $cbgForm->fill($data);
-
-        
-    //     $this->set('recordId', $recordId);
-        
-    //     $cpageData = ContentPage::getAttributesByLangId($langId, $recordId, NULL, TRUE);
-    //     $this->set('contentPageDetails', $cpageData);
-    //     $this->set('cbgForm', $cbgForm);
-    //     $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
-        
-    //     $this->_template->render(false, false);
-    // }
 
     /**
      * Undocumented function
