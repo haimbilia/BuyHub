@@ -368,11 +368,10 @@
                     </div>
                 </li>
             <?php } ?>
-                
-                 <?php
+
+            <?php
             if (
                     $objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)
-                     
             ) {
                 ?>
                 <li class="menu-item dropdown">
@@ -389,12 +388,16 @@
                         <ul class="nav">
                             <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('TaxStructure'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_STRUCTURE', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+
+                                <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('TaxCategories'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?></span>
                                     </a>
                                 </li>
-                            <?php } ?>  
-                                 <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('TaxCategoriesRule'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?></span>
