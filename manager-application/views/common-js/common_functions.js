@@ -198,6 +198,10 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
         ele.data('select2').$container.addClass("w-100");
     }
 
+    if (0 < ele.closest('.form-group').length) {
+        ele.data('select2').$container.addClass("w-100");
+    }
+
     $("." + $.ykmodal.element).removeAttr('tabindex');
 };
 /**
