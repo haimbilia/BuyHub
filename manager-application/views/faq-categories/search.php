@@ -69,7 +69,7 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = ['onClick'=>'editRecord(' . $row['faqcat_id'] . ', false, "modal-dialog-vertical-md")'];
+                    $data['editButton'] = ['onClick'=>'editRecord(' . $row['faqcat_id'] . ', false, "modal-dialog-vertical-xs")'];
                     $data['deleteButton'] = [];
                 }
                 $url = UrlHelper::generateUrl('Faq', 'index', array($row['faqcat_id']));

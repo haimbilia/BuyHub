@@ -134,7 +134,7 @@ class FaqCategoriesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('formTitle', Labels::getLabel('LBL_FAQ_CATEGORY_SETUP', $this->siteLangId));
         $this->set('frm', $frm);
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->_template->render(false, false);
     }
 
     protected function getForm() {
@@ -544,6 +544,6 @@ class FaqCategoriesController extends ListingBaseController
      */
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'faqcat_id' , 'faqcat_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop', 'faqcat_active'], Common::excludeKeysForSort());
     }
 }
