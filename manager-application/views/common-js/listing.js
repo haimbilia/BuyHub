@@ -280,7 +280,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     };
 
     editLangData = function (recordId, langId, autoFillLangData = 0) {
-        return;
         if (false === checkControllerName()) {
             return false;
         }
