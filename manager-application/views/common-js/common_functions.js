@@ -198,6 +198,10 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
         ele.data('select2').$container.addClass("w-100");
     }
 
+    if (0 < ele.closest('.form-group').length) {
+        ele.data('select2').$container.addClass("w-100");
+    }
+
     $("." + $.ykmodal.element).removeAttr('tabindex');
 };
 /**
@@ -249,12 +253,14 @@ $(document).ready(function () {
     /* alert-text close */
 
     $('.openAlertJs').on('click', function () {
-        $.removeCookie($(this).attr('data-name'));
         if ($('.mainHeaderJs').find('.closeAlertJs').length == 0) {
+            $.removeCookie($(this).attr('data-name'));
             data = 'id=' + $(this).attr('data-pageid');
             fcom.updateWithAjax(fcom.makeUrl('PageLanguageData', 'displayAlert'), data, function (t) {
                 $('.mainHeaderJs').append(t.html);
             });
+        } else {
+            $('.alertWarningJs').remove();
         }
     });
 

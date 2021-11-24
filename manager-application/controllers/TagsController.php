@@ -44,6 +44,28 @@ class TagsController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
+    public function autoComplete()
+    {
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, $this->siteLangId);
+
+        $srch = Tag::getSearchObject();
+        $srch->addOrder('tag_identifier');
+        $srch->joinTable(
+            Tag::DB_TBL . '_lang',
+            'LEFT OUTER JOIN',
+            'taglang_tag_id = tag_id AND taglang_lang_id = ' . $langId
+        );
+        $srch->addMultipleFields(array('tag_id', 'IFNULL(tag_name, tag_identifier) as tag_name'));
+
+        if (!empty($keyword)) {
+            $cnd = $srch->addCondition('tag_name', 'LIKE', '%' . $keyword . '%');
+            $cnd->attachCondition('tag_identifier', 'LIKE', '%' . $keyword . '%', 'OR');
+        }
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        die(FatUtility::convertToJson($records));
+    }
+
     private function getListingData() {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();

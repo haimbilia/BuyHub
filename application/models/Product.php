@@ -287,7 +287,7 @@ class Product extends MyAppModel
         );
     }
 
-    public static function getWarrantyTypes(int $langId): array
+    public static function getWarrantyUnits(int $langId): array
     {
         return array(
             self::WARRANTY_TYPE_DAY => Labels::getLabel('LBL_DAYS', $langId),

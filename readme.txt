@@ -310,6 +310,7 @@ Admin UI/UX Enhancements pages:
    => Admin Profile info 
    => Content Pages Management  
    => Content Block Integration
+   => CMS-Faqs
 
     
 Known Issues and Problems :

@@ -168,14 +168,14 @@ $frm->setFormTagAttribute('class', 'form');
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <?php
-                                        $warrantTypes = Product::getWarrantyTypes($siteLangId);
+                                        $warrantTypes = Product::getWarrantyUnits($siteLangId);
                                         ?>
                                         <label class="label"><?php echo $fld->getCaption(); ?></label>
                                         <div class="input-group">
                                             <?php echo $fld->getHtml(); ?>
                                             <div class="input-group-append">
                                                 <button type="button" class="btn btn-outline-gray dropdown-toggle warrantyTypeButtonJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    <?php echo $warrantTypes[$fld->value] ?? current($warrantTypes); ?>
+                                                    <?php echo $warrantTypes[$frm->getField('product_warranty_unit')->value] ?? current($warrantTypes); ?>
                                                 </button>
                                                 <div class="dropdown-menu">
                                                     <?php foreach ($warrantTypes as $type => $name) { ?>
@@ -190,8 +190,8 @@ $frm->setFormTagAttribute('class', 'form');
                             echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
                             echo $frm->getFieldHtml('product_id');
-                            $frm->getField('product_warranty_type')->setfieldTagAttribute('id', 'product_warranty_type');
-                            echo $frm->getFieldHtml('product_warranty_type');
+                            $frm->getField('product_warranty_unit')->setfieldTagAttribute('id', 'product_warranty_unit');
+                            echo $frm->getFieldHtml('product_warranty_unit');
                             ?>
                         </div>
                     </div>
@@ -665,7 +665,8 @@ $frm->setFormTagAttribute('class', 'form');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="label"></label> 
-                                        <button type="button" class="btn btn-brand btn-wide" onclick="addSpecifiction()">
+                                        <input type="hidden" name="sp_id" id="sp_id" value="0" data-required ="0">
+                                        <button type="button" class="btn btn-brand btn-wide" onclick="addSpecification()">
                                             <?php echo Labels::getLabel('BTN_ADD', $siteLangId); ?>
                                         </button>
                                     </div>
@@ -673,7 +674,7 @@ $frm->setFormTagAttribute('class', 'form');
                             </div>
                         </div>
                         <div class="separator separator-dashed my-4"></div>
-                        <div id="specificationsListJS">
+                        <div id="specificationsListJs">
                         </div>                        
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 <?php if (isset($pageData['plang_warring_msg']) && !empty($pageData['plang_warring_msg'])) { ?>
-    <div class="alert alert-solid-warning fade show" role="alert">
+    <div class="alert alert-solid-warning fade alertWarningJs show" role="alert">
         <div class="alert-icon"><i class="flaticon-warning"></i></div>
         <div class="alert-text"><?php echo $pageData['plang_warring_msg']; ?></div>
         <div class="alert-close">
