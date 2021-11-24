@@ -253,12 +253,14 @@ $(document).ready(function () {
     /* alert-text close */
 
     $('.openAlertJs').on('click', function () {
-        $.removeCookie($(this).attr('data-name'));
         if ($('.mainHeaderJs').find('.closeAlertJs').length == 0) {
+            $.removeCookie($(this).attr('data-name'));
             data = 'id=' + $(this).attr('data-pageid');
             fcom.updateWithAjax(fcom.makeUrl('PageLanguageData', 'displayAlert'), data, function (t) {
                 $('.mainHeaderJs').append(t.html);
             });
+        } else {
+            $('.alertWarningJs').remove();
         }
     });
 
