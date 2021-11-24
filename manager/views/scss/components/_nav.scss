@@ -159,7 +159,9 @@
                             &.nav__link-bullet {
                                 &-dot>span,
                                 &-line>span {
-                                    background-color: $brand-color;
+                                    // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                                 }
                             }
                         }
@@ -189,7 +191,9 @@
                                     &-bullet.nav__link-bullet {
                                         &-dot>span,
                                         &-line>span {
-                                            background-color: $brand-color;
+                                            // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                                         }
                                     }
                                 }
@@ -203,7 +207,9 @@
                     .nav__link-bullet.nav__link-bullet {
                         &-dot>span,
                         &-line>span {
-                            background-color: $brand-color;
+                            // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                         }
                     }
                 }
@@ -341,7 +347,9 @@
                 }
                 &.nav__item-active {
                     >.nav__link {
-                        background-color: $brand-color;
+                        // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                         transition: none;
                         .nav__link {
                             &-arrpw,
@@ -361,7 +369,9 @@
                     }
                     &:hover {
                         >.nav__link {
-                            background-color: $brand-color;
+                            // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                             .nav__link {
                                 &-arrow,
                                 &-icon,

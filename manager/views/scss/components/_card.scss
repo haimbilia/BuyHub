@@ -421,7 +421,11 @@ $card:'card';
         }
     }
     &#{&}-solid-brand {
-        background: $brand-color;
+        // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
         #{$selfHead} {
             color: #ffffff;
             border-bottom: 1px solid transparent;
