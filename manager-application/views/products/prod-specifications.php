@@ -17,7 +17,8 @@ foreach ($arr_flds as $key => $val) {
     }
 }
 $tbody = $tbl->appendElement('tbody');
-foreach ($productSpecifications as $specification) {
+$count = 0;
+foreach ($productSpecifications as  $specification) {
     $prodSpecId = $specification['prodspec_id'];
     $tr = $tbody->appendElement('tr',['data-id' => $prodSpecId ]);
     foreach ($arr_flds as $key => $val) {   
@@ -30,10 +31,10 @@ foreach ($productSpecifications as $specification) {
                 $li->appendElement(
                     'input',
                     [
-                        'name' => 'specifications[][id]',
+                        'name' => 'specifications['.$count.'][id]',
                         'type' => 'hidden',
                         'value' => $specification['prodspec_id'],
-                        'data-fatreq' => "{&quot;required&quot;:false}",
+                        'data-fatreq' => json_encode(['required'=> false]),
                     ]
                 );
                 $li->appendElement(
@@ -71,9 +72,19 @@ foreach ($productSpecifications as $specification) {
 
                 break;
             default:
-                $td->appendElement('plaintext',$tdAttr, $specification[$key], true);
+                $input = new HtmlElement(
+                    'input',
+                    [
+                        'name' => 'specifications['.$count.']['.str_replace(ProdSpecification::DB_TBL_PREFIX,'',$key).']',
+                        'type' => 'hidden',
+                        'value' => $specification[$key],
+                        'data-fatreq' => json_encode(['required'=> false]),
+                    ]
+                );
+                $td->appendElement('plaintext',$tdAttr, $specification[$key].$input->getHtml(), true);
                 break;
         }
     }
+    $count++;
 }
 echo $tbl->getHtml();

@@ -2250,15 +2250,27 @@ strong {
         border-radius: $radius-common;
         border: $border;
         li {
-            a {
-                width: 4rem;
+            .actions-link {
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: $input-height;
+                padding: $input-padding;
+                font-size: $input-font-size;
                 line-height: $input-line-height;
+                border-radius: $input-border-radius;
+                width: 4rem;
                 border-#{$end-direction}: $border;
-                &:before {
+                margin: 0;
+                cursor: pointer;
+                &:before { cursor: pointer;
                     content: normal;
                 }
                 &:hover {
-                    background-color: $brand-color;
+                    // background-color: $brand-color;
+                    // color:  lighten($brand-color, 55%); 
+                    @include bg-brand();
                     color: $brand-color-inverse;
                 }
             }
@@ -2270,6 +2282,3 @@ strong {
         }
     }
 }
- 
-
- 

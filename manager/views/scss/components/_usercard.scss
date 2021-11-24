@@ -4,7 +4,9 @@
     background-size: cover;
     background-repeat: no-repeat;
     padding: 2rem 1rem;
-    background-color: $brand-color;
+    // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
     .user-card__avatar {
         .badge {
             width: 60px;

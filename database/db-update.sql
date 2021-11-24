@@ -1368,3 +1368,8 @@ INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_la
 ALTER TABLE `tbl_product_specifics` ADD `product_warranty_unit` TINYINT NOT NULL AFTER `product_warranty`;
 UPDATE `tbl_product_specifics` SET `product_warranty_unit` = '1';
 ALTER TABLE `tbl_product_specifics` CHANGE `product_warranty` `product_warranty` INT NOT NULL;
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_NAME', '1', 'Name', '1') ON DUPLICATE KEY UPDATE label_caption = 'Name';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_VALUE', '1', 'Value', '1') ON DUPLICATE KEY UPDATE label_caption = 'Value';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_GROUP', '1', 'Group', '1') ON DUPLICATE KEY UPDATE label_caption = 'Group';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', '1', 'Attachment at inventory level', '1') ON DUPLICATE KEY UPDATE label_caption = 'Attachment at inventory level';

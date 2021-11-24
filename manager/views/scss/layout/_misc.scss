@@ -517,7 +517,9 @@
     border: none;
     box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
     overflow: hidden;
-    background-color: $brand-color;
+      // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
     color: $brand-color-inverse;
     border-radius: 50%;
     width: 45px;
