@@ -80,7 +80,7 @@ class FaqCategoriesController extends ListingBaseController
             $condition->attachCondition('fc_l.faqcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $srch->addOrder($sortBy, $sortOrder); 
+        // $srch->addOrder($sortBy, $sortOrder); 
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
@@ -88,7 +88,7 @@ class FaqCategoriesController extends ListingBaseController
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
         $srch->addOrder('faqcat_active', 'DESC');
-        $srch->addOrder('faqcat_display_order', 'asc');
+        $srch->addOrder('faqcat_display_order', 'ASC');
         $rs = $srch->getResultSet();
 
         $records = array();
@@ -107,7 +107,8 @@ class FaqCategoriesController extends ListingBaseController
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
 
-        $this->set('sortBy', $sortBy);
+        // $this->set('sortBy', $sortBy);
+        $this->set('sortBy', 'faqcat_display_order');
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
@@ -134,7 +135,7 @@ class FaqCategoriesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('formTitle', Labels::getLabel('LBL_FAQ_CATEGORY_SETUP', $this->siteLangId));
         $this->set('frm', $frm);
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->_template->render(false, false);
     }
 
     protected function getForm() {
@@ -544,6 +545,6 @@ class FaqCategoriesController extends ListingBaseController
      */
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'faqcat_id' , 'faqcat_active'], Common::excludeKeysForSort());
+        return [];
     }
 }

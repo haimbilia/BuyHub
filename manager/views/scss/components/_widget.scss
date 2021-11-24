@@ -107,7 +107,11 @@ $widget:'widget';
         &#{$self}__item {
             &--brand {
                 &:before {
-                    background: $brand-color;
+                    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                 }
             }
             &--light {
@@ -1467,7 +1471,9 @@ $widget:'widget';
                     border: $border;
                 }
                 >a.active {
-                    background-color: $brand-color;
+                    // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                     border-color: $brand-color !important;
                     color: #ffffff;
                 }
@@ -1735,7 +1741,9 @@ $widget:'widget';
             .center {
                 >div {
                     cursor: auto;
-                    background-color: $brand-color;
+                    // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                     box-shadow: 0px 2px 14px 2px rgba(54, 108, 243, 0.2);
                     >span {
                         &:first-child {

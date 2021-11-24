@@ -33,8 +33,10 @@
     }
     //varsions
     &-brand {
-        background-color: var(--brand-color);
-        color: var(--brand-color-inverse);
+        // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+       
         &:hover {
             background-color: darken($brand-color, 5%);
             color: $brand-color-inverse !important;
@@ -181,7 +183,11 @@ a.link {
         bottom: -2px;
         #{$start-direction}: 0;
         #{$end-direction}: 0;
-        background: $brand-color;
+        // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
         color: $brand-color-inverse;
         transform-origin: bottom left;
         transform: scaleX(1);

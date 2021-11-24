@@ -29,7 +29,11 @@
              overflow: hidden;
              margin: 0 3px;
              &:hover {
-                 background: $brand-color;
+                 // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                  color: $brand-color-inverse;
                  border-color: $brand-color;
                  text-decoration: none;
@@ -38,7 +42,11 @@
          &.selected {
              a {
                  border-color: $brand-color;
-                 background: $brand-color;
+                 // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                  color: $brand-color-inverse;
                  &:hover {
                      background-color: darken($brand-color, 5%);

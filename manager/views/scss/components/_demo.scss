@@ -78,7 +78,9 @@
                     height: 4rem;
                     margin: 0 auto 0.85rem;
                     border-radius: 1rem;
-                    background-color: $brand-color;
+                    // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                     color: $brand-color-inverse;
                     svg {
                         width: 2rem;

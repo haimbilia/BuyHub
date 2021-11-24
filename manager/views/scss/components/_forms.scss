@@ -593,7 +593,11 @@ form.custom-form {
 
 .checkbox input:checked,
 .radio input:checked {
-    background: $brand-color;
+    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
     color: $brand-color-inverse;
 }
 
@@ -618,7 +622,11 @@ form.custom-form {
 .checkbox input:checked::after,
 .radio input:checked::after {
     //animation: click-wave 0.65s;
-    background: $brand-color;
+    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
     color: $brand-color-inverse;
     content: "";
     display: block;
@@ -688,7 +696,11 @@ form.custom-form {
 }
 
 .switch-button:after {
-    background: $brand-color;
+    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
     color: $brand-color-inverse;
     width: 18px;
     height: 18px;
@@ -776,8 +788,11 @@ form.custom-form {
             text-align: center;
         }
         &:checked+label {
-            background-color: $brand-color;
-            color: $brand-color-inverse;
+            // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
         }
     }
 }

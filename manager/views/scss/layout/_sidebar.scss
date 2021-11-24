@@ -1,7 +1,8 @@
 .sidebar {
     //overflow-y: auto;
-    background-color: $brand-color;
-    color: $brand-color-inverse;
+    // background-color: $brand-color;
+    // color:  lighten($brand-color, 55%); 
+    @include bg-brand();
     position: fixed;
     top: 0;
     bottom: 0;
@@ -101,8 +102,8 @@
         }
     }
     .dropdown-menu {
-        #{$start-direction}: 100% !important;
-        top: 0 !important;
+        // #{$start-direction}: 100% !important;
+        // top: 0 !important;
         h6 {
             padding: 0 1rem;
         }

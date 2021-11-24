@@ -667,7 +667,7 @@
         &:last-child {
             margin-#{$end-direction}: 0;
         }
-        >a {
+        >a  {
             //background: lighten($bg-gray, 0.1); 
             //color: $brand-color-inverse; 
             // width: 30px;
@@ -675,7 +675,7 @@
             position: relative;
             z-index: 0;
             color: $txt-gray;
-            line-height: 1.4;
+            
             text-align: center;
             display: flex;
             align-items: center;

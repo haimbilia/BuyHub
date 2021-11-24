@@ -84,7 +84,9 @@
                 }
                 &--brand {
                     &:before {
-                        background-color: $brand-color;
+                        // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                     }
                 }
                 &--light {
@@ -504,7 +506,11 @@
             }
             &--brand {
                 &:before {
-                    background: $brand-color;
+                    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                 }
             }
             &--light {
@@ -572,7 +578,11 @@
                 #{$start-direction}: 100px;
                 top: 0px;
                 // content: "";
-                background: $brand-color;
+                // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
             }
             &-time {
                 display: flex;
@@ -602,7 +612,9 @@
                     padding: 0.15rem 1rem;
                     font-size: 0.875rem;
                     font-weight: 600;
-                    background-color: $brand-color;
+                    // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                     color: $brand-color-inverse;
                     border-radius: 0rem 1rem 1rem 0rem;
                     display: inline-flex;
@@ -614,7 +626,11 @@
             }
             &--brand {
                 &:before {
-                    background: $brand-color;
+                    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                 }
             }
             &--light {

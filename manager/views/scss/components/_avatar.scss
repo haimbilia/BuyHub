@@ -45,7 +45,9 @@ $avatar: 'avatar';
         }
         &:hover {
             transition: all 0.3s;
-            background-color: $brand-color;
+            // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
             i {
                 color: #ffffff;
             }
@@ -88,7 +90,9 @@ $avatar: 'avatar';
                 color: $brand-color;
             }
             &:hover {
-                background-color: $brand-color;
+                // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                 i {
                     color: #ffffff;
                 }
