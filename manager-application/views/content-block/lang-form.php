@@ -2,8 +2,6 @@
 
 HtmlHelper::formatFormFields($langFrm);
 $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#frmBlock")); return(false);');
-$fld = $langFrm->getField('cblock_bg_image');
-$fld->value = '<span id="imageListingJs"></span>';
 
 $imageLangFld = $langFrm->getField('lang_id');
 $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
@@ -13,6 +11,8 @@ $formTitle = Labels::getLabel('LBL_CONTENT_BLOCK_SETUP', $siteLangId);
 $activeLangtab = true;
 if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId))) {
     
+    $fld = $langFrm->getField('cblock_bg_image');
+    $fld->value = '<span id="imageListingJs"></span>';
     $imgArr = [];
     $recordId = $image['afile_record_id'];
     if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
