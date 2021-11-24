@@ -72,12 +72,10 @@ foreach ($arrListing as $sn => $row) {
                     $data['editButton'] = ['onClick'=>'editRecord(' . $row['faqcat_id'] . ', false, "modal-dialog-vertical-xs")'];
                     $data['deleteButton'] = [];
                 }
-                $url = UrlHelper::generateUrl('Faq', 'index', array($row['faqcat_id']));
                 $data['otherButtons'] = [
                     [
                         'attr' => [
-                            'href' => 'javascript:void(0);',
-                            'onClick' => 'redirectUrl("' . $url . '")',
+                            'href' =>  UrlHelper::generateUrl('Faq', 'list', array($row['faqcat_id'])),
                             'title' => Labels::getLabel('LBL_FAQ_Listing', $siteLangId),
                         ],
                         'label' => '<i class="icn">
