@@ -389,8 +389,8 @@
                                                         <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/flags/round/<?php echo CommonHelper::getLangCountryCode() ?>.svg"></span>
                                                 </span>
                                                 <div class="languages">
-                                                    <?php foreach ($languages as $langId => $language) { ?>
-                                                        <span <?php echo ($siteLangId == $langId) ? 'class="is--active"' : ''; ?> onClick="setSiteDefaultLang(<?php echo $langId; ?>)"><?php echo $language['language_name']; ?></span>
+                                                    <?php foreach ($languages as $languageId => $language) { ?>
+                                                        <span <?php echo ($siteLangId == $languageId) ? 'class="is--active"' : ''; ?> onClick="setSiteDefaultLang(<?php echo $languageId; ?>)"><?php echo $language['language_name']; ?></span>
                                                     <?php } ?>
                                                 </div>
                                             </a>

@@ -1,23 +1,6 @@
 (function () {
-
-
-    $('#addProductfrm').find('input,select').each(function(){      
-        if($(this).data('fatreq') == undefined){           
-            $(this).data('fatreq',{"required":false});            
-        } 
-        if($(this).attr('name') == undefined){           
-            $(this).attr('name','');            
-        }
-           
-    });
-
-    select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), { brand_active: 1 });
-    select2('ptc_prodcat_id', fcom.makeUrl('ProductCategories', 'autoComplete'));
-    select2('ptt_taxcat_id', fcom.makeUrl('Tax', 'autoComplete'));
-    select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'));
-
-    setup = function (frm) {       
-        if (!$(frm).validate()) { return; }
+    setup = function (frm) {    
+        if (!$(frm).validate()) { return; }       
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
             fcom.removeLoader();
@@ -29,6 +12,29 @@
             $.ykmsg.success(t.msg);
         });
     };
+
+    langForm = function (autoFillLangData = 0) {
+        let productId = $("#addProductfrm input[name='product_id']").val();
+        let langId = $("#addProductfrm [name='lang_id']").val();
+        $('.mainJs').prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('Products', 'form', [productId]), {langId : langId, autoFillLangData :autoFillLangData }, function (res) {
+            $('.mainJs').replaceWith(res);
+            fcom.removeLoader();
+        });
+
+    };
+
+    productType = function (el) {
+        let productId = $("#addProductfrm input[name='product_id']").val();
+        let langId = $("#addProductfrm [name='lang_id']").val();        
+        let productType = $(el).val();
+        $('.mainJs').prepend(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('Products', 'form', [productId,productType]), {langId : langId}, function (res) {
+            $('.mainJs').replaceWith(res);
+            fcom.removeLoader();
+        });
+
+    };   
 
     addBrand = function () {
         fcom.resetEditorInstance();
@@ -46,17 +52,17 @@
             $.ykmodal(t);
             fcom.removeLoader();
         });
-    };   
+    };
     addTaxCategory = function () {
         fcom.resetEditorInstance();
         $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Tax', "form"), "", function (t) {
+        fcom.ajax(fcom.makeUrl('TaxCategories', "form"), "", function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
         });
     };
-    addTagData = function (e) {   
-        let rt_id = e.detail.data.id;            
+    addTagData = function (e) {
+        let rt_id = e.detail.data.id;
         if (rt_id == '') {
             if (1 > canEditTags) {
                 $.ykmsg.error(tagsEditErr);
@@ -76,12 +82,12 @@
     getTagsAutoComplete = function (e) {
 
         let keyword = e.detail.value;
-        let langId = $("#addProductfrm [name='lang_id']").val();
+        let langId = $("#addProductfrm [name='langId']").val();
         var list = [];
-        fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), { keyword: keyword, lang_id: langId }, function (t) {
+        fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), { keyword: keyword, langId: langId }, function (t) {
             var ans = $.parseJSON(t);
-            console.log(ans);  
-            console.log(ans.length);        
+            console.log(ans);
+            console.log(ans.length);
             for (i = 0; i < ans.length; i++) {
                 console.log(ans[i]);
                 list.push({
@@ -106,8 +112,7 @@
             delimiters: "#",
             editTags: false,
         }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
-    };
-    tagifyProducts();
+    };  
 
     addSpecification = function () {
 
@@ -115,118 +120,118 @@
 
         let label = $('#sp_label').val();
         let value = $('#sp_value').val();
-        let group = $('#sp_group').val(); 
+        let group = $('#sp_group').val();
         let prodSpecId = parseInt($('#sp_id').val());
-        if(prodSpecId == NaN){
-            prodSpecId = 0; 
+        if (prodSpecId == NaN) {
+            prodSpecId = 0;
         }
-        if(!validateSpeficationForm()){
+        if (!validateSpeficationForm()) {
             return;
-        } 
+        }
 
         let rowCount = appendEle.find('tr').length;
 
-        let html  = '<tr data-id="'+prodSpecId+'">';
-        html  += '<td class="nameJs">'+label+'<input type="hidden" name="specifications['+rowCount+'][name]" value="'+label+'"  data-fatreq="{&quot;required&quot;:false}"/> </td>';
-        html  += '<td class="valueJs">'+value+'<input type="hidden" name="specifications['+rowCount+'][value]" value="'+value+'" data-fatreq="{&quot;required&quot;:false}" /> </td>';
-        html  += '<td class="groupJs">'+group+'<input type="hidden" name="specifications['+rowCount+'][group]"  value="'+group+'" data-fatreq="{&quot;required&quot;:false}" /> </td>';
-        html +='<td class="align-right"><ul class="actions">'+
-                '<li><input type="hidden" name="specifications['+rowCount+'][id]" value="'+prodSpecId+'"  data-fatreq="{&quot;required&quot;:false}"/>'+
-                '<a href="javascript:void(0)"  onclick="editProdSpec(this)">'+
-                '<svg class="svg" width="18" height="18">'+
-                    '<use xlink:href="'+siteConstants.webroot+'images/retina/sprite-actions.svg#edit">'+
-                    '</use>'+
-                '</svg>'+
-                '</a></li>'+
-                '<li>'+
-                '<a href="javascript:void(0)" onclick="deleteProdSpec(this)">'+
-                '<svg class="svg" width="18" height="18">'+
-                    '<use xlink:href="'+siteConstants.webroot+'images/retina/sprite-actions.svg#delete">'+
-                    '</use>'+
-                '</svg>'+
-                '</a></li>'+
+        let html = '<tr data-id="' + prodSpecId + '">';
+        html += '<td class="nameJs">' + label + '<input type="hidden" name="specifications[' + rowCount + '][name]" value="' + label + '"  data-fatreq="{&quot;required&quot;:false}"/> </td>';
+        html += '<td class="valueJs">' + value + '<input type="hidden" name="specifications[' + rowCount + '][value]" value="' + value + '" data-fatreq="{&quot;required&quot;:false}" /> </td>';
+        html += '<td class="groupJs">' + group + '<input type="hidden" name="specifications[' + rowCount + '][group]"  value="' + group + '" data-fatreq="{&quot;required&quot;:false}" /> </td>';
+        html += '<td class="align-right"><ul class="actions">' +
+            '<li><input type="hidden" name="specifications[' + rowCount + '][id]" value="' + prodSpecId + '"  data-fatreq="{&quot;required&quot;:false}"/>' +
+            '<a href="javascript:void(0)"  onclick="editProdSpec(this)">' +
+            '<svg class="svg" width="18" height="18">' +
+            '<use xlink:href="' + siteConstants.webroot + 'images/retina/sprite-actions.svg#edit">' +
+            '</use>' +
+            '</svg>' +
+            '</a></li>' +
+            '<li>' +
+            '<a href="javascript:void(0)" onclick="deleteProdSpec(this)">' +
+            '<svg class="svg" width="18" height="18">' +
+            '<use xlink:href="' + siteConstants.webroot + 'images/retina/sprite-actions.svg#delete">' +
+            '</use>' +
+            '</svg>' +
+            '</a></li>' +
             '</td>';
-        html  += '</ul></tr>';
+        html += '</ul></tr>';
 
-        if(appendEle.find('.editRowJs').length){
+        if (appendEle.find('.editRowJs').length) {
             appendEle.find('.editRowJs').replaceWith(html);
-        }else{
+        } else {
             appendEle.find('tbody').append(html);
         }
-        
+
         appendEle.find('table').removeClass('hide');
 
         $('#sp_label').val('');
         $('#sp_value').val('');
         $('#sp_group').val('');
         $('#sp_id').val(0);
-       
+
     };
     validateSpeficationForm = function () {
         let validate = true;
-        $('#specificationsFormJs input').each(function () {          
-            if($(this).data('change-event-bind') != 1 ){
-                $("input").change(function(){
+        $('#specificationsFormJs input').each(function () {
+            if ($(this).data('change-event-bind') != 1) {
+                $("input").change(function () {
                     $(this).siblings('ul').remove();
                 });
                 $(this).data('change-event-bind', 1);
-            }            
-            $(this).siblings('ul').remove();            
-            if ($(this).data('required') ==  1 && '' == $(this).val()) {
+            }
+            $(this).siblings('ul').remove();
+            if ($(this).data('required') == 1 && '' == $(this).val()) {
                 let caption = $(this).siblings('label').text().trim();
                 errorlist = $(document.createElement("ul")).addClass('errorlist').append(
                     $(document.createElement('li')).append($(document.createElement('a')).html(caption + " " + langLbl.isMandatory,).attr({ 'href': 'javascript:void(0);' }))
                 );
                 $(this).after(errorlist);
                 validate = false;
-            }                       
-        });  
-        
-        return validate; 
+            }
+        });
+
+        return validate;
     };
-        
+
     prodSpecifications = function () {
         var productId = $("#addProductfrm input[name='product_id']").val();
         var langId = $("#addProductfrm [name='lang_id']").val();
         fcom.ajax(fcom.makeUrl('Products', 'prodSpecifications'), { product_id: productId, langId: langId }, function (res) {
             $('#specificationsListJs').html(res);
-            if($('#specificationsListJs').find('table tbody tr').length == 0){
+            if ($('#specificationsListJs').find('table tbody tr').length == 0) {
                 $('#specificationsListJs').find('table').addClass('hide');
-            } 
+            }
         });
     };
-    
-    editProdSpec = function(el){ 
-        let trEle = $(el).closest('tr');      
+
+    editProdSpec = function (el) {
+        let trEle = $(el).closest('tr');
         let prodSpecId = parseInt(trEle.data('id'));
-        if(prodSpecId == NaN){
-            prodSpecId = 0; 
-        } 
-       
+        if (prodSpecId == NaN) {
+            prodSpecId = 0;
+        }
+
         let label = trEle.find('.nameJs').text();
         let value = trEle.find('.valueJs').text();
-        let group = trEle.find('.groupJs').text();  
+        let group = trEle.find('.groupJs').text();
         trEle.siblings().removeClass('editRowJs');
         trEle.addClass('editRowJs');
 
         $('#sp_label').val(label);
         $('#sp_value').val(value);
         $('#sp_group').val(group);
-        $('#sp_id').val(prodSpecId);        
+        $('#sp_id').val(prodSpecId);
     };
 
 
-    deleteProdSpec = function(el){ 
+    deleteProdSpec = function (el) {
         let prodSpecId = $(el).closest('tr').data('id');
-        if(1 > prodSpecId ){
+        if (1 > prodSpecId) {
             $(el).closest('tr').remove();
-            if($('#specificationsListJs').find('table tbody tr').length == 0){
+            if ($('#specificationsListJs').find('table tbody tr').length == 0) {
                 $('#specificationsListJs').find('table').addClass('hide');
-            }            
+            }
             return;
         }
 
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), {prodSpecId:prodSpecId}, function(t) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId: prodSpecId }, function (t) {
             prodSpecifications();
         });
     };

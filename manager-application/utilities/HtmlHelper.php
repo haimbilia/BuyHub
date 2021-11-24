@@ -407,7 +407,7 @@ class HtmlHelper
      *    ]
      * @return void
      */
-    public static function getFieldHtml($frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [], string $labelInfoText = '', array $labelExtraArr = [])
+    public static function getFieldHtml($frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [],  string $fieldInfoText = '' ,string $labelInfoText = '', array $labelExtraArr = [] )
     {
 
         $fld = $frm->getField($fldName);
@@ -418,15 +418,18 @@ class HtmlHelper
         foreach ($setFieldTagAttrs as $attrkey => $attrVal) {
             $fld->setfieldTagAttribute($attrkey, $attrVal);
         }
-        $caption = $fld->getCaption();
+        $caption = $fld->getCaption();      
 
         switch ($fld->fldType) {
             case 'radio':
                 $fld->addOptionListTagAttribute('class', 'list-radio');
                 HtmlHelper::configureSwitchForRadio($fld);
                 break;
+            case 'hidden':
+               
+                return $fld->getHtml();       
+                break;    
         }
-
         $mainDiv = new HtmlElement("div", [
             'class' => 'col-md-' . $col,
         ]);
@@ -462,6 +465,10 @@ class HtmlHelper
         if (isset($labelExtraArr['attr']) && isset($labelExtraArr['label'])) {
             $div->appendElement('a', $labelExtraArr['attr'], $labelExtraArr['label']);
         }
+
+        if(!empty($fieldInfoText)){
+            $fld->htmlAfterField = '<small class="text--small">'.$fieldInfoText.'</small>';
+        }       
 
         $div1->appendElement('plaintext', [], $fld->getHtml(), true);
 
