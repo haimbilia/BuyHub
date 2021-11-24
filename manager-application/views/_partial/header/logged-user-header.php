@@ -46,9 +46,9 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <div class="search-native">
-                                                    <p><label class="" for="">Press <kbd>Ctrl-F</kbd> again to
+                                                  <label class="checkbox" for="">Press <kbd>Ctrl-F</kbd> again to
                                                             use native browser search.
-                                                            <input type="checkbox" id="quickSearchCtrl"></label></p>
+                                                            <input type="checkbox" id="quickSearchCtrl"></label> 
                                                 </div>
                                             </div>
                                         </div>

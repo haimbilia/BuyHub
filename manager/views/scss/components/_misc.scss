@@ -2271,7 +2271,7 @@ strong {
                     // background-color: $brand-color;
                     // color:  lighten($brand-color, 55%); 
                     @include bg-brand();
-                    color: $brand-color-inverse;
+                    
                 }
             }
             &:last-child {
