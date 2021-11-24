@@ -23,7 +23,7 @@
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-catelog">
-                                </use>
+                                </use> 
                             </svg>
                         </span>
                     </button>
@@ -412,8 +412,9 @@
 
             <?php
             if (
-                $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) 
+                    || $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)
+                    || $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
                 <li class="menu-item dropdown">
@@ -439,6 +440,13 @@
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ContentBlock'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_CONTENT_BLOCK', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('FaqCategories'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_FAQS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
