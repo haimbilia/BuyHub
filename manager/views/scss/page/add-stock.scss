@@ -42,11 +42,12 @@
         }
         &.is-active {
             a {
-                background-color: $brand-color;
-                color: $brand-color-inverse;
+                // background-color: $brand-color;
+                // color:  lighten($brand-color, 55%); 
+                @include bg-brand();
                 text-decoration: none;
                 .stock-nav-title {
-                    color: $brand-color-inverse;
+                    color: currentColor;
                 }
             }
         }
