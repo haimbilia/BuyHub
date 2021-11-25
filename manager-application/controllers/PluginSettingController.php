@@ -44,6 +44,7 @@ class PluginSettingController extends ListingBaseController
         $identifier = isset($settings['plugin_identifier']) ? $settings['plugin_identifier'] : '';
         $this->set('frm', $this->frmObj);
         $this->set('identifier', $identifier);
+        $this->set('keyName', $this->keyName);
         $this->_template->render(false, false, 'plugins/settings.php');
     }
 
