@@ -130,17 +130,12 @@ class FaqCategoriesController extends ListingBaseController
         $frm->addHiddenField('', 'faqcat_id','');
         $frm->addHiddenField('', 'lang_id', $this->siteLangId);
         // $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_IDENTIFIER', $langId), 'faqcat_identifier');
-
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($langId);
         $faqCatTypeArr = FaqCategory::getFaqCatTypeArr($langId);
-
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'faqcat_name');
-
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $langId), 'faqcat_active', $activeInactiveArr, '', array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $langId), 'faqcat_type', $faqCatTypeArr, '', array(), '');
-        
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $langId), 'faqcat_active', $activeInactiveArr, '', array(), '');
         if (!empty($translatorSubscriptionKey) ) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }

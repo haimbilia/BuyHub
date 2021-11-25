@@ -9,10 +9,9 @@ class FaqController extends ListingBaseController
         $this->objPrivilege->canViewFaq();
     }
 
-    public function list(int $faqCatId)
+    public function index(int $faqCatId)
     {
         $this->checkEditPrivilege(true);
-        $faqCatId = FatUtility::int($faqCatId);
         if (1 > $faqCatId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -55,7 +54,6 @@ class FaqController extends ListingBaseController
 
     public function getListingData(int $faqCatId)
     {
-        $faqCatId = FatApp::getPostedData('faqCatId', FatUtility::VAR_INT, $faqCatId);
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -114,8 +112,7 @@ class FaqController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function form()
-    {
+    public function form() {
         $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $faqCatId = FatApp::getPostedData('faqCatId', FatUtility::VAR_INT, 0);
@@ -148,7 +145,7 @@ class FaqController extends ListingBaseController
 
     }
 
-    private function getForm($faqCatId = 0)
+    private function getForm(int $faqCatId = 0)
     {
         $frm = new Form('frmFaq');
         $frm->addHiddenField('', 'faqCatId', $faqCatId);
@@ -262,7 +259,7 @@ class FaqController extends ListingBaseController
         if ($langData) {
             $faqLangFrm->fill($langData);
         }
-        $this->set('faqcat_id', $faqCatId);
+        $this->set('faqCatId', $faqCatId);
         $this->set('recordId', $recordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $faqLangFrm);
@@ -270,7 +267,13 @@ class FaqController extends ListingBaseController
         $this->_template->render(false, false);
     }
 
-    private function getLangForm($langId = 0)
+    /**
+     * Getting the Language Form
+     *
+     * @param integer $langId
+     * @return void
+     */
+    private function getLangForm(int $langId = 0)
     {
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $langId = 1 > $langId ? $siteLangId : $langId;
@@ -291,10 +294,8 @@ class FaqController extends ListingBaseController
     }
 
 
-    public function langSetup()
-    {
+    public function langSetup() {
         $this->checkEditPrivilege();
-
         $post = FatApp::getPostedData();
         $recordId = $post['faq_id'];
         $languages = Language::getAllNames();
@@ -345,8 +346,7 @@ class FaqController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
     
-    public function updateOrder()
-    {
+    public function updateOrder() {
         $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
         if (!empty($post)) {
@@ -358,8 +358,7 @@ class FaqController extends ListingBaseController
         }
     }
 
-    public function deleteRecord()
-    {
+    public function deleteRecord() {
         $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($recordId < 1) {

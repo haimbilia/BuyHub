@@ -1,6 +1,8 @@
 <?php
 class RecomendedTagProductsController extends ListingBaseController
 {
+    protected $pageKey = 'RECOMENDED_TAG_PRODUCTS_WEIGHTAGES';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,7 +14,7 @@ class RecomendedTagProductsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_RECOMENDATIONS_TAG_PRODUCTS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -25,11 +27,11 @@ class RecomendedTagProductsController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TAG_NAME_OR_PRODUCT_NAME', $this->siteLangId));
         $this->getListingData();
-        
+
         $this->_template->addJs(['recomended-tag-products/page-js/index.js']);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
-    
+
     public function search()
     {
         $this->getListingData();
@@ -99,7 +101,6 @@ class RecomendedTagProductsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditRecomendedWeightages($this->admin_id, true));
-        
     }
 
     public function setup()
