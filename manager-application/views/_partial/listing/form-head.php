@@ -29,12 +29,12 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
                     if(!isset($generalTab)){
                         $generalTab = [
                             'attr' => [
-                                'title' => Labels::getLabel('LBL_GENERAL', $siteLangId),
-                                'isActive' => $activeGentab,
                                 'href' => 'javascript:void(0);',
-                                'onclick' => "editRecord(".$recordId .");"
+                                'onclick' => "editRecord(".$recordId .");",
+                                'title' => Labels::getLabel('LBL_GENERAL', $siteLangId)
                             ],
-                            'label' => Labels::getLabel('LBL_GENERAL', $siteLangId)
+                            'label' => Labels::getLabel('LBL_GENERAL', $siteLangId),
+                            'isActive' => true
                         ];
                     }
                     $generalTabAttr = isset($generalTab['attr']) ? $generalTab['attr'] : [];
