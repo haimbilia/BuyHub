@@ -828,7 +828,7 @@
                                                     <label class="checkbox">
                                                         <input type="checkbox"> Write
                                                     </label>
-                                                </td>
+                                                </td> 
                                             </tr>
                                             <tr>
                                                 <td>Add Products</td>

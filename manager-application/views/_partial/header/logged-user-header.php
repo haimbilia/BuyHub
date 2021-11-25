@@ -360,7 +360,7 @@
                                         <img aria-expanded="false" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>" alt="">
                                     </span>
                                 </a>
-                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
+                                <div class="header-action__target p-0 dropdown-menu">
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">

@@ -37,7 +37,6 @@
                                     </a>
                                 </li>
                             <?php } ?>
-
                             <?php if ($objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Shops'); ?>">

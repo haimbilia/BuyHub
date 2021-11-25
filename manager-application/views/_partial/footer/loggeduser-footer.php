@@ -66,7 +66,7 @@
                 <img aria-expanded="false" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="">
             </span>
         </a>
-        <div class="footer-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
+        <div class="footer-action__target p-0 dropdown-menu ">
             <div class="header-account__avtar">
                 <div class="profile">
                     <div class="profile__img">

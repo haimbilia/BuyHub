@@ -12,13 +12,14 @@
 }
 
 .login-1 {
-    .login-block {
+    .login-block { 
         max-width: 450px;
-        min-width: 300px; 
+        min-width: 300px;
         margin: 2rem auto;
     }
     .logo {
-        margin: 0 auto;
+        text-align: center;
+        margin: 0 auto; margin-bottom: 2rem;
         img {
             max-width: 120px;
         }
@@ -27,22 +28,27 @@
         padding: 2rem 3rem;
         &-head {
             border: none;
-            padding:0;
+            padding: 0;
             padding-bottom: 1rem;
+
+            
         }
-        &-body {padding: 0;
+        &-body {
+            padding: 0;
             // padding: 2rem;
-            .title {
-                margin-bottom: 0.5rem;
-                h2 {
-                    font-size: 1.5rem;
-                    color: $txt-body;
-                }
-            }
+           
         }
         &-foot {
             border: none;
             padding: 0;
+        }
+
+        .title {
+            margin-bottom: 0.5rem;
+            h2 {
+                font-size: 1.5rem;
+                color: $txt-body;
+            }
         }
     }
     .other-links {
