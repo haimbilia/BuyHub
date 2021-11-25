@@ -9,7 +9,7 @@ class FaqController extends ListingBaseController
         $this->objPrivilege->canViewFaq();
     }
 
-    public function list(int $faqCatId)
+    public function index(int $faqCatId)
     {
         $this->checkEditPrivilege(true);
         if (1 > $faqCatId) {

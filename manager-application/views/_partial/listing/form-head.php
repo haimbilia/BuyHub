@@ -34,7 +34,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
                                 'title' => Labels::getLabel('LBL_GENERAL', $siteLangId)
                             ],
                             'label' => Labels::getLabel('LBL_GENERAL', $siteLangId),
-                            'isActive' => true
+                            'isActive' => $activeGentab
                         ];
                     }
                     $generalTabAttr = isset($generalTab['attr']) ? $generalTab['attr'] : [];
@@ -45,6 +45,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
                     $href = !empty($generalTabAttr) ? $generalTabAttr['href'] : 'javascript:void(0);';
                     $onclick = !empty($generalTabAttr) ? $generalTabAttr['onclick'] : '';
                     $title = !empty($generalTabAttr) ? $generalTabAttr['title'] : '';
+
                 ?>
                 <a class="nav-link <?php echo $active . $disabled; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
                     <?php echo $label; ?>
