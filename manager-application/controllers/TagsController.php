@@ -5,11 +5,7 @@ class TagsController extends ListingBaseController {
     protected $modelClass = 'Tag';
     protected $pageKey = 'MANAGE_TAGS';
 
-    public function __construct($action) {
-        $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
+    public function __construct($action) {       
         parent::__construct($action);
         $this->objPrivilege->canViewTags();
     }
