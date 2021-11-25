@@ -1,5 +1,5 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.');
-
+$frm->setFormTagAttribute('data-onclear', 'editRecord('.$recordId.','.$faqCatId.')');
 $generalTab = [
     'attr' => [
         'title' => Labels::getLabel('LBL_GENERAL', $siteLangId),

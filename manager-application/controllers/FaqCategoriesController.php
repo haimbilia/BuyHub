@@ -21,7 +21,7 @@ class FaqCategoriesController extends ListingBaseController
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
-        $actionItemsData['newRecordBtn'] = true;
+        $actionItemsData['deleteButton'] = true;
         
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -70,9 +70,6 @@ class FaqCategoriesController extends ListingBaseController
             $condition->attachCondition('fc_l.faqcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        // $srch->addOrder($sortBy, $sortOrder); 
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->doNotLimitRecords();
