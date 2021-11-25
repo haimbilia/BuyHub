@@ -25,8 +25,29 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
     if ($includeTabs && (0 < count($languages) || isset($otherButtons))) { ?>
         <div class="form-edit-head">
             <nav class="nav nav-tabs navTabsJs">
-                <a class="nav-link <?php echo $activeGentab; ?>" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);" title="<?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>">
-                    <?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>
+                <?php
+                    if(!isset($generalTab)){
+                        $generalTab = [
+                            'attr' => [
+                                'title' => Labels::getLabel('LBL_GENERAL', $siteLangId),
+                                'isActive' => $activeGentab,
+                                'href' => 'javascript:void(0);',
+                                'onclick' => "editRecord(".$recordId .");"
+                            ],
+                            'label' => Labels::getLabel('LBL_GENERAL', $siteLangId)
+                        ];
+                    }
+                    $generalTabAttr = isset($generalTab['attr']) ? $generalTab['attr'] : [];
+                    $label = isset($generalTab['label']) ? $generalTab['label'] : '';
+                    $isActive = isset($generalTab['isActive']) ? $generalTab['isActive'] : false;
+                    $active = $isActive ? 'active' : '';
+
+                    $href = !empty($generalTabAttr) ? $generalTabAttr['href'] : 'javascript:void(0);';
+                    $onclick = !empty($generalTabAttr) ? $generalTabAttr['onclick'] : '';
+                    $title = !empty($generalTabAttr) ? $generalTabAttr['title'] : '';
+                ?>
+                <a class="nav-link <?php echo $active . $disabled; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
+                    <?php echo $label; ?>
                 </a>
                 <?php if (0 < count($languages) && true === $displayLangTab) { ?>
                     <a class="nav-link <?php echo $activeLangtab . $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . array_key_first($languages) . ");'" : ""; ?> title="<?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>">
