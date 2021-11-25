@@ -86,6 +86,70 @@ class TaxStructure extends MyAppModel {
     }
 
     /**
+     * getCombinedTaxes
+     *
+     * @param  int $parentId
+     * @return object
+     */
+    public function getCombinedTaxesForLang($parentId, $lang): array {
+        $srch = static::getSearchObject();
+        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id=taxstrlang_taxstr_id', 'taxLang');
+        $srch->addMultipleFields(array('taxstr_id', 'taxstr_name'));
+        $srch->addCondition('taxstr_parent', '=', $parentId);
+        $srch->addCondition('taxstrlang_lang_id', '=', $lang);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+    }
+
+    /**
+     * getCombinedTaxes
+     *
+     * @param  int $parentId
+     * @return object
+     */
+    public function getCombinedTax($parentId): array {
+        $srch = static::getSearchObject();
+        $srch->addMultipleFields(array('taxstr_id', 'taxstr_identifier'));
+        $srch->addCondition('taxstr_parent', '=', $parentId);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords(); 
+        return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+    }
+
+    /**
+     * getCombinedTaxes
+     *
+     * @param  int $parentId
+     * @return object
+     */
+    public function getCombinedTaxesWithLang($parentId, $data = []): array {
+        $srch = static::getSearchObject();
+        $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id=taxstrlang_taxstr_id', 'taxLang');
+        $srch->addCondition('taxstr_parent', '=', $parentId);
+        $srch->addOrder('taxstr_id', 'ASC');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $results = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $component = [];
+        $postComponents = $data['taxstr_component_name'] ?? [];
+        $postLang = $data['lang_id'] ?? '';
+        foreach ($results as $key => $result) {
+            $component[$result['taxstr_id']][$result['taxstrlang_lang_id']] = $result['taxstr_name'];
+        }
+        sort($component);
+        foreach ($results as $result) {
+            $components['taxstr_name'][$result['taxstrlang_lang_id']] = $result['taxstr_name'];
+        }
+        foreach ($postComponents as $key => $postComponent) {
+            $component[$key][$postLang] = $postComponent[$postLang];
+            $components['taxstr_name'][$postLang] = $data['taxstr_name'];
+        }
+        $components['taxstr_component_name'] = $component;
+        return $components;
+    }
+
+    /**
      * 
      * @param int $langId
      * @param int $ruleId
@@ -125,7 +189,27 @@ class TaxStructure extends MyAppModel {
                 $frm->addTextBox(Labels::getLabel('LBL_Tax_name', $languageId), 'taxstr_name[' . $languageId . ']');
             }
             $frm->addTextBox(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
+            /* if (0 < $taxStrId) {
+              $combinedTaxes = $taxStructure->getCombinedTaxes($taxStrId);
+              foreach($combinedTaxes as $combTaxCount => $combinedTax){
+              $frm->addTextBox(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name['.$combTaxCount.'][' . $languageId . ']');
+              }
+              } else {
+              if ($languageId == $siteDefaultLangId) {
+              $frm->addRequiredField(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
+              } else {
+              $frm->addTextBox(Labels::getLabel('LBL_Tax_Component_Name', $languageId), 'taxstr_component_name[0][' . $languageId . ']');
+              }
+              } */
         }
+
+        /* $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+          unset($languages[$siteDefaultLangId]);
+          if (!empty($translatorSubscriptionKey) && count($languages) > 0) {
+          $frm->addCheckBox(Labels::getLabel('LBL_Translate_To_Other_Languages', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+          } */
+
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
 
@@ -190,16 +274,22 @@ class TaxStructure extends MyAppModel {
      * @param  array $post
      * @return bool
      */
-    private function addUpdateCombinedData($post, $parentId): bool {
+    public function addUpdateCombinedData($post, $parentId): bool {
         $parentId = FatUtility::int($parentId);
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 
         unset($post['taxstr_id']);
 
         $db = FatApp::getDb();
-        if (!$db->deleteRecords(static::DB_TBL, array('smt' => 'taxstr_parent = ?', 'vals' => array($parentId)))) {
-            $this->error = $db->getError();
-            return false;
+        if ($parentId > 0) {
+            $components = $this->getCombinedTax($parentId); 
+            if (!$db->deleteRecords(static::DB_TBL, array('smt' => 'taxstr_parent = ?', 'vals' => array($parentId)))) {
+                $this->error = $db->getError();
+                return false;
+            } 
+            foreach ($components as $key => $component) {
+                $db->deleteRecords(static::DB_TBL_LANG, array('smt' => 'taxstrlang_taxstr_id = ?', 'vals' => array($key)));
+            }
         }
 
         foreach ($post['taxstr_component_name'] as $taxStrValues) {
@@ -238,6 +328,38 @@ class TaxStructure extends MyAppModel {
         return true;
     }
 
+    /**
+     * addUpdateCombinedData
+     *
+     * @param  array $post
+     * @return bool
+     */
+    public function addUpdateCombinedTax($post, $parentId, $langId): bool {
+        $parentId = FatUtility::int($parentId);
+        if (!FatApp::getDb()->deleteRecords(static::DB_TBL, array('smt' => 'taxstr_parent = ?', 'vals' => array($parentId)))) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+
+        foreach ($post['taxstr_component_name'] as $key => $taxStrValues) {
+            if (empty($taxStrValues)) {
+                continue;
+            }
+
+
+            $data = array(
+                static::DB_TBL_LANG_PREFIX . 'taxstr_id' => $this->mainTableRecordId,
+                static::DB_TBL_LANG_PREFIX . 'lang_id' => $langId,
+                'taxstr_name' => $taxStrValues,
+            );
+            if (!$this->updateLangData($langId, $data)) {
+                $this->error = $this->getError();
+                return false;
+            }
+        }
+        return true;
+    }
+  
     /**
      * saveTranslatedLangData
      *

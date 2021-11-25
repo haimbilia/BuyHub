@@ -246,7 +246,7 @@ class SellerProductsController extends ListingBaseController
         } else {
             $sellerProductRow['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($productLangRow['product_url_keyword']));
         }
-        $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id']);
+        $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id'], $this->siteLangId);
         $sellerProductRow['selprod_user_shop_name'] = $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_identifier'];
 
         $productWarranty = Product::getAttributesById($product_id, 'product_warranty', true);
@@ -1031,40 +1031,7 @@ class SellerProductsController extends ListingBaseController
             );
         }
         die(json_encode(['pageCount' => $pageCount, 'products' => $json]));
-    }
-
-    public function autoCompleteUserShopName()
-    {
-        $pagesize = 10;
-        $post = FatApp::getPostedData();
-        $srch = new SearchBase(User::DB_TBL, 'tu');
-        $srch->joinTable('tbl_shops', 'INNER JOIN', 'tu.user_id=ts.shop_user_id', 'ts');
-        $srch->addOrder('user_name', 'asc');
-        if (!empty($post['keyword'])) {
-            $cnd = $srch->addCondition('user_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd = $cnd->attachCondition('shop_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
-        }
-        $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . User::DB_TBL_CRED_PREFIX . 'user_id = tu.user_id', 'uc');
-        $srch->addCondition('uc.' . User::DB_TBL_CRED_PREFIX . 'active', '=', 1);
-        $srch->addCondition('user_is_supplier', '=', 1);
-
-        $srch->addMultipleFields(array('user_id', 'user_name', 'shop_identifier'));
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
-        // echo  $srch->getQuery(); die;
-        $users = array();
-        if ($rs) {
-            $users = $db->fetchAll($rs);
-        }
-        foreach ($users as $key => $option) {
-            $json[] = array(
-                'user_id' => $option['user_id'],
-                'user_name' => strip_tags(html_entity_decode($option['user_name'], ENT_QUOTES, 'UTF-8')),
-                'shop_identifier' => strip_tags(html_entity_decode($option['shop_identifier'], ENT_QUOTES, 'UTF-8'))
-            );
-        }
-        die(json_encode($json));
-    }
+    }   
 
     public function setupSellerProductLinks()
     {

@@ -371,7 +371,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-
+        console.log($(frm).validate());
         if (!$(frm).validate()) {
             return;
         }

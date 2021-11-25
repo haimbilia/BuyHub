@@ -45,16 +45,16 @@
     };
 
     editSettingForm = function (keyName) {
-        fcom.displayProcessing();
+        $.ykmodal(fcom.getLoader());
         var data = 'keyName=' + keyName;
         fcom.ajax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
-            $.ykmsg.close();
+            fcom.removeLoader();
             var res = isJson(t);
             if (res && res.status == 0) {
                 $.ykmsg.error(res.msg);
-            } else {
-                $.ykmodal(t);
+                return;
             }
+            $.ykmodal(t);
         });
     };
 

@@ -1,6 +1,7 @@
 (function () {
-    setup = function (frm) {    
-        if (!$(frm).validate()) { return; }       
+   
+    setup = function (frm) {
+        if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
             fcom.removeLoader();
@@ -17,7 +18,7 @@
         let productId = $("#addProductfrm input[name='product_id']").val();
         let langId = $("#addProductfrm [name='lang_id']").val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Products', 'form', [productId]), {langId : langId, autoFillLangData :autoFillLangData }, function (res) {
+        fcom.ajax(fcom.makeUrl('Products', 'form', [productId]), { langId, autoFillLangData }, function (res) {
             $('.mainJs').replaceWith(res);
             fcom.removeLoader();
         });
@@ -26,15 +27,15 @@
 
     productType = function (el) {
         let productId = $("#addProductfrm input[name='product_id']").val();
-        let langId = $("#addProductfrm [name='lang_id']").val();        
+        let langId = $("#addProductfrm [name='lang_id']").val();
         let productType = $(el).val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Products', 'form', [productId,productType]), {langId : langId}, function (res) {
+        fcom.ajax(fcom.makeUrl('Products', 'form', [productId, productType]), { langId }, function (res) {
             $('.mainJs').replaceWith(res);
             fcom.removeLoader();
         });
 
-    };   
+    };
 
     addBrand = function () {
         fcom.resetEditorInstance();
@@ -84,7 +85,7 @@
         let keyword = e.detail.value;
         let langId = $("#addProductfrm [name='langId']").val();
         var list = [];
-        fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), { keyword: keyword, langId: langId }, function (t) {
+        fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), { keyword, langId }, function (t) {
             var ans = $.parseJSON(t);
             console.log(ans);
             console.log(ans.length);
@@ -112,7 +113,7 @@
             delimiters: "#",
             editTags: false,
         }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
-    };  
+    };
 
     addSpecification = function () {
 
@@ -193,7 +194,7 @@
     prodSpecifications = function () {
         var productId = $("#addProductfrm input[name='product_id']").val();
         var langId = $("#addProductfrm [name='lang_id']").val();
-        fcom.ajax(fcom.makeUrl('Products', 'prodSpecifications'), { product_id: productId, langId: langId }, function (res) {
+        fcom.ajax(fcom.makeUrl('Products', 'prodSpecifications'), { product_id :productId, langId }, function (res) {
             $('#specificationsListJs').html(res);
             if ($('#specificationsListJs').find('table tbody tr').length == 0) {
                 $('#specificationsListJs').find('table').addClass('hide');
@@ -231,10 +232,33 @@
             return;
         }
 
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId: prodSpecId }, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId }, function (t) {
             prodSpecifications();
         });
     };
+
+    getShippingProfileOptions = function (userId) { 
+        let langId = getCurrentFrmLangId();
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'getShippingProfileOptions'), { userId, langId }, function (t) {
+            if(t.shippingApiActive == 1){
+                $('#shipping_profile').attr('disabled', true );
+            }else{
+                $('#shipping_profile').attr('disabled', false )
+                .html('');
+                $.each(t.shipProfileArr,function (id,name){
+                    $('#shipping_profile').append(`<option value="${id}">
+                            ${name}
+                    </option>`);
+                });
+            }            
+        });
+    };
+
+    getCurrentFrmLangId = function (){
+        return $("#addProductfrm [name='lang_id']").val();
+    }
+
+    
 
 })();
 

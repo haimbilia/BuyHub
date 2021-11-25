@@ -396,8 +396,9 @@ class HtmlHelper
      * @param  mixed $fldName
      * @param  mixed $col
      * @param  mixed $setFieldTagAttrs 
-     * @param  mixed $labelInfoText 
-     * @param  mixed $labelArr = [
+     * @param  mixed $labelInfoText  - to show tooltip on label
+     * @param  mixed $labelArr -  to show button on right side of label
+     *  = [
      *        'attr' => [
      *            'href' => 'javascript:void(0)',
      *            'onclick' => 'FN()',
@@ -425,11 +426,11 @@ class HtmlHelper
                 $fld->addOptionListTagAttribute('class', 'list-radio');
                 HtmlHelper::configureSwitchForRadio($fld);
                 break;
-            case 'hidden':
-               
+            case 'hidden':               
                 return $fld->getHtml();       
                 break;    
         }
+        
         $mainDiv = new HtmlElement("div", [
             'class' => 'col-md-' . $col,
         ]);
@@ -467,7 +468,7 @@ class HtmlHelper
         }
 
         if(!empty($fieldInfoText)){
-            $fld->htmlAfterField = '<small class="text--small">'.$fieldInfoText.'</small>';
+            $fld->htmlAfterField = '<span class="form-text text-muted">'.$fieldInfoText.'</span>';
         }       
 
         $div1->appendElement('plaintext', [], $fld->getHtml(), true);

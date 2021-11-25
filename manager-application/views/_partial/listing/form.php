@@ -10,7 +10,7 @@ if (!$frm->getFormTagAttribute('data-onclear')) {
 
 $frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs ' . $formClassExtra);
 if (!$frm->getFormTagAttribute('onsubmit')) {
-    $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+    $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#'.$frm->getFormTagAttribute('id').'")[0]); return(false);');
 }
 
 $activeGentab = $activeGentab ?? true;

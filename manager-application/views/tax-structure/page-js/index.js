@@ -9,8 +9,11 @@ $(document).on("change", "input[name=taxstr_is_combined]", function () {
     }
 });
 
-$(document).on("click", ".add-combined-form--js", function () {
-    $(this).closest('.row').after($(this).closest('.row').clone());
+$(document).on("click", ".add-combined-form--js", function () {  
+    $(this).closest('.component_link').find('.row').last().after($(this).closest('.row').clone());
+    $(this).closest('.component_link').find('.row').last().find('input[type=text]').val('');
+    $(this).closest('.component_link').find('.row').last().find('.move-combined-form--js').removeClass('hide');
+    
 });
 $(document).on("click", ".remove-combined-form--js", function () {
     if ($('.component_link .row').length == 1) {
