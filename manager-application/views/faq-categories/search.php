@@ -11,7 +11,7 @@ $serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
 foreach ($arrListing as $sn => $row) {
     $serialNo++;
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
-    $tr = $tbody->appendElement('tr', ['width'=> '100%', 'class' => $cls, 'data-row' => $serialNo, 'id' => $row['faqcat_id']]);
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['faqcat_id']]);
 
     if ($row['faqcat_active'] == applicationConstants::ACTIVE) {
         $tr->setAttribute("id", $row['faqcat_id']);
@@ -32,19 +32,13 @@ foreach ($arrListing as $sn => $row) {
                 </svg>', true);
                 break;
             case 'select_all':
-                $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="faqcat_ids[]" value=' . $row['faqcat_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="faqcat_ids[]" value=' . $row['faqcat_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $serialNo);
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'faqcat_identifier':
-                if ($row['faqcat_name'] != '') {
-                    $td->appendElement('plaintext', array(), $row['faqcat_name'], true);
-                    $td->appendElement('br', array());
-                    $td->appendElement('plaintext', array(), '(' . $row[$key] . ')', true);
-                } else {
-                    $td->appendElement('plaintext', array(), $row[$key], true);
-                }
+            case 'faqcat_name':
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
             case 'faqcat_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['faqcat_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
@@ -69,18 +63,18 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = ['onClick'=>'editRecord(' . $row['faqcat_id'] . ', false, "modal-dialog-vertical-xs")'];
+                    $data['editButton'] = [];
                     $data['deleteButton'] = [];
                 }
                 $data['otherButtons'] = [
                     [
                         'attr' => [
-                            'href' =>  UrlHelper::generateUrl('Faq', 'index', array($row['faqcat_id'])),
+                            'href' =>  UrlHelper::generateUrl('Faq', 'list', array($row['faqcat_id'])),
                             'title' => Labels::getLabel('LBL_FAQ_Listing', $siteLangId),
                         ],
                         'label' => '<i class="icn">
                             <svg class="svg" width="18" height="18">
-                                <use xlink:href="/admin/images/retina/sprite.yokart.svg#password">
+                                <use xlink:href="/admin/images/retina/sprite.yokart.svg#list">
                                 </use>
                             </svg>
                         </i>'
@@ -91,7 +85,7 @@ foreach ($arrListing as $sn => $row) {
                 
                 break;
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }
