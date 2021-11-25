@@ -72,11 +72,12 @@
         }
         &.is-active {
             a {
-                background-color: $brand-color;
-                color: $brand-color-inverse;
+                // background-color: $brand-color;
+                // color:  lighten($brand-color, 55%); 
+                @include bg-brand();
                 text-decoration: none;
                 .settings-inner-title {
-                    color: $brand-color-inverse;
+                    color: currentColor;
                 }
             }
         }

@@ -8,8 +8,10 @@
         position: absolute;
         z-index: 1;
         font-size: 0.85rem;
-        background-color: $brand-color;
-        color: $brand-color-inverse;
+        // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+       
         >.ribbon__inner {
             z-index: -1;
             position: absolute;
@@ -199,13 +201,17 @@
     }
     &--brand {
         .ribbon__target {
-            background-color: $brand-color;
+            // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
             color: #ffffff;
             &:after {
                 border-color: rgba(255, 255, 255, 0.5);
             }
             >.ribbon__inner {
-                background-color: $brand-color;
+                // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                 color: #ffffff;
                 &:after {
                     border-color: transparent;

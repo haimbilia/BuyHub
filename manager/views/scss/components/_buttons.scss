@@ -31,13 +31,14 @@
     &:hover {
         outline: none !important;
     }
-    //varsions
+    //versions
     &-brand {
-        background-color: var(--brand-color);
-        color: var(--brand-color-inverse);
+        // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
         &:hover {
             background-color: darken($brand-color, 5%);
-            color: $brand-color-inverse !important;
+            color:  lighten($brand-color, 55%) !important;
         }
     }
     &-outline-brand {
@@ -46,7 +47,7 @@
         color: $brand-color;
         &:hover {
             background-color: darken($brand-color, 5%);
-            color: $brand-color-inverse !important;
+            color:  lighten($brand-color, 55%) !important;
         }
     }
     &-light {
@@ -181,8 +182,10 @@ a.link {
         bottom: -2px;
         #{$start-direction}: 0;
         #{$end-direction}: 0;
-        background: $brand-color;
-        color: $brand-color-inverse;
+        //background-color: $brand-color;
+        //color:lighten($brand-color, 55%);        
+        @include bg-brand();
+        
         transform-origin: bottom left;
         transform: scaleX(1);
         transition: transform .3s ease-in-out;

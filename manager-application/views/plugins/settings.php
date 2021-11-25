@@ -1,8 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'setupPluginsSettings(this); return(false);');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+$frm->setFormTagAttribute('data-onclear', 'editSettingForm("' . $keyName . '")');
+$frm->setFormTagAttribute('onsubmit', 'setupPluginsSettings($("#'.$frm->getFormTagAttribute('id').'")[0]); return(false);');
 $formTitle = CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $siteLangId), ['{PLUGIN-NAME}' => $identifier]);
 $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 ?>
@@ -19,14 +20,5 @@ $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>
-
-    <div class="form-edit-foot">
-        <div class="row">
-            <div class="col-auto">
-                <button type="button" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">
-                    <?php  echo Labels::getLabel('LBL_SAVE', $siteLangId); ?>
-                </button>
-            </div>
-        </div>
-    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>

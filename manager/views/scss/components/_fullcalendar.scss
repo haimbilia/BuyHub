@@ -2018,7 +2018,11 @@ be a descendant of the grid when it is being dragged.
 
 .fc-unthemed .fc-event.fc-start.fc-event-brand .fc-content:before,
 .fc-unthemed .fc-event-dot.fc-start.fc-event-brand .fc-content:before {
-    background: $brand-color;
+    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
 }
 
 .fc-unthemed .fc-event.fc-not-start.fc-end.fc-event-solid-brand,
@@ -2027,7 +2031,11 @@ be a descendant of the grid when it is being dragged.
 .fc-unthemed .fc-event-dot.fc-not-start.fc-end.fc-event-solid-brand,
 .fc-unthemed .fc-event-dot.fc-not-start.fc-not-end.fc-event-solid-brand,
 .fc-unthemed .fc-event-dot.fc-start.fc-event-solid-brand {
-    background: $brand-color;
+    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
 }
 
 .fc-unthemed .fc-event.fc-not-start.fc-end.fc-event-solid-brand .fc-title,
@@ -2384,12 +2392,20 @@ be a descendant of the grid when it is being dragged.
 
 .fc-unthemed .fc-popover .fc-body .fc-event.fc-not-start.fc-not-end.fc-event-brand .fc-content:before,
 .fc-unthemed .fc-popover .fc-body .fc-event-dot.fc-not-start.fc-not-end.fc-event-brand .fc-content:before {
-    background: $brand-color;
+    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
 }
 
 .fc-unthemed .fc-popover .fc-body .fc-event.fc-not-start.fc-not-end.fc-event-solid-brand,
 .fc-unthemed .fc-popover .fc-body .fc-event-dot.fc-not-start.fc-not-end.fc-event-solid-brand {
-    background: $brand-color;
+    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
 }
 
 .fc-unthemed .fc-popover .fc-body .fc-event.fc-not-start.fc-not-end.fc-event-solid-brand .fc-title,
@@ -2617,7 +2633,11 @@ be a descendant of the grid when it is being dragged.
 
 .fc-unthemed .fc-list-item.fc-event-solid-brand .fc-event-dot,
 .fc-unthemed .fc-list-item.fc-event-brand .fc-event-dot {
-    background: $brand-color;
+    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
     border-color: $brand-color;
 }
 
@@ -2686,7 +2706,11 @@ be a descendant of the grid when it is being dragged.
 .fc-unthemed .fc-toolbar .fc-button:focus,
 .fc-unthemed .fc-toolbar .fc-button:active,
 .fc-unthemed .fc-toolbar .fc-button.fc-button-active {
-    background: $brand-color;
+    // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
     color: #ffffff;
     border: 1px solid $brand-color;
     -webkit-box-shadow: none;

@@ -14,7 +14,9 @@
         visibility: hidden;
         &:checked {
             ~.option__title {
-                background-color: $brand-color;
+                // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                 //color:$brand-color-inverse;
                 &:before {
                     opacity: 1;
@@ -38,7 +40,9 @@
             width: 8px;
             height: 8px;
             display: inline-block;
-            background-color: $brand-color;
+            // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
             margin-#{$end-direction}: 4px;
             border-radius: 50%;
             opacity: 0;

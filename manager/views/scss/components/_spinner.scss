@@ -229,7 +229,9 @@
         height: 1rem;
     }
     &.loader--brand {
-        background-color: $brand-color;
+        // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
     }
     &.loader--light {
         background-color: $bg-white;

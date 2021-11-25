@@ -11,7 +11,16 @@
                     $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-catelog">
+                                    </use>
+                                </svg>
+                            </i>
+
+                            <?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>
+                        </h6>
                         <?php if ($objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <div class="search-result">
                                 <span class="search-result__icon">

@@ -1363,3 +1363,13 @@ UPDATE `tbl_pages_language_data` SET `plang_title` = 'Manage Order Statuses', `p
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_USER_REWARDS', '-1', 'Manage User Rewards', 'Improve your conversion rate and sales by rewarding your users with points that they can redeem when placing orders.', '', '', '');
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'TRANSACTIONS', '-1', 'Transactions', 'View details of the transactions of declined and canceled followed by the current status.', '', '', '');
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'DELETED_USERS', '-1', 'Deleted Users', 'Search deleted users using filters & hover over the user you want to restore by clicking on the button ‘Restore User’.', '', '', '');
+
+
+ALTER TABLE `tbl_product_specifics` ADD `product_warranty_unit` TINYINT NOT NULL AFTER `product_warranty`;
+UPDATE `tbl_product_specifics` SET `product_warranty_unit` = '1';
+ALTER TABLE `tbl_product_specifics` CHANGE `product_warranty` `product_warranty` INT NOT NULL;
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_NAME', '1', 'Name', '1') ON DUPLICATE KEY UPDATE label_caption = 'Name';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_VALUE', '1', 'Value', '1') ON DUPLICATE KEY UPDATE label_caption = 'Value';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_GROUP', '1', 'Group', '1') ON DUPLICATE KEY UPDATE label_caption = 'Group';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', '1', 'Attachment at inventory level', '1') ON DUPLICATE KEY UPDATE label_caption = 'Attachment at inventory level';
