@@ -26,8 +26,9 @@
         text-overflow: ellipsis;
     }
     &-1 {
-        background: $brand-color;
-        color: $brand-color-inverse;
+        //background-color: $brand-color;
+        //color:lighten($brand-color, 55%);        
+        @include bg-brand();
         border-radius: $radius4;
         padding: 4px 8px;
         width: auto;

@@ -27,7 +27,7 @@
 $dark-color:#888;
 //dynamic theme colors
 $brand-color: #0073CF;
-$brand-color-inverse:#FFFFFF;
+//$brand-color-inverse:#FFFFFF;
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
 // $secondary-color: #6DCDEF;
@@ -71,7 +71,7 @@ $danger-color: #fd397a;
 //Bg brand
  @mixin bg-brand {
     background-color: $brand-color;
-    color: lighten($brand-color, 55%);
+    color: lighten($brand-color, 55%); 
 }
 //Push auto
 @mixin push--auto {

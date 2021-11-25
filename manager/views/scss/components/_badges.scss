@@ -11,20 +11,14 @@
         border: $border;
     }
     &-brand {
-        // // background-color: $brand-color;
+        // background-color: $brand-color;
         // color:  lighten($brand-color, 55%); 
         @include bg-brand();
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
-        color: $brand-color-inverse;
     }
     &-primary {
-        // // background-color: $brand-color;
+        // background-color: $brand-color;
         // color:  lighten($brand-color, 55%); 
         @include bg-brand();
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
-        color: $brand-color-inverse;
     }
     &-secondary {
         // background: $secondary-color;
