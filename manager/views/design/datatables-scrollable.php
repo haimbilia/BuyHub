@@ -409,7 +409,7 @@
                                                                 <td>Rosenbaum-Reichel</td>
                                                                 <td>8/6/2017</td>
                                                                 <td><span
-                                                                        class="badge  badge--danger badge--inline badge--pill">Danger</span>
+                                                                        class="badge  badge-danger badge-inline badge-pill">Danger</span>
                                                                 </td>
                                                                 <td><span
                                                                         class="badge badge--success badge--dot"></span>&nbsp;<span
@@ -535,7 +535,7 @@
                                                                 <td>Dicki-Kling</td>
                                                                 <td>5/20/2017</td>
                                                                 <td><span
-                                                                        class="badge  badge--danger badge--inline badge--pill">Delivered</span>
+                                                                        class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
                                                                         class="badge badge--success badge--dot"></span>&nbsp;<span
@@ -619,7 +619,7 @@
                                                                 <td>Jenkins Inc</td>
                                                                 <td>6/28/2016</td>
                                                                 <td><span
-                                                                        class="badge  badge--danger badge--inline badge--pill">Delivered</span>
+                                                                        class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
                                                                         class="badge badge--success badge--dot"></span>&nbsp;<span
@@ -661,7 +661,7 @@
                                                                 <td>Streich LLC</td>
                                                                 <td>8/5/2016</td>
                                                                 <td><span
-                                                                        class="badge  badge--danger badge--inline badge--pill">Danger</span>
+                                                                        class="badge  badge-danger badge-inline badge-pill">Danger</span>
                                                                 </td>
                                                                 <td><span
                                                                         class="badge badge--danger badge--dot"></span>&nbsp;<span
@@ -702,7 +702,7 @@
                                                                 <td>Haley, Schamberger and Durgan</td>
                                                                 <td>3/31/2017</td>
                                                                 <td><span
-                                                                        class="badge  badge--danger badge--inline badge--pill">Delivered</span>
+                                                                        class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
                                                                         class="badge badge--danger badge--dot"></span>&nbsp;<span
@@ -1235,7 +1235,7 @@
                                                                 <td>Asia/Jakarta</td>
                                                                 <td>$795849.41</td>
                                                                 <td><span
-                                                                        class="badge  badge--danger badge--inline badge--pill">Danger</span>
+                                                                        class="badge  badge-danger badge-inline badge-pill">Danger</span>
                                                                 </td>
                                                                 <td><span
                                                                         class="badge badge--success badge--dot"></span>&nbsp;<span
@@ -1391,7 +1391,7 @@
                                                                 <td>Europe/Vienna</td>
                                                                 <td>$516467.41</td>
                                                                 <td><span
-                                                                        class="badge  badge--danger badge--inline badge--pill">Delivered</span>
+                                                                        class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
                                                                         class="badge badge--success badge--dot"></span>&nbsp;<span
@@ -1495,7 +1495,7 @@
                                                                 <td>Asia/Chongqing</td>
                                                                 <td>$210902.65</td>
                                                                 <td><span
-                                                                        class="badge  badge--danger badge--inline badge--pill">Delivered</span>
+                                                                        class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
                                                                         class="badge badge--success badge--dot"></span>&nbsp;<span
@@ -1547,7 +1547,7 @@
                                                                 <td>Europe/Zagreb</td>
                                                                 <td>$1162836.25</td>
                                                                 <td><span
-                                                                        class="badge  badge--danger badge--inline badge--pill">Danger</span>
+                                                                        class="badge  badge-danger badge-inline badge-pill">Danger</span>
                                                                 </td>
                                                                 <td><span
                                                                         class="badge badge--danger badge--dot"></span>&nbsp;<span
@@ -1598,7 +1598,7 @@
                                                                 <td>America/Bogota</td>
                                                                 <td>$124768.15</td>
                                                                 <td><span
-                                                                        class="badge  badge--danger badge--inline badge--pill">Delivered</span>
+                                                                        class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
                                                                         class="badge badge--danger badge--dot"></span>&nbsp;<span

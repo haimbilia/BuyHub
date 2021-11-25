@@ -221,7 +221,7 @@
                                                     <td style="display: none;">2017-10-06 00:23:49</td>
                                                     <td style="display: none;">Asia/Makassar</td>
                                                     <td style="display: none;">$158287.28</td>
-                                                    <td style="display: none;"><span class="badge  badge--danger badge--inline badge--pill">Danger</span></td>
+                                                    <td style="display: none;"><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
                                                     <td style="display: none;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
@@ -357,7 +357,7 @@
                                                     <td style="display: none;">2018-02-23 01:18:36</td>
                                                     <td style="display: none;">America/Bogota</td>
                                                     <td style="display: none;">$124768.15</td>
-                                                    <td style="display: none;"><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></td>
+                                                    <td style="display: none;"><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
                                                     <td style="display: none;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">

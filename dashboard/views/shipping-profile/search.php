@@ -34,7 +34,7 @@
                     case 'shipprofile_name':
                         $badge = '';
                         if ($row['shipprofile_default'] == 1) {
-                            $badge = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_Default', $siteLangId) . '</span>';
+                            $badge = ' <span class="badge badge-brand badge-inline badge-pill">' . Labels::getLabel('LBL_Default', $siteLangId) . '</span>';
                         }
                         $td->appendElement('plaintext', array(), $row[$key] . $badge, true);
                         break;
