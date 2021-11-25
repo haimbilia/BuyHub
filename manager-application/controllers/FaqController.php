@@ -3,37 +3,134 @@
 class FaqController extends ListingBaseController
 {
     protected $modelClass = 'Faq';
+    protected $pageKey = 'MANAGE_FAQ';
 
     public function __construct($action) {
         parent::__construct($action);
         $this->objPrivilege->canViewFaq();
     }
 
-    public function index(int $faqCatId)
+
+     /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->checkEditPrivilege();
+        $this->modelObj = (new ReflectionClass('Faq'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [
+            'faqlang_lang_id',
+            'faqlang_faq_id',
+            'faq_title',
+            'faq_content'
+        ];
+        $this->set('formTitle', Labels::getLabel('LBL_FAQ_SETUP', $this->siteLangId));
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    protected function getFormColumns(): array
+    {
+        $faqTblHeadingCols = CacheHelper::get('faqTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($faqTblHeadingCols) {
+            return json_decode($faqTblHeadingCols);
+        }
+
+        $arr = [
+            'dragdrop' => '',
+            'faq_display_order' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'faqcat_id' => Labels::getLabel('LBL_ID', $this->siteLangId),
+            'faq_title' => Labels::getLabel('LBL_FAQ_TITLE', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('faqTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'dragdrop',
+            'faq_display_order',
+            'faq_title',
+            'action',
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $fields
+     * @return array
+     */
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['faq_display_order', 'faq_title'], Common::excludeKeysForSort());
+    }
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditFaq($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditFaq();
+        }
+    }
+
+    public function list(int $faqCatId)
     {
         $this->checkEditPrivilege(true);
-        if (1 > $faqCatId) {
+        if (1 > $faqCatId) {    
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields, $faqCatId);
         $frmSearch->fill(['faqCatId' => $faqCatId]);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_FAQ', $this->siteLangId);   
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);   
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
        
         $this->setModel();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $this->set('pageData', $pageData);
         $this->set('faqCatId', $faqCatId);
         $this->set('pageTitle', $pageTitle);
-        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_FAQ_TITLE', $this->siteLangId));
         $this->getListingData($faqCatId);
-        $this->_template->render();
+        
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $btnLabel = Labels::getLabel('LBL_NEW', $this->siteLangId);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['statusButtons'] = false;
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'href' => 'javascript:void(0);',
+                'onclick' => 'addNewFaq('.$faqCatId.')',
+                'title' => $btnLabel,
+            ],
+            'label' => $btnLabel
+        ];
+        $this->set('actionItemsData', $actionItemsData);
+        $this->_template->addJs('faq/page-js/list.js');
+        $this->_template->render(true,true, '_partial/listing/index.php');
     }
-
     public function getSearchForm($fields = [])
     {
         $fields = $this->getFormColumns();
@@ -45,11 +142,22 @@ class FaqController extends ListingBaseController
         $fld->overrideFldType('search');
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'spplan_price');
+            $this->addSortingElements($frm, 'faq_display_order');
         }
 
         HtmlHelper::addSearchButton($frm);
         return $frm;
+    }
+
+    public function search()
+    {
+        $faqCatId = FatApp::getPostedData('faqCatId', FatUtility::VAR_INT, 0);
+        $this->getListingData($faqCatId);
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'faq/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 
     public function getListingData(int $faqCatId)
@@ -68,12 +176,11 @@ class FaqController extends ListingBaseController
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $searchForm = $this->getSearchForm($fields);
         $post = $searchForm->getFormDataFromArray($data);
-
+        
         $srch = Faq::getSearchObject($this->siteLangId);
-
+        
         if($faqCatId && $faqCatId > 0){
             $srch->addCondition('faq_faqcat_id', '=', $faqCatId);
         }
@@ -81,9 +188,8 @@ class FaqController extends ListingBaseController
             $condition = $srch->addCondition('f.faq_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('f_l.faq_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
+        
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 :FatUtility::int($data['page']);
         $srch->addOrder('faq_display_order', 'ASC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
@@ -101,16 +207,7 @@ class FaqController extends ListingBaseController
         $this->checkEditPrivilege(true);
     }
 
-    public function search()
-    {
-        $faqCatId = FatApp::getPostedData('faqCatId', FatUtility::VAR_INT, 0);
-        $this->getListingData($faqCatId);
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'faq/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
-    }
+   
 
     public function form() {
         $this->checkEditPrivilege();
@@ -121,6 +218,8 @@ class FaqController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frm = $this->getForm($faqCatId);
+       
+
         if (0 < $recordId) {
             $srch = Faq::getSearchObject($this->siteLangId);
             $srch->addCondition('faq_faqcat_id', '=', $faqCatId);
@@ -135,9 +234,9 @@ class FaqController extends ListingBaseController
             $data['faqCatId'] = $faqCatId;
             $frm->fill($data);
         }
+
         $this->set('languages', Language::getAllNames());
         $this->set('faqCatId', $faqCatId);
-        $this->set('faq_id', $recordId);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_FAQ_SETUP', $this->siteLangId));
@@ -259,10 +358,12 @@ class FaqController extends ListingBaseController
         if ($langData) {
             $faqLangFrm->fill($langData);
         }
+        
         $this->set('faqCatId', $faqCatId);
         $this->set('recordId', $recordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $faqLangFrm);
+        $this->set('formTitle', Labels::getLabel('LBL_FAQ_SETUP', $this->siteLangId));
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
@@ -379,67 +480,21 @@ class FaqController extends ListingBaseController
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
 
-     /**
-     * Undocumented function
-     *
-     * @return array
-     */
-    protected function getFormColumns(): array
+    public function getBreadcrumbNodes($action)
     {
-        $faqTblHeadingCols = CacheHelper::get('faqTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($faqTblHeadingCols) {
-            return json_decode($faqTblHeadingCols);
+        switch ($action) {
+            case 'list':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_FAQ_CATEGORIES', $this->siteLangId), 'href' => UrlHelper::generateUrl('FaqCategories')],
+                    ['title' => $pageTitle]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
-
-        $arr = [
-            'dragdrop' => '',
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'faqcat_id' => Labels::getLabel('LBL_ID', $this->siteLangId),
-            'faq_title' => Labels::getLabel('LBL_FAQ_TITLE', $this->siteLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
-        ];
-        CacheHelper::create('faqTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        return $arr;
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return array
-     */
-    protected function getDefaultColumns(): array
-    {
-        return [
-            'dragdrop',
-            'listSerial',
-            'faq_title',
-            'action',
-        ];
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @param array $fields
-     * @return array
-     */
-    protected function excludeKeysForSort($fields = []): array
-    {
-        return [];
-    }
-
-    /**
-     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
-     *
-     * @param  bool $setVariable
-     * @return void
-     */
-    protected function checkEditPrivilege(bool $setVariable = false): void
-    {
-        if (true === $setVariable) {
-            $this->set("canEdit", $this->objPrivilege->canEditFaq($this->admin_id, true));
-        } else {
-            $this->objPrivilege->canEditFaq();
-        }
+        return $this->nodes;
     }
 }
