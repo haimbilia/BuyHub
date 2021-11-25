@@ -6,7 +6,7 @@ $frm->setFormTagAttribute('class', 'form');
     <div class="container">
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false);
-        $frm->setFormTagAttribute('id', 'addProductfrm');      
+        $frm->setFormTagAttribute('id', 'addProductfrm');
         $frm->setFormTagAttribute('onsubmit', 'setup($(\'#addProductfrm\'));return false;');
         echo $frm->getFormTag(); ?>
         <div class="add-stock">
@@ -115,12 +115,12 @@ $frm->setFormTagAttribute('class', 'form');
                             information</span>
                     </div>
 
-                    <?php 
-                    $langFld =  $frm->getField('lang_id');                    
-                    if(null != $langFld &&  0 < $productId){
-                        $langFld->setfieldTagAttribute('class','form-control form-select select-language');
-                        $langFld->setfieldTagAttribute('onchange','langForm()');  
-                        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');                             
+                    <?php
+                    $langFld =  $frm->getField('lang_id');
+                    if (null != $langFld &&  0 < $productId) {
+                        $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
+                        $langFld->setfieldTagAttribute('onchange', 'langForm()');
+                        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
                         if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
                             $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
                             $langFld->htmlAfterField = '<div class="input-group-append">
@@ -133,14 +133,14 @@ $frm->setFormTagAttribute('class', 'form');
                                                         </div>';
                         }
 
-                    ?> 
-                    <div class="add-stock-column-head-action">
-                        <div class="input-group">
-                            <?php 
-                                echo $langFld->getHtml();                                                             
-                            ?>
+                    ?>
+                        <div class="add-stock-column-head-action">
+                            <div class="input-group">
+                                <?php
+                                echo $langFld->getHtml();
+                                ?>
+                            </div>
                         </div>
-                    </div>
                     <?php } ?>
 
                 </div>
@@ -155,15 +155,15 @@ $frm->setFormTagAttribute('class', 'form');
                     <div class="card-body">
                         <div class="row">
                             <?php
-                            echo HtmlHelper::getFieldHtml($frm, 'product_type', 6,['onchange'=>'productType(this)']);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_seller_id');
-                            
+                            echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)']);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_seller_id', 6, ['id' => 'product_seller_id','placeholder'=> Labels::getLabel('FRM_SELECT_USER', $langId)]);
+
                             echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
                             echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
-                            echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '',['label' => Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrand()', 'class' => 'link']]);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrand()', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategory()', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);                            
+                            echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);
                             $fld = $frm->getField('product_warranty');
                             if (null !== $fld) {
 
@@ -189,13 +189,13 @@ $frm->setFormTagAttribute('class', 'form');
                                         </div>
                                     </div>
                                 </div>
-                            <?php } 
+                            <?php }
                             echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6 , [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
+                            echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
-                            echo $frm->getFieldHtml('product_id');                        
-                            echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit',6,['id'=>'product_warranty_unit']);                            
-                           
+                            echo $frm->getFieldHtml('product_id');
+                            echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit', 6, ['id' => 'product_warranty_unit']);
+
 
                             ?>
                         </div>
@@ -643,22 +643,22 @@ $frm->setFormTagAttribute('class', 'form');
                                     <div class="form-group">
                                         <label class="label">
 
-                                            <?php 
-                                            
-                                  
+                                            <?php
+
+
                                             echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
                                         </label>
-                                        <input type="text" name="sp_label"  id="sp_label"value="" data-required="1" >
+                                        <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
                                         <span class="form-text text-muted">Lorem ipsum dolor sit,
                                             amet consectetur adipisicing elit. </span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="label"> 
+                                        <label class="label">
                                             <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $langId); ?>
                                         </label>
-                                        <input type="text" name="sp_value" id="sp_value" value="" data-required ="1">
+                                        <input type="text" name="sp_value" id="sp_value" value="" data-required="1">
                                     </div>
                                 </div>
                             </div>
@@ -667,14 +667,14 @@ $frm->setFormTagAttribute('class', 'form');
                                     <div class="form-group">
                                         <label class="label">
                                             <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $langId); ?>
-                                        </label>                                   
-                                        <input type="text" name="sp_group" id="sp_group" value="" data-required ="0">
+                                        </label>
+                                        <input type="text" name="sp_group" id="sp_group" value="" data-required="0">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="label"></label> 
-                                        <input type="hidden" name="sp_id" id="sp_id" value="0" data-required ="0">
+                                        <label class="label"></label>
+                                        <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
                                         <button type="button" class="btn btn-brand btn-wide" onclick="addSpecification()">
                                             <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
                                         </button>
@@ -684,7 +684,7 @@ $frm->setFormTagAttribute('class', 'form');
                         </div>
                         <div class="separator separator-dashed my-4"></div>
                         <div id="specificationsListJs">
-                        </div>                        
+                        </div>
                     </div>
                 </div>
                 <div class="card" id="tax-shipping">
@@ -699,15 +699,15 @@ $frm->setFormTagAttribute('class', 'form');
                     </div>
                     <div class="card-body show" id="stock-block4">
                         <div class="row">
-                        <?php 
-                            echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '','', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);      
-                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6); 
-                            echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6,['id' => 'ps_from_country_id']);      
+                            <?php
+                            echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6, ['id' => 'ps_from_country_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);    
-                            echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6);         
-                        ?>
+                            echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6 ,['id'=>'shipping_profile']);
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -716,125 +716,134 @@ $frm->setFormTagAttribute('class', 'form');
                 <div class="sticky-top">
                     <div class="card">
                         <div class="card-body">
-                            <button type="submit" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>                           
+                            <button type="submit" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>
                             <div class="mt-3">
-                                <?php 
-                                    $fld = $frm->getField('product_active');                                      
-                                    HtmlHelper::configureSwitchForCheckbox($fld);
-                                    if(null !=  $fld){ 
-                                        echo $fld->getHtml();              
-                                    } 
-                                ?>                                
+                                <?php
+                                $fld = $frm->getField('product_active');
+                                HtmlHelper::configureSwitchForCheckbox($fld);
+                                if (null !=  $fld) {
+                                    echo $fld->getHtml();
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-body">
                             <ul class="list-featured">
-                                <?php 
-                                $fld = $frm->getField('product_featured');                                  
-                                if(null !=  $fld){                                         
-                                    $caption =  $fld->getCaption();   
-                                    $fld->changeCaption('');                   
-                                ?>                            
-                                <li>                                    
-                                    <label class="checkbox">
-                                    <?php echo$fld->getHtml(); ?>
-                                        <span>
-                                            <strong><?php echo $caption;?></strong>
-                                            <span class="text-muted">
-                                                <?php echo Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', $langId); ?>                                               
-                                            </span>
-                                        </span>
-                                    </label>
-                                </li>
-                                <?php } ?>
-                                <?php 
-                                    $fld = $frm->getField('product_cod_enabled');
-                                    if(null !=  $fld){     
-                                        if(!$codEnabled){
-                                            $fld->addFieldTagAttribute('disabled', 'disabled');
-                                        }  
-                                        $caption =  $fld->getCaption();   
-                                        $fld->changeCaption('');                                   
+                                <?php
+                                $fld = $frm->getField('product_featured');
+                                if (null !=  $fld) {
+                                    $caption =  $fld->getCaption();
+                                    $fld->changeCaption('');
                                 ?>
-                                <li>
-                                    <label class="checkbox">
-                                        <?php echo $fld->getHtml(); ?>
-                                        <span>
-                                            <strong><?php echo $caption; ?></strong>
-                                            <?php if(!$codEnabled){ ?>                                      
-                                            <div class="alert alert-solid-brand mt-4" role="alert">
-                                                <div class="alert-icon"><i class="flaticon-warning"></i>
-                                                </div>
-                                                <div class="alert-text text-xs">
-                                                     <?php echo Labels::getLabel('MSG_DISCLAIMER', $langId);?>: <?php echo Labels::getLabel('MSG_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $langId);?>
-                                                </div>
-                                            </div>
-                                            <?php }else{ ?>
-                                            <span class="text-muted">
-                                                <?php echo Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId); ?>                                               
+                                    <li>
+                                        <label class="checkbox">
+                                            <?php echo $fld->getHtml(); ?>
+                                            <span>
+                                                <strong><?php echo $caption; ?></strong>
+                                                <span class="text-muted">
+                                                    <?php echo Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', $langId); ?>
+                                                </span>
                                             </span>
-                                            <?php  } ?>
-                                        </span>
-                                    </label>
-                                </li>
-                                <?php } ?>                              
+                                        </label>
+                                    </li>
+                                <?php } ?>
+                                <?php
+                                $fld = $frm->getField('product_cod_enabled');
+                                if (null !=  $fld) {
+                                    if (!$codEnabled) {
+                                        $fld->addFieldTagAttribute('disabled', 'disabled');
+                                    }
+                                    $caption =  $fld->getCaption();
+                                    $fld->changeCaption('');
+                                ?>
+                                    <li>
+                                        <label class="checkbox">
+                                            <?php echo $fld->getHtml(); ?>
+                                            <span>
+                                                <strong><?php echo $caption; ?></strong>
+                                                <?php if (!$codEnabled) { ?>
+                                                    <div class="alert alert-solid-brand mt-4" role="alert">
+                                                        <div class="alert-icon"><i class="flaticon-warning"></i>
+                                                        </div>
+                                                        <div class="alert-text text-xs">
+                                                            <?php echo Labels::getLabel('MSG_DISCLAIMER', $langId); ?>: <?php echo Labels::getLabel('MSG_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $langId); ?>
+                                                        </div>
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <span class="text-muted">
+                                                        <?php echo Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId); ?>
+                                                    </span>
+                                                <?php  } ?>
+                                            </span>
+                                        </label>
+                                    </li>
+                                <?php } ?>
                             </ul>
                         </div>
                     </div>
-                    <?php 
+                    <?php
                     $fld = $frm->getField('product_tags');
-                    if(null != $fld){
+                    if (null != $fld) {
                         $fld->addFieldTagAttribute('class', 'form-tagify');
-                        $fld->addFieldTagAttribute('id', 'product_tags');                        
+                        $fld->addFieldTagAttribute('id', 'product_tags');
                     ?>
-                    <div class="card">
-                        <div class="card-head">
-                            <div class="card-head-label">
-                                <h3 class="card-head-title">Tags</h3>
-                                <span class="text-muted">
-                                    <?php echo Labels::getLabel('FRM_PRODUCT_TAG_INFO', $langId); ?> 
-                                </span>
+                        <div class="card">
+                            <div class="card-head">
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title">Tags</h3>
+                                    <span class="text-muted">
+                                        <?php echo Labels::getLabel('FRM_PRODUCT_TAG_INFO', $langId); ?>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <?php echo $fld->getHtml(); ?>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <?php echo $fld->getHtml(); ?>                            
-                        </div>
-                    </div>
                     <?php } ?>
                 </div>
-            </div>       
+            </div>
         </div>
         </form>
     </div>
 </main>
 <?php echo $frm->getExternalJS(); ?>
-<script>  
-    var canEditTags = <?php echo $canEditTags ? 1 : 0;?>;
-    var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>'; 
+<script>
+    var canEditTags = <?php echo $canEditTags ? 1 : 0; ?>;
+    var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';
     $(function() {
-        
+
         prodSpecifications();
         tagifyProducts();
-        select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), { brand_active: 1 });
+        select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
+            brand_active: 1
+        });
         select2('ptc_prodcat_id', fcom.makeUrl('ProductCategories', 'autoComplete'));
         select2('ptt_taxcat_id', fcom.makeUrl('TaxCategories', 'autoComplete'));
         select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'));
 
-        if (product_added_by_admin == 1 && totalProducts == 0) {
-            select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'));
 
-        }    
+        getShippingProfileOptions(<?php echo $frm->getField('product_seller_id')->value;?>);
 
-        $('#addProductfrm').find('input,select').each(function () {
+        <?php if ($isProductAddedByAdmin  && !$isProductAddedBySeller) { ?>
+            select2('product_seller_id', fcom.makeUrl('Users', 'autoComplete'),{joinShop:1,user_is_supplier:1},function(e){
+                getShippingProfileOptions(e.params.args.data.id)              
+            });
+        <?php } else { ?>           
+            $('select[name=\'product_seller_id\']').attr('disabled', true);
+        <?php } ?>  
+
+        $('#addProductfrm').find('input,select').each(function() {
             if ($(this).data('fatreq') == undefined) {
-                $(this).data('fatreq', { "required": false });
+                $(this).data('fatreq', {
+                    "required": false
+                });
             }
             if ($(this).attr('name') == undefined) {
                 $(this).attr('name', '');
             }
-        }); 
+        });
     });
-  
 </script>
