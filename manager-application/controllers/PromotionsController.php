@@ -2,6 +2,8 @@
 
 class PromotionsController extends ListingBaseController
 {
+    protected $pageKey = 'PROMOTIONS';
+
     private int $minWidth = 1200;
     private int $minHeight = 360;
     protected $modelClass = 'Promotion';
@@ -62,7 +64,7 @@ class PromotionsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_PROMOTIONS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
