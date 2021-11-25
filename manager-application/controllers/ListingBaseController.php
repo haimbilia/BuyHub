@@ -94,11 +94,10 @@ class ListingBaseController extends AdminBaseController
 
     protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
     {
-        $recordId = $classObj->getMainTableRecordId();
+        $recordId = $classObj->getMainTableRecordId(); 
         if (!$classObj->updateLangData((0 < $langId  ? $langId : CommonHelper::getDefaultFormLangId()), $langDataArr)) {
             LibHelper::exitWithError($classObj->getError(), true);
-        }
-
+        } 
         $newTabLangId = 0;
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {

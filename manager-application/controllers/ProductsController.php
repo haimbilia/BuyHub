@@ -206,9 +206,14 @@ class ProductsController extends ListingBaseController
             $langId = CommonHelper::getDefaultFormLangId();         
         }
 
+        if (1 > $productType) {
+            $productType = Product::PRODUCT_TYPE_PHYSICAL;        
+        }        
+
         $frm = $this->getForm($langId, $productType);
 
         $isProductAddedBySeller = false;
+        $isProductAddedByAdmin = true;
         if (1 < $productId) {
             $this->setModel([$productId]);       
           
@@ -222,14 +227,17 @@ class ProductsController extends ListingBaseController
                 $productData += $this->modelObj::getAttributesById($productId);
             } else {
                 $productData = $this->modelObj::getAttributesByLangId($langId, $productId, null, true);
-            }
+            }           
 
+            $productData['product_type'] =  $productType;
+
+            $fld = $frm->getField('product_seller_id'); 
             if ($productData['product_seller_id'] > 0) {
-                $userShopName = User::getUserShopName($productData['product_seller_id']);
-                $productData['selprod_user_shop_name'] = $userShopName['user_name'] . ' - ' . $userShopName['shop_identifier'];
-            } else {
-                $productData['selprod_user_shop_name'] = 'Admin';
-            }
+                $userShopName = User::getUserShopName($productData['product_seller_id'] , $langId);                               
+                $fld->options = [$productData['product_seller_id'] => $userShopName['user_name'] . ' (' . $userShopName['shop_name'] .')'];
+            }else{
+                $fld->options = [0 => Labels::getLabel('FRM_ADMIN', $langId)];
+            } 
 
             if (empty($productData)) {
                 LibHelper::exitWithError($this->str_invalid_request_id, false, true);
@@ -306,6 +314,7 @@ class ProductsController extends ListingBaseController
             }
             /* ]*/
             $isProductAddedBySeller = 0 < Product::getCatalogProductCount($productId);
+            $isProductAddedByAdmin = applicationConstants::YES == $productData['product_added_by_admin_id'];
 
             $frm->fill($productData);
         }
@@ -335,6 +344,7 @@ class ProductsController extends ListingBaseController
         $this->set("productId", $productId);    
         
         $this->set('isProductAddedBySeller', $isProductAddedBySeller);
+        $this->set('isProductAddedByAdmin', $isProductAddedByAdmin);        
 
         if (FatUtility::isAjaxCall()) {
             $this->_template->render(false, false);
@@ -356,11 +366,11 @@ class ProductsController extends ListingBaseController
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, [], '');
         $fld->requirements()->setRequired();
 
-        $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $langId), 'product_type', $productTypeArr, array_key_first($productTypeArr));
+        $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $langId), 'product_type', $productTypeArr, $productType);
         $fld->requirements()->setRequired();
 
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $langId), 'product_seller_id', []);
-        
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $langId), 'product_seller_id', [],'', [], Labels::getLabel('FRM_ADMIN', $langId));
+
         $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_IDENTIFIER', $langId), 'product_identifier');
         $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_NAME', $langId), 'product_name');
 
@@ -416,10 +426,6 @@ class ProductsController extends ListingBaseController
         // $approveUnApproveArr = Product::getApproveUnApproveArr($langId);
         // $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL_STATUS', $langId), 'product_approved', $approveUnApproveArr, Product::APPROVED, array(), '');
 
-
-        $fld = $frm->addCheckBox(Labels::getLabel('FRM_PRODUCT_IS_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', $langId), 'product_cod_enabled', 1, array(), false, 0);
-
-
         $frm->addCheckBox(Labels::getLabel("LBL_ACTIVE", $langId), 'product_active', applicationConstants::YES, array(), true, 0);
 
         $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_TAGS', $langId), 'product_tags');
@@ -435,8 +441,10 @@ class ProductsController extends ListingBaseController
               
         }else{
 
+            $fld = $frm->addCheckBox(Labels::getLabel('FRM_PRODUCT_IS_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', $langId), 'product_cod_enabled', 1, array(), false, 0);
+
             $fulFillmentArr = Shipping::getFulFillmentArr($langId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
-            $fulFillmentTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $langId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibilityJs'], Labels::getLabel('FRM_SELECT', $langId));
+            $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $langId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, ['class' => 'fieldsVisibilityJs'], Labels::getLabel('FRM_SELECT', $langId));
         
             if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
                 $shipPackArr = ShippingPackage::getAllNames();
@@ -450,21 +458,15 @@ class ProductsController extends ListingBaseController
                 $weightFld->requirements()->setFloatPositive();
                 $weightFld->requirements()->setRange('0.01', '9999999999');
             }
-            $shippedByUserId = 0;
-            $shipProfileArr = ShippingProfile::getProfileArr($langId, $shippedByUserId, true, true);
-            $shippingFld = $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $langId))->requirements()->setRequired();
-        
-            // if (!$shippedByUserId) {
-            //     $profileUnReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $langId));
-            //     $profileUnReqObj->setRequired(false);
-            //     $profileReqObj = new FormFieldRequirement('shipping_profile', Labels::getLabel('LBL_Shipping_Profile', $langId));
-            //     $profileReqObj->setRequired(true);
 
-            //     $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP ,'eq', 'shipping_profile', $profileUnReqObj);
-            //     $fulFillmentTypeFld->requirements()->addOnChangerequirementUpdate(Shipping::FULFILMENT_PICKUP, 'ne', 'shipping_profile', $profileReqObj);
-            // }         
-
+            // $shippingObj = new Shipping($this->adminLangId);
+                  
+            // if(!$shippingObj->getShippingApiObj($shippedByUserId)){
+            //     $shipProfileArr = ShippingProfile::getProfileArr($langId, $shippedByUserId, true, true); 
+            //     $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', $shipProfileArr, '', [], '')->requirements()->setRequired();
+            // }               
             
+            $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', [], '', [], '');
         }
 
         $frm->addHiddenField('', 'specifications');
@@ -490,13 +492,14 @@ class ProductsController extends ListingBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $post['product_seller_id'] = 0;
-
         /* [] select2 data */
         $post['product_brand_id'] = FatApp::getPostedData('product_brand_id', FatUtility::VAR_INT, 0);
         $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
         $post['ptt_taxcat_id'] = FatApp::getPostedData('ptt_taxcat_id', FatUtility::VAR_INT, 0);
         $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);
+        $post['product_seller_id'] = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
+        $post['product_approved'] = 0;
+        
         /* select2 data ] */
 
         $productId = $post['product_id'];
@@ -1665,7 +1668,7 @@ class ProductsController extends ListingBaseController
         $prodShippingDetails = Product::getProductShippingDetails($productId, $this->siteLangId, $productData['product_seller_id']);
         $productData['ps_free'] = isset($prodShippingDetails['ps_free']) ? $prodShippingDetails['ps_free'] : 0;
         if ($productData['product_seller_id'] > 0) {
-            $userShopName = User::getUserShopName($productData['product_seller_id']);
+            $userShopName = User::getUserShopName($productData['product_seller_id'], $this->siteLangId);
             $productData['selprod_user_shop_name'] = $userShopName['user_name'] . ' - ' . $userShopName['shop_identifier'];
         } else {
             $productData['selprod_user_shop_name'] = 'Admin';
@@ -2513,7 +2516,24 @@ class ProductsController extends ListingBaseController
         FatUtility::dieJsonSuccess($json);
     }
 
+    public function getShippingProfileOptions()
+    {        
 
+        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT);
+        if (1 > $langId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $shippingObj = new Shipping($userId);
+        $shipProfileArr = [];
+        $shippingApiActive = 1;
+        if (!$shippingObj->getShippingApiObj($userId)) {
+            $shippingApiActive = 0;
+            $shipProfileArr = ShippingProfile::getProfileArr($langId, $userId, true, true);
+        }
+
+        FatUtility::dieJsonSuccess(['shipProfileArr' => $shipProfileArr, 'shippingApiActive' => $shippingApiActive]);
+    }
 
     protected function getFormColumns(): array
     {

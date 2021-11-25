@@ -2170,20 +2170,19 @@ class User extends MyAppModel
 
     return $row;
     } */
-    public static function getUserShopName($user_id = 0)
+    public static function getUserShopName(int $user_id , $langId)
     {
         $user_id = FatUtility::int($user_id);
         $srch = new SearchBase(static::DB_TBL, 'tu');
-        $srch->joinTable('tbl_shops', 'LEFT JOIN', 'tu.user_id=ts.shop_user_id', 'ts');
+        $srch->joinTable('tbl_shops', 'LEFT JOIN', 'tu.user_id = s.shop_user_id', 's');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 's.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $langId, 's_l');
         $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = tu.user_id', 'uc');
-        $srch->addMultipleFields(array('user_id', 'user_name', 'shop_identifier'));
-        $srch->addOrder('user_name', 'asc');
-        if ($user_id > 0) {
-            $srch->addCondition('tu.user_id', '=', intval($user_id));
-        }
-        $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
-        $rs = $srch->getResultSet();
-        if (!$row = FatApp::getDb()->fetch($rs)) {
+        $srch->addMultipleFields(array('user_id', 'user_name', 'COALESCE(s_l.shop_name, s.shop_identifier) as shop_name')); 
+        $srch->addCondition('tu.user_id', '=', intval($user_id));
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->setPagesize(1); 
+        if (!$row = FatApp::getDb()->fetch($srch->getResultSet())) {
             return false;
         }
 

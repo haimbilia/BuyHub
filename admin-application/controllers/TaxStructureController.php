@@ -89,7 +89,7 @@ class TaxStructureController extends AdminBaseController
         $taxStrId = $post['taxstr_id'];
         unset($post['taxstr_id']);
 		
-        $record = new TaxStructure($taxStrId);
+        $record = new TaxStructure($taxStrId); 
         if (!$record->addUpdateData($post)) {
             Message::addErrorMessage($record->getError());
             FatUtility::dieJsonError(Message::getHtml());
