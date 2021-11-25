@@ -23,6 +23,19 @@ foreach ($arrListing as $sn => $row) {
                 $brandName = !empty($row['epage_label']) ? $row['epage_label'] : $row[$key];
                 $td->appendElement('plaintext', $tdAttr, $brandName, true);
                 break;
+            case 'epage_active':
+                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['epage_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+                $statusClass = ($canEdit) ? '' : 'disabled';
+                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
+
+                $htm = '<span class="switch switch-sm switch-icon">
+                    <label>
+                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['epage_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
+                        <span class="input-helper"></span>
+                    </label>
+                </span>';
+                $td->appendElement('plaintext', $tdAttr, $htm, true);
+                break;
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
