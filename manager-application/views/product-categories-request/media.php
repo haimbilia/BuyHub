@@ -55,7 +55,7 @@ $otherButtons = [
     ]
 ];
 
-$formTitle = Labels::getLabel('LBL_Category_SETUP', $siteLangId); ?>
+$formTitle = Labels::getLabel('LBL_PRODUCT_CATEGORY_REQUESTS_SETUP', $siteLangId); ?>
 
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">

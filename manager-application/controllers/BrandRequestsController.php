@@ -3,7 +3,7 @@
 class BrandRequestsController extends ListingBaseController {
 
     protected $modelClass = 'Brand';
-    protected $pageKey = 'MANAGE_PRODUCT_BRAND';
+    protected $pageKey = 'MANAGE_PRODUCT_BRAND_REQUEST';
 
     public function __construct($action) {
         parent::__construct($action);
@@ -195,10 +195,10 @@ class BrandRequestsController extends ListingBaseController {
         } else {
             $brand->rewriteUrl($post['urlrewrite_custom']);
         }
-        /* ] */ 
+        /* ] */
         Product::updateMinPrices(0, 0, $recordId);
         $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId); 
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -406,7 +406,6 @@ class BrandRequestsController extends ListingBaseController {
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'brand_logo' => Labels::getLabel('LBL_Logo', $this->siteLangId),
             'brand_name' => Labels::getLabel('LBL_Brand_Name', $this->siteLangId),
@@ -419,7 +418,6 @@ class BrandRequestsController extends ListingBaseController {
 
     protected function getDefaultColumns(): array {
         return [
-            'select_all',
             'listSerial',
             'brand_logo',
             'brand_name',

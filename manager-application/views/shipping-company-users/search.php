@@ -17,7 +17,7 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="brandIds[]" value=' . $row['user_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['user_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
@@ -35,7 +35,7 @@ foreach ($arrListing as $sn => $row) {
                                 </span>';
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
-            
+
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
@@ -45,6 +45,16 @@ foreach ($arrListing as $sn => $row) {
                 if ($canEdit) {
                     $data['editButton'] = [];
                 }
+                $data['otherButtons'] = [
+                    [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'addUserTransaction(' . $row['user_id'] . ')',
+                            'title' => Labels::getLabel('LBL_ADD_TRANSACTIONS', $siteLangId)
+                        ],
+                        'label' => "<i class='far fa-eye icon'></i>"
+                    ]
+                ];
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;

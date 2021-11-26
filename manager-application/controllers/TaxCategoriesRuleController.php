@@ -149,6 +149,7 @@ class TaxCategoriesRuleController extends ListingBaseController
             $frm->fill(['taxrule_taxcat_id' => $parantId]);
         }
         $this->set('languages', []);
+        $this->set('includeTabs', false);
         $this->set('ruleLocations', $ruleLocations ?? []);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
@@ -166,7 +167,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $this->objPrivilege->canEditBrandRequests();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_TAX_CATEGORIES_SETUP', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_TAX_CATEGORIES_RULE_SETUP', $this->siteLangId));
         $this->checkMediaExist = false;
     }
 
@@ -342,6 +343,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
+        $frm->addHTML('', 'space', '');
         $frm->addHTML('', 'space', '');
         return $frm;
     }
