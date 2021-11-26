@@ -229,7 +229,7 @@ class ListingBaseController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($recordId)
+    protected function markAsDeleted($recordId)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {

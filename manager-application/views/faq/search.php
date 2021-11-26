@@ -20,6 +20,9 @@ foreach ($arrListing as $sn => $row) {
                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag"></use>
                 </svg>', true);
                 break;
+            case 'select_all':
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="faq_ids[]" value=' . $row['faq_id'] . '><i class="input-helper"></i></label>', true);
+                break;
             case 'faq_display_order':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;

@@ -91,6 +91,7 @@ class FaqController extends ListingBaseController
         $btnLabel = Labels::getLabel('LBL_NEW', $this->siteLangId);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = false;
+        $actionItemsData['deleteButton'] = true;
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
                 'href' => 'javascript:void(0);',
@@ -425,27 +426,25 @@ class FaqController extends ListingBaseController
         }
     }
 
-    public function deleteRecord() 
+    public function deleteSelected()
     {
-        $this->checkEditPrivilege();
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        if ($recordId < 1) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-        
-        $res = Faq::getAttributesById($recordId, array('faq_id'));
-        if ($res == false) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
+       $this->checkEditPrivilege();
+        $faqcatIdsArr = FatUtility::int(FatApp::getPostedData('faq_ids'));
+
+        if (empty($faqcatIdsArr)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $faqObj = new Faq($recordId);
-        $faqObj->assignValues(array(Faq::tblFld('deleted') => 1));
-        if (!$faqObj->save()) {
-            LibHelper::exitWithError($faqObj->getError(), true);
+        foreach ($faqcatIdsArr as $faqcatId) {
+            if (1 > $faqcatId) {
+                continue;
+            }
+            $this->markAsDeleted($faqcatId);
         }
-
-        FatUtility::dieJsonSuccess($this->str_delete_record);
+        $this->set('msg', $this->str_delete_record);
+        $this->_template->render(false, false, 'json-success.php');
     }
+
 
     public function getBreadcrumbNodes($action)
     {
@@ -479,6 +478,7 @@ class FaqController extends ListingBaseController
 
         $arr = [
             'dragdrop' => '',
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'faq_display_order' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'faqcat_id' => Labels::getLabel('LBL_ID', $this->siteLangId),
             'faq_title' => Labels::getLabel('LBL_FAQ_TITLE', $this->siteLangId),
@@ -497,6 +497,7 @@ class FaqController extends ListingBaseController
     {
         return [
             'dragdrop',
+            'select_all',
             'faq_display_order',
             'faq_title',
             'action',
@@ -511,6 +512,6 @@ class FaqController extends ListingBaseController
      */
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['faq_display_order', 'faq_title'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop', 'faq_display_order', 'faq_title'], Common::excludeKeysForSort());
     }
 }

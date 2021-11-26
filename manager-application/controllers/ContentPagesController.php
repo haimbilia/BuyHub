@@ -656,23 +656,6 @@ class ContentPagesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($recordId)
-    {
-        $recordId = FatUtility::int($recordId);
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-        $obj = new ContentPage($recordId);
-        if (!$obj->canRecordMarkDelete($recordId)) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $obj->assignValues(array(ContentPage::tblFld('deleted') => 1));
-        if (!$obj->save()) {
-            LibHelper::exitWithError($obj->getError(), true);
-        }
-    }
-
     public function autoComplete()
     {
         $srch = ContentPage::getSearchObject($this->siteLangId);
