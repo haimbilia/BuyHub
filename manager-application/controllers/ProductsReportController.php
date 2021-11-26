@@ -2,6 +2,7 @@
 
 class ProductsReportController extends ListingBaseController
 {
+    protected $pageKey = 'REPORT_PRODUCT_VARIANTS';
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,7 +14,7 @@ class ProductsReportController extends ListingBaseController
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
 
-        $pageData = PageLanguageData::getAttributesByKey('PRODUCTS_REPORTS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);

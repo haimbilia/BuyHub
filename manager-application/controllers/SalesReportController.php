@@ -2,6 +2,8 @@
 
 class SalesReportController extends ListingBaseController
 {
+    protected $pageKey = 'REPORT_SALES_OVERTIME';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,7 +14,7 @@ class SalesReportController extends ListingBaseController
     {
         $formColumns = $this->getFormColumns($orderDate);
         $frmSearch = $this->getSearchForm($formColumns, $orderDate);
-        $pageData = PageLanguageData::getAttributesByKey('SALES_REPORT', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
@@ -264,8 +266,11 @@ class SalesReportController extends ListingBaseController
     {
         switch ($action) {
             case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SALES_OVER_TIME', $this->siteLangId)]
+                    ['title' => Labels::getLabel('LBL_SALES_OVER_TIME', $this->siteLangId)],
+                    ['title' => $pageTitle]
                 ];
                 break;
             default:

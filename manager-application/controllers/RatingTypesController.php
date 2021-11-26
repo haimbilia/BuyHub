@@ -3,7 +3,7 @@
 class RatingTypesController extends ListingBaseController {
 
     protected $modelClass = 'RatingType';
-    protected $pageKey = 'MANAGE_RATING_TYPES';
+    protected $pageKey = 'RATING_TYPES';
 
     public function __construct($action) {
         parent::__construct($action);
