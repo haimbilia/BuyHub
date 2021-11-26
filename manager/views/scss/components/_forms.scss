@@ -814,10 +814,11 @@ form.custom-form {
             align-items: inherit;
         }
     }
-    .card-head-label {
+    .card-head-label~.card-toolbar {
         @include media-breakpoint-up(lg) {
-            max-width: 60%;
-            flex: 0 0 60%;
+            // max-width: 60%;
+            // flex: 0 0 60%;
+            margin-#{$start-direction}: 5rem;
         }
     }
 }

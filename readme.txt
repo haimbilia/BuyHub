@@ -311,6 +311,7 @@ Admin UI/UX Enhancements pages:
    => Content Pages Management  
    => Content Block Integration
    => CMS-Faqs
+   => Testimonials Management
 
     
 Known Issues and Problems :

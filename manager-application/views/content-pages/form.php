@@ -10,15 +10,15 @@ $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
 
 $pageLayout = $frm->getField('cpage_layout');
 // $pageLayout->setFieldTagAttribute('onchange', "showLayout($(this))");
-
+$displayLangTab = false;
 $otherButtons = [
     [
        'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'mediaForm(' . $recordId . ')',
-            'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+            'onclick' => 'editLangData('.$recordId.','.array_key_first($languages).');',
+            'title' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
         ],
-        'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+        'label' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
         'isActive' => false
     ]
 ]; 

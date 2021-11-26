@@ -72,7 +72,7 @@
                                             <div class="row align-items-center">
 
                                                 <div class="col-auto">
-                                                    <h6 class="font-bold">GENERAL PROFILE <span class="badge badge--unified-brand badge--inline badge--pill">Default</span></h6>
+                                                    <h6 class="font-bold">GENERAL PROFILE <span class="badge badge-brand badge-inline badge-pill">Default</span></h6>
                                                     <p class="mb-0">All products not in other profiles</p>
                                                 </div>
 
@@ -202,7 +202,7 @@
                                                     <p class="mb-0">8.6 × 5.4 × 1.6 in, 0 lb</p>
                                                 </div>
 
-                                                <div class="col-auto"><span class="badge badge--unified-brand badge--inline badge--pill">Default</span></div>
+                                                <div class="col-auto"><span class="badge badge-brand badge-inline badge-pill">Default</span></div>
                                             </div>
                                         </div>
                                         <div class="col-auto"><a href="#" title="Edit details" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-edit"></i> </a></div>

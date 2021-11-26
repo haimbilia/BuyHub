@@ -23,24 +23,24 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
 <div class="login-page login-1">
     <div class="container">
         <div class="login-block">
+            <div class="logo">
+                <a href="<?php echo UrlHelper::generateUrl(); ?>">
+                    <?php
+                    $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+                    $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    ?>
+                    <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
+                </a>
+            </div>
             <div class="card">
                 <div class="card-head">
-                    <div class="logo">
-                        <a href="<?php echo UrlHelper::generateUrl(); ?>">
-                            <?php
-                            $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
-                            $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                            $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                            ?>
-                            <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
-                        </a>
-                    </div>
-
-                </div>
-                <div class="card-body">
                     <div class="title">
                         <h2><?php echo Labels::getlabel('LBL_SIGN_IN', $siteLangId); ?></h2>
+                        <p class="text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
                     </div>
+                </div>
+                <div class="card-body">
                     <?php echo $frm->getFormTag(); ?>
                     <div class="form-group">
                         <label class="label"><?php echo $userNameFld->getCaption() ?></label>
@@ -48,7 +48,10 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
                     </div>
                     <div class="form-group">
                         <label class="label"><?php echo $passwordFld->getCaption() ?></label>
+                        <div class="input-group">
                         <?php echo $passwordFld->getHTML('password'); ?>
+                        <div class="input-group-append"><span class="input-group-text">Show</span></div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="switch switch-sm remember-me">

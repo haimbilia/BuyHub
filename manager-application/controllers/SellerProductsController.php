@@ -2452,7 +2452,7 @@ class SellerProductsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($selprod_id)
+    protected function markAsDeleted($selprod_id)
     {
         $selprod_id = FatUtility::int($selprod_id);
         if (1 > $selprod_id) {

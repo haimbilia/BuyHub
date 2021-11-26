@@ -67,7 +67,7 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
 if (isset($otherButtons) && is_array($otherButtons)) {
     foreach ($otherButtons as $attr) {
         $li = $ul->appendElement('li');
-        $li->appendElement('a', $attr['attr'], (string) html_entity_decode($attr['label'], ENT_QUOTES, 'utf-8') , true);
+        $li->appendElement('a', $attr['attr'], (string) html_entity_decode($attr['label'], ENT_QUOTES, 'utf-8'), true);
     }
 }
 
@@ -93,5 +93,7 @@ if (!empty($columnButtons)) {
     $li->appendElement('div', ['class' => 'dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y'], $columnButtons, true);
 }
 if (!empty($htmlContent) || !empty($statusButtons) || !empty($deleteButton) || !empty($otherButtons) || !empty($columnButtons)) {
+    echo '<div class="card-toolbar">';
     echo $ul->getHtml();
+    echo '</div>';
 }

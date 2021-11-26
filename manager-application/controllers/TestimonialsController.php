@@ -2,57 +2,154 @@
 
 class TestimonialsController extends ListingBaseController
 {
-    private $canView;
-    private $canEdit;
+    protected $modelClass = 'Testimonial';
+    protected $pageKey = 'MANAGE_TESTIMONIAL';
 
     public function __construct($action)
     {
-        $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewTestimonial($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditTestimonial($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewTestimonial();
+    }
+
+        /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->checkEditPrivilege();
+        $this->modelObj = (new ReflectionClass('Faq'))->newInstanceArgs($constructorArgs);
+        $this->formLangFields = [
+            'testimoniallang_testimonial_id',
+            'testimoniallang_lang_id',
+            'testimonial_title',
+            'testimonial_text'
+        ];
+        $this->set('formTitle', Labels::getLabel('LBL_TESTIMONIAL_SETUP', $this->siteLangId));
+    }
+
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditTestimonial($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditTestimonial();
+        }
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewTestimonial();
+
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+        
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['deleteButton'] = true;
+        
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
+        $this->checkEditPrivilege(true);
+        $this->getListingData();
+        
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs('js/cropper.js');
         $this->_template->addJs('js/cropper-main.js');
-        $this->_template->render();
+        $this->_template->render(true,true, '_partial/listing/index.php');
     }
+
+    // public function search()
+    // {
+        
+
+    //     $srch = Testimonial::getSearchObject($this->siteLangId, false);
+
+    //     $srch->addMultipleFields(array('t.*', 't_l.testimonial_title', 't_l.testimonial_text'));
+    //     $srch->addOrder('testimonial_active', 'desc');
+    //     $srch->addOrder('testimonial_added_on', 'desc');
+    //     $rs = $srch->getResultSet();
+    //     $records = array();
+    //     if ($rs) {
+    //         $records = FatApp::getDb()->fetchAll($rs);
+    //     }
+
+    //     $this->set("arrListing", $records);
+    //     $this->set('recordCount', $srch->recordCount());
+    //     $this->_template->render(false, false);
+    // }
 
     public function search()
     {
-        $this->objPrivilege->canViewTestimonial();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'faq/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
+    public function getListingData()
+    {
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+        $data = FatApp::getPostedData();
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $searchForm = $this->getSearchForm($fields);
+        $post = $searchForm->getFormDataFromArray($data);
         $srch = Testimonial::getSearchObject($this->siteLangId, false);
 
         $srch->addMultipleFields(array('t.*', 't_l.testimonial_title', 't_l.testimonial_text'));
         $srch->addOrder('testimonial_active', 'desc');
         $srch->addOrder('testimonial_added_on', 'desc');
-        $rs = $srch->getResultSet();
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
+    
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set("arrListing", $records);
+        $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+        $this->set('sortBy', 'faq_display_order');
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('siteLangId', $this->siteLangId);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->checkEditPrivilege(true);
     }
 
 
     public function form($testimonialId)
     {
-        $this->objPrivilege->canViewTestimonial();
-
         $testimonialId = FatUtility::int($testimonialId);
 
         $frm = $this->getForm($testimonialId);
@@ -119,7 +216,7 @@ class TestimonialsController extends ListingBaseController
 
     public function langForm($testimonialId = 0, $lang_id = 0, $autoFillLangData = 0)
     {
-        $this->objPrivilege->canViewTestimonial();
+        
         $testimonialId = FatUtility::int($testimonialId);
         $lang_id = FatUtility::int($lang_id);
 
@@ -219,28 +316,28 @@ class TestimonialsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function changeStatus()
-    {
-        $this->objPrivilege->canEditTestimonial();
-        $testimonialId = FatApp::getPostedData('testimonialId', FatUtility::VAR_INT, 0);
-        if (0 >= $testimonialId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    // public function changeStatus()
+    // {
+    //     $this->objPrivilege->canEditTestimonial();
+    //     $testimonialId = FatApp::getPostedData('testimonialId', FatUtility::VAR_INT, 0);
+    //     if (0 >= $testimonialId) {
+    //         Message::addErrorMessage($this->str_invalid_request_id);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        $data = Testimonial::getAttributesById($testimonialId, array('testimonial_id', 'testimonial_active'));
+    //     $data = Testimonial::getAttributesById($testimonialId, array('testimonial_id', 'testimonial_active'));
 
-        if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    //     if ($data == false) {
+    //         Message::addErrorMessage($this->str_invalid_request);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        $status = ($data['testimonial_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
+    //     $status = ($data['testimonial_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
 
-        $this->updateTestimonialStatus($testimonialId, $status);
+    //     $this->updateTestimonialStatus($testimonialId, $status);
 
-        FatUtility::dieJsonSuccess($this->str_update_record);
-    }
+    //     FatUtility::dieJsonSuccess($this->str_update_record);
+    // }
 
     public function toggleBulkStatuses()
     {
@@ -317,7 +414,7 @@ class TestimonialsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($testimonial_id)
+    protected function markAsDeleted($testimonial_id)
     {
         $testimonial_id = FatUtility::int($testimonial_id);
         if (1 > $testimonial_id) {
@@ -426,7 +523,7 @@ class TestimonialsController extends ListingBaseController
 
     private function getForm($testimonialId = 0)
     {
-        $this->objPrivilege->canViewTestimonial();
+        
         $testimonialId = FatUtility::int($testimonialId);
 
         $frm = new Form('frmTestimonial');
@@ -442,7 +539,7 @@ class TestimonialsController extends ListingBaseController
 
     private function getLangForm($testimonialId = 0, $lang_id = 0)
     {
-        $this->objPrivilege->canViewTestimonial();
+        
         $frm = new Form('frmTestimonialLang');
         $frm->addHiddenField('', 'testimonial_id', $testimonialId);
 
@@ -508,5 +605,55 @@ class TestimonialsController extends ListingBaseController
             );
         }
         die(json_encode($json));
+    }
+
+     /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    protected function getFormColumns(): array
+    {
+        $testimonialTblHeadingCols = CacheHelper::get('testimonialTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($testimonialTblHeadingCols) {
+            return json_decode($testimonialTblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'testimonial_title' => Labels::getLabel('LBL_TESTIMONIAL_TITLE', $this->siteLangId),
+            'testimonial_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('testimonialTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'testimonial_title',
+            'testimonial_active',
+            'action',
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $fields
+     * @return array
+     */
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['testimonial_id', 'testimonial_active'], Common::excludeKeysForSort());
     }
 }
