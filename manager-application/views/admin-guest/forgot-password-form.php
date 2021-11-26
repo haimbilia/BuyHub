@@ -16,49 +16,50 @@ $captchaFld = $frm->getField('g-recaptcha-response');
 HtmlHelper::formatFormFields($frm);
 
 if (null != $captchaFld) {
-    ?>
+?>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 <?php } ?>
 <div id="particles-js"></div>
 <div class="login-page login-1">
     <div class="container">
-        <div class="login-block">            
-                <div class="card">
-                    <div class="card-head">
-                        <div class="logo">
-                            <a href="<?php echo UrlHelper::generateUrl(); ?>">
-                                <?php
-                                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
-                                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                                $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                                ?>
-                                <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="title">
-                            <h2><?php echo Labels::getLabel('LBL_Forgot_Your_Password?', CommonHelper::getLangId()); ?></h2>
-                            <p class="text-muted"><?php echo Labels::getLabel('LBL_Enter_The_E-mail_Address_Associated_With_Your_Account', $siteLangId) ?></p>
-                        </div>                        
-                        <?php echo $frm->getFormHtml(); ?>                       
-                    </div>
-                    <div class="card-foot">
-                        <ul class="other-links">
-                            <li>
-                                <a href="<?php echo UrlHelper::generateUrl('adminGuest', 'loginForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_Back_to_Login', $siteLangId); ?></a>
-                            </li>
-                        </ul>
+        <div class="login-block">
+            <div class="logo">
+                <a href="<?php echo UrlHelper::generateUrl(); ?>">
+                    <?php
+                    $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
+                    $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                    ?>
+                    <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <div class="title">
+                        <h2><?php echo Labels::getLabel('LBL_Forgot_Your_Password?', CommonHelper::getLangId()); ?></h2>
+                        <p class="text-muted"><?php echo Labels::getLabel('LBL_Enter_The_E-mail_Address_Associated_With_Your_Account', $siteLangId) ?></p>
                     </div>
                 </div>
-                <p class="version"><?php $this->includeTemplate('_partial/footer/copyright-text.php', $this->variables, false); ?></p>
-            
+                <div class="card-body">
+                    <?php echo $frm->getFormHtml(); ?>
+                </div>
+                <div class="card-foot">
+                    <ul class="other-links">
+                        <li>
+                            <a href="<?php echo UrlHelper::generateUrl('adminGuest', 'loginForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_Back_to_Login', $siteLangId); ?></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <p class="version"><?php $this->includeTemplate('_partial/footer/copyright-text.php', $this->variables, false); ?></p>
+
         </div>
     </div>
     <?php
     if (null != $captchaFld) {
         $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
-        ?>
+    ?>
         <script>
             langLbl.captchaSiteKey = "<?php echo FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, ''); ?>";
         </script>

@@ -383,7 +383,7 @@
                                                         style="width: 115px;">Rosenbaum-Reichel</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Danger</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Danger</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
@@ -513,7 +513,7 @@
                                                         style="width: 115px;">Dicki-Kling</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
@@ -600,7 +600,7 @@
                                                         style="width: 115px;">Jenkins Inc</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
@@ -644,7 +644,7 @@
                                                         style="width: 115px;">Streich LLC</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Danger</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Danger</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
@@ -687,7 +687,7 @@
                                                         style="width: 115px;">Haley, Schamberger and Durgan</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
@@ -1166,7 +1166,7 @@
                                                         style="width: 115px;">Mann LLC</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span

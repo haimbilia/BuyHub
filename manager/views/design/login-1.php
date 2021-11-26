@@ -15,21 +15,21 @@
     <div id="particles-js"></div>
     <div class="login-page login-1">
         <div class="container">
-
             <div class="login-block">
+                <div class="logo">
+                    <a href="index.php">
+                        <img title="Yo!Kart" src="<?php echo CONF_WEBROOT_URL; ?>images/logos/logo-coloured.png" alt="Yo!Kart">
+                    </a>
+                </div>
                 <div class="card">
                     <div class="card-head">
-                        <div class="logo">
-                            <a href="index.php">
-                                <img title="Yo!Kart" src="<?php echo CONF_WEBROOT_URL; ?>images/logos/logo-coloured.png" alt="Yo!Kart">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="card-body">
                         <div class="title">
                             <h2>Sign in to your account</h2>
                             <p class="text-muted">Lorem, ipsum dolor sit amet consectetur adipisicing elit. </p>
                         </div>
+                    </div>
+
+                    <div class="card-body">
                         <form class="form form-login">
                             <div class="form-group">
                                 <label class="label">Username</label>

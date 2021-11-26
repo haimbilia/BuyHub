@@ -198,7 +198,7 @@
 													<td>Cherish Peplay</td>
 													<td>McCullough-Gibson</td>
 													<td>11/23/2017</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
 													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
@@ -378,7 +378,7 @@
 													<td>Hazlett Kite</td>
 													<td>Streich LLC</td>
 													<td>8/5/2016</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Danger</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
 													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
@@ -408,7 +408,7 @@
 													<td>Tannie Seakes</td>
 													<td>Blanda Group</td>
 													<td>7/31/2016</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Danger</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
 													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
@@ -468,7 +468,7 @@
 													<td>Emelita Giraldez</td>
 													<td>Rosenbaum-Reichel</td>
 													<td>8/6/2017</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Danger</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
 													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">

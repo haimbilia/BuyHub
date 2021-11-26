@@ -2,7 +2,7 @@
 
 $typeArr = Badge::getTypeArr($adminLangId);
 $headingLabel = $badgeName . ' ' . Labels::getLabel('LBL_BIND_CONDITIONS', $adminLangId);
-$headingLabel .= ' <span class="badge badge--unified-brand badge--inline badge--pill">' . $typeArr[$badgeType] . '</span>';
+$headingLabel .= ' <span class="badge badge-brand badge-inline badge-pill">' . $typeArr[$badgeType] . '</span>';
 $listingLabel = $badgeName . ' ' . Labels::getLabel('LBL_CONDITIONS_LIST', $adminLangId);
 
 $data = [
