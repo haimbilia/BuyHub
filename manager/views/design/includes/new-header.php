@@ -5,9 +5,9 @@
                 <h1>Page title goes here</h1>
                 <span class="page-title-sub"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
                     repudiandae, 
-                  <a href=""><i class="fas fa-lightbulb"></i></a>  
-                  <a href="">  <i class="fas fa-external-link-alt"></i> </a>
-                  <a href=""> <i class="fas fa-exclamation-triangle"></i> </a>
+                  <a href="javascript:void(0)"><i class="fas fa-lightbulb"></i></a>  
+                  <a href="javascript:void(0)">  <i class="fas fa-external-link-alt"></i> </a>
+                  <a href="javascript:void(0)"> <i class="fas fa-exclamation-triangle"></i> </a>
                 </span>
             </div>
             <div class="main-header-toolbar">
@@ -343,7 +343,7 @@
                         </div>
                     </div>
                     <div class="header-action__item">
-                        <a class="header-action__trigger" href="" title="View Store">
+                        <a class="header-action__trigger" href="javascript:void(0)" title="View Store">
                             <span class="icon">
                                 <svg class="svg" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
@@ -353,7 +353,7 @@
                         </a>
                     </div>
                     <div class="header-action__item">
-                        <a class="header-action__trigger" href="" title="Clear Cache">
+                        <a class="header-action__trigger" href="javascript:void(0)" title="Clear Cache">
                             <span class="icon">
                                 <svg class="svg" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-cache">
@@ -363,7 +363,7 @@
                         </a>
                     </div>
                     <div class="header-action__item dropdown">
-                        <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="">
+                        <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
                             <span class="icon">
                                 <svg class="svg" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
@@ -395,7 +395,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
-                                                        <a href="" class="title">Project Alice</a>
+                                                        <a href="javascript:void(0)" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
                                                     </div>
                                                     <span class="notification__time">1 hr</span>
@@ -411,7 +411,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
-                                                        <a href="" class="title">Project Alice</a>
+                                                        <a href="javascript:void(0)" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
                                                     </div>
                                                     <span class="notification__time">1 hr</span>
@@ -427,7 +427,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
-                                                        <a href="" class="title">Project Alice</a>
+                                                        <a href="javascript:void(0)" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
                                                     </div>
                                                     <span class="notification__time">1 hr</span>
@@ -443,7 +443,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
-                                                        <a href="" class="title">Project Alice</a>
+                                                        <a href="javascript:void(0)" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
                                                     </div>
                                                     <span class="notification__time">1 hr</span>
@@ -459,7 +459,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
-                                                        <a href="" class="title">Project Alice</a>
+                                                        <a href="javascript:void(0)" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
                                                     </div>
                                                     <span class="notification__time">1 hr</span>
@@ -475,7 +475,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
-                                                        <a href="" class="title">Project Alice</a>
+                                                        <a href="javascript:void(0)" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
                                                     </div>
                                                     <span class="notification__time">1 hr</span>
@@ -491,7 +491,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
-                                                        <a href="" class="title">Project Alice</a>
+                                                        <a href="javascript:void(0)" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
                                                     </div>
                                                     <span class="notification__time">1 hr</span>
@@ -507,7 +507,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="notification__detail">
-                                                        <a href="" class="title">Project Alice</a>
+                                                        <a href="javascript:void(0)" class="title">Project Alice</a>
                                                         <div class="summary">Phase 1 development</div>
                                                     </div>
                                                     <span class="notification__time">1 hr</span>
@@ -635,18 +635,18 @@
                                     </div>
                                 </div>
                                 <div class="header-notification__footer">
-                                    <a href="" class="text-link text-link--arrow">View All </a>
+                                    <a href="javascript:void(0)" class="text-link text-link--arrow">View All </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="header-action__item dropdown header-account">
-                        <a class=" dropdown-toggle no-after" data-toggle="dropdown" href="">
+                        <a class="dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
                             <span class="header-account__img">
                                 <img aria-expanded="false" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="">
                             </span>
                         </a>
-                        <div class="header-action__target p-0 dropdown-menu ">
+                        <div class="header-action__target p-0 dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                             <div class="header-account__avtar">
                                 <div class="profile">
                                     <div class="profile__img">
