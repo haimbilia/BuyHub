@@ -251,7 +251,7 @@ class ShippingDurationsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($sduration_id)
+    protected function markAsDeleted($sduration_id)
     {
         $sduration_id = FatUtility::int($sduration_id);
         if (1 > $sduration_id) {

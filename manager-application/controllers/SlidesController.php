@@ -300,7 +300,7 @@ class SlidesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($slide_id)
+    protected function markAsDeleted($slide_id)
     {
         $slide_id = FatUtility::int($slide_id);
         if (1 > $slide_id) {

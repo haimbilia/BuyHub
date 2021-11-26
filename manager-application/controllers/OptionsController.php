@@ -306,7 +306,7 @@ class OptionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($option_id)
+    protected function markAsDeleted($option_id)
     {
         $optionObj = new Option($option_id);
         if (!$optionObj->canRecordMarkDelete($option_id)) {
