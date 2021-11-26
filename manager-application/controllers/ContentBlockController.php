@@ -370,9 +370,8 @@ class ContentBlockController extends ListingBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $epageObj = new Extrapage($recordId);
-        if (!$epageObj->updateLangData($languageId, $data)) {
-            LibHelper::exitWithError($epageObj->getError(), true);
+        if (!$record->updateLangData($languageId, $data)) {
+            LibHelper::exitWithError($record->getError(), true);
         }
 
 
