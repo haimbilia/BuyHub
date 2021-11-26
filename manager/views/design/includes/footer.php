@@ -29,7 +29,7 @@
 
     </div>
     <div class="footer-action__item">
-        <a class="footer-action__trigger" href="" title="View Store">
+        <a class="footer-action__trigger" href="javascript:void(0)" title="View Store">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
@@ -39,7 +39,7 @@
         </a>
     </div>
     <div class="footer-action__item">
-        <a class="footer-action__trigger" href="" title="Clear Cache">
+        <a class="footer-action__trigger" href="javascript:void(0)" title="Clear Cache">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-cache">
@@ -49,7 +49,7 @@
         </a>
     </div>
     <div class="footer-action__item dropdown">
-        <a class="footer-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="">
+        <a class="footer-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
@@ -60,12 +60,12 @@
 
     </div>
     <div class="footer-action__item dropdown header-account">
-        <a class=" dropdown-toggle no-after" data-toggle="dropdown" href="">
+        <a class=" dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
             <span class="header-account__img">
                 <img aria-expanded="false" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="">
             </span>
         </a>
-        <div class="footer-action__target p-0 dropdown-menu ">
+        <div class="footer-action__target p-0 dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
             <div class="header-account__avtar">
                 <div class="profile">
                     <div class="profile__img">

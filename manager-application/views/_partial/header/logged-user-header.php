@@ -108,7 +108,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -124,7 +124,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -140,7 +140,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -156,7 +156,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -172,7 +172,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -188,7 +188,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -204,7 +204,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -220,7 +220,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -349,18 +349,18 @@
                                             </div>
                                         </div>
                                         <div class="header-notification__footer">
-                                            <a href="" class="text-link text-link--arrow">View All </a>
+                                            <a href="javascript:void(0)" class="text-link text-link--arrow">View All </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="header-action__item dropdown header-account">
-                                <a class="dropdown-toggle no-after" data-toggle="dropdown" href="">
+                                <a class="dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
                                     <span class="header-account__img">
                                         <img aria-expanded="false" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>" alt="">
                                     </span>
                                 </a>
-                                <div class="header-action__target p-0 dropdown-menu">
+                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">

@@ -8,7 +8,7 @@
 <?php if ($languages && count($languages) > 1) { ?>
 <li class="menu__item">
     <div class="menu__item__inner">
-        <a href="" class="accordianheader">
+        <a href="javascript:void(0)" class="accordianheader">
             <i class="icn "><svg class="svg">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#language"></use>
                 </svg>
@@ -25,7 +25,7 @@
 <?php }
     if ($currencies && count($currencies) > 1) { ?>
 <li class="menu__item">
-    <div class="menu__item__inner"><a title="" href="" class="accordianheader">
+    <div class="menu__item__inner"><a title="" href="javascript:void(0)" class="accordianheader">
             <i class="icn "><svg class="svg">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#currency"></use>
                 </svg>
