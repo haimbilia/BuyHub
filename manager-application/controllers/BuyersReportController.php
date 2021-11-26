@@ -3,7 +3,7 @@
 class BuyersReportController extends ListingBaseController
 {
     protected $pageKey = 'REPORT_CUSTOMERS';
-    
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -228,5 +228,21 @@ class BuyersReportController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return ['buyerName', 'totOrders', 'totQtys', 'totRefundedQtys', 'grossSales',  'taxTotal', 'shippingTotal', 'discountTotal', 'refundedAmount', 'orderNetAmount'];
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('NAV_REPORTS', $this->siteLangId)],
+                    ['title' => Labels::getLabel('NAV_SALES_REPORTS', $this->siteLangId)],
+                    ['title' => $pageTitle]
+                ];
+                break;
+        }
+        return $this->nodes;
     }
 }

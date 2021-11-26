@@ -269,7 +269,8 @@ class SalesReportController extends ListingBaseController
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SALES_OVER_TIME', $this->siteLangId)],
+                    ['title' => Labels::getLabel('NAV_REPORTS', $this->siteLangId)],
+                    ['title' => Labels::getLabel('NAV_SALES_REPORTS', $this->siteLangId)],
                     ['title' => $pageTitle]
                 ];
                 break;
