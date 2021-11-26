@@ -411,7 +411,10 @@
 
             <?php
             if (
-                    $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) || $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) || $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) 
+                    || $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) 
+                    || $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)
+                    || $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
                 <li class="menu-item dropdown dropright">
@@ -444,6 +447,13 @@
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('FaqCategories'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_FAQS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_TESTIMONIALS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>

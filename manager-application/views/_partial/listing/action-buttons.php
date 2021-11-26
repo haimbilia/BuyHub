@@ -3,7 +3,7 @@
 $canEdit = isset($canEdit) ? $canEdit : false;
 
 $ul = new HtmlElement("ul", array());
-if (isset($htmlContent) && $htmlContent != '') {
+if (isset($htmlContent) && !empty($htmlContent)) {
     $ul->appendElement('li', [], $htmlContent, true);
 }
 
