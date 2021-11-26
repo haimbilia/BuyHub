@@ -2,6 +2,8 @@
 
 class AbusiveWordsController extends ListingBaseController
 {
+    protected $pageKey = 'MANAGE_ABUSIVE_KEYWORDS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,7 +15,7 @@ class AbusiveWordsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_ABUSIVE_KEYWORDS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -27,7 +29,7 @@ class AbusiveWordsController extends ListingBaseController
                 'onclick' => "addNew(true)",
                 'title' => $btnTitle,
             ],
-            'label' => $btnTitle,   
+            'label' => $btnTitle,
         ];
 
         $this->set('pageData', $pageData);
@@ -240,7 +242,7 @@ class AbusiveWordsController extends ListingBaseController
     {
         $frm = new Form('frmAbusiveWord');
         $frm->addHiddenField('', 'abusive_id', $recordId);
-        
+
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'abusive_lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
@@ -295,12 +297,11 @@ class AbusiveWordsController extends ListingBaseController
     }
 
     public function getBreadcrumbNodes($action)
-    {        
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_ABUSIVE_KEYWORDS', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
+    {
         switch ($action) {
             case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
