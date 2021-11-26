@@ -1219,7 +1219,7 @@ class CollectionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
     
-    private function markAsDeleted($collection_id)
+    protected function markAsDeleted($collection_id)
     {
         $collection_id = FatUtility::int($collection_id);
         if (1 > $collection_id) {

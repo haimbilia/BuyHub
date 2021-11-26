@@ -414,7 +414,7 @@ class TestimonialsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($testimonial_id)
+    protected function markAsDeleted($testimonial_id)
     {
         $testimonial_id = FatUtility::int($testimonial_id);
         if (1 > $testimonial_id) {
