@@ -3,13 +3,14 @@
 class SellerProductsController extends ListingBaseController
 {
     use ProductsDigitalDownloads;
+    protected $pageKey = 'MANAGE_SELLER_INVENTORIES';
 
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewSellerProducts($this->admin_id);
     }
-
+    
     public function index($productId = 0)
     {
         $fields = $this->getFormColumns();
@@ -25,6 +26,11 @@ class SellerProductsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_INVENTORIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['statusButton'] = true;
+
+        $this->set('actionItemsData', $actionItemsData);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->getListingData();
@@ -44,15 +50,12 @@ class SellerProductsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
 
-        // $frm->addTextBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', $userArr, '', [], '');
 
         $prodCatObj = new ProductCategory();
         $arrCategories = $prodCatObj->getCategoriesForSelectBox($this->siteLangId);
         $categories = $prodCatObj->makeAssociativeArray($arrCategories);
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'prodcat_id', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $categories, '', array(), '');
-       /*  $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'active', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $activeInactiveArr, '', array(), ''); */
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'selprod_title');
