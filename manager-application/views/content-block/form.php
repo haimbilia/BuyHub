@@ -10,13 +10,13 @@ $fld->setFieldTagAttribute('id', "urlrewrite_custom");
 $fld->htmlAfterField = '<span class="form-text text-muted">' . UrlHelper::generateFullUrl('Custom', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '</span>';
 $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
 $formTitle = Labels::getLabel('LBL_CONTENT_BLOCK_SETUP', $siteLangId);
-if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId))) {  
-    
+if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId))) 
+{  
     $imageLangFld = $frm->getField('lang_id');
     $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
     
     $imgArr = [];
-    $recordId = $image['afile_record_id'];
+    $imageRecordId = $image['afile_record_id'];
     if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
         $imgArr = [

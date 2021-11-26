@@ -2,6 +2,8 @@
 
 class ImportExportController extends ListingBaseController
 {
+    protected $pageKey = 'IMPORT_EXPORT';
+
     public function __construct($action)
     {
         parent::__construct($action);

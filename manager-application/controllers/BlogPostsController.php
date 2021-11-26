@@ -2,6 +2,9 @@
 
 class BlogPostsController extends ListingBaseController
 {
+    protected $modelClass = 'BlogPost';
+    protected $pageKey = 'BLOG_POSTS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -17,7 +20,8 @@ class BlogPostsController extends ListingBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditBlogPosts();
-        $this->modelObj = (new ReflectionClass('BlogPost'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
+        //$this->modelObj = (new ReflectionClass('BlogPost'))->newInstanceArgs($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title'), $this->modelObj::tblFld('author_name'), $this->modelObj::tblFld('description')];
         $this->set('formTitle', Labels::getLabel('LBL_BLOG_POST_SETUP', $this->siteLangId));
     }
@@ -27,7 +31,7 @@ class BlogPostsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_BLOG_POSTS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);

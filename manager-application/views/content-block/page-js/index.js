@@ -1,7 +1,7 @@
 
 
- backgroundImage = function (recordId, imageType, langId) {
-    fcom.ajax(fcom.makeUrl('ContentBlock', 'images', [recordId, imageType, langId]), '', function (t) {	
+backgroundImage = function (recordId, imageType, langId) {
+    fcom.ajax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId}, function (t) {	
         $('#imageListingJs').html(t);
     });
 };
@@ -9,19 +9,21 @@
 
 deleteBackgroundImage = function (recordId, afileId ,type, langId) {
     if (!confirm(langLbl.confirmDelete)) { return; }
-    fcom.updateWithAjax(fcom.makeUrl('ContentBlock', 'removeMedia', [recordId, afileId, type, langId]), '', function (t) {
+    console.log(recordId, afileId ,type, langId);
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeMedia'), {recordId, afileId, type, langId}, function (t) {
         backgroundImage(recordId, 'THUMB' ,langId);
         reloadList();
+        $('.resetModalFormJs').click();
     });
 };    
 
 
 $(document).on('change', '#imageLanguageJs', function() {
-    var lang_id = $(this).val();
-    var recordId = $(this).closest("form").find('input[name="epage_id"]').val();
+    let lang_id = $(this).val();
+    let recordId = $(this).closest("form").find('input[name="epage_id"]').val();
     backgroundImage(recordId, 'THUMB',lang_id);
 });
 
-mediaForm = (recordId, imageType, langId, slideScreen) => {
+mediaForm = function(recordId, imageType, langId, slideScreen) {
     backgroundImage(recordId, 'THUMB' ,langId);
 }

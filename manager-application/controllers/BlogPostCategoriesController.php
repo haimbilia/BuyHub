@@ -3,6 +3,7 @@
 class BlogPostCategoriesController extends ListingBaseController
 {
     protected $modelClass = 'BlogPostCategory';
+    protected $pageKey = 'BLOG_CATEGORIES';
 
     public function __construct($action)
     {
