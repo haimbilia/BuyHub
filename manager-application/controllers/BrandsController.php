@@ -517,7 +517,7 @@ class BrandsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function markAsDeleted($recordId)
+    public function markAsDeleted($recordId)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {

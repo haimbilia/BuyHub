@@ -2,6 +2,7 @@
 
 class EarningsReportController extends ListingBaseController
 {
+    protected $pageKey = 'REPORT_EARNINGS';
 
     public function __construct($action)
     {
@@ -13,7 +14,7 @@ class EarningsReportController extends ListingBaseController
     {
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
-        $pageData = PageLanguageData::getAttributesByKey('EARNINGS_REPORT', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
