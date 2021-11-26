@@ -27,11 +27,11 @@
         ?>
     </ul>
 
-    <div class="d-flex ">
+    <!-- <div class="d-flex ">
         <select class="form-control form-select select-language">
             <option value="2" selected="selected">Arabic</option>
         </select>
-    </div>
+    </div> -->
 
 
 
