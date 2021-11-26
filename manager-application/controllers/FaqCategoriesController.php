@@ -13,15 +13,13 @@ class FaqCategoriesController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_FAQ_CATEGORIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-        
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
-        $actionItemsData['newRecordBtn'] = true;
+        $actionItemsData['deleteButton'] = true;
         
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -70,11 +68,14 @@ class FaqCategoriesController extends ListingBaseController
             $condition->attachCondition('fc_l.faqcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        // $srch->addOrder($sortBy, $sortOrder); 
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
+        // $srch->setPageNumber($page);
+        // $srch->setPageSize($pageSize);
+        $srch->addMultipleFields([
+            'IFNULL(faqcat_name,faqcat_identifier) AS faqcat_name',
+            'faqcat_id', 'faqcat_identifier', 'faqcat_active',
+            'faqcat_type', 'faqcat_deleted', 'faqcat_display_order',
+            'faqcat_featured', 'faqcatlang_faqcat_id', 'faqcatlang_lang_id',
+        ]);
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
         $srch->addOrder('faqcat_display_order', 'ASC');
@@ -129,7 +130,6 @@ class FaqCategoriesController extends ListingBaseController
         $frm = new Form('frmFaqCat');
         $frm->addHiddenField('', 'faqcat_id','');
         $frm->addHiddenField('', 'lang_id', $this->siteLangId);
-        // $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_IDENTIFIER', $langId), 'faqcat_identifier');
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($langId);
         $faqCatTypeArr = FaqCategory::getFaqCatTypeArr($langId);
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'faqcat_name');
@@ -139,7 +139,6 @@ class FaqCategoriesController extends ListingBaseController
         if (!empty($translatorSubscriptionKey) ) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        /*$frm->addCheckBox(Labels::getLabel('LBL_featured',$langId), 'faqcat_featured', 1,array(),false,0);*/
         return $frm;
     }
 
@@ -347,19 +346,6 @@ class FaqCategoriesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($faqcatId)
-    {
-        $faqcatId = FatUtility::int($faqcatId);
-        if (1 > $faqcatId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-        $faqCatObj = new FaqCategory($faqcatId);
-        $faqCatObj->assignValues(array(FaqCategory::tblFld('deleted') => 1));
-        if (!$faqCatObj->save()) {
-            LibHelper::exitWithError($faqCatObj->getError(), true);
-        }
-    }
-
     public function updateOrder()
     {
        $this->checkEditPrivilege();
@@ -371,27 +357,6 @@ class FaqCategoriesController extends ListingBaseController
             }
             LibHelper::exitWithSuccess(Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId), true);
         }
-    }
-
-
-    public function updateStatus() {
-       $this->checkEditPrivilege();
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        if (0 >= $recordId) {
-             LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $data = FaqCategory::getAttributesById($recordId, array('faqcat_id', 'faqcat_active'));
-
-        if ($data == false) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $status = ($data['faqcat_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
-
-        $this->updateFaqCatStatus($recordId, $status);
-
-        LibHelper::exitWithSuccess($this->str_update_record, true);
     }
 
     public function toggleBulkStatuses()
@@ -430,40 +395,6 @@ class FaqCategoriesController extends ListingBaseController
     }
 
 
-    public function autoComplete()
-    {
-        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE');
-        $post = FatApp::getPostedData();
-
-        $srch = FaqCategory::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('faqcat_id, IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'));
-
-        if (!empty($post['keyword'])) {
-            $cond = $srch->addCondition('faqcat_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $cond->attachCondition('faqcat_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
-        }
-
-        $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
-        $alreadyAdded = Collections::getRecords($collectionId);
-        if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
-            $srch->addCondition('faqcat_id', 'NOT IN', array_keys($alreadyAdded));
-        }
-
-        $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $posts = $db->fetchAll($rs, 'faqcat_id');
-        $json = array();
-        foreach ($posts as $key => $post) {
-            $json[] = array(
-                'id' => $key,
-                'name' => strip_tags(html_entity_decode($post['faqcat_name'], ENT_QUOTES, 'UTF-8'))
-            );
-        }
-        die(json_encode($json));
-    }
-
-
      /**
      * Undocumented function
      *
@@ -481,7 +412,7 @@ class FaqCategoriesController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'faqcat_id' => Labels::getLabel('LBL_ID', $this->siteLangId),
-            'faqcat_identifier' => Labels::getLabel('LBL_category_Name', $this->siteLangId),
+            'faqcat_name' => Labels::getLabel('LBL_category_Name', $this->siteLangId),
             'faqcat_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -500,7 +431,7 @@ class FaqCategoriesController extends ListingBaseController
             'dragdrop',
             'select_all',
             'listSerial',
-            'faqcat_identifier',
+            'faqcat_name',
             'faqcat_active',
             'action',
         ];
@@ -514,7 +445,7 @@ class FaqCategoriesController extends ListingBaseController
      */
     protected function excludeKeysForSort($fields = []): array
     {
-        return [];
+        return array_diff($fields, ['dragdrop', 'faqcat_name', 'faqcat_active'], Common::excludeKeysForSort());
     }
 
     /**

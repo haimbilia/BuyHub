@@ -257,7 +257,7 @@
 													<td>Englebert Shelley</td>
 													<td>Jenkins Inc</td>
 													<td>6/28/2016</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
 													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
@@ -335,7 +335,7 @@
 													<td>Emelita Giraldez</td>
 													<td>Rosenbaum-Reichel</td>
 													<td>8/6/2017</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Danger</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
 													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
@@ -387,7 +387,7 @@
 													<td>Hubey Passby</td>
 													<td>Lemke-Hermiston</td>
 													<td>6/29/2017</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
 													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
@@ -491,7 +491,7 @@
 													<td>Yardley Wetherell</td>
 													<td>Gerlach-Schultz</td>
 													<td>4/3/2017</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
 													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
@@ -569,7 +569,7 @@
 													<td>Leonora Chevin</td>
 													<td>Mann LLC</td>
 													<td>9/6/2017</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
 													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
@@ -621,7 +621,7 @@
 													<td>Penrod Allanby</td>
 													<td>Rodriguez Group</td>
 													<td>3/5/2018</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
 													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
@@ -673,7 +673,7 @@
 													<td>Gusti Clamp</td>
 													<td>Stokes Group</td>
 													<td>4/12/2018</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Danger</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
 													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
@@ -699,7 +699,7 @@
 													<td>Chrissie Jeromson</td>
 													<td>Brakus-McCullough</td>
 													<td>11/26/2017</td>
-													<td><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></td>
+													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
 													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">

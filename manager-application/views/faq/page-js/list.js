@@ -1,12 +1,8 @@
-addNewFaq = faqCatId =>  {
+addNewFaq = function(faqCatId) {
     fcom.resetEditorInstance();
-    let data = {faqCatId};
-
-    /* Uncheck all if checked. */
     $(".selectAllJs, .selectItemJs").prop("checked", false)
-
     $.ykmodal(fcom.getLoader(), false, '');
-    fcom.ajax(fcom.makeUrl('Faq', 'form'), data, function (t) {
+    fcom.ajax(fcom.makeUrl('Faq', 'form'), {faqCatId}, function (t) {
         $.ykmodal(t, false, '');
         fcom.removeLoader();
     });
@@ -20,11 +16,10 @@ $(document).ajaxComplete(function() {
     bindSortable();
 });
 
-function bindSortable() {
+bindSortable = function() {
     if (1 > $('[data-field="dragdrop"]').length) {
         return;
     }
-
     $("#orderStatuses > tbody").sortable({
         update: function(event, ui) {
             fcom.displayProcessing();
@@ -43,7 +38,7 @@ function bindSortable() {
             });
             bindData.then(
                 function(value) {
-                    fcom.ajax(fcom.makeUrl('Faq', 'updateOrder'), value, function(res) {
+                    fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function(res) {
                         fcom.removeLoader();
                         $.ykmsg.close();
                         var ans = $.parseJSON(res);
@@ -65,12 +60,12 @@ function bindSortable() {
 }
 
 
-editRecord = (recordId, faqCatId) => {
+editRecord = function(recordId, faqCatId) {
     fcom.resetEditorInstance();
     $.ykmodal(fcom.getLoader());
     data = {recordId, faqCatId};
     console.log(data);
-    fcom.ajax(fcom.makeUrl('Faq', 'form'), data, function (t) {
+    fcom.ajax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
         $.ykmodal(t);
         fcom.removeLoader();
     });

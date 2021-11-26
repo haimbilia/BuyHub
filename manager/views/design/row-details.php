@@ -400,7 +400,7 @@
                                                         interdum</span></td>
                                                 <td data-field="Status" class="datatable__cell" style="display: none;">
                                                     <span style="width: 110px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Danger</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Danger</span></span>
                                                 </td>
                                                 <td data-field="Type" class="datatable__cell" style="display: none;">
                                                     <span style="width: 110px;"><span
@@ -555,7 +555,7 @@
                                                         nunc rhoncus dui</span></td>
                                                 <td data-field="Status" class="datatable__cell" style="display: none;">
                                                     <span style="width: 110px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" class="datatable__cell" style="display: none;">
                                                     <span style="width: 110px;"><span
@@ -660,7 +660,7 @@
                                                         odio curabitur convallis duis</span></td>
                                                 <td data-field="Status" class="datatable__cell" style="display: none;">
                                                     <span style="width: 110px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" class="datatable__cell" style="display: none;">
                                                     <span style="width: 110px;"><span
@@ -712,7 +712,7 @@
                                                         pretium quis lectus suspendisse potenti in eleifend</span></td>
                                                 <td data-field="Status" class="datatable__cell" style="display: none;">
                                                     <span style="width: 110px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Danger</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Danger</span></span>
                                                 </td>
                                                 <td data-field="Type" class="datatable__cell" style="display: none;">
                                                     <span style="width: 110px;"><span
@@ -763,7 +763,7 @@
                                                         cursus id turpis integer aliquet</span></td>
                                                 <td data-field="Status" class="datatable__cell" style="display: none;">
                                                     <span style="width: 110px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" class="datatable__cell" style="display: none;">
                                                     <span style="width: 110px;"><span

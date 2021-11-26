@@ -29,6 +29,17 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
         $('.component_link').closest('.col-md-12').addClass('hide');
         if ($("input[name=taxstr_is_combined]").prop('checked') == true) {
             $('.component_link').closest('.col-md-12').removeClass('hide');
-        } 
-    })
+        }
+<?php
+if (!empty($combinedTaxes)) {
+    foreach ($combinedTaxes as $key => $tax) {
+        ?>
+                $('.component_link').find('.row').after($('.component_link').find('.row').last().clone());
+                $('.component_link').find('.row').last().find('input[type=text]').val('<?php echo $tax; ?>');
+                $('.component_link').find('.row').last().find('.remove-combined-form--js').removeClass('hide');
+        <?php
+    }
+}
+?>
+    });
 </script>

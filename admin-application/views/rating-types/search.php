@@ -46,7 +46,7 @@ foreach ($arrListing as $sn => $row) {
                 $name = array_key_exists('ratingtype_name', $row) && !empty($row[$key]) ? $row[$key]  . ' (' . $row['ratingtype_identifier'] . ')' : $row['ratingtype_identifier'];
 
                 if (array_key_exists('ratingtype_active', $row) && applicationConstants::YES == $row['ratingtype_default']) {
-                    $name .= ' <span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>';
+                    $name .= ' <span class="badge badge-brand badge-inline badge-pill">' . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>';
                 }
                 $infoLabel = '';
                 switch($row['ratingtype_id']){

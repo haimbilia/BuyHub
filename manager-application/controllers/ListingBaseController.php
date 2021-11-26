@@ -94,11 +94,10 @@ class ListingBaseController extends AdminBaseController
 
     protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
     {
-        $recordId = $classObj->getMainTableRecordId();
+        $recordId = $classObj->getMainTableRecordId(); 
         if (!$classObj->updateLangData((0 < $langId  ? $langId : CommonHelper::getDefaultFormLangId()), $langDataArr)) {
             LibHelper::exitWithError($classObj->getError(), true);
-        }
-
+        } 
         $newTabLangId = 0;
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
@@ -230,7 +229,7 @@ class ListingBaseController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($recordId)
+    protected function markAsDeleted($recordId)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {

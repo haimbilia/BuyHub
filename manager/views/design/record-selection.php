@@ -410,7 +410,7 @@
                                                         style="width: 148px;">8/6/2017</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Danger</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Danger</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
@@ -537,7 +537,7 @@
                                                         style="width: 148px;">5/20/2017</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
@@ -622,7 +622,7 @@
                                                         style="width: 148px;">6/28/2016</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
@@ -665,7 +665,7 @@
                                                         style="width: 148px;">8/5/2016</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Danger</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Danger</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
@@ -707,7 +707,7 @@
                                                         style="width: 148px;">3/31/2017</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
@@ -1165,7 +1165,7 @@
                                                         style="width: 148px;">8/6/2017</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Danger</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Danger</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
@@ -1292,7 +1292,7 @@
                                                         style="width: 148px;">5/20/2017</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
@@ -1377,7 +1377,7 @@
                                                         style="width: 148px;">6/28/2016</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
@@ -1420,7 +1420,7 @@
                                                         style="width: 148px;">8/5/2016</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Danger</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Danger</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
@@ -1462,7 +1462,7 @@
                                                         style="width: 148px;">3/31/2017</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--danger badge--inline badge--pill">Delivered</span></span>
+                                                            class="badge  badge-danger badge-inline badge-pill">Delivered</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
