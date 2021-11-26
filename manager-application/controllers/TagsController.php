@@ -1,22 +1,31 @@
 <?php
 
-class TagsController extends ListingBaseController {
+class TagsController extends ListingBaseController
+{
 
     protected $modelClass = 'Tag';
     protected $pageKey = 'MANAGE_TAGS';
 
-    public function __construct($action) {       
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewTags();
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $pageData = PageLanguageData::getAttributesByKey('LBL_MANAGE_TAGS', $this->siteLangId);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageData['plang_title'] ?? LibHelper::getControllerName(true));
-        $this->set('actionItemsData', HtmlHelper::getDefaultActionItems($fields));
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['otherButtons'] = false;
+        $actionItemsData['otherButtons'] = false;   
+        
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
@@ -31,7 +40,8 @@ class TagsController extends ListingBaseController {
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'tags/search.php', true),
@@ -51,7 +61,7 @@ class TagsController extends ListingBaseController {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $tag_id = FatUtility::int($post['tag_id']);       
+        $tag_id = FatUtility::int($post['tag_id']);
 
         $recordObj = new Tag($tag_id);
         $recordObj->assignValues($post);
@@ -66,7 +76,7 @@ class TagsController extends ListingBaseController {
         /* ] */
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('tagId', $tag_id); 
+        $this->set('tagId', $tag_id);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -74,26 +84,28 @@ class TagsController extends ListingBaseController {
     {
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-        $srch = Tag::getSearchObject();  
-        $srch->addCondition('tag_lang_id', '=', $langId);       
+        $srch = Tag::getSearchObject();
+        $srch->addCondition('tag_lang_id', '=', $langId);
         $srch->addMultipleFields(array('tag_id', 'tag_name'));
         if (!empty($keyword)) {
-            $srch->addCondition('tag_name', 'LIKE', '%' . $keyword . '%'); 
-        } 
+            $srch->addCondition('tag_name', 'LIKE', '%' . $keyword . '%');
+        }
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         die(FatUtility::convertToJson($records));
     }
 
     private function getForm()
     {
-        $this->objPrivilege->canEditTags();    
+        $this->objPrivilege->canEditTags();
         $frm = new Form('frmTag');
         $frm->addHiddenField('', 'tag_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_TAG_NAME', $this->adminLangId), 'tag_name');      
+        $frm->addHiddenField('', 'tag_lang_id');
+        $frm->addRequiredField(Labels::getLabel('LBL_TAG_NAME', $this->siteLangId), 'tag_name');
         return $frm;
     }
 
-    private function getListingData() {
+    private function getListingData()
+    {
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
@@ -120,16 +132,15 @@ class TagsController extends ListingBaseController {
                     END ) )'
         );
         */
-     
+
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $keyword . '%');
-            $cnd->attachCondition('product_identifier', 'like', '%' . $keyword . '%', 'OR');     
+            $cnd->attachCondition('product_identifier', 'like', '%' . $keyword . '%', 'OR');
             $cnd->attachCondition('product_model', 'like', '%' . $keyword . '%');
-
         }
-        $srch->addMultipleFields(['product_id','IFNULL(product_name, product_identifier) as product_name']);
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addMultipleFields(['product_id', 'IFNULL(product_name, product_identifier) as product_name']);
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -147,7 +158,8 @@ class TagsController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditTags($this->admin_id, true));
     }
 
-    protected function getFormColumns(): array {
+    protected function getFormColumns(): array
+    {
         $relatedProdsTblHeadingCols = CacheHelper::get('tagsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($relatedProdsTblHeadingCols) {
             return json_decode($relatedProdsTblHeadingCols);
@@ -163,7 +175,8 @@ class TagsController extends ListingBaseController {
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             'listSerial',
             'product_name',
@@ -171,8 +184,8 @@ class TagsController extends ListingBaseController {
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, ['tags'], Common::excludeKeysForSort());
     }
-
 }

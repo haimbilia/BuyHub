@@ -23,6 +23,7 @@ class HtmlHelper
         $actionBtnArr = [
             'newRecordBtn' => true,
             'newRecordBtnAttrs' => [],
+            'headerHtmlContent'  => NULL,
             'deleteButton' => false,
             'statusButtons' => false,
             'columnButtons' => false,
@@ -31,6 +32,7 @@ class HtmlHelper
             'formAction' => 'toggleBulkStatuses',
             'siteLangId' => $langId,
             'otherButtons' => [],
+            'htmlContent'  => NULL,            
             'searchFrmTemplate' => '_partial/listing/listing-search-form.php',
             'searchListingPage' => FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php'
         ];
