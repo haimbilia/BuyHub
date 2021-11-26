@@ -18,6 +18,10 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
+            case 'product_name':
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $row['selprod_id'], 'siteLangId' => $siteLangId, 'sellerName' => $row['credential_username']], false, true);
+                $td->appendElement('plaintext', array(), $str, true);
+                break;
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,

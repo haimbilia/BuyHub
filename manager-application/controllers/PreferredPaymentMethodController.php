@@ -2,6 +2,7 @@
 
 class PreferredPaymentMethodController extends ListingBaseController
 {
+    protected $pageKey = 'REPORT_PREFERRED_PAYMENT_METHOD';
 
     public function __construct($action)
     {
@@ -13,7 +14,7 @@ class PreferredPaymentMethodController extends ListingBaseController
     {
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
-        $pageData = PageLanguageData::getAttributesByKey('PREFERRED_PAYMENT_METHOD_REPORT', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
