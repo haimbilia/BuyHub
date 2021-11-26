@@ -28,6 +28,9 @@ foreach ($arrListing as $sn => $row) {
                 if ($row[$key] != '') {
                     if ($canViewShops) {
                         $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Shops') . '", ' . $row['shop_id'] . ')'), $row[$key], true);
+                        //$str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId], false, true);
+                        //$td->appendElement('plaintext', $tdAttr, $str, true); 
+
                     } else {
                         $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                     }

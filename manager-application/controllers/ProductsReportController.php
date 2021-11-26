@@ -2,6 +2,7 @@
 
 class ProductsReportController extends ListingBaseController
 {
+    protected $pageKey = 'REPORT_PRODUCT_VARIANTS';
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,7 +14,7 @@ class ProductsReportController extends ListingBaseController
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
 
-        $pageData = PageLanguageData::getAttributesByKey('PRODUCTS_REPORTS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
@@ -340,5 +341,24 @@ class ProductsReportController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return ['product_name', 'netSoldQty', 'grossSales', 'couponDiscount', 'refundedAmount', 'taxTotal', 'shippingTotal', 'orderNetAmount'];
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('NAV_REPORTS', $this->siteLangId)],
+                    ['title' => Labels::getLabel('NAV_SALES_REPORTS', $this->siteLangId)],
+                    ['title' => $pageTitle]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
+        }
+        return $this->nodes;
     }
 }

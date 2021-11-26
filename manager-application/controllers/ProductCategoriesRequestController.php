@@ -3,7 +3,7 @@
 class ProductCategoriesRequestController extends ListingBaseController {
 
     protected $modelClass = 'ProductCategory';
-    protected $pageKey = 'MANAGE_PRODUCT_CATEGORY_REQUESTS';
+    protected $pageKey = 'CATEGORIES_REQUESTS';
 
     public function __construct($action) {
         parent::__construct($action);

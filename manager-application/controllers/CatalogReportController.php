@@ -2,6 +2,8 @@
 
 class CatalogReportController extends ListingBaseController
 {
+    protected $pageKey = 'REPORT_PRODUCTS';
+    
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,7 +14,7 @@ class CatalogReportController extends ListingBaseController
     {
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
-        $pageData = PageLanguageData::getAttributesByKey('SALES_REPORT', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
@@ -251,8 +253,12 @@ class CatalogReportController extends ListingBaseController
     {       
         switch ($action) {
             case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_PRODUCT_SALES_REPORT', $this->siteLangId)]
+                    ['title' => Labels::getLabel('NAV_REPORTS', $this->siteLangId)],
+                    ['title' => Labels::getLabel('NAV_SALES_REPORTS', $this->siteLangId)],
+                    ['title' => $pageTitle]
                 ];
                 break;
             default:

@@ -3,7 +3,7 @@
 class SellerApprovalRequestsController extends ListingBaseController {
 
     protected $modelClass = 'User';
-    protected $pageKey = 'MANAGE_SELLER_APPROVAL_REQUEST';
+    protected $pageKey = 'SELLER_APPROVAL_REQUESTS';
 
     public function __construct($action) {
         parent::__construct($action);
