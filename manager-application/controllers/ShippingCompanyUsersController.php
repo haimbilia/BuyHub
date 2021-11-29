@@ -10,6 +10,20 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $this->objPrivilege->canViewShippingCompanyUsers();
     }
 
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditShippingCompanyUsers($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditShippingCompanyUsers();
+        }
+    }
+
     public function index() {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
@@ -18,11 +32,11 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $this->setModel();
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj));
+        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), ['statusButtons' => true, 'performBulkAction' => true]);
         $this->set('actionItemsData', $actionItemsData);
         $this->set('canEdit', $this->objPrivilege->canEditShippingCompanyUsers($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->_template->addJs('shipping-company-users/page-js/index.js');
+        $this->_template->addJs('shipping-company-users/page-js/index.js'); 
         $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -125,8 +139,9 @@ class ShippingCompanyUsersController extends ListingBaseController {
             $stateId = $data['user_state_id'];
             $frm->fill($data);
         }
+        $this->set('includeTabs', false);
         $this->set('languages', []);
-        $this->set('stateId', $stateId);
+        $this->set('stateId', $stateId ?? 0);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -139,8 +154,7 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $post = FatApp::getPostedData();
         $post = $frm->getFormDataFromArray($post);
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $post['user_is_shipping_company'] = 1;
@@ -153,7 +167,9 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         $userObj = new User($user_id);
         $userObj->assignValues($post);
+        FatApp::getDB()->startTransaction();
         if (!$userObj->save()) {
+            FatApp::getDB()->rollbackTransaction();
             LibHelper::exitWithError($userObj->getError(), true);
         }
 
@@ -161,16 +177,66 @@ class ShippingCompanyUsersController extends ListingBaseController {
         if ($post['user_id'] <= 0) {
             $post['user_password'] = CommonHelper::getRandomPassword(10);
             if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], $post['user_password'], 1, 1)) {
-                LibHelper::exitWithError(Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->adminLangId), true);
+                FatApp::getDB()->rollbackTransaction();
+                LibHelper::exitWithError(Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId), true);
             }
         }
+        FatApp::getDB()->commitTransaction();
         $this->set('msg', Labels::getLabel("SUC_SETUP_SUCCESSFUL", $this->siteLangId));
         $this->set('userId', $user_id);
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    public function updateStatus() {
+        $this->checkEditPrivilege();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 == $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $this->updateUserStatus($recordId, $status);
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function toggleBulkStatuses() {
+        $this->checkEditPrivilege();
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        $recordsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
+        if (empty($recordsArr) || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        foreach ($recordsArr as $userId) {
+            if (1 > $userId) {
+                continue;
+            }
+            $this->updateUserStatus($userId, $status);
+        }
+        Product::updateMinPrices();
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function updateUserStatus($userId, $status) {
+        $status = FatUtility::int($status);
+        $userId = FatUtility::int($userId);
+        if (1 > $userId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $userObj = new User($userId);
+        if (!$userObj->activateAccount($status)) {
+            LibHelper::exitWithError($userObj->getError(), true);
+        }
+    }
+
     public function getSearchForm($fields = []) {
         $frm = new Form('frmRecordSearch');
+        $frm->setFormTagAttribute('class', 'actionButtonsJs');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
@@ -210,7 +276,7 @@ class ShippingCompanyUsersController extends ListingBaseController {
     }
 
     private function excludeKeysForSort($fields = []): array {
-        return array_diff($fields, ['brand_logo', 'brand_name', 'sbrandreq_status'], Common::excludeKeysForSort());
+        return array_diff($fields, ['credential_username'], Common::excludeKeysForSort());
     }
 
 }

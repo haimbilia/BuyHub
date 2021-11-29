@@ -180,7 +180,7 @@
 															<i class="nav__link-icon flaticon2-new-email"></i>
 															<span class="nav__link-text">Support</span>
 															<span class="nav__link-badge">
-																<span class="badge badge--success">5</span>
+																<span class="badge badge-success">5</span>
 															</span>
 														</a>
 													</li>
@@ -289,7 +289,7 @@
 															<tbody>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single">
+																		<label class="checkbox checkbox-single">
 																			<input type="checkbox"><span></span>
 																		</label>
 																	</td>
@@ -299,12 +299,12 @@
 																	</td>
 																	<td>19,200</td>
 																	<td>$63</td>
-																	<td><span class="badge badge--inline badge--brand">new</span></td>
+																	<td><span class="badge badge-inline badge-brand">new</span></td>
 																	<td class="align-right font-brand font-bold">$34,740</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<a href="#" class="widget11__title">Selto</a>
@@ -312,12 +312,12 @@
 																	</td>
 																	<td>24,310</td>
 																	<td>$39</td>
-																	<td><span class="badge badge--inline badge--success">approved</span></td>
+																	<td><span class="badge badge-inline badge-success">approved</span></td>
 																	<td class="align-right font-brand font-bold">$46,010</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<a href="#" class="widget11__title">Jippo</a>
@@ -325,12 +325,12 @@
 																	</td>
 																	<td>9,076</td>
 																	<td>$105</td>
-																	<td><span class="badge badge--inline badge--warning">pending</span></td>
+																	<td><span class="badge badge-inline badge-warning">pending</span></td>
 																	<td class="align-right font-brand font-bold">$67,800</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<a href="#" class="widget11__title">Verto</a>
@@ -338,7 +338,7 @@
 																	</td>
 																	<td>11,094</td>
 																	<td>$16</td>
-																	<td><span class="badge badge--inline badge--danger">on hold</span></td>
+																	<td><span class="badge badge-inline badge-danger">on hold</span></td>
 																	<td class="align-right font-brand font-bold">$18,520</td>
 																</tr>
 															</tbody>
@@ -374,7 +374,7 @@
 															<tbody>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single">
+																		<label class="checkbox checkbox-single">
 																			<input type="checkbox"><span></span>
 																		</label>
 																	</td>
@@ -384,12 +384,12 @@
 																	</td>
 																	<td>19,200</td>
 																	<td>$63</td>
-																	<td><span class="badge badge--inline badge--danger">pending</span></td>
+																	<td><span class="badge badge-inline badge-danger">pending</span></td>
 																	<td class="align-right font-brand  font-bold">$23,740</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<span class="widget11__title">Selto</span>
@@ -397,12 +397,12 @@
 																	</td>
 																	<td>24,310</td>
 																	<td>$39</td>
-																	<td><span class="badge badge--inline badge--success">new</span></td>
+																	<td><span class="badge badge-inline badge-success">new</span></td>
 																	<td class="align-right font-success  font-bold">$46,010</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<span class="widget11__title">Jippo</span>
@@ -410,12 +410,12 @@
 																	</td>
 																	<td>9,076</td>
 																	<td>$105</td>
-																	<td><span class="badge badge--inline badge--brand">approved</span></td>
+																	<td><span class="badge badge-inline badge-brand">approved</span></td>
 																	<td class="align-right font-danger font-bold">$15,800</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<span class="widget11__title">Verto</span>
@@ -423,7 +423,7 @@
 																	</td>
 																	<td>11,094</td>
 																	<td>$16</td>
-																	<td><span class="badge badge--inline badge--info">done</span></td>
+																	<td><span class="badge badge-inline badge-info">done</span></td>
 																	<td class="align-right font-warning font-bold">$8,520</td>
 																</tr>
 															</tbody>
@@ -499,7 +499,7 @@
 																<i class="nav__link-icon flaticon2-new-email"></i>
 																<span class="nav__link-text">Support</span>
 																<span class="nav__link-badge">
-																	<span class="badge badge--success">5</span>
+																	<span class="badge badge-success">5</span>
 																</span>
 															</a>
 														</li>
@@ -1068,7 +1068,7 @@
 																<i class="nav__link-icon flaticon2-new-email"></i>
 																<span class="nav__link-text">Support</span>
 																<span class="nav__link-badge">
-																	<span class="badge badge--success">5</span>
+																	<span class="badge badge-success">5</span>
 																</span>
 															</a>
 														</li>
@@ -1090,7 +1090,7 @@
 											<table class="table datatable__table">
 												<thead class="datatable__head">
 													<tr class="datatable__row">
-														<th class="datatable__cell--center datatable__cell datatable__cell--check"><span><label class="checkbox checkbox--single checkbox--all checkbox--solid"><input type="checkbox">&nbsp;<span></span></label></span></th>
+														<th class="datatable__cell--center datatable__cell datatable__cell--check"><span><label class="checkbox checkbox-single checkbox-all checkbox-solid"><input type="checkbox">&nbsp;<span></span></label></span></th>
 														<th class="datatable__cell datatable__cell--sort"><span>Company</span></th>
 														<th class="datatable__cell datatable__cell--sort"><span>Date</span></th>
 														<th class="datatable__cell datatable__cell--sort"><span>Status</span></th>
@@ -1100,7 +1100,7 @@
 												</thead>
 												<tbody class="datatable__body">
 													<tr class="datatable__row">
-														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="1">&nbsp;<span></span></label></span></td>
+														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="1">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo1.png"> </div>
@@ -1112,7 +1112,7 @@
 														<td data-field="Type" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic">
-																		<div class="badge badge--xl badge--info">N</div>
+																		<div class="badge badge-xl badge-info">N</div>
 																	</div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Nixie Sailor</a> <span class="user-card-v2__desc">Designer</span> </div>
 																</div>
@@ -1131,7 +1131,7 @@
 															</span></td>
 													</tr>
 													<tr data-row="1" class="datatable__row datatable__row--even">
-														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="2">&nbsp;<span></span></label></span></td>
+														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="2">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo2.png"> </div>
@@ -1143,7 +1143,7 @@
 														<td data-field="Type" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic">
-																		<div class="badge badge--xl badge--brand">E</div>
+																		<div class="badge badge-xl badge-brand">E</div>
 																	</div>
 																	<div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Emelita Giraldez</a> <span class="user-card-v2__desc">Manager</span> </div>
 																</div>
@@ -1162,7 +1162,7 @@
 															</span></td>
 													</tr>
 													<tr data-row="2" class="datatable__row">
-														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="3">&nbsp;<span></span></label></span></td>
+														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="3">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
@@ -1191,7 +1191,7 @@
 															</span></td>
 													</tr>
 													<tr data-row="3" class="datatable__row datatable__row--even">
-														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="4">&nbsp;<span></span></label></span></td>
+														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="4">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
@@ -1220,7 +1220,7 @@
 															</span></td>
 													</tr>
 													<tr data-row="4" class="datatable__row">
-														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="5">&nbsp;<span></span></label></span></td>
+														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="5">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo5.png"> </div>
@@ -1249,7 +1249,7 @@
 															</span></td>
 													</tr>
 													<tr data-row="5" class="datatable__row datatable__row--even">
-														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="6">&nbsp;<span></span></label></span></td>
+														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="6">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
@@ -1278,7 +1278,7 @@
 															</span></td>
 													</tr>
 													<tr data-row="6" class="datatable__row">
-														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="7">&nbsp;<span></span></label></span></td>
+														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="7">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
@@ -1307,7 +1307,7 @@
 															</span></td>
 													</tr>
 													<tr data-row="7" class="datatable__row datatable__row--even">
-														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="8">&nbsp;<span></span></label></span></td>
+														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="8">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo5.png"> </div>
@@ -1336,7 +1336,7 @@
 															</span></td>
 													</tr>
 													<tr data-row="8" class="datatable__row">
-														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="9">&nbsp;<span></span></label></span></td>
+														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="9">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
@@ -1365,7 +1365,7 @@
 															</span></td>
 													</tr>
 													<tr data-row="9" class="datatable__row datatable__row--even">
-														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="10">&nbsp;<span></span></label></span></td>
+														<td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="10">&nbsp;<span></span></label></span></td>
 														<td data-field="ShipName" data-autohide-disabled="false" class="datatable__cell"><span>
 																<div class="user-card-v2">
 																	<div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
@@ -1488,7 +1488,7 @@
 															<tbody>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single">
+																		<label class="checkbox checkbox-single">
 																			<input type="checkbox"><span></span>
 																		</label>
 																	</td>
@@ -1503,12 +1503,12 @@
 
 																		</div>
 																	</td>
-																	<td><span class="badge badge--danger badge--inline">in process</span></td>
+																	<td><span class="badge badge-danger badge-inline">in process</span></td>
 																	<td class="align-right font-brand font-bold">$14,740</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<span class="widget11__title">FATbit</span>
@@ -1521,13 +1521,13 @@
 																		</div>
 																	</td>
 																	<td>
-																		<span class="badge badge--success badge--inline">pending</span>
+																		<span class="badge badge-success badge-inline">pending</span>
 																	</td>
 																	<td class="align-right font-brand font-bold">$16,010</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<span class="widget11__title">Apex</span>
@@ -1540,13 +1540,13 @@
 																		</div>
 																	</td>
 																	<td>
-																		<span class="badge badge--brand badge--inline">new</span>
+																		<span class="badge badge-brand badge-inline">new</span>
 																	</td>
 																	<td class="align-right font-brand font-bold">$37,200</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<span class="widget11__title">Cascades</span>
@@ -1559,7 +1559,7 @@
 																		</div>
 																	</td>
 																	<td>
-																		<span class="badge badge--warning badge--inline">new</span>
+																		<span class="badge badge-warning badge-inline">new</span>
 																	</td>
 																	<td class="align-right font-brand font-bold">$8,520</td>
 																</tr>
@@ -1592,7 +1592,7 @@
 															<tbody>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single">
+																		<label class="checkbox checkbox-single">
 																			<input type="checkbox"><span></span>
 																		</label>
 																	</td>
@@ -1606,12 +1606,12 @@
 
 																		</div>
 																	</td>
-																	<td><span class="badge badge--danger badge--inline">in process</span></td>
+																	<td><span class="badge badge-danger badge-inline">in process</span></td>
 																	<td class="align-right font-brand">$34,740</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<span class="widget11__title">Selto</span>
@@ -1623,12 +1623,12 @@
 																			<canvas id="chart_sales_by_apps_2_2" height="0" width="0"></canvas>
 																		</div>
 																	</td>
-																	<td><span class="badge badge--success badge--inline">new</span></td>
+																	<td><span class="badge badge-success badge-inline">new</span></td>
 																	<td class="align-right font-brand">$46,010</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<span class="widget11__title">Jippo</span>
@@ -1640,12 +1640,12 @@
 
 																		</div>
 																	</td>
-																	<td><span class="badge badge--brand badge--inline">approved</span></td>
+																	<td><span class="badge badge-brand badge-inline">approved</span></td>
 																	<td class="align-right font-brand">$67,800</td>
 																</tr>
 																<tr>
 																	<td>
-																		<label class="checkbox checkbox--single"><input type="checkbox"><span></span></label>
+																		<label class="checkbox checkbox-single"><input type="checkbox"><span></span></label>
 																	</td>
 																	<td>
 																		<span class="widget11__title">Verto</span>
@@ -1657,7 +1657,7 @@
 
 																		</div>
 																	</td>
-																	<td><span class="badge badge--danger badge--inline">pending</span></td>
+																	<td><span class="badge badge-danger badge-inline">pending</span></td>
 																	<td class="align-right font-brand">$18,520</td>
 																</tr>
 															</tbody>
@@ -1722,7 +1722,7 @@
 															<i class="nav__link-icon flaticon2-new-email"></i>
 															<span class="nav__link-text">Support</span>
 															<span class="nav__link-badge">
-																<span class="badge badge--success">5</span>
+																<span class="badge badge-success">5</span>
 															</span>
 														</a>
 													</li>

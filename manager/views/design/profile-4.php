@@ -285,7 +285,7 @@
                                                         <i class="nav__link-icon flaticon2-new-email"></i>
                                                         <span class="nav__link-text">Reports</span>
                                                         <span class="nav__link-badge">
-                                                            <span class="badge badge--success">5</span>
+                                                            <span class="badge badge-success">5</span>
                                                         </span>
                                                     </a>
                                                 </li>
@@ -530,7 +530,7 @@
                                                                 <i class="nav__link-icon flaticon2-new-email"></i>
                                                                 <span class="nav__link-text">Support</span>
                                                                 <span class="nav__link-badge">
-                                                                    <span class="badge badge--success badge--rounded">5</span>
+                                                                    <span class="badge badge-success badge-rounded">5</span>
                                                                 </span>
                                                             </a>
                                                         </li>
@@ -784,7 +784,7 @@
                                                                     <i class="nav__link-icon flaticon2-new-email"></i>
                                                                     <span class="nav__link-text">Support</span>
                                                                     <span class="nav__link-badge">
-                                                                        <span class="badge badge--success badge--rounded">5</span>
+                                                                        <span class="badge badge-success badge-rounded">5</span>
                                                                     </span>
                                                                 </a>
                                                             </li>

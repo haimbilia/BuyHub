@@ -21,7 +21,7 @@ $htmlFld->value = $addBtn . $delBtn;
 $otherButtons = [
 ];
 
-$formTitle = Labels::getLabel('LBL_TAX_CATEGORIES_REQUEST', $siteLangId);
+$formTitle = Labels::getLabel('LBL_TAX_STRUCTURE_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>
 <script type="text/javascript">

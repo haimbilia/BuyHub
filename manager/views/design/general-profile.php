@@ -376,14 +376,14 @@
                                 <ul>
                                     <li>
                                         <div class="row">
-                                            <div class="col"><label class="checkbox checkbox--bold checkbox--brand">
+                                            <div class="col"><label class="checkbox checkbox-bold checkbox-brand">
                                                     <input type="checkbox">Rest of world<span></span>
                                                 </label></div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="row">
-                                            <div class="col"><label class="checkbox checkbox--bold checkbox--brand">
+                                            <div class="col"><label class="checkbox checkbox-bold checkbox-brand">
                                                     <input type="checkbox">Asia<span></span>
                                                 </label></div>
                                         </div>
@@ -392,7 +392,7 @@
                                             <li>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <label class="checkbox checkbox--bold checkbox--brand">
+                                                        <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/af.svg" alt="">
                                                             </i>Afghanistan<span></span>
@@ -403,7 +403,7 @@
                                             <li>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <label class="checkbox checkbox--bold checkbox--brand">
+                                                        <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Bangladesh<span></span>
@@ -413,7 +413,7 @@
                                             <li>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <label class="checkbox checkbox--bold checkbox--brand">
+                                                        <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Bhutan<span></span>
@@ -423,7 +423,7 @@
                                             <li>
                                                 <div class="row justify-content-between align-items-center">
                                                     <div class="col">
-                                                        <label class="checkbox checkbox--bold checkbox--brand">
+                                                        <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>China<span></span>
@@ -435,28 +435,28 @@
                                                 </div>
 
                                                 <ul>
-                                                    <li> <label class="checkbox checkbox--bold checkbox--brand">
+                                                    <li> <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox">Anhui<span></span>
                                                         </label>
                                                     </li>
 
-                                                    <li> <label class="checkbox checkbox--bold checkbox--brand">
+                                                    <li> <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox">Beijing<span></span>
                                                         </label>
                                                     </li>
-                                                    <li> <label class="checkbox checkbox--bold checkbox--brand">
+                                                    <li> <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox">Chongqing<span></span>
                                                         </label>
                                                     </li>
-                                                    <li> <label class="checkbox checkbox--bold checkbox--brand">
+                                                    <li> <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox">Fujian<span></span>
                                                         </label>
                                                     </li>
-                                                    <li> <label class="checkbox checkbox--bold checkbox--brand">
+                                                    <li> <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox">Gansu<span></span>
                                                         </label>
                                                     </li>
-                                                    <li> <label class="checkbox checkbox--bold checkbox--brand">
+                                                    <li> <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox">Guangdong<span></span>
                                                         </label>
                                                     </li>
@@ -466,7 +466,7 @@
                                             <li>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <label class="checkbox checkbox--bold checkbox--brand">
+                                                        <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Cocos (Keeling) Islands<span></span>
@@ -476,7 +476,7 @@
                                             <li>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <label class="checkbox checkbox--bold checkbox--brand">
+                                                        <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Cocos (Keeling) Islands<span></span>
@@ -486,7 +486,7 @@
                                             <li>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <label class="checkbox checkbox--bold checkbox--brand">
+                                                        <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Cocos (Keeling) Islands<span></span>
@@ -496,7 +496,7 @@
                                             <li>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <label class="checkbox checkbox--bold checkbox--brand">
+                                                        <label class="checkbox checkbox-bold checkbox-brand">
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Cocos (Keeling) Islands<span></span>
@@ -508,7 +508,7 @@
 
                                     <li>
                                         <div class="row">
-                                            <div class="col"><label class="checkbox checkbox--bold checkbox--brand">
+                                            <div class="col"><label class="checkbox checkbox-bold checkbox-brand">
                                                     <input type="checkbox">Europe<span></span>
                                                 </label></div>
                                         </div>

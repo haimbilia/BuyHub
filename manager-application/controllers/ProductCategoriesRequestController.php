@@ -36,7 +36,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
             'newRecordBtn' => false
         ]);
-        $this->set('actionItemsData', $actionItemsData); 
+        $this->set('actionItemsData', $actionItemsData);
         $this->_template->addCss(['css/cropper.css', 'css/select2.min.css']);
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'product-categories-request/page-js/index.js']);
         $this->getListingData();
@@ -93,7 +93,6 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->addMultipleFields(array('m.*', 'prodcat_name', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name'));
-        $srch->addOrder('prodcat_requested_on', 'desc');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('prodcat_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('prodcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -109,6 +108,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
         $this->set("arrListing", $records);
@@ -135,7 +135,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
             }
             $frm->fill($data);
         }
-
+        
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -270,7 +270,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
         if (empty($post)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
         }
-         
+
         $recordId = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, 0);
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
@@ -376,7 +376,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
             return json_decode($shopsTblHeadingCols);
         }
 
-        $arr = [ 
+        $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'prodcat_parent' => Labels::getLabel('LBL_PARENT_CATEGORY', $this->siteLangId),
             'prodcat_name' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
@@ -388,7 +388,7 @@ class ProductCategoriesRequestController extends ListingBaseController {
     }
 
     protected function getDefaultColumns(): array {
-        return [ 
+        return [
             'listSerial',
             'prodcat_parent',
             'prodcat_name',

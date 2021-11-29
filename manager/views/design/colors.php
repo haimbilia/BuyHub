@@ -114,27 +114,27 @@
 															<td colspan="4"><span class="font-bold">Bootstrap States</span></td>
 														</tr>
 														<tr>
-															<td><span class="badge badge--inline badge--success">Success</span></td>
+															<td><span class="badge badge-inline badge-success">Success</span></td>
 															<td><code>*-success</code></td>
 															<td><code>btn-success</code> <code>font-success</code></td>
 														</tr>
 														<tr>
-															<td><span class="badge badge--inline badge--warning">Warning</span></td>
+															<td><span class="badge badge-inline badge-warning">Warning</span></td>
 															<td><code>*-warning</code></td>
 															<td><code>btn-warning</code> <code>font-warning</code></td>
 														</tr>
 														<tr>
-															<td><span class="badge badge--inline badge--danger">Danger</span></td>
+															<td><span class="badge badge-inline badge-danger">Danger</span></td>
 															<td><code>*-danger</code></td>
 															<td><code>btn-danger</code> <code>font-danger</code></td>
 														</tr>
 														<tr>
-															<td><span class="badge badge--inline badge--info">Info</span></td>
+															<td><span class="badge badge-inline badge-info">Info</span></td>
 															<td><code>*-info</code></td>
 															<td><code>btn-info</code> <code>font-info</code></td>
 														</tr>
 														<tr>
-															<td><span class="badge badge--inline badge--primary">Primary</span></td>
+															<td><span class="badge badge-inline badge-primary">Primary</span></td>
 															<td><code>*-primary</code></td>
 															<td><code>btn-primary</code> <code>font-primary</code></td>
 														</tr>
@@ -142,17 +142,17 @@
 															<td colspan="4"><span class="font-bold">Metronic Custom States</span></td>
 														</tr>
 														<tr>
-															<td><span class="badge badge--inline badge--brand">Brand</span></td>
+															<td><span class="badge badge-inline badge-brand">Brand</span></td>
 															<td><code>*-brand</code></td>
 															<td><code>btn-success</code> <code>font-brand</code></td>
 														</tr>
 														<tr>
-															<td><span class="badge badge--inline badge--dark">Dark</span></td>
+															<td><span class="badge badge-inline badge-dark">Dark</span></td>
 															<td><code>*-dark</code></td>
 															<td><code>btn-dark</code> <code>font-dark</code></td>
 														</tr>
 														<tr class="active">
-															<td><span class="badge badge--inline badge--light">Light</span></td>
+															<td><span class="badge badge-inline badge-light">Light</span></td>
 															<td><code>*-light</code></td>
 															<td><code>btn-light</code> <code>font-light</code></td>
 														</tr>

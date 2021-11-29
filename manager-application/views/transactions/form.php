@@ -1,4 +1,6 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php
+
+defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
 
@@ -14,10 +16,12 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('amount');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
-
-<script>
-    $(document).ready(function () {
-        bindUserSelect2('userIdJs');
-    });
-</script>
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');
+?>
+<?php if ($userId == 0) { ?>
+    <script>
+        $(document).ready(function () {
+            bindUserSelect2('userIdJs');
+        });
+    </script>
+<?php } ?>

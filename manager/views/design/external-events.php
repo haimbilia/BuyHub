@@ -90,22 +90,22 @@
 								</div>
 								<div class="card-body">
 									<div id="calendar_external_events" class="fc-unthemed">
-										<div class="fc-draggable-handle badge badge--lg badge--primary badge--inline margin-b-15" data-color="fc-event-primary">Meeting</div><br>
-										<div class="fc-draggable-handle badge badge--lg badge--brand badge--inline margin-b-15" data-color="fc-event-brand">Conference Call</div><br>
-										<div class="fc-draggable-handle badge badge--lg badge--success badge--inline margin-b-15" data-color="fc-event-success">Dinner</div><br>
-										<div class="fc-draggable-handle badge badge--lg badge--warning badge--inline margin-b-15" data-color="fc-event-warning">Product Launch</div><br>
-										<div class="fc-draggable-handle badge badge--lg badge--danger badge--inline margin-b-15" data-color="fc-event-danger">Reporting</div><br>
+										<div class="fc-draggable-handle badge badge-lg badge-primary badge-inline margin-b-15" data-color="fc-event-primary">Meeting</div><br>
+										<div class="fc-draggable-handle badge badge-lg badge-brand badge-inline margin-b-15" data-color="fc-event-brand">Conference Call</div><br>
+										<div class="fc-draggable-handle badge badge-lg badge-success badge-inline margin-b-15" data-color="fc-event-success">Dinner</div><br>
+										<div class="fc-draggable-handle badge badge-lg badge-warning badge-inline margin-b-15" data-color="fc-event-warning">Product Launch</div><br>
+										<div class="fc-draggable-handle badge badge-lg badge-danger badge-inline margin-b-15" data-color="fc-event-danger">Reporting</div><br>
 
 										<div class="separator separator--border-dashed separator--space-md"></div>
 
-										<div class="fc-draggable-handle badge badge--lg badge--success badge--inline margin-b-15" data-color="fc-event-success">Project Update</div><br>
-										<div class="fc-draggable-handle badge badge--lg badge--info badge--inline margin-b-15" data-color="fc-event-info">Staff Meeting</div><br>
-										<div class="fc-draggable-handle badge badge--lg badge--dark badge--inline margin-b-15" data-color="fc-event-dark">Lunch</div>
+										<div class="fc-draggable-handle badge badge-lg badge-success badge-inline margin-b-15" data-color="fc-event-success">Project Update</div><br>
+										<div class="fc-draggable-handle badge badge-lg badge-info badge-inline margin-b-15" data-color="fc-event-info">Staff Meeting</div><br>
+										<div class="fc-draggable-handle badge badge-lg badge-dark badge-inline margin-b-15" data-color="fc-event-dark">Lunch</div>
 
 										<div class="separator separator--border-dashed separator--space-md"></div>
 
 										<div>
-											<label class="checkbox checkbox--brand">
+											<label class="checkbox checkbox-brand">
 												<input type="checkbox" id="calendar_external_events_remove"> Remove after drop
 												<span></span>
 											</label>

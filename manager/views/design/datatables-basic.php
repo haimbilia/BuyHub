@@ -157,7 +157,7 @@
 											<thead>
 												<tr role="row">
 													<th class="dt-right sorting_disabled" rowspan="1" colspan="1" style="width: 30.5px;" aria-label="Record ID">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-group-checkable">
 															<span></span>
 														</label></th>
@@ -187,7 +187,7 @@
 
 												<tr role="row" class="odd">
 													<td class=" dt-right" tabindex="0">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-checkable">
 															<span></span>
 														</label></td>
@@ -199,7 +199,7 @@
 													<td>McCullough-Gibson</td>
 													<td>11/23/2017</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
-													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+													<td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -217,7 +217,7 @@
 												</tr>
 												<tr role="row" class="even">
 													<td class=" dt-right" tabindex="0">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-checkable">
 															<span></span>
 														</label></td>
@@ -228,8 +228,8 @@
 													<td>Devi Iglesias</td>
 													<td>Ullrich-Dibbert</td>
 													<td>7/21/2016</td>
-													<td><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+													<td><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+													<td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -247,7 +247,7 @@
 												</tr>
 												<tr role="row" class="odd">
 													<td class=" dt-right" tabindex="0">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-checkable">
 															<span></span>
 														</label></td>
@@ -258,8 +258,8 @@
 													<td>Pavel Kringe</td>
 													<td>Goldner-Lehner</td>
 													<td>4/2/2017</td>
-													<td><span class="badge  badge--success badge--inline badge--pill">Success</span></td>
-													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+													<td><span class="badge  badge-success badge-inline badge-pill">Success</span></td>
+													<td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -277,7 +277,7 @@
 												</tr>
 												<tr role="row" class="even">
 													<td class=" dt-right" tabindex="0">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-checkable">
 															<span></span>
 														</label></td>
@@ -288,8 +288,8 @@
 													<td>Ula Luckin</td>
 													<td>Kulas, Cassin and Batz</td>
 													<td>5/26/2016</td>
-													<td><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+													<td><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+													<td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -307,7 +307,7 @@
 												</tr>
 												<tr role="row" class="odd">
 													<td class=" dt-right" tabindex="0">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-checkable">
 															<span></span>
 														</label></td>
@@ -318,8 +318,8 @@
 													<td>Shandee Goracci</td>
 													<td>Bergnaum, Thiel and Schuppe</td>
 													<td>7/24/2016</td>
-													<td><span class="badge  badge--info badge--inline badge--pill">Info</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge  badge-info badge-inline badge-pill">Info</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -337,7 +337,7 @@
 												</tr>
 												<tr role="row" class="even">
 													<td class=" dt-right" tabindex="0">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-checkable">
 															<span></span>
 														</label></td>
@@ -348,8 +348,8 @@
 													<td>Evangeline Cure</td>
 													<td>Pfannerstill-Treutel</td>
 													<td>7/2/2016</td>
-													<td><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -367,7 +367,7 @@
 												</tr>
 												<tr role="row" class="odd">
 													<td class=" dt-right" tabindex="0">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-checkable">
 															<span></span>
 														</label></td>
@@ -379,7 +379,7 @@
 													<td>Streich LLC</td>
 													<td>8/5/2016</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
-													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+													<td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -397,7 +397,7 @@
 												</tr>
 												<tr role="row" class="even">
 													<td class=" dt-right" tabindex="0">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-checkable">
 															<span></span>
 														</label></td>
@@ -409,7 +409,7 @@
 													<td>Blanda Group</td>
 													<td>7/31/2016</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -427,7 +427,7 @@
 												</tr>
 												<tr role="row" class="odd">
 													<td class=" dt-right" tabindex="0">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-checkable">
 															<span></span>
 														</label></td>
@@ -438,8 +438,8 @@
 													<td>Gerhard Reinhard</td>
 													<td>Gleason, Kub and Marquardt</td>
 													<td>11/26/2016</td>
-													<td><span class="badge  badge--info badge--inline badge--pill">Info</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge  badge-info badge-inline badge-pill">Info</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -457,7 +457,7 @@
 												</tr>
 												<tr role="row" class="even">
 													<td class=" dt-right" tabindex="0">
-														<label class="checkbox checkbox--single checkbox--solid">
+														<label class="checkbox checkbox-single checkbox-solid">
 															<input type="checkbox" value="" class="m-checkable">
 															<span></span>
 														</label></td>
@@ -469,7 +469,7 @@
 													<td>Rosenbaum-Reichel</td>
 													<td>8/6/2017</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">

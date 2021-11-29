@@ -123,6 +123,7 @@ class SellerApprovalRequestsController extends ListingBaseController {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frm->fill($data);
+        $this->set('includeTabs', false);
         $this->set('languages', []);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);

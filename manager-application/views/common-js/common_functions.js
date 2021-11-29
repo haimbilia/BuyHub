@@ -264,4 +264,10 @@ $(document).ready(function () {
         }
     });
 
+    $(".dropdown").hover(function () {
+        $(this).toggleClass("show");
+        $(this).find('.sidebar-dropdown-menu').toggleClass('show');
+    });
+
+    
 });

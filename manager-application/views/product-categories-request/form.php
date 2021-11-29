@@ -23,5 +23,5 @@ $otherButtons = [
     ]
 ]; 
 
-$formTitle = Labels::getLabel('LBL_Product_Brand_Setup', $siteLangId);
+$formTitle = Labels::getLabel('LBL_PRODUCT_CATEGORY_REQUESTS_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

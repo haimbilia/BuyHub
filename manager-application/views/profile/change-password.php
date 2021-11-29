@@ -14,37 +14,38 @@ $confPassFld = $frm->getField('conf_new_password');
         </div>
     </div>
     <?php echo $frm->getFormTag(); ?>
-    <div class="card-body">        
+    <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">               
+                <div class="form-group">
                     <label class="label <?php echo $currentPassFld->requirements()->isRequired() ? 'required ' : '' ?>"><?php echo $currentPassFld->getCaption(); ?></label>
-                    <?php echo $currentPassFld->getHTML(); ?>                    
+                    <?php echo $currentPassFld->getHTML(); ?>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">                  
+                <div class="form-group">
                     <label class="label <?php echo $newPassFld->requirements()->isRequired() ? 'required ' : '' ?>"><?php echo $newPassFld->getCaption(); ?></label>
-                    <?php echo $newPassFld->getHTML(); ?> 
+                    <?php echo $newPassFld->getHTML(); ?>
                 </div>
             </div>
-        </div>  
+        </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">               
+                <div class="form-group">
                     <label class="label <?php echo $confPassFld->requirements()->isRequired() ? 'required ' : '' ?>"><?php echo $confPassFld->getCaption(); ?></label>
-                    <?php echo $confPassFld->getHTML(); ?>                    
+                    <?php echo $confPassFld->getHTML(); ?>
                 </div>
-            </div>                
+            </div>
         </div>
     </div>
     <div class="card-foot">
-        <div class="row">                                    
+        <div class="row">
+            <div class="col"></div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-brand gb-btn gb-btn-primary"><?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?></button>
             </div>
         </div>
-    </div> 
-</form>
-<?php echo $frm->getExternalJS(); ?>
+    </div>
+    </form>
+    <?php echo $frm->getExternalJS(); ?>
 </div>

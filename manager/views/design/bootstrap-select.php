@@ -375,23 +375,23 @@
                                             <div class="dropdown bootstrap-select form-control "><select
                                                     class="form-control selectpicker" tabindex="-98">
                                                     <option
-                                                        data-content="<span class='badge badge--success badge--inline badge--rounded'>Relish</span>">
+                                                        data-content="<span class='badge badge-success badge-inline badge-rounded'>Relish</span>">
                                                         Mustard</option>
                                                     <option
-                                                        data-content="<span class='badge badge--warning badge--inline badge--rounded'>Ketchup</span>">
+                                                        data-content="<span class='badge badge-warning badge-inline badge-rounded'>Ketchup</span>">
                                                         Ketchup</option>
                                                     <option
-                                                        data-content="<span class='badge badge--brand badge--inline badge--rounded'>Relish</span>">
+                                                        data-content="<span class='badge badge-brand badge-inline badge-rounded'>Relish</span>">
                                                         Relish</option>
                                                     <option
-                                                        data-content="<span class='badge badge--danger badge--inline badge--rounded'>Chili</span>">
+                                                        data-content="<span class='badge badge-danger badge-inline badge-rounded'>Chili</span>">
                                                         Chili</option>
                                                 </select><button type="button" class="btn dropdown-toggle btn-light"
                                                     data-toggle="dropdown" role="button" title="Relish">
                                                     <div class="filter-option">
                                                         <div class="filter-option-inner">
                                                             <div class="filter-option-inner-inner"><span
-                                                                    class="badge badge--success badge--inline badge--rounded">Relish</span>
+                                                                    class="badge badge-success badge-inline badge-rounded">Relish</span>
                                                             </div>
                                                         </div>
                                                     </div>

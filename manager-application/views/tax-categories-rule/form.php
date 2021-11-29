@@ -51,7 +51,7 @@ $taxStrFld->setFieldTagAttribute("onChange", "getCombinedTaxes(this.value)");
 $otherButtons = [
 ];
 
-$formTitle = Labels::getLabel('LBL_TAX_CATEGORIES_REQUEST', $siteLangId);
+$formTitle = Labels::getLabel('LBL_TAX_CATEGORIES_RULE_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>
 

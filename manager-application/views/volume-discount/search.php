@@ -31,7 +31,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'credential_username':
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', array(), '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'voldiscount_min_qty':
             case 'voldiscount_percentage':

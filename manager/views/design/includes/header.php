@@ -714,7 +714,7 @@
                             <img class="hidden" alt="Pic" src="<?php echo CONF_WEBROOT_URL;?>images/300_25.jpg" />
 
                             <!--use below badge element instead the user avatar to display username's first letter(remove hidden class to display it) -->
-                            <span class="badge badge--lg badge--rounded badge--bold font-success">S</span>
+                            <span class="badge badge-lg badge-rounded badge-bold font-success">S</span>
                         </div>
                         <div class="user-card__name">
                             Sean Stone
@@ -790,7 +790,7 @@
                                 </div>
                                 <div class="notification__item-time">
                                     billing & statements <span
-                                        class="badge badge--danger badge--inline badge--pill badge--rounded">2
+                                        class="badge badge-danger badge-inline badge-pill badge-rounded">2
                                         pending</span>
                                 </div>
                             </div>
@@ -849,7 +849,7 @@
                     <ul class="d-flex flex-column-reverse todo-list scroll scroll-y">
                         <li>
                             <div class="form-check">
-                                <label class="checkbox checkbox--bold checkbox--brand">
+                                <label class="checkbox checkbox-bold checkbox-brand">
                                     <input type="checkbox">Project review
                                     <span></span>
                                 </label>
@@ -860,7 +860,7 @@
                         <li>
                             <div class="form-check">
 
-                                <label class="checkbox checkbox--bold checkbox--brand">
+                                <label class="checkbox checkbox-bold checkbox-brand">
                                     <input type="checkbox">Prepare for presentation
                                     <span></span>
                                 </label>
@@ -869,7 +869,7 @@
                         </li>
                         <li>
                             <div class="form-check">
-                                <label class="checkbox checkbox--bold checkbox--brand">
+                                <label class="checkbox checkbox-bold checkbox-brand">
                                     <input type="checkbox">Resolve all the low priority tickets due today Resolve all
                                     the low priority tickets due today
                                     <span></span>
@@ -879,7 +879,7 @@
                         </li>
                         <li class="completed">
                             <div class="form-check">
-                                <label class="checkbox checkbox--bold checkbox--brand">
+                                <label class="checkbox checkbox-bold checkbox-brand">
                                     <input type="checkbox" checked> Schedule meeting for next week
                                     <span></span>
                                 </label>
@@ -888,7 +888,7 @@
                         </li>
                         <li class="completed">
                             <div class="form-check">
-                                <label class="checkbox checkbox--bold checkbox--brand">
+                                <label class="checkbox checkbox-bold checkbox-brand">
                                     <input type="checkbox" checked>Project review
                                     <span></span>
                                 </label>
@@ -1087,7 +1087,7 @@
                             <div class="widget__info">
                                 <div class="widget__section">
                                     <a href="#" class="widget__username">Matt Pears</a>
-                                    <span class="badge badge--success badge--dot"></span>
+                                    <span class="badge badge-success badge-dot"></span>
                                 </div>
 
                                 <span class="widget__desc">
@@ -1096,7 +1096,7 @@
                             </div>
                             <div class="widget__action">
                                 <span class="widget__date">36 Mines</span>
-                                <span class="badge badge--success font-bold">7</span>
+                                <span class="badge badge-success font-bold">7</span>
                             </div>
                         </div>
 
@@ -1108,7 +1108,7 @@
                             <div class="widget__info">
                                 <div class="widget__section">
                                     <a href="#" class="widget__username">Charlie Stone</a>
-                                    <span class="badge badge--success badge--dot"></span>
+                                    <span class="badge badge-success badge-dot"></span>
                                 </div>
 
                                 <span class="widget__desc">
@@ -1118,7 +1118,7 @@
 
                             <div class="widget__action">
                                 <span class="widget__date">5 Hours</span>
-                                <span class="badge badge--success font-bold">2</span>
+                                <span class="badge badge-success font-bold">2</span>
                             </div>
                         </div>
 
@@ -1130,7 +1130,7 @@
                             <div class="widget__info">
                                 <div class="widget__section">
                                     <a href="#" class="widget__username">Jason Muller</a>
-                                    <span class="badge badge--success badge--dot"></span>
+                                    <span class="badge badge-success badge-dot"></span>
                                 </div>
 
                                 <span class="widget__desc">
@@ -1251,7 +1251,7 @@
                             <div class="widget__info">
                                 <div class="widget__section">
                                     <a href="#" class="widget__username">Matt Pears</a>
-                                    <span class="badge badge--success badge--dot"></span>
+                                    <span class="badge badge-success badge-dot"></span>
                                 </div>
 
                                 <span class="widget__desc">
@@ -1261,7 +1261,7 @@
 
                             <div class="widget__action">
                                 <span class="widget__date">36 Mines</span>
-                                <span class="badge badge--success font-bold">7</span>
+                                <span class="badge badge-success font-bold">7</span>
                             </div>
                         </div>
 
@@ -1273,7 +1273,7 @@
                             <div class="widget__info">
                                 <div class="widget__section">
                                     <a href="#" class="widget__username">Charlie Stone</a>
-                                    <span class="badge badge--success badge--dot"></span>
+                                    <span class="badge badge-success badge-dot"></span>
                                 </div>
 
                                 <span class="widget__desc">
@@ -1283,7 +1283,7 @@
 
                             <div class="widget__action">
                                 <span class="widget__date">5 Hours</span>
-                                <span class="badge badge--success font-bold">2</span>
+                                <span class="badge badge-success font-bold">2</span>
                             </div>
                         </div>
 
@@ -1295,7 +1295,7 @@
                             <div class="widget__info">
                                 <div class="widget__section">
                                     <a href="#" class="widget__username">Jason Muller</a>
-                                    <span class="badge badge--success badge--dot"></span>
+                                    <span class="badge badge-success badge-dot"></span>
                                 </div>
 
                                 <span class="widget__desc">
