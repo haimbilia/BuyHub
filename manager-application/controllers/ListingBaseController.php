@@ -131,7 +131,7 @@ class ListingBaseController extends AdminBaseController
     protected function getSearchForm($fields = [])
     {
         $fields = $this->getFormColumns();
-        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($this->getFormColumns()));
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
 
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
