@@ -1,8 +1,4 @@
-<?php
-
-use PhpParser\Node\Stmt\Label;
-
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 if (!$print) {
     $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>

@@ -1386,3 +1386,11 @@ ALTER TABLE tbl_tags DROP INDEX tag_identifier;
 ALTER TABLE tbl_tags ADD UNIQUE( tag_name, tag_lang_id);
 RENAME TABLE tbl_tags_lang TO tbl_tags_lang_bk;
 -- ---- tags update ]---- --
+
+DELETE FROM `tbl_language_labels` WHERE label_key='LBL_CUSTOMER_NAME';
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_Order_Payment_Status_Cancelled', 1, 'Cancelled', 1),
+('LBL_Order_Payment_Status_Pending', 1, 'Pending', 1),
+('LBL_Order_Payment_Status_Paid', 1, 'Paid', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

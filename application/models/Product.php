@@ -767,7 +767,7 @@ class Product extends MyAppModel
         return $data;
     }
 
-    public static function getProductTags($product_id, $lang_id, $assoc = false)
+    public static function getProductTags($product_id, $lang_id, $assoc = false , array $attrs = [])
     {
         $product_id = FatUtility::convertToType($product_id, FatUtility::VAR_INT);
         $lang_id = FatUtility::convertToType($lang_id, FatUtility::VAR_INT);
@@ -777,12 +777,20 @@ class Product extends MyAppModel
         }
 
         $srch = new SearchBase(static::DB_PRODUCT_TO_TAG);
-        $srch->addCondition(static::DB_PRODUCT_TO_TAG_PREFIX . 'product_id', '=', $product_id);
         $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', Tag::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_TAG_PREFIX . 'tag_id');
+        $srch->addCondition(static::DB_PRODUCT_TO_TAG_PREFIX . 'product_id', '=', $product_id);
+        $srch->addCondition(Tag::tblFld('lang_id'), '=', $lang_id); 
 
-        if (true == $assoc) {
-            $srch->addMultipleFields(array('tag_id', 'tag_name'));
+        if (true == $assoc) {    
+            if(count($attrs)){
+                $srch->addMultipleFields($attrs);
+            }else{
+                $srch->addMultipleFields(array('tag_id', 'tag_name'));
+            }
             return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+        }
+        if(count($attrs)){
+            $srch->addMultipleFields($attrs);
         }
         return FatApp::getDb()->fetchAll($srch->getResultSet());
     }

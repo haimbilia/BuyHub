@@ -1,4 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
 $activeGentab = !empty($activeGentab) ? 'active' : '';
 $activeLangtab = !empty($activeLangtab) ? 'active' : '';
 $disabled = !empty($disabled) ? ' disabled' : '';
@@ -7,9 +8,7 @@ $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 $includeTabs = $includeTabs ?? true;
 $displayLangTab = $displayLangTab ?? true;
 $languages = $languages ?? [];
-unset($languages[CommonHelper::getDefaultFormLangId()]);
-
-?>
+unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
 
 <div class="modal-header">
     <h5 class="modal-title">

@@ -540,6 +540,8 @@ class UsersController extends ListingBaseController
         }
 
         $joinShop = FatApp::getPostedData('joinShop', FatUtility::VAR_INT, 0);
+        $joinOrder = FatApp::getPostedData('joinOrder', FatUtility::VAR_INT, 0);
+        $orderType = FatApp::getPostedData('order_type', FatUtility::VAR_INT, 0);
 
         $attr = [
             'u.user_name',
@@ -561,6 +563,14 @@ class UsersController extends ListingBaseController
             $srch->addCondition('shp.shop_supplier_display_status', '=', applicationConstants::YES);
             $srch->addCondition('shp.shop_active', '=', applicationConstants::YES);
         }
+        
+        if (0 < $joinOrder) {
+            $srch->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id = u.user_id', 'o');
+            $srch->addGroupby('o.order_user_id');
+            if (0 < $orderType) {
+                $srch->addCondition('o.order_type', '=', $orderType);    
+            }
+        }
 
         if (!$skipDeletedUser) {
             $srch->addCondition('user_deleted', '=', applicationConstants::YES);
@@ -568,6 +578,7 @@ class UsersController extends ListingBaseController
         $srch->addOrder('credential_email', 'ASC');
 
         $keyword = FatApp::getPostedData('keyword', null, '');
+        
         if (!empty($keyword)) {
             $cond = $srch->addCondition('uc.credential_username', 'like', '%' . $keyword . '%');
             $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
@@ -610,8 +621,7 @@ class UsersController extends ListingBaseController
         $srch->setPageSize($pagesize);
 
         $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $users = $db->fetchAll($rs, 'user_id');
+        $users = FatApp::getDb()->fetchAll($rs, 'user_id');
         $json = array(
             'pageCount' => $srch->pages()
         );

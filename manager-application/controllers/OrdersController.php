@@ -1,74 +1,84 @@
 <?php
 
+use Stripe\Order;
+
 class OrdersController extends ListingBaseController
 {
-    private $shippingService;
+    private array $order;
     public function __construct($action)
     {
-        $ajaxCallArray = array();
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewOrders($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditOrders($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
-
-        $this->shippingService = (object) [];
+        $this->objPrivilege->canViewOrders();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewOrders();
-        $frmSearch = $this->getOrderSearchForm($this->siteLangId);
-        $data = FatApp::getPostedData();
-        if ($data) {
-            $data['keyword'] = $data['id'];
-            unset($data['id']);
-            $frmSearch->fill($data);
-        }
-        $this->set('frmSearch', $frmSearch);
-        $this->_template->render();
-    }
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
 
-    public function deletedOrders()
-    {
-        $this->objPrivilege->canViewOrders();
-        $frmSearch = $this->getOrderSearchForm($this->siteLangId, true);
-        $data = FatApp::getPostedData();
-        if ($data) {
-            $data['keyword'] = $data['id'];
-            unset($data['id']);
-            $frmSearch->fill($data);
-        }
-        $this->set('frmSearch', $frmSearch);
-        $this->_template->render();
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDERS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['formAction'] = 'deleteSelected';
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['searchFrmTemplate'] = 'orders/search-form.php';
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ORDER_ID,_CUSTOMER_NAME,_USERNAME_OR_EMAIL_ID', $this->siteLangId));
+        $this->getListingData();
+
+        $this->_template->addJs(array('js/select2.js', 'orders/page-js/index.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewOrders();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'orders/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $frmSearch = $this->getOrderSearchForm($this->siteLangId);
+    private function getListingData()
+    {
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
-        $data = FatApp::getPostedData();
-        $post = $frmSearch->getFormDataFromArray($data);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'order_date_added');
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
 
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : FatUtility::int($data['page']);
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC));
+
+        $srchFrm = $this->getSearchForm($fields);
+        $postedData = FatApp::getPostedData();
+        $post = $srchFrm->getFormDataFromArray($postedData);
+
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = new OrderSearch();
         $srch->joinOrderBuyerUser();
         $srch->joinOrderPaymentMethod($this->siteLangId);
-
-        $srch->addOrder('order_date_added', 'DESC');
         $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
 
-        $srch->addMultipleFields(array('order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data'));
+        $srch->addMultipleFields(['order_number', 'order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data', 'buyer.user_name', 'user_updated_on', 'user_id', 'credential_username', 'buyer_cred.credential_email']);
 
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
@@ -76,7 +86,7 @@ class OrdersController extends ListingBaseController
         }
 
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
-        if ($user_id) {
+        if (0 < $user_id) {
             $srch->addCondition('buyer.user_id', '=', $user_id);
         }
 
@@ -105,35 +115,36 @@ class OrdersController extends ListingBaseController
             $srch->addMaxPriceCondition($priceTo);
         }
 
-        $isDeleted = FatApp::getPostedData('is_deleted', FatUtility::VAR_INT, 0);
-        if (!empty($isDeleted)) {
-            $srch->addCondition('order_deleted', '=', applicationConstants::YES);
-            $this->set("deletedOrders", true);
-        } else {
-            $srch->addCondition('order_deleted', '=', applicationConstants::NO);
-            $this->set("deletedOrders", false);
-        }
+        $isDeleted = FatApp::getPostedData('order_deleted', FatUtility::VAR_INT, applicationConstants::NO);
+        $srch->addCondition('order_deleted', '=', $isDeleted);
+        $this->set("deletedOrders", ($isDeleted == applicationConstants::YES));
+
+        $srch->addOrder($sortBy, $sortOrder);
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
 
         $rs = $srch->getResultSet();
-        $ordersList = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("ordersList", $ordersList);
+        $records = FatApp::getDb()->fetchAll($rs);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-        $this->set('recordCount', $srch->recordCount());
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
 
-        $this->set('canViewSellerOrders', $this->objPrivilege->canViewSellerOrders($this->admin_id, true));
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
-
-        $this->_template->render(false, false);
+        $this->set("canEdit", $this->objPrivilege->canEditOrders($this->admin_id, true));
+        $this->set('canViewSellerOrders', $this->objPrivilege->canViewSellerOrders($this->admin_id, true));
     }
 
-    public function view($order_id)
+    private function orderData(int $orderId, bool $bindHistory = false)
     {
-        $this->objPrivilege->canViewOrders();
-
         $srch = new OrderSearch($this->siteLangId);
         $srch->joinOrderPaymentMethod();
         $srch->doNotCalculateRecords();
@@ -141,22 +152,627 @@ class OrdersController extends ListingBaseController
         $srch->joinOrderBuyerUser();
         $srch->addMultipleFields(
             array(
-                'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
+                'order_number', 'order_id', 'order_user_id', 'order_date_added', 'order_payment_status', 'order_tax_charged', 'order_site_commission',
                 'order_reward_point_value', 'order_volume_discount_total', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'order_net_amount', 'order_shippingapi_name', 'order_pmethod_id', 'ifnull(plugin_name,plugin_identifier)as plugin_name', 'order_discount_total', 'plugin_code', 'order_is_wallet_selected', 'order_reward_point_used', 'order_deleted', 'order_rounding_off'
             )
         );
-        $srch->addCondition('order_id', '=', $order_id);
+        $srch->addCondition('order_id', '=', $orderId);
         $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
         $rs = $srch->getResultSet();
-        $order = FatApp::getDb()->fetch($rs);
-        if (!$order) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Order_Data_Not_Found', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl("Orders"));
+        $this->order = FatApp::getDb()->fetch($rs);
+        if (!$this->order) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Order_Data_Not_Found', $this->siteLangId), true);
         }
 
-
-        $opSrch = new OrderProductSearch($this->siteLangId, false, true, true);
+        $opSrch = new OrderProductSearch($this->siteLangId, true, true, true);
         $opSrch->joinShippingCharges();
+        $opSrch->joinAddress();
+        $opSrch->joinPaymentMethod();
+        $opSrch->joinOrderProductShipment();
+        $opSrch->addCountsOfOrderedProducts();
+        $opSrch->addOrderProductCharges();
+        $opSrch->joinOrderProductSpecifics();
+        $opSrch->joinSellerProducts();
+        $opSrch->doNotCalculateRecords();
+        $opSrch->doNotLimitRecords();
+        $opSrch->addCondition('op.op_order_id', '=', $this->order['order_id']);
+
+        $opSellerId = FatApp::getPostedData('op_selprod_user_id', FatUtility::VAR_INT, 0);
+        if (0 < $opSellerId) {
+            $opSrch->addCondition('op.op_selprod_user_id', '=', $opSellerId);
+        }
+        
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
+        if (0 < $opId) {
+            $opSrch->addCondition('op.op_id', '=', $opId);
+        }
+
+        $opSrch->addMultipleFields(
+            array(
+                'op_id', 'op_status_id', 'op_selprod_id', 'op_selprod_user_id', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
+                'op_qty', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
+                'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
+                'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'ts.state_code', 'tc.country_code', 'op_rounding_off',
+                'op_shop_owner_phone_dcode', 'op_selprod_price', 'op_special_price', 'opshipping_by_seller_user_id', 'selprod_product_id', 'orderstatus_color_class', 'op_product_type', 'order_payment_status', 'plugin_code', 'opshipping_fulfillment_type'
+            )
+        );
+
+        $opRs = $opSrch->getResultSet();
+        $this->order['products'] = FatApp::getDb()->fetchAll($opRs, 'op_id');
+        $orderObj = new Orders($this->order['order_id']);
+
+        $charges = $orderObj->getOrderProductChargesByOrderId($this->order['order_id']);
+        $shippingObj = new Shipping($this->siteLangId);
+        
+        $sellers = [];
+        $shippingApiObj = NULL;
+        foreach ($this->order['products'] as $opId => $opVal) {
+            $sellers[$opVal['op_selprod_user_id']] = $opVal['op_shop_name'];
+            $this->order['products'][$opId]['charges'] = $charges[$opId];
+            $opChargesLog = new OrderProductChargeLog($opId);
+            $taxOptions = $opChargesLog->getData($this->siteLangId);
+            $this->order['products'][$opId]['taxOptions'] = $taxOptions;
+            if (!empty($opVal["opship_orderid"])) {
+                $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opVal['op_selprod_user_id'], $opVal['opshipping_by_seller_user_id']);
+                $shippingApiObj = $shippingObj->getShippingApiObj(($shippingHanldedBySeller ? $opVal['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+                if (false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
+                    LibHelper::exitWithError($shippingApiObj->getError(), true);
+                }
+                $this->order['products'][$opId]['thirdPartyorderInfo'] = $shippingApiObj ? $shippingApiObj->getResponse() : [];
+            }
+        }
+        $addresses = $orderObj->getOrderAddresses($this->order['order_id']);
+        $this->order['billingAddress'] = $this->order['billingAddress'] = [];
+        if (!empty($addresses)) {
+            $this->order['billingAddress'] = $addresses[Orders::BILLING_ADDRESS_TYPE] ?? [];
+            $this->order['shippingAddress'] = $addresses[Orders::SHIPPING_ADDRESS_TYPE] ?? [];
+        }
+
+        $this->order['comments'] = $orderObj->getOrderComments($this->siteLangId, array("order_id" => $this->order['order_id']));
+        $this->order['payments'] = $orderObj->getOrderPayments(array("order_id" => $this->order['order_id']));
+
+        $this->set('shippingApiObj', $shippingApiObj);
+        $this->set('shippedOrderStatus', FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
+        $this->set('sellers', $sellers);
+        $this->set('opSellerId', $opSellerId);
+        $this->set('order', $this->order);
+        $this->set("canEdit", $this->objPrivilege->canEditOrders($this->admin_id, true));
+        $this->set("canEditSellerOrders", $this->objPrivilege->canEditSellerOrders($this->admin_id, true));
+        
+        $this->set("allowedShippingUserStatuses", $orderObj->getAdminAllowedUpdateShippingUser());
+    }
+
+    public function view($orderId)
+    {
+        $this->orderData($orderId);
+        $str = Labels::getLabel('LBL_ORDER_#{ORDER-NUMBER}', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey('ORDER_VIEW', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? CommonHelper::replaceStringData($str, ['{ORDER-NUMBER}' =>  $this->order['order_number']]);
+        $this->set('pageTitle', $pageTitle);
+
+        $frm = $this->getPaymentForm($this->order['order_id']);
+        $this->set('frm', $frm);
+
+        $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
+        $this->set('orderStatusArr', $orderStatusArr);
+        $this->_template->render();
+    }
+    
+    public function getOrderParticulars($orderId)
+    {
+        $this->orderData($orderId);
+        $jsonData = [
+            'itemSummaryHtml' => $this->_template->render(false, false, 'orders/item-summary.php', true),
+            'orderSummaryHtml' => $this->_template->render(false, false, 'orders/order-summary.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    public function getItem($orderId)
+    {
+        $this->orderData($orderId);
+        $this->_template->render(false, false);
+    }
+
+    private function rowsData(int $orderId)
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId || 1 > $orderId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $orderObj = new Orders($orderId);
+        $srch = $orderObj->getOrderCommentsSrchObj($this->siteLangId, array("op_id" => $recordId));
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $this->set("arrListing", $records);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pagesize);
+        $this->set('postedData', FatApp::getPostedData());
+    }
+
+    public function getItemStatusHistory($orderId)
+    {
+        $this->rowsData($orderId);
+        $this->_template->render(false, false);
+    }
+
+    public function getRows($orderId = 0)
+    {
+        $orderId = FatApp::getPostedData('order_id', FatUtility::VAR_INT, $orderId);
+        $this->rowsData($orderId);
+        $this->_template->render(false, false);
+    }
+
+    private function getCommentDataSrchObj(array $attr)
+    {
+        $this->objPrivilege->canEditSellerOrders();
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
+
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
+        $srch->joinOrderProductShipment();
+        $srch->joinOrderUser();
+        $srch->joinPaymentMethod();
+        $srch->joinShippingUsers();
+        $srch->joinShippingCharges();
+        $srch->joinAddress();
+        $srch->addOrderProductCharges();
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
+        $srch->addMultipleFields($attr);
+        $srch->addCondition('op_id', '=', $opId);
+        $srch->setPageSize(1);
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetch($srch->getResultSet());
+    }
+
+    public function shippingUsersForm(int $orderId)
+    {
+        $this->objPrivilege->canEditSellerOrders();
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
+        $opRow = $this->getCommentDataSrchObj(['optsu_user_id', 'op_selprod_title']);
+        if ($opRow == false) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $frm = $this->getShippingUserForm();
+        $frm->fill(['op_id' => $opId, 'optsu_user_id' => $opRow['optsu_user_id']]);
+        $this->set('frm', $frm);
+        $this->set('orderId', $orderId);
+        $this->set('recordId', $opId);
+        $this->set('formTitle', $opRow['op_selprod_title']);
+        $this->_template->render(false, false);
+    }
+
+    public function orderCommentsForm()
+    {
+        $opRow = $this->getCommentDataSrchObj([
+            'ops.*', 'order_number', 'order_id', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'ouc.credential_username as buyer_username', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as buyer_username', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone_dcode', 'op.op_shop_owner_phone',
+            'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
+            'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'orderstatus_id', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'opshipping_by_seller_user_id'
+        ]);
+        if ($opRow == false) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opRow['op_selprod_user_id'], $opRow['opshipping_by_seller_user_id']);
+
+        $orderObj = new Orders($opRow['order_id']);
+        if ($opRow['plugin_code'] == 'CashOnDelivery') {
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
+        } else if ($opRow['plugin_code'] == 'PayAtStore') {
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, false, true);
+        } else {
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $opRow['op_product_type']);
+        }
+
+        $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
+        $data = [
+            'op_id' => $opId,
+            'op_status_id' => $opRow['op_status_id'],
+            'tracking_number' => $opRow['opship_tracking_number']
+        ];
+
+        if ($opRow["opshipping_fulfillment_type"] == Shipping::FULFILMENT_PICKUP) {
+            $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        } else {
+            $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_PICKUP_READY_ORDER_STATUS", FatUtility::VAR_INT, 0));
+        }
+
+        $displayForm = (in_array($opRow['op_status_id'], $processingStatuses) && $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED);
+        if (!$displayForm) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_NOT_ALLOWED_TO_UPDATE_STATUS', $this->siteLangId), true);
+        }
+
+        $allowedShippingUserStatuses = $orderObj->getAdminAllowedUpdateShippingUser();
+        $displayShippingUserForm = (
+            (
+                (in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])) || 
+                (in_array($opRow['op_status_id'], $allowedShippingUserStatuses))
+            ) && 
+            $this->objPrivilege->canEditSellerOrders($this->admin_id, true) && 
+            !$shippingHanldedBySeller && 
+            ($opRow['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL && 
+            $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED)
+            );
+
+
+        $frm = $this->getOrderCommentsForm($opRow, $processingStatuses);
+        $frm->fill($data);
+        $this->set('frm', $frm);
+        $this->set('op', $opRow);
+        $this->set('displayShippingUserForm', $displayShippingUserForm);
+        $this->_template->render(false, false);
+    }
+
+    private function getShippingUserForm()
+    {
+        $srch = User::getSearchObject(true);
+        $srch->addOrder('u.user_id', 'DESC');
+        $srch->addCondition('u.user_is_shipping_company', '=', applicationConstants::YES);
+        $srch->addMultipleFields(array('user_id', 'credential_username'));
+        $srch->addCondition('uc.credential_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('uc.credential_verified', '=', applicationConstants::YES);
+        $records = FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+
+        $frm = new Form('frmShippingUser');
+        $frm->addHiddenField('', 'op_id');
+        $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_USER', $this->siteLangId), 'optsu_user_id', $records)->requirements()->setRequired();
+        return $frm;
+    }
+
+
+    private function getOrderCommentsForm($orderData = array(), $processingOrderStatus = [])
+    {
+        $frm = new Form('frmOrderComments');
+        $frm->addTextArea(Labels::getLabel('LBL_Your_Comments', $this->siteLangId), 'comments');
+        $orderStatusArr = Orders::getOrderProductStatusArr($this->siteLangId, $processingOrderStatus, $orderData['op_status_id']);
+
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'op_status_id', $orderStatusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld->requirements()->setRequired();
+
+        $frm->addSelectBox(Labels::getLabel('LBL_Notify_Customer', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+        if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
+            $manualFld = $frm->addCheckBox(Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
+            $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
+            $manualShipUnReqObj->setRequired(false);
+            $manualShipReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
+            $manualShipReqObj->setRequired(true);
+
+            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"), 'eq', 'manual_shipping', $manualShipReqObj);
+            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"), 'ne', 'manual_shipping', $manualShipUnReqObj);
+
+            $frm->addTextBox(Labels::getLabel('LBL_Tracking_Number', $this->siteLangId), 'tracking_number');
+
+            $trackingUnReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('LBL_Tracking_Number', $this->siteLangId));
+            $trackingUnReqObj->setRequired(false);
+
+            $trackingReqObj = new FormFieldRequirement('tracking_number', Labels::getLabel('LBL_Tracking_Number', $this->siteLangId));
+            $trackingReqObj->setRequired(true);
+
+            $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'tracking_number', $trackingReqObj);
+            $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'tracking_number', $trackingUnReqObj);
+
+            $frm->addTextBox(Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId), 'opship_tracking_url');
+
+            $trackingUrlUnReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId));
+            $trackingUrlUnReqObj->setRequired(false);
+
+            $trackingurlReqObj = new FormFieldRequirement('opship_tracking_url', Labels::getLabel('LBL_TRACKING_URL', $this->siteLangId));
+            $trackingurlReqObj->setRequired(true);
+
+            $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'opship_tracking_url', $trackingurlReqObj);
+            $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'opship_tracking_url', $trackingUrlUnReqObj);
+
+            $shipmentTracking = new ShipmentTracking();
+            if (false !== $shipmentTracking->init($this->siteLangId) && false !== $shipmentTracking->getTrackingCouriers()) {
+                $trackCarriers = $shipmentTracking->getResponse();
+                $frm->addSelectBox(Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId), 'oshistory_courier', $trackCarriers, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+
+                $trackCarrierFldUnReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId));
+                $trackCarrierFldUnReqObj->setRequired(false);
+
+                $trackCarrierFldReqObj = new FormFieldRequirement('oshistory_courier', Labels::getLabel('LBL_TRACKING_COURIER', $this->siteLangId));
+                $trackCarrierFldReqObj->setRequired(true);
+
+                $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'oshistory_courier', $trackCarrierFldReqObj);
+                $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'oshistory_courier', $trackCarrierFldUnReqObj);
+            }
+        }
+
+        $frm->addHiddenField('', 'op_id', 0);
+        return $frm;
+    }
+
+    public function updateShippingUser()
+    {
+        $this->objPrivilege->canEditSellerOrders();
+        $post = FatApp::getPostedData();
+        $op_id = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
+        if (1 > $op_id) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
+        $srch->joinPaymentMethod();
+        $srch->joinShippingUsers();
+        $srch->joinOrderUser();
+        $srch->addOrderProductCharges();
+        $srch->addCondition('op_id', '=', $op_id);
+        $srch->addMultipleFields(
+            array(
+                'order_id', 'order_pmethod_id', 'order_date_added', 'op_id', 'op_qty', 'op_unit_price',
+                'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'ouc.credential_username as buyer_username', 'IFNULL(plugin_name, IFNULL(plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_commission_percentage',   'ou.user_name as buyer_name', 'ouc.credential_username as buyer_username', 'ouc.credential_email as buyer_email', 'ou.user_phone_dcode as buyer_phone_dcode', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone_dcode', 'op.op_shop_owner_phone', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_other_charges', 'op_rounding_off', 'optsu_user_id', 'op_product_weight', 'credential_email', 'plugin_code'
+            )
+        );
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        $orderDetail = FatApp::getDb()->fetch($rs);
+
+        if (!$orderDetail) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $srch = new SearchBase(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'optosu');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addCondition('optosu.optsu_op_id', '=', $orderDetail['op_id']);
+        $rs = $srch->getResultSet();
+        $shippingUserRow = FatApp::getDb()->fetch($rs);
+        if ($shippingUserRow) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_ALREADY_ASSIGNED_TO_SHIPPING_COMPANY_USER', $this->siteLangId), true);
+        }
+
+        $frm = $this->getShippingUserForm();
+        $post = $frm->getFormDataFromArray($post);
+
+        if (!false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
+        $db = FatApp::getDb();
+        $db->startTransaction();
+
+        $data = array('optsu_op_id' => $op_id, 'optsu_user_id' => $post['optsu_user_id']);
+        if ($orderDetail['optsu_user_id'] == null) {
+            $row = $db->insertFromArray(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, $data);
+        } else {
+            $row = $db->updateFromArray(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, $data, array('smt' => 'optsu_op_id = ?', 'vals' => array($op_id)));
+        }
+
+        if (!$row) {
+            LibHelper::exitWithError($db->getError(), true);
+        }
+
+        $orderObj = new Orders($orderDetail['order_id']);
+        $addresses = $orderObj->getOrderAddresses($orderDetail['order_id']);
+        $orderDetail['billingAddress'] = $addresses[Orders::BILLING_ADDRESS_TYPE];
+        $orderDetail['shippingAddress'] = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : $addresses[Orders::BILLING_ADDRESS_TYPE];
+
+        $shopSrch = new ShopSearch(1);
+        $shopSrch->joinShopCountry();
+        $shopSrch->joinShopState();
+        $shopSrch->addCondition('shop_id', '=', 1);
+        $shopSrch->addMultipleFields(array('ifnull(country_name,country_code) as country_name', 'ifnull(state_name,state_identifier) as state_name', 'shop_city', 'shop_address_line_1', 'shop_address_line_2'));
+        $shopSrch->doNotCalculateRecords();
+        $shopSrch->setPageSize(1);
+        $rs = $shopSrch->getResultSet();
+        $orderDetail['shopDetail'] = FatApp::getDb()->fetch($rs);
+
+        $srch = new SearchBase(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'optosu');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addCondition('optosu.optsu_op_id', '=', $orderDetail['op_id']);
+        $rs = $srch->getResultSet();
+        $shippingUserRow = FatApp::getDb()->fetch($rs);
+        if ($shippingUserRow && $orderDetail['plugin_code'] == "CashOnDelivery") {
+            $comments = Labels::getLabel('Msg_Cash_will_collect_against_COD_order', $this->siteLangId) . ' ' . $orderDetail['op_invoice_number'];
+            $amt = CommonHelper::orderProductAmount($orderDetail);
+            $txnObj = new Transactions();
+            $txnDataArr = array(
+                'utxn_user_id' => $shippingUserRow['optsu_user_id'],
+                'utxn_comments' => $comments,
+                'utxn_status' => Transactions::STATUS_COMPLETED,
+                'utxn_debit' => $amt,
+                'utxn_op_id' => $orderDetail['op_id'],
+            );
+            if (!$txnObj->addTransaction($txnDataArr)) {
+                $db->rollbackTransaction();
+                LibHelper::exitWithError($txnObj->getError(), true);
+            }
+        }
+
+        $db->commitTransaction();
+
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function orderTrackingInfo($trackingNumber, $courier, $orderNumber)
+    {
+        if (empty($trackingNumber) || empty($courier)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request', $this->siteLangId), true);
+        }
+
+        $shipmentTracking = new ShipmentTracking();
+        if (false === $shipmentTracking->init($this->siteLangId)) {
+            LibHelper::exitWithError($shipmentTracking->getError(), true);
+        }
+
+        $shipmentTracking->createTracking($trackingNumber, $courier, $orderNumber);
+
+        if (false === $shipmentTracking->getTrackingInfo($trackingNumber, $courier)) {
+            LibHelper::exitWithError($shipmentTracking->getError(), true);
+        }
+        $trackingInfo = $shipmentTracking->getResponse();
+
+        $this->set('trackingInfo', $trackingInfo);
+        $this->_template->render(false, false);
+    }
+
+    public function changeOrderStatus()
+    {
+        $this->objPrivilege->canEditSellerOrders();
+        $db = FatApp::getDb();
+        $db->startTransaction();
+
+        $post = FatApp::getPostedData();
+        if (!isset($post['op_id'])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $op_id = FatUtility::int($post['op_id']);
+        if (1 > $op_id) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj() ?? NULL;
+
+        $status = FatApp::getPostedData('op_status_id', FatUtility::VAR_INT, 0);
+        $manualShipping = FatApp::getPostedData('manual_shipping', FatUtility::VAR_INT, 0);
+        $trackingNumber = FatApp::getPostedData('tracking_number', FatUtility::VAR_STRING, '');
+        if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && empty($shippingApiObj)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId), true);
+        }
+
+        $oCancelRequestSrch = new OrderCancelRequestSearch();
+        $oCancelRequestSrch->doNotCalculateRecords();
+        $oCancelRequestSrch->setPageSize(1);
+        $oCancelRequestSrch->addCondition('ocrequest_op_id', '=', $op_id);
+        $oCancelRequestSrch->addCondition('ocrequest_status', '!=', OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED);
+        $oCancelRequestRs = $oCancelRequestSrch->getResultSet();
+        if (FatApp::getDb()->fetch($oCancelRequestRs)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Cancel_request_is_submitted_for_this_order', $this->siteLangId), true);
+        }
+
+        $orderObj = new Orders();
+
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
+        $srch->joinOrderProductShipment();
+        $srch->joinPaymentMethod();
+        $srch->joinShippingUsers();
+        //$srch->joinSellerProducts();
+        $srch->joinShippingCharges();
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
+        $srch->joinOrderUser();
+        $srch->addCondition('op_id', '=', $op_id);
+        $srch->addMultipleFields(['op.*', 'pm.*', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code']);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        $orderDetail = array();
+        if ($rs) {
+            $orderDetail = FatApp::getDb()->fetch($rs);
+        }
+
+        if (empty($orderDetail)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if ($orderDetail['plugin_code'] == 'CashOnDelivery') {
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(true);
+        } else if ($orderDetail['plugin_code'] == 'PayAtStore') {
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, false, true);
+        } else {
+            $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type']);
+        }
+        $frm = $this->getOrderCommentsForm($orderDetail, $processingStatuses);
+        $post = $frm->getFormDataFromArray($post);
+
+        if (!false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
+        $restrictOrderStatusChange = array_merge(
+            (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"),
+            (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"),
+            (array) FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")
+        );
+
+        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && !$orderDetail['optsu_user_id'] && in_array($post["op_status_id"], $restrictOrderStatusChange) && $orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_assign_shipping_user', $this->siteLangId), true);
+        }
+
+        if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
+            $trackingCourierCode = '';
+            $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
+            if ($post["op_status_id"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && !empty($shippingApiObj) && in_array($shippingApiObj->keyName, ['AfterShipShipment'])) {
+                $activatedTrackPluginId = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, 'plugin_id') ?? 0;
+                if (0 < $manualShipping) {
+                    $updateData = [
+                        'opship_op_id' => $post['op_id'],
+                        "opship_tracking_number" => $post['tracking_number'],
+                    ];
+
+                    if (!empty($opship_tracking_url)) {
+                        $updateData['opship_tracking_url'] =  $opship_tracking_url;
+                    }
+                    $oshistory_courier = FatApp::getPostedData('oshistory_courier', FatUtility::VAR_STRING, '');
+                    if (!empty($oshistory_courier)) {
+                        $trackingCourierCode = $oshistory_courier;
+                        $updateData['opship_tracking_courier_code'] = $oshistory_courier;
+                        $updateData['opship_tracking_plugin_id'] = $activatedTrackPluginId;
+                    }
+                } else {
+                    $trackingRelation = new TrackingCourierCodeRelation();
+                    $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
+                    $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
+                    $updateData = [
+                        'opship_op_id' => $post['op_id'],
+                        "opship_tracking_courier_code" => $trackingCourierCode,
+                        "opship_tracking_plugin_id" => $activatedTrackPluginId,
+                    ];
+                }
+
+                if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
+                    LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+                }
+            }
+            $trackingNumber = FatApp::getPostedData("tracking_number", FatUtility::VAR_STRING, '');
+            if (!$orderObj->addChildProductOrderHistory($op_id, $orderDetail["order_language_id"], $post["op_status_id"], $post["comments"], $post["customer_notified"], $trackingNumber, 0, true, $trackingCourierCode, $opship_tracking_url)) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
+        } else {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
+            $orderProducts = new OrderProductSearch($this->siteLangId, true, true);
+            $orderProducts->joinPaymentMethod();
+            $orderProducts->addMultipleFields(['op_status_id']);
+            $orderProducts->addCondition('op_order_id', '=', $orderDetail['order_id']);
+            $orderProducts->addCondition('op_status_id', '!=', FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"));
+            $orderProducts->addCondition('op_status_id', '!=', FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS"));
+            $rs = $orderProducts->getResultSet();
+            if ($rs) {
+                $childOrders = FatApp::getDb()->fetchAll($rs);
+                if (empty($childOrders)) {
+                    $updateArray = array('order_payment_status' => Orders::ORDER_PAYMENT_PAID);
+                    $whr = array('smt' => 'order_id = ?', 'vals' => array($orderDetail['order_id']));
+                    if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL, $updateArray, $whr)) {
+                        LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId), true);
+                    }
+                }
+            }
+        }
+
+        $db->commitTransaction();
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function orderProductsCharges($orderId, int $chargeType = 0)
+    {
+        $opSrch = new OrderProductSearch($this->siteLangId, true, true, true);
+        $opSrch->joinShippingCharges();
+        $opSrch->joinSellerProducts();
         $opSrch->joinAddress();
         $opSrch->joinOrderProductShipment();
         $opSrch->addCountsOfOrderedProducts();
@@ -164,65 +780,44 @@ class OrdersController extends ListingBaseController
         $opSrch->joinOrderProductSpecifics();
         $opSrch->doNotCalculateRecords();
         $opSrch->doNotLimitRecords();
-        $opSrch->addCondition('op.op_order_id', '=', $order['order_id']);
+        $opSrch->addCondition('op.op_order_id', '=', $orderId);
 
         $opSrch->addMultipleFields(
-            array(
-                'op_id', 'op_selprod_user_id', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
+            [
+                'order_id', 'order_number', 'order_date_added', 'op_id', 'op_selprod_user_id', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
                 'op_qty', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
                 'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
                 'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'ts.state_code', 'tc.country_code', 'op_rounding_off',
-                'op_shop_owner_phone_dcode','op_selprod_price','op_special_price','opshipping_by_seller_user_id'
-            )
+                'op_shop_owner_phone_dcode', 'op_selprod_price', 'op_special_price', 'opshipping_by_seller_user_id', 'op_is_batch', 'op_selprod_id', 'selprod_product_id'
+            ]
         );
+        $opsShippingDetail = FatApp::getDb()->fetchAll($opSrch->getResultSet());
 
-        $opRs = $opSrch->getResultSet();
-        $order['products'] = FatApp::getDb()->fetchAll($opRs, 'op_id');
-        $orderObj = new Orders($order['order_id']);
-
-        $charges = $orderObj->getOrderProductChargesByOrderId($order['order_id']);
-        $shippingObj = new Shipping($this->siteLangId);
-        foreach ($order['products'] as $opId => $opVal) {
-            $order['products'][$opId]['charges'] = $charges[$opId];
-            $opChargesLog = new OrderProductChargeLog($opId);
-            $taxOptions = $opChargesLog->getData($this->siteLangId);
-            $order['products'][$opId]['taxOptions'] = $taxOptions;
-            if (!empty($opVal["opship_orderid"])) {
-                $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opVal['op_selprod_user_id'], $opVal['opshipping_by_seller_user_id']);
-                $shippingApiObj = $shippingObj->getShippingApiObj(($shippingHanldedBySeller ? $opVal['opshipping_by_seller_user_id'] : 0)) ?? NULL;
-                if (false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
-                    Message::addErrorMessage($shippingApiObj->getError());
-                    FatApp::redirectUser(UrlHelper::generateUrl("Orders"));
-                }
-                $order['products'][$opId]['thirdPartyorderInfo'] = $shippingApiObj ? $shippingApiObj->getResponse() : [];
-            }
+        $oObj = new Orders();
+        foreach ($opsShippingDetail as &$op) {
+            $charges = $oObj->getOrderProductChargesArr($op['op_id']);
+            $op['charges'] = $charges;
         }
 
-        $addresses = $orderObj->getOrderAddresses($order['order_id']);
-        $order['billingAddress'] = $addresses[Orders::BILLING_ADDRESS_TYPE];
-        $order['shippingAddress'] = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
-
-        $order['comments'] = $orderObj->getOrderComments($this->siteLangId, array("order_id" => $order['order_id']));
-        $order['payments'] = $orderObj->getOrderPayments(array("order_id" => $order['order_id']));
-
-        $frm = $this->getPaymentForm($this->siteLangId, $order['order_id']);
-        // CommonHelper::printArray($order, true);
-        $this->set('frm', $frm);
-        $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
-        $this->set('order', $order);
-
-        $this->_template->render();
-    }
-
-    public function listChildOrderStatusLog($op_id)
-    {
-        $this->objPrivilege->canViewOrders();
-        $op_id = FatUtility::int($op_id);
-        $orderObj = new Orders();
-        $comments = $orderObj->getOrderComments($this->siteLangId, array("op_id" => $op_id));
-        //CommonHelper::printArray( $comments );
-        $this->set('comments', $comments);
-        $this->_template->render(false, false);
+        $this->set('opsShippingDetail', $opsShippingDetail);
+        switch ($chargeType) {
+            case OrderProduct::CHARGE_TYPE_SHIPPING:
+                $this->_template->render(false, false, 'orders/order-products-shipping.php');
+                break;
+            case OrderProduct::CHARGE_TYPE_TAX:
+                $this->_template->render(false, false, 'orders/order-products-tax.php');
+                break;
+            case OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT:
+                $this->_template->render(false, false, 'orders/order-products-vol-discount.php');
+                break;
+            case OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT:
+                $this->_template->render(false, false, 'orders/order-products-rewards.php');
+                break;
+            
+            default:
+                LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_CHARGE_TYPE', $this->siteLangId), true);
+                break;
+        }
     }
 
     public function updatePayment()
@@ -232,15 +827,13 @@ class OrdersController extends ListingBaseController
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $orderId = $post['opayment_order_id'];
 
         if ($orderId == '' || $orderId == null) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $srch = new OrderSearch($this->siteLangId);
@@ -253,149 +846,16 @@ class OrdersController extends ListingBaseController
         $rs = $srch->getResultSet();
         $order = FatApp::getDb()->fetch($rs);
         if (!empty($order) && array_key_exists('plugin_code', $order) && 'CashOnDelivery' == $order['plugin_code']) {
-            Message::addErrorMessage(Labels::getLabel('LBL_COD_orders_are_not_eligible_for_payment_status_update', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_COD_orders_are_not_eligible_for_payment_status_update', $this->siteLangId), true);
         }
 
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
         if (!$orderPaymentObj->addOrderPayment($post["opayment_method"], $post['opayment_gateway_txn_id'], $post["opayment_amount"], $post["opayment_comments"])) {
-            Message::addErrorMessage($orderPaymentObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($orderPaymentObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('LBL_Payment_Details_Added_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function Cancel($order_id)
-    {
-        $this->objPrivilege->canEditOrders();
-
-        $orderObj = new Orders();
-        $order = $orderObj->getOrderById($order_id);
-
-        if ($order == false) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Error:_Please_perform_this_action_on_valid_record.', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $allowedCancellationArr =  Orders::getBuyerAllowedOrderCancellationStatuses();
-        $srch = new OrderProductSearch(0, true);
-        $srch->addMultipleFields(array('op.op_status_id', 'o.order_id'));
-        $srch->addCondition('order_id', '=', $order_id);
-        $srch->addCondition('op_status_id', 'NOT IN', $allowedCancellationArr);
-        $opDetails = FatApp::getDb()->fetchAll($srch->getResultSet());
-        if (!empty($opDetails)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Error:_Orders_that_are_completed_cannot_be_Cancelled.', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        if ($order["order_payment_status"]) {
-            if (!$orderObj->addOrderPaymentHistory($order_id, Orders::ORDER_PAYMENT_CANCELLED, Labels::getLabel('MSG_Order_Cancelled', $order['order_language_id']), 1)) {
-                Message::addErrorMessage($orderObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-
-            if (!$orderObj->refundOrderPaidAmount($order_id, $order['order_language_id'])) {
-                Message::addErrorMessage($orderObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-
-            $pluginKey = Plugin::getAttributesById($order['order_pmethod_id'], 'plugin_code');
-            $paymentMethodObj = new PaymentMethods();
-            if (true === $paymentMethodObj->canRefundToCard($pluginKey, $this->siteLangId)) {
-                $orderProducts = $orderObj->getChildOrders(array('order_id' => $order_id), $order['order_type'], $order['order_language_id']);
-
-                foreach ($orderProducts as $op) {
-                    if (false == $paymentMethodObj->initiateRefund($op, PaymentMethods::REFUND_TYPE_CANCEL)) {
-                        FatUtility::dieJsonError($paymentMethodObj->getError());
-                    }
-
-                    $resp = $paymentMethodObj->getResponse();
-                    if (empty($resp)) {
-                        FatUtility::dieJsonError(Labels::getLabel('LBL_UNABLE_TO_PLACE_GATEWAY_REFUND_REQUEST', $this->siteLangId));
-                    }
-
-                    // Debit from wallet if plugin/payment method support's direct payment to card of customer.
-                    if (!empty($resp->id)) {
-                        $childOrderInfo = $orderObj->getOrderProductsByOpId($op['op_id'], $this->siteLangId);
-                        $txnAmount = $paymentMethodObj->getTxnAmount();
-                        $comments = Labels::getLabel('LBL_TRANSFERED_TO_YOUR_CARD._INVOICE_#{invoice-no}', $this->siteLangId);
-                        $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $childOrderInfo['op_invoice_number']]);
-                        Transactions::debitWallet($childOrderInfo['order_user_id'], Transactions::TYPE_ORDER_REFUND, $txnAmount, $this->siteLangId, $comments, $op['op_id'], $resp->id);
-                    }
-                }
-            }
-        }
-
-        $this->set('msg', Labels::getLabel('LBL_Payment_Details_Cancelled_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function delete($order_id)
-    {
-        $this->objPrivilege->canEditOrders();
-
-        $orderObj = new Orders();
-        $order = $orderObj->getOrderById($order_id);
-
-        if ($order == false) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Error:_Please_perform_this_action_on_valid_record.', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        if (!$order["order_payment_status"]) {
-            $updateArray = array('order_deleted' => applicationConstants::YES);
-            $whr = array('smt' => 'order_id = ?', 'vals' => array($order_id));
-
-            if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL, $updateArray, $whr)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
-        $this->set('msg', Labels::getLabel('LBL_Order_Deleted_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function getPaymentForm($langId, $orderId = '')
-    {
-        $frm = new Form('frmPayment');
-        $frm->addHiddenField('', 'opayment_order_id', $orderId);
-        $frm->addTextArea(Labels::getLabel('LBL_Comments', $this->siteLangId), 'opayment_comments', '')->requirements()->setRequired();
-        $frm->addRequiredField(Labels::getLabel('LBL_Payment_Method', $this->siteLangId), 'opayment_method');
-        $frm->addRequiredField(Labels::getLabel('LBL_Txn_ID', $this->siteLangId), 'opayment_gateway_txn_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_Amount', $this->siteLangId), 'opayment_amount')->requirements()->setFloatPositive(true);
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getOrderSearchForm($langId, $deletedOrders = false)
-    {
-        $currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
-        $currencyData = Currency::getAttributesById($currency_id, array('currency_code', 'currency_symbol_left', 'currency_symbol_right'));
-        $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
-
-        $frm = new Form('frmOrderSearch');
-        $keyword = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-
-        $frm->addTextBox(Labels::getLabel('LBL_Buyer', $this->siteLangId), 'buyer', '');
-
-        $frm->addSelectBox(Labels::getLabel('LBL_Payment_Status', $this->siteLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($langId), '', array(), Labels::getLabel('LBL_Select_Payment_Status', $this->siteLangId));
-
-        $frm->addDateField('', 'date_from', '', array('placeholder' => 'Date From', 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => 'Date To', 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addTextBox('', 'price_from', '', array('placeholder' => 'Order From' . ' [' . $currencySymbol . ']'));
-        $frm->addTextBox('', 'price_to', '', array('placeholder' => 'Order To [' . $currencySymbol . ']'));
-
-        $frm->addHiddenField('', 'page');
-        $frm->addHiddenField('', 'user_id');
-        $deleted = ($deletedOrders) ? 1 : 0;
-        $frm->addHiddenField('', 'is_deleted', $deleted);
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
     }
 
     public function approvePayment(int $orderPaymentId)
@@ -411,7 +871,7 @@ class OrdersController extends ListingBaseController
                 array('smt' => 'order_id = ? ', 'vals' => array($result['opayment_order_id']))
             )) {
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError($db->getError());
+                LibHelper::exitWithError($db->getError(), true);
             }
 
             if (!$db->updateFromArray(
@@ -420,7 +880,7 @@ class OrdersController extends ListingBaseController
                 array('smt' => 'opayment_id = ? ', 'vals' => array($orderPaymentId))
             )) {
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError($db->getError());
+                LibHelper::exitWithError($db->getError(), true);
             }
 
             if (!$db->updateFromArray(
@@ -429,7 +889,7 @@ class OrdersController extends ListingBaseController
                 array('smt' => 'op_order_id = ? ', 'vals' => array($result['opayment_order_id']))
             )) {
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError($db->getError());
+                LibHelper::exitWithError($db->getError(), true);
             }
         }
 
@@ -451,7 +911,7 @@ class OrdersController extends ListingBaseController
                 array('smt' => 'order_id = ? ', 'vals' => array($result['opayment_order_id']))
             )) {
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError($db->getError());
+                LibHelper::exitWithError($db->getError(), true);
             }
 
             if (!$db->updateFromArray(
@@ -460,7 +920,7 @@ class OrdersController extends ListingBaseController
                 array('smt' => 'opayment_id = ? ', 'vals' => array($orderPaymentId))
             )) {
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError($db->getError());
+                LibHelper::exitWithError($db->getError(), true);
             }
 
             if (!$db->updateFromArray(
@@ -469,109 +929,164 @@ class OrdersController extends ListingBaseController
                 array('smt' => 'op_order_id = ? ', 'vals' => array($result['opayment_order_id']))
             )) {
                 $db->rollbackTransaction();
-                FatUtility::dieJsonError($db->getError());
+                LibHelper::exitWithError($db->getError(), true);
             }
         }
         $db->commitTransaction();
         $this->set('msg', Labels::getLabel("MSG_REJECTED", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-    
-    public function viewBuyerOrderInvoice($orderId, $opId = 0)
+
+    public function deleteRecord()
     {
-        $this->objPrivilege->canViewSellerOrders();
-        if (!$orderId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            CommonHelper::redirectUserReferer();
+        $this->objPrivilege->canEditOrders();
+        $orderId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+
+        $this->markAsDeleted($orderId);
+
+        $this->set('msg', $this->str_delete_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function deleteSelected()
+    {
+        $this->objPrivilege->canEditOrders();
+        $orderIdsArr = FatUtility::int(FatApp::getPostedData('order_ids'));
+        if (empty($orderIdsArr)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
-        $opId = FatUtility::int($opId);
-
-        $srch = new OrderProductSearch($this->siteLangId, true, true);
-        $srch->joinPaymentMethod();
-        $srch->joinSellerProducts();
-        $srch->joinShop();
-        $srch->joinShopSpecifics();
-        $srch->joinShopCountry();
-        $srch->joinShopState();
-        $srch->addOrderProductCharges();
-        $srch->addCondition('order_id', '=', $orderId);
-        if (0 < $opId) {
-            $srch->addCondition('op_id', '=', $opId);
+        foreach ($orderIdsArr as $orderId) {
+            $this->markAsDeleted($orderId);
         }
-        $srch->addMultipleFields(array('*', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city'));
-        $childOrderDetail = FatApp::getDb()->fetchAll($srch->getResultSet(), 'op_id');
-        
-        if (1 > count($childOrderDetail)) {           
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Order', $this->siteLangId));
-            CommonHelper::redirectUserReferer();
-        }
+        $this->set('msg', $this->str_delete_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
 
+    protected function markAsDeleted($orderId)
+    {
         $orderObj = new Orders();
-        $orderDetail = $orderObj->getOrderById($orderId, $this->siteLangId);
-        $orderDetail['charges'] = $orderObj->getOrderProductChargesByOrderId($orderDetail['order_id']);
+        $order = $orderObj->getOrderById($orderId);
+        if (false === $order) {
+            LibHelper::exitWithError(Labels::getLabel('LBL_Error:_Please_perform_this_action_on_valid_record.', $this->siteLangId), true);
+        }
 
-        if (count($childOrderDetail)) {
-            foreach ($childOrderDetail as &$arr) {
-                $arr['options'] = SellerProduct::getSellerProductOptions($arr['op_selprod_id'], true, $this->siteLangId);
+        if (!$order["order_payment_status"]) {
+            $updateArray = array('order_deleted' => applicationConstants::YES);
+            $whr = array('smt' => 'order_id = ?', 'vals' => array($orderId));
+
+            if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL, $updateArray, $whr)) {
+                LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId), true);
             }
         }
+    }
 
-        foreach ($childOrderDetail as $op_id => $val) {
-            $childOrderDetail[$op_id]['charges'] = $orderDetail['charges'][$op_id];
+    private function getPaymentForm($orderId = '')
+    {
+        $frm = new Form('frmPayment');
+        $frm->addHiddenField('', 'opayment_order_id', $orderId);
+        $frm->addTextArea(Labels::getLabel('FRM_Comments', $this->siteLangId), 'opayment_comments', '')->requirements()->setRequired();
+        $frm->addRequiredField(Labels::getLabel('FRM_Payment_Method', $this->siteLangId), 'opayment_method');
+        $frm->addRequiredField(Labels::getLabel('FRM_Txn_ID', $this->siteLangId), 'opayment_gateway_txn_id');
+        $frm->addRequiredField(Labels::getLabel('FRM_Amount', $this->siteLangId), 'opayment_amount')->requirements()->setFloatPositive(true);
+        return $frm;
+    }
 
-            $opChargesLog = new OrderProductChargeLog($op_id);
-            $taxOptions = $opChargesLog->getData($this->siteLangId);
-            $childOrderDetail[$op_id]['taxOptions'] = $taxOptions;
+    protected function getSearchForm($fields = [])
+    {
+        $currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
+        $currencyData = Currency::getAttributesById($currency_id, array('currency_code', 'currency_symbol_left', 'currency_symbol_right'));
+        $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
+
+        $frm = new Form('frmRecordSearch');
+
+        $frm->addHiddenField('', 'page');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'order_date_added', applicationConstants::SORT_DESC);
+        }
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        $frm->addSelectBox(Labels::getLabel('FRM_BUYER', $this->siteLangId), 'user_id', []);
+
+        $frm->addSelectBox(Labels::getLabel('FRM_DELETED_ORDERS', $this->siteLangId), 'order_deleted', applicationConstants::getYesNoArr($this->siteLangId));
+
+        $frm->addSelectBox(Labels::getLabel('FRM_Payment_Status', $this->siteLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($this->siteLangId));
+
+        $frm->addDateField('', 'date_from', '', array('placeholder' => 'Date From', 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField('', 'date_to', '', array('placeholder' => 'Date To', 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addTextBox('', 'price_from', '', array('placeholder' => 'Order From' . ' [' . $currencySymbol . ']'));
+        $frm->addTextBox('', 'price_to', '', array('placeholder' => 'Order To [' . $currencySymbol . ']'));
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
+        return $frm;
+    }
+
+    protected function getFormColumns(): array
+    {
+        $abusiveWordsTblHeadingCols = CacheHelper::get('abusiveWordsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($abusiveWordsTblHeadingCols) {
+            return json_decode($abusiveWordsTblHeadingCols);
         }
 
-        $address = $orderObj->getOrderAddresses($orderDetail['order_id']);
-        $orderDetail['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
-        $orderDetail['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE])) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : array();
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'order_number' => Labels::getLabel('LBL_Order_ID', $this->siteLangId),
+            'buyer_user_name' => Labels::getLabel('LBL_Customer_Name', $this->siteLangId),
+            'order_date_added' => Labels::getLabel('LBL_ORDER_DATE_&_TIME', $this->siteLangId),
+            'order_net_amount' => Labels::getLabel('LBL_Total', $this->siteLangId),
+            'order_payment_status' => Labels::getLabel('LBL_Payment_Status', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
 
-        $pickUpAddress = $orderObj->getOrderAddresses($orderDetail['order_id'], $opId);
-        $orderDetail['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
-
-        $template = new FatTemplate('', '');
-        $template->set('siteLangId', $this->siteLangId);
-        $template->set('orderDetail', $orderDetail);
-        $template->set('childOrderDetail', $childOrderDetail);
-        $template->set('opId', $opId);
-
-        require_once(CONF_INSTALLATION_PATH . 'library/tcpdf/tcpdf.php');
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
-        $pdf->SetKeywords(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
-        $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->SetHeaderMargin(0);
-        $pdf->SetHeaderData('', 0, '', '', array(255, 255, 255), array(255, 255, 255));
-        $pdf->setFooterData(array(0, 0, 0), array(200, 200, 200));
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetMargins(10, 10, 10);
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->AddPage();
-        $pdf->SetTitle(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
-        $pdf->SetSubject(Labels::getLabel('LBL_Tax_Invoice', $this->siteLangId));
-
-        // set LTR direction for english translation
-        $pdf->setRTL(('rtl' == Language::getLayoutDirection($this->siteLangId)));
-        // set font
-        $pdf->SetFont('dejavusans');
-
-        $templatePath = "orders/view-buyer-order-invoice.php";
-        $html = $template->render(false, false, $templatePath, true, true);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->lastPage();
-
-        ob_end_clean();
-        // $saveFile = CONF_UPLOADS_PATH . 'demo-pdf.pdf';
-        //$pdf->Output($saveFile, 'F');
-        $pdf->Output('tax-invoice.pdf', 'I');
-        return true;
+        CacheHelper::create('abusiveWordsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
     }
-    
-    
-    
+
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'order_number',
+            'buyer_user_name',
+            'order_date_added',
+            'order_net_amount',
+            'order_payment_status',
+            'action'
+        ];
+    }
+
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'view':
+                $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDERS', $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_ORDERS', $this->siteLangId);
+
+                $url = FatApp::getQueryStringData('url');
+                $urlParts = explode('/', $url);
+                $title = Labels::getLabel('LBL_VIEW_ORDER', $this->siteLangId);
+                if (isset($urlParts[2])) {
+                    $title = Orders::getAttributesById($urlParts[2], 'order_number');
+                }
+
+                $this->nodes = [
+                    ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('Orders')],
+                    ['title' => $title]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
+        }
+        return $this->nodes;
+    }
 }
