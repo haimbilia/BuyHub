@@ -22,7 +22,7 @@
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-catelog">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
                             </use> 
                             </svg>
                         </span>
@@ -70,7 +70,7 @@
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-catelog">
                             </use>
                             </svg>
                         </span>
@@ -411,7 +411,10 @@
 
             <?php
             if (
-                    $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) || $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) || $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) 
+                    || $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) 
+                    || $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)
+                    || $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
                 <li class="menu-item dropdown dropright">
@@ -444,6 +447,13 @@
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('FaqCategories'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_FAQS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_TESTIMONIALS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -722,7 +732,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if ($objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) { ?>
+                        <?php if (false && $objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
                                     <?php echo Labels::getLabel('NAV_SHIPPING_PACKAGES', $siteLangId); ?>
@@ -730,7 +740,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if ($objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if (false && $objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
                                     <span class="nav_text"><?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?></span>
@@ -738,21 +748,21 @@
                             </li> 
                         <?php } ?>
 
-                        <?php if ($objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if (false && $objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>">
                                     <span class="nav_text"><?php echo Labels::getLabel('NAV_PICKUP_ADDRESSES', $siteLangId); ?></span>
                                 </a>
                             </li>
                         <?php } ?>
-                        <?php if ($objPrivilege->canViewShippedProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if (false && $objPrivilege->canViewShippedProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ShippedProducts'); ?>">
                                     <span class="nav_text"><?php echo Labels::getLabel('NAV_SHIPPED_PRODUCTS', $siteLangId); ?></span>
                                 </a>
                             </li>
                         <?php } ?>
-                        <?php if ($objPrivilege->canViewTrackingRelationCode(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if (false && $objPrivilege->canViewTrackingRelationCode(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('TrackingCodeRelation'); ?>">
                                     <span class="nav_text"><?php echo Labels::getLabel('NAV_TRACKING_CODE_RELATION', $siteLangId); ?></span>

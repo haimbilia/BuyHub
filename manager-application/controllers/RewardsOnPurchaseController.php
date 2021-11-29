@@ -199,7 +199,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($ropId)
+    protected function markAsDeleted($ropId)
     {
         $ropId = FatUtility::int($ropId);
         if (1 > $ropId) {

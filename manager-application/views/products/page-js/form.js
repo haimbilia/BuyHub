@@ -86,17 +86,13 @@
         let langId = $("#addProductfrm [name='langId']").val();
         var list = [];
         fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), { keyword, langId }, function (t) {
-            var ans = $.parseJSON(t);
-            console.log(ans);
-            console.log(ans.length);
-            for (i = 0; i < ans.length; i++) {
-                console.log(ans[i]);
+            var ans = $.parseJSON(t);         
+            for (i = 0; i < ans.length; i++) {  
                 list.push({
                     "id": ans[i].tag_id,
                     "value": ans[i].tag_name,
                 });
             }
-            console.log(list);
             tagify.settings.whitelist = list;
             tagify.loading(false).dropdown.show.call(tagify, keyword);
         });

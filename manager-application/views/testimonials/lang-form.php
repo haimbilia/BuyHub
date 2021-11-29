@@ -1,10 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
+$formTitle = Labels::getLabel('LBL_TESTIMONIAL_SETUP', $siteLangId);
 $otherButtons = [
     [
-       'attr' => [
+        'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'mediaForm(' . $recordId . ')',
+            'onclick' => 'mediaForm('.$recordId.')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -12,5 +12,5 @@ $otherButtons = [
     ]
 ]; 
 
-$formTitle = Labels::getLabel('LBL_PRODUCT_BRAND_REQUEST_SETUP', $siteLangId);
-require_once(CONF_THEME_PATH . '_partial/listing/lang-form.php');
+
+require_once(CONF_THEME_PATH . '_partial/listing/lang-form.php'); ?>

@@ -389,19 +389,19 @@ class AdminGuestController extends FatController
         }
 
         $frm = new Form('frmLogin');
-        $frm->addTextBox(Labels::getlabel('LBL_USERNAME', $this->siteLangId), 'username', $userName)->requirements()->setRequired();
-        $frm->addPasswordField(Labels::getlabel('LBL_PASSWORD', $this->siteLangId), 'password', $pass)->requirements()->setRequired();
+        $frm->addTextBox(Labels::getlabel('FRM_USERNAME', $this->siteLangId), 'username', $userName)->requirements()->setRequired();
+        $frm->addPasswordField(Labels::getlabel('FRM_PASSWORD', $this->siteLangId), 'password', $pass)->requirements()->setRequired();
         $frm->addCheckBox('', 'rememberme', 1);
-        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('LBL_SIGN_IN', $this->siteLangId), 'submit', 'btn_submit', 'btn btn-brand btn-lg btn-block'));
+        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('FRM_SIGN_IN', $this->siteLangId), 'submit', 'btn_submit', 'btn btn-brand btn-lg btn-block'));
         return $frm;
     }
 
     private function getForgotForm()
     {
         $frm = new Form('adminFrmForgot');
-        $frm->addEmailField(Labels::getLabel('LBL_Enter_Your_Email_Address', $this->siteLangId), 'admin_email')->requirements()->setRequired();
+        $frm->addEmailField(Labels::getLabel('FRM_ENTER_YOUR_EMAIL_ADDRESS', $this->siteLangId), 'admin_email')->requirements()->setRequired();
         CommonHelper::addCaptchaField($frm);
-        $frm->addSubmitButton('', 'btn_forgot', Labels::getLabel('LBL_Send_Reset_Pasword_Email', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_forgot', Labels::getLabel('FRM_SEND_RESET_PASWORD_EMAIL', $this->siteLangId));
         return $frm;
     }
 
@@ -413,7 +413,7 @@ class AdminGuestController extends FatController
         $fld_cp->requirements()->setCompareWith('new_pwd', 'eq', '');
         $frm->addHiddenField('', 'apr_id', $aId, array('id' => 'apr_id'));
         $frm->addHiddenField('', 'token', $token, array('id' => 'token'));
-        $frm->addSubmitButton('', 'btn_reset', Labels::getLabel('LBL_Reset_Pasword', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_reset', Labels::getLabel('FRM_RESET_PASWORD', $this->siteLangId));
         return $frm;
     }
 }

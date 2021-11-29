@@ -156,7 +156,7 @@ class TaxCategoriesController extends ListingBaseController
         $this->objPrivilege->canEditBrandRequests();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_TAX_CATEGORIES_SETUP', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_TAX_CATEGORY_SETUP', $this->siteLangId));
         $this->checkMediaExist = false;
     }
 

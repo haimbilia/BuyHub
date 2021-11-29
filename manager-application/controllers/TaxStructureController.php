@@ -187,8 +187,8 @@ class TaxStructureController extends ListingBaseController {
         $this->setLangData($record, [
             'taxstr_name' => $post['taxstr_name']
         ]);
-
-        if (isset($post['taxstr_is_combined'])) {
+        $recordId = $record->getMainTableRecordId();
+        if (isset($post['taxstr_is_combined']) && !empty($post['taxstr_is_combined'])) {
             $postComponent = [];
             if (!empty(array_filter($post['taxstr_component_name']))) {
                 foreach ($post['taxstr_component_name'] as $component) {
@@ -204,13 +204,13 @@ class TaxStructureController extends ListingBaseController {
         } else {
             $post['taxstr_component_name'] = [];
         }
-
+        
         if (!$record->addUpdateCombinedData($post, $record->getMainTableRecordId())) {
             LibHelper::exitWithError($record->getError(), true);
         }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $record->getMainTableRecordId());
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -297,8 +297,9 @@ class TaxStructureController extends ListingBaseController {
         $frm->addHiddenField('', 'taxstr_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $lang_id), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $lang_id), 'taxstr_name');
-        $htmlFld = $frm->addHTML('', 'component_link', Labels::getLabel('FRM_TAX_COMPONENT_NAME', $lang_id));
+        
         if ($isCombined) {
+            $htmlFld = $frm->addHTML('', 'component_link', Labels::getLabel('FRM_TAX_COMPONENT_NAME', $lang_id));
             $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
             $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
             foreach ($combinedTaxes as $key => $value) {

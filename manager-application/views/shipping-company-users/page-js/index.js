@@ -1,21 +1,6 @@
- 
-(function () { 
-    var transactionUserId = 0;    
 
-    usersAutocomplete = function (v) {
-        var dv = $('.autoSuggest');
-        if (v.value == '')
-            return;
-        fcom.ajax(fcom.makeUrl('users', 'autoComplete'), {keyword: v.value, user_type: document.frmUserSearch.user_type.value}, function (t) {
-            dv.show();
-            dv.html(t);
-        });
-    };
-
-    fillSuggetion = function (v) {
-        $('#keyword').val(v);
-        $('.autoSuggest').hide();
-    };
+(function () {
+    var transactionUserId = 0;
 
     transactions = function (userId) {
         transactionUserId = userId;
@@ -25,27 +10,43 @@
     };
 
     getTransactions = function (userId) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('Users', 'transaction', [userId]), '', function (t) {
-            fcom.updateFaceboxContent(t);
+        $.ykmodal(fcom.getLoader(), false, '');
+        fcom.ajax(fcom.makeUrl('transactions', 'search'), 'utxn_user_id=' + userId, function (t) {
+            $.ykmodal(t, true, '');
         });
     };
 
     addUserTransaction = function (userId) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('Users', 'addUserTransaction', [userId]), '', function (t) {
-            fcom.updateFaceboxContent(t);
+        $.ykmodal(fcom.getLoader(), false, '');
+        var data = 'utxn_user_id=' + userId;
+        fcom.ajax(fcom.makeUrl('transactions', 'form'), data, function (t) {
+            $.ykmodal(t, false, '');
+            fcom.removeLoader();
         });
     };
 
-    setupUserTransaction = function (frm) {
-        if (!$(frm).validate())
+    saveRecord = function (frm, callback = '') {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        if (!$(frm).validate()) {
             return;
+        }
+
+        $.ykmodal(fcom.getLoader());
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Users', 'setupUserTransaction'), data, function (t) {
-            if (t.userId > 0) {
-                getTransactions(t.userId);
+        fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
+            $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
+            fcom.removeLoader();
+            var t = JSON.parse(res);
+            if (t.status == 0) {
+                $.ykmsg.error(t.msg);
+                return false;
             }
+            $.ykmsg.success(t.msg);
+            frm.reset();
+            return;
         });
     };
 
@@ -62,5 +63,5 @@
         });
         $.systemMessage.close();
     };
- 
+
 })();

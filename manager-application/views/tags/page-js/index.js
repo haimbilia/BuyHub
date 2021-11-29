@@ -1,106 +1,84 @@
 (function () {
-    var selected_products = [];
-    bindProductNameSelect2 = function () {
-        $("select[name='product_name']").select2({
-            closeOnSelect: true,
-            dir: layoutDirection,
-            allowClear: true,
-            placeholder: $("select[name='product_name']").attr('placeholder'),
-            ajax: {
-                url: fcom.makeUrl('RelatedProducts', 'autoCompleteProducts'),
-                dataType: 'json',
-                delay: 250,
-                method: 'post',
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-                    return {
-                        results: data.products,
-                        pagination: {
-                            more: params.page < data.pageCount
-                        }
-                    };
-                },
-                cache: true
-            },
-            minimumInputLength: 0,
-            templateResult: function (result) {
-                return result.name;
-            },
-            templateSelection: function (result) {
-                return result.name || result.text;
-            }
-        }).on('select2:selecting', function (e) {
-            var parentForm = $(this).closest('form').attr('id');
-            $("#" + parentForm + " input[name='selprod_id']").val(e.params.args.data.id);
 
-        }).on('select2:unselecting', function (e) {
-            var parentForm = $(this).closest('form').attr('id');
-            $("#" + parentForm + " input[name='selprod_id']").val('');
-        });
-        $("." + $.ykmodal.element).removeAttr('tabindex');
+    addTagData = function(e){
+        var product_id = $(e.detail.tagify.DOM.originalInput).data('product_id');
+        var tag_id = e.detail.data.id;        
+        if(e.detail.data.product_id > 0  && tag_id > 0){
+            bindProductWithTag(e.detail.data.product_id,tag_id);  
+        }else if(tag_id == undefined){
+            var tag_name = e.detail.data.value;
+            var tag_lang_id = 1;
+            if(tag_id == undefined || tag_id == '' ) {
+                tag_id = 0;         
+                fcom.updateWithAjax(fcom.makeUrl('Tags', 'setup'), {tag_id,tag_name ,tag_lang_id}, function(t) {                   
+                    tag_id = t.tagId;                 
+                    e.detail.tagify.settings.whitelist.push({'id':t.tagId, value:tag_name,product_id:product_id});                  
+                    bindProductWithTag(product_id,tag_id);  
+                });
+            }
+        } 
     };
 
-    bindlRelatedProdSelect2 = function () {
-        var element = $("select.relatedProductsJs");
-        element.select2({
-            closeOnSelect: true,
-            dir: layoutDirection,
-            allowClear: true,
-            placeholder: element.attr('placeholder'),
-            ajax: {
-                url: fcom.makeUrl('SellerProducts', 'autoCompleteProducts'),
-                dataType: 'json',
-                delay: 250,
-                method: 'post',
-                data: function (params) {
-                    var parentForm = element.closest('form').attr('id');
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page,
-                        fIsAjax: 1,
-                        selProdId: $("#" + parentForm + " input[name='selprod_id']").val(),
-                        selected_products: selected_products
-                    };
-                },
-                beforeSend:
-                    function (xhr, opts) {
-                        var parentForm = element.closest('form').attr('id');
-                        var selprod_id = $("#" + parentForm + " input[name='selprod_id']").val();
-                        if (1 > selprod_id) {
-                            xhr.abort();
-                        }
-                        $('input[name="selected_products[]"]').each(function () {
-                            selected_products.push($(this).val());
-                        });
+   
+    bindProductWithTag = function(product_id,tag_id){      
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'updateProductTag'), {product_id,tag_id}, function(t) {
+         });
+    }
+  
 
-                    },
-                processResults: function (data, params) {
-                    params.page = params.page || 1;
-                    return {
-                        results: data.products,
-                        pagination: {
-                            more: params.page < data.pageCount
-                        }
-                    };
-                },
-                cache: true
-            },
-            minimumInputLength: 0,
-            templateResult: function (result) {
-                return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
-            },
-            templateSelection: function (result) {
-                return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
-            }
+    removeTagData = function(e){  
+        let  product_id = $(e.detail.tagify.DOM.originalInput).data('product_id');
+        if(0 < product_id ){
+            let tag_id = e.detail.tag.id;
+            fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), {product_id,tag_id}, function(t) {
+            });
+        }        
+    }
+
+    getTags = function(e) {
+        var keyword = e.detail.value;
+        var element = e.detail.tagify.DOM.originalInput;
+        var list = [];
+        fcom.ajax(fcom.makeUrl('Tags', 'autoComplete'), {
+            keyword: keyword,
+            langId: 1,
+        }, function(t) {
+            var ans = JSON.parse(t);            
+            $.each(ans ,function(id ,tag){ 
+                list.push({
+                    "id": tag.tag_id,
+                    "value": tag.tag_name,
+                    "product_id": $(element).data('product_id')                
+                });
+            });
+            
+            e.detail.tagify.settings.whitelist = list;
+            e.detail.tagify.loading(false).dropdown.show.call(tagify, keyword);
         });
-        setTimeout(() => {
-            element.siblings('.select2').find('.select2-search__field').attr('name', element.attr('name') + '_search');
-        }, 200);
+    }
+    let isDeletedConfirmed = false;
+    TagTagify = function() {
+        var input = document.querySelectorAll('.productsTagsJs');
+        input.forEach(function(element, index) { 
+            tagify = new Tagify(element, {
+                whitelist: [],
+                dropdown: {
+                    position: 'text',
+                    enabled: 1 // show suggestions dropdown after 1 typed character
+                },hooks: {
+                    beforeRemoveTag: function(tags) {                 
+                        return new Promise((resolve, reject) => {
+                            if (isDeletedConfirmed == false && !confirm(langLbl.confirmRemove)) {
+                                return false;
+                            } 
+                            isDeletedConfirmed = true;
+                            resolve();                       
+                        })
+                    }
+                }
+               
+            }).on('input', getTags).on('focus', getTags).on('add', addTagData).on('remove', removeTagData);
+        });
     };
+
 })();

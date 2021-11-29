@@ -129,7 +129,7 @@ class PromotionsController extends ListingBaseController
         $srch->joinPromotionsLogForCount();
         $srch->joinActiveUser(false);
         $srch->joinShops($this->siteLangId);
-        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id', 'IFNULL(shop_name, shop_identifier) as shop_name']);
+        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id', 'IFNULL(shop_name, shop_identifier) as shop_name','user_id','user_updated_on','shop_updated_on']);
         $srch->addCondition('pr.promotion_deleted', '=', applicationConstants::NO);
         $srch->addOrder($sortBy, $sortOrder);
 
@@ -781,7 +781,7 @@ class PromotionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($recordId)
+    protected function markAsDeleted($recordId)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {

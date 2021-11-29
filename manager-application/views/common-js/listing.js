@@ -516,7 +516,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         );
     };
 
-    deleteMedia = function (recordId, fileType, afileId) {
+    deleteMedia = function (recordId, fileType, afileId, slide_screen = 0, langId = 0) {
         if (false === checkControllerName()) {
             return false;
         }

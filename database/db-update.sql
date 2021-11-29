@@ -1373,3 +1373,16 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_VALUE', '1', 'Value', '1') ON DUPLICATE KEY UPDATE label_caption = 'Value';
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_GROUP', '1', 'Group', '1') ON DUPLICATE KEY UPDATE label_caption = 'Group';
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', '1', 'Attachment at inventory level', '1') ON DUPLICATE KEY UPDATE label_caption = 'Attachment at inventory level';
+
+-- ---- tags update ---- --
+ALTER TABLE `tbl_tags` CHANGE `tag_identifier` `tag_name` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `tbl_tags` ADD `tag_lang_id` INT NOT NULL AFTER `tag_name`;
+update tbl_tags set tag_lang_id = (SELECT conf_val FROM `tbl_configurations` where conf_name='CONF_ADMIN_DEFAULT_LANG');
+
+DELETE tag FROM tbl_tags tag   
+  LEFT JOIN tbl_product_to_tags ptag ON ptag.ptt_tag_id = tag_id
+      WHERE ptag.ptt_tag_id IS NULL;  
+ALTER TABLE tbl_tags DROP INDEX tag_identifier;
+ALTER TABLE tbl_tags ADD UNIQUE( tag_name, tag_lang_id);
+RENAME TABLE tbl_tags_lang TO tbl_tags_lang_bk;
+-- ---- tags update ]---- --

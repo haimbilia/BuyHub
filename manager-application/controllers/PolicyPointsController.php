@@ -302,7 +302,7 @@ class PolicyPointsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($ppoint_id)
+    protected function markAsDeleted($ppoint_id)
     {
         $ppoint_id = FatUtility::int($ppoint_id);
         if (1 > $ppoint_id) {

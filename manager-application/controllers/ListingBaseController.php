@@ -229,6 +229,25 @@ class ListingBaseController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    public function deleteSelected()
+    {
+        $this->checkEditPrivilege();
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
+
+        if (empty($recordIdsArr)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
+                continue;
+            }
+            $this->markAsDeleted($recordId);
+        }
+        $this->set('msg', $this->str_delete_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     protected function markAsDeleted($recordId)
     {
         $recordId = FatUtility::int($recordId);

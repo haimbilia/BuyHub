@@ -20,15 +20,6 @@ $otherButtons = [
         ],
         'label' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
         'isActive' => false
-    ],
-    [
-       'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => 'mediaForm(' . $recordId . ')',
-            'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
-        ],
-        'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
-        'isActive' => false
     ]
 ]; 
 

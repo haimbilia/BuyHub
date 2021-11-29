@@ -1,26 +1,31 @@
 <?php
 
-class TagsController extends ListingBaseController {
+class TagsController extends ListingBaseController
+{
 
     protected $modelClass = 'Tag';
     protected $pageKey = 'MANAGE_TAGS';
 
-    public function __construct($action) {
-        $ajaxCallArray = array('deleteRecord', 'form', 'langForm', 'search', 'setup', 'langSetup');
-        if (!FatUtility::isAjaxCall() && in_array($action, $ajaxCallArray)) {
-            die($this->str_invalid_Action);
-        }
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewTags();
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $pageData = PageLanguageData::getAttributesByKey('LBL_MANAGE_TAGS', $this->siteLangId);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageData['plang_title'] ?? LibHelper::getControllerName(true));
-        $this->set('actionItemsData', HtmlHelper::getDefaultActionItems($fields));
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['otherButtons'] = false;
+        $actionItemsData['otherButtons'] = false;   
+        
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
@@ -35,7 +40,8 @@ class TagsController extends ListingBaseController {
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'tags/search.php', true),
@@ -44,29 +50,63 @@ class TagsController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
+
+    public function setup()
+    {
+        $this->objPrivilege->canEditTags();
+
+        $frm = $this->getForm();
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
+        $tag_id = FatUtility::int($post['tag_id']);
+
+        $recordObj = new Tag($tag_id);
+        $recordObj->assignValues($post);
+        if (!$recordObj->save()) {
+            LibHelper::exitWithError($recordObj->getError(), true);
+        }
+
+        $tag_id = $recordObj->getMainTableRecordId();
+
+        /* update product tags association and tag string in products lang table[ */
+        Tag::updateTagStrings($tag_id);
+        /* ] */
+
+        $this->set('msg', $this->str_setup_successful);
+        $this->set('tagId', $tag_id);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     public function autoComplete()
     {
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, $this->siteLangId);
-
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         $srch = Tag::getSearchObject();
-        $srch->addOrder('tag_identifier');
-        $srch->joinTable(
-            Tag::DB_TBL . '_lang',
-            'LEFT OUTER JOIN',
-            'taglang_tag_id = tag_id AND taglang_lang_id = ' . $langId
-        );
-        $srch->addMultipleFields(array('tag_id', 'IFNULL(tag_name, tag_identifier) as tag_name'));
-
+        $srch->addCondition('tag_lang_id', '=', $langId);
+        $srch->addMultipleFields(array('tag_id', 'tag_name'));
         if (!empty($keyword)) {
-            $cnd = $srch->addCondition('tag_name', 'LIKE', '%' . $keyword . '%');
-            $cnd->attachCondition('tag_identifier', 'LIKE', '%' . $keyword . '%', 'OR');
+            $srch->addCondition('tag_name', 'LIKE', '%' . $keyword . '%');
         }
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         die(FatUtility::convertToJson($records));
     }
 
-    private function getListingData() {
+    private function getForm()
+    {
+        $this->objPrivilege->canEditTags();
+        $frm = new Form('frmTag');
+        $frm->addHiddenField('', 'tag_id');
+        $frm->addHiddenField('', 'tag_lang_id');
+        $frm->addRequiredField(Labels::getLabel('LBL_TAG_NAME', $this->siteLangId), 'tag_name');
+        return $frm;
+    }
+
+    private function getListingData()
+    {
+
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -84,39 +124,27 @@ class TagsController extends ListingBaseController {
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
-        $srch = new ProductSearch($this->siteLangId, null, null, false, false);
-        $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
-        $srch->joinTable(UpcCode::DB_TBL, 'LEFT OUTER JOIN', 'upc_product_id = product_id', 'upc');
+        $srch = new ProductSearch($this->siteLangId, null, null, false, false, true);        /*
         $srch->addDirectCondition(
                 '((CASE
                     WHEN product_seller_id = 0 THEN product_active = 1
                     WHEN product_seller_id > 0 THEN product_active IN (1, 0)
                     END ) )'
         );
+        */
 
-        $srch->addCondition('product_deleted', '=', applicationConstants::NO);
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $keyword . '%');
             $cnd->attachCondition('product_identifier', 'like', '%' . $keyword . '%', 'OR');
-            $cnd->attachCondition('attrgrp_name', 'like', '%' . $keyword . '%');
             $cnd->attachCondition('product_model', 'like', '%' . $keyword . '%');
-            $cnd->attachCondition('upc_code', 'like', '%' . $keyword . '%');
-            $cnd->attachCondition('product_upc', 'like', '%' . $keyword . '%');
         }
-        $srch->addMultipleFields(
-                array(
-                    'product_id',
-                    'product_identifier',
-                    'IFNULL(product_name, product_identifier) as product_name',
-                )
-        );
-        $srch->addOrder('product_active', 'DESC');
-        $srch->addOrder('product_added_on', 'DESC');
-        $srch->addGroupBy('product_id');
+        $srch->addMultipleFields(['product_id', 'IFNULL(product_name, product_identifier) as product_name']);
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -130,19 +158,8 @@ class TagsController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditTags($this->admin_id, true));
     }
 
-    protected function getSearchForm($fields = []) {
-        $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'page');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
-        $fld->overrideFldType('search');
-        if (!empty($fields)) {
-            $this->addSortingElements($frm, 'product_name');
-        }
-        HtmlHelper::addSearchButton($frm);
-        return $frm;
-    }
-
-    protected function getFormColumns(): array {
+    protected function getFormColumns(): array
+    {
         $relatedProdsTblHeadingCols = CacheHelper::get('tagsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($relatedProdsTblHeadingCols) {
             return json_decode($relatedProdsTblHeadingCols);
@@ -158,7 +175,8 @@ class TagsController extends ListingBaseController {
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             'listSerial',
             'product_name',
@@ -166,8 +184,8 @@ class TagsController extends ListingBaseController {
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array {
-        return array_diff($fields, ['tags', 'product_name'], Common::excludeKeysForSort());
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['tags'], Common::excludeKeysForSort());
     }
-
 }

@@ -3,7 +3,7 @@
 class ThresholdProductsController extends ListingBaseController {
 
     protected $modelClass = 'SellerProduct';
-    protected $pageKey = 'MANAGE_THRESHOLD_PRODUCTS';
+    protected $pageKey = 'THRESHOLD_PRODUCTS';
 
     public function __construct($action) {
         parent::__construct($action);
@@ -80,7 +80,7 @@ class ThresholdProductsController extends ListingBaseController {
 
         $srch->addDirectCondition('selprod_stock <= selprod_threshold_stock_level');
         $srch->addDirectCondition('selprod_track_inventory = ' . Product::INVENTORY_TRACK);
-        $srch->addMultipleFields(array('selprod_id', 'selprod_user_id', 'IF(selprod_title is NULL or selprod_title = "" ,product_name, selprod_title) as product_name', 'selprod_stock', 'selprod_threshold_stock_level', 'earch_sent_on'));
+        $srch->addMultipleFields(array('selprod_id', 'selprod_user_id', 'IF(selprod_title is NULL or selprod_title = "" ,product_name, selprod_title) as product_name', 'selprod_stock', 'selprod_threshold_stock_level', 'earch_sent_on','credential_username'));
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);

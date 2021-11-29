@@ -1131,7 +1131,7 @@ class ProductsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($productId)
+    protected function markAsDeleted($productId)
     {
         $productId = FatUtility::int($productId);
         if (1 > $productId) {

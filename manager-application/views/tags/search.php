@@ -18,14 +18,14 @@ foreach ($arrListing as $selProdId => $row) {
                 $td->appendElement('plaintext', [], $serialNo);
                 break; 
             case 'tags':
-                $productTags = Product::getProductTags($row['product_id']);
+                $productTags = Product::getProductTags($row['product_id'],$siteLangId);
                 $tagData = array();
                 foreach ($productTags as $key => $data) {
                     $tagData[$key]['id'] = $data['tag_id'];
-                    $tagData[$key]['value'] = $data['tag_identifier'];
+                    $tagData[$key]['value'] = $data['tag_name'];
                 }
                 $encodedData = htmlspecialchars(json_encode($tagData), ENT_QUOTES, 'UTF-8');
-                $td->appendElement('plaintext', array(), "<div class='product-tag' id='product" . $row['product_id'] . "'><input class='tag_name' type='text' name='tag_name" . $row['product_id'] . "' value='" . $encodedData . "' data-product_id='" . $row['product_id'] . "'></div>", true);
+                $td->appendElement('plaintext', array(), "<div class='product-tag' id='product" . $row['product_id'] . "'><input class='productsTagsJs' type='text' name='tag_name" . $row['product_id'] . "' value='" . $encodedData . "' data-product_id='" . $row['product_id'] . "'></div>", true);
                 break;
             default:
                 $td->appendElement('plaintext', '', $row[$key], true);
@@ -49,4 +49,10 @@ if ($printData) {
     echo $tbody->getHtml();
 }
 ?>
+<script>  
+$(function() {
+    TagTagify();
+});
+
+</script>    
  

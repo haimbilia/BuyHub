@@ -26,9 +26,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'product_name':
-                // last Param of getProductDisplayTitle function used to get title in html form.
-                $productName = SellerProduct::getProductDisplayTitle($selProdId, $siteLangId, true);
-                $td->appendElement('plaintext', $tdAttr, $productName, true);
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId, 'sellerName' => $row['credential_username']], false, true);
+                $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'selprod_price':
                 $price = CommonHelper::displayMoneyFormat($row[$key], true, true);
