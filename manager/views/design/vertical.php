@@ -339,11 +339,11 @@
                                                 </td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--primary badge--inline badge--pill">Canceled</span></span>
+                                                            class="badge  badge-primary badge-inline badge-pill">Canceled</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-primary">Retail</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -387,7 +387,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -426,11 +426,11 @@
                                                         style="width: 115px;">Kulas, Cassin and Batz</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-primary">Retail</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -470,11 +470,11 @@
                                                         style="width: 115px;">Pfannerstill-Treutel</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -517,7 +517,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -557,11 +557,11 @@
                                                         style="width: 115px;">Gleason, Kub and Marquardt</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--info badge--inline badge--pill">Info</span></span>
+                                                            class="badge  badge-info badge-inline badge-pill">Info</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -604,7 +604,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -648,7 +648,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-danger">Online</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -691,7 +691,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-danger">Online</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -731,11 +731,11 @@
                                                         style="width: 115px;">Labadie, Predovic and Hammes</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -774,11 +774,11 @@
                                                         style="width: 115px;">Treutel-Ratke</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--success badge--inline badge--pill">Success</span></span>
+                                                            class="badge  badge-success badge-inline badge-pill">Success</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-primary">Retail</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -818,11 +818,11 @@
                                                         style="width: 115px;">Strosin, Nitzsche and Wisozk</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--primary badge--inline badge--pill">Canceled</span></span>
+                                                            class="badge  badge-primary badge-inline badge-pill">Canceled</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-danger">Online</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -861,11 +861,11 @@
                                                         style="width: 115px;">Miller-Schiller</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--primary badge--inline badge--pill">Canceled</span></span>
+                                                            class="badge  badge-primary badge-inline badge-pill">Canceled</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-danger">Online</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -905,11 +905,11 @@
                                                         style="width: 115px;">Rice, Cole and Spinka</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--success badge--inline badge--pill">Success</span></span>
+                                                            class="badge  badge-success badge-inline badge-pill">Success</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-danger">Online</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -948,11 +948,11 @@
                                                         style="width: 115px;">Brakus-Hansen</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-primary">Retail</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -992,11 +992,11 @@
                                                         style="width: 115px;">Bergnaum, Thiel and Schuppe</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--info badge--inline badge--pill">Info</span></span>
+                                                            class="badge  badge-info badge-inline badge-pill">Info</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -1035,11 +1035,11 @@
                                                         style="width: 115px;">Kreiger, Glover and Connelly</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge  badge--primary badge--inline badge--pill">Canceled</span></span>
+                                                            class="badge  badge-primary badge-inline badge-pill">Canceled</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-danger">Online</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -1079,11 +1079,11 @@
                                                         style="width: 115px;">Legros-Gleichner</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-primary">Retail</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -1122,11 +1122,11 @@
                                                         style="width: 115px;">Haag LLC</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 115px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-primary">Retail</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span
@@ -1170,7 +1170,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 115px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td data-field="Actions" data-autohide-disabled="false"
                                                     class="datatable__cell"><span

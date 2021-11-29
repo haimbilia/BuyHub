@@ -268,8 +268,8 @@
                                             <td data-field="Country" class="datatable__cell"><span style="width: 148px;">China CN</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span style="width: 148px;">2/12/2018</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span style="width: 148px;">Gleichner, Ziemann and Gutkowski</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--primary badge--inline badge--pill">Canceled</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-primary badge-inline badge-pill">Canceled</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right"> <a href="#" class="dropdown-item"><i class="la la-edit"></i> Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i> Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i> Generate Report</a> </div>
@@ -283,7 +283,7 @@
                                             <td data-field="ShipDate" class="datatable__cell"><span style="width: 148px;">8/6/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span style="width: 148px;">Rosenbaum-Reichel</span></td>
                                             <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right"> <a href="#" class="dropdown-item"><i class="la la-edit"></i> Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i> Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i> Generate Report</a> </div>
@@ -296,8 +296,8 @@
                                             <td data-field="Country" class="datatable__cell"><span style="width: 148px;">Argentina AR</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span style="width: 148px;">5/26/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span style="width: 148px;">Kulas, Cassin and Batz</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--brand badge--inline badge--pill">Pending</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-brand badge-inline badge-pill">Pending</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right"> <a href="#" class="dropdown-item"><i class="la la-edit"></i> Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i> Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i> Generate Report</a> </div>
@@ -310,8 +310,8 @@
                                             <td data-field="Country" class="datatable__cell"><span style="width: 148px;">Indonesia ID</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span style="width: 148px;">7/2/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span style="width: 148px;">Pfannerstill-Treutel</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--brand badge--inline badge--pill">Pending</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-brand badge-inline badge-pill">Pending</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right"> <a href="#" class="dropdown-item"><i class="la la-edit"></i> Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i> Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i> Generate Report</a> </div>
@@ -325,7 +325,7 @@
                                             <td data-field="ShipDate" class="datatable__cell"><span style="width: 148px;">5/20/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span style="width: 148px;">Dicki-Kling</span></td>
                                             <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right"> <a href="#" class="dropdown-item"><i class="la la-edit"></i> Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i> Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i> Generate Report</a> </div>
@@ -338,8 +338,8 @@
                                             <td data-field="Country" class="datatable__cell"><span style="width: 148px;">China CN</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span style="width: 148px;">11/26/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span style="width: 148px;">Gleason, Kub and Marquardt</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--info badge--inline badge--pill">Info</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-info badge-inline badge-pill">Info</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right"> <a href="#" class="dropdown-item"><i class="la la-edit"></i> Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i> Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i> Generate Report</a> </div>
@@ -353,7 +353,7 @@
                                             <td data-field="ShipDate" class="datatable__cell"><span style="width: 148px;">6/28/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span style="width: 148px;">Jenkins Inc</span></td>
                                             <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right"> <a href="#" class="dropdown-item"><i class="la la-edit"></i> Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i> Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i> Generate Report</a> </div>
@@ -367,7 +367,7 @@
                                             <td data-field="ShipDate" class="datatable__cell"><span style="width: 148px;">8/5/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span style="width: 148px;">Streich LLC</span></td>
                                             <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right"> <a href="#" class="dropdown-item"><i class="la la-edit"></i> Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i> Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i> Generate Report</a> </div>
@@ -381,7 +381,7 @@
                                             <td data-field="ShipDate" class="datatable__cell"><span style="width: 148px;">3/31/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span style="width: 148px;">Haley, Schamberger and Durgan</span></td>
                                             <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right"> <a href="#" class="dropdown-item"><i class="la la-edit"></i> Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i> Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i> Generate Report</a> </div>
@@ -394,8 +394,8 @@
                                             <td data-field="Country" class="datatable__cell"><span style="width: 148px;">Thailand TH</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span style="width: 148px;">1/26/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span style="width: 148px;">Labadie, Predovic and Hammes</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--brand badge--inline badge--pill">Pending</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-brand badge-inline badge-pill">Pending</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right"> <a href="#" class="dropdown-item"><i class="la la-edit"></i> Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i> Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i> Generate Report</a> </div>

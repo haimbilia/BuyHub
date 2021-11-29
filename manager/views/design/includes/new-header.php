@@ -4,10 +4,10 @@
             <div class="page-title">
                 <h1>Page title goes here</h1>
                 <span class="page-title-sub"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto
-                    repudiandae, 
-                  <a href="javascript:void(0)"><i class="fas fa-lightbulb"></i></a>  
-                  <a href="javascript:void(0)">  <i class="fas fa-external-link-alt"></i> </a>
-                  <a href="javascript:void(0)"> <i class="fas fa-exclamation-triangle"></i> </a>
+                    repudiandae,
+                    <a href="javascript:void(0)"><i class="fas fa-lightbulb"></i></a>
+                    <a href="javascript:void(0)"> <i class="fas fa-external-link-alt"></i> </a>
+                    <a href="javascript:void(0)"> <i class="fas fa-exclamation-triangle"></i> </a>
                 </span>
             </div>
             <div class="main-header-toolbar">
@@ -334,8 +334,8 @@
                                     <div class="modal-footer">
                                         <div class="search-native">
                                             <label class="checkbox" for="">Press <kbd>Ctrl-F</kbd> again to
-                                                    use native browser search.
-                                                    <input type="checkbox"></label> 
+                                                use native browser search.
+                                                <input type="checkbox"></label>
                                         </div>
                                     </div>
                                 </div>
@@ -666,18 +666,20 @@
                             </nav>
                             <div class="separator m-0"></div>
                             <nav class="nav nav--header-account">
-                                <a href="#" class="language-selector">
+                                <a class="language-selector" data-toggle="collapse" href="#languages" role="button" aria-expanded="false" aria-controls="languages">
                                     Language
                                     <span class="selected-language">
                                         English
                                         <span>
                                             <img src="<?php echo CONF_WEBROOT_URL; ?>images/flags/009-australia.svg" alt=""></span>
                                     </span>
-                                    <div class="languages">
-                                        <span onclick="">English</span>
-                                        <span onclick="">Arabic</span>
-                                    </div>
+
                                 </a>
+                                <div class="languages collapse" id="languages">
+
+                                    <a class="languages-link" href="">English</a>
+                                    <a class="languages-link" href="">Arabic</a>
+                                </div>
                                 <a href="#">System Setting</a>
                                 <a href="#">Sign out</a>
                             </nav>

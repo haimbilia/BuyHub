@@ -186,12 +186,13 @@
                         <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-head">
-                                    <div class="card-head-label">
+                                    <div class="card-head-label"> 
                                         <h3 class="card-head-title">Yokart Admin</h3>
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <ul class="list-group">
+                                        <li class="list-group-item"><a target="_blank" href="dashboard-new.php"> Dashboard </a></li>
                                         <li class="list-group-item"><a target="_blank" href="roles-permission.php"> Roles </a></li>
 
                                         <li class="list-group-item"><a target="_blank" href="shipping-zone.php">

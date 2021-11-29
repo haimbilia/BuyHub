@@ -138,7 +138,7 @@
                                                         <i class="nav__link-icon flaticon2-new-email"></i>
                                                         <span class="nav__link-text">Support</span>
                                                         <span class="nav__link-badge">
-                                                            <span class="badge badge--success badge--rounded">5</span>
+                                                            <span class="badge badge-success badge-rounded">5</span>
                                                         </span>
                                                     </a>
                                                 </li>
@@ -252,7 +252,7 @@
                                                             Change Passwort
                                                         </span>
                                                     </span>
-                                                    <span class="badge badge--unified-danger badge--sm badge--rounded badge--bolder">5</span>
+                                                    <span class="badge badge-unified-danger badge-sm badge-rounded badge-bolder">5</span>
                                                 </a>
                                                 <a href="profile-email-settings.php" class="widget__item widget__item--active">
                                                     <span class="widget__section">
@@ -297,7 +297,7 @@
                                                             </svg> </span>
                                                         <span href="#" class="widget__desc">Tax information</span>
                                                     </span>
-                                                    <span class="badge badge--unified-brand badge--inline badge--bolder">new</span>
+                                                    <span class="badge badge-unified-brand badge-inline badge-bolder">new</span>
                                                 </a>
                                                 <a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                                     <span class="widget__section">
@@ -402,15 +402,15 @@
                                                             <label class="col-xl-3 col-lg-3 col-form-label">When To Escalate Emails</label>
                                                             <div class="col-lg-9 col-xl-6">
                                                                 <div class="checkbox-list">
-                                                                    <label class="checkbox checkbox--brand">
+                                                                    <label class="checkbox checkbox-brand">
                                                                         <input type="checkbox"> Upon new order.
                                                                         <span></span>
                                                                     </label>
-                                                                    <label class="checkbox checkbox--brand">
+                                                                    <label class="checkbox checkbox-brand">
                                                                         <input type="checkbox"> New membership approval
                                                                         <span></span>
                                                                     </label>
-                                                                    <label class="checkbox checkbox--brand">
+                                                                    <label class="checkbox checkbox-brand">
                                                                         <input type="checkbox" checked="checked"> Member registration
                                                                         <span></span>
                                                                     </label>

@@ -156,7 +156,7 @@ class AdminBaseController extends FatController
                 'selectTimeslotDay' => Labels::getLabel('LBL_ATLEAST_ONE_DAY_AND_TIMESLOT_NEEDS_TO_BE_CONFIGURED', $this->siteLangId),
                 'invalidTimeSlot' => Labels::getLabel('LBL_PLEASE_CONFIGURE_FROM_AND_TO_TIME', $this->siteLangId),
                 'noRecordFound' => Labels::getLabel('LBL_No_Record_Found', $this->siteLangId),
-                'disableChildCategories' => Labels::getLabel('LBL_DISABLE_CHILD_CATEGORY_VALIDATION', $this->siteLangId),             
+                'disableChildCategories' => Labels::getLabel('LBL_DISABLE_CHILD_CATEGORY_VALIDATION', $this->siteLangId),
                 'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->siteLangId),
                 'enableParentCategories' => Labels::getLabel('LBL_ENABLE_PARENT_CATEGORIES_VALIDATION', $this->siteLangId),
                 'defaultCountryCode' => $defaultCountryCode,
@@ -216,9 +216,6 @@ class AdminBaseController extends FatController
 
         $this->includeDatePickerLangJs();
 
-        if ($this->layoutDirection == 'rtl') {
-            $this->_template->addCss('css/style--arabic.css');
-        }
         if (CommonHelper::demoUrl() == true) {
             $this->_template->addCss('css/demo.css');
         }
@@ -227,8 +224,6 @@ class AdminBaseController extends FatController
     public function getNavigationBreadcrumbArr($action)
     {
         switch ($action) {
-            case 'shops':
-            case 'shops':
             case 'shops':
                 $link = Labels::getLabel('MSG_Catalog', $this->siteLangId);
                 break;

@@ -371,7 +371,7 @@ $prefix: 'yk-';
             }
             &:hover,
             &.show {
-                .header__topbar-icon { 
+                .header__topbar-icon {
                     transition: all 0.3s;
                     // background-color: $brand-color;
                     // color:  lighten($brand-color, 55%); 
@@ -901,13 +901,13 @@ $mykart:'mykart';
 }
 
 .nav.nav--header-account {
+    font-size: 0.8rem;
     display: block;
     padding: .5rem 1rem;
     a {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
-        font-size: .875rem;
         padding: .5rem .875rem;
         text-decoration: none;
         color: rgba($txt-body, .85);
@@ -921,25 +921,8 @@ $mykart:'mykart';
 }
 
 .language-selector {
+    padding-#{$end-direction}: 0 !important;
     position: relative;
-    background-color: #fff !important;
-    .languages {
-        display: none;
-        position: relative;
-        background-color: #f5f8fa;
-        flex: 0 0 100%;
-        font-size: .75rem;
-        border-radius: 4px;
-        padding: 10px 15px;
-        margin-top: 8px;
-        span {
-            display: block;
-            padding: .25rem 0;
-        }
-        &.is-open {
-            display: block;
-        }
-    }
 }
 
 .selected-language {
@@ -959,5 +942,18 @@ $mykart:'mykart';
     img {
         display: block;
         border-radius: 4px;
+    }
+}
+
+.languages {
+    position: relative;
+    background-color: $bg-gray;
+    flex: 0 0 100%;
+    border-radius: $radius4;
+    //padding: 10px 15px;
+    margin-top: 8px;
+    &-link {
+        display: block;
+        padding: .25rem 0;
     }
 }

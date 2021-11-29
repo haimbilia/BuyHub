@@ -1397,6 +1397,12 @@ class AdvertiserController extends AdvertiserBaseController
             'blocation_promotion_cost',
             'ifnull(blocation_name,blocation_identifier) as blocation_name'
         ));
+        $srch->joinTable(
+            Collections::DB_TBL,
+            'INNER JOIN',
+            'collections.collection_id = blocation_collection_id',
+            'collections'
+        );
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'blocation_id');
         $locationArr = array();

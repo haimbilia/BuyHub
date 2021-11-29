@@ -51,6 +51,9 @@
     &-item {
         transition: all 0.3s ease;
         text-align: center;
+        &:hover{ 
+            //.dropdown-menu{ display: block;}
+        }
     }
     &-link {
         background: transparent;

@@ -210,7 +210,7 @@
                                                             </span>
                                                         </span>
                                                         <span
-                                                            class="badge badge--unified-danger badge--sm badge--rounded badge--bolder">5</span>
+                                                            class="badge badge-unified-danger badge-sm badge-rounded badge-bolder">5</span>
                                                     </a>
                                                     <a href="profile-email-settings.php" class="widget__item ">
                                                         <span class="widget__section">
@@ -281,7 +281,7 @@
                                                             <span href="#" class="widget__desc">Tax information</span>
                                                         </span>
                                                         <span
-                                                            class="badge badge--unified-brand badge--inline badge--bolder">new</span>
+                                                            class="badge badge-unified-brand badge-inline badge-bolder">new</span>
                                                     </a>
                                                     <a href="#" class="widget__item" data-toggle="tooltip" title=""
                                                         data-placement="right" data-original-title="Coming soon...">

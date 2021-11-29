@@ -202,7 +202,7 @@
                                             <th data-field="AgentName" class="datatable_cell datatable_cell_left"><span>
                                                     <div class="user-card-v2">
                                                         <div class="user-card-v2__pic">
-                                                            <div class="badge badge--xl badge--info">T</div>
+                                                            <div class="badge badge-xl badge-info">T</div>
                                                         </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Tuck O'Dowgaine</a> <span class="user-card-v2__desc">Developer</span> </div>
                                                     </div>
@@ -217,7 +217,7 @@
                                                     </div>
                                                 </span></td>
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-brand">Pending</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -236,7 +236,7 @@
                                             <th data-field="AgentName" class="datatable_cell datatable_cell_left"><span>
                                                     <div class="user-card-v2">
                                                         <div class="user-card-v2__pic">
-                                                            <div class="badge badge--xl badge--danger">F</div>
+                                                            <div class="badge badge-xl badge-danger">F</div>
                                                         </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Freida Morby</a> <span class="user-card-v2__desc">Manager</span> </div>
                                                     </div>
@@ -251,7 +251,7 @@
                                                     </div>
                                                 </span></td>
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Processing</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -283,7 +283,7 @@
                                                     </div>
                                                 </span></td>
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">Success</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -315,7 +315,7 @@
                                                     </div>
                                                 </span></td>
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Done</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -347,7 +347,7 @@
                                                     </div>
                                                 </span></td>
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">Success</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -379,7 +379,7 @@
                                                     </div>
                                                 </span></td>
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Processing</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -411,7 +411,7 @@
                                                     </div>
                                                 </span></td>
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">Success</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -443,7 +443,7 @@
                                                     </div>
                                                 </span></td>
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Processing</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -475,7 +475,7 @@
                                                     </div>
                                                 </span></td>
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">Delivered</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -507,7 +507,7 @@
                                                     </div>
                                                 </span></td>
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-brand">Pending</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right">

@@ -6422,4 +6422,10 @@ class SellerController extends SellerBaseController
         $shopData = (array)Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), $attr, true, $this->siteLangId);
         FatUtility::dieJsonSuccess(['shopData' => $shopData]);
     }
+
+    // Page Created for Pawan to create new UI for add product. 26/11/2021
+    public function addProductPageUi(Type $var = null)
+    {
+        $this->_template->render();
+    }
 }
