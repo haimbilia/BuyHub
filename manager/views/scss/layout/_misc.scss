@@ -4,9 +4,9 @@
 }
 
 .app {
-    display: flex;
-    flex: 1 0 auto;
-    flex-direction: row;
+    // display: flex;
+    // flex: 1 0 auto;
+    // flex-direction: row;
 }
 
 .wrap {
@@ -52,6 +52,9 @@
             // overflow: hidden;
             // text-overflow: ellipsis;
         }
+        a {
+            color: currentColor;
+        }
     }
     &-inner {
         display: flex;
@@ -94,6 +97,8 @@
 }
 
 .advanced-trigger {
+    display: flex;
+    align-items: center;
     background-color: $bg-gray;
     border: solid 1px transparent;
     color: $txt-gray;
@@ -497,9 +502,12 @@
         transition: transform 0.3s ease-out;
         transform: translateX(100%);
     }
+    .card-head {
+        flex-direction: row;
+    }
     &-close {
         @include media-breakpoint-up(lg) {
-            display: none;
+            display: none !important;
         }
     }
     &--on & {
@@ -512,15 +520,16 @@
     border: none;
     box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
     overflow: hidden;
-    background-color: $brand-color;
-    color: $brand-color-inverse;
+    // background-color: $brand-color;
+    // color:  lighten($brand-color, 55%); 
+    @include bg-brand();
     border-radius: 50%;
     width: 45px;
     height: 45px;
     position: fixed;
     margin: 1em;
     z-index: 9;
-    #{$end-direction}:0.5rem;
+    #{$end-direction}: 0.5rem;
     bottom: 6rem;
     display: flex;
     align-items: center;

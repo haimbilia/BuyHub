@@ -2,6 +2,8 @@
 
 class UsersAddressesController extends ListingBaseController
 {
+    protected $pageKey = 'USER_ADDRESSES';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,7 +15,7 @@ class UsersAddressesController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_USERS_ADDRESSES', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -67,9 +69,9 @@ class UsersAddressesController extends ListingBaseController
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-        
+
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-        
+
         $srch = new AddressSearch($this->siteLangId);
         $srch->joinUser();
         $srch->joinCountry();
@@ -80,16 +82,16 @@ class UsersAddressesController extends ListingBaseController
         $srch->addCondition('state_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('user_deleted', '=', applicationConstants::NO);
         $srch->addCondition(Address::tblFld('type'), '=', Address::TYPE_USER);
-        
+
         if (0 < $userId) {
             $srch->addCondition(Address::tblFld('record_id'), '=', $userId);
         }
 
         $title = FatApp::getPostedData('addr_title', FatUtility::VAR_STRING, '');
         if (!empty($title)) {
-            $srch->addCondition(Address::tblFld('title'), 'LIKE', '%'. $title . '%');
+            $srch->addCondition(Address::tblFld('title'), 'LIKE', '%' . $title . '%');
         }
-        
+
         $srch->addMultipleFields(array('addr.*', 'state_code', 'country_code', 'country_code_alpha3', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
 
         $srch->addOrder($sortBy, $sortOrder);
@@ -104,7 +106,7 @@ class UsersAddressesController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        
+
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 
@@ -145,7 +147,7 @@ class UsersAddressesController extends ListingBaseController
     {
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
@@ -226,7 +228,7 @@ class UsersAddressesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($recordId)
+    protected function markAsDeleted($recordId)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
@@ -266,7 +268,7 @@ class UsersAddressesController extends ListingBaseController
         $frm->addHiddenField('', 'addr_phone_dcode');
         $phnFld = $frm->addTextBox(Labels::getLabel('FRM_Phone', $this->siteLangId), 'addr_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        
+
         return $frm;
     }
 
@@ -327,14 +329,16 @@ class UsersAddressesController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
                     ['title' => Labels::getLabel('LBL_USERS_ADDRESSES', $this->siteLangId)]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

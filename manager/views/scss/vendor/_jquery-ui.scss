@@ -2152,8 +2152,9 @@ a.ui-button:active,
 }
 
 .ui-datepicker td.ui-datepicker-today {
-    background: $brand-color;
-    color: $brand-color-inverse;
+    // background-color: $brand-color;
+    // color:  lighten($brand-color, 55%); 
+    @include bg-brand();
     font-weight: 600;
 }
 

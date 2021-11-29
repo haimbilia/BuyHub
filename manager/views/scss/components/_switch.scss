@@ -67,7 +67,9 @@
                 .input-helper {
                     &:after {
                         margin-#{$start-direction}: 26px;
-                        background-color: $brand-color;
+                        // background-color: $brand-color;
+                        // color:  lighten($brand-color, 55%); 
+                        @include bg-brand();
                         color: #ffffff;
                     }
                     &:before {
@@ -227,7 +229,9 @@
                     ~ {
                         .input-helper {
                             &:before {
-                                background-color: $brand-color;
+                                // background-color: $brand-color;
+                                // color:  lighten($brand-color, 55%); 
+                                @include bg-brand();
                             }
                             &:after {
                                 color: $brand-color;
@@ -241,7 +245,9 @@
                     ~ {
                         .input-helper {
                             &:before {
-                                background-color: $brand-color;
+                                // background-color: $brand-color;
+                                // color:  lighten($brand-color, 55%); 
+                                @include bg-brand();
                             }
                             &:after {
                                 opacity: 1;
@@ -275,7 +281,9 @@
                                 background-color: $bg-white;
                             }
                             &:after {
-                                background-color: $brand-color;
+                                // background-color: $brand-color;
+                                // color:  lighten($brand-color, 55%); 
+                                @include bg-brand();
                                 opacity: 1;
                             }
                         }
@@ -411,21 +419,25 @@
                     ~ {
                         .input-helper {
                             &:before {
-                                background-color: $brand-color;
+                                // background-color: $brand-color;
+                                // color:  lighten($brand-color, 55%); 
+                                @include bg-brand();
                                 border-color: $brand-color;
                             }
                             &:after {
-                                background-color: $brand-color-inverse;
+                                background-color: lighten($brand-color, 55%);
                                 opacity: 1;
                                 margin-#{$start-direction}: 20px;
                             }
                             &:hover {
                                 &:before {
-                                    background-color: $brand-color;
+                                    // background-color: $brand-color;
+                                    // color:  lighten($brand-color, 55%); 
+                                    @include bg-brand();
                                     border-color: $brand-color;
                                 }
                                 &::after {
-                                    background-color: $brand-color-inverse;
+                                    background-color:  lighten($brand-color, 55%);
                                 }
                             }
                         }

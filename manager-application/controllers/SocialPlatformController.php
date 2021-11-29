@@ -322,7 +322,7 @@ class SocialPlatformController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($splatform_id)
+    protected function markAsDeleted($splatform_id)
     {
         $splatform_id = FatUtility::int($splatform_id);
         if (1 > $splatform_id) {

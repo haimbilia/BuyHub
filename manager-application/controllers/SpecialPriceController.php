@@ -3,6 +3,7 @@
 class SpecialPriceController extends ListingBaseController
 {
     protected $modelClass = 'SellerProduct';
+    protected $pageKey = 'SPECIAL_PRICE';
 
     public function __construct($action)
     {
@@ -15,7 +16,7 @@ class SpecialPriceController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_SPECIAL_PRICE', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
@@ -32,7 +33,7 @@ class SpecialPriceController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addJs(['js/select2.js', 'special-price/page-js/index.js']);        
+        $this->_template->addJs(['js/select2.js', 'special-price/page-js/index.js']);
         $this->_template->addCss(['css/select2.min.css']);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -68,7 +69,7 @@ class SpecialPriceController extends ListingBaseController
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-        
+
         $postedData = FatApp::getPostedData();
         $post = $searchForm->getFormDataFromArray($postedData);
 
@@ -89,7 +90,7 @@ class SpecialPriceController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        
+
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 
@@ -264,7 +265,7 @@ class SpecialPriceController extends ListingBaseController
             'smt' => $smt,
             'vals' => $smtValues
         );
-        
+
         if ($tblRecord->loadFromDb($condition)) {
             $specialPriceRow = $tblRecord->getFlds();
             if ($specialPriceRow['splprice_id'] != $splprice_id) {
@@ -348,7 +349,7 @@ class SpecialPriceController extends ListingBaseController
         if ($rs) {
             $products = $db->fetchAll($rs, 'id');
         }
-        
+
         $json = array();
         foreach ($products as $key => $option) {
             $options = SellerProduct::getSellerProductOptions($key, true, $this->siteLangId);
@@ -428,7 +429,7 @@ class SpecialPriceController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($recordId)
+    protected function markAsDeleted($recordId)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {

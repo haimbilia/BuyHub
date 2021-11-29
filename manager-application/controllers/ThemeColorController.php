@@ -7,6 +7,7 @@ use Curl\Curl;
 
 class ThemeColorController extends ListingBaseController
 {
+    protected $pageKey = 'THEME_SETTINGS';
     private $apiKey;
 
     public function __construct($action)
@@ -30,6 +31,11 @@ class ThemeColorController extends ListingBaseController
 
         $frm = $this->getFontsForm();
         $frm->fill($record);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $this->set('pageTitle', $pageTitle);
+
         $this->set('frm', $frm);
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js'));
@@ -204,9 +210,8 @@ class ThemeColorController extends ListingBaseController
     }
 
     public function getBreadcrumbNodes($action)
-    {
-        parent::getBreadcrumbNodes($action);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_THEME_SETTINGS', $this->siteLangId);
+    {        
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {
             case 'index':
@@ -214,6 +219,10 @@ class ThemeColorController extends ListingBaseController
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

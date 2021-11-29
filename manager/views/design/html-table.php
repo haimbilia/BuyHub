@@ -265,7 +265,7 @@
                                             <td data-field="Color" class="datatable__cell"><span style="width: 148px;">Goldenrod</span></td>
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$70991.52</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2017-03-16</span></td>
-                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                         </tr>
                                         <tr data-row="3" class="datatable__row datatable__row--even" style="left: 0px;">
@@ -276,7 +276,7 @@
                                             <td data-field="Color" class="datatable__cell"><span style="width: 148px;">Indigo</span></td>
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$42615.31</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2016-09-04</span></td>
-                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                         </tr>
                                         <tr data-row="4" class="datatable__row" style="left: 0px;">

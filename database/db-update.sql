@@ -1356,6 +1356,36 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_BRANDS', '-1', 'Manage Brands', 'Add and manage product brands. Upload logos and banners to display on the brand detail page at the storefront.', 'Brands will be visible at storefront after they are linked with Product(s).', '', '');
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_SHOPS', '-1', 'Manage Shops', 'View and manage sellers’ registered shops information.', 'Buyers look over shop details on the Shop detail page.', '', '');
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_CATEGORIES', '-1', 'Manage Categories', 'Add and manage product categories. Upload category logos and banners to display on the category detail page at storefront.', 'Categories will be visible at storefront after they are linked with Product(s).', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_ORDER_CANCEL_REASONS', '-1', 'Manage Order Cancellation Reasons', 'Provide a comprehensive set of reasons to buyers when placing order cancellation requests.', '', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_ORDER_RETURN_REASONS', '-1', 'Manage Order Return Reasons', 'Provide a comprehensive set of reasons to buyers when placing order return requests.', '', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_ORDER_STATUS', '-1', 'Manage User Rewards', 'Improve your conversion rate and sales by rewarding your users with points that they can redeem when placing orders.', '', '', '');
+UPDATE `tbl_pages_language_data` SET `plang_title` = 'Manage Order Statuses', `plang_summary` = 'Customize, edit, add or delete order statuses to keep users informed of order updates and changes.' WHERE `tbl_pages_language_data`.`plang_key` = 'MANAGE_ORDER_STATUS';
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_USER_REWARDS', '-1', 'Manage User Rewards', 'Improve your conversion rate and sales by rewarding your users with points that they can redeem when placing orders.', '', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'TRANSACTIONS', '-1', 'Transactions', 'View details of the transactions of declined and canceled followed by the current status.', '', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'DELETED_USERS', '-1', 'Deleted Users', 'Search deleted users using filters & hover over the user you want to restore by clicking on the button ‘Restore User’.', '', '', '');
+
+
+ALTER TABLE `tbl_product_specifics` ADD `product_warranty_unit` TINYINT NOT NULL AFTER `product_warranty`;
+UPDATE `tbl_product_specifics` SET `product_warranty_unit` = '1';
+ALTER TABLE `tbl_product_specifics` CHANGE `product_warranty` `product_warranty` INT NOT NULL;
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_NAME', '1', 'Name', '1') ON DUPLICATE KEY UPDATE label_caption = 'Name';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_VALUE', '1', 'Value', '1') ON DUPLICATE KEY UPDATE label_caption = 'Value';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_GROUP', '1', 'Group', '1') ON DUPLICATE KEY UPDATE label_caption = 'Group';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', '1', 'Attachment at inventory level', '1') ON DUPLICATE KEY UPDATE label_caption = 'Attachment at inventory level';
+
+-- ---- tags update ---- --
+ALTER TABLE `tbl_tags` CHANGE `tag_identifier` `tag_name` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `tbl_tags` ADD `tag_lang_id` INT NOT NULL AFTER `tag_name`;
+update tbl_tags set tag_lang_id = (SELECT conf_val FROM `tbl_configurations` where conf_name='CONF_ADMIN_DEFAULT_LANG');
+
+DELETE tag FROM tbl_tags tag   
+  LEFT JOIN tbl_product_to_tags ptag ON ptag.ptt_tag_id = tag_id
+      WHERE ptag.ptt_tag_id IS NULL;  
+ALTER TABLE tbl_tags DROP INDEX tag_identifier;
+ALTER TABLE tbl_tags ADD UNIQUE( tag_name, tag_lang_id);
+RENAME TABLE tbl_tags_lang TO tbl_tags_lang_bk;
+-- ---- tags update ]---- --
 
 DELETE FROM `tbl_language_labels` WHERE label_key='LBL_CUSTOMER_NAME';
 

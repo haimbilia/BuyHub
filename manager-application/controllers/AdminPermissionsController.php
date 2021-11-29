@@ -198,7 +198,7 @@ class AdminPermissionsController extends ListingBaseController
         if (empty($postedModulesArr) || -1 == $permission) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        
+
         $modulesArr = AdminPrivilege::getPermissionModulesArr();
         if (count($modulesArr) == count($postedModulesArr)) {
             $this->changePermission(0, $permission);
@@ -296,8 +296,6 @@ class AdminPermissionsController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_ADMIN_PERMISSIONS', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_PERMISSIONS', $this->siteLangId);
 

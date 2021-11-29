@@ -24,9 +24,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
             case 'user_name':
-                $userDetail = '<strong>' . Labels::getLabel('LBL_N:', $siteLangId) . ' </strong>' . $row['user_name'] . '<br/>';
-                $userDetail .= '<strong>' . Labels::getLabel('LBL_UN:', $siteLangId) . ' </strong>' . $row['credential_username'] . '<br/>';
-                $td->appendElement('plaintext', $tdAttr, $userDetail, true);
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'shop_name':
                 if (!empty($row['shop_name'])) {

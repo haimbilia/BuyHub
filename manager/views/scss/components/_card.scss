@@ -59,8 +59,7 @@ $card:'card';
     &-toolbar {
         display: flex;
         align-items: flex-start;
-        align-content: flex-start;     
-      
+        align-content: flex-start;
         @include media-breakpoint-up(md) {
             align-items: center;
             align-content: flex-end;
@@ -89,6 +88,12 @@ $card:'card';
             li {
                 list-style: none;
                 margin-#{$start-direction}: 0.5rem;
+                &:first-child {
+                    margin-#{$start-direction}: 0;
+                }
+                &:last-child {
+                    margin-#{$end-direction}: 0;
+                }
             }
         }
     }
@@ -416,7 +421,11 @@ $card:'card';
         }
     }
     &#{&}-solid-brand {
-        background: $brand-color;
+        // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
         #{$selfHead} {
             color: #ffffff;
             border-bottom: 1px solid transparent;

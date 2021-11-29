@@ -1,5 +1,4 @@
-//default colors
- 
+//default colors 
 $dark-color:#888;
 $blue:var(--brand-color);
 $primary:#ff3a59;
@@ -13,7 +12,7 @@ $secondary-color-inverse: #FFFFFF;
 $third-color: var(--third-color);
 $third-color-inverse:var(--third-color-inverse);
 //fixed theme colors 
-$txt-body:rgba(0, 0, 0, .87);
+$txt-body:rgba(0, 0, 0, .87); 
 $txt-gray:rgba(0, 0, 0, .67);
 $text-muted:#888888 !default;
 //border colors
@@ -23,7 +22,7 @@ $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
 //backgrounds colors
 $bg-white: #fff;
-$bg-white-inverse:$body-color;
+$bg-white-inverse:$txt-body;
 $bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
 $bg-light: #f3f4f5;
 $bg-gray: #f3f4f5;
@@ -42,6 +41,12 @@ $success-color: #1dc9b7;
 $warning-color: #ffb822;
 $info-color: #5578eb;
 $danger-color: #fd397a;
+
+//Bg brand
+@mixin bg-brand {
+    background-color: $brand-color;
+    color: lighten($brand-color, 55%);
+}
 //Push auto
 @mixin push--auto {
     margin: {

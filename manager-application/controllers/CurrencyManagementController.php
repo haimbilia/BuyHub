@@ -2,6 +2,8 @@
 
 class CurrencyManagementController extends ListingBaseController
 {
+    protected $pageKey = 'MANAGE_CURRENCIES';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -17,7 +19,7 @@ class CurrencyManagementController extends ListingBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditCurrencyManagement();
-        $this->modelObj = (new ReflectionClass('Currency'))->newInstanceArgs($constructorArgs);
+        $this->setModel();
         $this->formLangFields = [$this->modelObj::tblFld('name')];
         $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->siteLangId));
     }
@@ -27,7 +29,7 @@ class CurrencyManagementController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CURRENCIES', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $currencyPlugins = Plugin::getNamesByType(Plugin::TYPE_CURRENCY_CONVERTER, $this->siteLangId);
@@ -162,7 +164,7 @@ class CurrencyManagementController extends ListingBaseController
         $frm = $this->getForm($defaultCurrency);
         $frm->fill($data);
 
-        
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_CURRENCY_SETUP', $this->siteLangId));
@@ -358,15 +360,18 @@ class CurrencyManagementController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CURRENCIES', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {
             case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

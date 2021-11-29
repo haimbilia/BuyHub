@@ -2,6 +2,8 @@
 
 class SalesReportController extends ListingBaseController
 {
+    protected $pageKey = 'REPORT_SALES_OVERTIME';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,7 +14,7 @@ class SalesReportController extends ListingBaseController
     {
         $formColumns = $this->getFormColumns($orderDate);
         $frmSearch = $this->getSearchForm($formColumns, $orderDate);
-        $pageData = PageLanguageData::getAttributesByKey('SALES_REPORT', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
@@ -50,7 +52,7 @@ class SalesReportController extends ListingBaseController
             $this->addSortingElements($frm, 'orderDate', applicationConstants::SORT_DESC);
         }
         $frm->addHiddenField('', 'orderDate', $orderDate);
-       
+
         if (empty($orderDate)) {
             $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
             $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
@@ -262,13 +264,19 @@ class SalesReportController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-
         switch ($action) {
             case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SALES_OVER_TIME', $this->siteLangId)]
+                    ['title' => Labels::getLabel('NAV_REPORTS', $this->siteLangId)],
+                    ['title' => Labels::getLabel('NAV_SALES_REPORTS', $this->siteLangId)],
+                    ['title' => $pageTitle]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

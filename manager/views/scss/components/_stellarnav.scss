@@ -30,7 +30,11 @@
             li {
                 a {
                     &:hover {
-                        background: $brand-color;
+                        // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
                         color: #fff;
                         [data-theme="dark"] & {
                             background: $bg-black;
@@ -290,7 +294,11 @@
         text-align: center;
         margin: 1rem;
         &:hover {
-            background: $brand-color;
+            // // background-color: $brand-color;
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
+        // color:  lighten($brand-color, 55%); 
+        @include bg-brand();
             &:before {
                 border-color: #fff;
             }

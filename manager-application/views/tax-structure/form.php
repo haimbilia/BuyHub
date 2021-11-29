@@ -1,207 +1,45 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php
+defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
+$frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+$delBtn = '<button type="button" data-id="0" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="Remove">
+        <svg class="svg" width="18" height="18">
+            <use xlink:href="/admin/images/retina/sprite-actions.svg#delete">
+            </use>
+        </svg>
+    </button>';
+$addBtn = '<button type="button" class="btn btn--secondary ripplelink add-combined-form--js ml-2" title="Add">
+        <svg class="svg" width="18" height="18">
+            <use xlink:href="/admin//images/retina/sprite-actions.svg#add">
+            </use>
+        </svg>
+    </button>';
+$htmlFld = $frm->getField('component_link');
+$htmlFld->value = $addBtn . $delBtn;
+$otherButtons = [
+];
+
+$formTitle = Labels::getLabel('LBL_TAX_STRUCTURE_SETUP', $siteLangId);
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>
-<div class="modal-header">
-    <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_TAX_STRUCTURE_SETUP', $siteLangId); ?>
-    </h5>
-</div>
-<div class="modal-body form-edit">
-    <div class="form-edit-body loaderContainerJs">
-        <?php echo $frm->getFormTag(); ?>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="field-set">
-                        <div class="caption-wraper">
-                            <label class="field_label">
-                                <?php $fld = $frm->getField('taxstr_name[' . $siteDefaultLangId . ']');
-                                echo $fld->getCaption(); ?>
-                                <span class="spn_must_field">*</span></label>
-                        </div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $frm->getFieldHtml('taxstr_name[' . $siteDefaultLangId . ']'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="field-set">
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $frm->getFieldHtml('taxstr_is_combined'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php $combTaxCount = 0; ?>
-            <?php if (array_key_exists('taxstr_is_combined', $taxStrData) && $taxStrData['taxstr_is_combined']) { ?>
-                <div id="combinedTax-js" <?php echo (!array_key_exists('taxstr_is_combined', $taxStrData) || (!$taxStrData['taxstr_is_combined'])) ? 'style="display:none"' : ''; ?>>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h6><?php
-                                $fld = $frm->getField('taxstr_component_name[' . $combTaxCount . '][' . $siteDefaultLangId . ']');
-                                echo $fld->getCaption();
-                                ?></h6>
-                        </div>
-                    </div>
-                    <div class="row combined-tax--js">
-                        <?php foreach ($combinedTaxes as $combTaxCount => $combinedTax) { ?>
-                            <div class="col-md-12 combined-tax-row<?php echo $combTaxCount; ?>">
-                                <div class="field-set">
-                                    <div class="field-wraper">
-                                        <div class="field_cover d-flex">
-                                            <input type="text" name="taxstr_component_name[<?php echo $combTaxCount; ?>][<?php echo $siteDefaultLangId; ?>]" value="<?php echo isset($combinedTax[$siteDefaultLangId]) ? $combinedTax[$siteDefaultLangId] : ''; ?>">
-                                            <button type="button" data-id="<?php echo $combTaxCount; ?>" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>"><i class="ion-minus-round"></i></button>
-                                            <button type="button" class="btn btn--secondary ripplelink addCombinedFormJs ml-2" title="<?php echo Labels::getLabel('LBL_Add', $siteLangId); ?>"><i class="ion-plus-round"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-            <?php } else { ?>
-                <div id="combinedTax-js" <?php echo (!array_key_exists('taxstr_is_combined', $taxStrData) || (!$taxStrData['taxstr_is_combined'])) ? 'style="display:none"' : ''; ?>>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h6><?php
-                                $fld = $frm->getField('taxstr_component_name[' . $combTaxCount . '][' . $siteDefaultLangId . ']');
-                                echo $fld->getCaption();
-                                ?></h6>
-                        </div>
-                    </div>
-                    <div class="row combined-tax--js">
-                        <div class="col-md-12 combined-tax-row<?php echo $combTaxCount; ?>">
-                            <div class="field-set">
-                                <div class="field-wraper">
-                                    <div class="field_cover d-flex">
-                                        <?php echo $frm->getFieldHtml('taxstr_component_name[' . $combTaxCount . '][' . $siteDefaultLangId . ']'); ?>
-                                        <button type="button" data-id="<?php echo $combTaxCount; ?>" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>"><i class="ion-minus-round"></i></button>
-                                        <button type="button" class="btn btn--secondary ripplelink addCombinedFormJs ml-2" title="<?php echo Labels::getLabel('LBL_Add', $siteLangId); ?>"><i class="ion-plus-round"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-            <?php if (!empty($otherLangData)) {
-                foreach ($otherLangData as $langId => $data) { ?>
-                    <div class="accordians_container accordians_container-categories" defaultLang="<?php echo $siteDefaultLangId; ?>" language="<?php echo $langId; ?>" id="accordion-language_<?php echo $langId; ?>" onClick="translateData(this)">
-                        <div class="accordian_panel">
-                            <span class="accordian_title accordianhead accordian_title" id="collapse_<?php echo $langId; ?>">
-                                <?php echo $data . " ";
-                                echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                            </span>
-                            <div class="accordian_body accordiancontent p-0" style="display: none;">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="field-set">
-                                            <div class="caption-wraper">
-                                                <label class="field_label">
-                                                    <?php $fld = $frm->getField('taxstr_name[' . $langId . ']');
-                                                    echo $fld->getCaption(); ?>
-                                                </label>
-                                            </div>
-                                            <div class="field-wraper">
-                                                <div class="field_cover">
-                                                    <?php echo $frm->getFieldHtml('taxstr_name[' . $langId . ']'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php $combTaxCount = 0; ?>
-                                <?php if (array_key_exists('taxstr_is_combined', $taxStrData) && $taxStrData['taxstr_is_combined']) { ?>
-                                    <div id="combinedTaxLang-js" <?php echo (!array_key_exists('taxstr_is_combined', $taxStrData) || (!$taxStrData['taxstr_is_combined'])) ? 'style="display: none;"' : ''; ?>>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h6><?php
-                                                    $fld = $frm->getField('taxstr_component_name[' . $combTaxCount . '][' . $langId . ']');
-                                                    echo $fld->getCaption();
-                                                    ?></h6>
-                                            </div>
-                                        </div>
-                                        <div class="row combined-tax-lang--js<?php echo $langId; ?>">
-                                            <?php foreach ($combinedTaxes as $combTaxCount => $combinedTax) { ?>
-                                                <div class="col-md-12 combined-tax-row<?php echo $combTaxCount; ?>">
-                                                    <div class="field-set">
-                                                        <div class="field-wraper">
-                                                            <div class="field_cover">
-                                                                <input type="text" name="taxstr_component_name[<?php echo $combTaxCount; ?>][<?php echo $langId; ?>]" value="<?php echo isset($combinedTax[$langId]) ? $combinedTax[$langId] : ''; ?>">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php } ?>
-                                        </div>
-                                    </div>
-                                <?php } else { ?>
-                                    <div id="combinedTaxLang-js" <?php echo (!array_key_exists('taxstr_is_combined', $taxStrData) || (!$taxStrData['taxstr_is_combined'])) ? 'style="display: none;"' : ''; ?>>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h6><?php
-                                                    $fld = $frm->getField('taxstr_component_name[' . $combTaxCount . '][' . $langId . ']');
-                                                    echo $fld->getCaption();
-                                                    ?></h6>
-                                            </div>
-                                        </div>
-                                        <div class="row combined-tax-lang--js<?php echo $langId; ?>">
-                                            <div class="col-md-12 combined-tax-row<?php echo $combTaxCount; ?>">
-                                                <div class="field-set">
-                                                    <div class="field-wraper">
-                                                        <div class="field_cover">
-                                                            <?php echo $frm->getFieldHtml('taxstr_component_name[' . $combTaxCount . '][' . $langId . ']'); ?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    </div>
-            <?php }
-            } ?>
-            <?php echo $frm->getFieldHtml('taxstr_id'); ?>
-        </form>
-        <?php echo $frm->getExternalJS(); ?>
-    </div>
-    
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
-</div>
-<script>
-    $(document).ready(function() {
-        var combTaxCount = <?php echo $combTaxCount; ?>;
-        $(document).on('click', '.addCombinedFormJs', function(event) {
-            event.stopImmediatePropagation();
-            combTaxCount++;
-            var rowHtml = '<div class="col-md-12 combined-tax-row' + combTaxCount + '"><div class="field-set"><div class="field-wraper"><div class="field_cover d-flex"><input type="text" name="taxstr_component_name[' + combTaxCount + '][<?php echo $siteDefaultLangId; ?>]" value=""><button type="button" data-id="' + combTaxCount + '" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>"><i class="ion-minus-round"></i></button><button type="button" class="btn btn--secondary ripplelink addCombinedFormJs ml-2" title="<?php echo Labels::getLabel('LBL_Add', $siteLangId); ?>"><i class="ion-plus-round"></i></button></div></div></div></div>';
-            $('.combined-tax--js').append(rowHtml);
-
-            <?php foreach ($otherLangData as $langId => $data) { ?>
-                var langRowHtml = '<div class="col-md-12 combined-tax-row' + combTaxCount + '"><div class="field-set"><div class="field-wraper"><div class="field_cover"><input type="text" name="taxstr_component_name[' + combTaxCount + '][<?php echo $langId; ?>]" value=""></div></div></div></div>';
-                $('.combined-tax-lang--js' + <?php echo $langId; ?>).append(langRowHtml);
-            <?php } ?>
-            fcom.resetFaceboxHeight();
-        });
-
-        // Find and remove selected table rows
-        $(document).on('click', '.remove-combined-form--js', function() {
-            var rowCount = $(this).data("id");
-            if (rowCount > 0) {
-                var className = $('.combined-tax-row' + rowCount).remove();
-            }
-            fcom.resetFaceboxHeight();
-        });
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.component_link').closest('.col-md-12').addClass('hide');
+        if ($("input[name=taxstr_is_combined]").prop('checked') == true) {
+            $('.component_link').closest('.col-md-12').removeClass('hide');
+        }
+<?php
+if (!empty($combinedTaxes)) {
+    foreach ($combinedTaxes as $key => $tax) {
+        ?>
+                $('.component_link').find('.row').after($('.component_link').find('.row').last().clone());
+                $('.component_link').find('.row').last().find('input[type=text]').val('<?php echo $tax; ?>');
+                $('.component_link').find('.row').last().find('.remove-combined-form--js').removeClass('hide');
+        <?php
+    }
+}
+?>
     });
 </script>

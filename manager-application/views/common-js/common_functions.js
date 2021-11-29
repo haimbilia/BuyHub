@@ -193,8 +193,12 @@ select2 = function (elmId, url, postdata = {}, callbackOnSelect = '', callbackOn
             callbackOnUnSelect(e);
         }
     });
-    
+
     if (0 < ele.closest('.advancedSearchJs').length) {
+        ele.data('select2').$container.addClass("w-100");
+    }
+
+    if (0 < ele.closest('.form-group').length) {
         ele.data('select2').$container.addClass("w-100");
     }
 
@@ -241,4 +245,27 @@ $(document).ready(function () {
         }
     });
     /* Active Sidebar Link. */
+
+    /* alert-text close */
+    $('.closeAlertJs').on('click', function () {
+        $.cookie($(this).attr('data-name'), true);
+    });
+    /* alert-text close */
+
+    $('.openAlertJs').on('click', function () {
+        if ($('.mainHeaderJs').find('.closeAlertJs').length == 0) {
+            $.removeCookie($(this).attr('data-name'));
+            data = 'id=' + $(this).attr('data-pageid');
+            fcom.updateWithAjax(fcom.makeUrl('PageLanguageData', 'displayAlert'), data, function (t) {
+                $('.mainHeaderJs').append(t.html);
+            });
+        } else {
+            $('.alertWarningJs').remove();
+        }
+    });
+
+    $(".dropdown").hover(function () {
+        $(this).toggleClass("show");
+        $(this).find('.sidebar-dropdown-menu').toggleClass('show');
+    });
 });

@@ -251,7 +251,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>China CN</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>8/27/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Kris-Wehner</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -349,7 +349,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>France FR</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>6/13/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Lubowitz Inc</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -377,7 +377,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Greece GR</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>8/2/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Hoeger-Waelchi</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -489,7 +489,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Panama PA</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>8/1/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Johns-Lueilwitz</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -601,7 +601,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>China CN</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>9/27/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Hodkiewicz-Ledner</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -629,7 +629,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Hungary HU</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>12/5/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Morar, Bosco and Rosenbaum</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -643,7 +643,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Netherlands NL</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>7/8/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Heathcote-Lueilwitz</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -671,7 +671,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>French Polynesia PF</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>8/10/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Hermiston, Stanton and Weissnat</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -713,7 +713,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>El Salvador SV</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>11/29/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Kohler Inc</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -755,7 +755,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Philippines PH</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>12/12/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Yundt-Jacobs</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -769,7 +769,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Norway NO</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>9/15/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Schulist Inc</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -867,7 +867,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Russia RU</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>5/31/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Cronin-Purdy</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -881,7 +881,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Portugal PT</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>5/16/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Skiles-McCullough</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -937,7 +937,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Australia AU</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>9/6/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Ankunding-Hudson</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -979,7 +979,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Albania AL</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>3/14/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Sanford, Hoeger and Stanton</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1021,7 +1021,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Israel IL</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>5/6/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Kerluke, Witting and Zboncak</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1049,7 +1049,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Indonesia ID</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>3/10/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Feil, Mante and Becker</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1077,7 +1077,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Macedonia MK</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>2/3/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Moore, Toy and McCullough</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1105,7 +1105,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Indonesia ID</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>3/4/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Dach-Ernser</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1147,7 +1147,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Uganda UG</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>7/8/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Kuphal Inc</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1175,7 +1175,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Spain ES</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>11/2/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Jacobson-Brakus</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1217,7 +1217,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>France FR</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>11/18/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Dicki and Sons</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1245,7 +1245,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Brazil BR</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>1/18/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Zboncak-Dooley</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1329,7 +1329,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>France FR</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>2/5/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Witting-Von</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1343,7 +1343,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Pakistan PK</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>1/29/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Kunde-Veum</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1357,7 +1357,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>China CN</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>3/5/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Brown-Hudson</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1371,7 +1371,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Philippines PH</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>10/4/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Adams, Macejkovic and Little</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1413,7 +1413,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Dominican Republic DO</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>11/14/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Wiegand and Sons</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1441,7 +1441,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Philippines PH</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>5/20/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Nicolas-Bayer</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1511,7 +1511,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Brazil BR</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>6/26/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Pfeffer, Harber and Hintz</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1595,7 +1595,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Dominica DM</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>12/20/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Denesik-Wyman</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1609,7 +1609,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Mexico MX</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>12/22/2017</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>O'Reilly, Block and Goyette</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Delivered</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>
@@ -1637,7 +1637,7 @@
                                             <td data-field="Country" class="datatable__cell"><span>Honduras HN</span></td>
                                             <td data-field="ShipDate" class="datatable__cell"><span>1/14/2016</span></td>
                                             <td data-field="CompanyName" class="datatable__cell"><span>Kessler, Greenfelder and Gaylord</span></td>
-                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge--danger badge--inline badge--pill">Danger</span></span></td>
+                                            <td data-field="Status" class="datatable__cell"><span><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-cog"></i> </a>

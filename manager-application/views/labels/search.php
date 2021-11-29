@@ -20,6 +20,9 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo, true);
                 break;
+            case 'label_key':
+                $td->appendElement('plaintext', $tdAttr, Labels::displayPrefixType($row[$key], $siteLangId), true);
+                break;
             case 'label_caption':
                 $td->appendElement('plaintext', $tdAttr, nl2br($row[$key]), true);
                 break;
@@ -33,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['label_id']
                 ];
-                
+
                 if ($canEdit) {
                     $data['otherButtons'] = [
                         [

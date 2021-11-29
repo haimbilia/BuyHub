@@ -2,6 +2,8 @@
 
 class BlogCommentsController extends ListingBaseController
 {
+    protected $pageKey = 'BLOG_COMMENTS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,7 +15,7 @@ class BlogCommentsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_BLOG_COMMENTS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -197,7 +199,7 @@ class BlogCommentsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($recordId)
+    protected function markAsDeleted($recordId)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {

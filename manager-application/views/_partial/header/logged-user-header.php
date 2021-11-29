@@ -1,7 +1,7 @@
 <div class="app">
     <?php $this->includeTemplate('_partial/header/left-navigation.php') ?>
     <div class="wrap">
-        <header class="main-header">
+        <header class="main-header mainHeaderJs">
             <div class="container-fluid">
                 <div class="main-header-inner">
                     <div class="page-title">
@@ -14,8 +14,11 @@
                             } ?>
                         </h1>
                         <?php if (isset($pageData['plang_summary'])) { ?>
-                            <span class="page-title-sub"> <?php echo $pageData['plang_summary']; ?></span>
+                            <span class="page-title-sub"> <?php echo $pageData['plang_summary']; ?> <a href="javascript:void(0)" class="openAlertJs" data-pageid="<?php echo $pageData['plang_id']; ?>" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>">
+                                    <?php if (!empty($pageData['plang_warring_msg']) /* && CommonHelper::isSetCookie('alert_' . $pageData['plang_id']) */) { ?>
+                                        <i class="fas fa-lightbulb"></i></a></span>
                         <?php } ?>
+                    <?php } ?>
 
                     </div>
                     <div class="main-header-toolbar">
@@ -43,9 +46,9 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <div class="search-native">
-                                                    <p><label class="" for="">Press <kbd>Ctrl-F</kbd> again to
+                                                  <label class="checkbox" for="">Press <kbd>Ctrl-F</kbd> again to
                                                             use native browser search.
-                                                            <input type="checkbox" id="quickSearchCtrl"></label></p>
+                                                            <input type="checkbox" id="quickSearchCtrl"></label> 
                                                 </div>
                                             </div>
                                         </div>
@@ -105,7 +108,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -121,7 +124,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -137,7 +140,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -153,7 +156,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -169,7 +172,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -185,7 +188,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -201,7 +204,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -217,7 +220,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notification__detail">
-                                                                <a href="" class="title">Project Alice</a>
+                                                                <a href="javascript:void(0)" class="title">Project Alice</a>
                                                                 <div class="summary">Phase 1 development</div>
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
@@ -346,18 +349,18 @@
                                             </div>
                                         </div>
                                         <div class="header-notification__footer">
-                                            <a href="" class="text-link text-link--arrow">View All </a>
+                                            <a href="javascript:void(0)" class="text-link text-link--arrow">View All </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="header-action__item dropdown header-account">
-                                <a class="dropdown-toggle no-after" data-toggle="dropdown" href="">
+                                <a class="dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
                                     <span class="header-account__img">
                                         <img aria-expanded="false" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>" alt="">
                                     </span>
                                 </a>
-                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
+                                <div class="header-action__target p-0 dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                                     <div class="header-account__avtar">
                                         <div class="profile">
                                             <div class="profile__img">
@@ -389,8 +392,8 @@
                                                         <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/flags/round/<?php echo CommonHelper::getLangCountryCode() ?>.svg"></span>
                                                 </span>
                                                 <div class="languages">
-                                                    <?php foreach ($languages as $langId => $language) { ?>
-                                                        <span <?php echo ($siteLangId == $langId) ? 'class="is--active"' : ''; ?> onClick="setSiteDefaultLang(<?php echo $langId; ?>)"><?php echo $language['language_name']; ?></span>
+                                                    <?php foreach ($languages as $languageId => $language) { ?>
+                                                        <span <?php echo ($siteLangId == $languageId) ? 'class="is--active"' : ''; ?> onClick="setSiteDefaultLang(<?php echo $languageId; ?>)"><?php echo $language['language_name']; ?></span>
                                                     <?php } ?>
                                                 </div>
                                             </a>
@@ -405,16 +408,15 @@
                     </div>
                 </div>
             </div>
-            <?php if (isset($pageData['plang_warring_msg'])) { ?>
-                <div class="alert alert-solid-warning fade show" role="alert">
+            <?php if (isset($pageData['plang_warring_msg']) && !empty($pageData['plang_warring_msg']) && !CommonHelper::isSetCookie('alert_' . $pageData['plang_id'])) { ?>
+                <div class="alert alert-solid-warning fade alertWarningJs show" role="alert">
                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
                     <div class="alert-text"><?php echo $pageData['plang_warring_msg']; ?></div>
                     <div class="alert-close">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <button type="button" class="close closeAlertJs <?php echo 'alert_' . $pageData['plang_id']; ?>" data-dismiss="alert" aria-label="Close" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>">
                             <span aria-hidden="true"><i class="la la-close"></i></span>
                         </button>
                     </div>
                 </div>
             <?php } ?>
-
         </header>

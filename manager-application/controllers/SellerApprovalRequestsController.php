@@ -3,7 +3,7 @@
 class SellerApprovalRequestsController extends ListingBaseController {
 
     protected $modelClass = 'User';
-    protected $pageKey = 'MANAGE_SELLER_APPROVAL_REQUEST';
+    protected $pageKey = 'SELLER_APPROVAL_REQUESTS';
 
     public function __construct($action) {
         parent::__construct($action);
@@ -123,6 +123,7 @@ class SellerApprovalRequestsController extends ListingBaseController {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frm->fill($data);
+        $this->set('includeTabs', false);
         $this->set('languages', []);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);

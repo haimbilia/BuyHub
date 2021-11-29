@@ -2,6 +2,8 @@
 
 class CommissionController extends ListingBaseController
 {
+    protected $pageKey = 'MANAGE_COMMISSIONS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,7 +15,7 @@ class CommissionController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CURRENCIES', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -201,7 +203,7 @@ class CommissionController extends ListingBaseController
         if (!$record->addUpdateData($post)) {
             LibHelper::exitWithError($record->getError(), true);
         }
-        
+
         $insertId = $record->getMainTableRecordId();
         if (!$insertId) {
             $insertId = FatApp::getDb()->getInsertId();
@@ -289,7 +291,7 @@ class CommissionController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($recordId)
+    protected function markAsDeleted($recordId)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
@@ -395,16 +397,18 @@ class CommissionController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CURRENCIES', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
         switch ($action) {
             case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }

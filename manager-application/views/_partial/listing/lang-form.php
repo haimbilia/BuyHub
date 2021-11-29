@@ -11,7 +11,7 @@ if (!$langFrm->getFormTagAttribute('data-onclear')) {
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
 $langFrm->setFormTagAttribute('dir', $formLayout);
 if (!$langFrm->getFormTagAttribute('onsubmit')) {
-    $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#frmLangJs")); return(false);');
+    $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#'.$langFrm->getFormTagAttribute('id').'")[0]); return(false);');
 }
 
 $langFld = $langFrm->getField('lang_id');

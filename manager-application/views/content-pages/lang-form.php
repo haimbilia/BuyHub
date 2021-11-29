@@ -1,17 +1,59 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$langFrm->setFormTagAttribute('onsubmit', 'saveContentPageLangData($("#frmLangJs")); return(false);');
 $langFrm->setFormTagAttribute('id', 'frmLangJs1');
+$langFrm->setFormTagAttribute('onsubmit', 'saveContentPageLangData($("#frmLangJs1")); return(false);');
+$displayLangTab = false;
+
 $otherButtons = [
     [
        'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'mediaForm(' . $recordId . ')',
-            'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+            'onclick' => 'editLangData('.$recordId.','.array_key_first($languages).');',
+            'title' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
         ],
-        'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
-        'isActive' => false
+        'label' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
+        'isActive' => true
     ]
 ]; 
 
-$activeLangtab = true;
+if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
+    $fld = $langFrm->getField('cpage_bg_image');
+    $fld->value = '<span id="imageListingJs"></span>';
+    $imgArr = [];
+    $recordId = $image['afile_record_id'];
+    if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
+        $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+        $imgArr = [
+            'url' => UrlHelper::getCachedUrl(
+                UrlHelper::generateFileUrl(
+                    'Image', 
+                    'cpageBackgroundImage', 
+                    array(
+                        $recordId, 
+                        $image['afile_lang_id'], 
+                        "THUMB", 
+                        $image['afile_type']
+                    ), CONF_WEBROOT_FRONT_URL
+                ) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'
+            ),
+            'name' => $image['afile_name'],
+            'afile_id' => $image['afile_id'],
+        ]; 
+    } 
+    
+    $fld->value =  HtmlHelper::getfileInputHtml(
+        [
+            'onChange' => 'loadImageCropper(this)', 
+            'accept' => 'image/*', 
+            'data-name' => Labels::getLabel("FRM_BACKGROUND_IMAGE", $siteLangId)
+        ],
+        $siteLangId,
+        ($canEdit ? 'deleteBackgroundImage(' . $recordId . ',' . $image['afile_id'] .',' . $image['afile_type'].','.$image['afile_lang_id'].')' :''),
+        ($canEdit ? 'editDropZoneImages(this)': ''),
+        $imgArr,
+        'mt-3 dropzone-custom dropzoneContainerJs'
+    );
+
+}
+
+
 require_once(CONF_THEME_PATH . '_partial/listing/lang-form.php'); ?>

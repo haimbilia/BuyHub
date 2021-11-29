@@ -90,8 +90,7 @@ if ($printData) {
             e.detail.tag.remove();
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('RelatedProducts', 'deleteSelprodRelatedProduct', [mainRecordId, recomendedSelprodId]), '', function(t) {
-            reloadList();
+        fcom.updateWithAjax(fcom.makeUrl('RelatedProducts', 'deleteSelprodRelatedProduct', [mainRecordId, recomendedSelprodId]), '', function(t) {            
         });
     }
 
@@ -116,7 +115,7 @@ if ($printData) {
             e.detail.tagify.loading(false).dropdown.show.call(tagify, keyword);
         });
     }
-
+    let isDeletedConfirmed = false;
     bindTagify = function() {
         var input = document.querySelectorAll('.tagifyJs');
         input.forEach(function(element) {
@@ -129,10 +128,12 @@ if ($printData) {
                 hooks: {
                     beforeRemoveTag: function(tags) {
                         return new Promise((resolve, reject) => {
-                            if (!confirm("Remove " + tags[0].data.value + "?")) {
+                            if (isDeletedConfirmed == false &&  !confirm(langLbl.confirmRemove)) {
                                 return false;
                             }
+                            isDeletedConfirmed = true;
                             removeProduct(tags[0]);
+                            resolve();
                         })
                     }
                 }

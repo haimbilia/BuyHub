@@ -4,7 +4,7 @@
     height: 38px;
     line-height: 38px;
     width: 100%;
-    color: $body-color;
+    color: $txt-body;
     font-family: inherit;
     font-size: 0.9em;
     font-weight: normal;
@@ -70,7 +70,7 @@
             }
             a {
                 cursor: pointer;
-                color: $body-color;
+                color: $txt-body;
                 display: block;
                 overflow: hidden;
                 position: relative;

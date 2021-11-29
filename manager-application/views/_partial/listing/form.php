@@ -10,7 +10,7 @@ if (!$frm->getFormTagAttribute('data-onclear')) {
 
 $frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs ' . $formClassExtra);
 if (!$frm->getFormTagAttribute('onsubmit')) {
-    $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+    $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#'.$frm->getFormTagAttribute('id').'")[0]); return(false);');
 }
 
 $activeGentab = $activeGentab ?? true;
@@ -18,6 +18,7 @@ $disabled = (isset($recordId) && 1 > $recordId) ? 'disabled' : '';
 require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
+        </form>
     </div>
     <?php if (true === $displayFooterButtons) {
         require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php');

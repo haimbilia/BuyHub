@@ -113,8 +113,9 @@
         width: 1rem;
         height: 1rem;
         display: inline-flex;
-        background: $brand-color;
-        color: $brand-color-inverse;
+        //background-color: $brand-color;
+        //color:lighten($brand-color, 55%);        
+        @include bg-brand();
         font-size: 12px;
         text-align: center;
         justify-content: center;

@@ -30,7 +30,7 @@ if (count($arrListing) == 0) {
                 case 'shipprofile_name':
                     $badge = '';
                     if ($row['shipprofile_default'] == 1) {
-                        $badge = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_Default', $adminLangId) . '</span>';
+                        $badge = ' <span class="badge badge-brand badge-inline badge-pill">' . Labels::getLabel('LBL_Default', $adminLangId) . '</span>';
                     }
                     $td->appendElement('plaintext', array(), $row[$key] . $badge, true);
                     break;

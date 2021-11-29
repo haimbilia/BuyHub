@@ -23,7 +23,7 @@
     left: 0;
     right: 0;
     background:  darken($brand-color, 10);   
-    color: $brand-color-inverse; 
+    color: lighten($brand-color, 55%); 
     z-index: 99;
     align-items: center;
     justify-content: space-between;
@@ -61,7 +61,7 @@
                 z-index: 0;
                 width: 16px;
                 height: 16px;
-                color: $brand-color-inverse;
+                color: currentColor;
             }
             &:hover {
                 color: $brand-color;

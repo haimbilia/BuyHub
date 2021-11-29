@@ -1,6 +1,8 @@
 <?php
 class RecomendedTagProductsController extends ListingBaseController
 {
+    protected $pageKey = 'RECOMENDED_TAG_PRODUCTS_WEIGHTAGES';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,7 +14,7 @@ class RecomendedTagProductsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_RECOMENDATIONS_TAG_PRODUCTS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -25,11 +27,11 @@ class RecomendedTagProductsController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TAG_NAME_OR_PRODUCT_NAME', $this->siteLangId));
         $this->getListingData();
-        
+
         $this->_template->addJs(['recomended-tag-products/page-js/index.js']);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
-    
+
     public function search()
     {
         $this->getListingData();
@@ -67,11 +69,10 @@ class RecomendedTagProductsController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = new SearchBase('tbl_tag_product_recommendation', 'tpr');
-        $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', 't.tag_id = tpr.tpr_tag_id', 't');
-        $srch->joinTable(Tag::DB_TBL_LANG, 'LEFT OUTER JOIN', 't_l.taglang_tag_id = t.tag_id and t_l.taglang_lang_id = ' . $this->siteLangId, 't_l');
+        $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', 't.tag_id = tpr.tpr_tag_id', 't');     
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = tpr.tpr_product_id', 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p_l.productlang_product_id = p.product_id and p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
-        $srch->addMultipleFields(array('tpr.*', 'IFNULL(t_l.tag_name,t.tag_identifier) as tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
+        $srch->addMultipleFields(array('tpr.*', 'tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
 
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
         if (!empty($keyword)) {
@@ -79,6 +80,7 @@ class RecomendedTagProductsController extends ListingBaseController
             $cnd->attachCondition('product_name', 'LIKE', '%' . $keyword . '%');
         }
 
+        $srch->addCondition('t.tag_lang_id', '=', $this->siteLangId);
         $srch->addOrder($sortBy, $sortOrder);
 
         $srch->setPageNumber($page);
@@ -99,7 +101,6 @@ class RecomendedTagProductsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditRecomendedWeightages($this->admin_id, true));
-        
     }
 
     public function setup()

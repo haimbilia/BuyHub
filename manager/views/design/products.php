@@ -6,8 +6,7 @@
         <title>FATbit | Dashboard</title>
         <meta name="description" content="">
         
-        <meta name="viewport" name="viewport"  content="width=device-width, initial-scale=1.0"
-        >
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet">
         <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />

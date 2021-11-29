@@ -2,6 +2,7 @@
 
 class SubscriptionSellerReportController extends ListingBaseController
 {
+    protected $pageKey = 'REPORT_SUBSCRIPTION_BY_SELLER';
 
     public function __construct($action)
     {
@@ -13,7 +14,7 @@ class SubscriptionSellerReportController extends ListingBaseController
     {
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
-        $pageData = PageLanguageData::getAttributesByKey('SUBSCRIPTION_SELLER_REPORT', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);

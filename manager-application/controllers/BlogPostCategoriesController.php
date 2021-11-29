@@ -3,7 +3,8 @@
 class BlogPostCategoriesController extends ListingBaseController
 {
     protected $modelClass = 'BlogPostCategory';
-    
+    protected $pageKey = 'BLOG_CATEGORIES';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -90,7 +91,7 @@ class BlogPostCategoriesController extends ListingBaseController
             $frm->fill($data);
         }
 
-        
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
@@ -103,7 +104,7 @@ class BlogPostCategoriesController extends ListingBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
-        if (false === $post) {        
+        if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
@@ -119,7 +120,7 @@ class BlogPostCategoriesController extends ListingBaseController
         }
         $record->assignValues($data);
 
-        if (!$record->save()) {           
+        if (!$record->save()) {
             LibHelper::exitWithError($record->getError(), true);
         }
         $recordId = $record->getMainTableRecordId();
@@ -183,13 +184,15 @@ class BlogPostCategoriesController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-
         switch ($action) {
             case 'index':
-                $this->nodes = [                  
+                $this->nodes = [
                     ['title' => Labels::getLabel('LBL_BLOG_POST_CATEGORIES', $this->siteLangId)]
                 ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
         return $this->nodes;
     }
@@ -200,7 +203,7 @@ class BlogPostCategoriesController extends ListingBaseController
         $bpCatObj = new BlogPostCategory();
         $arrCategories = $bpCatObj->getCategoriesForSelectBox($this->siteLangId, $recordId);
         $categories = $bpCatObj->makeAssociativeArray($arrCategories);
-        
+
         $frm = new Form('frmBlogPostCategory');
         $frm->addHiddenField('', 'bpcategory_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_IDENTIFIER', $this->siteLangId), 'bpcategory_identifier');

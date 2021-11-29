@@ -44,7 +44,7 @@ foreach ($arrListing as $sn => $row) {
             case 'plugin_identifier':
                 $htm = '';
                 if (!empty($defaultPluginId) && $row['plugin_id'] == $defaultPluginId) {
-                    $htm = ' <span class="badge badge--unified-brand badge--inline badge--pill">' . Labels::getLabel('LBL_DEFAULT', $siteLangId) . '</span>';
+                    $htm = ' <span class="badge badge-brand badge-inline badge-pill">' . Labels::getLabel('LBL_DEFAULT', $siteLangId) . '</span>';
                 }
 
                 if (!empty($row['plugin_name'])) {

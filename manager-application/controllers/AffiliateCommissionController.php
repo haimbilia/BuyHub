@@ -2,6 +2,8 @@
 
 class AffiliateCommissionController extends ListingBaseController
 {
+    protected $pageKey = 'AFFILIATE_COMMISSIONS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,7 +15,7 @@ class AffiliateCommissionController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_AFFILIATE_COMMISSION', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -63,10 +65,10 @@ class AffiliateCommissionController extends ListingBaseController
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $srchFrm = $this->getSearchForm($fields);
-        
+
         $postedData = FatApp::getPostedData();
         $post = $srchFrm->getFormDataFromArray($postedData);
-        
+
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
 
@@ -285,7 +287,7 @@ class AffiliateCommissionController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($recordId)
+    protected function markAsDeleted($recordId)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
@@ -324,12 +326,10 @@ class AffiliateCommissionController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
-        parent::getBreadcrumbNodes($action);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_AFFILIATE_COMMISSION', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
         switch ($action) {
             case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]

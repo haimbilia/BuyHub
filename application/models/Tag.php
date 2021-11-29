@@ -3,25 +3,17 @@
 class Tag extends MyAppModel
 {
     public const DB_TBL = 'tbl_tags';
-    public const DB_TBL_PREFIX = 'tag_';
-
-    public const DB_TBL_LANG = 'tbl_tags_lang';
-    private $db;
+    public const DB_TBL_PREFIX = 'tag_';  
 
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
+        $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);        
     }
-
-    public static function getSearchObject($langId = 0)
-    {
-        $langId = FatUtility::int($langId);
-        $srch = new SearchBase(static::DB_TBL, 't');
-        if ($langId) {
-            $srch->joinTable(static::DB_TBL_LANG, 'LEFT OUTER JOIN', 't.tag_id = t_l.taglang_tag_id AND t_l.taglang_lang_id = ' . $langId, 't_l');
-        }
-        return $srch;
+    
+    public static function getSearchObject()
+    {        
+        return  new SearchBase(static::DB_TBL, 't');     
     }
 
     public static function requiredTagsFields()
@@ -30,8 +22,7 @@ class Tag extends MyAppModel
             ImportexportCommon::VALIDATE_POSITIVE_INT => array(
                 'tag_id',
             ),
-            ImportexportCommon::VALIDATE_NOT_NULL => array(
-                'tag_identifier',
+            ImportexportCommon::VALIDATE_NOT_NULL => array(          
                 'tag_name',
                 'credential_username',
                 'tag_user_id',
@@ -56,8 +47,7 @@ class Tag extends MyAppModel
                 'tag_id',
             ),
             ImportexportCommon::VALIDATE_NOT_NULL => array(
-                'product_identifier',
-                'tag_identifier',
+                'product_identifier',         
             ),
         );
     }

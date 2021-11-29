@@ -2,6 +2,8 @@
 
 class RewardsOnPurchaseController extends ListingBaseController
 {
+    protected $pageKey = 'REWARDS_ON_PURCHASE';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -13,7 +15,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_REWARDS_ON_PURCHASE', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
@@ -197,7 +199,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($ropId)
+    protected function markAsDeleted($ropId)
     {
         $ropId = FatUtility::int($ropId);
         if (1 > $ropId) {

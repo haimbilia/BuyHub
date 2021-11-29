@@ -1,19 +1,19 @@
 <?php
 
-class TransactionsController extends ListingBaseController
-{
-    public function __construct($action)
-    {
+class TransactionsController extends ListingBaseController {
+
+    protected $pageKey = 'TRANSACTIONS';
+
+    public function __construct($action) {
         parent::__construct($action);
         $this->objPrivilege->canViewUsers();
     }
 
-    public function index()
-    {
+    public function index() {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_USER_TRANSACTIONS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -31,8 +31,7 @@ class TransactionsController extends ListingBaseController
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search()
-    {
+    public function search() {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'transactions/search.php', true),
@@ -41,12 +40,11 @@ class TransactionsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
-    {
+    private function getListingData() {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
@@ -58,7 +56,7 @@ class TransactionsController extends ListingBaseController
 
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
-        
+
         $postedData = FatApp::getPostedData();
         $post = $srchFrm->getFormDataFromArray($postedData);
         $post['utxn_user_id'] = $userId;
@@ -76,7 +74,7 @@ class TransactionsController extends ListingBaseController
             $balSrch->addCondition('utxn_user_id', '=', $userId);
         }
         $balSrch->addCondition('utxn_status', '=', 1);
-        
+
         $srch = Transactions::getSearchObject();
         $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.credential_user_id = u.user_id', 'uc');
@@ -88,7 +86,6 @@ class TransactionsController extends ListingBaseController
 
         $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
         $srch->addGroupBy('utxn.utxn_id');
-
 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
@@ -102,7 +99,7 @@ class TransactionsController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        
+
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 
@@ -114,8 +111,7 @@ class TransactionsController extends ListingBaseController
         $this->set('canEdit', $this->objPrivilege->canEditUsers($this->admin_id, true));
     }
 
-    protected function getSearchForm($fields = [])
-    {
+    protected function getSearchForm($fields = []) {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'user_name');
@@ -127,21 +123,25 @@ class TransactionsController extends ListingBaseController
         return $frm;
     }
 
-    public function form()
-    {
+    public function form() {
         $this->objPrivilege->canEditUsers();
-        $frm = $this->getForm();
+        $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($userId); 
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
+        $this->set('userId', $userId);
         $this->set('formTitle', Labels::getLabel('LBL_USER_TRANSACTIONS_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
-    private function getForm()
-    {
+    private function getForm($userId = 0) {
         $frm = new Form('frmUserTransaction');
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
-        $fld->requirements()->setRequired(true);
+        if ($userId == 0) {
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', [29]);
+            $fld->requirements()->setRequired(true);
+        } else {
+            $frm->addHiddenField('', 'utxn_user_id', $userId);
+        }
 
         $typeArr = Transactions::getCreditDebitTypeArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_Type', $this->siteLangId), 'type', $typeArr, '', [], Labels::getLabel('FRM_Select', $this->siteLangId))->requirements()->setRequired(true);
@@ -150,8 +150,7 @@ class TransactionsController extends ListingBaseController
         return $frm;
     }
 
-    public function setup()
-    {
+    public function setup() {
         $this->objPrivilege->canEditUsers();
         $frm = $this->getForm();
 
@@ -194,7 +193,7 @@ class TransactionsController extends ListingBaseController
 
         /* send email to user[ */
         $emailNotificationObj = new EmailHandler();
-        $emailNotificationObj->sendTxnNotification($tObj->getMainTableRecordId(), $this->siteLangId);
+        //$emailNotificationObj->sendTxnNotification($tObj->getMainTableRecordId(), $this->siteLangId);
         /* ] */
 
         $this->set('userId', $userId);
@@ -202,15 +201,14 @@ class TransactionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function getFormColumns(): array
-    {
+    protected function getFormColumns(): array {
         $transactionsTblHeadingCols = CacheHelper::get('transactionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($transactionsTblHeadingCols) {
             return json_decode($transactionsTblHeadingCols);
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),          
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
             'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
@@ -225,8 +223,7 @@ class TransactionsController extends ListingBaseController
         return $arr;
     }
 
-    protected function getDefaultColumns(): array
-    {
+    protected function getDefaultColumns(): array {
         return [
             'listSerial',
             'user_name',
@@ -240,22 +237,22 @@ class TransactionsController extends ListingBaseController
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array
-    {
+    protected function excludeKeysForSort($fields = []): array {
         return array_diff($fields, ['utxn_comments'], Common::excludeKeysForSort());
     }
 
-    public function getBreadcrumbNodes($action)
-    {
-        parent::getBreadcrumbNodes($action);
+    public function getBreadcrumbNodes($action) {
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         switch ($action) {
             case 'index':
                 $this->nodes = [
                     ['title' => Labels::getLabel('LBL_USERS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Users')],
-                    ['title' => Labels::getLabel('LBL_TRANSACTIONS', $this->siteLangId)]
+                    ['title' => $pageTitle]
                 ];
         }
         return $this->nodes;
     }
+
 }

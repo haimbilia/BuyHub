@@ -3,13 +3,14 @@
 class SellerProductsController extends ListingBaseController
 {
     use ProductsDigitalDownloads;
+    protected $pageKey = 'MANAGE_SELLER_INVENTORIES';
 
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewSellerProducts($this->admin_id);
     }
-
+    
     public function index($productId = 0)
     {
         $fields = $this->getFormColumns();
@@ -25,6 +26,11 @@ class SellerProductsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_INVENTORIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['statusButton'] = true;
+
+        $this->set('actionItemsData', $actionItemsData);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->getListingData();
@@ -44,15 +50,12 @@ class SellerProductsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
 
-        // $frm->addTextBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', $userArr, '', [], '');
 
         $prodCatObj = new ProductCategory();
         $arrCategories = $prodCatObj->getCategoriesForSelectBox($this->siteLangId);
         $categories = $prodCatObj->makeAssociativeArray($arrCategories);
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'prodcat_id', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $categories, '', array(), '');
-       /*  $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'active', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $activeInactiveArr, '', array(), ''); */
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'selprod_title');
@@ -246,7 +249,7 @@ class SellerProductsController extends ListingBaseController
         } else {
             $sellerProductRow['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($productLangRow['product_url_keyword']));
         }
-        $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id']);
+        $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id'], $this->siteLangId);
         $sellerProductRow['selprod_user_shop_name'] = $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_identifier'];
 
         $productWarranty = Product::getAttributesById($product_id, 'product_warranty', true);
@@ -1031,40 +1034,7 @@ class SellerProductsController extends ListingBaseController
             );
         }
         die(json_encode(['pageCount' => $pageCount, 'products' => $json]));
-    }
-
-    public function autoCompleteUserShopName()
-    {
-        $pagesize = 10;
-        $post = FatApp::getPostedData();
-        $srch = new SearchBase(User::DB_TBL, 'tu');
-        $srch->joinTable('tbl_shops', 'INNER JOIN', 'tu.user_id=ts.shop_user_id', 'ts');
-        $srch->addOrder('user_name', 'asc');
-        if (!empty($post['keyword'])) {
-            $cnd = $srch->addCondition('user_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd = $cnd->attachCondition('shop_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
-        }
-        $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . User::DB_TBL_CRED_PREFIX . 'user_id = tu.user_id', 'uc');
-        $srch->addCondition('uc.' . User::DB_TBL_CRED_PREFIX . 'active', '=', 1);
-        $srch->addCondition('user_is_supplier', '=', 1);
-
-        $srch->addMultipleFields(array('user_id', 'user_name', 'shop_identifier'));
-        $db = FatApp::getDb();
-        $rs = $srch->getResultSet();
-        // echo  $srch->getQuery(); die;
-        $users = array();
-        if ($rs) {
-            $users = $db->fetchAll($rs);
-        }
-        foreach ($users as $key => $option) {
-            $json[] = array(
-                'user_id' => $option['user_id'],
-                'user_name' => strip_tags(html_entity_decode($option['user_name'], ENT_QUOTES, 'UTF-8')),
-                'shop_identifier' => strip_tags(html_entity_decode($option['shop_identifier'], ENT_QUOTES, 'UTF-8'))
-            );
-        }
-        die(json_encode($json));
-    }
+    }   
 
     public function setupSellerProductLinks()
     {
@@ -2482,7 +2452,7 @@ class SellerProductsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function markAsDeleted($selprod_id)
+    protected function markAsDeleted($selprod_id)
     {
         $selprod_id = FatUtility::int($selprod_id);
         if (1 > $selprod_id) {
