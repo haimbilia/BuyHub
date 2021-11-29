@@ -106,22 +106,145 @@
                                             </li>
                                         </ul>
                                     </div>
-
                                 </div>
                                 <div class="card-body">
                                     <div class="tab-content">
-                                        <div class="tab-pane active" id="#statistics-1"></div>
-                                        <div class="tab-pane" id="#statistics-2"></div>
+                                        <div class="tab-pane active" id="statistics-1">
+                                            <div class="statistics js-statistics"> </div>
+                                        </div>
+                                        <div class="tab-pane" id="statistics-2">
+                                            <div class="statistics js-statistics"> </div>
+                                        </div>
+                                        <div class="tab-pane" id="statistics-3">
+                                            <div class="statistics js-statistics"> </div>
+                                        </div>
+                                        <div class="tab-pane" id="statistics-4">
+                                            <div class="statistics js-statistics"> </div>
+                                        </div>
+                                        <div class="tab-pane" id="statistics-5">
+                                            <div class="statistics js-statistics"> </div>
+                                        </div>
 
                                     </div>
                                 </div>
-                                <div class="card-foot">Foot</div>
+
                             </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card ">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="widget26">
+                                                <div class="widget26__content">
+                                                    <div class="row align-items-center justify-content-between">
+                                                        <div class="col"><span class="widget26__number">$9581</span></div>
+                                                        <div class="col-auto">
+                                                            <span class="widget26__cents font-success"><i class="la la-arrow-up"></i> 2.6%</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row align-items-center justify-content-between">
+                                                        <div class="col"><span class="widget26__desc">Total
+                                                                Sales <i class="fa fa-question-circle"></i></span>
+                                                        </div>
+                                                        <div class="col-auto"><a class="link" href="#">View
+                                                                Report</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="widget__chart">
+                                                    <div class="sales js-sales">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="widget15 mt-4">
+                                                <div class="widget15__items">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="widget15__item">
+                                                                <span class="widget15__stats">
+                                                                    63%
+                                                                </span>
+                                                                <span class="widget15__text">
+                                                                    Online Store
+                                                                </span>
+                                                                <div class="space-10"></div>
+                                                                <div class="progress widget15__chart-progress--sm">
+                                                                    <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%;"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="widget15__item">
+                                                                <span class="widget15__stats">
+                                                                    54%
+                                                                </span>
+                                                                <span class="widget15__text">
+                                                                    Facebook
+                                                                </span>
+                                                                <div class="space-10"></div>
+                                                                <div class="progress progress--sm">
+                                                                    <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 65%;"></div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="widget15__item">
+                                                                <span class="widget15__stats">
+                                                                    41%
+                                                                </span>
+                                                                <span class="widget15__text">
+                                                                    Profit Grow
+                                                                </span>
+                                                                <div class="space-10"></div>
+                                                                <div class="progress progress--sm">
+                                                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 45%;"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="widget15__item">
+                                                                <span class="widget15__stats">
+                                                                    79%
+                                                                </span>
+                                                                <span class="widget15__text">
+                                                                    Member Grow
+                                                                </span>
+                                                                <div class="space-10"></div>
+                                                                <div class="progress progress--sm">
+                                                                    <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 85%;"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <div class="widget15__desc">
+                                                                * lorem ipsum dolor sit amet consectetuer sediat
+                                                                elit
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                     <div class="row row-full-height">
                         <div class="col-md-4">
-                            <div class="card card--height-fluid-half card--border-bottom-brand">
+                            <div class="card ">
                                 <div class="card-body card__body--fluid">
                                     <div class="row">
                                         <div class="col-12">
@@ -229,7 +352,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card card--height-fluid-half card--border-bottom-brand">
+                            <div class="card ">
                                 <div class="card-body card__body--fluid">
                                     <div class="row">
                                         <div class="col-12">
@@ -337,7 +460,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card card--height-fluid-half card--border-bottom-brand">
+                            <div class="card ">
                                 <div class="card-body card__body--fluid">
                                     <div class="row">
                                         <div class="col-12">
@@ -445,7 +568,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card card--height-fluid-half card--border-bottom-brand">
+                            <div class="card ">
                                 <div class="card-body card__body--fluid">
                                     <div class="row">
                                         <div class="col-12">
@@ -553,7 +676,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card card--height-fluid-half card--border-bottom-brand">
+                            <div class="card ">
                                 <div class="card-body card__body--fluid">
                                     <div class="row">
                                         <div class="col-12">
@@ -659,7 +782,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card card--height-fluid-half card--border-bottom-brand">
+                            <div class="card ">
                                 <div class="card-body card__body--fluid">
                                     <div class="row">
                                         <div class="col-12">
@@ -1508,6 +1631,38 @@
         </div>
     </div>
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script>
+        new Chartist.Line('.js-statistics', {
+            labels: [1, 2, 3, 4, 5, 6, 7, 8],
+            series: [
+                [1, 2, 3, 1, -2, 0, 1, 0],
+                [-2, -1, -2, -1, -2.5, -1, -2, -1],
+                [0, 0, 0, 1, 2, 2.5, 2, 1],
+                [2.5, 2, 1, 0.5, 1, 0.5, -1, -2.5]
+            ]
+        }, {
+            high: 3,
+            low: -3,
+            showArea: true,
+            showLine: false,
+            showPoint: false,
+            fullWidth: true,
+            axisX: {
+                showLabel: false,
+                showGrid: false
+            }
+        });
+
+        new Chartist.Line('.js-sales', {
+  labels: [1, 2, 3, 4, 5, 6, 7, 8],
+  series: [
+    [5, 9, 7, 8, 5, 3, 5, 4]
+  ]
+}, {
+  low: 0,
+  showArea: true
+});
+    </script>
 
 </body>
 

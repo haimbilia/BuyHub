@@ -689,7 +689,7 @@
             </div>
         </div>
     </div>
-    <div class="alert alert-solid-warning fade show" role="alert">
+    <!-- <div class="alert alert-solid-warning fade show" role="alert">
         <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="alert-text">A simple warning alert—check it out!</div>
         <div class="alert-close">
@@ -706,6 +706,6 @@
                 <span aria-hidden="true"><i class="la la-close"></i></span>
             </button>
         </div>
-    </div>
+    </div> -->
 
 </header>

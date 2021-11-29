@@ -7,7 +7,7 @@ $widget:'widget';
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 0.07rem dashed #ebedf2;
+        border-bottom: $border;
         &:last-child {
             padding-bottom: 0;
             border-bottom: 0;
@@ -108,10 +108,10 @@ $widget:'widget';
             &--brand {
                 &:before {
                     // // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
+                    // color:  lighten($brand-color, 55%); 
+                    @include bg-brand();
+                    // color:  lighten($brand-color, 55%); 
+                    @include bg-brand();
                 }
             }
             &--light {
@@ -864,20 +864,20 @@ $widget:'widget';
     flex-direction: column;
     height: 100%;
     width: 100%;
+    font-size: 0.85rem;
+    color: $txt-gray;
     #{$self}__items {
         flex-grow: 1;
         #{$self}__item {
             #{$self}__stats {
-                font-size: 1.1rem;
+                font-size: 1rem;
                 font-weight: 500;
-                color: $txt-gray;
+                color: $txt-body;
             }
             #{$self}__text {
-                font-size: 1rem;
+                font-size: 0.85rem;
                 float: right;
-                margin-top: 0.3rem;
                 font-weight: 400;
-                color: $txt-gray;
             }
             .progress {
                 margin-bottom: 1.6rem;
@@ -886,9 +886,7 @@ $widget:'widget';
         }
         #{$self}__desc {
             margin-top: 0.5rem;
-            font-size: 0.9rem;
             font-weight: 400;
-            color: $txt-gray;
         }
         &--bottom {
             display: flex;
@@ -1368,6 +1366,7 @@ $widget:'widget';
     flex-direction: column;
     height: 100%;
     width: 100%;
+    color: $txt-gray;
     #{$self}__content {
         display: flex;
         padding-bottom: 1rem;
@@ -1383,8 +1382,7 @@ $widget:'widget';
             font-size: 1.2rem;
         }
         #{$self}__desc {
-            color: $txt-gray;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 400;
             margin-top: 0.55rem;
         }
@@ -1472,8 +1470,8 @@ $widget:'widget';
                 }
                 >a.active {
                     // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
+                    // color:  lighten($brand-color, 55%); 
+                    @include bg-brand();
                     border-color: $brand-color !important;
                     color: #ffffff;
                 }
@@ -1742,8 +1740,8 @@ $widget:'widget';
                 >div {
                     cursor: auto;
                     // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
-        @include bg-brand();
+                    // color:  lighten($brand-color, 55%); 
+                    @include bg-brand();
                     box-shadow: 0px 2px 14px 2px rgba(54, 108, 243, 0.2);
                     >span {
                         &:first-child {
