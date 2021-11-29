@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'direction="rtl" style="direction: rtl;"' : '';
+$additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'style="direction: rtl;"' : '';
 ?>
 <!doctype html>
 <html <?php echo $additionalAttributes; ?> class="<?php if (CommonHelper::demoUrl()) {
