@@ -33,6 +33,7 @@
 /public/apple-app-site-association
 package-lock.json
 /.well-known
+/.history/
 
 # zip files
 /*.zip
