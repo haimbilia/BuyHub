@@ -46,9 +46,9 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <div class="search-native">
-                                                  <label class="checkbox" for="">Press <kbd>Ctrl-F</kbd> again to
-                                                            use native browser search.
-                                                            <input type="checkbox" id="quickSearchCtrl"></label> 
+                                                    <label class="checkbox" for="">Press <kbd>Ctrl-F</kbd> again to
+                                                        use native browser search.
+                                                        <input type="checkbox" id="quickSearchCtrl"></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -382,21 +382,21 @@
                                     </nav>
                                     <div class="separator m-0"></div>
                                     <nav class="nav nav--header-account">
-                                        <?php if (1 < count($languages)) {
-                                        ?>
-                                            <a href="javascript:void(0)" class="language-selector">
-                                                Language
+                                        <?php if (1 < count($languages)) { ?>
+                                            <a class="language-selector collapsed" data-toggle="collapse" href="#languages" role="button" aria-expanded="false" aria-controls="languages">
+                                                <?php echo Labels::getLabel('NAV_LANGUAGES', $siteLangId) ?>
                                                 <span class="selected-language">
                                                     <?php echo CommonHelper::getLangCode() ?>
                                                     <span>
                                                         <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/flags/round/<?php echo CommonHelper::getLangCountryCode() ?>.svg"></span>
                                                 </span>
-                                                <div class="languages">
-                                                    <?php foreach ($languages as $languageId => $language) { ?>
-                                                        <span <?php echo ($siteLangId == $languageId) ? 'class="is--active"' : ''; ?> onClick="setSiteDefaultLang(<?php echo $languageId; ?>)"><?php echo $language['language_name']; ?></span>
-                                                    <?php } ?>
-                                                </div>
+
                                             </a>
+                                            <div class="languages collapse" id="languages" style="">
+                                                <?php foreach ($languages as $languageId => $language) { ?>
+                                                    <a class="languages-link <?php echo ($siteLangId == $languageId) ? 'class="is--active"' : ''; ?>" href="" onClick="setSiteDefaultLang(<?php echo $languageId; ?>)"><?php echo $language['language_name']; ?></a>
+                                                <?php } ?>
+                                            </div>
                                         <?php
                                         } ?>
                                         <a href="<?php echo UrlHelper::generateUrl('profile', 'logout'); ?>"><?php echo  Labels::getLabel('LBL_LOGOUT', $siteLangId); ?></a>
