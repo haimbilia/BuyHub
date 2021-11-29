@@ -17,6 +17,7 @@ $totalRecords = count($arrListing); ?>
             <?php 
             $lastRecord = current(array_reverse($arrListing));
             $postedData['reference'] = $lastRecord['oshistory_date_added'];
+            $postedData['order_id'] = $lastRecord['op_order_id'];
             $data = [
                 'siteLangId' => $siteLangId,
                 'postedData' => $postedData,

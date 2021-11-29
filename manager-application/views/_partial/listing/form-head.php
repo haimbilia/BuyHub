@@ -21,7 +21,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
 <div class="modal-body form-edit">
     <!-- Closing tag must be added inside the files who include this file. -->
     <?php
-    if ($includeTabs && (0 < count($languages) || isset($otherButtons))) { die('jkj'); ?>
+    if ($includeTabs && (0 < count($languages) || isset($otherButtons))) { ?>
         <div class="form-edit-head">
             <nav class="nav nav-tabs navTabsJs">
                 <?php

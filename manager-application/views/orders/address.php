@@ -11,12 +11,6 @@
             <span class="value"><?php echo $address['oua_address1']; ?></span>
         </li>
     <?php } ?>
-    <?php if ($address['oua_address1'] != '') { ?>
-        <li>
-            <span class="label"><?php echo Labels::getLabel('LBL_ADDRESS_1', $siteLangId); ?> </span>
-            <span class="value"><?php echo $address['oua_address1']; ?></span>
-        </li>
-    <?php } ?>
     <?php if ($address['oua_address2'] != '') { ?>
         <li>
             <span class="label"><?php echo Labels::getLabel('LBL_ADDRESS_2', $siteLangId); ?> </span>

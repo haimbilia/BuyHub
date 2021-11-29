@@ -19,6 +19,18 @@
                 <?php 
                 $store = "";
                 foreach ($order['products'] as $op) {
+                    $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($op['op_selprod_user_id'], $op['opshipping_by_seller_user_id']);
+                    $displayShippingUserForm = (
+                        (
+                            (in_array(strtolower($op['plugin_code']), ['cashondelivery', 'payatstore'])) || 
+                            (in_array($op['op_status_id'], $allowedShippingUserStatuses))
+                        ) && 
+                        $canEditSellerOrders && 
+                        !$shippingHanldedBySeller && 
+                        ($op['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL && 
+                        $op['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED)
+                    );
+
                     $shippingCost = CommonHelper::orderProductAmount($op, 'SHIPPING');
                     $volumeDiscount = CommonHelper::orderProductAmount($op, 'VOLUME_DISCOUNT');
                     $total = CommonHelper::orderProductAmount($op, 'cart_total') + $shippingCost + $volumeDiscount;
@@ -84,7 +96,7 @@
                         <td class="align-right">
                             <ul class="actions">
                                 <li data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_VIEW_DETAIL', $siteLangId); ?>">
-                                    <a href="javascript:void(0)" onclick="getItem(<?php echo $op['order_id']; ?>, <?php echo $op['op_id']?>)">
+                                    <a href="javascript:void(0)" onclick="getItem(<?php echo $op['order_id']; ?>, <?php echo $op['op_id']; ?>)">
                                         <svg class="svg" width="18" height="18">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
                                             </use>
@@ -92,17 +104,21 @@
                                     </a>
                                 </li>
                                 <li data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId); ?>">
-                                    <a href="javascript:void(0)" onclick="getItemStatusHistory(<?php echo $op['order_id']; ?>, <?php echo $op['op_id']?>)">
+                                    <a href="javascript:void(0)" onclick="getItemStatusHistory(<?php echo $op['order_id']; ?>, <?php echo $op['op_id']; ?>)">
                                         <svg class="svg" width="18" height="18">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#timeline">
                                             </use>
                                         </svg>
                                     </a>
                                 </li>
-                                <li data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_UPDATE_SHIPPING', $siteLangId); ?>">
-                                    <a href="javascript:void(0)" onclick="getOrderCommentForm(<?php echo $op['order_id']; ?>, <?php echo $op['op_id']?>)">
+                                <li data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId); ?>">
+                                    <?php 
+                                    $fn = $displayShippingUserForm ? 'getShippingUsersForm' : 'getOrderCommentForm';
+                                    $fn = $fn . '(' . $op['order_id'] . ', ' . $op['op_id'] . ')';
+                                    ?>
+                                    <a href="javascript:void(0)" onclick="<?php echo $fn; ?>">
                                         <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-shipping-pickup">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-orders">
                                             </use>
                                         </svg>
                                     </a>

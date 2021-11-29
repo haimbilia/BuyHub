@@ -4,7 +4,7 @@ $frm->setFormTagAttribute('onsubmit', 'updatePayment(this); return(false);');
 $frm->setFormTagAttribute('class', 'form');
 
 $statusFld = $shippingUserFrm->getField('optsu_user_id');
-$statusFld->setFieldTagAttribute('class', 'shippingUser-js');
+$statusFld->setFieldTagAttribute('class', 'shippingUserJs');
 
 echo $frm->getFormTag(); 
     echo $frm->getFieldHtml('opayment_order_id');

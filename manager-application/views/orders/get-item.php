@@ -3,6 +3,8 @@ $op = current($order['products']);
 
 $shippingCost = CommonHelper::orderProductAmount($op, 'SHIPPING');
 $volumeDiscount = CommonHelper::orderProductAmount($op, 'VOLUME_DISCOUNT');
+$discount = CommonHelper::orderProductAmount($op, 'DISCOUNT');
+$rewards = CommonHelper::orderProductAmount($op, 'REWARDPOINT');
 $total = CommonHelper::orderProductAmount($op, 'cart_total') + $shippingCost + $volumeDiscount;
 
 $op['order_id'] = $order['order_id'];
@@ -10,6 +12,21 @@ $op['order_number'] = $order['order_number'];
 $op['order_date_added'] = $order['order_date_added'];
 
 $isOrderShipped = (Shipping::FULFILMENT_PICKUP != $op['opshipping_fulfillment_type']);
+
+$orderObj = new Orders($op['order_id']);
+$addresses = $orderObj->getOrderAddresses($op['order_id'], $op['op_id']);
+
+$totalTax = 0;
+$taxOptionsTotal = [];
+foreach ($op['taxOptions'] as $key => $val) {
+    $totalTax = $totalTax + $val['value'];
+
+    if (!isset($taxOptionsTotal[$key]['value'])) {
+        $taxOptionsTotal[$key]['value'] = 0;
+    }
+    $taxOptionsTotal[$key]['value'] += $val['value'];
+    $taxOptionsTotal[$key]['title'] = CommonHelper::displayTaxPercantage($val);
+}
 ?>
 
 <div class="modal-header">
@@ -28,6 +45,33 @@ $isOrderShipped = (Shipping::FULFILMENT_PICKUP != $op['opshipping_fulfillment_ty
                 <span class="lable"><?php echo Labels::getLabel('LBL_STORE', $siteLangId); ?>:</span>
                 <span class="value"><?php echo $op['op_shop_name'] ?></span>
             </li>
+
+            <?php if (!empty($addresses)) { 
+                $pickupAddress = (!empty($addresses[Orders::PICKUP_ADDRESS_TYPE])) ? $addresses[Orders::PICKUP_ADDRESS_TYPE] : array();
+                $pickupAddrPhone = "";
+                if (!empty($pickupAddress['oua_phone_dcode'])) {
+                    $pickupAddrPhone = ValidateElement::formatDialCode($pickupAddress['oua_phone_dcode']) . $pickupAddress['oua_phone'];
+                }
+                $contactName = $pickupAddress['oua_name'];
+
+                unset($pickupAddress['oua_name'], $pickupAddress['oua_order_id'], $pickupAddress['oua_op_id'], $pickupAddress['oua_type'], $pickupAddress['oua_phone_dcode'], $pickupAddress['oua_country_code'], $pickupAddress['oua_country_code_alpha3'], $pickupAddress['oua_state_code'], $pickupAddress['oua_phone']);
+
+                if (!empty($pickupAddrPhone)) { ?>
+                    <li>
+                        <span class="lable"><?php echo Labels::getLabel('LBL_PICKUP_ADDRESS_CONTACT', $siteLangId); ?>:</span>
+                        <span class="value">
+                            <?php echo $contactName . ' (' . $pickupAddrPhone . ')'; ?>    
+                        </span>
+                    </li>
+                <?php } ?>
+                <li>
+                    <span class="lable"><?php echo Labels::getLabel('LBL_PICKUP_ADDRESS', $siteLangId); ?>:</span>
+                    <span class="value">
+                        <?php echo implode(', ', $pickupAddress); ?>    
+                    </span>
+                </li>
+            <?php } ?>
+
             <li>
                 <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_STATUS', $siteLangId); ?>:</span>
                 <span class="value">
@@ -57,16 +101,76 @@ $isOrderShipped = (Shipping::FULFILMENT_PICKUP != $op['opshipping_fulfillment_ty
                 <span class="value"><?php echo $op['op_qty']; ?></span>
             </li>
 
-            <?php if ($isOrderShipped) { ?>
+            <?php if ($isOrderShipped && 0 < $shippingCost) { ?>
                 <li>
                     <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING', $siteLangId); ?>:</span>
                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($shippingCost, true, true); ?></span>
                 </li>
             <?php } ?>
-            <li>
-                <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId); ?>:</span>
-                <span class="value"><?php echo CommonHelper::displayMoneyFormat($volumeDiscount, true, true); ?></span>
-            </li>
+
+            <?php if (empty($taxOptionsTotal)) {
+                if (0 < $totalTax) { ?>
+                    <li>
+                        <span class="lable">
+                            <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
+                        </span>
+                        <span class="value">
+                            <span class="currency-value" dir="ltr">
+                                <?php echo CommonHelper::displayMoneyFormat($totalTax, true, false, true, false, true); ?>
+                            </span>
+                        </span>
+                    </li>
+                <?php }
+            } else {
+                foreach ($taxOptionsTotal as $key => $val) { 
+                    if (1 > $val['value']) {
+                        continue;
+                    }
+                    ?>
+                    <li>
+                        <span class="lable">
+                            <?php echo $val['title']; ?>
+                        </span>
+                        <span class="value">
+                            <span class="currency-value" dir="ltr">
+                                <?php echo CommonHelper::displayMoneyFormat($val['value'], true, false, true, false, true); ?>
+                            </span>
+                        </span>
+                    </li>
+            <?php }
+            } ?>
+            <?php $discount = abs($discount);
+                if (0 < $discount) { ?>
+                    <li class="discounted">
+                        <span class="lable"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></span>
+                        <span class="value">
+                            <?php echo '-' . CommonHelper::displayMoneyFormat($discount, true, false, true, false, true); ?>
+                        </span>
+                    </li>
+            <?php } ?>
+
+            <?php 
+            $volumeDiscount = abs($volumeDiscount);
+            if (0 < $volumeDiscount) { ?>
+                <li>
+                    <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId); ?>:</span>
+                    <span class="value"><?php echo '-' . CommonHelper::displayMoneyFormat($volumeDiscount, true, true); ?></span>
+                </li>
+            <?php } ?>
+
+            <?php
+            $rewards = abs($rewards);
+            if (0 < $rewards) { ?>
+                <li class="discounted">
+                    <span class="label">
+                        <?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?>
+                    </span>
+                    <span class="value">
+                        <?php echo '-' . CommonHelper::displayMoneyFormat($rewards, true, false, true, false, true); ?>
+                    </span>
+                </li>
+            <?php } ?>
+
             <li>
                 <span class="lable"><?php echo Labels::getLabel('LBL_TOTAL', $siteLangId); ?>:</span>
                 <span class="value"<?php echo CommonHelper::displayMoneyFormat($total, true, true, true, false, true); ?></span>

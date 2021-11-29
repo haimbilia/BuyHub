@@ -1234,6 +1234,9 @@ class Orders extends MyAppModel
             }
         }
 
+        $srch->addOrder('oshistory_date_added', 'DESC');
+        $srch->addOrder('oshistory_orderstatus_id');
+        $srch->addGroupBy('oshistory_id');
         return $srch;
     }
 
@@ -1247,9 +1250,6 @@ class Orders extends MyAppModel
             $srch->doNotLimitRecords();
         }
         $srch->doNotCalculateRecords(true);
-        $srch->addOrder('oshistory_date_added', 'DESC');
-        $srch->addOrder('oshistory_orderstatus_id');
-        $srch->addGroupBy('oshistory_id');
 
         $rs = $srch->getResultSet();
         return ($pagesize == 1) ? FatApp::getDb()->fetch($rs) : FatApp::getDb()->fetchAll($rs);

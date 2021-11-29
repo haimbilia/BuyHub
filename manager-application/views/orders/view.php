@@ -20,14 +20,16 @@
                                 ?>
                             </h3>
                         </div>
-                        <div class="card-toolbar">
-                            <select class="form-select" onchange="getOrderParticulars(<?php echo $order['order_id'] ?>, this)">
-                                <option value=""><?php echo Labels::getLabel('LBL_ALL_SELLERS', $siteLangId); ?></option>
-                                <?php foreach ($sellers as $sellerId => $shopName) { ?>
-                                    <option value="<?php echo $sellerId; ?>" <?php echo ($opSellerId == $sellerId ? 'selected="selected"' : ''); ?>><?php echo $shopName; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
+                        <?php if (1 < count($sellers)) { ?>
+                            <div class="card-toolbar">
+                                <select class="form-select" onchange="getOrderParticulars(<?php echo $order['order_id'] ?>, this)">
+                                    <option value=""><?php echo Labels::getLabel('LBL_ALL_SELLERS', $siteLangId); ?></option>
+                                    <?php foreach ($sellers as $sellerId => $shopName) { ?>
+                                        <option value="<?php echo $sellerId; ?>" <?php echo ($opSellerId == $sellerId ? 'selected="selected"' : ''); ?>><?php echo $shopName; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        <?php } ?>
                     </div>
                     <?php require_once(CONF_THEME_PATH . 'orders/item-summary.php'); ?>
                 </div>
@@ -76,22 +78,23 @@
 
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-head dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block1" aria-expanded="false" aria-controls="order-block1">
-                        <div class="card-head-label">
-                            <h3 class="card-head-title"><i class="fas fa-address-card"></i>
-                                <?php echo Labels::getLabel('LBL_SHIPPING_ADDRESS', $siteLangId); ?>
-                            </h3>
+                <?php 
+                $address = $order['shippingAddress'];
+                if (!empty($address)) { ?>
+                    <div class="card">
+                        <div class="card-head dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block1" aria-expanded="false" aria-controls="order-block1">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title"><i class="fas fa-address-card"></i>
+                                    <?php echo Labels::getLabel('LBL_SHIPPING_ADDRESS', $siteLangId); ?>
+                                </h3>
+                            </div>
+                            <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
-                        <i class="dropdown-toggle-custom-arrow"></i>
+                        <div class="card-body collapse" id="order-block1">
+                            <?php include(CONF_THEME_PATH . 'orders/address.php'); ?>
+                        </div>
                     </div>
-                    <div class="card-body collapse" id="order-block1">
-                        <?php
-                        $address = $order['shippingAddress'];
-                        include(CONF_THEME_PATH . 'orders/address.php');
-                        ?>
-                    </div>
-                </div>
+                <?php } ?>
                 <div class="card">
                     <div class="card-head dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block2" aria-expanded="false" aria-controls="order-block2">
                         <div class="card-head-label">
@@ -112,3 +115,8 @@
         </div>
     </div>
 </main>
+
+<script>
+    var canShipByPlugin = <?php echo (!empty($shippingApiObj) ? 1 : 0); ?>;
+    var orderShippedStatus = <?php echo $shippedOrderStatus; ?>;
+</script>
