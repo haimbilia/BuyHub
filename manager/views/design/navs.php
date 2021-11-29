@@ -98,7 +98,7 @@
 														<i class="nav__link-icon flaticon2-rocket-2"></i>
 														<span class="nav__link-text">Messages</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--danger badge--inline badge--pill badge--rounded">new</span>
+															<span class="badge badge-danger badge-inline badge-pill badge-rounded">new</span>
 														</span>
 													</a>
 												</li>
@@ -119,7 +119,7 @@
 														<i class="nav__link-icon flaticon2-new-email"></i>
 														<span class="nav__link-text">Support</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--success">5</span>
+															<span class="badge badge-success">5</span>
 														</span>
 													</a>
 												</li>
@@ -146,7 +146,7 @@
 														<i class="nav__link-icon flaticon2-rocket-2"></i>
 														<span class="nav__link-text">Messages</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--danger badge--inline badge--pill badge--rounded">new</span>
+															<span class="badge badge-danger badge-inline badge-pill badge-rounded">new</span>
 														</span>
 													</a>
 												</li>
@@ -167,7 +167,7 @@
 														<i class="nav__link-icon flaticon2-new-email"></i>
 														<span class="nav__link-text">Support</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--success">5</span>
+															<span class="badge badge-success">5</span>
 														</span>
 													</a>
 												</li>
@@ -436,7 +436,7 @@
 														<i class="nav__link-icon flaticon2-new-email"></i>
 														<span class="nav__link-text">Support</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--success">5</span>
+															<span class="badge badge-success">5</span>
 														</span>
 													</a>
 												</li>
@@ -475,7 +475,7 @@
 														<i class="nav__link-icon flaticon2-new-email"></i>
 														<span class="nav__link-text">Support</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--success">5</span>
+															<span class="badge badge-success">5</span>
 														</span>
 													</a>
 												</li>
@@ -519,7 +519,7 @@
 																<span class="nav__link-title">
 																	<span class="nav__link-text">Messages</span>
 																	<span class="nav__link-badge">
-																		<span class="badge badge--danger badge--inline badge--pill badge--rounded">new</span>
+																		<span class="badge badge-danger badge-inline badge-pill badge-rounded">new</span>
 																	</span>
 																</span></a>
 															<ul class="nav__sub">
@@ -534,7 +534,7 @@
 																		<span class="nav__link-bullet nav__link-bullet--line"><span></span></span>
 																		<span class="nav__link-text">Pending</span>
 																		<span class="nav__link-badge">
-																			<span class="badge badge--warning">3</span>
+																			<span class="badge badge-warning">3</span>
 																		</span>
 																	</a>
 																</li>
@@ -563,7 +563,7 @@
 																<i class="nav__link-icon flaticon2-laptop"></i>
 																<span class="nav__link-text">Support</span>
 																<span class="nav__link-badge">
-																	<span class="badge badge--success badge--inline badge--pill">23</span>
+																	<span class="badge badge-success badge-inline badge-pill">23</span>
 																</span>
 															</a>
 														</li>
@@ -589,7 +589,7 @@
 																<i class="nav__link-icon flaticon2-graphic"></i>
 																<span class="nav__link-text">Messages</span>
 																<span class="nav__link-badge">
-																	<span class="badge badge--danger badge--inline badge--pill badge--rounded">new</span>
+																	<span class="badge badge-danger badge-inline badge-pill badge-rounded">new</span>
 																</span>
 																<span class="nav__link-arrow"></span>
 															</a>
@@ -619,7 +619,7 @@
 																<i class="nav__link-icon flaticon2-new-email"></i>
 																<span class="nav__link-text">Reports</span>
 																<span class="nav__link-badge">
-																	<span class="badge badge--brand">3</span>
+																	<span class="badge badge-brand">3</span>
 																</span>
 																<span class="nav__link-arrow"></span>
 															</a>
@@ -635,7 +635,7 @@
 																		<span class="nav__link-bullet nav__link-bullet--line"><span></span></span>
 																		<span class="nav__link-text">Pending</span>
 																		<span class="nav__link-badge">
-																			<span class="badge badge--warning">3</span>
+																			<span class="badge badge-warning">3</span>
 																		</span>
 																	</a>
 																</li>
@@ -706,7 +706,7 @@
 														<i class="nav__link-icon flaticon2-new-email"></i>
 														<span class="nav__link-text">Support</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--success">5</span>
+															<span class="badge badge-success">5</span>
 														</span>
 													</a>
 												</li>
@@ -752,7 +752,7 @@
 														<i class="nav__link-icon flaticon2-new-email"></i>
 														<span class="nav__link-text">Support</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--success">5</span>
+															<span class="badge badge-success">5</span>
 														</span>
 													</a>
 												</li>
@@ -808,7 +808,7 @@
 														<i class="nav__link-icon flaticon2-new-email"></i>
 														<span class="nav__link-text">Support</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--success">5</span>
+															<span class="badge badge-success">5</span>
 														</span>
 													</a>
 												</li>
@@ -859,7 +859,7 @@
 														<i class="nav__link-icon flaticon2-new-email"></i>
 														<span class="nav__link-text">Support</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--success">5</span>
+															<span class="badge badge-success">5</span>
 														</span>
 													</a>
 												</li>

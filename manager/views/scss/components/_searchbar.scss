@@ -19,7 +19,7 @@
 }
 
 .list--search-result {
-    height: 330px;
+    max-height: 330px;
     overflow-y: auto;
     font-size: 0.8rem;
     li {

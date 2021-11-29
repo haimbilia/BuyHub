@@ -367,10 +367,10 @@
                                                                 <td>Gleichner, Ziemann and Gutkowski</td>
                                                                 <td>2/12/2018</td>
                                                                 <td><span
-                                                                        class="badge  badge--primary badge--inline badge--pill">Canceled</span>
+                                                                        class="badge  badge-primary badge-inline badge-pill">Canceled</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-primary">Retail</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -412,7 +412,7 @@
                                                                         class="badge  badge-danger badge-inline badge-pill">Danger</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -451,10 +451,10 @@
                                                                 <td>Kulas, Cassin and Batz</td>
                                                                 <td>5/26/2016</td>
                                                                 <td><span
-                                                                        class="badge badge--brand badge--inline badge--pill">Pending</span>
+                                                                        class="badge badge-brand badge-inline badge-pill">Pending</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-primary">Retail</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -493,10 +493,10 @@
                                                                 <td>Pfannerstill-Treutel</td>
                                                                 <td>7/2/2016</td>
                                                                 <td><span
-                                                                        class="badge badge--brand badge--inline badge--pill">Pending</span>
+                                                                        class="badge badge-brand badge-inline badge-pill">Pending</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -538,7 +538,7 @@
                                                                         class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -577,10 +577,10 @@
                                                                 <td>Gleason, Kub and Marquardt</td>
                                                                 <td>11/26/2016</td>
                                                                 <td><span
-                                                                        class="badge  badge--info badge--inline badge--pill">Info</span>
+                                                                        class="badge  badge-info badge-inline badge-pill">Info</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -622,7 +622,7 @@
                                                                         class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -664,7 +664,7 @@
                                                                         class="badge  badge-danger badge-inline badge-pill">Danger</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-danger">Online</span></td>
                                                                 <td nowrap="">
                                                                     <span class="dropdown">
@@ -705,7 +705,7 @@
                                                                         class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-danger">Online</span></td>
                                                                 <td nowrap="">
                                                                     <span class="dropdown">
@@ -743,10 +743,10 @@
                                                                 <td>Labadie, Predovic and Hammes</td>
                                                                 <td>1/26/2017</td>
                                                                 <td><span
-                                                                        class="badge badge--brand badge--inline badge--pill">Pending</span>
+                                                                        class="badge badge-brand badge-inline badge-pill">Pending</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -1183,10 +1183,10 @@
                                                                 <td>Asia/Chongqing</td>
                                                                 <td>$246154.65</td>
                                                                 <td><span
-                                                                        class="badge  badge--primary badge--inline badge--pill">Canceled</span>
+                                                                        class="badge  badge-primary badge-inline badge-pill">Canceled</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-primary">Retail</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -1238,7 +1238,7 @@
                                                                         class="badge  badge-danger badge-inline badge-pill">Danger</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -1287,10 +1287,10 @@
                                                                 <td>America/Argentina/Cordoba</td>
                                                                 <td>$830764.07</td>
                                                                 <td><span
-                                                                        class="badge badge--brand badge--inline badge--pill">Pending</span>
+                                                                        class="badge badge-brand badge-inline badge-pill">Pending</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-primary">Retail</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -1339,10 +1339,10 @@
                                                                 <td>Asia/Jakarta</td>
                                                                 <td>$777892.92</td>
                                                                 <td><span
-                                                                        class="badge badge--brand badge--inline badge--pill">Pending</span>
+                                                                        class="badge badge-brand badge-inline badge-pill">Pending</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -1394,7 +1394,7 @@
                                                                         class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -1443,10 +1443,10 @@
                                                                 <td>Asia/Shanghai</td>
                                                                 <td>$410062.16</td>
                                                                 <td><span
-                                                                        class="badge  badge--info badge--inline badge--pill">Info</span>
+                                                                        class="badge  badge-info badge-inline badge-pill">Info</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -1498,7 +1498,7 @@
                                                                         class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">
@@ -1550,7 +1550,7 @@
                                                                         class="badge  badge-danger badge-inline badge-pill">Danger</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-danger">Online</span></td>
                                                                 <td nowrap="">
                                                                     <span class="dropdown">
@@ -1601,7 +1601,7 @@
                                                                         class="badge  badge-danger badge-inline badge-pill">Delivered</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-danger">Online</span></td>
                                                                 <td nowrap="">
                                                                     <span class="dropdown">
@@ -1649,10 +1649,10 @@
                                                                 <td>Asia/Bangkok</td>
                                                                 <td>$531999.26</td>
                                                                 <td><span
-                                                                        class="badge badge--brand badge--inline badge--pill">Pending</span>
+                                                                        class="badge badge-brand badge-inline badge-pill">Pending</span>
                                                                 </td>
                                                                 <td><span
-                                                                        class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                                        class="badge badge-success badge-dot"></span>&nbsp;<span
                                                                         class="font-bold font-success">Direct</span>
                                                                 </td>
                                                                 <td nowrap="">

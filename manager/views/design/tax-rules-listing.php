@@ -84,7 +84,7 @@
                                             <thead class="datatable__head">
                                                 <tr class="datatable__row">
                                                     <th width="20" class="datatable__cell--center datatable__cell datatable__cell--check">
-                                                        <span style="width:20px;"><label class="checkbox checkbox--single checkbox--all checkbox--solid"><input type="checkbox">&nbsp;<span></span></label></span>
+                                                        <span style="width:20px;"><label class="checkbox checkbox-single checkbox-all checkbox-solid"><input type="checkbox">&nbsp;<span></span></label></span>
                                                     </th>
                                                     <th class="datatable__cell datatable__cell--sort"><span>Summary</span></th>
                                                     <th class="datatable__cell"><span>Actions</span></th>
@@ -93,7 +93,7 @@
                                             <tbody class="datatable__body">
 
                                                 <tr class="datatable__row datatable__row--even">
-                                                    <td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span style="width:20px;"><label class="checkbox checkbox--single checkbox--solid"><input type="checkbox" value="1">&nbsp;<span></span></label></span></td>
+                                                    <td class="datatable__cell--center datatable__cell datatable__cell--check" data-field="RecordID"><span style="width:20px;"><label class="checkbox checkbox-single checkbox-solid"><input type="checkbox" value="1">&nbsp;<span></span></label></span></td>
 
 
                                                     <td class="datatable__cell">

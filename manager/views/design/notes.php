@@ -103,7 +103,7 @@
                                         <span class="notes__desc">
                                             9:30AM 16 June, 2015
                                         </span>
-                                        <span class="badge badge--brand badge--inline">important</span>
+                                        <span class="badge badge-brand badge-inline">important</span>
                                     </div>
                                     <div class="notes__dropdown"> 
                                         <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
@@ -224,7 +224,7 @@
                                         <span class="notes__desc">
                                             7:10AM 21 February, 2016
                                         </span>
-                                        <span class="badge badge--success badge--inline">pending</span>
+                                        <span class="badge badge-success badge-inline">pending</span>
                                     </div>
                                     <div class="notes__dropdown"> 
                                         <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
@@ -388,7 +388,7 @@
                                         <span class="notes__desc">
                                             9:30AM 16 June, 2015
                                         </span>
-                                        <span class="badge badge--success badge--inline">new</span>
+                                        <span class="badge badge-success badge-inline">new</span>
                                     </div>
                                     <div class="notes__dropdown"> 
                                         <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
@@ -575,7 +575,7 @@
                                         <span class="notes__desc">
                                             11:40AM 14 March, 2012
                                         </span>
-                                        <span class="badge badge--danger badge--inline">important</span>
+                                        <span class="badge badge-danger badge-inline">important</span>
                                     </div>
                                 </div>
                                 <span class="notes__body">                                        

@@ -138,7 +138,7 @@
 														<i class="nav__link-icon flaticon2-new-email"></i>
 														<span class="nav__link-text">Support</span>
 														<span class="nav__link-badge">
-															<span class="badge badge--success badge--rounded">5</span>
+															<span class="badge badge-success badge-rounded">5</span>
 														</span>
 													</a>
 												</li>
@@ -253,7 +253,7 @@
 															Change Passwort
 														</span>
 													</span>
-													<span class="badge badge--unified-danger badge--sm badge--rounded badge--bolder">5</span>
+													<span class="badge badge-unified-danger badge-sm badge-rounded badge-bolder">5</span>
 												</a>
 												<a href="profile-email-settings.php" class="widget__item ">
 													<span class="widget__section">
@@ -298,7 +298,7 @@
 															</svg> </span>
 														<span href="#" class="widget__desc">Tax information</span>
 													</span>
-													<span class="badge badge--unified-brand badge--inline badge--bolder">new</span>
+													<span class="badge badge-unified-brand badge-inline badge-bolder">new</span>
 												</a>
 												<a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
 													<span class="widget__section">
@@ -381,7 +381,7 @@
 																<i class="nav__link-icon flaticon2-new-email"></i>
 																<span class="nav__link-text">Support</span>
 																<span class="nav__link-badge">
-																	<span class="badge badge--success badge--rounded">5</span>
+																	<span class="badge badge-success badge-rounded">5</span>
 																</span>
 															</a>
 														</li>
@@ -478,7 +478,7 @@
 													<div class="widget2">
 														<div class="widget2__item widget2__item--primary">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -534,7 +534,7 @@
 
 														<div class="widget2__item widget2__item--warning">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -592,7 +592,7 @@
 
 														<div class="widget2__item widget2__item--brand">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -650,7 +650,7 @@
 
 														<div class="widget2__item widget2__item--success">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -707,7 +707,7 @@
 
 														<div class="widget2__item widget2__item--danger">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -766,7 +766,7 @@
 
 														<div class="widget2__item widget2__item--info">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -828,7 +828,7 @@
 													<div class="widget2">
 														<div class="widget2__item widget2__item--success">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -885,7 +885,7 @@
 
 														<div class="widget2__item widget2__item--warning">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -943,7 +943,7 @@
 
 														<div class="widget2__item widget2__item--danger">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -1002,7 +1002,7 @@
 
 														<div class="widget2__item widget2__item--primary">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -1060,7 +1060,7 @@
 
 														<div class="widget2__item widget2__item--info">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -1116,7 +1116,7 @@
 
 														<div class="widget2__item widget2__item--brand">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -1177,7 +1177,7 @@
 
 														<div class="widget2__item widget2__item--warning">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -1233,7 +1233,7 @@
 
 														<div class="widget2__item widget2__item--danger">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -1289,7 +1289,7 @@
 
 														<div class="widget2__item widget2__item--brand">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -1345,7 +1345,7 @@
 
 														<div class="widget2__item widget2__item--info">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -1401,7 +1401,7 @@
 
 														<div class="widget2__item widget2__item--success">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -1457,7 +1457,7 @@
 
 														<div class="widget2__item widget2__item--primary">
 															<div class="widget2__checkbox">
-																<label class="checkbox checkbox--solid checkbox--single">
+																<label class="checkbox checkbox-solid checkbox-single">
 																	<input type="checkbox">
 																	<span></span>
 																</label>
@@ -1572,7 +1572,7 @@
 																<i class="nav__link-icon flaticon2-new-email"></i>
 																<span class="nav__link-text">Support</span>
 																<span class="nav__link-badge">
-																	<span class="badge badge--success badge--rounded">5</span>
+																	<span class="badge badge-success badge-rounded">5</span>
 																</span>
 															</a>
 														</li>

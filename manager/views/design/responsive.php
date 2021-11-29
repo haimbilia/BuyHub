@@ -222,7 +222,7 @@
                                                     <td style="display: none;">Asia/Makassar</td>
                                                     <td style="display: none;">$158287.28</td>
                                                     <td style="display: none;"><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
-                                                    <td style="display: none;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+                                                    <td style="display: none;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -255,8 +255,8 @@
                                                     <td style="display: none;">2016-01-01 18:08:34</td>
                                                     <td style="display: none;">Asia/Chongqing</td>
                                                     <td style="display: none;">$429312.02</td>
-                                                    <td style="display: none;"><span class="badge  badge--success badge--inline badge--pill">Success</span></td>
-                                                    <td style="display: none;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+                                                    <td style="display: none;"><span class="badge  badge-success badge-inline badge-pill">Success</span></td>
+                                                    <td style="display: none;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -289,8 +289,8 @@
                                                     <td style="display: none;">2016-08-05 06:19:54</td>
                                                     <td style="display: none;">Asia/Chongqing</td>
                                                     <td style="display: none;">$1143125.96</td>
-                                                    <td style="display: none;"><span class="badge  badge--primary badge--inline badge--pill">Canceled</span></td>
-                                                    <td style="display: none;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+                                                    <td style="display: none;"><span class="badge  badge-primary badge-inline badge-pill">Canceled</span></td>
+                                                    <td style="display: none;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -323,8 +323,8 @@
                                                     <td style="display: none;">2016-06-13 16:43:18</td>
                                                     <td style="display: none;">Africa/Casablanca</td>
                                                     <td style="display: none;">$285288.32</td>
-                                                    <td style="display: none;"><span class="badge  badge--info badge--inline badge--pill">Info</span></td>
-                                                    <td style="display: none;"><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+                                                    <td style="display: none;"><span class="badge  badge-info badge-inline badge-pill">Info</span></td>
+                                                    <td style="display: none;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -358,7 +358,7 @@
                                                     <td style="display: none;">America/Bogota</td>
                                                     <td style="display: none;">$124768.15</td>
                                                     <td style="display: none;"><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
-                                                    <td style="display: none;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+                                                    <td style="display: none;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -391,8 +391,8 @@
                                                     <td style="display: none;">2016-08-06 05:33:25</td>
                                                     <td style="display: none;">America/Sao_Paulo</td>
                                                     <td style="display: none;">$1096683.96</td>
-                                                    <td style="display: none;"><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-                                                    <td style="display: none;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+                                                    <td style="display: none;"><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+                                                    <td style="display: none;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -425,8 +425,8 @@
                                                     <td style="display: none;">2016-08-06 20:08:36</td>
                                                     <td style="display: none;">Africa/Dar_es_Salaam</td>
                                                     <td style="display: none;">$290437.32</td>
-                                                    <td style="display: none;"><span class="badge  badge--primary badge--inline badge--pill">Canceled</span></td>
-                                                    <td style="display: none;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+                                                    <td style="display: none;"><span class="badge  badge-primary badge-inline badge-pill">Canceled</span></td>
+                                                    <td style="display: none;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -459,8 +459,8 @@
                                                     <td style="display: none;">2016-06-10 04:20:27</td>
                                                     <td style="display: none;">Asia/Hebron</td>
                                                     <td style="display: none;">$503984.70</td>
-                                                    <td style="display: none;"><span class="badge  badge--info badge--inline badge--pill">Info</span></td>
-                                                    <td style="display: none;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+                                                    <td style="display: none;"><span class="badge  badge-info badge-inline badge-pill">Info</span></td>
+                                                    <td style="display: none;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -493,8 +493,8 @@
                                                     <td style="display: none;">2017-02-02 05:24:00</td>
                                                     <td style="display: none;">Asia/Shanghai</td>
                                                     <td style="display: none;">$159355.37</td>
-                                                    <td style="display: none;"><span class="badge  badge--primary badge--inline badge--pill">Canceled</span></td>
-                                                    <td style="display: none;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+                                                    <td style="display: none;"><span class="badge  badge-primary badge-inline badge-pill">Canceled</span></td>
+                                                    <td style="display: none;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -527,8 +527,8 @@
                                                     <td style="display: none;">2017-07-22 18:32:31</td>
                                                     <td style="display: none;">Africa/Accra</td>
                                                     <td style="display: none;">$179291.15</td>
-                                                    <td style="display: none;"><span class="badge  badge--success badge--inline badge--pill">Success</span></td>
-                                                    <td style="display: none;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+                                                    <td style="display: none;"><span class="badge  badge-success badge-inline badge-pill">Success</span></td>
+                                                    <td style="display: none;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
                                                     <td nowrap="" style="display: none;">
                                                         <span class="dropdown">
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">

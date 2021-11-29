@@ -118,11 +118,11 @@ include 'includes/header.php';
                                     <div class="widget_date">
                                     <div class="widget_date_box">
                                     <label><strong>Start Date</strong></label>
-                                    <span class="badge badge--inline badge--primary">11/09/2020</span>
+                                    <span class="badge badge-inline badge-primary">11/09/2020</span>
                                     </div>
                                     <div class="widget_date_box">
                                     <label><strong>Due Date</strong></label>
-                                    <span class="badge badge--inline badge--danger">16/09/2020</span>
+                                    <span class="badge badge-inline badge-danger">16/09/2020</span>
                                     </div>
                                     </div>
 
@@ -279,7 +279,7 @@ include 'includes/header.php';
                                                         <span class="pro-td-subtitle">Insurance</span>
                                                     </div>
                                                     </td>
-                                                    <td><span class="badge badge--inline badge--success">Success</span></td>
+                                                    <td><span class="badge badge-inline badge-success">Success</span></td>
                                                 </tr>
                                                 <tr>
                                                     <td>
@@ -306,7 +306,7 @@ include 'includes/header.php';
                                                         <span class="pro-td-subtitle">Insurance</span>
                                                     </div>
                                                     </td>
-                                                    <td><span class="badge badge--inline badge--warning">In Progress</span></td>
+                                                    <td><span class="badge badge-inline badge-warning">In Progress</span></td>
                                                 </tr>
                                                 <tr>
                                                     <td>
@@ -333,7 +333,7 @@ include 'includes/header.php';
                                                         <span class="pro-td-subtitle">Insurance</span>
                                                     </div>
                                                     </td>
-                                                    <td><span class="badge badge--inline badge--primary">Approved</span></td>
+                                                    <td><span class="badge badge-inline badge-primary">Approved</span></td>
                                                 </tr>
                                                 <tr>
                                                     <td>
@@ -360,7 +360,7 @@ include 'includes/header.php';
                                                         <span class="pro-td-subtitle">Insurance</span>
                                                     </div>
                                                     </td>
-                                                    <td><span class="badge badge--inline badge--danger">Rejected</span></td>
+                                                    <td><span class="badge badge-inline badge-danger">Rejected</span></td>
                                                 </tr>
                                             </tbody>
                                         </table>
