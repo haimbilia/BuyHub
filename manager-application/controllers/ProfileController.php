@@ -71,15 +71,15 @@ class ProfileController extends ListingBaseController
     {
         $frm = new Form('frmProfileInfo');
         $frm->addHiddenField('', 'admin_id', $this->admin_id);
-        $frm->addFileUpload(Labels::getLabel('FRM_Profile_Picture', $this->siteLangId), 'user_profile_image');
-        $fld = $frm->addRequiredField(Labels::getLabel('FRM_Username', $this->siteLangId), 'admin_username');
+        $frm->addFileUpload(Labels::getLabel('FRM_PROFILE_PICTURE', $this->siteLangId), 'user_profile_image');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'admin_username');
         $fld->setUnique('tbl_admin', 'admin_username', 'admin_id', 'admin_id', 'admin_id');
 
-        $fld = $frm->addRequiredField(Labels::getLabel('FRM_Email', $this->siteLangId), 'admin_email');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'admin_email');
         $fld->setUnique('tbl_admin', 'admin_email', 'admin_id', 'admin_id', 'admin_id');
 
-        $frm->addRequiredField(Labels::getLabel('FRM_Full_Name', $this->siteLangId), 'admin_name');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
+        $frm->addRequiredField(Labels::getLabel('FRM_FULL_NAME', $this->siteLangId), 'admin_name');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
