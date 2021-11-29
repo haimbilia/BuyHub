@@ -1,7 +1,4 @@
 <?php
-
-use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Html;
-
 class ConfigurationsController extends ListingBaseController
 {
     /* these variables must be only those which will store array type data and will saved as serialized array [*/

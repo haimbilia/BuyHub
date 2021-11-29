@@ -1356,3 +1356,11 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_BRANDS', '-1', 'Manage Brands', 'Add and manage product brands. Upload logos and banners to display on the brand detail page at the storefront.', 'Brands will be visible at storefront after they are linked with Product(s).', '', '');
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_SHOPS', '-1', 'Manage Shops', 'View and manage sellers’ registered shops information.', 'Buyers look over shop details on the Shop detail page.', '', '');
 INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_CATEGORIES', '-1', 'Manage Categories', 'Add and manage product categories. Upload category logos and banners to display on the category detail page at storefront.', 'Categories will be visible at storefront after they are linked with Product(s).', '', '');
+
+DELETE FROM `tbl_language_labels` WHERE label_key='LBL_CUSTOMER_NAME';
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_Order_Payment_Status_Cancelled', 1, 'Cancelled', 1),
+('LBL_Order_Payment_Status_Pending', 1, 'Pending', 1),
+('LBL_Order_Payment_Status_Paid', 1, 'Paid', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

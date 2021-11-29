@@ -1,4 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
 $activeGentab = !empty($activeGentab) ? 'active' : '';
 $activeLangtab = !empty($activeLangtab) ? 'active' : '';
 $disabled = !empty($disabled) ? ' disabled' : '';
@@ -7,9 +8,7 @@ $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 $includeTabs = $includeTabs ?? true;
 $displayLangTab = $displayLangTab ?? true;
 $languages = $languages ?? [];
-unset($languages[CommonHelper::getDefaultFormLangId()]);
-
-?>
+unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
 
 <div class="modal-header">
     <h5 class="modal-title">
@@ -22,7 +21,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
 <div class="modal-body form-edit">
     <!-- Closing tag must be added inside the files who include this file. -->
     <?php
-    if ($includeTabs && (0 < count($languages) || isset($otherButtons))) { ?>
+    if ($includeTabs && (0 < count($languages) || isset($otherButtons))) { die('jkj'); ?>
         <div class="form-edit-head">
             <nav class="nav nav-tabs navTabsJs">
                 <a class="nav-link <?php echo $activeGentab; ?>" href="javascript:void(0)" onclick="editRecord(<?php echo $recordId ?>);" title="<?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>">

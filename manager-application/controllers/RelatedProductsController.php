@@ -25,12 +25,12 @@ class RelatedProductsController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->getListingData();
-        
+
         $this->_template->addJs(['js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'related-products/page-js/index.js']);
         $this->_template->addCss(['css/select2.min.css', 'css/tagify.min.css']);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
-    
+
     public function search()
     {
         $this->getListingData();
@@ -83,17 +83,16 @@ class RelatedProductsController extends ListingBaseController
         }
 
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = selprod_user_id', 'tuc');
-        $srch->addFld('related_sellerproduct_id, credential_username');
+        $srch->addMultipleFields(['related_sellerproduct_id', 'credential_username', 'selprod_id', 'selprod_product_id', 'product_updated_on', 'selprod_title', 'product_name', 'product_identifier']);
         $srch->addGroupBy('related_sellerproduct_id');
-        
+
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
         $srch->addOrder($sortBy, $sortOrder);
 
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
+        $records = FatApp::getDb()->fetchAll($rs, 'related_sellerproduct_id');
         $arrListing = array();
         foreach ($records as $relatedProd) {
             $productId = $relatedProd['related_sellerproduct_id'];
@@ -109,6 +108,7 @@ class RelatedProductsController extends ListingBaseController
         }
 
         $this->set("arrListing", $arrListing);
+        $this->set("productsList", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
@@ -324,6 +324,6 @@ class RelatedProductsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['related_products'],Common::excludeKeysForSort());
+        return array_diff($fields, ['related_products'], Common::excludeKeysForSort());
     }
 }

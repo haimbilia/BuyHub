@@ -18,7 +18,9 @@ foreach ($arrListing as $selProdId => $row) {
                 $td->appendElement('plaintext', [], $serialNo);
                 break;
             case 'product_name':
-                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId, 'sellerName' => $row['credential_username']], false, true);
+                $product = $productsList[$selProdId];
+                $product['sellerName'] = $product['credential_username']; 
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['product' => $product, 'siteLangId' => $siteLangId], false, true);
                 $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'related_products':
