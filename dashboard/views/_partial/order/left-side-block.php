@@ -162,11 +162,9 @@ foreach ($arr as $childOrder) {
             <h4><?php echo Labels::getLabel('LBL_Shipping_ADDRESS', $siteLangId); ?></h4>
             <div class="order-block-data">
                 <?php 
-                        $data = $this->variables + [
-                            'address' => $orderDetail['shippingAddress'],
-                        ];
-                        $this->includeTemplate('_partial/order/address.php', $data, false);
-                    ?>
+                    $data = $this->variables + ['address' => $orderDetail['shippingAddress']];
+                    $this->includeTemplate('_partial/order/address.php', $data, false);
+                ?>
             </div>
         </div>
         <?php } ?>

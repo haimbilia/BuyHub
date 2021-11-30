@@ -178,7 +178,7 @@ class ShippingCompanyUsersController extends ListingBaseController {
             $post['user_password'] = CommonHelper::getRandomPassword(10);
             if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], $post['user_password'], 1, 1)) {
                 FatApp::getDB()->rollbackTransaction();
-                LibHelper::exitWithError(Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId), true);
             }
         }
         FatApp::getDB()->commitTransaction();

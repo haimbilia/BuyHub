@@ -327,7 +327,7 @@ class BrandsController extends ListingBaseController
         $this->objPrivilege->canEditBrands();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
         }
         $brand_id = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, 0);
         $languages = Language::getAllNames();
@@ -345,7 +345,7 @@ class BrandsController extends ListingBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_File', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -633,7 +633,7 @@ class BrandsController extends ListingBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $brandObj = new Brand($recordId);

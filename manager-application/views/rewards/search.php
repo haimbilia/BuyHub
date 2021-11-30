@@ -19,7 +19,7 @@ foreach ($arrListing as $sn => $row) {
             case 'user_name':
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
-                break;    
+                break;
             case 'urp_date_added':
             case 'urp_date_expiry':
                 $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key]));

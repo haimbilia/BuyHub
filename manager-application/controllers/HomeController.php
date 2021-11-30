@@ -402,12 +402,12 @@ class HomeController extends ListingBaseController
     {
         $url = FatApp::getPostedData('url', FatUtility::VAR_STRING, '');
         if (empty($url)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $segments = CommonHelper::segregateUrl($url);
         if (empty($segments)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_URL', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_URL', $this->siteLangId), true);
         }
 
         $data = [

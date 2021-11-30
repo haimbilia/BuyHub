@@ -41,7 +41,7 @@ class OrderSearch extends SearchBase
 
     public function addKeywordSearch($keyword)
     {
-        $cnd = $this->addCondition('order_id', 'like', '%' . $keyword . '%');
+        $cnd = $this->addCondition('order_number', 'like', '%' . $keyword . '%');
         if ($this->isOrderBuyerUserJoined) {
             $cnd->attachCondition('buyer.user_name', 'like', '%' . $keyword . '%', 'OR');
             $cnd->attachCondition('buyer_cred.credential_username', 'like', '%' . $keyword . '%', 'OR');

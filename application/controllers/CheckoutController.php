@@ -1136,7 +1136,6 @@ class CheckoutController extends MyAppController
 
         /* order products[ */
         $cartProducts = $this->cartObj->getProducts($this->siteLangId);
-
         $orderData['products'] = array();
         $orderData['prodCharges'] = array();
 
@@ -1268,9 +1267,9 @@ class CheckoutController extends MyAppController
                     if (!empty($productOptionsRows)) {
                         $optionCounter = 1;
                         foreach ($productOptionsRows as $poLang) {
-                            $op_selprod_options .= $poLang['option_name'] . ': ' . $poLang['optionvalue_name'];
+                            $op_selprod_options .= $poLang['option_name'] . SellerProduct::OPTION_NAME_SEPARATOR . $poLang['optionvalue_name'];
                             if ($optionCounter != count($productOptionsRows)) {
-                                $op_selprod_options .= ' | ';
+                                $op_selprod_options .= SellerProduct::MULTIPLE_OPTION_SEPARATOR;
                             }
                             $optionCounter++;
                         }
@@ -1436,6 +1435,7 @@ class CheckoutController extends MyAppController
         $orderData['order_affiliate_total_commission'] = $order_affiliate_total_commission;
         /* ] */
         /* ] */
+        
         $orderObj = new Orders();
         if ($orderObj->addUpdateOrder($orderData, $this->siteLangId)) {
             $order_id = $orderObj->getMainTableRecordId();

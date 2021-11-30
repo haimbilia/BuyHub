@@ -133,7 +133,7 @@ class BlogContributionsController extends ListingBaseController
         $frm = $this->getForm($recordId);
         $data = BlogContribution::getAttributesById($recordId);
         if ($data === false) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
         }
         $frm->fill($data);
         $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
@@ -201,7 +201,7 @@ class BlogContributionsController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('bcontributions_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -218,7 +218,7 @@ class BlogContributionsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $obj = new BlogContribution($recordId);
         if (!$obj->deleteRecord()) {
