@@ -629,6 +629,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 }
                 $.ykmsg.success(ans.msg);
                 if (true === $.ykmodal.isAdded()) {
+                   
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
                     if ("" != callback) {

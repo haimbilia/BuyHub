@@ -312,6 +312,7 @@ Admin UI/UX Enhancements pages:
    => Content Block Integration
    => CMS-Faqs
    => Testimonials Management
+   => Home Page Banner Slides Management
 
     
 Known Issues and Problems :
