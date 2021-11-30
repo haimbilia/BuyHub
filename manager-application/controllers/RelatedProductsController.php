@@ -149,11 +149,11 @@ class RelatedProductsController extends ListingBaseController
         $post = FatApp::getPostedData();
         $recordId = FatUtility::int($post['selprod_id']);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_Please_Select_A_Valid_Product", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_Please_Select_A_Valid_Product", $this->siteLangId), true);
         }
 
         if (!isset($post['products_related']) || !is_array($post['products_related']) || 1 > count($post['products_related'])) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_MUST_SELECT_ATLEAST_ONE_PRODUCT_TO_RELATED_PRODUCTS", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_MUST_SELECT_ATLEAST_ONE_PRODUCT_TO_RELATED_PRODUCTS", $this->siteLangId), true);
         }
 
         $relatedProducts = $post['products_related'];
@@ -171,7 +171,7 @@ class RelatedProductsController extends ListingBaseController
     {
         $recordId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_Please_Select_A_Valid_Product", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_Please_Select_A_Valid_Product", $this->siteLangId), true);
         }
         $relatedProdId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
 

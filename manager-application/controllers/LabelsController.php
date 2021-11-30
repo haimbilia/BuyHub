@@ -310,7 +310,7 @@ class LabelsController extends ListingBaseController
         foreach ($languages as $langId => $langCode) {
             $resp = Labels::updateDataToFile($langId, $langCode, $labelType, true);
             if ($resp === false) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_Unable_to_update_file', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_update_file', $this->siteLangId), true);
             }
         }
         $message = Labels::getLabel('MSG_File_successfully_updated', $this->siteLangId);

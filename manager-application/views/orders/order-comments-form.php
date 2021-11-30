@@ -7,15 +7,15 @@ $frm->setFormTagAttribute('data-onclear', 'getOrderCommentForm(' . $op['order_id
 $manualFld = $frm->getField('manual_shipping');
 
 $statusFld = $frm->getField('op_status_id');
-$statusFld->setFieldTagAttribute('class', 'status-js fieldsVisibilityJs');
+$statusFld->setFieldTagAttribute('class', 'statusJs fieldsVisibilityJs');
 $statusFld->developerTags['col'] = (null != $manualFld) ? 4 : 6;
 
 $notiFld = $frm->getField('customer_notified');
-$notiFld->setFieldTagAttribute('class', 'notifyCustomer-js');
+$notiFld->setFieldTagAttribute('class', 'notifyCustomerJs');
 $notiFld->developerTags['col'] = (null != $manualFld) ? 4 : 6;
 
 if (null != $manualFld) {
-    $manualFld->setFieldTagAttribute('class', 'manualShipping-js fieldsVisibilityJs');
+    $manualFld->setFieldTagAttribute('class', 'manualShippingJs fieldsVisibilityJs');
     $manualFld->developerTags['col'] = 4;
 
     $fldTracking = $frm->getField('tracking_number');

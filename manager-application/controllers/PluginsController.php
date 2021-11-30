@@ -261,7 +261,7 @@ class PluginsController extends ListingBaseController
         $post = FatApp::getPostedData();
 
         if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Please_select_a_file', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -410,7 +410,7 @@ class PluginsController extends ListingBaseController
         $pluginType = FatApp::getPostedData('plugin_type', FatUtility::VAR_INT, 0);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
         if (empty($recordIdsArr) || -1 == $status || 1 > $pluginType) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $error = '';
         foreach ($recordIdsArr as $recordId) {
@@ -432,7 +432,7 @@ class PluginsController extends ListingBaseController
 
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
         if (empty($recordIdsArr) || -1 == $status || 1 > $pluginGroupType) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {

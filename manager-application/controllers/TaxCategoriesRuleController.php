@@ -189,7 +189,7 @@ class TaxCategoriesRuleController extends ListingBaseController
                 $totalCombinedTax += $value['taxruledet_rate'];
             });
             if ($totalCombinedTax != $post['trr_rate']) {
-                LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_COMBINED_TAX_COMBINATION', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_COMBINED_TAX_COMBINATION', $this->siteLangId), true);
             }
         }
         $this->validateStateCountry($post);
@@ -208,13 +208,13 @@ class TaxCategoriesRuleController extends ListingBaseController
         $ruleId = $taxRuleObj->getMainTableRecordId();
         /* [ update location data */
         if (!$taxRuleObj->addUpdateLocationData($ruleId, $post)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Unable_to_Update_Location_Data', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Location_Data', $this->siteLangId));
         }
         /* ] */
 
         /* [ UPDATE COMBINED TAX DETAILS */
         if (!$taxRuleObj->addUpdateCombinedData($combinedTaxDetails, $ruleId)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Unable_to_Update_Combined_Tax_Data', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Combined_Tax_Data', $this->siteLangId));
         }
         /* ] */
 
@@ -249,7 +249,7 @@ class TaxCategoriesRuleController extends ListingBaseController
                 }
                 $key = $post['taxruleloc_from_country_id'] . "-" . $fromState . "-" . $post['taxruleloc_to_country_id'] . "-" . $toState . "-" . $post['taxruleloc_type'] . "-" . $isUnique;
                 if (in_array($key, $combination)) {
-                    LibHelper::exitWithError(Labels::getLabel('LBL_COMBINATION_OF_COUNTRY_STATE_AND_STATE_TYPE_ALREADY_EXIST_IN_CATEGORY', $this->siteLangId), true);
+                    LibHelper::exitWithError(Labels::getLabel('ERR_COMBINATION_OF_COUNTRY_STATE_AND_STATE_TYPE_ALREADY_EXIST_IN_CATEGORY', $this->siteLangId), true);
                 }
             }
         }

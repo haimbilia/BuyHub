@@ -1394,3 +1394,7 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('LBL_Order_Payment_Status_Pending', 1, 'Pending', 1),
 ('LBL_Order_Payment_Status_Paid', 1, 'Paid', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_PRESS_{KEY}_KEY_FOR_BROWSER_SEARCH', 1, 'Press {KEY} again to use native browser search.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

@@ -73,6 +73,20 @@ foreach ($op['taxOptions'] as $key => $val) {
             <?php } ?>
 
             <li>
+                <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_LABEL', $siteLangId); ?>:</span>
+                <span class="value">
+                    <?php echo CommonHelper::displayNotApplicable($siteLangId, $op["opshipping_label"]); ?>
+                </span>
+            </li>
+            <?php if (!empty($op["opshipping_service_code"])) { ?>
+                <li>
+                    <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_SERVICES', $siteLangId); ?>:</span>
+                    <span class="value">
+                        <?php echo CommonHelper::displayNotApplicable($siteLangId, $op["opshipping_service_code"]); ?>
+                    </span>
+                </li>
+            <?php } ?>
+            <li>
                 <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_STATUS', $siteLangId); ?>:</span>
                 <span class="value">
                     <?php
@@ -92,6 +106,7 @@ foreach ($op['taxOptions'] as $key => $val) {
                     ?>
                 </span>
             </li>
+
             <li>
                 <span class="lable"><?php echo Labels::getLabel('LBL_UNIT_PRICE', $siteLangId); ?>:</span>
                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($op["op_unit_price"], true, true); ?></span>
@@ -103,7 +118,7 @@ foreach ($op['taxOptions'] as $key => $val) {
 
             <?php if ($isOrderShipped && 0 < $shippingCost) { ?>
                 <li>
-                    <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING', $siteLangId); ?>:</span>
+                    <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_COST', $siteLangId); ?>:</span>
                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($shippingCost, true, true); ?></span>
                 </li>
             <?php } ?>

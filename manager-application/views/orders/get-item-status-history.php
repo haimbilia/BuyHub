@@ -9,7 +9,7 @@ $totalRecords = count($arrListing); ?>
     <div class="form-edit-body">
         <?php 
         if ($totalRecords == 0) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_NO_RECORD_FOUND', $siteLangId), false, false, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_NO_RECORD_FOUND', $siteLangId), false, false, true);
         } else { ?>
             <div class="timeline-v4 appendRowsJs">
                 <?php require_once('get-rows.php'); ?>

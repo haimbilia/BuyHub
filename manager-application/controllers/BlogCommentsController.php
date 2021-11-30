@@ -117,7 +117,7 @@ class BlogCommentsController extends ListingBaseController
         $srch->addCondition('bpcomment_id', '=', $recordId);
         $data = FatApp::getDb()->fetch($srch->getResultSet());
         if ($data === false) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
         }
         $frm->fill($data);
         $statusArr = BlogComment::getBlogCommentStatusArr($this->siteLangId);
@@ -186,7 +186,7 @@ class BlogCommentsController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('bpcomment_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -203,11 +203,11 @@ class BlogCommentsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $obj = new BlogComment($recordId);
         if (!$obj->canMarkRecordDelete($recordId)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Unauthorized_Access', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Unauthorized_Access', $this->siteLangId), true);
         }
 
         $obj->assignValues(array(BlogComment::tblFld('deleted') => 1));

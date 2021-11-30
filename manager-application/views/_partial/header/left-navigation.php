@@ -18,7 +18,7 @@
                 $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -66,7 +66,7 @@
                     $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -125,7 +125,7 @@
                 $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -172,7 +172,7 @@
               $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true) */
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -257,7 +257,7 @@
                 $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -331,7 +331,7 @@
                 $objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -381,7 +381,7 @@
                     $objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -424,7 +424,7 @@
                     || $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -487,7 +487,7 @@
                 $objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -686,7 +686,7 @@
                 $objPrivilege->canViewImportExport(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -719,7 +719,7 @@
             ) {
                 ?>
             <?php } ?>
-            <li class="menu-item dropdown dropright">
+            <li class="menu-item dropdown dropright dropdownJs">
                 <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
@@ -786,7 +786,7 @@
                     $objPrivilege->canViewMetaTags(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
-                <li class="menu-item dropdown dropright">
+                <li class="menu-item dropdown dropright dropdownJs">
                     <button type="button" class="menu-link menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
@@ -847,7 +847,7 @@
     </div>
     <div class="sidebar-foot">
         <ul class="menu">
-            <li class="menu-item dropdown dropright">
+            <li class="menu-item dropdown dropright dropdownJs">
                 <button type="button" class="menu-link menuLinkJs" onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">

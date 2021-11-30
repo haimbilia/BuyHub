@@ -366,7 +366,7 @@ class ProductCategoriesController extends ListingBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_File', $this->siteLangId), true);
         }
 
         ProductCategory::deleteImagesWithOutCategoryId($file_type);

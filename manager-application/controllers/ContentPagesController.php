@@ -460,7 +460,7 @@ class ContentPagesController extends ListingBaseController
         $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
         }
         $recordId = FatApp::getPostedData('cpage_id', FatUtility::VAR_INT, 0);
         $languages = Language::getAllNames();
@@ -477,7 +477,7 @@ class ContentPagesController extends ListingBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();

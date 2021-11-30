@@ -135,14 +135,14 @@ class LanguagesController extends ListingBaseController
 
         $status = FatApp::getPostedData('language_active', FatUtility::VAR_INT, 0);
         if ($status == applicationConstants::INACTIVE && 1 > count(Language::getAllNames())) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
         }
 
         $record = new Language($recordId);
         $record->assignValues($post);
 
         if (!$record->save()) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_This_language_code_is_not_available', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_This_language_code_is_not_available', $this->siteLangId), true);
         }
 
         $msg = Labels::getLabel('MSG_ADDED_SUCCESSFULLY', $this->siteLangId);
@@ -199,7 +199,7 @@ class LanguagesController extends ListingBaseController
         }
 
         if ($status == applicationConstants::INACTIVE && 1 == count(Language::getAllNames())) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
         }
 
         $this->changeStatus($recordId, $status);
@@ -217,7 +217,7 @@ class LanguagesController extends ListingBaseController
         }
 
         if ($status == applicationConstants::INACTIVE && count($recordIdsArr) >= count(Language::getAllNames())) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {

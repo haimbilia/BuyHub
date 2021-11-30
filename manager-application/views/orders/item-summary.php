@@ -39,6 +39,18 @@
                     $op['order_number'] = $order['order_number'];
                     $op['order_date_added'] = $order['order_date_added'];
 
+                    $orderStatusLbl = Labels::getLabel('LBL_AWAITING_SHIPMENT', $siteLangId);
+                    $opStatus = '';
+                    if (!empty($op["thirdPartyorderInfo"]) && isset($op["thirdPartyorderInfo"]['orderStatus'])) {
+                        $opStatus = $op["thirdPartyorderInfo"]['orderStatus'];
+                        $opStatusLbl = strpos($opStatus, "_") ? str_replace('_', ' ', $opStatus) : $opStatus;
+                    }
+
+                    if (!empty($op['opship_tracking_url'])) {
+                        $opStatusLbl = Labels::getLabel('LBL_SHIPPED', $siteLangId);
+                    }
+                    $shippingApiObj = (new Shipping($siteLangId))->getShippingApiObj(($shippingHanldedBySeller ? $op['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+
                     if ($store != $op['op_shop_name']) { 
                         if (!empty($store)) { ?>
                             </tbody><tbody>
@@ -94,36 +106,216 @@
                             </span>
                         </td>
                         <td class="align-right">
-                            <ul class="actions">
-                                <li data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_VIEW_DETAIL', $siteLangId); ?>">
-                                    <a href="javascript:void(0)" onclick="getItem(<?php echo $op['order_id']; ?>, <?php echo $op['op_id']; ?>)">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view">
-                                            </use>
-                                        </svg>
-                                    </a>
-                                </li>
-                                <li data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId); ?>">
-                                    <a href="javascript:void(0)" onclick="getItemStatusHistory(<?php echo $op['order_id']; ?>, <?php echo $op['op_id']; ?>)">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#timeline">
-                                            </use>
-                                        </svg>
-                                    </a>
-                                </li>
-                                <li data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId); ?>">
-                                    <?php 
-                                    $fn = $displayShippingUserForm ? 'getShippingUsersForm' : 'getOrderCommentForm';
-                                    $fn = $fn . '(' . $op['order_id'] . ', ' . $op['op_id'] . ')';
-                                    ?>
-                                    <a href="javascript:void(0)" onclick="<?php echo $fn; ?>">
-                                        <svg class="svg" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-orders">
-                                            </use>
-                                        </svg>
-                                    </a>
-                                </li>
-                            </ul>
+                            <?php 
+                            $fn = $displayShippingUserForm ? 'getShippingUsersForm' : 'getOrderCommentForm';
+                            $fn = $fn . '(' . $op['order_id'] . ', ' . $op['op_id'] . ')';
+
+                            $data = ['siteLangId' => $siteLangId];
+                            $data['dropdownButtons']['otherButtons'] = [
+                                [
+                                    'attr' => [
+                                        'href' => 'javascript:void(0)',
+                                        'onclick' => 'getItem(' . $op['order_id'] . ',' . $op['op_id'] . ')',
+                                        'title' => Labels::getLabel('MSG_VIEW_DETAIL', $siteLangId),
+                                    ],
+                                    'label' => '<i class="icn">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use
+                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                                        </use>
+                                                    </svg>
+                                                </i>' . Labels::getLabel('MSG_VIEW_DETAIL', $siteLangId),
+                                ],
+                                [
+                                    'attr' => [
+                                        'href' => Fatutility::generateUrl('Orders', 'viewInvoice', [$op['op_id']]),
+                                        'target' => '_blank',
+                                        'title' => Labels::getLabel('MSG_PRINT_INVOICE', $siteLangId),
+                                    ],
+                                    'label' => '<i class="icn">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use
+                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print">
+                                                        </use>
+                                                    </svg>
+                                                </i>' . Labels::getLabel('MSG_PRINT_INVOICE', $siteLangId),
+                                ],
+                                [
+                                    'attr' => [
+                                        'href' => Fatutility::generateUrl('Orders', 'viewBuyerOrderInvoice', [$op['order_id'], $op['op_id']]),
+                                        'target' => '_blank',
+                                        'title' => Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId),
+                                    ],
+                                    'label' => '<i class="icn">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use
+                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print">
+                                                        </use>
+                                                    </svg>
+                                                </i>' . Labels::getLabel('LBL_PRINT_BUYER_INVOICE', $siteLangId),
+                                ],
+                                [
+                                    'attr' => [
+                                        'href' => 'javascript:void(0)',
+                                        'onclick' => 'getItemStatusHistory(' . $op['order_id'] . ',' . $op['op_id'] . ')',
+                                        'title' => Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId),
+                                    ],
+                                    'label' => '<i class="icn">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use
+                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#timeline">
+                                                        </use>
+                                                    </svg>
+                                                </i>' . Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId),
+                                ],
+                                [
+                                    'attr' => [
+                                        'href' => 'javascript:void(0)',
+                                        'onclick' => $fn . '(' . $op['order_id'] . ', ' . $op['op_id'] . ')',
+                                        'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
+                                    ],
+                                    'label' => '<i class="icn">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use
+                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#inventory">
+                                                        </use>
+                                                    </svg>
+                                                </i>' . Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
+                                ]
+                            ];
+
+                            if (
+                                !in_array($op['op_status_id'], unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))) && 
+                                $op['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && 
+                                !$shippingHanldedBySeller && 
+                                is_object($shippingApiObj) && 
+                                (
+                                    'CashOnDelivery' == $op['plugin_code'] || 
+                                    Orders::ORDER_PAYMENT_PAID == $op['order_payment_status']
+                                )
+                            ) {
+                                $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']); 
+                                
+                                if (1 < $op['opshipping_rate_id'] && 
+                                    (
+                                        empty($op['opshipping_plugin_id']) || 
+                                        (
+                                            $shippingApiObj->getKey('plugin_id') != $op['opshipping_plugin_id'] && 
+                                            empty($op['opr_response'])
+                                        )
+                                    )
+                                ) {
+                                    $data['dropdownButtons']['otherButtons'][] = [
+                                        'attr' => [
+                                            'href' => 'javascript:void(0)',
+                                            'onclick' => 'shippingRatesForm(' . $op['op_id'] . ')',
+                                            'title' => Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId)
+                                        ],
+                                        'label' => '<i class="icn">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#list-paper">
+                                                            </use>
+                                                        </svg>
+                                                    </i>' . Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId),
+                                    ];
+                                } else { 
+                                    if($shippingApiObj->getKey('plugin_id') == $op['opshipping_plugin_id']){
+                                        if (empty($op['opr_response']) && empty($op['opship_tracking_number']) && !$allowedForPlugin) {
+                                            $data['dropdownButtons']['otherButtons'][] = [
+                                                'attr' => [
+                                                    'href' => 'javascript:void(0)',
+                                                    'onclick' => 'generateLabel(' . $op['op_id'] . ')',
+                                                    'title' => Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId)
+                                                ],
+                                                'label' => '<i class="icn">
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#print-label">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>' . Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId),
+                                            ];
+                                        } elseif (!empty($op['opr_response'])) {
+                                            $method = ($returnRequestApproved == $op["op_status_id"]) ? 'previewReturnLabel' : 'previewLabel';
+                                            $title = ($returnRequestApproved == $op["op_status_id"]) ? 'LBL_PREVIEW_RETURN_LABEL' : 'LBL_PREVIEW_LABEL';
+                                            $data['dropdownButtons']['otherButtons'][] = [
+                                                'attr' => [
+                                                    'href' => UrlHelper::generateUrl("ShippingServices", $method, [$op['op_id']]),
+                                                    'target' => "_blank",
+                                                    'title' => Labels::getLabel($title, $siteLangId)
+                                                ],
+                                                'label' => '<i class="icn">
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#export">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>' . Labels::getLabel($title, $siteLangId),
+                                            ];
+                                        }  
+
+                                        if ((!empty($opStatus) && 'awaiting_shipment' == $opStatus && !empty($op['opr_response']) || $allowedForPlugin) && empty($op['opship_order_number'])) {
+                                            if ('EasyPost' == $shippingApiObj->keyName) {
+                                                $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
+                                            } else {
+                                                $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $siteLangId);
+                                            }
+                                            $data['dropdownButtons']['otherButtons'][] = [
+                                                'attr' => [
+                                                    'href' => 'javascript:void(0)',
+                                                    'onclick' => 'proceedToShipment(' . $op['op_id'] . ')',
+                                                    'title' => $label
+                                                ],
+                                                'label' => '<i class="icn">
+                                                                <svg class="svg" width="18" height="18">
+                                                                    <use
+                                                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-shipping-pickup">
+                                                                    </use>
+                                                                </svg>
+                                                            </i>' . $label,
+                                            ];
+                                        }                                    
+
+                                        if ($op['orderstatus_id'] == $shippedOrderStatus &&  true === $shippingApiObj->canCreatePickup()) {
+                                            if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
+                                                $data['dropdownButtons']['otherButtons'][] = [
+                                                    'attr' => [
+                                                        'href' => 'javascript:void(0)',
+                                                        'onclick' => 'getPickupForm(' . $op['op_id'] . ')',
+                                                        'title' => Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId)
+                                                    ],
+                                                    'label' => '<i class="icn">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use
+                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#pickup">
+                                                                        </use>
+                                                                    </svg>
+                                                                </i>' . Labels::getLabel('LBL_CREATE_PICKUP', $siteLangId),
+                                                ];
+                                            } else {
+                                                $data['dropdownButtons']['otherButtons'][] = [
+                                                    'attr' => [
+                                                        'href' => 'javascript:void(0)',
+                                                        'onclick' => 'cancelPickup(' . $op['op_id'] . ')',
+                                                        'title' => Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId)
+                                                    ],
+                                                    'label' => '<i class="icn">
+                                                                    <svg class="svg" width="18" height="18">
+                                                                        <use
+                                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#not-allowed">
+                                                                        </use>
+                                                                    </svg>
+                                                                </i>' . Labels::getLabel('LBL_CANCEL_PICKUP', $siteLangId),
+                                                ];
+                                            }
+                                        }                                    
+                                    }
+                                }
+                            }
+        
+                            $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false);
+                            ?>
                         </td>
                     </tr>
                 <?php 
