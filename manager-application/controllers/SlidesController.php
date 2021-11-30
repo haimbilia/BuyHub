@@ -2,578 +2,562 @@
 
 class SlidesController extends ListingBaseController
 {
-    private $canView;
-    private $canEdit;
+    protected $modelClass = 'Slides';
+    protected $pageKey = 'MANAGE_SLIDES';
 
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewSlides($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditSlides($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewSlides();
+    }
+
+     /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditSlides($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditSlides();
+        }
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewSlides();
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+        
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['deleteButton'] = true;
+        
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TESTIMONIAL_TITLE', $this->siteLangId));
+        $this->checkEditPrivilege(true);
+        $this->getListingData();
+        
         $this->_template->addCss('css/cropper.css');
-        $this->_template->addJs('js/cropper.js');
-        $this->_template->addJs('js/cropper-main.js');
-        $this->_template->render();
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'slides/page-js/index.js']);
+        $this->_template->render(true,true, '_partial/listing/index.php');
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewSlides();
-        $post = FatApp::getPostedData();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'slides/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        /* $searchForm = $this->getSearchForm();
-        $post = $searchForm->getFormDataFromArray($post); */
+    public function getListingData()
+    {
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+        $data = FatApp::getPostedData();
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        // $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        // if (!array_key_exists($sortBy, $fields)) {
+        //     $sortBy = current($allowedKeysForSorting);
+        // }
+        $sortBy = Slides::DB_TBL_PREFIX . 'display_order';
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $searchForm = $this->getSearchForm($fields);
+        $post = $searchForm->getFormDataFromArray($data);
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
 
         $srch = Slides::getSearchObject($this->siteLangId, false);
         $srch->addCondition('slide_type', '=', Slides::TYPE_SLIDE);
-        $srch->addOrder(Slides::DB_TBL_PREFIX . 'active', 'DESC');
-        $srch->addOrder('slide_display_order', 'ASC');
+        $srch->addOrder($sortBy, $sortOrder);
+        if (!empty($post['keyword'])) {
+            $condition = $srch->addCondition('slide_identifier', 'like', '%' . $post['keyword'] . '%');
+            $condition->attachCondition('slide_title', 'like', '%' . $post['keyword'] . '%', 'OR');
+        }
+        $srch->addOrder(Slides::DB_TBL_PREFIX . 'active', 'ASC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
 
-        $arrListing = array();
-        if ($rs) {
-            $arrListing = FatApp::getDb()->fetchAll($rs);
-        }
+        $srch->addMultipleFields([
+            'slide_id', 'slide_identifier', 'slide_type', 'slide_record_id', 'slide_url',
+            'slide_target', 'slide_active', 'slide_display_order', 'slide_img_updated_on', 'slidelang_slide_id',
+            'slidelang_lang_id', 'IFNULL(slide_title, slide_identifier) AS slide_title'
+        ]);
 
-        $this->set("arrListing", $arrListing);
-        /* $this->set('languages', Language::getAllNames()); */
+        $records =  FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('siteLangId', $this->siteLangId);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->checkEditPrivilege(true);
+    }
+
+    public function form()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
+        $langId = $this->siteLangId;
+
+        if (0 < $recordId) {
+            $fields = [
+                'slide_id', 'slide_identifier', 'slide_type', 'slide_record_id', 'slide_url',
+                'slide_target', 'slide_active', 'slide_display_order', 'slide_img_updated_on', 'slidelang_slide_id',
+                'slidelang_lang_id', 'IFNULL(slide_title, slide_identifier) AS slide_title'
+            ];
+            $data = Slides::getAttributesByLangId($langId, $recordId, $fields, true);
+            if ($data === false) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
+            $frm->fill($data);
+        }
+        
+        $this->set('recordId', $recordId);
+        $this->set('frm', $frm);
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $universalImage = true;
+            
+        } else {
+            $universalImage = false;
+            $langId = array_key_first($languages);
+        }
+
+        $slideImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, $universalImage);
+        $this->set('image', $slideImage);
+        $this->checkEditPrivilege(true);
         $this->_template->render(false, false);
     }
 
-    public function form($slide_id = 0)
+    private function getForm($recordId = 0)
     {
-        $this->objPrivilege->canViewSlides();
+        $frm = new Form('frmSlide');
+        $frm->addHiddenField('', 'slide_id', $recordId);
+        $frm->addHiddenField('', 'lang_id', $this->siteLangId);
+        $frm->addHiddenField('', 'slide_type', Slides::TYPE_SLIDE);
+        $frm->addRequiredField(Labels::getLabel('FRM_SLIDE_TITLE', $this->siteLangId), 'slide_title');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_SLIDE_URL', $this->siteLangId), 'slide_url');
+        $fld->setFieldTagAttribute('placeholder', 'http://');
 
-        $slide_id = FatUtility::int($slide_id);
-        $slideFrm = $this->getForm();
-
-        if (0 < $slide_id) {
-            $data = Slides::getAttributesById($slide_id);
-            if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
-            }
-            $slideFrm->fill($data);
-        }
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('slide_id', $slide_id);
-        $this->set('slideFrm', $slideFrm);
-        $this->_template->render(false, false);
+        $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_OPEN_IN', $this->siteLangId), 'slide_target', $linkTargetsArr, '', [], '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'slide_active', applicationConstants::getActiveInactiveArr($this->siteLangId), 
+        applicationConstants::ACTIVE, array(), '');
+        return $frm;
     }
 
     public function setup()
     {
-        $this->objPrivilege->canEditSlides();
-
+        $this->checkEditPrivilege();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $slide_id = $post['slide_id'];
-        $recordId = Slides::getAttributesByIdentifier($post['slide_identifier'], 'slide_id');
-        if (!empty($recordId) && $recordId != $slide_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Slide_identifier_must_be_unique', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = $post['slide_id'];
+        $slideId = Slides::getAttributesByIdentifier($post['slide_title'], 'slide_id');
+        if (!empty($slideId) && $slideId != $recordId) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_SLIDE_TITLE_MUST_BE_UNIQUE', $this->siteLangId), true);
         }
 
-        unset($post['slide_id']);
+        $post['slide_identifier'] = $post['slide_title'];
+        
+        $langData = [
+            'slidelang_slide_id' => $recordId,
+            'slidelang_lang_id' => $this->siteLangId,
+            'slide_title' =>  $post['slide_title']
+        ];
+        
+        unset($post['slide_id'], $post['slide_title']);
 
-        $recordObj = new Slides($slide_id);
-        $recordObj->assignValues($post);
+        $slideObj = new Slides($recordId);
+        $slideObj->assignValues($post);
 
-        if (!$recordObj->save()) {
-            Message::addErrorMessage($recordObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        if (!$slideObj->save()) {
+            LibHelper::exitWithError($slideObj->getError(), true);
+        }
+        
+        if (!$slideObj->updateLangData($this->siteLangId, $langData)) {
+            LibHelper::exitWithError($slideObj->getError(), true);
         }
 
         $newTabLangId = 0;
-        if ($slide_id > 0) {
+        if ($recordId > 0) {
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
-                if (!$row = Slides::getAttributesByLangId($langId, $slide_id)) {
+                if (!Slides::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
         } else {
-            $slide_id = $recordObj->getMainTableRecordId();
+            $recordId = $slideObj->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        if ($newTabLangId == 0 && !$this->isMediaUploaded($slide_id)) {
+        if ($newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
             $this->set('openMediaForm', true);
         }
         $this->set('msg', $this->str_setup_successful);
-        $this->set('slideId', $slide_id);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($slide_id = 0, $lang_id = 0, $autoFillLangData = 0)
+    public function langForm($autoFillLangData = 0)
     {
-        $this->objPrivilege->canViewSlides();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
-        $slide_id = FatUtility::int($slide_id);
-        $lang_id = FatUtility::int($lang_id);
-
-        if ($slide_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        if (1 > $recordId || 1 > $langId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
-        $slideLangFrm = $this->getLangForm($lang_id);
+        $langFrm = $this->getLangForm($langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(Slides::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($slide_id, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
-            $langData = Slides::getAttributesByLangId($lang_id, $slide_id);
+            $langData = Slides::getAttributesByLangId($langId, $recordId);
         }
 
-        $langData['slide_id'] = $slide_id;
-        $slideLangFrm->fill($langData);
+        $langData['slide_id'] = $recordId;
+        $langFrm->fill($langData);
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $universalImage = true;
+            
+        } else {
+            $universalImage = false;
+            $langId = array_key_first($languages);
+        }
 
-        $slideBanner = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id, 0, $lang_id);
-        $this->set('slideBanner', $slideBanner);
+        $slideImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, $universalImage);
 
+        $this->set('image', $slideImage);
         $this->set('languages', Language::getAllNames());
-        $this->set('slide_id', $slide_id);
-        $this->set('slide_lang_id', $lang_id);
-        $this->set('slideLangFrm', $slideLangFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
+        $this->set('recordId', $recordId);
+        $this->set('lang_id', $langId);
+        $this->set('langFrm', $langFrm);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->checkEditPrivilege(true);
         $this->_template->render(false, false);
+    }
+
+    private function getLangForm($langId = 0)
+    {
+        $frm = new Form('frmSlideLang');
+        $frm->addHiddenField('', 'slide_id');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_SLIDE_TITLE', $langId), 'slide_title');
+        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+
+        return $frm;
     }
 
     public function langSetup()
     {
-        $this->objPrivilege->canEditSlides();
+        $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
 
-        $slide_id = $post['slide_id'];
+        $recordId = $post['slide_id'];
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $lang_id = $post['lang_id'];
+            $langId = $post['lang_id'];
         } else {
-            $lang_id = array_key_first($languages);
+            $langId = array_key_first($languages);
         }
 
-        if ($slide_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        if ($recordId == 0 || $langId == 0) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+            
         }
 
-        $frm = $this->getLangForm($lang_id);
+        $frm = $this->getLangForm($langId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['slide_id']);
         unset($post['lang_id']);
         $data = array(
-            'slidelang_slide_id' => $slide_id,
-            'slidelang_lang_id' => $lang_id,
+            'slidelang_slide_id' => $recordId,
+            'slidelang_lang_id' => $langId,
             'slide_title' => $post['slide_title']
         );
 
-        $slideObj = new Slides($slide_id);
-        if (!$slideObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($slideObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+        $slideObj = new Slides($recordId);
+        if (!$slideObj->updateLangData($langId, $data)) {
+            LibHelper::exitWithError($slideObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Slides::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($slide_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
-            if (!$row = Slides::getAttributesByLangId($langId, $slide_id)) {
+            if (!$row = Slides::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
                 break;
             }
         }
-        if ($newTabLangId == 0 && !$this->isMediaUploaded($slide_id)) {
-            $this->set('openMediaForm', true);
-        }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('slideId', $slide_id);
+        $this->set('slideId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function mediaForm($slide_id)
+    public function images()
     {
-        $slide_id = FatUtility::int($slide_id);
-        $slideDetail = Slides::getAttributesById($slide_id);
-        $slideMediaFrm = $this->getMediaForm($slide_id);
-        $screenTypeArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        /* CommonHelper::printArray(key($screenTypeArr)); die; */
-        $this->set('slide_id', $slide_id);
-        $this->set('slideMediaFrm', $slideMediaFrm);
-        $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
-    }
-
-    public function images($slide_id, $slide_screen = 0, $lang_id = 0)
-    {
-        $slide_id = FatUtility::int($slide_id);
-        $slideDetail = Slides::getAttributesById($slide_id);
-        if (false == $slideDetail) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        // $fileType = FatApp::getPostedData('imageType', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        $slideScreen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 1);
         $languages = Language::getAllNames();
-		if(count($languages) <= 1){
-			 $lang_id =  array_key_first($languages); 
-		}
-        /* echo $slide_id.' '.$lang_id.' '.$slide_screen; die; */
-        if (!false == $slideDetail) {
-            $slideBanner = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id, 0, $lang_id, (count($languages) > 1) ? false : true, $slide_screen);
-            $this->set('images', $slideBanner);
+        $slideDetail = Slides::getAttributesById($recordId);
+        if (false == $slideDetail) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $this->set('slide_id', $slide_id);
-        $this->set('bannerTypeArr', $this->bannerTypeArr());
-        $this->set('screenTypeArr', $this->getDisplayScreenName());
-        $this->set('languages', Language::getAllNames());
+        $universalImage = (count($languages) > 1) ? false : true;
+        $langId = $langId == 0 ?  $this->siteLangId : $langId;
+        $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, $universalImage, $slideScreen);
+        $this->set('image', $image);
+        $this->set('imageFunction', 'Slide');
+        $this->set('file_type', 'THUMB');
+        $this->set('universalImage', $universalImage);
+        $this->set('recordId', $recordId);
+        $this->checkEditPrivilege(true);
         $this->_template->render(false, false);
     }
 
-    public function deleteRecord()
+
+    protected function markAsDeleted($recordId)
     {
-        $this->objPrivilege->canEditSlides();
-
-        $slide_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-        if ($slide_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        $this->markAsDeleted($slide_id);
-
-        $fileHandlerObj = new AttachedFile();
-        $fileHandlerObj->deleteFile(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id);
-        FatUtility::dieJsonSuccess($this->str_delete_record);
-    }
-
-    public function deleteSelected()
-    {
-        $this->objPrivilege->canEditSlides();
-        $slideIdsArr = FatUtility::int(FatApp::getPostedData('slide_ids'));
-
-        if (empty($slideIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        foreach ($slideIdsArr as $slide_id) {
-            if (1 > $slide_id) {
-                continue;
-            }
-            $this->markAsDeleted($slide_id);
+        $obj = new Slides($recordId);
+        if (!$obj->deleteRecord(true)) {
+            LibHelper::exitWithError($obj->getError(), true);
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function markAsDeleted($slide_id)
+
+    public function uploadMedia()
     {
-        $slide_id = FatUtility::int($slide_id);
-        if (1 > $slide_id) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
+        $this->checkEditPrivilege();
+        $fileType = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('slide_id', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        $slideScreen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
+        if (!$fileType || !$recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        $obj = new Slides($slide_id);
-        if (!$obj->deleteRecord(true)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-    }
-
-    public function setUpImage($slide_id)
-    {
-        $this->objPrivilege->canEditSlides();
-
-        $slide_id = FatUtility::int($slide_id);
-
-        if (1 > $slide_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $post = FatApp::getPostedData();
-        $lang_id = FatUtility::int($post['lang_id']);
-        $slide_screen = FatUtility::int($post['slide_screen']);
-        if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+    
+        $file = $_FILES['cropped_image'];
+        if (!is_uploaded_file($file['tmp_name'])) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
-
-        if (!$res = $fileHandlerObj->saveAttachment(
-            $_FILES['cropped_image']['tmp_name'],
-            AttachedFile::FILETYPE_HOME_PAGE_BANNER,
-            $slide_id,
-            0,
-            $_FILES['cropped_image']['name'],
-            -1,
-            true,
-            $lang_id,
-            $slide_screen
-        )) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        if (!$fileHandlerObj->saveImage($file['tmp_name'], $fileType, $recordId, 0, $file['name'], -1, true, $langId, $file['type'], $slideScreen)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
-        Slides::setLastModified($slide_id);
-        $this->set('slideId', $slide_id);
-        $fileName = $_FILES['cropped_image']['name'];
-        $this->set('file', $fileName);
-        $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-        $fileName = strlen($fileName) > 10 ? substr($fileName, 0, 10) . '.' . $ext : $fileName;
-        $this->set('msg', $fileName . ' ' . Labels::getLabel('MSG_File_uploaded_successfully', $this->siteLangId));
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $universalImage = true;
+            $langId = FatUtility::int($langId);
+        } else {
+            $universalImage = false;
+            $langId = array_key_first($languages);
+        }
+
+        $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $langId, $universalImage, $slideScreen);
+        $this->set('image', $cbgImage);
+        $this->set('imageFunction', 'Slide');
+        $this->set('file', $file['name']);
+        $this->set('recordId', $recordId);
+        $this->set('file_type', $fileType);
+        $this->set('lang_id', $langId);
+        $this->set('msg', $file['name'] . ' ' . Labels::getLabel('MSG_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    /* public function setUpImage( $slide_id, $lang_id ){
-    $slide_id = FatUtility::int( $slide_id );
-    $lang_id = FatUtility::int( $lang_id );
-    if( !$slide_id || !$lang_id ){
-    Message::addErrorMessage($this->str_invalid_request);
-    FatUtility::dieJsonError( Message::getHtml() );
-    }
-
-    $post = FatApp::getPostedData();
-
-    if ( !is_uploaded_file($_FILES['file']['tmp_name']) ) {
-    Message::addErrorMessage(Labels::getLabel('LBL_Please_Select_A_File',$this->siteLangId));
-    FatUtility::dieJsonError(Message::getHtml());
-    }
-
-    $fileHandlerObj = new AttachedFile();
-    $fileHandlerObj->deleteFile( AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id, 0, 0, $lang_id );
-    if(!$res = $fileHandlerObj->saveImage($_FILES['file']['tmp_name'], AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id, 0,
-    $_FILES['file']['name'], -1, false, $lang_id)
-    ){
-    Message::addErrorMessage($fileHandlerObj->getError());
-    FatUtility::dieJsonError( Message::getHtml() );
-    }
-
-    $this->set( 'file', $_FILES['file']['name'] );
-    $this->set( 'slide_id', $slide_id );
-    $this->set('msg', $_FILES['file']['name'].' '.Labels::getLabel('LBL_Uploaded_Successfully',$this->siteLangId));
-    $this->_template->render(false, false, 'json-success.php');
-    } */
-
-    public function removeImage($slide_id, $lang_id, $screen)
+    public function removeMedia() 
     {
-        $slide_id = FatUtility::int($slide_id);
-        $lang_id = FatUtility::int($lang_id);
-        if (1 > $slide_id) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $afileId = FatApp::getPostedData('afileId', FatUtility::VAR_INT, 0);
+        $fileType = FatApp::getPostedData('fileType', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        $slideScreen = FatApp::getPostedData('slideScreen', FatUtility::VAR_INT, 0);
+        
+        if (0 == $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id, 0, 0, $lang_id, $screen)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        $fileHandlerObj = new AttachedFile($afileId);
+        if($langId == $this->siteLangId){
+            $fileHandlerObj->deleteFile($fileType, $recordId, 0, 0, 0, $slideScreen);
+        }
+        if (!$fileHandlerObj->deleteFile($fileType, $recordId, $afileId, 0, $langId, $slideScreen)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Deleted_successfully', $this->siteLangId));
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $universalImage = true;
+            $langId = FatUtility::int($langId);
+        } else {
+            $universalImage = false;
+            $langId = array_key_first($languages);
+        }
+        
+        $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $langId, $universalImage, $slideScreen);
+        $this->set('image', $cbgImage);
+        $this->set('imageFunction', 'Slide');
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
     public function updateOrder()
     {
-        $this->objPrivilege->canEditSlides();
-
+        $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
         if (!empty($post)) {
             $slideObj = new Slides();
-            if (!$slideObj->updateOrder($post['slideList'])) {
-                Message::addErrorMessage($slideObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+            if (!$slideObj->updateOrder($post['record_ids'])) {
+                LibHelper::exitWithError($slideObj->getError(), true);
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
+            LibHelper::exitWithSuccess(Labels::getLabel('MSG_ORDER_UPDATED_SUCCESSFULLY', $this->siteLangId), true);
         }
     }
 
-    public function changeStatus()
+
+    public function media($recordId = 0, $langId = 0, $slideScreen = 1)
     {
-        $this->objPrivilege->canEditSlides();
-        $slideId = FatApp::getPostedData('slideId', FatUtility::VAR_INT, 0);
-        if (0 >= $slideId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $data = Slides::getAttributesById($slideId, array('slide_id', 'slide_active'));
-
-        if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $status = ($data['slide_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
-
-        $this->updateSlideStatus($slideId, $status);
-
-        FatUtility::dieJsonSuccess($this->str_update_record);
-    }
-
-    public function toggleBulkStatuses()
-    {
-        $this->objPrivilege->canEditSlides();
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $slideIdsArr = FatUtility::int(FatApp::getPostedData('slide_ids'));
-        if (empty($slideIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        foreach ($slideIdsArr as $slideId) {
-            if (1 > $slideId) {
-                continue;
-            }
-
-            $this->updateSlideStatus($slideId, $status);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    private function updateSlideStatus($slideId, $status)
-    {
-        $status = FatUtility::int($status);
-        $slideId = FatUtility::int($slideId);
-        if (1 > $slideId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        $obj = new Slides($slideId);
-        if (!$obj->changeStatus($status)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-    }
-
-    private function isMediaUploaded($slideId)
-    {
-        if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slideId, 0)) {
-            return true;
-        }
-        return false;
-    }
-
-    private function getForm()
-    {
-        $this->objPrivilege->canViewSlides();
-        $frm = new Form('frmSlide');
-        $frm->addHiddenField('', 'slide_id');
-        $frm->addHiddenField('', 'slide_type', Slides::TYPE_SLIDE);
-        $frm->addRequiredField(Labels::getLabel('LBL_Slide_Identifier', $this->siteLangId), 'slide_identifier');
-
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Slide_URL', $this->siteLangId), 'slide_url');
-        $fld->setFieldTagAttribute('placeholder', 'http://');
-
-        $linkTargetsArr = applicationConstants::getLinkTargetsArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Open_In', $this->siteLangId), 'slide_target', $linkTargetsArr, '', array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'slide_active', applicationConstants::getActiveInactiveArr($this->siteLangId), applicationConstants::ACTIVE, array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getLangForm($lang_id = 0)
-    {
-        $frm = new Form('frmSlideLang');
-        $frm->addHiddenField('', 'slide_id');
+        $recordId = FatUtility::int($recordId);
+        $imageFrm = $this->getMediaForm($recordId);
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+            $universalImage = true;
+            
         } else {
-            $lang_id = array_key_first($languages);
-            $frm->addHiddenField('', 'lang_id', $lang_id);
+            $universalImage = false;
+            $langId = array_key_first($languages);
         }
 
-
-        $frm->addRequiredField(Labels::getLabel('LBL_Slide_Title', $this->siteLangId), 'slide_title');
-        // $fld =  $frm->addButton(Labels::getLabel('LBL_Slide_slide_Image',$this->siteLangId),'slide_image',Labels::getLabel('LBL_Upload_File',$this->siteLangId),array('class'=>'slideFile-Js','id'=>'slide_image','data-slide_id'=>''));
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
-        return $frm;
+        $slideImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, $universalImage);
+        $this->set('image', $slideImage);
+        $this->set('recordId', $recordId);
+        $this->set('imageFrm', $imageFrm);
+        $this->checkEditPrivilege(true);
+        $this->_template->render(false, false);
     }
 
-    private function getMediaForm($slide_id = 0)
+
+    private function getMediaForm($recordId = 0)
     {
         $frm = new Form('frmSlideMedia');
-        $frm->addHiddenField('', 'slide_id', $slide_id);
-        $bannerTypeArr = $this->bannerTypeArr();
-      
-		if(count($bannerTypeArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
-		} else  {
-			$lang_id = array_key_first($bannerTypeArr); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-        
+        $frm->addHiddenField('', 'slide_id', $recordId);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(), $this->siteLangId, array(), '');
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
-        $frm->addHiddenField('', 'banner_min_width');
-        $frm->addHiddenField('', 'banner_min_height');
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload', $this->siteLangId), 'slide_image', array('accept' => 'image/*', 'data-frm' => 'frmSlideMedia'));
+        $frm->addHTML('', Labels::getLabel('FRM_SLIDE_IMAGE', $this->siteLangId), Labels::getLabel('FRM_SLIDE_IMAGE', $this->siteLangId) );
+        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_HOME_PAGE_BANNER);
+        $frm->addHiddenField('', 'min_width', 1350);
+        $frm->addHiddenField('', 'min_height', 405);
+        $frm->addHTML('', 'slide_image', '');
         return $frm;
     }
-
-    /* public function getSearchForm(){
-    $frm = new Form('frmSlideSearch',array('id'=>'frmSlideSearch'));
-    return $frm;
-    } */
-
-    private function bannerTypeArr()
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    protected function getFormColumns(): array
     {
-        return applicationConstants::bannerTypeArr();
+        $slideTblHeadingCols = CacheHelper::get('slideTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($slideTblHeadingCols) {
+            return json_decode($slideTblHeadingCols);
+        }
+
+        $arr = [
+            'dragdrop' => '',
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'slide_title' => Labels::getLabel('LBL_TESTIMONIAL_TITLE', $this->siteLangId),
+            'slide_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('slideTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
     }
 
-    private function getDisplayScreenName()
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    protected function getDefaultColumns(): array
     {
-        $screenTypesArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        return array(0 => '') + $screenTypesArr;
+        return [
+            'dragdrop',
+            'select_all',
+            'listSerial',
+            'slide_title',
+            'slide_active',
+            'action',
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $fields
+     * @return array
+     */
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['dragdrop', 'slide_title', 'slide_id', 'slide_active'], Common::excludeKeysForSort());
     }
 }
