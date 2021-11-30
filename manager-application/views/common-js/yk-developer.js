@@ -391,7 +391,7 @@ $(document).on("keyup", "#quickSearch", function (e) {
 
 $(window).keydown(function (e) {
     if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
-        if (0 == $.cookie('quickSearchCtrlJs')) {
+        if (0 == $.cookie('quickSearchCtrlJs') || 'undefined' == typeof $.cookie('quickSearchCtrlJs')) {
             $(".quickSearchMain").trigger('click');
             e.preventDefault();
         }

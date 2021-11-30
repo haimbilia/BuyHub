@@ -48,9 +48,10 @@
                                                 <div class="search-native">
                                                     <label class="checkbox" for="">
                                                         <?php 
+                                                        $preferences = $_COOKIE['quickSearchCtrlJs'] ?? 0 ;
                                                         $str = Labels::getLabel('LBL_PRESS_{KEY}_KEY_FOR_BROWSER_SEARCH', $siteLangId);
                                                         echo CommonHelper::replaceStringData($str, ['{KEY}' => '<kbd>Ctrl-F</kbd>']); ?>
-                                                        <input type="checkbox" id="quickSearchCtrlJs" <?php echo (0 < $_COOKIE['quickSearchCtrlJs'] ? 'checked="checked"' : ''); ?> data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_MARK_AS_CHECKED_TO_USE_THE_ONLY_NATIVE_BROWSER_SEARCH', $siteLangId); ?>">
+                                                        <input type="checkbox" id="quickSearchCtrlJs" <?php echo (0 < $preferences ? 'checked="checked"' : ''); ?> data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_MARK_AS_CHECKED_TO_USE_THE_ONLY_NATIVE_BROWSER_SEARCH', $siteLangId); ?>">
                                                     </label>
                                                 </div>
                                             </div>
