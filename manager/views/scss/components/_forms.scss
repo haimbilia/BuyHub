@@ -608,7 +608,7 @@ form.custom-form {
     font-size: 1rem;
     text-align: center;
     line-height: 1rem;
-    border-#{$end-direction}: 2px solid #fff;
+    border-right: 2px solid #fff;
     border-bottom: 2px solid #fff;
     transform: rotate(45deg);
     left: 50%;
@@ -820,5 +820,8 @@ form.custom-form {
             // flex: 0 0 60%;
             margin-#{$start-direction}: 5rem;
         }
+    }
+    .btn-search {
+        margin-#{$start-direction}: 0.5rem;
     }
 }
