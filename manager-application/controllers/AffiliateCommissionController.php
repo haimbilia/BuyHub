@@ -298,7 +298,7 @@ class AffiliateCommissionController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         if ($row['afcommsetting_is_mandatory']) {
-            LibHelper::exitWithError(Labels::getLabel("LBL_Default_record_cannot_be_deleted", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_Default_record_cannot_be_deleted", $this->siteLangId), true);
         }
         FatApp::getDb()->deleteRecords(AffiliateCommission::DB_TBL, array('smt' => 'afcommsetting_id = ?', 'vals' => array($recordId)));
     }

@@ -178,7 +178,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="radio-inline">
-															<label class="checkbox checkbox--state-success">
+															<label class="checkbox checkbox-state-success">
 																<input type="checkbox"> Primary
 																<span></span>
 															</label>
@@ -216,7 +216,7 @@
 													</div>
 													<div class="col-md-2">
 														<div class="radio-inline">
-															<label class="checkbox checkbox--state-success">
+															<label class="checkbox checkbox-state-success">
 																<input type="checkbox"> Primary
 																<span></span>
 															</label>

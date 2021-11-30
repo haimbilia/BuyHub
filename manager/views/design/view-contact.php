@@ -100,7 +100,7 @@
                                                     </a>
 
                                                     <span
-                                                        class="badge badge--bolder badge badge--inline badge--unified-success">Customer</span>
+                                                        class="badge badge-bolder badge badge-inline badge-unified-success">Customer</span>
 
                                                     <div class="dropdown dropdown-inline margin-l-5"
                                                         data-toggle="tooltip-" title="Change label"
@@ -126,28 +126,28 @@
                                                                     <a href="#" class="nav__link"
                                                                         data-toggle="status-change" data-status="1">
                                                                         <span class="nav__link-text"><span
-                                                                                class="badge badge--unified-success badge--inline badge--lg badge--bold">Customer</span></span>
+                                                                                class="badge badge-unified-success badge-inline badge-lg badge-bold">Customer</span></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav__item">
                                                                     <a href="#" class="nav__link"
                                                                         data-toggle="status-change" data-status="2">
                                                                         <span class="nav__link-text"><span
-                                                                                class="badge badge--unified-danger badge--inline badge--lg badge--bold">Partner</span></span>
+                                                                                class="badge badge-unified-danger badge-inline badge-lg badge-bold">Partner</span></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav__item">
                                                                     <a href="#" class="nav__link"
                                                                         data-toggle="status-change" data-status="3">
                                                                         <span class="nav__link-text"><span
-                                                                                class="badge badge--unified-warning badge--inline badge--lg badge--bold">Supplier</span></span>
+                                                                                class="badge badge-unified-warning badge-inline badge-lg badge-bold">Supplier</span></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav__item">
                                                                     <a href="#" class="nav__link"
                                                                         data-toggle="status-change" data-status="4">
                                                                         <span class="nav__link-text"><span
-                                                                                class="badge badge--unified-info badge--inline badge--lg badge--bold">On
+                                                                                class="badge badge-unified-info badge-inline badge-lg badge-bold">On
                                                                                 Hold</span></span>
                                                                     </a>
                                                                 </li>
@@ -155,7 +155,7 @@
                                                                     <a href="#" class="nav__link"
                                                                         data-toggle="status-change" data-status="4">
                                                                         <span class="nav__link-text"><span
-                                                                                class="badge badge--unified-brand badge--inline badge--lg badge--bold">Staff</span></span>
+                                                                                class="badge badge-unified-brand badge-inline badge-lg badge-bold">Staff</span></span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="nav__separator">
@@ -239,7 +239,7 @@
                                                                         <span class="nav__link-text">Support</span>
                                                                         <span class="nav__link-badge">
                                                                             <span
-                                                                                class="badge badge--success badge--rounded">5</span>
+                                                                                class="badge badge-success badge-rounded">5</span>
                                                                         </span>
                                                                     </a>
                                                                 </li>
@@ -402,7 +402,7 @@
                                         </div>
                                         <div class="card-head-toolbar">
                                             <span
-                                                class="badge badge--bolder badge badge--inline badge--danger">Now</span>
+                                                class="badge badge-bolder badge badge-inline badge-danger">Now</span>
                                         </div>
                                     </div>
                                     <div class="card-body card__body--fit-top">
@@ -466,7 +466,7 @@
                                                             <i class="nav__link-icon flaticon2-new-email"></i>
                                                             <span class="nav__link-text">Reports</span>
                                                             <span class="nav__link-badge">
-                                                                <span class="badge badge--success">5</span>
+                                                                <span class="badge badge-success">5</span>
                                                             </span>
                                                         </a>
                                                     </li>
@@ -606,7 +606,7 @@
                                                             <i class="nav__link-icon flaticon2-new-email"></i>
                                                             <span class="nav__link-text">Reports</span>
                                                             <span class="nav__link-badge">
-                                                                <span class="badge badge--success">5</span>
+                                                                <span class="badge badge-success">5</span>
                                                             </span>
                                                         </a>
                                                     </li>
@@ -642,7 +642,7 @@
                                                 <div class="col-8">
                                                     <span class="form-control-plaintext"><span
                                                             class="font-bolder">345,000M</span> &nbsp;<span
-                                                            class="badge badge--inline badge--danger badge--bold">Q4,
+                                                            class="badge badge-inline badge-danger badge-bold">Q4,
                                                             2019</span></span>
                                                 </div>
                                             </div>
@@ -778,7 +778,7 @@
                                                                             9:30AM 16 June, 2015
                                                                         </span>
                                                                         <span
-                                                                            class="badge badge--success badge--inline">new</span>
+                                                                            class="badge badge-success badge-inline">new</span>
                                                                     </div>
                                                                     <div class="notes__dropdown">
                                                                         <a href="#"
@@ -1242,7 +1242,7 @@
                                                                             11:40AM 14 March, 2012
                                                                         </span>
                                                                         <span
-                                                                            class="badge badge--danger badge--inline">important</span>
+                                                                            class="badge badge-danger badge-inline">important</span>
                                                                     </div>
                                                                 </div>
                                                                 <span class="notes__body">
@@ -2311,16 +2311,16 @@
                                                                         To Escalate Emails</label>
                                                                     <div class="col-lg-9 col-xl-6">
                                                                         <div class="checkbox-list">
-                                                                            <label class="checkbox checkbox--brand">
+                                                                            <label class="checkbox checkbox-brand">
                                                                                 <input type="checkbox"> Upon new order.
                                                                                 <span></span>
                                                                             </label>
-                                                                            <label class="checkbox checkbox--brand">
+                                                                            <label class="checkbox checkbox-brand">
                                                                                 <input type="checkbox"> New membership
                                                                                 approval
                                                                                 <span></span>
                                                                             </label>
-                                                                            <label class="checkbox checkbox--brand">
+                                                                            <label class="checkbox checkbox-brand">
                                                                                 <input type="checkbox"
                                                                                     checked="checked"> Member
                                                                                 registration

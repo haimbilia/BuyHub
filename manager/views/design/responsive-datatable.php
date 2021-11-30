@@ -131,8 +131,8 @@
                                             <td style="display: none;">2016-01-07 03:02:49</td>
                                             <td style="display: none;">Europe/Moscow</td>
                                             <td style="display: none;">$902481.80</td>
-                                            <td style="display: none;"><span class="m-badge  m-badge--success m-badge--wide">Success</span></td>
-                                            <td style="display: none;"><span class="m-badge m-badge--primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
+                                            <td style="display: none;"><span class="m-badge  m-badge-success m-badge--wide">Success</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
@@ -166,8 +166,8 @@
                                             <td style="display: none;">2017-10-06 00:23:49</td>
                                             <td style="display: none;">Asia/Makassar</td>
                                             <td style="display: none;">$158287.28</td>
-                                            <td style="display: none;"><span class="m-badge  m-badge--danger m-badge--wide">Danger</span></td>
-                                            <td style="display: none;"><span class="m-badge m-badge--primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
+                                            <td style="display: none;"><span class="m-badge  m-badge-danger m-badge--wide">Danger</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
@@ -201,8 +201,8 @@
                                             <td style="display: none;">2016-01-01 18:08:34</td>
                                             <td style="display: none;">Asia/Chongqing</td>
                                             <td style="display: none;">$429312.02</td>
-                                            <td style="display: none;"><span class="m-badge  m-badge--success m-badge--wide">Success</span></td>
-                                            <td style="display: none;"><span class="m-badge m-badge--primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
+                                            <td style="display: none;"><span class="m-badge  m-badge-success m-badge--wide">Success</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
@@ -236,8 +236,8 @@
                                             <td style="display: none;">2016-08-05 06:19:54</td>
                                             <td style="display: none;">Asia/Chongqing</td>
                                             <td style="display: none;">$1143125.96</td>
-                                            <td style="display: none;"><span class="m-badge  m-badge--primary m-badge--wide">Canceled</span></td>
-                                            <td style="display: none;"><span class="m-badge m-badge--danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
+                                            <td style="display: none;"><span class="m-badge  m-badge-primary m-badge--wide">Canceled</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
@@ -271,8 +271,8 @@
                                             <td style="display: none;">2016-04-21 02:47:05</td>
                                             <td style="display: none;">America/Sao_Paulo</td>
                                             <td style="display: none;">$340528.17</td>
-                                            <td style="display: none;"><span class="m-badge  m-badge--primary m-badge--wide">Canceled</span></td>
-                                            <td style="display: none;"><span class="m-badge m-badge--primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
+                                            <td style="display: none;"><span class="m-badge  m-badge-primary m-badge--wide">Canceled</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
@@ -342,7 +342,7 @@
                                             <td style="display: none;">America/Bogota</td>
                                             <td style="display: none;">$124768.15</td>
                                             <td style="display: none;"><span class="m-badge  m-badge--metal m-badge--wide">Delivered</span></td>
-                                            <td style="display: none;"><span class="m-badge m-badge--danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
@@ -376,8 +376,8 @@
                                             <td style="display: none;">2017-09-21 03:09:00</td>
                                             <td style="display: none;">Europe/Paris</td>
                                             <td style="display: none;">$955141.22</td>
-                                            <td style="display: none;"><span class="m-badge m-badge--brand m-badge--wide">Pending</span></td>
-                                            <td style="display: none;"><span class="m-badge m-badge--danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-brand m-badge--wide">Pending</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
@@ -411,8 +411,8 @@
                                             <td style="display: none;">2016-08-06 05:33:25</td>
                                             <td style="display: none;">America/Sao_Paulo</td>
                                             <td style="display: none;">$1096683.96</td>
-                                            <td style="display: none;"><span class="m-badge m-badge--brand m-badge--wide">Pending</span></td>
-                                            <td style="display: none;"><span class="m-badge m-badge--primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-brand m-badge--wide">Pending</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
@@ -446,8 +446,8 @@
                                             <td style="display: none;">2016-08-06 20:08:36</td>
                                             <td style="display: none;">Africa/Dar_es_Salaam</td>
                                             <td style="display: none;">$290437.32</td>
-                                            <td style="display: none;"><span class="m-badge  m-badge--primary m-badge--wide">Canceled</span></td>
-                                            <td style="display: none;"><span class="m-badge m-badge--danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
+                                            <td style="display: none;"><span class="m-badge  m-badge-primary m-badge--wide">Canceled</span></td>
+                                            <td style="display: none;"><span class="m-badge m-badge-danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">

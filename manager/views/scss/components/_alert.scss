@@ -619,12 +619,12 @@
  }
  
  .alert[data-notify] .icon~[data-notify=title] {
-     padding-left: 2.85rem
+     padding-#{$start-direction}: 2.85rem
  }
  
  .alert[data-notify] .icon~[data-notify=message] {
      display: inline-block;
-     padding-left: 2.85rem
+     padding-#{$start-direction}: 2.85rem
  }
  
  .alert[data-notify] [data-notify=title]:not(:empty)~[data-notify=message] {

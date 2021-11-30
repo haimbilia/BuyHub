@@ -213,7 +213,7 @@ class UsersAddressesController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('addr_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -232,7 +232,7 @@ class UsersAddressesController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $address = new Address($recordId, $this->siteLangId);

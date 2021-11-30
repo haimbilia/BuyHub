@@ -15,6 +15,7 @@ $userNameFld->addFieldTagAttribute('autocomplete', 'off');
 $passwordFld = $frm->getField('password');
 $passwordFld->addFieldTagAttribute('title', $passwordFld->getCaption());
 $passwordFld->addFieldTagAttribute('autocomplete', 'off');
+$passwordFld->addFieldTagAttribute('id', 'password');
 
 $fld = $frm->getField('rememberme');
 $fld->addFieldTagAttribute('class', 'rememberFldJs');
@@ -36,8 +37,8 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
             <div class="card">
                 <div class="card-head">
                     <div class="title">
-                        <h2><?php echo Labels::getlabel('LBL_SIGN_IN', $siteLangId); ?></h2>
-                        <p class="text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
+                        <h2><?php echo Labels::getlabel('FRM_SIGN_IN', $siteLangId); ?></h2>
+                        <p class="text-muted"><?php echo Labels::getlabel('MSG_PLEASE_ENTER_YOUR_LOGIN_CREDENTIALS', $siteLangId); ?> </p>
                     </div>
                 </div>
                 <div class="card-body">
@@ -49,14 +50,14 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
                     <div class="form-group">
                         <label class="label"><?php echo $passwordFld->getCaption() ?></label>
                         <div class="input-group">
-                        <?php echo $passwordFld->getHTML('password'); ?>
-                        <div class="input-group-append"><span class="input-group-text">Show</span></div>
+                            <?php echo $passwordFld->getHTML('password'); ?>
+                            <div class="input-group-append"><span class="input-group-text" id="showPass"><?php echo Labels::getlabel('FRM_SHOW', $siteLangId); ?></span></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="switch switch-sm remember-me">
                             <?php echo $frm->getFieldHTML('rememberme'); ?>
-                            <span class="input-helper"></span><?php echo Labels::getlabel('LBL_Remember_me', $siteLangId); ?>
+                            <span class="input-helper"></span><?php echo Labels::getlabel('FRM_REMEMBER_ME', $siteLangId); ?>
                         </label>
 
                     </div>
@@ -69,7 +70,7 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
                 </div>
                 <div class="card-foot">
                     <ul class="other-links">
-                        <li><a href="<?php echo UrlHelper::generateUrl('adminGuest', 'forgotPasswordForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_Forgot_Password?', $siteLangId); ?></a></li>
+                        <li><a href="<?php echo UrlHelper::generateUrl('adminGuest', 'forgotPasswordForm'); ?>" class="link"><?php echo Labels::getLabel('LBL_FORGOT_PASSWORD?', $siteLangId); ?></a></li>
                     </ul>
                 </div>
             </div>
@@ -77,9 +78,6 @@ $fld->addFieldTagAttribute('class', 'rememberFldJs');
         </div>
     </div>
     <script>
-        $(document).ready(function() {
-            if ($(".rememberFldJs").parent().is("label")) {
-                $(".rememberFldJs").unwrap();
-            }
-        });
+        var hideTxt = '<?php echo Labels::getlabel('FRM_HIDE', $siteLangId); ?>';
+        var showTxt = '<?php echo Labels::getlabel('FRM_SHOW', $siteLangId); ?>';
     </script>

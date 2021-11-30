@@ -341,7 +341,7 @@ class BlogPostsController extends ListingBaseController
         if (!$row = BlogPost::getAttributesById($recordId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_NO_RECORD_FOUND', $this->siteLangId), true);
         }
-        $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $recordId, 0, $langId, (count($languages) > 1) ? false : true);
+        $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $recordId, 0, $langId, (1 < count($languages)), 0, 1);
         $this->set('languages', Language::getAllNames());
         $this->set('images', $post_images);
         $this->set('recordId', $recordId);
@@ -372,14 +372,13 @@ class BlogPostsController extends ListingBaseController
         $this->objPrivilege->canEditBlogPosts();
         $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $languages = Language::getAllNames();
         if (count($languages) <= 1) {
-            $langId =  array_key_first($languages);
+            $langId = array_key_first($languages);
         }
 
         if ($recordId < 1) {
@@ -416,7 +415,9 @@ class BlogPostsController extends ListingBaseController
         )) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_IMAGE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_IMAGE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('recordId', $recordId);
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     public function deleteImage($recordId = 0, $afile_id = 0, $langId = 0)
@@ -427,6 +428,13 @@ class BlogPostsController extends ListingBaseController
         if (!$recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
+
+        $languages = Language::getAllNames();
+        if (1 == count($languages)) {
+            $afile_id = 0;
+            $langId = -1;
+        }
+
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $recordId, $afile_id, 0, $langId)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);

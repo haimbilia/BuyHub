@@ -140,7 +140,7 @@ class RatingTypesController extends ListingBaseController {
         $recordId = FatApp::getPostedData('ratingtype_id', FatUtility::VAR_INT, 0);
         $restrictTypes = [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY];
         if (in_array($recordId, $restrictTypes)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_NOT_ALLOWED_TO_UPDATE_DEFAULT_RATING_TYPE_IDENTIFIER', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_NOT_ALLOWED_TO_UPDATE_DEFAULT_RATING_TYPE_IDENTIFIER', $this->siteLangId), true);
         }
 
 

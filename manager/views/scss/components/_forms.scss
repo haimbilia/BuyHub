@@ -110,7 +110,7 @@ $input-color: #474747;
             background-repeat: no-repeat;
             background-position: calc(13px) center;
             [dir="rtl"] & {
-                background-position: calc(-13px) center;
+                background-position: calc(100% - 13px) center;
             }
         }
         &[type="password"] {
@@ -608,7 +608,7 @@ form.custom-form {
     font-size: 1rem;
     text-align: center;
     line-height: 1rem;
-    border-right: 2px solid #fff;
+    border-#{$end-direction}: 2px solid #fff;
     border-bottom: 2px solid #fff;
     transform: rotate(45deg);
     left: 50%;
@@ -773,7 +773,7 @@ form.custom-form {
             cursor: pointer;
             border: $border;
             margin: 0;
-            margin-right: -2px;
+            margin-#{$end-direction}: -2px;
             background-color: #ffffff;
             display: block;
             text-align: center;

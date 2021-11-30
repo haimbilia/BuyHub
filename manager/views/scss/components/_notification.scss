@@ -20,7 +20,7 @@
                 svg {
                     height: 24px;
                     width: 24px;
-                    margin-left: -4px;
+                    margin-#{$start-direction}: -4px;
                 }
             }
             .notification__item-details {
@@ -83,12 +83,12 @@
         }
     }
     &-item-padding-x {
-        padding-left: 1.5rem !important;
-        padding-right: 1.5rem !important;
+        padding-#{$start-direction}: 1.5rem !important;
+        padding-#{$end-direction}: 1.5rem !important;
     }
     &-item-margin-x {
-        margin-left: 1.5rem !important;
-        margin-right: 1.5rem !important;
+        margin-#{$start-direction}: 1.5rem !important;
+        margin-#{$end-direction}: 1.5rem !important;
     }
     &-v2 {
         margin: 0;
@@ -113,7 +113,7 @@
                     }
                 }
                 &__itek-wrapper {
-                    padding-left: 1.5rem;
+                    padding-#{$start-direction}: 1.5rem;
                     flex: 1 1 auto;
                     .notification-v2__item- {
                         &title {

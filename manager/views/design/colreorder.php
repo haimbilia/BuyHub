@@ -205,8 +205,8 @@
 													<td>Vernon Cosham</td>
 													<td>Kreiger-Nicolas</td>
 													<td>2/8/2017</td>
-													<td><span class="badge  badge--success badge--inline badge--pill">Success</span></td>
-													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+													<td><span class="badge  badge-success badge-inline badge-pill">Success</span></td>
+													<td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -231,8 +231,8 @@
 													<td>Christa Jacmar</td>
 													<td>Brakus-Hansen</td>
 													<td>8/17/2017</td>
-													<td><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+													<td><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+													<td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -258,7 +258,7 @@
 													<td>Jenkins Inc</td>
 													<td>6/28/2016</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -283,8 +283,8 @@
 													<td>Sioux Kneath</td>
 													<td>Rice, Cole and Spinka</td>
 													<td>10/11/2017</td>
-													<td><span class="badge  badge--success badge--inline badge--pill">Success</span></td>
-													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+													<td><span class="badge  badge-success badge-inline badge-pill">Success</span></td>
+													<td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -309,8 +309,8 @@
 													<td>Sibyl Amy</td>
 													<td>Treutel-Ratke</td>
 													<td>3/8/2017</td>
-													<td><span class="badge  badge--success badge--inline badge--pill">Success</span></td>
-													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+													<td><span class="badge  badge-success badge-inline badge-pill">Success</span></td>
+													<td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -336,7 +336,7 @@
 													<td>Rosenbaum-Reichel</td>
 													<td>8/6/2017</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -361,8 +361,8 @@
 													<td>Michaelina Plenderleith</td>
 													<td>Legros-Gleichner</td>
 													<td>2/21/2018</td>
-													<td><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+													<td><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+													<td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -388,7 +388,7 @@
 													<td>Lemke-Hermiston</td>
 													<td>6/29/2017</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -413,8 +413,8 @@
 													<td>Heddi Castelli</td>
 													<td>Kessler and Sons</td>
 													<td>1/12/2017</td>
-													<td><span class="badge  badge--info badge--inline badge--pill">Info</span></td>
-													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+													<td><span class="badge  badge-info badge-inline badge-pill">Info</span></td>
+													<td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -439,8 +439,8 @@
 													<td>Lonnie Haycox</td>
 													<td>Feest Group</td>
 													<td>4/24/2018</td>
-													<td><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -465,8 +465,8 @@
 													<td>Natka Fairbanks</td>
 													<td>Mueller-Greenholt</td>
 													<td>6/21/2017</td>
-													<td><span class="badge  badge--primary badge--inline badge--pill">Canceled</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge  badge-primary badge-inline badge-pill">Canceled</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -492,7 +492,7 @@
 													<td>Gerlach-Schultz</td>
 													<td>4/3/2017</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
-													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+													<td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -517,8 +517,8 @@
 													<td>Norri Foldes</td>
 													<td>Strosin, Nitzsche and Wisozk</td>
 													<td>4/2/2017</td>
-													<td><span class="badge  badge--primary badge--inline badge--pill">Canceled</span></td>
-													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+													<td><span class="badge  badge-primary badge-inline badge-pill">Canceled</span></td>
+													<td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -543,8 +543,8 @@
 													<td>Otis Jobbins</td>
 													<td>Ruecker, Leffler and Abshire</td>
 													<td>3/6/2018</td>
-													<td><span class="badge  badge--success badge--inline badge--pill">Success</span></td>
-													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+													<td><span class="badge  badge-success badge-inline badge-pill">Success</span></td>
+													<td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -570,7 +570,7 @@
 													<td>Mann LLC</td>
 													<td>9/6/2017</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -595,8 +595,8 @@
 													<td>Tuck O'Dowgaine</td>
 													<td>Simonis, Rowe and Davis</td>
 													<td>5/6/2017</td>
-													<td><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+													<td><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+													<td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -622,7 +622,7 @@
 													<td>Rodriguez Group</td>
 													<td>3/5/2018</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -647,8 +647,8 @@
 													<td>Obed Helian</td>
 													<td>Labadie, Predovic and Hammes</td>
 													<td>1/26/2017</td>
-													<td><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -674,7 +674,7 @@
 													<td>Stokes Group</td>
 													<td>4/12/2018</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Danger</span></td>
-													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+													<td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -700,7 +700,7 @@
 													<td>Brakus-McCullough</td>
 													<td>11/26/2017</td>
 													<td><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></td>
-													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+													<td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -725,8 +725,8 @@
 													<td>Magdaia Rotlauf</td>
 													<td>Hettinger, Medhurst and Heaney</td>
 													<td>2/18/2018</td>
-													<td><span class="badge  badge--primary badge--inline badge--pill">Canceled</span></td>
-													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+													<td><span class="badge  badge-primary badge-inline badge-pill">Canceled</span></td>
+													<td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -751,8 +751,8 @@
 													<td>Jerrome Colvie</td>
 													<td>Kreiger, Glover and Connelly</td>
 													<td>3/4/2016</td>
-													<td><span class="badge  badge--primary badge--inline badge--pill">Canceled</span></td>
-													<td><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
+													<td><span class="badge  badge-primary badge-inline badge-pill">Canceled</span></td>
+													<td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -777,8 +777,8 @@
 													<td>Shandee Goracci</td>
 													<td>Bergnaum, Thiel and Schuppe</td>
 													<td>7/24/2016</td>
-													<td><span class="badge  badge--info badge--inline badge--pill">Info</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge  badge-info badge-inline badge-pill">Info</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
@@ -803,8 +803,8 @@
 													<td>Ula Luckin</td>
 													<td>Kulas, Cassin and Batz</td>
 													<td>5/26/2016</td>
-													<td><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-													<td><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
+													<td><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+													<td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="false">
@@ -830,8 +830,8 @@
 													<td>Alfonse Lawrance</td>
 													<td>Schuppe-Harber</td>
 													<td>4/14/2017</td>
-													<td><span class="badge badge--brand badge--inline badge--pill">Pending</span></td>
-													<td><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
+													<td><span class="badge badge-brand badge-inline badge-pill">Pending</span></td>
+													<td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
 													<td nowrap="">
 														<span class="dropdown">
 															<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">

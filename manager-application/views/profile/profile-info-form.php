@@ -84,6 +84,7 @@ $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAu
     </div>
     <div class="card-foot">
         <div class="row">
+            <div class="col"> </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-brand gb-btn gb-btn-primary"><?php echo Labels::getLabel('LBL_UPDATE', $siteLangId); ?></button>
             </div>

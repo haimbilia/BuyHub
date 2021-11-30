@@ -14,15 +14,15 @@
      &-footer {
          justify-content: inherit;
      }
-     &.fixed-right {
-         padding-right: 0 !important;
+     &.fixed-right { 
+         padding-#{$end-direction}: 0 !important;
          .modal-dialog-vertical {
-             height: 100%;
+             height: 100%; 
              max-width: 570px;
              margin: 0;
-             margin-left: auto;
+             margin-#{$start-direction}: auto;
              .modal-content {
-                 border-radius: 0px;
+                 border-radius: 0px; 
                  height: inherit;
                  overflow-y: auto;
                  .modal-header {
@@ -40,10 +40,12 @@
              }
          }
          &.fade .modal-dialog-vertical {
-             transform: translateX(100%);
+             transform: translateX(100% * $transform-direction);
+            
+
          }
          &.show .modal-dialog-vertical {
-             transform: translateX(0);
+             transform: translateX(0 * $transform-direction);
          }
      }
  }

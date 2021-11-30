@@ -199,15 +199,15 @@
 											<div class="form-group">
 												<label for="recipient-name" class="form-control-label">Groups:</label>
 												<div class="checkbox-list">
-													<label class="checkbox checkbox--solid">
+													<label class="checkbox checkbox-solid">
 														<input type="checkbox" checked=""> Management
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--solid">
+													<label class="checkbox checkbox-solid">
 														<input type="checkbox"> Finance
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--solid">
+													<label class="checkbox checkbox-solid">
 														<input type="checkbox"> IT Department
 														<span></span>
 													</label>

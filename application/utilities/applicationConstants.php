@@ -102,12 +102,12 @@ class applicationConstants {
     }
 
     public static function bannerTypeArr() {
-        $bannerTypeArr = Language::getAllNames();
-        if (count($bannerTypeArr) > 1) {
-            return array(0 => Labels::getLabel('LBL_All_Languages', CommonHelper::getLangId())) + $bannerTypeArr;
-        } else {
-            return $bannerTypeArr;
+        $languagesArr = Language::getAllNames();
+        if (count($languagesArr) > 1) {
+            return array(0 => Labels::getLabel('LBL_All_Languages', CommonHelper::getLangId())) + $languagesArr;
         }
+
+        return $languagesArr;
     }
 
     public static function digitalDownloadTypeArr($langId) {

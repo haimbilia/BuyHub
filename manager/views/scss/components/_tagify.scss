@@ -35,9 +35,9 @@
             >div {
                 &:before {
                     top: 0;
-                    right: 0;
+                    #{$end-direction}: 0;
                     bottom: 0;
-                    left: 0;
+                    #{$start-direction}: 0;
                 }
             }
         }
@@ -66,7 +66,7 @@
         .tagify__tag__removeBtn {
             opacity: 0;
             transform: translateX(-6px) scale(.5);
-            margin-left: -3ch;
+            margin-#{$start-direction}: -3ch;
             transition: .12s;
         }
         &:hover {
@@ -81,7 +81,7 @@
             .tagify__tag__removeBtn {
                 transform: none;
                 opacity: 1;
-                margin-left: -1ch;
+                margin-#{$start-direction}: -1ch;
             }
         }
         &--editable {

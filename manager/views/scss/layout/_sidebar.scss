@@ -6,7 +6,7 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    left: 0;
+    #{$start-direction}: 0; 
     z-index: 98;
     width: 80px;
     transition: width .3s ease;
@@ -51,6 +51,9 @@
     &-item {
         transition: all 0.3s ease;
         text-align: center;
+        &:hover{ 
+            //.dropdown-menu{ display: block;}
+        }
     }
     &-link {
         background: transparent;

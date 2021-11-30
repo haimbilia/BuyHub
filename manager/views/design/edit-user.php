@@ -638,15 +638,15 @@
                                                             <label class="col-xl-3 col-lg-3 col-form-label">When To Escalate Emails</label>
                                                             <div class="col-lg-9 col-xl-6">
                                                                 <div class="checkbox-list">
-                                                                    <label class="checkbox checkbox--brand">
+                                                                    <label class="checkbox checkbox-brand">
                                                                         <input type="checkbox"> Upon new order.
                                                                         <span></span>
                                                                     </label>
-                                                                    <label class="checkbox checkbox--brand">
+                                                                    <label class="checkbox checkbox-brand">
                                                                         <input type="checkbox"> New membership approval
                                                                         <span></span>
                                                                     </label>
-                                                                    <label class="checkbox checkbox--brand">
+                                                                    <label class="checkbox checkbox-brand">
                                                                         <input type="checkbox" checked="checked"> Member registration
                                                                         <span></span>
                                                                     </label>

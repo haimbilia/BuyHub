@@ -264,8 +264,15 @@ $(document).ready(function () {
         }
     });
 
-    $(".dropdown").hover(function () {
-        $(this).toggleClass("show");
-        $(this).find('.sidebar-dropdown-menu').toggleClass('show');
+    /* Sidebar menu open on hover. */
+    $(".dropdownJs").on({
+        mouseenter: function () {
+            $(this).addClass("show");
+            $(this).find('.sidebar-dropdown-menu').addClass('show');
+        },
+        mouseleave: function () {
+            $(this).removeClass("show");
+            $(this).find('.sidebar-dropdown-menu').removeClass('show');
+        }
     });
 });

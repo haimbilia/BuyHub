@@ -6,6 +6,8 @@ data-target-close => value = target element id to be closed
 data-close-on-click-outside => value 
 */
 
+
+
 $("body")
   .find("*[data-trigger]")
   .click(function () {

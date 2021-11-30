@@ -126,7 +126,7 @@ $(document).ready(function(){
 	  }else{
 		  $position='end';
 	  }
-	callChart('monthlysales--js',$SalesChartKey,$SalesChartVal,$position);
+	// callChart('monthlysales--js',$SalesChartKey,$SalesChartVal,$position);
 	$('.counter').each(function() {
 	  var $this = $(this),
 		  countTo = $this.attr('data-count');

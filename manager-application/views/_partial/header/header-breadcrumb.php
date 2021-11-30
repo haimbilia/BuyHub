@@ -3,7 +3,7 @@
     <ul class="breadcrumb ">
         <li class="breadcrumb-item">
             <a href="<?php echo UrlHelper::generateUrl('') ?>">
-                <?php echo labels::getLabel('LBL_Home', $siteLangId); ?>
+                <?php echo labels::getLabel('LBL_Home', (isset($langId)  && 0 < $langId ? $langId : $siteLangId)); ?>
             </a>
         </li>
         <?php
@@ -26,16 +26,12 @@
         }
         ?>
     </ul>
-
-    <!-- <div class="d-flex ">
-        <select class="form-control form-select select-language">
-            <option value="2" selected="selected">Arabic</option>
-        </select>
-    </div> -->
-
-
-
     <?php
+
+    if (isset($headerHtmlContent) && NULL != $headerHtmlContent) {
+        echo $headerHtmlContent;
+    }
+
     $newRecordBtn = $newRecordBtn ?? false;
     $newRecordParent = $newRecordParent ?? '';
     $newRecordBtnAttrs = $newRecordBtnAttrs ?? [];

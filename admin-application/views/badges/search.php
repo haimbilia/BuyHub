@@ -52,7 +52,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case Badge::DB_TBL_PREFIX . 'condition_type':
                 $class = Badge::COND_AUTO == $row[$key] ? 'badge--unified-success' : 'badge--unified-brand';
-                $html = '<span class="badge ' . $class . ' badge--inline badge--pill">' . $conditionTypeArr[$row[$key]] . '</span>';
+                $html = '<span class="badge ' . $class . ' badge-inline badge-pill">' . $conditionTypeArr[$row[$key]] . '</span>';
                 $td->appendElement('plaintext', [], $html, true);
                 break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
@@ -68,11 +68,11 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case Badge::DB_TBL_PREFIX . 'required_approval':
                 $class = (applicationConstants::YES == $row[$key] ? 'badge--unified-warning' : 'badge--unified-success'); 
-                $htm = ' <span class="badge badge--unified-success badge--inline badge--pill">' . Labels::getLabel('LBL_NOT_REQUIRED', $adminLangId) . '</span>';;
+                $htm = ' <span class="badge badge-unified-success badge-inline badge-pill">' . Labels::getLabel('LBL_NOT_REQUIRED', $adminLangId) . '</span>';;
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
                     $lbl = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? Labels::getLabel('LBL_NOT_ALLOWED', $adminLangId) : $approvalStatusArr[$row[$key]];
                     $class = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? 'badge--unified-danger' : $class;
-                    $htm = ' <span class="badge ' . $class . ' badge--inline badge--pill">' . $lbl . '</span>';
+                    $htm = ' <span class="badge ' . $class . ' badge-inline badge-pill">' . $lbl . '</span>';
                 }
                 $td->appendElement('plaintext', [], $htm, true);
                 break;

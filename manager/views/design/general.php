@@ -552,7 +552,7 @@
                                                             <span class="nav__link-text">Support</span>
                                                             <span class="nav__link-badge">
                                                                 <span
-                                                                    class="badge badge--success badge--rounded">5</span>
+                                                                    class="badge badge-success badge-rounded">5</span>
                                                             </span>
                                                         </a>
                                                     </li>
@@ -931,7 +931,7 @@
                                                                                     Again</span>
                                                                             </td>
                                                                             <td><span
-                                                                                    class="badge badge--success badge--inline">pending</span>
+                                                                                    class="badge badge-success badge-inline">pending</span>
                                                                             </td>
                                                                             <td
                                                                                 class="align-right font-brand font-bold">
@@ -945,7 +945,7 @@
                                                                                     Admin Theme</span>
                                                                             </td>
                                                                             <td><span
-                                                                                    class="badge badge--brand badge--inline">new</span>
+                                                                                    class="badge badge-brand badge-inline">new</span>
                                                                             </td>
                                                                             <td
                                                                                 class="align-right font-brand font-bold">
@@ -983,7 +983,7 @@
                                                                                     Again</span>
                                                                             </td>
                                                                             <td><span
-                                                                                    class="badge badge--success badge--inline">pending</span>
+                                                                                    class="badge badge-success badge-inline">pending</span>
                                                                             </td>
                                                                             <td
                                                                                 class="align-right font-brand font-bold">
@@ -997,7 +997,7 @@
                                                                                     Selling App</span>
                                                                             </td>
                                                                             <td><span
-                                                                                    class="badge badge--warning badge--inline">in
+                                                                                    class="badge badge-warning badge-inline">in
                                                                                     process</span></td>
                                                                             <td
                                                                                 class="align-right font-brand font-bold">
@@ -1034,7 +1034,7 @@
                                                                                     Admin Theme</span>
                                                                             </td>
                                                                             <td><span
-                                                                                    class="badge badge--brand badge--inline">new</span>
+                                                                                    class="badge badge-brand badge-inline">new</span>
                                                                             </td>
                                                                             <td
                                                                                 class="align-right font-brand font-bold">
@@ -1048,7 +1048,7 @@
                                                                                     Selling App</span>
                                                                             </td>
                                                                             <td><span
-                                                                                    class="badge badge--warning badge--inline">in
+                                                                                    class="badge badge-warning badge-inline">in
                                                                                     process</span></td>
                                                                             <td
                                                                                 class="align-right font-brand font-bold">
@@ -1086,7 +1086,7 @@
                                                                                     Again</span>
                                                                             </td>
                                                                             <td><span
-                                                                                    class="badge badge--success badge--inline">pending</span>
+                                                                                    class="badge badge-success badge-inline">pending</span>
                                                                             </td>
                                                                             <td
                                                                                 class="align-right font-brand font-bold">
@@ -1100,7 +1100,7 @@
                                                                                     Admin Theme</span>
                                                                             </td>
                                                                             <td><span
-                                                                                    class="badge badge--brand badge--inline">new</span>
+                                                                                    class="badge badge-brand badge-inline">new</span>
                                                                             </td>
                                                                             <td
                                                                                 class="align-right font-brand font-bold">
@@ -1457,7 +1457,7 @@
                                                             <span class="nav__link-text">Support</span>
                                                             <span class="nav__link-badge">
                                                                 <span
-                                                                    class="badge badge--success badge--rounded">5</span>
+                                                                    class="badge badge-success badge-rounded">5</span>
                                                             </span>
                                                         </a>
                                                     </li>
@@ -1616,7 +1616,7 @@
                                                             </span>
                                                         </span>
                                                         <span
-                                                            class="badge badge--unified-danger badge--sm badge--rounded badge--bolder">5</span>
+                                                            class="badge badge-unified-danger badge-sm badge-rounded badge-bolder">5</span>
                                                     </a>
                                                     <a href="user/profile-1/email-settings.html" class="widget__item ">
                                                         <span class="widget__section">
@@ -1687,7 +1687,7 @@
                                                             <span href="#" class="widget__desc">Tax information</span>
                                                         </span>
                                                         <span
-                                                            class="badge badge--unified-brand badge--inline badge--bolder">new</span>
+                                                            class="badge badge-unified-brand badge-inline badge-bolder">new</span>
                                                     </a>
                                                     <a href="#" class="widget__item" data-toggle="tooltip" title=""
                                                         data-placement="right" data-original-title="Coming soon...">

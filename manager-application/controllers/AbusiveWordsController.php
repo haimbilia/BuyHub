@@ -192,7 +192,7 @@ class AbusiveWordsController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('abusive_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -211,7 +211,7 @@ class AbusiveWordsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $obj = new Abusive($recordId);
         if (!$obj->deleteRecord(false)) {

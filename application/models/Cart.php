@@ -392,6 +392,7 @@ class Cart extends FatModel
             //$this->getBasketProducts($siteLangId);
 
             $productSelectedShippingMethodsArr = $this->getProductShippingMethod();
+            
             $maxConfiguredCommissionVal = FatApp::getConfig("CONF_MAX_COMMISSION", FatUtility::VAR_INT, 0);
 
             /* $db = FatApp::getDb();
@@ -815,8 +816,8 @@ class Cart extends FatModel
         /* set variable of shipping cost of the product, if shipping already selected[ */
         $sellerProductRow['shipping_cost'] = 0;
         $sellerProductRow['opshipping_rate_id'] = 0;
-        if (!empty($productSelectedShippingMethodsArr) && isset($productSelectedShippingMethodsArr[$selprod_id])) {
-            $shippingDurationRow = $productSelectedShippingMethodsArr[$selprod_id];
+        if (!empty($productSelectedShippingMethodsArr) && isset($productSelectedShippingMethodsArr['product'][$selprod_id])) {
+            $shippingDurationRow = $productSelectedShippingMethodsArr['product'][$selprod_id];
             $sellerProductRow['opshipping_rate_id'] = $shippingDurationRow['mshipapi_id'];
             $sellerProductRow['shipping_cost'] = ROUND(($shippingDurationRow['mshipapi_cost'] * $quantity), 2);
         }

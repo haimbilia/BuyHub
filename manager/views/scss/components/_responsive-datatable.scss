@@ -36,22 +36,22 @@ table.dataTable {
     thead {
         >tr {
             >td.sorting {
-                padding-right: 30px;
+                padding-#{$end-direction}: 30px;
             }
             >td.sorting_asc {
-                padding-right: 30px;
+                padding-#{$end-direction}: 30px;
             }
             >td.sorting_desc {
-                padding-right: 30px;
+                padding-#{$end-direction}: 30px;
             }
             >th.sorting {
-                padding-right: 30px;
+                padding-#{$end-direction}: 30px;
             }
             >th.sorting_asc {
-                padding-right: 30px;
+                padding-#{$end-direction}: 30px;
             }
             >th.sorting_desc {
-                padding-right: 30px;
+                padding-#{$end-direction}: 30px;
             }
             >td {
                 &:active {
@@ -248,7 +248,7 @@ table.dataTable {
                 box-sizing: border-box;
                 content: ' ';
                 margin-top: -6px;
-                margin-left: -6px;
+                margin-#{$start-direction}: -6px;
                 border: 1px solid #000;
                 border-radius: 3px;
             }
@@ -276,7 +276,7 @@ table.dataTable {
                 box-sizing: border-box;
                 content: ' ';
                 margin-top: -6px;
-                margin-left: -6px;
+                margin-#{$start-direction}: -6px;
                 border: 1px solid #000;
                 border-radius: 3px;
             }
@@ -305,7 +305,7 @@ table.dataTable {
             &:after {
                 content: '\2714';
                 margin-top: -11px;
-                margin-left: -4px;
+                margin-#{$start-direction}: -4px;
                 text-align: center;
                 text-shadow: 1px 1px #b0bed9, -1px -1px #b0bed9, 1px -1px #b0bed9, -1px 1px #b0bed9;
             }
@@ -314,7 +314,7 @@ table.dataTable {
             &:after {
                 content: '\2714';
                 margin-top: -11px;
-                margin-left: -4px;
+                margin-#{$start-direction}: -4px;
                 text-align: center;
                 text-shadow: 1px 1px #b0bed9, -1px -1px #b0bed9, 1px -1px #b0bed9, -1px 1px #b0bed9;
             }
@@ -351,7 +351,7 @@ div.dataTables_wrapper {
             text-align: left;
         }
         input {
-            margin-left: .5em;
+            margin-#{$start-direction}: .5em;
             display: inline-block;
             width: auto;
         }
@@ -377,16 +377,16 @@ div.dataTables_wrapper {
         top: 50%;
         left: 50%;
         width: 200px;
-        margin-left: -100px;
+        margin-#{$start-direction}: -100px;
         margin-top: -26px;
         text-align: center;
         padding: 1em 0;
     }
     span.select-info {
-        margin-left: .5em;
+        margin-#{$start-direction}: .5em;
     }
     span.select-item {
-        margin-left: .5em;
+        margin-#{$start-direction}: .5em;
     }
 }
 
@@ -451,7 +451,7 @@ table.dataTable.table-sm {
     >thead {
         >tr {
             >th {
-                padding-right: 20px;
+                padding-#{$end-direction}: 20px;
             }
         }
     }
@@ -513,10 +513,10 @@ div.table-responsive {
             margin: 0;
             >div[class^=col-] {
                 &:first-child {
-                    padding-left: 0;
+                    padding-#{$start-direction}: 0;
                 }
                 &:last-child {
-                    padding-right: 0;
+                    padding-#{$end-direction}: 0;
                 }
             }
         }
@@ -529,7 +529,7 @@ div.dt-button-info {
     left: 50%;
     width: 400px;
     margin-top: -100px;
-    margin-left: -200px;
+    margin-#{$start-direction}: -200px;
     background-color: #fff;
     border: 2px solid #111;
     -webkit-box-shadow: 3px 3px 8px rgba(0, 0, 0, .3);
@@ -569,20 +569,20 @@ ul.dt-button-collection.dropdown-menu.fixed {
     position: fixed;
     top: 50%;
     left: 50%;
-    margin-left: -75px;
+    margin-#{$start-direction}: -75px;
     border-radius: 0;
 }
 
 ul.dt-button-collection.dropdown-menu.fixed.two-column {
-    margin-left: -150px;
+    margin-#{$start-direction}: -150px;
 }
 
 ul.dt-button-collection.dropdown-menu.fixed.three-column {
-    margin-left: -225px;
+    margin-#{$start-direction}: -225px;
 }
 
 ul.dt-button-collection.dropdown-menu.fixed.four-column {
-    margin-left: -300px;
+    margin-#{$start-direction}: -300px;
 }
 
 ul.dt-button-collection.dropdown-menu.two-column {
@@ -630,7 +630,7 @@ ul.dt-button-collection.fixed {
     position: fixed;
     top: 50%;
     left: 50%;
-    margin-left: -75px;
+    margin-#{$start-direction}: -75px;
     border-radius: 0;
     max-width: none;
     &:after {
@@ -642,15 +642,15 @@ ul.dt-button-collection.fixed {
 }
 
 ul.dt-button-collection.fixed.two-column {
-    margin-left: -150px;
+    margin-#{$start-direction}: -150px;
 }
 
 ul.dt-button-collection.fixed.three-column {
-    margin-left: -225px;
+    margin-#{$start-direction}: -225px;
 }
 
 ul.dt-button-collection.fixed.four-column {
-    margin-left: -300px;
+    margin-#{$start-direction}: -300px;
 }
 
 ul.dt-button-collection.two-column {
@@ -683,7 +683,7 @@ ul.dt-button-collection.four-column {
 div.dt-button-background {
     position: fixed;
     top: 0;
-    left: 0;
+    #{$start-direction}: 0;
     width: 100%;
     height: 100%;
     z-index: 999;
@@ -794,12 +794,12 @@ div.dt-autofill-select.top {
 
 div.dt-autofill-select.left {
     width: 3px;
-    margin-left: -1px;
+    margin-#{$start-direction}: -1px;
 }
 
 div.dt-autofill-select.right {
     width: 3px;
-    margin-left: -1px;
+    margin-#{$start-direction}: -1px;
 }
 
 div.dt-autofill-list {
@@ -807,7 +807,7 @@ div.dt-autofill-list {
     top: 50%;
     left: 50%;
     width: 500px;
-    margin-left: -250px;
+    margin-#{$start-direction}: -250px;
     background-color: #fff;
     border-radius: 6px;
     -webkit-box-shadow: 0 0 5px #555;
@@ -858,7 +858,7 @@ div.dt-autofill-list {
 div.dt-autofill-background {
     position: fixed;
     top: 0;
-    left: 0;
+    #{$start-direction}: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, .7);
@@ -1039,7 +1039,7 @@ table.dataTable.dtr-inline.collapsed {
             >td {
                 &:first-child {
                     position: relative;
-                    padding-left: 30px;
+                    padding-#{$start-direction}: 30px;
                     cursor: pointer;
                     &:before {
                         top: 18px;
@@ -1060,7 +1060,7 @@ table.dataTable.dtr-inline.collapsed {
             >th {
                 &:first-child {
                     position: relative;
-                    padding-left: 30px;
+                    padding-#{$start-direction}: 30px;
                     cursor: pointer;
                     &:before {
                         top: 12px;
@@ -1112,7 +1112,7 @@ table.dataTable.dtr-inline.collapsed.compact {
         >tr {
             >td {
                 &:first-child {
-                    padding-left: 27px;
+                    padding-#{$start-direction}: 27px;
                     &:before {
                         top: 5px;
                         left: 4px;
@@ -1126,7 +1126,7 @@ table.dataTable.dtr-inline.collapsed.compact {
             }
             >th {
                 &:first-child {
-                    padding-left: 27px;
+                    padding-#{$start-direction}: 27px;
                     &:before {
                         top: 5px;
                         left: 4px;
@@ -1154,7 +1154,7 @@ table.dataTable.dtr-column {
                     height: 16px;
                     width: 16px;
                     margin-top: -10px;
-                    margin-left: -10px;
+                    margin-#{$start-direction}: -10px;
                     display: block;
                     position: absolute;
                     color: #fff;
@@ -1181,7 +1181,7 @@ table.dataTable.dtr-column {
                     height: 16px;
                     width: 16px;
                     margin-top: -10px;
-                    margin-left: -10px;
+                    margin-#{$start-direction}: -10px;
                     display: block;
                     position: absolute;
                     color: #fff;
@@ -1222,7 +1222,7 @@ div.dtr-modal {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     top: 0;
-    left: 0;
+    #{$start-direction}: 0;
     height: 100%;
     width: 100%;
     z-index: 100;
@@ -1230,9 +1230,9 @@ div.dtr-modal {
     div.dtr-modal-display {
         position: absolute;
         top: 0;
-        left: 0;
+        #{$start-direction}: 0;
         bottom: 0;
-        right: 0;
+        #{$end-direction}: 0;
         width: 50%;
         height: 50%;
         overflow: auto;
@@ -1268,8 +1268,8 @@ div.dtr-modal {
     div.dtr-modal-background {
         position: fixed;
         top: 0;
-        left: 0;
-        right: 0;
+        #{$start-direction}: 0;
+        #{$end-direction}: 0;
         bottom: 0;
         z-index: 101;
         background: rgba(0, 0, 0, .6);
@@ -1568,11 +1568,11 @@ table.dataTable.order-column.hover {
 @media screen and (max-width:640px) {
     div.dataTables_wrapper {
         span.select-info {
-            margin-left: 0;
+            margin-#{$start-direction}: 0;
             display: block;
         }
         span.select-item {
-            margin-left: 0;
+            margin-#{$start-direction}: 0;
             display: block;
         }
     }

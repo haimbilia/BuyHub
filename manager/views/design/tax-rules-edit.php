@@ -263,7 +263,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="border p-4">
-                                                            <label class="checkbox checkbox--bold mb-0">
+                                                            <label class="checkbox checkbox-bold mb-0">
                                                                 <input type="checkbox" checked>Combined Tax<span></span>
                                                             </label></div>
                                                         <div class="heading heading--md pt-4">Tax Details</div>

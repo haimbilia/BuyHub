@@ -123,7 +123,7 @@
                                                     <div class="widget__info">
                                                         <div class="widget__section">
                                                             <a href="#" class="widget__username">Matt Pears</a>
-                                                            <span class="badge badge--success badge--dot"></span>
+                                                            <span class="badge badge-success badge-dot"></span>
                                                         </div>
 
                                                         <span class="widget__desc">
@@ -132,7 +132,7 @@
                                                     </div>
                                                     <div class="widget__action">
                                                         <span class="widget__date">36 Mines</span>
-                                                        <span class="badge badge--success font-bold">7</span>
+                                                        <span class="badge badge-success font-bold">7</span>
                                                     </div>
                                                 </div>
 
@@ -145,7 +145,7 @@
                                                     <div class="widget__info">
                                                         <div class="widget__section">
                                                             <a href="#" class="widget__username">Charlie Stone</a>
-                                                            <span class="badge badge--success badge--dot"></span>
+                                                            <span class="badge badge-success badge-dot"></span>
                                                         </div>
 
                                                         <span class="widget__desc">
@@ -155,7 +155,7 @@
 
                                                     <div class="widget__action">
                                                         <span class="widget__date">5 Hours</span>
-                                                        <span class="badge badge--success font-bold">2</span>
+                                                        <span class="badge badge-success font-bold">2</span>
                                                     </div>
                                                 </div>
 
@@ -168,7 +168,7 @@
                                                     <div class="widget__info">
                                                         <div class="widget__section">
                                                             <a href="#" class="widget__username">Jason Muller</a>
-                                                            <span class="badge badge--success badge--dot"></span>
+                                                            <span class="badge badge-success badge-dot"></span>
                                                         </div>
 
                                                         <span class="widget__desc">
@@ -295,7 +295,7 @@
                                                     <div class="widget__info">
                                                         <div class="widget__section">
                                                             <a href="#" class="widget__username">Matt Pears</a>
-                                                            <span class="badge badge--success badge--dot"></span>
+                                                            <span class="badge badge-success badge-dot"></span>
                                                         </div>
 
                                                         <span class="widget__desc">
@@ -305,7 +305,7 @@
 
                                                     <div class="widget__action">
                                                         <span class="widget__date">36 Mines</span>
-                                                        <span class="badge badge--success font-bold">7</span>
+                                                        <span class="badge badge-success font-bold">7</span>
                                                     </div>
                                                 </div>
 
@@ -318,7 +318,7 @@
                                                     <div class="widget__info">
                                                         <div class="widget__section">
                                                             <a href="#" class="widget__username">Charlie Stone</a>
-                                                            <span class="badge badge--success badge--dot"></span>
+                                                            <span class="badge badge-success badge-dot"></span>
                                                         </div>
 
                                                         <span class="widget__desc">
@@ -328,7 +328,7 @@
 
                                                     <div class="widget__action">
                                                         <span class="widget__date">5 Hours</span>
-                                                        <span class="badge badge--success font-bold">2</span>
+                                                        <span class="badge badge-success font-bold">2</span>
                                                     </div>
                                                 </div>
 
@@ -341,7 +341,7 @@
                                                     <div class="widget__info">
                                                         <div class="widget__section">
                                                             <a href="#" class="widget__username">Jason Muller</a>
-                                                            <span class="badge badge--success badge--dot"></span>
+                                                            <span class="badge badge-success badge-dot"></span>
                                                         </div>
 
                                                         <span class="widget__desc">
@@ -489,8 +489,8 @@
                                                         <i class="flaticon-more-1"></i>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-left dropdown-menu-md"
-                                                        x-placement="bottom-start"
-                                                        style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 33px, 0px);">
+                                                        
+                                                        >
                                                         <!--begin::Nav-->
                                                         <ul class="nav nav--block">
                                                             <li class="nav__item">
@@ -512,7 +512,7 @@
                                                                     <span class="nav__link-text">Groups</span>
                                                                     <span class="nav__link-badge">
                                                                         <span
-                                                                            class="badge badge--brand badge--inline">new</span>
+                                                                            class="badge badge-brand badge-inline">new</span>
                                                                     </span>
                                                                 </a>
                                                             </li>
@@ -654,7 +654,7 @@
                                                                     <span class="nav__link-text">Contacts</span>
                                                                     <span class="nav__link-badge">
                                                                         <span
-                                                                            class="badge badge--brand  badge--rounded-">5</span>
+                                                                            class="badge badge-brand  badge-rounded-">5</span>
                                                                     </span>
                                                                 </a>
                                                             </li>

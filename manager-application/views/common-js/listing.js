@@ -67,6 +67,15 @@ $(document).on("click", ".resetModalFormJs", function (e) {
     }
 });
 
+$(document).on("click", ".clearFormJs", function (e) {
+    var form = $(this).closest('form');
+    form[0].reset();
+});
+
+$(document).on("click", ".submitFormBtnJs", function (e) {
+    $(this).closest('form').submit();
+});
+
 $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     $.ykmodal.show();
 });
@@ -324,10 +333,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
                     $.ykmsg.success(ans.msg);
-                    $(obj).attr({onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + ")", "data-old-status": status});
+                    $(obj).attr({ onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + ")", "data-old-status": status });
                     if ("" != callback) {
                         eval(callback);
-                    } 
+                    }
                 } else {
                     $(obj).prop("checked", 1 == oldStatus);
                     $.ykmsg.error(ans.msg);
@@ -397,7 +406,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     selectAll = function (element) {
         var obj = $(element);
-        if (0 < $(".listingRecordJs .noRecordFoundJs").length) {
+        if (1 > $(".listingRecordJs .selectItemJs:not(:disabled)").length) {
             obj.prop("disabled", "disabled");
             obj.prop("checked", false);
             return false;
@@ -411,7 +420,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             if (obj.prop("checked") == false) {
                 $(this).prop("checked", false);
                 tr.removeClass('selected');
-            } else {
+            } else if (!$(this).hasClass('disabled')) {
                 $(this).prop("checked", true);
                 tr.addClass('selected');
             }
