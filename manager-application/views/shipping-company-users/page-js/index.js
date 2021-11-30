@@ -91,12 +91,10 @@ var defaultController = controllerName;
 })();
 
 $(document).bind("close.ykmodal", function () {
-    console.log('close.ykmodal');
     controllerName = defaultController;
     $.ykmodal.close();
 });
 $(document).on("hidden.bs.modal", "." + $.ykmodal.element, function () {
-    console.log('hidden.bs.modal');
     controllerName = defaultController;
     $.ykmodal.close()
 });
