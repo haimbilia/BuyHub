@@ -149,7 +149,7 @@ class RewardsController extends ListingBaseController
 
         $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
         if (1 > $userId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_USER', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_USER', $this->siteLangId), true);
         }
 
         $userObj = new User($userId);

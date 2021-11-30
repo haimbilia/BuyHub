@@ -16,8 +16,6 @@
             top: 0;
             transform: translateX(-100% * $transform-direction);
             transition: all 300ms ease 0s;
-            -moz-transition: all 300ms ease 0s;
-            -webkit-transition: all 300ms ease 0s;
             width: 280px;
             z-index: 110;
             .toggled_left & {

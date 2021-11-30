@@ -31,7 +31,7 @@
         &:last-child {
             margin-bottom: 0 !important;
         }
-         .title {
+        .title {
             padding: 0;
             margin: 0;
             margin-bottom: 0.8rem;
@@ -59,15 +59,25 @@
             }
         }
         &__link {
-            transition: 0.5s;
             color: currentColor;
             font-size: .875rem;
             display: block;
+            position: relative;
+            &:after {
+                transition: all 0.5s ease;
+                position: absolute;
+                right: 0rem;
+                opacity: 0;
+                content: "→";
+            }
             &:hover {
                 color: $brand-color;
                 text-decoration: none;
-                &::after {
-                    content: " →";
+                &:after {
+                    transition: all 0.5s ease;
+                    right: -1rem;
+                    width: auto;
+                    opacity: 1;
                 }
             }
         }

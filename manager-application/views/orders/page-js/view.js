@@ -79,41 +79,41 @@
             getOpCharges(orderId, chargeType);
         }
     };
-    
+
     getItem = function (orderId, opId) {
         if (0 < $(".opDetailsJs" + opId).length) {
             $.ykmodal.show();
         } else {
-            $.ykmodal(fcom.getLoader());
+            $.ykmodal(fcom.getLoader(), false);
             fcom.ajax(fcom.makeUrl(controllerName, 'getItem', [orderId]), 'op_id=' + opId, function (ans) {
                 $.ykmodal(ans);
                 fcom.removeLoader()
             });
         }
     };
-   
+
     getItemStatusHistory = function (orderId, opId) {
         if (0 < $(".opStausLogJs" + opId).length) {
             $.ykmodal.show();
         } else {
-            $.ykmodal(fcom.getLoader());
+            $.ykmodal(fcom.getLoader(), false);
             fcom.ajax(fcom.makeUrl(controllerName, 'getItemStatusHistory', [orderId]), 'recordId=' + opId, function (ans) {
                 $.ykmodal(ans);
                 fcom.removeLoader()
             });
         }
     };
-    
+
     getShippingUsersForm = function (orderId, opId) {
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), false);
         fcom.ajax(fcom.makeUrl(controllerName, 'shippingUsersForm', [orderId]), 'op_id=' + opId, function (ans) {
             $.ykmodal(ans);
             fcom.removeLoader()
         });
     };
-    
+
     getOrderCommentForm = function (orderId, opId) {
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), false);
         fcom.ajax(fcom.makeUrl(controllerName, 'orderCommentsForm', [orderId]), 'op_id=' + opId, function (ans) {
             $.ykmodal(ans);
             fcom.removeLoader()
@@ -132,30 +132,29 @@
         }
 
         var manualShipping = 0;
-        if (0 < $("input.manualShipping-js").length) {
-            manualShipping = $("input.manualShipping-js:checked").val();
+        if (0 < $("input.manualShippingJs").length) {
+            manualShipping = $("input.manualShippingJs:checked").val();
         }
 
         if (0 < canShipByPlugin && 1 != manualShipping && orderShippedStatus == orderStatusId) {
             proceedToShipment(op_id);
         } else {
-            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) {
-                setTimeout("pageRedirect(" + op_id + ")", 1000);
-            });
+            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) { });
         }
     };
 
     updateShippingUser = function (frm) {
         var data = fcom.frmData(frm);
-        // var op_id = $(frm.op_id).val();
         if (!$(frm).validate()) return;
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updateShippingUser'), data, function (t) {});
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updateShippingUser'), data, function (t) { });
     };
 
     /* ShipStation */
     generateLabel = function (opId) {
-        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {            
-            setTimeout(function(){ window.location.href = fcom.makeUrl('sellerOrders', 'view',[opId]) }, 300);
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'generateLabel', [opId]), '', function (t) {
+            setTimeout(function () {
+                location.reload();
+            }, 300);
         });
     }
     /* ShipStation */
@@ -177,12 +176,12 @@
 
             var form = "form.markAsShippedJs";
             if (0 < $(form).length) {
-                $(form + " .status-js").val(orderShippedStatus).change();
-                $(form + " .notifyCustomer-js").val(1);
+                $(form + " .statusJs").val(orderShippedStatus).change();
+                $(form + " .notifyCustomerJs").val(1);
                 $(form + " input[name='tracking_number']").val(t.tracking_number);
                 canShipByPlugin = 0;
                 if ('' != t.tracking_number) {
-                    $(form + ' .manualShipping-js').attr('data-fatreq', '{"required":false}');
+                    $(form + ' .manualShippingJs').attr('data-fatreq', '{"required":false}');
                 }
                 updateStatus($(form)[0]);
             } else {
@@ -211,11 +210,124 @@
         });
     }
 
-    trackOrder = function(trackingNumber, courier, orderNumber) {
+    trackOrder = function (trackingNumber, courier, orderNumber) {
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('SellerOrders', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function (res) {
             $.ykmsg.close();
             $.ykmodal(res, true);
+        });
+    };
+
+    pageRedirect = function (op_id) {
+        window.location.replace(fcom.makeUrl(controllerName, 'view', [op_id]));
+    }
+
+    uploadAdditionalAttachment = function () {
+        var data = new FormData();
+        var opId = $("input[name='op_id']").val();
+
+        /* $inputs = $('#additional_attachments input[type=hidden]');
+        $inputs.each(function() { data.append( this.name,$(this).val());}); */
+
+        data.append('op_id', opId);
+
+        $.each($('#downloadable_file')[0].files, function (i, file) {
+            data.append('additional_attachment', file);
+        });
+
+        $.ajax({
+            url: fcom.makeUrl(controllerName, 'setupAdditionalOpAttachment'),
+            type: "POST",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (t) {
+                var ans = $.parseJSON(t);
+                if (ans.status == 0) {
+                    $.ykmsg.error(ans.msg);
+                    return;
+                }
+                $.ykmsg.success(ans.msg);
+                setTimeout("pageRedirect(" + opId + ")", 1000);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error Occurred.");
+            }
+        });
+    }
+    getPickupForm = function (opId) {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'pickupForm', [opId]), '', function (res) {        
+            $.ykmsg.close();        
+            $.ykmodal(res, false);
+            if (0 < $('.date--js').length) {
+                $('.date--js').datepicker({
+                    minDate: new Date(),
+                    dateFormat:'yy-mm-dd'
+                });
+            } 
+            
+            if (0 < $('.dateTime--js').length) {
+                $('.dateTime--js').datetimepicker({
+                    minDate: new Date(),
+                    format:'Y-m-d H:i'
+                });
+            } 
+
+            if (0 < $('.time--js').length) {
+                $('.time--js').datetimepicker({
+                    datepicker: false,
+                    format:'H:i',
+                    step: 30
+                });
+            }
+        });
+    }
+    createPickup = function (frm) {
+        if (!$(frm).validate()) {
+            return;
+        }        
+        fcom.displayProcessing();
+        var data = fcom.frmData(frm);
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'createPickup'), data, function (t) {
+            $.ykmsg.close();
+            t = $.parseJSON(t);
+            if (1 > t.status) {
+                $.ykmsg.error(t.msg);
+                return;
+            }      
+            window.location.reload();            
+        });
+    };
+    
+    cancelPickup = function (opId) {
+        fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'cancelPickup', [opId]), '', function (t) {
+             setTimeout(function(){ window.location.href = fcom.makeUrl(controllerName, 'view',[opId]) }, 300);
+        });
+    };
+
+    shippingRatesForm = function (opId) {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'shippingRatesForm', [opId]), '', function (res) {
+            $.ykmsg.close();
+            $.ykmodal(res, false);               
+        });
+    }   
+    
+    setUpShippingRate = function (frm) {
+        if (!$(frm).validate()) {
+            return;
+        }        
+        fcom.displayProcessing();
+        var data = fcom.frmData(frm);
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'setUpShippingRate'), data, function (t) {
+            $.ykmsg.close();
+            t = $.parseJSON(t);
+            if (1 > t.status) {
+                $.ykmsg.error(t.msg);
+                return;
+            }
+            $.ykmsg.success(t.msg); 
         });
     };
 })();

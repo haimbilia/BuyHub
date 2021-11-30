@@ -47,7 +47,7 @@
         position: fixed;
         -webkit-overflow-scrolling: touch;
         top: 0;
-        left: 0;
+        #{$start-direction}: 0;
         bottom: 0;
         overflow-y: auto;
         -webkit-transform: translate3d(0, 0, 0);

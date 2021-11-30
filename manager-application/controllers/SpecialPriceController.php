@@ -150,11 +150,11 @@ class SpecialPriceController extends ListingBaseController
     {
         $data = FatApp::getPostedData();
         if (empty($data)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
         }
         $splPriceId = $this->updateSelProdSplPrice($data, true);
         if (!$splPriceId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
         }
         // last Param of getProductDisplayTitle function used to get title in html form.
         $productName = SellerProduct::getProductDisplayTitle($data['splprice_selprod_id'], $this->siteLangId, true);
@@ -184,20 +184,20 @@ class SpecialPriceController extends ListingBaseController
     {
         $splPriceId = FatApp::getPostedData('splprice_id', FatUtility::VAR_INT, 0);
         if (1 > $splPriceId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
         }
 
         $attribute = FatApp::getPostedData('attribute', FatUtility::VAR_STRING, '');
 
         $columns = array('splprice_start_date', 'splprice_end_date', 'splprice_price');
         if (!in_array($attribute, $columns)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
         }
 
         $otherColumns = array_values(array_diff($columns, [$attribute]));
         $otherColumnsValue = SellerProductSpecialPrice::getAttributesById($splPriceId, $otherColumns);
         if (empty($otherColumnsValue)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
         }
         $value = FatApp::getPostedData('value');
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);
@@ -211,7 +211,7 @@ class SpecialPriceController extends ListingBaseController
         $dataToUpdate += $otherColumnsValue;
 
         if (!$this->updateSelProdSplPrice($dataToUpdate)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Something_went_wrong._Please_Try_Again.', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Something_went_wrong._Please_Try_Again.', $this->siteLangId), true);
         }
 
         if ('splprice_price' == $attribute) {
@@ -231,11 +231,11 @@ class SpecialPriceController extends ListingBaseController
         $splprice_id = !empty($post['splprice_id']) ? FatUtility::int($post['splprice_id']) : 0;
 
         if (1 > $selprod_id) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
         }
 
         if (strtotime($post['splprice_start_date']) > strtotime($post['splprice_end_date'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Dates', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Dates', $this->siteLangId), true);
         }
 
         /* Check if same date already exists [ */
@@ -269,7 +269,7 @@ class SpecialPriceController extends ListingBaseController
         if ($tblRecord->loadFromDb($condition)) {
             $specialPriceRow = $tblRecord->getFlds();
             if ($specialPriceRow['splprice_id'] != $splprice_id) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_Special_price_for_this_date_already_added', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_Special_price_for_this_date_already_added', $this->siteLangId), true);
             }
         }
         /* ] */
@@ -416,7 +416,7 @@ class SpecialPriceController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('selprod_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -433,11 +433,11 @@ class SpecialPriceController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $specialPriceRow = SellerProduct::getSellerProductSpecialPriceById($recordId);
         if (empty($specialPriceRow) || 1 > count($specialPriceRow)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Already_Deleted', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Already_Deleted', $this->siteLangId), true);
         }
 
         $sellerProdObj = new SellerProduct($specialPriceRow['selprod_id']);

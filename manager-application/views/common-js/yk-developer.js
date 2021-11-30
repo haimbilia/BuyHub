@@ -391,9 +391,18 @@ $(document).on("keyup", "#quickSearch", function (e) {
 
 $(window).keydown(function (e) {
     if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
-        if (!$('#quickSearchCtrl').is(':checked')) {
+        if (0 == $.cookie('quickSearchCtrlJs') || 'undefined' == typeof $.cookie('quickSearchCtrlJs')) {
             $(".quickSearchMain").trigger('click');
             e.preventDefault();
         }
+    }
+});
+
+$(document).on('click', '#quickSearchCtrlJs', function () {
+    if ($(this).is(":checked")) {
+        $.cookie('quickSearchCtrlJs', 1);
+        $("#search-main").modal('hide');
+    } else {
+        $.cookie('quickSearchCtrlJs', 0);
     }
 });

@@ -316,7 +316,7 @@ class UsersController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -334,7 +334,7 @@ class UsersController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $userObj = new User($recordId);
         $userObj->assignValues(array('user_deleted' => applicationConstants::YES));
@@ -483,11 +483,11 @@ class UsersController extends ListingBaseController
         }
 
         if ($post['new_password'] != $post['conf_new_password']) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_New_Password_and_Confirm_new_password_does_not_match', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_New_Password_and_Confirm_new_password_does_not_match', $this->siteLangId), true);
         }
 
         if (!ValidateElement::password($post['new_password'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId), true);
         }
 
         $recordId = FatUtility::int($post['user_id']);
@@ -497,7 +497,7 @@ class UsersController extends ListingBaseController
 
         /* Restrict to change password for demo user on demo URL. */
         if (CommonHelper::demoUrl() && 4 == $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId), true);
         }
 
         $userObj = new User($recordId);
@@ -515,7 +515,7 @@ class UsersController extends ListingBaseController
         }
 
         if (!$userObj->setLoginPassword($post['new_password'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Password_could_not_be_set ', $this->siteLangId) . ' ' . $userObj->getError(), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Password_could_not_be_set ', $this->siteLangId) . ' ' . $userObj->getError(), true);
         }
 
         // TODo:: Can send change password notification using configuration
@@ -667,7 +667,7 @@ class UsersController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('user_ids'));
         if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -686,7 +686,7 @@ class UsersController extends ListingBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $userObj = new User($recordId);

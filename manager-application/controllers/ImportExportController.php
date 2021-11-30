@@ -116,12 +116,12 @@ class ImportExportController extends ListingBaseController
     public function importData($actionType)
     {
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_CSV_File', $this->siteLangId), true);
         }
 
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
-            LibHelper::exitWithError(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_Not_a_Valid_CSV_File", $this->siteLangId), true);
         }
 
         $sheetType = FatApp::getPostedData('sheet_type', FatUtility::VAR_INT, 0);
@@ -235,12 +235,12 @@ class ImportExportController extends ListingBaseController
         $post = FatApp::getPostedData();
 
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_CSV_File', $this->siteLangId), true);
         }
 
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
-            LibHelper::exitWithError(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_Not_a_Valid_CSV_File", $this->siteLangId), true);
         }
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
@@ -1067,10 +1067,10 @@ class ImportExportController extends ListingBaseController
     public function uploadLabelsImportedFile()
     {
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_CSV_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_CSV_File', $this->siteLangId), true);
         }
         if (!in_array($_FILES['import_file']['type'], CommonHelper::isCsvValidMimes())) {
-            LibHelper::exitWithError(Labels::getLabel("LBL_Not_a_Valid_CSV_File", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_Not_a_Valid_CSV_File", $this->siteLangId), true);
         }
 
         $db = FatApp::getDb();
@@ -1091,7 +1091,7 @@ class ImportExportController extends ListingBaseController
         $langIndexLangIds = array();
         foreach ($firstLineLangArr as $key => $langCode) {
             if (!array_key_exists($langCode, $languages)) {
-                LibHelper::exitWithError(Labels::getLabel("MSG_Invalid_Coloum_CSV_File", $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel("ERR_Invalid_Coloum_CSV_File", $this->siteLangId), true);
             }
             $langIndexLangIds[$key] = $languages[$langCode]['language_id'];
         }

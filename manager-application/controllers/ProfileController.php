@@ -100,11 +100,11 @@ class ProfileController extends ListingBaseController
     {
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
         }
         if (isset($_FILES['org_image']['tmp_name'])) {
             if (!is_uploaded_file($_FILES['org_image']['tmp_name'])) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_Please_select_a_file', $this->siteLangId), true);
             }
 
             $fileHandlerObj = new AttachedFile();
@@ -117,7 +117,7 @@ class ProfileController extends ListingBaseController
 
         if (isset($_FILES['cropped_image']['tmp_name'])) {
             if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_Please_select_a_file', $this->siteLangId), true);
             }
 
             $fileHandlerObj = new AttachedFile();
@@ -182,7 +182,7 @@ class ProfileController extends ListingBaseController
 
         /* Restrict to change password for admin on demo URL. */
         if (CommonHelper::demoUrl() && 1 == $this->_adminId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId), true);
         }
 
         if (!$adminCredentials = AdminUsers::getAttributesById($this->_adminId, ['admin_password', 'admin_password_old'])) {
@@ -191,12 +191,12 @@ class ProfileController extends ListingBaseController
 
         if (!empty($adminCredentials['admin_password'])) {
             if (false == password_verify(FatApp::getPostedData('current_password'), $adminCredentials['admin_password'])) {
-                LibHelper::exitWithError(Labels::getLabel('LBL_Your_current_Password_mis-matched!', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_Your_current_Password_mis-matched!', $this->siteLangId), true);
             }
         } else {
             $currentEncPassword = UserAuthentication::encryptPassword(FatApp::getPostedData('current_password'), true);
             if ($currentEncPassword !== $adminCredentials['admin_password_old']) {
-                LibHelper::exitWithError(Labels::getLabel('LBL_Your_current_Password_mis-matched!', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_Your_current_Password_mis-matched!', $this->siteLangId), true);
             }
         }
         $newPassword = UserAuthentication::encryptPassword(FatApp::getPostedData('new_password'));
@@ -226,7 +226,7 @@ class ProfileController extends ListingBaseController
         $session_element_name = AdminAuthentication::SESSION_ELEMENT_NAME;
         $cookie_name = $session_element_name . 'layout';
         if (setcookie($cookie_name, $post['layout'], time() + 86400 * 30, CONF_WEBROOT_FRONT_URL)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Setting_Updated_Successfully', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Setting_Updated_Successfully', $this->siteLangId), true);
         } else {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }

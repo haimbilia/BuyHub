@@ -36,7 +36,7 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $this->set('actionItemsData', $actionItemsData);
         $this->set('canEdit', $this->objPrivilege->canEditShippingCompanyUsers($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
-        $this->_template->addJs('shipping-company-users/page-js/index.js'); 
+        $this->_template->addJs('shipping-company-users/page-js/index.js');
         $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -152,7 +152,7 @@ class ShippingCompanyUsersController extends ListingBaseController {
         $frm = $this->getUserForm(0, User::USER_TYPE_SHIPPING_COMPANY);
 
         $post = FatApp::getPostedData();
-        $post = $frm->getFormDataFromArray($post);
+        $post = $frm->getFormDataFromArray($post, ['user_state_id']);
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
@@ -178,7 +178,7 @@ class ShippingCompanyUsersController extends ListingBaseController {
             $post['user_password'] = CommonHelper::getRandomPassword(10);
             if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], $post['user_password'], 1, 1)) {
                 FatApp::getDB()->rollbackTransaction();
-                LibHelper::exitWithError(Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->siteLangId), true);
             }
         }
         FatApp::getDB()->commitTransaction();
@@ -232,6 +232,37 @@ class ShippingCompanyUsersController extends ListingBaseController {
         if (!$userObj->activateAccount($status)) {
             LibHelper::exitWithError($userObj->getError(), true);
         }
+    }
+
+    protected function getUserForm($user_id = 0, $userType = 0) {
+        $user_id = FatUtility::int($user_id);
+        $userType = FatUtility::int($userType);
+
+        $frm = new Form('frmUser', array('id' => 'frmUser'));
+        $frm->addHiddenField('', 'user_id', $user_id);
+        $frm->addHiddenField('', 'user_type');
+        $frm->addTextBox(Labels::getLabel('LBL_Username', $this->siteLangId), 'credential_username', '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Customer_name', $this->siteLangId), 'user_name');
+        $frm->addDateField(Labels::getLabel('LBL_Date_of_birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addHiddenField('', 'user_phone_dcode');
+        $phnFld = $frm->addTextBox(Labels::getLabel('LBL_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
+        $frm->addEmailField(Labels::getLabel('LBL_Email', $this->siteLangId), 'credential_email', '');
+
+        $countryObj = new Countries();
+        $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+        $fld->requirement->setRequired(true);
+
+        $frm->addSelectBox(Labels::getLabel('LBL_State', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addTextBox(Labels::getLabel('LBL_City', $this->siteLangId), 'user_city');
+
+        switch ($userType) {
+            case User::USER_TYPE_SHIPPING_COMPANY:
+                $frm->addTextBox(Labels::getLabel('LBL_Tracking_Site_Url', $this->siteLangId), 'user_order_tracking_url');
+                break;
+        }
+        return $frm;
     }
 
     public function getSearchForm($fields = []) {

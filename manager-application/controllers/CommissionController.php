@@ -190,7 +190,7 @@ class CommissionController extends ListingBaseController
         }
 
         if (false == $isMandatory && 1 < $recordId && (empty($post['commsetting_prodcat_id']) && empty($post['commsetting_user_id']) && empty($post['commsetting_product_id']))) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Please_add_commission_corresponding_to_product,_category_or_user', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Please_add_commission_corresponding_to_product,_category_or_user', $this->siteLangId), true);
         }
 
         if ($isMandatory) {

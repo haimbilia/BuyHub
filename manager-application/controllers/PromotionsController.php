@@ -244,7 +244,7 @@ class PromotionsController extends ListingBaseController
                 $rs = $srch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
                 if (empty($row)) {
-                    LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
+                    LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
                 }
                 $promotion_record_id = $row['shop_id'];
                 $minBudget = FatApp::getConfig('CONF_CPC_SHOP', FatUtility::VAR_FLOAT, 0);
@@ -265,7 +265,7 @@ class PromotionsController extends ListingBaseController
                 $row = FatApp::getDb()->fetch($rs);
 
                 if (empty($row)) {
-                    LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
+                    LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
                 }
                 $promotion_record_id = $row['selprod_id'];
                 $minBudget = FatApp::getConfig('CONF_CPC_PRODUCT', FatUtility::VAR_FLOAT, 0);
@@ -306,13 +306,13 @@ class PromotionsController extends ListingBaseController
                 break;
 
             default:
-                LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
                 break;
         }
 
         $promotionBudget = Fatutility::float($post['promotion_budget']);
         if ($minBudget > $promotionBudget) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_Budget_should_be_greater_than_CPC", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_Budget_should_be_greater_than_CPC", $this->siteLangId), true);
         }
 
         $recordId = $post['promotion_id'];
@@ -428,7 +428,7 @@ class PromotionsController extends ListingBaseController
 
         $data = Promotion::getAttributesById($recordId, array('promotion_id', 'promotion_type', 'promotion_user_id'));
         if (!$data) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -444,7 +444,7 @@ class PromotionsController extends ListingBaseController
         }
 
         if (1 > $attachedFileType) {
-            LibHelper::exitWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -478,11 +478,11 @@ class PromotionsController extends ListingBaseController
         $allowedTypeArr = array(Promotion::TYPE_BANNER, Promotion::TYPE_SLIDES);
 
         if (1 > $recordId || !in_array($promotionType, $allowedTypeArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_access', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_access', $this->siteLangId), true);
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_File', $this->siteLangId), true);
         }
 
         $promotionRecordId = 0;
@@ -514,7 +514,7 @@ class PromotionsController extends ListingBaseController
         }
 
         if (1 > $promotionRecordId || 1 > $attachedFileType) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_access', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_access', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -586,7 +586,7 @@ class PromotionsController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
 
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
         }
 
         $promotionType = 0;
@@ -601,7 +601,7 @@ class PromotionsController extends ListingBaseController
         $rs = $srch->getResultSet();
         $promotionDetails = FatApp::getDb()->fetch($rs);
         if (empty($promotionDetails)) {
-            LibHelper::exitWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
         }
         $promotionType = $promotionDetails['promotion_type'];
 
@@ -609,13 +609,13 @@ class PromotionsController extends ListingBaseController
             case Promotion::TYPE_BANNER:
                 $imgDetail = Banner::getAttributesById($promotionDetails['banner_id']);
                 if (!false == $imgDetail && ($imgDetail['banner_active'] != applicationConstants::ACTIVE)) {
-                    LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
+                    LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
                 }
                 break;
             case Promotion::TYPE_SLIDES:
                 $imgDetail = Slides::getAttributesById($promotionDetails['slide_id']);
                 if (!false == $imgDetail && ($imgDetail['slide_active'] != applicationConstants::ACTIVE)) {
-                    LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
+                    LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
                 }
                 break;
         }
@@ -646,7 +646,7 @@ class PromotionsController extends ListingBaseController
         $this->objPrivilege->canEditPromotions();
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
         }
 
         $languages = Language::getAllNames();
@@ -664,7 +664,7 @@ class PromotionsController extends ListingBaseController
         $rs = $srch->getResultSet();
         $promotionDetails = FatApp::getDb()->fetch($rs);
         if (empty($promotionDetails)) {
-            LibHelper::exitWithError(Labels::getLabel('Lbl_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
         }
         $promotionType = $promotionDetails['promotion_type'];
 
@@ -675,7 +675,7 @@ class PromotionsController extends ListingBaseController
             case Promotion::TYPE_BANNER:
                 $imgDetail = Banner::getAttributesById($promotionDetails['banner_id']);
                 if (!false == $imgDetail && ($imgDetail['banner_active'] != applicationConstants::ACTIVE)) {
-                    LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
+                    LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
                 }
                 $attachedFileType = AttachedFile::FILETYPE_BANNER;
                 $promotionRecordId = $promotionDetails['banner_id'];
@@ -683,7 +683,7 @@ class PromotionsController extends ListingBaseController
             case Promotion::TYPE_SLIDES:
                 $imgDetail = Slides::getAttributesById($promotionDetails['slide_id']);
                 if (!false == $imgDetail && ($imgDetail['slide_active'] != applicationConstants::ACTIVE)) {
-                    LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
+                    LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request_Or_Inactive_Record', $this->siteLangId), true);
                 }
                 $attachedFileType = AttachedFile::FILETYPE_HOME_PAGE_BANNER;
                 $promotionRecordId = $promotionDetails['slide_id'];
@@ -749,12 +749,12 @@ class PromotionsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
         $data = Promotion::getAttributesById($recordId, array('promotion_id', 'promotion_user_id'));
         if (!$data) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
         $this->markAsDeleted($recordId);
@@ -1034,7 +1034,7 @@ class PromotionsController extends ListingBaseController
         }
 
         if ($minBudget > $promotionBudget) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_Budget_should_be_greater_than_CPC", $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_Budget_should_be_greater_than_CPC", $this->siteLangId), true);
         }
         FatUtility::dieJsonSuccess(Labels::getLabel("MSG_SUCCESS", $this->siteLangId));
     }

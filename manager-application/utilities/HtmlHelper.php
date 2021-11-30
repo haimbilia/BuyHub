@@ -131,7 +131,7 @@ class HtmlHelper
     {
         $name = (!empty($name) ? 'name="' . $name . '"' : '');
         $onclick = (!empty($onclick) ? 'onclick="' . $onclick . ';"' : '');
-        $class = !empty($class) ? $class : 'btn btn-brand btn-wide ml-2 submitBtnJs';
+        $class = !empty($class) ? $class : 'btn btn-brand btn-wide btn-search submitBtnJs';
         return '<button type="' . $type . '" ' . $name . ' class="' . $class . '" ' . $onclick . '>' . $lbl . '</button>';
     }
 
@@ -445,7 +445,6 @@ class HtmlHelper
                 return $fld->getHtml();
                 break;
         }
-
 
         if ($doNotAddFieldWrapper) {
             if (!empty($labelExtraArr)) {

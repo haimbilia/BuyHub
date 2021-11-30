@@ -165,7 +165,7 @@ class UserGdprRequestsController extends ListingBaseController {
 
         $userObj = new User($userId);
         if (!$userObj->truncateUserInfo()) {
-            LibHelper::exitWithError(Labels::getLabel("MSG_USER_INFO_COULD_NOT_BE_DELETED", $this->siteLangId) . $userObj->getError(), true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_USER_INFO_COULD_NOT_BE_DELETED", $this->siteLangId) . $userObj->getError(), true);
         }
 
         $emailNotificationObj = new EmailHandler();

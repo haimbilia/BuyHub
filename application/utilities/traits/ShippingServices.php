@@ -190,7 +190,7 @@ trait ShippingServices
         $opSrch->doNotLimitRecords();
         $opSrch->addCondition('op.op_id', '=', $opId);
         $attr = !empty($attr) ? $attr : [
-            'op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
+            'op_id', 'op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
             'opsp_api_req_id', 'opsp_scheduled', 'opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_selprod_id', 'op_qty', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit',
             'op_product_weight', 'op_product_weight_unit', 'opshipping_rate_id', 'opshipping_plugin_id'
         ];
@@ -446,7 +446,6 @@ trait ShippingServices
             $fld->htmlAfterField = $htmlAfterField;
         }
 
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->langId));
         return $frm;
     }
 
@@ -550,21 +549,19 @@ trait ShippingServices
     {
         $orderData = $this->getOrderProductDetail($opId);
         if (empty($orderData)) {
-            $this->error = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
-            return false;
+            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_ORDER", $this->langId), true);
         }
-        //$warehouses = $this->getShippingWarehouseList($orderData);        
+        
         $rates = $this->getShippingRatesFromApi($orderData);
 
         if (false === $rates) {
-            LibHelper::exitWithError($this->error);
+            LibHelper::exitWithError($this->error, true);
         }
         $rateOptions = $this->formatShippingRates($rates, $this->langId);
 
         $frm = new Form('frmRates');
         $frm->addSelectBox(Labels::getLabel('LBL_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();
         $frm->addHiddenField('', 'op_id', $opId)->requirements()->setIntPositive();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->langId));
         return $frm;
     }
 
@@ -614,10 +611,11 @@ trait ShippingServices
 
         $orderObj = new Orders($orderData['op_order_id']);
         $addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_id']);
-
-        $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
-
-        $this->shippingService->setAddress($shippingAddress['oua_name'], $shippingAddress['oua_address1'], $shippingAddress['oua_address2'], $shippingAddress['oua_city'], $shippingAddress['oua_state'], $shippingAddress['oua_zip'], $shippingAddress['oua_country_code'], $shippingAddress['oua_phone']);
+        $shippingAddress = [];
+        if (!empty($addresses)) {
+            $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
+            $this->shippingService->setAddress($shippingAddress['oua_name'], $shippingAddress['oua_address1'], $shippingAddress['oua_address2'], $shippingAddress['oua_city'], $shippingAddress['oua_state'], $shippingAddress['oua_zip'], $shippingAddress['oua_country_code'], $shippingAddress['oua_phone']);
+        }
 
         $shippingHandledBySeller = CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']);
         $shopAddress = $this->shippingService->getShopAddress(($shippingHandledBySeller ? $orderData['op_selprod_user_id'] : 0));
@@ -638,7 +636,7 @@ trait ShippingServices
         }
 
         /* Retrieve Selected Shipping Service Detail. */
-        if (method_exists($this->shippingService, 'setSelectedShipping') && is_array($this->selectedShippingService) && 0 < count($this->selectedShippingService)) {
+        if (method_exists($this->shippingService, 'setSelectedShipping') && isset($this->selectedShippingService) && is_array($this->selectedShippingService) && 0 < count($this->selectedShippingService)) {
             $this->shippingService->setSelectedShipping($this->selectedShippingService[$orderData['op_selprod_id']]);
         }
 

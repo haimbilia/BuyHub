@@ -93,7 +93,7 @@ class AdminGuestController extends FatController
     public function sendResetPasswordLink($usernameOrEmail)
     {
         if (empty($usernameOrEmail)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
         }
 
         $adminAuthObj = AdminAuthentication::getInstance();
