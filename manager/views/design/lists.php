@@ -104,7 +104,7 @@
                                                     <span class="list-timeline__badge"></span>
                                                     <span class="list-timeline__text">Scheduled system reboot completed
                                                         <span
-                                                            class="badge badge--brand badge--inline">completed</span></span>
+                                                            class="badge badge-brand badge-inline">completed</span></span>
                                                     <span class="list-timeline__time">14 mins</span>
                                                 </div>
                                                 <div class="list-timeline__item">
@@ -117,7 +117,7 @@
                                                     <span class="list-timeline__badge"></span>
                                                     <span class="list-timeline__text">Database server overloaded 80% and
                                                         requires quick reboot <span
-                                                            class="badge badge--danger badge--inline">settled</span></span>
+                                                            class="badge badge-danger badge-inline">settled</span></span>
                                                     <span class="list-timeline__time">1 hr</span>
                                                 </div>
                                                 <div class="list-timeline__item">
@@ -161,7 +161,7 @@
                                                                 <span class="list-timeline__badge"></span>
                                                                 <span class="list-timeline__text">Scheduled system
                                                                     reboot completed <span
-                                                                        class="badge badge--success badge--inline">completed</span></span>
+                                                                        class="badge badge-success badge-inline">completed</span></span>
                                                                 <span class="list-timeline__time">14 mins</span>
                                                             </div>
                                                             <div class="list-timeline__item">
@@ -174,7 +174,7 @@
                                                                 <span class="list-timeline__badge"></span>
                                                                 <span class="list-timeline__text">Database server
                                                                     overloaded 80% and requires quick reboot <span
-                                                                        class="badge badge--info badge--inline">settled</span></span>
+                                                                        class="badge badge-info badge-inline">settled</span></span>
                                                                 <span class="list-timeline__time">1 hr</span>
                                                             </div>
                                                             <div class="list-timeline__item">
@@ -216,37 +216,37 @@
                                             <div class="list-timeline__items">
                                                 <div class="list-timeline__item">
                                                     <span
-                                                        class="list-timeline__badge list-timeline__badge--success"></span>
+                                                        class="list-timeline__badge list-timeline__badge-success"></span>
                                                     <span class="list-timeline__text">12 new users registered and
                                                         pending for activation</span>
                                                     <span class="list-timeline__time">Just now</span>
                                                 </div>
                                                 <div class="list-timeline__item">
                                                     <span
-                                                        class="list-timeline__badge list-timeline__badge--danger"></span>
+                                                        class="list-timeline__badge list-timeline__badge-danger"></span>
                                                     <span class="list-timeline__text">Scheduled system reboot completed
                                                         <span
-                                                            class="badge badge--success badge--inline">completed</span></span>
+                                                            class="badge badge-success badge-inline">completed</span></span>
                                                     <span class="list-timeline__time">14 mins</span>
                                                 </div>
                                                 <div class="list-timeline__item">
                                                     <span
-                                                        class="list-timeline__badge list-timeline__badge--warning"></span>
+                                                        class="list-timeline__badge list-timeline__badge-warning"></span>
                                                     <span class="list-timeline__text">New order has been planced and
                                                         pending for processing</span>
                                                     <span class="list-timeline__time">20 mins</span>
                                                 </div>
                                                 <div class="list-timeline__item">
                                                     <span
-                                                        class="list-timeline__badge list-timeline__badge--primary"></span>
+                                                        class="list-timeline__badge list-timeline__badge-primary"></span>
                                                     <span class="list-timeline__text">Database server overloaded 80% and
                                                         requires quick reboot <span
-                                                            class="badge badge--info badge--inline">settled</span></span>
+                                                            class="badge badge-info badge-inline">settled</span></span>
                                                     <span class="list-timeline__time">1 hr</span>
                                                 </div>
                                                 <div class="list-timeline__item">
                                                     <span
-                                                        class="list-timeline__badge list-timeline__badge--brand"></span>
+                                                        class="list-timeline__badge list-timeline__badge-brand"></span>
                                                     <span class="list-timeline__text">System error occured and hard
                                                         drive has been shutdown - <a href="#"
                                                             class="link">Check</a></span>
@@ -254,7 +254,7 @@
                                                 </div>
                                                 <div class="list-timeline__item">
                                                     <span
-                                                        class="list-timeline__badge list-timeline__badge--success"></span>
+                                                        class="list-timeline__badge list-timeline__badge-success"></span>
                                                     <span class="list-timeline__text">Production server is
                                                         rebooting...</span>
                                                     <span class="list-timeline__time">3 hrs</span>
@@ -286,7 +286,7 @@
                                                                 <span class="list-timeline__badge"></span>
                                                                 <span class="list-timeline__text">Scheduled system
                                                                     reboot completed <span
-                                                                        class="badge badge--success badge--inline">completed</span></span>
+                                                                        class="badge badge-success badge-inline">completed</span></span>
                                                                 <span class="list-timeline__time">14 mins</span>
                                                             </div>
                                                             <div class="list-timeline__item">
@@ -299,7 +299,7 @@
                                                                 <span class="list-timeline__badge"></span>
                                                                 <span class="list-timeline__text">Database server
                                                                     overloaded 80% and requires quick reboot <span
-                                                                        class="badge badge--info badge--inline">settled</span></span>
+                                                                        class="badge badge-info badge-inline">settled</span></span>
                                                                 <span class="list-timeline__time">1 hr</span>
                                                             </div>
                                                             <div class="list-timeline__item">
@@ -344,7 +344,7 @@
                                                     <div class="list-timeline__items">
                                                         <div class="list-timeline__item">
                                                             <span
-                                                                class="list-timeline__badge list-timeline__badge--success"></span>
+                                                                class="list-timeline__badge list-timeline__badge-success"></span>
                                                             <span
                                                                 class="list-timeline__icon flaticon2-graph-1 font-success"></span>
                                                             <span class="list-timeline__text">12 new users registered
@@ -353,17 +353,17 @@
                                                         </div>
                                                         <div class="list-timeline__item">
                                                             <span
-                                                                class="list-timeline__badge list-timeline__badge--danger"></span>
+                                                                class="list-timeline__badge list-timeline__badge-danger"></span>
                                                             <span
                                                                 class="list-timeline__icon flaticon2-position font-danger"></span>
                                                             <span class="list-timeline__text">Scheduled system reboot
                                                                 completed <span
-                                                                    class="badge badge--success badge--inline">completed</span></span>
+                                                                    class="badge badge-success badge-inline">completed</span></span>
                                                             <span class="list-timeline__time">14 mins</span>
                                                         </div>
                                                         <div class="list-timeline__item">
                                                             <span
-                                                                class="list-timeline__badge list-timeline__badge--warning"></span>
+                                                                class="list-timeline__badge list-timeline__badge-warning"></span>
                                                             <span
                                                                 class="list-timeline__icon flaticon2-lock font-warning"></span>
                                                             <span class="list-timeline__text">New order has been planced
@@ -372,17 +372,17 @@
                                                         </div>
                                                         <div class="list-timeline__item">
                                                             <span
-                                                                class="list-timeline__badge list-timeline__badge--primary"></span>
+                                                                class="list-timeline__badge list-timeline__badge-primary"></span>
                                                             <span
                                                                 class="list-timeline__icon flaticon2-note font-primary"></span>
                                                             <span class="list-timeline__text">Database server overloaded
                                                                 80% and requires quick reboot <span
-                                                                    class="badge badge--info badge--inline">settled</span></span>
+                                                                    class="badge badge-info badge-inline">settled</span></span>
                                                             <span class="list-timeline__time">1 hr</span>
                                                         </div>
                                                         <div class="list-timeline__item">
                                                             <span
-                                                                class="list-timeline__badge list-timeline__badge--brand"></span>
+                                                                class="list-timeline__badge list-timeline__badge-brand"></span>
                                                             <span
                                                                 class="list-timeline__icon flaticon2-attention font-brand"></span>
                                                             <span class="list-timeline__text">System error occured and
@@ -392,7 +392,7 @@
                                                         </div>
                                                         <div class="list-timeline__item">
                                                             <span
-                                                                class="list-timeline__badge list-timeline__badge--success"></span>
+                                                                class="list-timeline__badge list-timeline__badge-success"></span>
                                                             <span
                                                                 class="list-timeline__icon flaticon2-new-email font-success"></span>
                                                             <span class="list-timeline__text">Production server is
@@ -420,7 +420,7 @@
                                                         <div class="list-timeline__items">
                                                             <div class="list-timeline__item">
                                                                 <span
-                                                                    class="list-timeline__badge list-timeline__badge--success"></span>
+                                                                    class="list-timeline__badge list-timeline__badge-success"></span>
                                                                 <span
                                                                     class="list-timeline__icon flaticon2-graph-1 font-success"></span>
                                                                 <span class="list-timeline__text">12 new users
@@ -429,17 +429,17 @@
                                                             </div>
                                                             <div class="list-timeline__item">
                                                                 <span
-                                                                    class="list-timeline__badge list-timeline__badge--danger"></span>
+                                                                    class="list-timeline__badge list-timeline__badge-danger"></span>
                                                                 <span
                                                                     class="list-timeline__icon flaticon2-position font-danger"></span>
                                                                 <span class="list-timeline__text">Scheduled system
                                                                     reboot completed <span
-                                                                        class="badge badge--success badge--inline">completed</span></span>
+                                                                        class="badge badge-success badge-inline">completed</span></span>
                                                                 <span class="list-timeline__time">14 mins</span>
                                                             </div>
                                                             <div class="list-timeline__item">
                                                                 <span
-                                                                    class="list-timeline__badge list-timeline__badge--warning"></span>
+                                                                    class="list-timeline__badge list-timeline__badge-warning"></span>
                                                                 <span
                                                                     class="list-timeline__icon flaticon2-lock font-warning"></span>
                                                                 <span class="list-timeline__text">New order has been
@@ -448,17 +448,17 @@
                                                             </div>
                                                             <div class="list-timeline__item">
                                                                 <span
-                                                                    class="list-timeline__badge list-timeline__badge--primary"></span>
+                                                                    class="list-timeline__badge list-timeline__badge-primary"></span>
                                                                 <span
                                                                     class="list-timeline__icon flaticon2-note font-primary"></span>
                                                                 <span class="list-timeline__text">Database server
                                                                     overloaded 80% and requires quick reboot <span
-                                                                        class="badge badge--info badge--inline">settled</span></span>
+                                                                        class="badge badge-info badge-inline">settled</span></span>
                                                                 <span class="list-timeline__time">1 hr</span>
                                                             </div>
                                                             <div class="list-timeline__item">
                                                                 <span
-                                                                    class="list-timeline__badge list-timeline__badge--brand"></span>
+                                                                    class="list-timeline__badge list-timeline__badge-brand"></span>
                                                                 <span
                                                                     class="list-timeline__icon flaticon2-attention font-brand"></span>
                                                                 <span class="list-timeline__text">System error occured
@@ -468,7 +468,7 @@
                                                             </div>
                                                             <div class="list-timeline__item">
                                                                 <span
-                                                                    class="list-timeline__badge list-timeline__badge--success"></span>
+                                                                    class="list-timeline__badge list-timeline__badge-success"></span>
                                                                 <span
                                                                     class="list-timeline__icon flaticon2-new-email font-success"></span>
                                                                 <span class="list-timeline__text">Production server is

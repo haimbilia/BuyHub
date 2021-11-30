@@ -7,6 +7,12 @@
              font-weight: 400;
          }
      }
+     &-header {
+         .close {
+             margin: -1rem;
+             margin-#{$start-direction}: auto !important;
+         }
+     }
      &-title {
          font-size: 1.2rem;
          color: $txt-body;
@@ -15,12 +21,12 @@
          justify-content: inherit;
      }
      &.fixed-right {
-         padding-right: 0 !important;
+         padding-#{$end-direction}: 0 !important;
          .modal-dialog-vertical {
              height: 100%;
              max-width: 570px;
              margin: 0;
-             margin-left: auto;
+             margin-#{$start-direction}: auto;
              .modal-content {
                  border-radius: 0px;
                  height: inherit;
@@ -40,10 +46,10 @@
              }
          }
          &.fade .modal-dialog-vertical {
-             transform: translateX(100%);
+             transform: translateX(100% * $transform-direction);
          }
          &.show .modal-dialog-vertical {
-             transform: translateX(0);
+             transform: translateX(0 * $transform-direction);
          }
      }
  }

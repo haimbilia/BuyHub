@@ -1,7 +1,4 @@
 <?php
-
-use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Html;
-
 class ConfigurationsController extends ListingBaseController
 {
     /* these variables must be only those which will store array type data and will saved as serialized array [*/
@@ -162,14 +159,14 @@ class ConfigurationsController extends ListingBaseController
                 foreach ($smtp_arr as $skey => $sval) {
                     unset($post['CONF_SMTP_' . strtoupper($skey)]);
                 }
-                LibHelper::exitWithError(Labels::getLabel("LBL_SMTP_SETTINGS_PROVIDED_IS_INVALID_OR_UNABLE_TO_SEND_EMAIL_SO_WE_HAVE_NOT_SAVED_SMTP_SETTINGS", $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel("ERR_SMTP_SETTINGS_PROVIDED_IS_INVALID_OR_UNABLE_TO_SEND_EMAIL_SO_WE_HAVE_NOT_SAVED_SMTP_SETTINGS", $this->siteLangId), true);
             }
         }
 
         if (isset($post['CONF_USE_SSL']) && $post['CONF_USE_SSL'] == 1) {
             if (!$this->isSslEnabled()) {
                 if ($post['CONF_USE_SSL'] != FatApp::getConfig('CONF_USE_SSL')) {
-                    LibHelper::exitWithError(Labels::getLabel('MSG_SSL_NOT_INSTALLED_FOR_WEBSITE_TRY_TO_SAVE_DATA_WITHOUT_ENABLING_SSL', $this->siteLangId), true);
+                    LibHelper::exitWithError(Labels::getLabel('ERR_SSL_NOT_INSTALLED_FOR_WEBSITE_TRY_TO_SAVE_DATA_WITHOUT_ENABLING_SSL', $this->siteLangId), true);
                 }
 
                 unset($post['CONF_USE_SSL']);
@@ -186,7 +183,7 @@ class ConfigurationsController extends ListingBaseController
         if (array_key_exists('CONF_CURRENCY', $post)) {
             $data = Currency::getAttributesById($post['CONF_CURRENCY']);
             if (empty($data) || ($data['currency_value'] * 1) != 1) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SET_DEFAULT_CURRENCY_VALUE_TO_1', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SET_DEFAULT_CURRENCY_VALUE_TO_1', $this->siteLangId), true);
             }
         }
 
@@ -229,7 +226,7 @@ class ConfigurationsController extends ListingBaseController
         $post = FatApp::getPostedData();
 
         if (empty($post)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
         }
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
@@ -263,7 +260,7 @@ class ConfigurationsController extends ListingBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -1904,11 +1901,11 @@ class ConfigurationsController extends ListingBaseController
     {
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
         }
         $fileType = FatApp::getPostedData('fileType', FatUtility::VAR_STRING, '');
         if (!isset($_FILES['verification_file']['name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $target_dir = CONF_UPLOADS_PATH;
@@ -1917,7 +1914,7 @@ class ConfigurationsController extends ListingBaseController
         $path = pathinfo($file);
         $ext = $path['extension'];
         if (!in_array(strtoupper($ext), ['XML', 'HTML'])) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
         }
 
         if ($fileType == 'bing') {
@@ -1938,7 +1935,7 @@ class ConfigurationsController extends ListingBaseController
     public function deleteVerificationFile($fileType)
     {
         if ($fileType == '') {
-            LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $target_dir = CONF_UPLOADS_PATH;
         if ($fileType == 'bing') {

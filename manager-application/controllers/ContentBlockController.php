@@ -573,7 +573,7 @@ class ContentBlockController extends ListingBaseController
         }
         $file = $_FILES['cropped_image'];
         if (!is_uploaded_file($file['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
 

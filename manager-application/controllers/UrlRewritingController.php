@@ -169,7 +169,7 @@ class UrlRewritingController extends ListingBaseController
         }
 
         if (empty($originalUrl)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $langArr = Language::getAllNames();
@@ -226,7 +226,7 @@ class UrlRewritingController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('urlrewrite_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -243,7 +243,7 @@ class UrlRewritingController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
         }
         $obj = new UrlRewrite($recordId);
         if (!$obj->deleteRecord(false)) {

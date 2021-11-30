@@ -50,23 +50,6 @@ foreach ($arrListing as $sn => $row) {
                 ];
                 if ($canEdit) {
                     $data['editButton'] = [];
-
-                    $data['otherButtons'] = [
-                        [
-                            'attr' => [
-                                'href' => 'javascript:void(0)',
-                                'onclick' => 'changeUserPassword(' . $row['admin_id'] . ')',
-                                'title' => Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId),
-                            ],
-                            'label' => '<svg class="svg" width="18" height="18">
-                                                <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#password">
-                                                </use>
-                                            </svg>',
-                        ]
-                    ];
-
-
                     if ($row['admin_id'] > 1 && $row['admin_id'] != $adminLoggedInId) {
                         $data['otherButtons'][] = [
                             'attr' => [
@@ -80,11 +63,24 @@ foreach ($arrListing as $sn => $row) {
                                             </svg>',
                         ];
                     }
+
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'changeUserPassword(' . $row['admin_id'] . ')',
+                            'title' => Labels::getLabel('LBL_CHANGE_PASSWORD', $siteLangId),
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                                <use
+                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#password">
+                                                </use>
+                                            </svg>',
+                    ];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
-            
+
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;

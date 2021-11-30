@@ -323,7 +323,7 @@
                                                 <th data-field="RecordID"
                                                     class="datatable__cell--center datatable__cell datatable__cell--check">
                                                     <span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--all checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-all checkbox-solid"><input
                                                                 type="checkbox">&nbsp;<span></span></label></span>
                                                 </th>
                                                 <th data-field="OrderID" class="datatable__cell datatable__cell--sort">
@@ -354,7 +354,7 @@
                                             <tr data-row="0" class="datatable__row" style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="1">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -367,11 +367,11 @@
                                                         style="width: 148px;">2/12/2018</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--primary badge--inline badge--pill">Canceled</span></span>
+                                                            class="badge  badge-primary badge-inline badge-pill">Canceled</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-primary">Retail</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -397,7 +397,7 @@
                                                 style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="2">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -414,7 +414,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -439,7 +439,7 @@
                                             <tr data-row="2" class="datatable__row" style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="3">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -452,11 +452,11 @@
                                                         style="width: 148px;">5/26/2016</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-primary">Retail</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -482,7 +482,7 @@
                                                 style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="4">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -495,11 +495,11 @@
                                                         style="width: 148px;">7/2/2016</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -524,7 +524,7 @@
                                             <tr data-row="4" class="datatable__row" style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="5">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -541,7 +541,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -567,7 +567,7 @@
                                                 style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="6">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -580,11 +580,11 @@
                                                         style="width: 148px;">11/26/2016</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--info badge--inline badge--pill">Info</span></span>
+                                                            class="badge  badge-info badge-inline badge-pill">Info</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -609,7 +609,7 @@
                                             <tr data-row="6" class="datatable__row" style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="7">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -626,7 +626,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -652,7 +652,7 @@
                                                 style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="8">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -669,7 +669,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-danger">Online</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -694,7 +694,7 @@
                                             <tr data-row="8" class="datatable__row" style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="9">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -711,7 +711,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-danger">Online</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -737,7 +737,7 @@
                                                 style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="10">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -750,11 +750,11 @@
                                                         style="width: 148px;">1/26/2017</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -1078,7 +1078,7 @@
                                                 <th data-field="RecordID"
                                                     class="datatable__cell--center datatable__cell datatable__cell--check">
                                                     <span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--all checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-all checkbox-solid"><input
                                                                 type="checkbox">&nbsp;<span></span></label></span>
                                                 </th>
                                                 <th data-field="OrderID" class="datatable__cell datatable__cell--sort">
@@ -1109,7 +1109,7 @@
                                             <tr data-row="0" class="datatable__row" style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="1">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -1122,11 +1122,11 @@
                                                         style="width: 148px;">2/12/2018</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--primary badge--inline badge--pill">Canceled</span></span>
+                                                            class="badge  badge-primary badge-inline badge-pill">Canceled</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-primary">Retail</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -1152,7 +1152,7 @@
                                                 style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="2">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -1169,7 +1169,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -1194,7 +1194,7 @@
                                             <tr data-row="2" class="datatable__row" style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="3">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -1207,11 +1207,11 @@
                                                         style="width: 148px;">5/26/2016</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--primary badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-primary badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-primary">Retail</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -1237,7 +1237,7 @@
                                                 style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="4">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -1250,11 +1250,11 @@
                                                         style="width: 148px;">7/2/2016</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -1279,7 +1279,7 @@
                                             <tr data-row="4" class="datatable__row" style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="5">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -1296,7 +1296,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -1322,7 +1322,7 @@
                                                 style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="6">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -1335,11 +1335,11 @@
                                                         style="width: 148px;">11/26/2016</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge  badge--info badge--inline badge--pill">Info</span></span>
+                                                            class="badge  badge-info badge-inline badge-pill">Info</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -1364,7 +1364,7 @@
                                             <tr data-row="6" class="datatable__row" style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="7">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -1381,7 +1381,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -1407,7 +1407,7 @@
                                                 style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="8">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -1424,7 +1424,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-danger">Online</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -1449,7 +1449,7 @@
                                             <tr data-row="8" class="datatable__row" style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="9">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -1466,7 +1466,7 @@
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--danger badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-danger badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-danger">Online</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span
@@ -1492,7 +1492,7 @@
                                                 style="left: 0px;">
                                                 <td class="datatable__cell--center datatable__cell datatable__cell--check"
                                                     data-field="RecordID"><span style="width: 20px;"><label
-                                                            class="checkbox checkbox--single checkbox--solid"><input
+                                                            class="checkbox checkbox-single checkbox-solid"><input
                                                                 type="checkbox"
                                                                 value="10">&nbsp;<span></span></label></span></td>
                                                 <td data-field="OrderID" class="datatable__cell"><span
@@ -1505,11 +1505,11 @@
                                                         style="width: 148px;">1/26/2017</span></td>
                                                 <td data-field="Status" class="datatable__cell"><span
                                                         style="width: 148px;"><span
-                                                            class="badge badge--brand badge--inline badge--pill">Pending</span></span>
+                                                            class="badge badge-brand badge-inline badge-pill">Pending</span></span>
                                                 </td>
                                                 <td data-field="Type" data-autohide-disabled="false"
                                                     class="datatable__cell"><span style="width: 148px;"><span
-                                                            class="badge badge--success badge--dot"></span>&nbsp;<span
+                                                            class="badge badge-success badge-dot"></span>&nbsp;<span
                                                             class="font-bold font-success">Direct</span></span></td>
                                                 <td class="datatable__cell--left datatable__cell" data-field="Actions"
                                                     data-autohide-disabled="false"><span

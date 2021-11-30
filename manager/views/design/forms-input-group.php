@@ -377,7 +377,7 @@
 											<div class="input-group">
 												<div class="input-group-prepend">
 													<span class="input-group-text">
-														<label class="checkbox checkbox--single checkbox--success">
+														<label class="checkbox checkbox-single checkbox-success">
 															<input type="checkbox" checked="">
 															<span></span>
 														</label>
@@ -396,7 +396,7 @@
 												<input type="text" class="form-control" aria-label="Text input with checkbox">
 												<div class="input-group-append">
 													<span class="input-group-text">
-														<label class="checkbox checkbox--single checkbox--primary">
+														<label class="checkbox checkbox-single checkbox-primary">
 															<input type="checkbox" checked="">
 															<span></span>
 														</label>
@@ -409,7 +409,7 @@
 											<div class="input-group">
 												<div class="input-group-prepend">
 													<span class="input-group-text">
-														<label class="checkbox checkbox--single">
+														<label class="checkbox checkbox-single">
 															<input type="checkbox" checked="">
 															<span></span>
 														</label>
@@ -418,7 +418,7 @@
 												<input type="text" class="form-control" aria-label="Text input with checkbox">
 												<div class="input-group-append">
 													<span class="input-group-text">
-														<label class="checkbox checkbox--single">
+														<label class="checkbox checkbox-single">
 															<input type="checkbox">
 															<span></span>
 														</label>

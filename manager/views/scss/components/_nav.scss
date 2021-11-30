@@ -44,7 +44,7 @@
                     &-bullet {
                         text-align: center;
                         flex: 0 0 10px;
-                        margin-right: 10px;
+                        margin-#{$end-direction}: 10px;
                         >span {
                             vertical-align: middle;
                             display: inline-block;
@@ -273,8 +273,8 @@
         &-fit {
             padding: 0;
             .nav__item>.nav__link {
-                padding-left: 0;
-                padding-right: 0;
+                padding-#{$start-direction}: 0;
+                padding-#{$end-direction}: 0;
             }
         }
         &-lg-space {
@@ -397,13 +397,13 @@
                     transition: all .3s;
                     padding-top: 1rem;
                     padding-bottom: 1rem;
-                    border-left: 2px solid transparent;
+                    border-#{$start-direction}: 2px solid transparent;
                 }
                 &.active .nav__link,
                 &.nav__link-active .nav__link {
                     transition: all .3s;
                     background-color: #f7f8fa;
-                    border-left: 2px solid $brand-color;
+                    border-#{$start-direction}: 2px solid $brand-color;
                 }
                 &.active .nav__link .nav__link-text,
                 &.nav__link-active .nav__link .nav__link .nav__link-text {
@@ -423,7 +423,7 @@
                 padding: .65rem 0;
                 .nav__link {
                     background-color: transparent;
-                    margin-left: 3px;
+                    margin-#{$start-direction}: 3px;
                     color: #9492a1;
                     font-size: 1.2rem;
                     padding: 0 1.1rem;
@@ -434,9 +434,9 @@
                 }
                 &.active {
                     .nav__link {
-                        border-left: 3px solid $brand-color;
+                        border-#{$start-direction}: 3px solid $brand-color;
                         color: #48465b;
-                        margin-left: 0;
+                        margin-#{$start-direction}: 0;
                         .nav__link-text {
                             color: #48465b;
                         }
@@ -456,7 +456,7 @@
             &-brand {
                 .nav__item {
                     &.active .nav__link {
-                        border-left: 3px solid $brand-color;
+                        border-#{$start-direction}: 3px solid $brand-color;
                     }
                     &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $brand-color;
@@ -466,7 +466,7 @@
             &-light {
                 .nav__item {
                     &.active .nav__link {
-                        border-left: 3px solid #fff;
+                        border-#{$start-direction}: 3px solid #fff;
                     }
                     &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: #fff;
@@ -476,7 +476,7 @@
             &-dark {
                 .nav__item {
                     &.active .nav__link {
-                        border-left: 3px solid $dark-color;
+                        border-#{$start-direction}: 3px solid $dark-color;
                     }
                     &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $dark-color;
@@ -486,7 +486,7 @@
             &-primary {
                 .nav__item {
                     &.active .nav__link {
-                        border-left: 3px solid $primary-color;
+                        border-#{$start-direction}: 3px solid $primary-color;
                     }
                     &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $primary-color;
@@ -496,7 +496,7 @@
             &-success {
                 .nav__item {
                     &.active .nav__link {
-                        border-left: 3px solid $success-color;
+                        border-#{$start-direction}: 3px solid $success-color;
                     }
                     &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $success-color;
@@ -506,7 +506,7 @@
             &-info {
                 .nav__item {
                     &.active .nav__link {
-                        border-left: 3px solid $info-color;
+                        border-#{$start-direction}: 3px solid $info-color;
                     }
                     &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $info-color;
@@ -516,7 +516,7 @@
             &-warning {
                 .nav__item {
                     &.active .nav__link {
-                        border-left: 3px solid $warning-color;
+                        border-#{$start-direction}: 3px solid $warning-color;
                     }
                     &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $warning-color;
@@ -526,7 +526,7 @@
             &-danger {
                 .nav__item {
                     &.active .nav__link {
-                        border-left: 3px solid $danger-color;
+                        border-#{$start-direction}: 3px solid $danger-color;
                     }
                     &:hover:not(.nav__item-disabled):not(.nav__item-sub):not(.nav__item-active)>.nav__link .nav__link-text {
                         color: $danger-color;

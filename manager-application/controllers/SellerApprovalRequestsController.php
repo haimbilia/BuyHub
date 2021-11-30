@@ -151,11 +151,11 @@ class SellerApprovalRequestsController extends ListingBaseController {
 
         $statusArr = array(User::SUPPLIER_REQUEST_APPROVED, User::SUPPLIER_REQUEST_CANCELLED);
         if (!in_array($post['usuprequest_status'], $statusArr)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Status_Request', $this->siteLangId));
         }
 
         if (in_array($post['usuprequest_status'], $statusArr) && in_array($supplierRequest['usuprequest_status'], $statusArr)) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Status_Request', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Status_Request', $this->siteLangId));
         }
 
         FatApp::getDb()->startTransaction();

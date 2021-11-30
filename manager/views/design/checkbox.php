@@ -100,7 +100,7 @@
 													<input type="checkbox" checked="checked"> Checked
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--disabled">
+												<label class="checkbox checkbox-disabled">
 													<input type="checkbox" disabled=""> Disabled
 													<span></span>
 												</label>
@@ -117,7 +117,7 @@
 													<input type="checkbox" checked="checked"> Checked
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--disabled">
+												<label class="checkbox checkbox-disabled">
 													<input type="checkbox"> Disabled
 													<span></span>
 												</label>
@@ -127,15 +127,15 @@
 										<div class="form-group">
 											<label>Larg Size Checkboxes</label>
 											<div class="checkbox-inline">
-												<label class="checkbox checkbox--lg">
+												<label class="checkbox checkbox-lg">
 													<input type="checkbox"> Default
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--lg">
+												<label class="checkbox checkbox-lg">
 													<input type="checkbox" checked="checked"> Checked
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--lg checkbox--disabled">
+												<label class="checkbox checkbox-lg checkbox-disabled">
 													<input type="checkbox"> Disabled
 													<span></span>
 												</label>
@@ -145,15 +145,15 @@
 										<div class="form-group">
 											<label>Square Style</label>
 											<div class="checkbox-inline">
-												<label class="checkbox checkbox--square">
+												<label class="checkbox checkbox-square">
 													<input type="checkbox"> Default
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--square">
+												<label class="checkbox checkbox-square">
 													<input type="checkbox" checked="checked"> Checked
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--square checkbox--disabled">
+												<label class="checkbox checkbox-square checkbox-disabled">
 													<input type="checkbox"> Disabled
 													<span></span>
 												</label>
@@ -163,15 +163,15 @@
 										<div class="form-group">
 											<label>Rounded Style</label>
 											<div class="checkbox-inline">
-												<label class="checkbox checkbox--rounded">
+												<label class="checkbox checkbox-rounded">
 													<input type="checkbox"> Default
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--rounded">
+												<label class="checkbox checkbox-rounded">
 													<input type="checkbox" checked="checked"> Checked
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--rounded checkbox--disabled">
+												<label class="checkbox checkbox-rounded checkbox-disabled">
 													<input type="checkbox"> Disabled
 													<span></span>
 												</label>
@@ -208,7 +208,7 @@
 														<input type="checkbox" checked="checked"> Checked
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--disabled">
+													<label class="checkbox checkbox-disabled">
 														<input type="checkbox" disabled=""> Disabled
 														<span></span>
 													</label>
@@ -227,7 +227,7 @@
 														<input type="checkbox" checked="checked"> Checked
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--disabled">
+													<label class="checkbox checkbox-disabled">
 														<input type="checkbox"> Disabled
 														<span></span>
 													</label>
@@ -285,15 +285,15 @@
 													<input type="checkbox" checked="checked"> Checked
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--disabled">
+												<label class="checkbox checkbox-disabled">
 													<input type="checkbox" disabled="disabled"> Disabled
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--success">
+												<label class="checkbox checkbox-success">
 													<input type="checkbox"> Success state
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--brand">
+												<label class="checkbox checkbox-brand">
 													<input type="checkbox"> Brand state
 													<span></span>
 												</label>
@@ -303,23 +303,23 @@
 										<div class="form-group">
 											<label>Bold Checkboxes</label>
 											<div class="checkbox-inline">
-												<label class="checkbox checkbox--bold">
+												<label class="checkbox checkbox-bold">
 													<input type="checkbox"> Default
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--bold">
+												<label class="checkbox checkbox-bold">
 													<input type="checkbox" checked="checked"> Checked
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--bold checkbox--disabled">
+												<label class="checkbox checkbox-bold checkbox-disabled">
 													<input type="checkbox" disabled="disabled"> Disabled
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--bold checkbox--success">
+												<label class="checkbox checkbox-bold checkbox-success">
 													<input type="checkbox"> Success state
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--bold checkbox--brand">
+												<label class="checkbox checkbox-bold checkbox-brand">
 													<input type="checkbox"> Brand state
 													<span></span>
 												</label>
@@ -339,7 +339,7 @@
 														<input type="checkbox" checked="checked"> Checked
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--disabled">
+													<label class="checkbox checkbox-disabled">
 														<input type="checkbox"> Disabled
 														<span></span>
 													</label>
@@ -357,23 +357,23 @@
 										<div class="form-group">
 											<label>Default Solid Checkboxes</label>
 											<div class="checkbox-inline">
-												<label class="checkbox checkbox--solid">
+												<label class="checkbox checkbox-solid">
 													<input type="checkbox"> Default
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--solid">
+												<label class="checkbox checkbox-solid">
 													<input type="checkbox" checked="checked"> Checked
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--solid checkbox--disabled">
+												<label class="checkbox checkbox-solid checkbox-disabled">
 													<input type="checkbox" disabled="disabled"> Disabled
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--solid checkbox--success">
+												<label class="checkbox checkbox-solid checkbox-success">
 													<input type="checkbox"> Success state
 													<span></span>
 												</label>
-												<label class="checkbox checkbox--solid checkbox--brand">
+												<label class="checkbox checkbox-solid checkbox-brand">
 													<input type="checkbox"> Brand state
 													<span></span>
 												</label>
@@ -407,7 +407,7 @@
 														<input type="checkbox" checked="checked"> Checked
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--disabled">
+													<label class="checkbox checkbox-disabled">
 														<input type="checkbox"> Disabled
 														<span></span>
 													</label>
@@ -427,7 +427,7 @@
 														<input type="checkbox" checked="checked"> Checked
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--disabled">
+													<label class="checkbox checkbox-disabled">
 														<input type="checkbox"> Disabled
 														<span></span>
 													</label>
@@ -447,7 +447,7 @@
 														<input type="checkbox" checked="checked"> Checked
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--disabled">
+													<label class="checkbox checkbox-disabled">
 														<input type="checkbox"> Disabled
 														<span></span>
 													</label>
@@ -467,7 +467,7 @@
 														<input type="checkbox" checked="checked"> Checked
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--disabled">
+													<label class="checkbox checkbox-disabled">
 														<input type="checkbox"> Disabled
 														<span></span>
 													</label>
@@ -487,8 +487,8 @@
 														<input type="checkbox" checked="checked"> Checked
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--disabled">
-														<input type="checkbox checkbox--disabled"> Disabled
+													<label class="checkbox checkbox-disabled">
+														<input type="checkbox checkbox-disabled"> Disabled
 														<span></span>
 													</label>
 												</div>
@@ -507,8 +507,8 @@
 														<input type="checkbox" checked="checked"> Checked
 														<span></span>
 													</label>
-													<label class="checkbox checkbox--disabled">
-														<input type="checkbox checkbox--disabled"> Disabled
+													<label class="checkbox checkbox-disabled">
+														<input type="checkbox checkbox-disabled"> Disabled
 														<span></span>
 													</label>
 												</div>

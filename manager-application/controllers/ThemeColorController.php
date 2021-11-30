@@ -72,7 +72,7 @@ class ThemeColorController extends ListingBaseController
         $this->objPrivilege->canEditThemeColor();
 
         if (empty($this->apiKey)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_API_KEY_FOR_GOOGLE_FONTS_NOT_CONFIGURED', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_API_KEY_FOR_GOOGLE_FONTS_NOT_CONFIGURED', $this->siteLangId), true);
         }
 
         $googleFonts = CacheHelper::get('googleFonts' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -86,7 +86,7 @@ class ThemeColorController extends ListingBaseController
             }
 
             if (!isset($curl->response->items)) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_UNABLE_TO_LOAD_FONTS', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_LOAD_FONTS', $this->siteLangId), true);
             }
 
             $fontsArr = json_decode(json_encode($curl->response), true);

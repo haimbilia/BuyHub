@@ -95,7 +95,7 @@
 												</g>
 											</svg> <span class="nav__link-text">Inbox</span>
 											<span class="nav__link-badge">
-												<span class="badge badge--unified-success badge--md badge--rounded badge--boldest">3</span>
+												<span class="badge badge-unified-success badge-md badge-rounded badge-boldest">3</span>
 											</span>
 										</a>
 									</li>
@@ -120,7 +120,7 @@
 												</g>
 											</svg> <span class="nav__link-text">Draft</span>
 											<span class="nav__link-badge">
-												<span class="badge badge--unified-warning badge--md badge--rounded badge--boldest">1</span>
+												<span class="badge badge-unified-warning badge-md badge-rounded badge-boldest">1</span>
 											</span>
 										</a>
 									</li>
@@ -182,7 +182,7 @@
 								<div class="inbox__toolbar inbox__toolbar--extended">
 									<div class="inbox__actions inbox__actions--expanded">
 										<div class="inbox__check">
-											<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+											<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 												<input type="checkbox">
 												<span></span>
 											</label>
@@ -387,7 +387,7 @@
 															<i class="nav__link-icon flaticon2-new-email"></i>
 															<span class="nav__link-text">Support</span>
 															<span class="nav__link-badge">
-																<span class="badge badge--success badge--rounded">5</span>
+																<span class="badge badge-success badge-rounded">5</span>
 															</span>
 														</a>
 													</li>
@@ -408,7 +408,7 @@
 									<div class="inbox__item inbox__item--unread" data-id="1" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -432,7 +432,7 @@
 												<span class="inbox__summary">Thank you for ordering UFC 240 Holloway vs Edgar Alternate camera angles...</span>
 											</div>
 											<div class="inbox__labels">
-												<span class="inbox__label badge badge--unified-brand badge--bold badge--inline">inbox</span>
+												<span class="inbox__label badge badge-unified-brand badge-bold badge-inline">inbox</span>
 											</div>
 										</div>
 										<div class="inbox__datetime" data-toggle="view">
@@ -442,7 +442,7 @@
 									<div class="inbox__item inbox__item--unread" data-id="2" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -474,7 +474,7 @@
 									<div class="inbox__item" data-id="3" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -506,7 +506,7 @@
 									<div class="inbox__item" data-id="4" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -538,7 +538,7 @@
 									<div class="inbox__item" data-id="5" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -570,7 +570,7 @@
 									<div class="inbox__item" data-id="6" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -602,7 +602,7 @@
 									<div class="inbox__item inbox__item--unread" data-id="7" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -634,7 +634,7 @@
 									<div class="inbox__item" data-id="8" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -666,7 +666,7 @@
 									<div class="inbox__item" data-id="9" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -697,7 +697,7 @@
 									<div class="inbox__item" data-id="10" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -728,7 +728,7 @@
 									<div class="inbox__item" data-id="11" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -759,7 +759,7 @@
 									<div class="inbox__item" data-id="12" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -790,7 +790,7 @@
 									<div class="inbox__item" data-id="13" data-type="inbox">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -822,7 +822,7 @@
 									<div class="inbox__item inbox__item--unread" data-id="14" data-type="marked">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -853,7 +853,7 @@
 									<div class="inbox__item" data-id="15" data-type="marked">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -884,7 +884,7 @@
 									<div class="inbox__item" data-id="61" data-type="marked">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -916,7 +916,7 @@
 									<div class="inbox__item inbox__item--unread" data-id="71" data-type="marked">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -948,7 +948,7 @@
 									<div class="inbox__item" data-id="8" data-type="marked">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -980,7 +980,7 @@
 									<div class="inbox__item" data-id="9" data-type="marked">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1011,7 +1011,7 @@
 									<div class="inbox__item" data-id="10" data-type="marked">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1042,7 +1042,7 @@
 									<div class="inbox__item" data-id="11" data-type="marked">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1074,7 +1074,7 @@
 									<div class="inbox__item" data-id="16" data-type="draft">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1106,7 +1106,7 @@
 									<div class="inbox__item" data-id="17" data-type="draft">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1137,7 +1137,7 @@
 									<div class="inbox__item" data-id="18" data-type="draft">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1169,7 +1169,7 @@
 									<div class="inbox__item" data-id="19" data-type="sent">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1200,7 +1200,7 @@
 									<div class="inbox__item inbox__item--unread" data-id="20" data-type="sent">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1231,7 +1231,7 @@
 									<div class="inbox__item" data-id="21" data-type="sent">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1263,7 +1263,7 @@
 									<div class="inbox__item inbox__item--unread" data-id="22" data-type="trash">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1295,7 +1295,7 @@
 									<div class="inbox__item" data-id="23" data-type="trash">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1327,7 +1327,7 @@
 									<div class="inbox__item inbox__item--unread" data-id="24" data-type="trash">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1359,7 +1359,7 @@
 									<div class="inbox__item" data-id="25" data-type="trash">
 										<div class="inbox__info">
 											<div class="inbox__actions">
-												<label class="checkbox checkbox--single checkbox--tick checkbox--brand">
+												<label class="checkbox checkbox-single checkbox-tick checkbox-brand">
 													<input type="checkbox">
 													<span></span>
 												</label>
@@ -1465,10 +1465,10 @@
 								<div class="inbox__subject">
 									<div class="inbox__title">
 										<h3 class="inbox__text">Trip Reminder. Thank you for flying with us!</h3>
-										<span class="inbox__label badge badge--unified-brand badge--bold badge--inline">
+										<span class="inbox__label badge badge-unified-brand badge-bold badge-inline">
 											inbox
 										</span>
-										<span class="inbox__label badge badge--unified-danger badge--bold badge--inline">
+										<span class="inbox__label badge badge-unified-danger badge-bold badge-inline">
 											important
 										</span>
 									</div>
@@ -1493,7 +1493,7 @@
 													<a href="#" class="inbox__name">Chris Muller</a>
 
 													<div class="inbox__status">
-														<span class="badge badge--success badge--dot"></span> 1 Day ago
+														<span class="badge badge-success badge-dot"></span> 1 Day ago
 													</div>
 												</div>
 												<div class="inbox__details">
@@ -1584,7 +1584,7 @@
 													<a href="#" class="inbox__name">Lina Nilson</a>
 
 													<div class="inbox__status">
-														<span class="badge badge--success badge--dot"></span> 2 Day ago
+														<span class="badge badge-success badge-dot"></span> 2 Day ago
 													</div>
 												</div>
 												<div class="inbox__details">
@@ -1670,7 +1670,7 @@
 													<a href="#" class="inbox__name">Sean Stone</a>
 
 													<div class="inbox__status">
-														<span class="badge badge--success badge--dot"></span> 1 Day ago
+														<span class="badge badge-success badge-dot"></span> 1 Day ago
 													</div>
 												</div>
 												<div class="inbox__details">

@@ -243,8 +243,8 @@
                                             <td data-field="Color" class="datatable__cell"><span style="width: 148px;">Orange</span></td>
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$22672.60</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2016-11-28</span></td>
-                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--primary badge--inline badge--pill">Canceled</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--success badge--dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
+                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-primary badge-inline badge-pill">Canceled</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                         </tr>
                                         <tr data-row="1" class="datatable__row datatable__row--even" style="left: 0px;">
                                             <td class="datatable__cell datatable__toggle-detail"><a class="datatable__toggle-detail" href=""><i class="fa fa-caret-right"></i></a></td>
@@ -254,8 +254,8 @@
                                             <td data-field="Color" class="datatable__cell"><span style="width: 148px;">Goldenrod</span></td>
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$55141.29</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2017-04-29</span></td>
-                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--primary badge--inline badge--pill">Canceled</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
+                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-primary badge-inline badge-pill">Canceled</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                         </tr>
                                         <tr data-row="2" class="datatable__row" style="left: 0px;">
                                             <td class="datatable__cell datatable__toggle-detail"><a class="datatable__toggle-detail" href=""><i class="fa fa-caret-right"></i></a></td>
@@ -266,7 +266,7 @@
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$70991.52</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2017-03-16</span></td>
                                             <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-danger badge-inline badge-pill">Danger</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                         </tr>
                                         <tr data-row="3" class="datatable__row datatable__row--even" style="left: 0px;">
                                             <td class="datatable__cell datatable__toggle-detail"><a class="datatable__toggle-detail" href=""><i class="fa fa-caret-right"></i></a></td>
@@ -277,7 +277,7 @@
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$42615.31</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2016-09-04</span></td>
                                             <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-danger badge-inline badge-pill">Delivered</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                         </tr>
                                         <tr data-row="4" class="datatable__row" style="left: 0px;">
                                             <td class="datatable__cell datatable__toggle-detail"><a class="datatable__toggle-detail" href=""><i class="fa fa-caret-right"></i></a></td>
@@ -287,8 +287,8 @@
                                             <td data-field="Color" class="datatable__cell"><span style="width: 148px;">Teal</span></td>
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$74919.63</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2017-09-21</span></td>
-                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--success badge--inline badge--pill">Success</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
+                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-success badge-inline badge-pill">Success</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                         </tr>
                                         <tr data-row="5" class="datatable__row datatable__row--even" style="left: 0px;">
                                             <td class="datatable__cell datatable__toggle-detail"><a class="datatable__toggle-detail" href=""><i class="fa fa-caret-right"></i></a></td>
@@ -298,8 +298,8 @@
                                             <td data-field="Color" class="datatable__cell"><span style="width: 148px;">Crimson</span></td>
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$72908.80</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2017-04-03</span></td>
-                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--info badge--inline badge--pill">Info</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-info badge-inline badge-pill">Info</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                         </tr>
                                         <tr data-row="6" class="datatable__row" style="left: 0px;">
                                             <td class="datatable__cell datatable__toggle-detail"><a class="datatable__toggle-detail" href=""><i class="fa fa-caret-right"></i></a></td>
@@ -309,8 +309,8 @@
                                             <td data-field="Color" class="datatable__cell"><span style="width: 148px;">Goldenrod</span></td>
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$13569.00</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2016-03-22</span></td>
-                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--info badge--inline badge--pill">Info</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-info badge-inline badge-pill">Info</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                         </tr>
                                         <tr data-row="7" class="datatable__row datatable__row--even" style="left: 0px;">
                                             <td class="datatable__cell datatable__toggle-detail"><a class="datatable__toggle-detail" href=""><i class="fa fa-caret-right"></i></a></td>
@@ -320,8 +320,8 @@
                                             <td data-field="Color" class="datatable__cell"><span style="width: 148px;">Aquamarine</span></td>
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$22471.73</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2016-04-17</span></td>
-                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--brand badge--inline badge--pill">Pending</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
+                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-brand badge-inline badge-pill">Pending</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                         </tr>
                                         <tr data-row="8" class="datatable__row" style="left: 0px;">
                                             <td class="datatable__cell datatable__toggle-detail"><a class="datatable__toggle-detail" href=""><i class="fa fa-caret-right"></i></a></td>
@@ -331,8 +331,8 @@
                                             <td data-field="Color" class="datatable__cell"><span style="width: 148px;">Green</span></td>
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$43149.39</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2016-05-27</span></td>
-                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--success badge--inline badge--pill">Success</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--danger badge--dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
+                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-success badge-inline badge-pill">Success</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                         </tr>
                                         <tr data-row="9" class="datatable__row datatable__row--even" style="left: 0px;">
                                             <td class="datatable__cell datatable__toggle-detail"><a class="datatable__toggle-detail" href=""><i class="fa fa-caret-right"></i></a></td>
@@ -342,8 +342,8 @@
                                             <td data-field="Color" class="datatable__cell"><span style="width: 148px;">Turquoise</span></td>
                                             <td data-field="Deposit Paid" class="datatable__cell"><span style="width: 148px;">$39286.74</span></td>
                                             <td data-field="Order Date" class="datatable__cell" style="display: none;"><span style="width: 148px;">2016-07-23</span></td>
-                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge--info badge--inline badge--pill">Info</span></span></td>
-                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge--primary badge--dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
+                                            <td data-field="Status" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge  badge-info badge-inline badge-pill">Info</span></span></td>
+                                            <td data-field="Type" data-autohide-disabled="false" class="datatable__cell"><span style="width: 148px;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                         </tr>
                                     </tbody>
                                 </table>

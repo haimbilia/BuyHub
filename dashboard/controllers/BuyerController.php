@@ -319,7 +319,7 @@ class BuyerController extends BuyerBaseController
         }
 
         $cancelledDate = "";
-        if (true == $primaryOrderDisplay && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']) {
+        if (true == $primaryOrderDisplay && FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id'] && !empty($orderTimeLine)) {
             $cancelledDate = current($orderTimeLine[$childOrderDetail['orderstatus_id']])['oshistory_date_added'];
         }
 
@@ -330,7 +330,6 @@ class BuyerController extends BuyerBaseController
 
         $frm = $this->getTransferBankForm($this->siteLangId, $orderId);
         $this->set('frm', $frm);
-
         $this->set('highlightEnabled', $highlightEnabled);
         $this->set('currentStatus', $currentStatus);
         $this->set('orderProductStatusArr', $orderProductStatusArr);
@@ -3144,6 +3143,5 @@ class BuyerController extends BuyerBaseController
                 FatUtility::dieWithError(Message::getHtml());
                 break;
         }
-
     }
 }
