@@ -1,7 +1,6 @@
-
+var defaultController = controllerName;
 (function () {
     var transactionUserId = 0;
-    var defaultController = controllerName;
     transactions = function (userId) {
         transactionUserId = userId;
         $.facebox(function () {
@@ -54,7 +53,6 @@
         if (!$(frm).validate()) {
             return;
         }
-
         $.ykmodal(fcom.getLoader());
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
@@ -66,7 +64,6 @@
                 return false;
             }
             $.ykmsg.success(t.msg);
-            console.log(controllerName);
             if (controllerName == 'Transactions') {
                 frm.reset();
             } else {
@@ -92,3 +89,15 @@
     };
 
 })();
+
+$(document).bind("close.ykmodal", function () {
+    console.log('close.ykmodal');
+    controllerName = defaultController;
+    $.ykmodal.close();
+});
+$(document).on("hidden.bs.modal", "." + $.ykmodal.element, function () {
+    console.log('hidden.bs.modal');
+    controllerName = defaultController;
+    $.ykmodal.close()
+});
+
