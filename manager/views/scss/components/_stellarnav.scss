@@ -97,7 +97,7 @@
         }
         >li.drop-left {
             >ul {
-                right: 0;
+                #{$end-direction}: 0;
             }
         }
     }
@@ -150,16 +150,16 @@
         position: fixed;
         width: 100%;
         top: 0;
-        left: 0;
+        #{$start-direction}: 0;
         z-index: 9999;
     }
     li.has-sub {
         >a {
             &:after {
                 content: '';
-                margin-left: 10px;
-                border-left: 6px solid transparent;
-                border-right: 6px solid transparent;
+                margin-#{$start-direction}: 10px;
+                border-#{$start-direction}: 6px solid transparent;
+                border-#{$end-direction}: 6px solid transparent;
                 border-top: 6px solid currentcolor;
                 display: inline-block;
             }
@@ -169,11 +169,11 @@
         li.has-sub {
             >a {
                 &:after {
-                    margin-left: 10px;
+                    margin-#{$start-direction}: 10px;
                     float: right;
                     border-top: 6px solid transparent;
                     border-bottom: 6px solid transparent;
-                    border-left: 6px solid currentcolor;
+                    border-#{$start-direction}: 6px solid currentcolor;
                     position: relative;
                     top: 0;
                 }
@@ -185,11 +185,11 @@
             >a {
                 &:after {
                     float: left;
-                    margin-right: 10px;
-                    border-left: 0;
+                    margin-#{$end-direction}: 10px;
+                    border-#{$start-direction}: 0;
                     border-top: 6px solid transparent;
                     border-bottom: 6px solid transparent;
-                    border-right: 6px solid currentcolor;
+                    border-#{$end-direction}: 6px solid currentcolor;
                 }
             }
         }
@@ -218,7 +218,7 @@
         display: none;
         position: absolute;
         top: 0;
-        right: 0;
+        #{$end-direction}: 0;
         padding: 0;
         width: 48px;
         height: 48px;
@@ -330,7 +330,7 @@
     .menu-toggle {
         span.bars {
             display: inline-block;
-            margin-right: 7px;
+            margin-#{$end-direction}: 7px;
             position: relative;
             top: 3px;
             span {
@@ -406,15 +406,15 @@
             }
         }
         .third {
-            border-left: 1px solid rgba(0, 0, 0, .15);
+            border-#{$start-direction}: 1px solid rgba(0, 0, 0, .15);
             &:first-child {
-                border-left: 0;
+                border-#{$start-direction}: 0;
             }
         }
         .half {
-            border-left: 1px solid rgba(0, 0, 0, .15);
+            border-#{$start-direction}: 1px solid rgba(0, 0, 0, .15);
             &:first-child {
-                border-left: 0;
+                border-#{$start-direction}: 0;
             }
         }
         .menu-toggle {
@@ -467,15 +467,15 @@
             }
         }
         .third {
-            border-left: 1px solid rgba(255, 255, 255, .15);
+            border-#{$start-direction}: 1px solid rgba(255, 255, 255, .15);
             &:first-child {
-                border-left: 0;
+                border-#{$start-direction}: 0;
             }
         }
         .half {
-            border-left: 1px solid rgba(255, 255, 255, .15);
+            border-#{$start-direction}: 1px solid rgba(255, 255, 255, .15);
             &:first-child {
-                border-left: 0;
+                border-#{$start-direction}: 0;
             }
         }
         .menu-toggle {
@@ -596,7 +596,7 @@
             display: inline-block;
         }
         li.call-btn-mobile {
-            border-right: 1px solid rgba(255, 255, 255, .1);
+            border-#{$end-direction}: 1px solid rgba(255, 255, 255, .1);
             box-sizing: border-box;
             display: inline-block;
             width: 50%;
@@ -613,14 +613,14 @@
             display: block;
             width: 100%;
             text-transform: uppercase;
-            border-right: 0;
+            border-#{$end-direction}: 0;
             text-align: left;
         }
         li.location-btn-mobile.full {
             display: block;
             width: 100%;
             text-transform: uppercase;
-            border-right: 0;
+            border-#{$end-direction}: 0;
             text-align: left;
         }
         li.has-sub {
@@ -655,7 +655,7 @@
                 background: rgba(255, 255, 255, 1);
             }
             li.call-btn-mobile {
-                border-right: 1px solid rgba(0, 0, 0, .1);
+                border-#{$end-direction}: 1px solid rgba(0, 0, 0, .1);
             }
         }
         &.dark {
@@ -670,7 +670,7 @@
             position: absolute;
             width: 100%;
             top: 0;
-            left: 0;
+            #{$start-direction}: 0;
             z-index: 9999;
         }
         &.right {
@@ -683,7 +683,7 @@
                 overflow-x: hidden;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
-                right: 0;
+                #{$end-direction}: 0;
             }
             .close-menu {
                 display: inline-block;
@@ -727,7 +727,7 @@
                 overflow-x: hidden;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
-                left: 0;
+                #{$start-direction}: 0;
             }
             .close-menu {
                 display: inline-block;
@@ -773,7 +773,7 @@
             li {
                 display: inline-block;
                 vertical-align: top;
-                margin-left: -4px;
+                margin-#{$start-direction}: -4px;
                 li {
                     display: block;
                     position: relative;

@@ -28,7 +28,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         }
         &_left {
             position: sticky;
-            left: 0;
+            #{$start-direction}: 0;
             z-index: 2;
             background-color: hsla(0, 0%, 100%, .8);
             backdrop-filter: blur(3px);
@@ -36,7 +36,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
             &:after {
                 position: absolute;
                 top: 0;
-                right: 0;
+                #{$end-direction}: 0;
                 bottom: -1px;
                 width: 30px;
                 transform: translateX(100%);
@@ -48,7 +48,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         }
         &_right {
             position: sticky;
-            right: 0;
+            #{$end-direction}: 0;
             z-index: 2;
             background-color: hsla(0, 0%, 100%, .8);
             backdrop-filter: blur(3px);
@@ -57,7 +57,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                 position: absolute;
                 top: 0;
                 bottom: -1px;
-                left: 0;
+                #{$start-direction}: 0;
                 width: 30px;
                 transform: translateX(-100%);
                 transition: box-shadow 0.3s;

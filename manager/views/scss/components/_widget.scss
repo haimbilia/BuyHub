@@ -64,7 +64,7 @@ $widget:'widget';
         #{$self}__info {
             display: flex;
             flex-direction: column;
-            padding-left: 0.23rem 0 0 0.3rem;
+            padding-#{$start-direction}: 0.23rem 0 0 0.3rem;
             #{$self}__title {
                 font-weight: 500;
                 margin: 0;
@@ -171,7 +171,7 @@ $widget:'widget';
                 }
             }
             #{$self}__info {
-                padding-left: 1rem;
+                padding-#{$start-direction}: 1rem;
                 #{$self}__username {
                     font-weight: 500;
                     color: $txt-gray;
@@ -219,7 +219,7 @@ $widget:'widget';
         padding-bottom: 1rem;
         border-bottom: $border;
         #{$self}__pic {
-            padding-right: 1rem;
+            padding-#{$end-direction}: 1rem;
             img {
                 width: 2.5rem;
                 border-radius: 4px;
@@ -248,12 +248,12 @@ $widget:'widget';
             }
         }
         #{$self}__img {
-            margin-right: 0.5rem;
+            margin-#{$end-direction}: 0.5rem;
         }
         #{$self}__info {
             display: flex;
             flex-direction: column;
-            padding-right: 1.25rem;
+            padding-#{$end-direction}: 1.25rem;
             flex-grow: 1;
             #{$self}__username {
                 font-weight: 500;
@@ -280,7 +280,7 @@ $widget:'widget';
             color: $txt-gray;
             font-size: 1rem;
             font-weight: 500;
-            padding-right: 1.25rem;
+            padding-#{$end-direction}: 1.25rem;
             flex-grow: 1;
             transition: color 0.3s ease;
             &:hover {
@@ -300,7 +300,7 @@ $widget:'widget';
         }
         #{$self}__icon {
             $selfIcon: &;
-            padding-right: 1.25rem;
+            padding-#{$end-direction}: 1.25rem;
             >i {
                 font-size: 1.6rem;
                 text-align: right;
@@ -331,7 +331,7 @@ $widget:'widget';
             width: 50%;
             #{$self}__progress {
                 flex: 1;
-                padding-right: 1.5rem;
+                padding-#{$end-direction}: 1.5rem;
                 #{$self}__stats {
                     display: flex;
                     justify-content: space-between;
@@ -392,7 +392,7 @@ $widget:'widget';
             display: flex;
             align-items: center;
             #{$self}__pic {
-                padding-right: 1.25rem;
+                padding-#{$end-direction}: 1.25rem;
                 img {
                     max-width: 8.5rem;
                     border-radius: 4px;
@@ -419,7 +419,7 @@ $widget:'widget';
                 span {
                     &:nth-child(even) {
                         font-weight: 500;
-                        margin-right: 0.71rem;
+                        margin-#{$end-direction}: 0.71rem;
                     }
                 }
             }
@@ -427,7 +427,7 @@ $widget:'widget';
                 display: flex;
                 flex-direction: column;
                 &:first-child {
-                    padding-right: 3rem;
+                    padding-#{$end-direction}: 3rem;
                 }
                 #{$self}__number {
                     font-size: 1.3rem;
@@ -439,7 +439,7 @@ $widget:'widget';
                 flex-grow: 1;
                 text-align: right;
                 justify-content: flex-end;
-                padding-left: 1rem;
+                padding-#{$start-direction}: 1rem;
             }
         }
         &:last-child {
@@ -516,7 +516,7 @@ $widget:'widget';
             }
         }
         #{$self}__info {
-            padding-left: 1rem;
+            padding-#{$start-direction}: 1rem;
             #{$self}__username {
                 color: $txt-gray;
                 font-weight: 500;
@@ -640,18 +640,18 @@ $widget:'widget';
                 border-bottom: $border;
                 >td {
                     border: 0;
-                    padding-left: 0;
-                    padding-right: 0.5rem;
+                    padding-#{$start-direction}: 0;
+                    padding-#{$end-direction}: 0.5rem;
                     padding-top: 20px;
                     vertical-align: top;
                     color: $txt-gray;
                     >label {
-                        right: 0;
+                        #{$end-direction}: 0;
                         top: 0.5rem;
                         vertical-align: top;
                     }
                     &:last-child {
-                        padding-right: 0;
+                        padding-#{$end-direction}: 0;
                     }
                     #{$self}__chart {
                         position: relative;
@@ -728,7 +728,7 @@ $widget:'widget';
                         font-size: 1.3rem;
                         font-weight: 700;
                         color: $txt-gray;
-                        padding-left: 1rem;
+                        padding-#{$start-direction}: 1rem;
                     }
                 }
             }
@@ -753,12 +753,12 @@ $widget:'widget';
         #{$self}__desc {
             color: $txt-gray;
             text-align: right;
-            padding-right: 1rem;
+            padding-#{$end-direction}: 1rem;
             font-weight: 400;
         }
         #{$self}__text {
             color: $txt-gray;
-            padding-left: 1rem;
+            padding-#{$start-direction}: 1rem;
             font-weight: 400;
             &--bold {
                 color: $txt-gray;
@@ -781,7 +781,7 @@ $widget:'widget';
         }
     }
     &__details {
-        margin-right: 10px;
+        margin-#{$end-direction}: 10px;
         border-top: 0.07rem dashed #ebedf2;
     }
 }
@@ -809,7 +809,7 @@ $widget:'widget';
         align-items: center;
     }
     #{$self}__legends {
-        padding-left: 2rem;
+        padding-#{$start-direction}: 2rem;
         flex-grow: 1;
         #{$self}__legend {
             display: flex;
@@ -823,7 +823,7 @@ $widget:'widget';
                 color: $txt-gray;
                 font-weight: 500;
                 flex: 1;
-                padding-left: 1rem;
+                padding-#{$start-direction}: 1rem;
             }
             &:not(:first-child) {
                 &:not(:last-child) {
@@ -839,8 +839,8 @@ $widget:'widget';
             justify-content: center;
             align-items: center;
             position: absolute;
-            left: 0;
-            right: 0;
+            #{$start-direction}: 0;
+            #{$end-direction}: 0;
             bottom: 0;
             top: 0;
             font-size: 2.2rem;
@@ -909,7 +909,7 @@ $widget:'widget';
     display: flex;
     #{$self}__items {
         flex: 1;
-        padding-right: 1rem;
+        padding-#{$end-direction}: 1rem;
         width: 50%;
         #{$self}__item {
             display: flex;
@@ -947,11 +947,11 @@ $widget:'widget';
         display: flex;
         align-items: center;
         flex: 1;
-        padding-left: 1rem;
+        padding-#{$start-direction}: 1rem;
         width: 50%;
         #{$self}__legends {
             font-weight: 1;
-            padding-left: 2rem;
+            padding-#{$start-direction}: 2rem;
             #{$self}__legend {
                 #{$self}__bullet {
                     width: 1.5rem;
@@ -988,8 +988,8 @@ $widget:'widget';
                     justify-content: center;
                     align-items: center;
                     position: absolute;
-                    left: 0;
-                    right: 0;
+                    #{$start-direction}: 0;
+                    #{$end-direction}: 0;
                     bottom: 0;
                     top: 0;
                     font-size: 2.2rem;
@@ -1037,7 +1037,7 @@ $widget:'widget';
                         font-size: 2.6rem;
                     }
                     svg {
-                        margin-left: -4px;
+                        margin-#{$start-direction}: -4px;
                         width: 38px;
                         height: 38px;
                     }
@@ -1078,8 +1078,8 @@ $widget:'widget';
             position: absolute;
             top: 70%;
             bottom: 0;
-            left: 0;
-            right: 0;
+            #{$start-direction}: 0;
+            #{$end-direction}: 0;
             background: -webkit-gradient(linear, left top, left bottom, color-stop(20%, rgba(0, 0, 0, 0)), color-stop(40%, rgba(0, 0, 0, 0.1)), color-stop(90%, rgba(0, 0, 0, 0.5))) no-repeat scroll 0 0;
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0.5) 90%) no-repeat scroll 0 0;
         }
@@ -1088,7 +1088,7 @@ $widget:'widget';
             bottom: 0;
             display: block;
             z-index: 1;
-            padding-left: 25px;
+            padding-#{$start-direction}: 25px;
             padding-bottom: 12.5px;
             color: $txt-gray;
         }
@@ -1112,7 +1112,7 @@ $widget:'widget';
                 }
             }
             #{$self}__info {
-                padding-left: 1rem;
+                padding-#{$start-direction}: 1rem;
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
@@ -1214,7 +1214,7 @@ $widget:'widget';
             display: flex;
             align-items: center;
             flex: 1;
-            padding-left: 2rem;
+            padding-#{$start-direction}: 2rem;
             margin-top: 1.5rem;
             #{$self}__icon {
                 display: flex;
@@ -1228,7 +1228,7 @@ $widget:'widget';
                 }
             }
             #{$self}__info {
-                padding-left: 1rem;
+                padding-#{$start-direction}: 1rem;
                 flex: 1;
                 #{$self}__title {
                     display: block;
@@ -1281,7 +1281,7 @@ $widget:'widget';
         #{$self}__stats {
             font-size: 1.75rem;
             font-weight: 500;
-            padding-left: 0.5rem;
+            padding-#{$start-direction}: 0.5rem;
         }
     }
     .progress {
@@ -1319,7 +1319,7 @@ $widget:'widget';
     #{$self}__subtitle {
         color: $txt-gray;
         font-size: 1.1rem;
-        padding-left: 1rem;
+        padding-#{$start-direction}: 1rem;
     }
     #{$self}__items {
         display: flex;
@@ -1423,7 +1423,7 @@ $widget:'widget';
                 font-size: 4.5rem;
                 >span {
                     font-size: 2.5rem;
-                    padding-right: 0.4rem;
+                    padding-#{$end-direction}: 0.4rem;
                 }
             }
         }
@@ -1524,8 +1524,8 @@ $widget:'widget';
                     justify-content: center;
                     align-items: center;
                     position: absolute;
-                    left: 0;
-                    right: 0;
+                    #{$start-direction}: 0;
+                    #{$end-direction}: 0;
                     bottom: 0;
                     top: 0;
                     font-size: 2.2rem;
@@ -1575,7 +1575,7 @@ $widget:'widget';
                         transition: color 0.3s ease;
                         >i {
                             font-size: 2.2rem;
-                            margin-right: 0;
+                            margin-#{$end-direction}: 0;
                             padding-bottom: 1rem;
                             padding-top: 0.4rem;
                         }
@@ -1848,7 +1848,7 @@ $widget:'widget';
             }
             #{$self}__progress {
                 flex: 1;
-                padding-right: 3rem;
+                padding-#{$end-direction}: 3rem;
                 #{$self}__stats {
                     display: flex;
                     justify-content: space-between;
@@ -1925,7 +1925,7 @@ $widget:'widget';
                 border-bottom: $border;
                 #{$self}__pic {
                     width: 8rem;
-                    margin-right: 2rem;
+                    margin-#{$end-direction}: 2rem;
                     border-radius: 4px;
                 }
                 #{$self}__content {
@@ -1957,7 +1957,7 @@ $widget:'widget';
                             font-size: 1.2rem;
                             font-weight: 600;
                             color: #595d6e;
-                            padding-left: 1rem;
+                            padding-#{$start-direction}: 1rem;
                         }
                     }
                 }
@@ -2015,7 +2015,7 @@ $widget:'widget';
             }
         }
         .#{$widget}__content {
-            padding-left: 1.6rem;
+            padding-#{$start-direction}: 1.6rem;
             .#{$widget}__section {
                 .#{$widget}__username {
                     font-size: 1.3rem;
@@ -2027,7 +2027,7 @@ $widget:'widget';
                     }
                     i {
                         font-size: 1.1rem;
-                        padding-left: 0.4rem;
+                        padding-#{$start-direction}: 0.4rem;
                     }
                 }
                 .#{$widget}__subtitle {
@@ -2041,7 +2041,7 @@ $widget:'widget';
             .#{$widget}__action {
                 margin-top: 1rem;
                 .btn {
-                    margin-right: 0.4rem;
+                    margin-#{$end-direction}: 0.4rem;
                     font-weight: 600;
                     padding: 0.3rem 1rem;
                 }
@@ -2099,7 +2099,7 @@ $widget:'widget';
                     .#{$widget}__desc {
                         color: $txt-gray;
                         font-weight: 500;
-                        padding-left: 0.3rem;
+                        padding-#{$start-direction}: 0.3rem;
                     }
                 }
                 &:hover {
@@ -2203,7 +2203,7 @@ $widget:'widget';
             }
         }
         .#{$widget}__info {
-            padding-left: 1rem;
+            padding-#{$start-direction}: 1rem;
             .#{$widget}__username {
                 font-size: 1.4rem;
                 color: $txt-body;
@@ -2229,7 +2229,7 @@ $widget:'widget';
             color: $txt-gray;
             font-weight: 400;
             a {
-                padding-right: 0.3rem;
+                padding-#{$end-direction}: 0.3rem;
             }
         }
         .#{$widget}__content {
@@ -2247,7 +2247,7 @@ $widget:'widget';
                     }
                 }
                 .#{$widget}__details {
-                    padding-left: 1rem;
+                    padding-#{$start-direction}: 1rem;
                     .#{$widget}__title {
                         display: block;
                         color: $txt-gray;
@@ -2351,7 +2351,7 @@ $widget:'widget';
         }
         .#{$widget}__content {
             width: 100%;
-            padding-left: 1.7rem;
+            padding-#{$start-direction}: 1.7rem;
             .#{$widget}__head {
                 display: flex;
                 justify-content: space-between;
@@ -2373,20 +2373,20 @@ $widget:'widget';
                     i {
                         font-size: 1.2rem;
                         color: #57c974;
-                        padding-left: 0.5rem;
+                        padding-#{$start-direction}: 0.5rem;
                     }
                 }
                 .#{$widget}__action {
                     .btn {
                         font-weight: 600;
-                        margin-left: 0.5rem;
+                        margin-#{$start-direction}: 0.5rem;
                     }
                 }
             }
             .#{$widget}__subhead {
                 padding: 0.6rem 0 0.8rem 0;
                 a {
-                    padding-right: 2rem;
+                    padding-#{$end-direction}: 2rem;
                     color: $txt-gray;
                     font-weight: 500;
                     &:hover {
@@ -2394,7 +2394,7 @@ $widget:'widget';
                         transition: color 0.3s ease;
                     }
                     i {
-                        padding-right: 0.5rem;
+                        padding-#{$end-direction}: 0.5rem;
                     }
                 }
             }
@@ -2404,7 +2404,7 @@ $widget:'widget';
                 .#{$widget}__desc {
                     color: $txt-gray;
                     font-weight: 400;
-                    padding-right: 1rem;
+                    padding-#{$end-direction}: 1rem;
                     -webkit-box-flex: 1;
                     -ms-flex-positive: 1;
                     flex-grow: 1;
@@ -2417,12 +2417,12 @@ $widget:'widget';
                     width: 100%;
                     margin: 0.1rem 0;
                     .#{$widget}__text {
-                        padding-right: 1rem;
+                        padding-#{$end-direction}: 1rem;
                         color: $txt-gray;
                         font-weight: 500;
                     }
                     .#{$widget}__stats {
-                        padding-left: 1rem;
+                        padding-#{$start-direction}: 1rem;
                         color: $txt-body;
                         font-weight: 600;
                         font-size: 1.1rem;
@@ -2451,7 +2451,7 @@ $widget:'widget';
                 }
             }
             .#{$widget}__details {
-                padding-left: 1rem;
+                padding-#{$start-direction}: 1rem;
                 .#{$widget}__title {
                     display: block;
                     color: $txt-gray;
@@ -2475,7 +2475,7 @@ $widget:'widget';
                     }
                 }
                 .section__content {
-                    padding-left: 0.7rem;
+                    padding-#{$start-direction}: 0.7rem;
                 }
             }
         }
@@ -2618,7 +2618,7 @@ $widget:'widget';
             -webkit-box-flex: 3;
             -ms-flex: 3;
             flex: 3;
-            margin-left: 1rem;
+            margin-#{$start-direction}: 1rem;
             .#{$widget}__section {
                 display: flex;
                 align-items: center;
@@ -2632,7 +2632,7 @@ $widget:'widget';
                     }
                 }
                 .badge {
-                    margin-left: 0.5rem;
+                    margin-#{$start-direction}: 0.5rem;
                 }
             }
             .#{$widget}__desc {
@@ -2674,7 +2674,7 @@ $widget:'widget';
                         max-width: 62px;
                         height: 62px;
                         margin-top: -0.5rem;
-                        margin-left: -0.5rem;
+                        margin-#{$start-direction}: -0.5rem;
                     }
                     img {
                         width: 65px;
@@ -2733,7 +2733,7 @@ $widget:'widget';
                     width: 100%;
                     margin: 1.4rem 0 0.5rem 0;
                     .#{$widget}__stat {
-                        padding-left: 0.7rem;
+                        padding-#{$start-direction}: 0.7rem;
                         color: #48465b;
                         font-weight: 600;
                     }
@@ -2744,7 +2744,7 @@ $widget:'widget';
                     }
                 }
                 &:last-child {
-                    padding-left: 1rem;
+                    padding-#{$start-direction}: 1rem;
                 }
             }
         }
@@ -2760,7 +2760,7 @@ $widget:'widget';
                 width: 100%;
                 margin: 0 1rem;
                 .#{$widget}__stat {
-                    padding-left: 0.7rem;
+                    padding-#{$start-direction}: 0.7rem;
                     color: #48465b;
                     font-weight: 600;
                 }
@@ -2777,7 +2777,7 @@ $widget:'widget';
             display: flex;
             flex-wrap: wrap;
             .#{$widget}__details {
-                margin-right: 3.7rem;
+                margin-#{$end-direction}: 3.7rem;
                 padding-top: 1rem;
                 display: flex;
                 flex-direction: column;
@@ -2798,7 +2798,7 @@ $widget:'widget';
                     margin: 0.3rem 0 0 7px;
                 }
                 &:last-child {
-                    margin-right: 0;
+                    margin-#{$end-direction}: 0;
                     .#{$widget}__subtitle {
                         margin-top: 0rem;
                     }
@@ -2831,10 +2831,10 @@ $widget:'widget';
                     }
                     .#{$widget}__value {
                         font-weight: 700;
-                        padding-left: 0.6rem;
+                        padding-#{$start-direction}: 0.6rem;
                     }
                     &:last-child {
-                        padding-left: 1.7rem;
+                        padding-#{$start-direction}: 1.7rem;
                     }
                 }
             }
@@ -2852,7 +2852,7 @@ $widget:'widget';
         #{$self}__item {
             #{$self}__content {
                 #{$self}__pic {
-                    padding-right: 0.5rem;
+                    padding-#{$end-direction}: 0.5rem;
                     img {
                         max-width: 4rem;
                     }
@@ -2863,7 +2863,7 @@ $widget:'widget';
                         font-weight: 500;
                     }
                     &:first-child {
-                        padding-right: 1rem;
+                        padding-#{$end-direction}: 1rem;
                     }
                 }
             }
@@ -2873,7 +2873,7 @@ $widget:'widget';
         $self: &;
         padding: 15px;
         #{$self}__legends {
-            padding-left: 0.5rem;
+            padding-#{$start-direction}: 0.5rem;
         }
     }
     .#{$widget}19 {
@@ -2910,7 +2910,7 @@ $widget:'widget';
                 .#{$widget}__action {
                     margin-top: 0.5rem;
                     .btn {
-                        margin-right: 0.4rem;
+                        margin-#{$end-direction}: 0.4rem;
                         font-weight: 500;
                         padding: 0.25rem 1.25rem;
                     }
@@ -3004,7 +3004,7 @@ $widget:'widget';
                         }
                     }
                     &:last-child {
-                        padding-left: 0;
+                        padding-#{$start-direction}: 0;
                     }
                 }
             }
@@ -3015,9 +3015,9 @@ $widget:'widget';
             .#{$widget}__content {
                 padding: 0.5rem 0 1rem 0;
                 .#{$widget}__details {
-                    margin-right: 1.2rem;
+                    margin-#{$end-direction}: 1.2rem;
                     &:last-child {
-                        margin-right: 0;
+                        margin-#{$end-direction}: 0;
                         .#{$widget}__subtitle {
                             margin-top: 0rem;
                         }
@@ -3029,13 +3029,13 @@ $widget:'widget';
             .#{$widget}__wrapper {
                 padding: 15px;
                 .#{$widget}__section {
-                    padding-right: 1rem;
+                    padding-#{$end-direction}: 1rem;
                     .#{$widget}__blog {
                         .#{$widget}__value {
-                            padding-left: 0.4rem;
+                            padding-#{$start-direction}: 0.4rem;
                         }
                         &:last-child {
-                            padding-left: 1.2rem;
+                            padding-#{$start-direction}: 1.2rem;
                         }
                     }
                 }
@@ -3055,7 +3055,7 @@ $widget:'widget';
         #{$self}__stats {
             width: 100%;
             #{$self}__legends {
-                padding-left: 1rem;
+                padding-#{$start-direction}: 1rem;
             }
         }
     }
@@ -3064,7 +3064,7 @@ $widget:'widget';
         #{$self}__stats {
             #{$self}__items {
                 #{$self}__item {
-                    padding-left: 0.5rem;
+                    padding-#{$start-direction}: 0.5rem;
                 }
             }
         }
@@ -3073,10 +3073,10 @@ $widget:'widget';
         $self: &;
         #{$self}__content {
             #{$self}__item {
-                padding-left: 0;
+                padding-#{$start-direction}: 0;
                 margin-top: 0.5rem;
                 #{$self}__info {
-                    padding-left: 0.5rem;
+                    padding-#{$start-direction}: 0.5rem;
                 }
             }
         }
@@ -3088,9 +3088,9 @@ $widget:'widget';
             #{$self}__item {
                 #{$self}__info {
                     >span {
-                        padding-right: 1rem;
+                        padding-#{$end-direction}: 1rem;
                         &:last-child {
-                            padding-right: 0;
+                            padding-#{$end-direction}: 0;
                         }
                     }
                 }
@@ -3145,7 +3145,7 @@ $widget:'widget';
                 font-size: 1.3rem;
             }
             .#{$widget}__content {
-                padding-left: 1rem;
+                padding-#{$start-direction}: 1rem;
                 margin-top: 0;
                 .#{$widget}__head {
                     .#{$widget}__username {

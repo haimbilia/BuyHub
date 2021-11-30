@@ -103,8 +103,8 @@ hr.fc-divider {
     /* these element should always cling to top-left/right corners */
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    #{$start-direction}: 0;
+    #{$end-direction}: 0;
 }
 
 .fc-bg {
@@ -176,8 +176,8 @@ a[data-goto]:hover {
 .fc-row table {
     /* don't put left/right border on anything within a fake row.
      the outer tbody will worry about this */
-    border-left: 0 hidden transparent;
-    border-right: 0 hidden transparent;
+    border-#{$start-direction}: 0 hidden transparent;
+    border-#{$end-direction}: 0 hidden transparent;
     /* no bottom borders on rows */
     border-bottom: 0 hidden transparent;
 }
@@ -365,7 +365,7 @@ temporary rendered events).
     left: 50%;
     width: 40px;
     height: 40px;
-    margin-left: -20px;
+    margin-#{$start-direction}: -20px;
     margin-top: -20px;
 }
 
@@ -422,8 +422,8 @@ temporary rendered events).
     /* below resizers */
     top: -10px;
     bottom: -10px;
-    left: 0;
-    right: 0;
+    #{$start-direction}: 0;
+    #{$end-direction}: 0;
 }
 
 
@@ -431,9 +431,9 @@ temporary rendered events).
 
 .fc-ltr .fc-h-event.fc-not-start,
 .fc-rtl .fc-h-event.fc-not-end {
-    margin-left: 0;
+    margin-#{$start-direction}: 0;
     border-left-width: 0;
-    padding-left: 1px;
+    padding-#{$start-direction}: 1px;
     /* replace the border with padding */
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
@@ -441,9 +441,9 @@ temporary rendered events).
 
 .fc-ltr .fc-h-event.fc-not-end,
 .fc-rtl .fc-h-event.fc-not-start {
-    margin-right: 0;
+    margin-#{$end-direction}: 0;
     border-right-width: 0;
-    padding-right: 1px;
+    padding-#{$end-direction}: 1px;
     /* replace the border with padding */
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -505,7 +505,7 @@ temporary rendered events).
 
 .fc-ltr .fc-h-event.fc-selected .fc-start-resizer,
 .fc-rtl .fc-h-event.fc-selected .fc-end-resizer {
-    margin-left: -4px;
+    margin-#{$start-direction}: -4px;
     /* centers the 8x8 dot on the left edge */
 }
 
@@ -514,7 +514,7 @@ temporary rendered events).
 
 .fc-ltr .fc-h-event.fc-selected .fc-end-resizer,
 .fc-rtl .fc-h-event.fc-selected .fc-start-resizer {
-    margin-right: -4px;
+    margin-#{$end-direction}: -4px;
     /* centers the 8x8 dot on the right edge */
 }
 
@@ -559,7 +559,7 @@ tr:first-child>td>.fc-day-grid-event {
 
 .fc-ltr .fc-day-grid-event.fc-allow-mouse-resize .fc-start-resizer,
 .fc-rtl .fc-day-grid-event.fc-allow-mouse-resize .fc-end-resizer {
-    margin-left: -2px;
+    margin-#{$start-direction}: -2px;
     /* to the day cell's edge */
 }
 
@@ -568,7 +568,7 @@ tr:first-child>td>.fc-day-grid-event {
 
 .fc-ltr .fc-day-grid-event.fc-allow-mouse-resize .fc-end-resizer,
 .fc-rtl .fc-day-grid-event.fc-allow-mouse-resize .fc-start-resizer {
-    margin-right: -2px;
+    margin-#{$end-direction}: -2px;
     /* to the day cell's edge */
 }
 
@@ -886,7 +886,7 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 }
 
 .fc-button-group>.fc-button:not(:first-child) {
-    margin-left: -1px;
+    margin-#{$start-direction}: -1px;
 }
 
 .fc-button-group>.fc-button:not(:last-child) {
@@ -944,7 +944,7 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 /* inner content */
 
 .fc-toolbar>*> :not(:first-child) {
-    margin-left: 0.75em;
+    margin-#{$start-direction}: 0.75em;
 }
 
 .fc-toolbar h2 {
@@ -1174,8 +1174,8 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 .fc-row.fc-rigid .fc-content-skeleton {
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    #{$start-direction}: 0;
+    #{$end-direction}: 0;
 }
 
 
@@ -1323,11 +1323,11 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 /* make the dot closer to the event title */
 
 .fc-ltr .fc-list-item-marker {
-    padding-right: 0;
+    padding-#{$end-direction}: 0;
 }
 
 .fc-rtl .fc-list-item-marker {
-    padding-left: 0;
+    padding-#{$start-direction}: 0;
 }
 
 .fc-list-item-title a {
@@ -1347,8 +1347,8 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 .fc-list-empty-wrap2 {
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    #{$start-direction}: 0;
+    #{$end-direction}: 0;
     bottom: 0;
 }
 
@@ -1449,8 +1449,8 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
     position: absolute;
     z-index: 3;
     top: 0;
-    left: 0;
-    right: 0;
+    #{$start-direction}: 0;
+    #{$end-direction}: 0;
 }
 
 
@@ -1512,8 +1512,8 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 
 .fc-time-grid .fc-highlight {
     position: absolute;
-    left: 0;
-    right: 0;
+    #{$start-direction}: 0;
+    #{$end-direction}: 0;
     /* top and bottom will be in by JS */
 }
 
@@ -1540,8 +1540,8 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 
 .fc-time-grid .fc-bgevent {
     /* background events always span full width */
-    left: 0;
-    right: 0;
+    #{$start-direction}: 0;
+    #{$end-direction}: 0;
 }
 
 
@@ -1635,8 +1635,8 @@ be a descendant of the grid when it is being dragged.
 /* resizer (cursor device) */
 
 .fc-time-grid-event.fc-allow-mouse-resize .fc-resizer {
-    left: 0;
-    right: 0;
+    #{$start-direction}: 0;
+    #{$end-direction}: 0;
     bottom: 0;
     height: 8px;
     overflow: hidden;
@@ -1665,7 +1665,7 @@ be a descendant of the grid when it is being dragged.
     background: #fff;
     /* horizontally center */
     left: 50%;
-    margin-left: -5px;
+    margin-#{$start-direction}: -5px;
     /* center on the bottom edge */
     bottom: -5px;
 }
@@ -1676,8 +1676,8 @@ be a descendant of the grid when it is being dragged.
 
 .fc-time-grid .fc-now-indicator-line {
     border-top-width: 1px;
-    left: 0;
-    right: 0;
+    #{$start-direction}: 0;
+    #{$end-direction}: 0;
 }
 
 
@@ -1689,7 +1689,7 @@ be a descendant of the grid when it is being dragged.
 }
 
 .fc-ltr .fc-time-grid .fc-now-indicator-arrow {
-    left: 0;
+    #{$start-direction}: 0;
     /* triangle pointing right... */
     border-width: 5px 0 5px 6px;
     border-top-color: transparent;
@@ -1697,7 +1697,7 @@ be a descendant of the grid when it is being dragged.
 }
 
 .fc-rtl .fc-time-grid .fc-now-indicator-arrow {
-    right: 0;
+    #{$end-direction}: 0;
     /* triangle pointing left... */
     border-width: 5px 6px 5px 0;
     border-top-color: transparent;
@@ -1778,7 +1778,7 @@ be a descendant of the grid when it is being dragged.
 
 .fc-unthemed .fc-event.fc-not-start.fc-end .fc-content,
 .fc-unthemed .fc-event-dot.fc-not-start.fc-end .fc-content {
-    padding-left: 0.5rem;
+    padding-#{$start-direction}: 0.5rem;
 }
 
 .fc-unthemed .fc-event .fc-time,
@@ -1985,7 +1985,7 @@ be a descendant of the grid when it is being dragged.
 
 .fc-unthemed .fc-event.fc-not-start.fc-not-end,
 .fc-unthemed .fc-event-dot.fc-not-start.fc-not-end {
-    border-left: $border;
+    border-#{$start-direction}: $border;
 }
 
 .fc-unthemed .fc-event.fc-start .fc-content:before,

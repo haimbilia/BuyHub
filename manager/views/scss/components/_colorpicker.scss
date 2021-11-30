@@ -1,7 +1,7 @@
 .vc-chrome {
     position: absolute;
     top: 100%;
-    right: 0;
+    #{$end-direction}: 0;
     z-index: 9;
     width: 100% !important;
     margin-top: 10px;

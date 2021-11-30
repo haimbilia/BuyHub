@@ -78,8 +78,8 @@
         width: 100% !important;
     }
     &-wide {
-        padding-left: 2rem;
-        padding-right: 2rem;
+        padding-#{$start-direction}: 2rem;
+        padding-#{$end-direction}: 2rem;
     }
     &-arrow {
         .svg {

@@ -5,7 +5,7 @@
         box-sizing: border-box;
         position: absolute;
         top: 50%;
-        left: 0;
+        #{$start-direction}: 0;
         border-radius: 50%;
         width: 20px;
         height: 20px;
@@ -21,38 +21,38 @@
         &.spinner--center {
             &:before {
                 left: 50%;
-                margin-left: -8px;
+                margin-#{$start-direction}: -8px;
             }
         }
         &.spinner--left {
             &:before {
-                left: 0;
+                #{$start-direction}: 0;
                 right: auto;
             }
         }
         .spinner--right {
             &:before {
                 left: auto;
-                right: 0;
+                #{$end-direction}: 0;
             }
         }
     }
     &.spinner--center {
         &:before {
             left: 50%;
-            margin-left: -10px;
+            margin-#{$start-direction}: -10px;
         }
     }
     &.spinner--left {
         &:before {
-            left: 0;
+            #{$start-direction}: 0;
             right: auto;
         }
     }
     &.spinner--right {
         &:before {
             left: auto;
-            right: 0;
+            #{$end-direction}: 0;
         }
     }
     &.spinner--lg {
@@ -64,68 +64,68 @@
         &.spinner--center {
             &:before {
                 left: 50%;
-                margin-left: -12px;
+                margin-#{$start-direction}: -12px;
             }
         }
         &.spinner--left {
             &:before {
-                left: 0;
+                #{$start-direction}: 0;
                 right: auto;
             }
         }
         &.spinner--right {
             &:before {
                 left: auto;
-                right: 0;
+                #{$end-direction}: 0;
             }
         }
     }
     &.spinner--brand {
         &:before {
             border: 2px solid $brand-color;
-            border-right: 2px solid transparent;
+            border-#{$end-direction}: 2px solid transparent;
         }
     }
     &.spinner--light {
         &:before {
             border: 2px solid #ffffff;
-            border-right: 2px solid transparent;
+            border-#{$end-direction}: 2px solid transparent;
         }
     }
     &.spinner--dark {
         &:before {
             border: 2px solid $dark-color;
-            border-right: 2px solid transparent;
+            border-#{$end-direction}: 2px solid transparent;
         }
     }
     &.spinner--primary {
         &:before {
             border: 2px solid $primary-color;
-            border-right: 2px solid transparent;
+            border-#{$end-direction}: 2px solid transparent;
         }
     }
     &.spinner--success {
         &:before {
             border: 2px solid $success-color;
-            border-right: 2px solid transparent;
+            border-#{$end-direction}: 2px solid transparent;
         }
     }
     &.spinner--info {
         &:before {
             border: 2px solid $info-color;
-            border-right: 2px solid transparent;
+            border-#{$end-direction}: 2px solid transparent;
         }
     }
     &.spinner--warning {
         &:before {
             border: 2px solid $warning-color;
-            border-right: 2px solid transparent;
+            border-#{$end-direction}: 2px solid transparent;
         }
     }
     &.spinner--danger {
         &:before {
             border: 2px solid $danger-color;
-            border-right: 2px solid transparent;
+            border-#{$end-direction}: 2px solid transparent;
         }
     }
     &.spinner--input {
