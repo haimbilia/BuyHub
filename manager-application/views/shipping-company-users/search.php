@@ -1,3 +1,4 @@
+ 
 <?php
 
 defined('SYSTEM_INIT') or die('Invalid Usage.');
@@ -53,6 +54,19 @@ foreach ($arrListing as $sn => $row) {
                             'title' => Labels::getLabel('LBL_ADD_TRANSACTIONS', $siteLangId)
                         ],
                         'label' => "<i class='far fa-eye icon'></i>"
+                    ],
+                    [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'getTransactions(' . $row['user_id'] . ')',
+                            'title' => Labels::getLabel('LBL_TRANSACTIONS', $siteLangId)
+                        ],
+                        'label' => '<i class="icn">
+                                            <svg class="svg" width="18" height="18">
+                                                <use xlink:href="/admin/images/retina/sprite.yokart.svg#password">
+                                                </use>
+                                            </svg>
+                                        </i>'
                     ]
                 ];
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
