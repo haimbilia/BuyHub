@@ -647,6 +647,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
             }
         } else {
             $productData = Product::getAttributesById($product_id, array('product_type', 'product_min_selling_price', 'if(product_seller_id > 0, 1, 0) as sellerProduct', 'product_seller_id'));
+         
             if ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
                 $defaultProductCond = Product::CONDITION_NEW;
             }
@@ -657,7 +658,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
                 foreach ($productOptions as $option) {
                     $option_name = ($option['option_name'] != '') ? $option['option_name'] : $option['option_identifier'];
                     $fld = $frm->addSelectBox($option_name, 'selprodoption_optionvalue_id[' . $option['option_id'] . ']', $option['optionValues'], '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
-                    // $fld->requirements()->setRequired();
+                
                 }
             }
             $frm->addTextBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'selprod_user_shop_name', '', array(' ' => ' '))->requirements()->setRequired();
@@ -687,26 +688,17 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'selprod_stock');
         $fld->requirements()->setPositive();
+        $fld_sku = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'selprod_sku');
+        if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
+            $fld_sku->requirements()->setRequired();
+        }
+
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_MINIMUM_QUANTITY', $this->siteLangId), 'selprod_min_order_qty');
         $fld->requirements()->setPositive();
         $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_MAINTAIN_STOCK_LEVELS', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
         $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_TRACK_PRODUCT_INVENTORY', $this->siteLangId), 'selprod_track_inventory', Product::INVENTORY_TRACK, array(), false, 0);
         $fld = $frm->addTextBox(Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId), 'selprod_threshold_stock_level');
-        $fld->requirements()->setInt();
-
-        /* $threshold_stock_levelUnReqObj = new FormFieldRequirement( 'selprod_threshold_stock_level', Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId) );
-$threshold_stock_levelUnReqObj->setRequired(false);
-
-$threshold_stock_levelReqObj = new FormFieldRequirement( 'selprod_threshold_stock_level', Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId) );
-$threshold_stock_levelReqObj->setRequired(true);
-
-$selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Product::INVENTORY_TRACK, 'eq', 'selprod_threshold_stock_level', $threshold_stock_levelUnReqObj);
-$selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Product::INVENTORY_NOT_TRACK, 'eq', 'selprod_threshold_stock_level', $threshold_stock_levelReqObj); */
-
-        $fld_sku = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'selprod_sku');
-        if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
-            $fld_sku->requirements()->setRequired();
-        }
+        $fld->requirements()->setInt();       
 
         if ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_MAX_DOWNLOAD_TIMES', $this->siteLangId), 'selprod_max_download_times');
@@ -718,13 +710,7 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
         } else {
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_CONDITION', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), '', array(), Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
             $fld->requirements()->setRequired();
-        }
-
-        $frm->addDateField(Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'))->requirements()->setRequired();
-
-        /* $frm->addDateTimeField( Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '' , array('readonly' => 'readonly')); */
-
-        /* $frm->addTextArea( Labels::getLabel( 'FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments'); */
+        }        
 
         $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
@@ -757,27 +743,33 @@ $selprod_track_inventoryFld->requirements()->addOnChangerequirementUpdate(Produc
 
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_cancellation_age', $orderCancellationAgeUnReqFld);
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
+        
+        if ($productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
+            $codFld = $frm->addSelectBox(Labels::getLabel('FRM_AVAILABLE_FOR_COD', $this->siteLangId), 'selprod_cod_enabled', applicationConstants::getYesNoArr($this->siteLangId), '0', array(), '');
+            $paymentMethod = new PaymentMethods();
+            if (!$paymentMethod->cashOnDeliveryIsActive()) {
+                $codFld->addFieldTagAttribute('disabled', 'disabled');
+                $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</small>';
+            }
 
-        $frm->addSelectBox(Labels::getLabel('FRM_PUBLISH_INVENTORY', $this->siteLangId), 'selprod_active', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::YES, array(), '');
-
-        $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
-        $codFld = $frm->addSelectBox(Labels::getLabel('FRM_AVAILABLE_FOR_COD', $this->siteLangId), 'selprod_cod_enabled', $yesNoArr, '0', array(), '');
-        $paymentMethod = new PaymentMethods();
-        if (!$paymentMethod->cashOnDeliveryIsActive()) {
-            $codFld->addFieldTagAttribute('disabled', 'disabled');
-            $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</small>';
-        }
-
-        $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId, $isPickupEnabled);
-        if ($productData['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+            $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId, $isPickupEnabled);
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $this->siteLangId), 'selprod_fulfillment_type', $fulFillmentArr, applicationConstants::NO, array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
             $fld->requirement->setRequired(true);
-        }      
+        }       
+        
+        $frm->addDateField(Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_PUBLISH_INVENTORY', $this->siteLangId), 'selprod_active', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::YES, array(), '');
+       
         $frm->addTextArea(Labels::getLabel('FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments');
        
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+
         $frm->addHiddenField('', 'selprod_product_id', $product_id);
-        $frm->addHiddenField('', 'selprod_id');
-     
+        $frm->addHiddenField('', 'selprod_id');     
         return $frm;
     }
 

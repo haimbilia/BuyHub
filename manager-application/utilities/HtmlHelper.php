@@ -260,9 +260,9 @@ class HtmlHelper
         return $htmlFld;
     }
 
-    public static function addFieldLabelInfo(&$frm, $fldName, $msg)
+    public static function addFieldLabelInfo(&$frm, $fldName, $msg, $setFieldTagAttrs = [])
     {
-        $str = self::getFieldHtml($frm, $fldName, 6, [], '', $msg, [], true);
+        $str = self::getFieldHtml($frm, $fldName, 6, $setFieldTagAttrs, '', $msg, [], true);
         $fld = $frm->getField($fldName);
 
         $oldFldPostion = $fld->getFormIndex();
