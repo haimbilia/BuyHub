@@ -732,7 +732,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if (false && $objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) { ?>
+                        <?php if ($objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
                                     <?php echo Labels::getLabel('NAV_SHIPPING_PACKAGES', $siteLangId); ?>

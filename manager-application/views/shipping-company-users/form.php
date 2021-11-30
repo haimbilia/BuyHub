@@ -3,7 +3,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');  
 
 if ($recordId > 0) {
     $fld_credential_username = $frm->getField('credential_username');
@@ -20,6 +20,26 @@ $countryFld->setFieldTagAttribute('onChange', 'getCountryStates(this.value,' . $
 $stateFld = $frm->getField('user_state_id');
 $stateFld->setFieldTagAttribute('id','user_state_id');
 $otherButtons = [];
+
+$fld = $frm->getField('credential_username');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
+$fld = $frm->getField('user_name');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
+$fld = $frm->getField('user_dob');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
+$fld = $frm->getField('user_phone');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld = $frm->getField('credential_email');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld = $frm->getField('user_country_id');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld = $frm->getField('user_state_id');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld = $frm->getField('user_city');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld = $frm->getField('user_order_tracking_url');
+$fld->developerTags['colWidthValues'] = [null, '12', null, null]; 
+
 $formTitle = Labels::getLabel('LBL_SHIPPING_COMPANY_USER_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>
