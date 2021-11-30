@@ -32,7 +32,7 @@ class HtmlHelper
             'formAction' => 'toggleBulkStatuses',
             'siteLangId' => $langId,
             'otherButtons' => [],
-            'htmlContent'  => NULL,            
+            'htmlContent'  => NULL,
             'searchFrmTemplate' => '_partial/listing/listing-search-form.php',
             'searchListingPage' => FatUtility::camel2dashed(LibHelper::getControllerName()) . '/search.php'
         ];
@@ -131,7 +131,7 @@ class HtmlHelper
     {
         $name = (!empty($name) ? 'name="' . $name . '"' : '');
         $onclick = (!empty($onclick) ? 'onclick="' . $onclick . ';"' : '');
-        $class = !empty($class) ? $class : 'btn btn-brand btn-wide ml-2 submitBtnJs';
+        $class = !empty($class) ? $class : 'btn btn-brand btn-wide btn-search submitBtnJs';
         return '<button type="' . $type . '" ' . $name . ' class="' . $class . '" ' . $onclick . '>' . $lbl . '</button>';
     }
 
@@ -410,29 +410,29 @@ class HtmlHelper
      *    ]
      * @return void
      */
-    public static function getFieldHtml($frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [],  string $fieldInfoText = '' ,string $labelInfoText = '', array $labelExtraArr = [] )
+    public static function getFieldHtml($frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [],  string $fieldInfoText = '', string $labelInfoText = '', array $labelExtraArr = [])
     {
 
         $fld = $frm->getField($fldName);
-        if(null == $fld){
+        if (null == $fld) {
             return;
         }
 
         foreach ($setFieldTagAttrs as $attrkey => $attrVal) {
             $fld->setfieldTagAttribute($attrkey, $attrVal);
         }
-        $caption = $fld->getCaption();      
+        $caption = $fld->getCaption();
 
         switch ($fld->fldType) {
             case 'radio':
                 $fld->addOptionListTagAttribute('class', 'list-radio');
                 HtmlHelper::configureSwitchForRadio($fld);
                 break;
-            case 'hidden':               
-                return $fld->getHtml();       
-                break;    
+            case 'hidden':
+                return $fld->getHtml();
+                break;
         }
-        
+
         $mainDiv = new HtmlElement("div", [
             'class' => 'col-md-' . $col,
         ]);
@@ -469,14 +469,12 @@ class HtmlHelper
             $div->appendElement('a', $labelExtraArr['attr'], $labelExtraArr['label']);
         }
 
-        if(!empty($fieldInfoText)){
-            $fld->htmlAfterField = '<span class="form-text text-muted">'.$fieldInfoText.'</span>';
-        }       
+        if (!empty($fieldInfoText)) {
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . $fieldInfoText . '</span>';
+        }
 
         $div1->appendElement('plaintext', [], $fld->getHtml(), true);
 
         return $mainDiv->getHtml();
     }
-
-
 }
