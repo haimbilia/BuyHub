@@ -69,10 +69,9 @@ class DigitalDownloadPrivilages extends FatModel
             $this->error = Labels::getLabel('LBL_Attachments_or_links_allowed_only_with_digital_products', $langId);
             return false;
         }
-
         if (true === $isAdmin) {
             switch ($recordType) {
-                case Product::CATALOG_TYPE_INVENTORY:
+                case Product::CATALOG_TYPE_INVENTORY:               
                     $this->error = Labels::getLabel('LBL_Not_Authorised_to_upload_with_inventory', $langId);
                     return false;
                     break;

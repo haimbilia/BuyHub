@@ -6,6 +6,7 @@ $actionItemsData = $actionItemsData + [
     'canEdit' => $canEdit ?? false
 ];
 ?>
+
 <main class="main mainJs">
     <div class="container">
         <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', $actionItemsData, false); ?>
