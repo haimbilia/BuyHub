@@ -23,7 +23,10 @@
                     </div>
                     <?php require_once(CONF_THEME_PATH . 'subscription-orders/item-summary.php'); ?>
                 </div>
-                <?php if (!$order['order_deleted']) { ?>
+                <?php 
+                $paymentFormCond = (!$order["order_payment_status"] && $canEdit && 'CashOnDelivery' != $order['plugin_code']);
+                $paymentHistory = (!empty($order['payments']));
+                if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory)) { ?>
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
@@ -31,7 +34,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <?php if (!$order["order_payment_status"] && $canEdit && 'CashOnDelivery' != $order['plugin_code']) {
+                            <?php if ($paymentFormCond) {
                                 require_once(CONF_THEME_PATH . 'subscription-orders/payment-form.php'); ?>
                                 <div class="separator separator-dashed my-5"></div>
                             <?php } ?>
@@ -43,31 +46,36 @@
             </div>
             <div class="col-md-3">
                 <?php require_once(CONF_THEME_PATH . 'subscription-orders/order-summary.php'); ?>
-                <div class="card">
-                    <div class="card-head">
-                        <div class="card-head-label">
-                            <h3 class="card-head-title"><i class="fas fa-address-card"></i>
-                                <?php echo Labels::getLabel('LBL_CONTACT_INFORMATION', $siteLangId); ?>
-                            </h3>
+
+                <?php if (!empty($order['buyer_user_name']) || !empty($order['buyer_email'])) { ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title"><i class="fas fa-address-card"></i>
+                                    <?php echo Labels::getLabel('LBL_CONTACT_INFORMATION', $siteLangId); ?>
+                                </h3>
+                            </div>
+
                         </div>
+                        <div class="card-body">
+                            <ul class="list-text">
+                                <?php if (!empty($order['buyer_user_name'])) { ?>
+                                    <li>
+                                        <span class="lable"><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>:</span>
+                                        <span class="value"><?php echo $order['buyer_user_name']; ?></span>
+                                    </li>
+                                <?php } ?>
+                                <?php if (!empty($order['buyer_email'])) { ?>
+                                    <li>
+                                        <span class="lable"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?>:</span>
+                                        <span class="value"><?php echo $order['buyer_email']; ?></span>
+                                    </li>
+                                <?php } ?>
+                            </ul>
 
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <ul class="list-text">
-                            <?php if (isset($order['buyer_user_name'])) { ?>
-                                <li>
-                                    <span class="lable"><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>:</span>
-                                    <span class="value"><?php echo $order['buyer_user_name']; ?></span>
-                                </li>
-                            <?php } ?>
-                            <li>
-                                <span class="lable"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?>:</span>
-                                <span class="value"><?php echo $order['buyer_email']; ?></span>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
+                <?php } ?>
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
