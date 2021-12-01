@@ -182,27 +182,27 @@ class DigitalDownload extends MyAppModel
         $bannerTypeArr = applicationConstants::bannerTypeArr($langId);
         $digitalDownloadTypeArr = applicationConstants::digitalDownloadTypeArr($langId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Option', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_OPTION', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '')->requirements()->setRequired();
         
-        $frm->addSelectBox(Labels::getLabel('LBL_Digital_Download_Type', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_DIGITAL_DOWNLOAD_TYPE', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Attach_with_existing_orders', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ATTACH_WITH_EXISTING_ORDERS', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');
         
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Downloadable_Link', $langId), 'product_downloadable_link');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_DOWNLOADABLE_LINK', $langId), 'product_downloadable_link');
         /* $fld->requirements()->setRequired(); */
 
-        $frm->addTextBox(Labels::getLabel('LBL_Preview_Link', $langId), 'product_preview_link');
+        $frm->addTextBox(Labels::getLabel('FRM_PREVIEW_LINK', $langId), 'product_preview_link');
         
-        $frm->addButton('', 'attachment_link_btn', Labels::getLabel('LBL_Add', $langId));
+        $frm->addButton('', 'attachment_link_btn', Labels::getLabel('FRM_ADD', $langId));
 
-        $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
 
-        $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
+        $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_FILE', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
         
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload_Preview', $langId), 'preview_file', array('id' => 'preview_file'));
+        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_PREVIEW', $langId), 'preview_file', array('id' => 'preview_file'));
 
-        $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('LBL_Upload', $langId));
-        $frm->addButton('', 'reset', Labels::getLabel('LBL_Reset', $langId));
+        $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('FRM_UPLOAD', $langId));
+        $frm->addButton('', 'reset', Labels::getLabel('FRM_RESET', $langId));
         
         $frm->addHiddenField('', 'product_id');
         $frm->addHiddenField('', 'selprod_id');
