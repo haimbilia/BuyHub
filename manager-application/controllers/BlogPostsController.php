@@ -483,21 +483,22 @@ class BlogPostsController extends ListingBaseController
 
     protected function getLangForm($recordId = 0, $langId = 0)
     {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $recordId = FatUtility::int($recordId);
         $frm = new Form('frmBlogPostCatLang', array('id' => 'frmBlogPostCatLang'));
         $frm->addHiddenField('', 'post_id', $recordId);
 
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 
-        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'post_title');
-        $frm->addRequiredField(Labels::getLabel('FRM_POST_AUTHOR_NAME', $this->siteLangId), 'post_author_name');
-        $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $this->siteLangId), 'post_description')->requirements()->setRequired(true);
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $langId), 'post_title');
+        $frm->addRequiredField(Labels::getLabel('FRM_POST_AUTHOR_NAME', $langId), 'post_author_name');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'post_description')->requirements()->setRequired(true);
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
     }

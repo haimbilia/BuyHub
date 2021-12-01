@@ -60,8 +60,8 @@ if (isset($editButton) && is_array($editButton)) {
     $onClick = isset($editButton['onClick']) ? $editButton['onClick'] : 'editRecord(' . $recordId . ')';
 
     $cls = isset($editButton['class']) ? $editButton['class'] : '';
-    $li = $ul->appendElement('li', ['title' => Labels::getLabel('LBL_EDIT', $siteLangId)]);
-    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'title' => Labels::getLabel('LBL_EDIT', $siteLangId), "onclick" => $onClick), 
+    $li = $ul->appendElement('li', ['title' => Labels::getLabel('LBL_EDIT', $siteLangId), 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
+    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, "onclick" => $onClick), 
     '<svg class="svg" width="18" height="18">
         <use
             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
@@ -73,7 +73,10 @@ if (isset($editButton) && is_array($editButton)) {
 if (isset($otherButtons) && is_array($otherButtons)) {
     foreach ($otherButtons as $attr) {
         $title = isset($attr['attr']['title']) ? $attr['attr']['title'] : '';
-        $li = $ul->appendElement('li', ['title' => $title ]);
+        $li = $ul->appendElement('li', ['title' => $title, 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
+        if (isset($attr['attr']['title'])) {
+            unset($attr['attr']['title']);
+        }
         $li->appendElement('a', $attr['attr'], (string) $attr['label'], true);
     }
     $actionItems = true;
@@ -83,9 +86,9 @@ if (isset($deleteButton) && is_array($deleteButton)) {
     $onClick = isset($deleteButton['onClick']) ? $deleteButton['onClick'] : "deleteRecord(" . $recordId . ")";
 
     $cls = isset($deleteButton['class']) ? $deleteButton['class'] : '';
-    $title = isset($deleteButton['title']) && !empty($deleteButton['title']) ? $deleteButton['title'] : Labels::getLabel('LBL_DELETE', $siteLangId);
-    $li = $ul->appendElement('li', ['title' => $title]);
-    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'title' => $title, "onclick" => $onClick), 
+    $title = isset($deleteButton['title']) && !empty($deleteButton['title']) ? $deleteButton['title'] : Labels::getLabel('LBL_DELETE_RECORD', $siteLangId);
+    $li = $ul->appendElement('li', ['title' => $title, 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
+    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, "onclick" => $onClick), 
     '<svg class="svg" width="18" height="18">
         <use
             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">

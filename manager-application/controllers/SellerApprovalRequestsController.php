@@ -236,7 +236,7 @@ class SellerApprovalRequestsController extends ListingBaseController {
             'user_details' => Labels::getLabel('LBL_USERNAME/EMAIL', $this->siteLangId),
             'usuprequest_date' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
             'usuprequest_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('approvalRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

@@ -220,13 +220,14 @@ class StatesController extends ListingBaseController
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $langId = 0)
     {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $this->objPrivilege->canViewStates();
         $frm = new Form('frmStateLang');
         $frm->addHiddenField('', 'state_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_State_Name', $this->siteLangId), 'state_name');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_State_Name', $langId), 'state_name');
         return $frm;
     }
 

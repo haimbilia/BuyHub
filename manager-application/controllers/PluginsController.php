@@ -383,20 +383,21 @@ class PluginsController extends ListingBaseController
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $langId = 0)
     {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmPluginLang');
         $frm->addHiddenField('', 'plugin_id', $recordId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $this->siteLangId), 'plugin_name');
-        $frm->addHtmlEditor(Labels::getLabel('LBL_EXTRA_INFO', $this->siteLangId), 'plugin_description');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Plugin_Name', $langId), 'plugin_name');
+        $frm->addHtmlEditor(Labels::getLabel('LBL_EXTRA_INFO', $langId), 'plugin_description');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;

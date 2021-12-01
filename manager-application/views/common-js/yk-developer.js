@@ -213,12 +213,24 @@ $(document).ready(function () {
         $(obj).attr('data-original-title', langLbl.copied).tooltip('show').attr('data-original-title', elOriginalText);
     }
 
+    installJsColor = function () {
+        if (0 < $('.jscolor').length) {
+            $('.jscolor').each(function () {
+                $(this).attr('data-jscolor', '{}');
+            });
+            jscolor.install();
+        }
+    };
+
     $(document).ajaxComplete(function () {
         /* Bind bootstrap tooltip with ajax elements. */
         $('[data-toggle="tooltip"]').tooltip();
 
         /* Bind Scoll hand if table width is wider. */
         new ScrollHint('.js-scrollable');
+
+        /* Bind colors with all color fields. */
+        installJsColor();
     });
 })();
 
