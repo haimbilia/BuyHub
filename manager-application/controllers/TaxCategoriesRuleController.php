@@ -286,12 +286,13 @@ class TaxCategoriesRuleController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $langId = 0)
     {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmTaxLang', array('id' => 'frmTaxLang'));
         $frm->addHiddenField('', 'taxcat_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id);
-        $frm->addRequiredField(Labels::getLabel('FRM_TAX_CATEGORY_NAME', $this->siteLangId), 'taxcat_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id);
+        $frm->addRequiredField(Labels::getLabel('FRM_TAX_CATEGORY_NAME', $langId), 'taxcat_name');
         return $frm;
     }
 

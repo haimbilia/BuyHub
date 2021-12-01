@@ -31,7 +31,7 @@ class ListingBaseController extends AdminBaseController
             }
             $langData = current($translatedData);
         } else {
-            $langData = $this->modelObj::getAttributesByLangId($langId, $this->mainTableRecordId);
+            $langData = $this->modelObj::getAttributesByLangId($langId, $this->mainTableRecordId, null, true);
         }
 
         if ($langData) {

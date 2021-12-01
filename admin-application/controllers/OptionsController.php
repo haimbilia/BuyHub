@@ -108,7 +108,7 @@ class OptionsController extends AdminBaseController
 
         if (in_array($option_type, Option::ignoreOptionValues())) {
             $optionValueObj = new OptionValue();
-            $arr = $optionValueObj->getAtttibutesByOptionId($option_id, array('optionvalue_id'));
+            $arr = $optionValueObj->getAttributesByOptionId($option_id, array('optionvalue_id'));
             foreach ($arr as $val) {
                 $optionValueObj = new OptionValue($val['optionvalue_id']);
                 $optionValueObj->deleteRecord(true);

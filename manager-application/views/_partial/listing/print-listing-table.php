@@ -2,6 +2,7 @@
 
 $formFields = isset($formFields) ? $formFields : [];
 $performBulkAction = $performBulkAction ?? false;
+
 $bulkActionFormHiddenFields = $bulkActionFormHiddenFields ?? ['status' => ''];
 
 if (false === $performBulkAction) {

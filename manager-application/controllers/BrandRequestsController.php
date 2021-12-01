@@ -224,11 +224,12 @@ class BrandRequestsController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0) {
+    protected function getLangForm($recordId = 0, $langId = 0) {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmProdBrandLang', array('id' => 'frmProdBrandLang'));
         $frm->addHiddenField('', 'brand_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_Brand_Name', $this->siteLangId), 'brand_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_Brand_Name', $langId), 'brand_name');
         return $frm;
     }
 
@@ -410,7 +411,7 @@ class BrandRequestsController extends ListingBaseController {
             'brand_logo' => Labels::getLabel('LBL_Logo', $this->siteLangId),
             'brand_name' => Labels::getLabel('LBL_Brand_Name', $this->siteLangId),
             'brand_requested_on' => Labels::getLabel('LBL_Requested_On', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('shopsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

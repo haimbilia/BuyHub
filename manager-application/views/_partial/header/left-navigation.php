@@ -15,7 +15,8 @@
             if (
                 $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewOptions(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
                 <li class="menu-item dropdown dropright dropdownJs">
@@ -48,6 +49,13 @@
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ProductCategories'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewOptions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Options'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_OPTIONS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -120,6 +128,7 @@
 
             <?php
             if (
+                $objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
@@ -137,6 +146,13 @@
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
                         <h6 class=""><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></h6>
                         <ul class="nav">
+                            <?php if ($objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                             <?php if ($objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('OrderCancelReasons'); ?>">
