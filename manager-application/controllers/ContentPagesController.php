@@ -3,6 +3,8 @@
 class ContentPagesController extends ListingBaseController
 {
     protected $modelClass = 'ContentPage';
+    protected $pageKey = 'MANAGE_CONTENT_PAGES';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -14,7 +16,7 @@ class ContentPagesController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CONTENT_PAGES', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
@@ -59,7 +61,7 @@ class ContentPagesController extends ListingBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->checkEditPrivilege();
-        $this->modelObj = (new ReflectionClass('ContentPage'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [
             $this->modelObj::tblFld('title'), 
             $this->modelObj::tblFld('image_title'),

@@ -2,6 +2,8 @@
 
 <main class="main">
     <div class="container">
+        <?php
+        $this->includeTemplate('_partial/header/header-breadcrumb.php',[], false); ?>
         <div class="row">
             <div class="col-lg-4">
                 <button class="float-btn" type="button" data-trigger="card-aside">
@@ -20,8 +22,7 @@
                         <div class="card-toolbar">
                             <button class="btn btn-gray card-aside-close" data-target-close="card-aside">
                                 <svg class="svg" width="24" height="24">
-                                    <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
                                     </use>
                                 </svg>
                             </button>
@@ -33,25 +34,22 @@
                                 <?php foreach ($tabsArr as $tabMetaType => $metaDetail) {
                                     $tabsId = 'tabJs-' . $tabMetaType; ?>
 
-                                <li
-                                    class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $tabMetaType) ? 'is-active' : '' ?>">
-                                    <a class="settings-inner-link" href="javascript:void(0)"
-                                        onclick='searchRecords("<?php echo $tabMetaType; ?>")'>
-                                        <i class="settings-inner-icn">
-                                            <svg class="svg" width="20" height="20">
-                                                <use
-                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-extension">
-                                                </use>
-                                            </svg>
-                                        </i>
-                                        <div>
-                                            <h6 class="settings-inner-title"><?php echo $metaDetail['name']; ?></h6>
-                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
-                                                consectetur adipisicing
-                                                elit. Suscipit est quos </span>
-                                        </div>
-                                    </a>
-                                </li>
+                                    <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $tabMetaType) ? 'is-active' : '' ?>">
+                                        <a class="settings-inner-link" href="javascript:void(0)" onclick='searchRecords("<?php echo $tabMetaType; ?>")'>
+                                            <i class="settings-inner-icn">
+                                                <svg class="svg" width="20" height="20">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-extension">
+                                                    </use>
+                                                </svg>
+                                            </i>
+                                            <div>
+                                                <h6 class="settings-inner-title"><?php echo $metaDetail['name']; ?></h6>
+                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                    consectetur adipisicing
+                                                    elit. Suscipit est quos </span>
+                                            </div>
+                                        </a>
+                                    </li>
                                 <?php } ?>
                             </ul>
                         </div>
