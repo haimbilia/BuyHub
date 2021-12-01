@@ -10,7 +10,7 @@ $langFld = $settingFrm->getField('lang_id');
 $langFld->setfieldTagAttribute('onChange', "editSettingsForm(this.value);");
 
 $edFld = $settingFrm->getField('CONF_EMAIL_TEMPLATE_FOOTER_HTML'.$lang_id);
-$edFld->htmlBeforeField = '<br/><a class="themebtn btn-brand" onClick="resetToDefaultContent();" href="javascript:void(0)">Reset Editor Content to default</a>';
+$edFld->htmlBeforeField = '<br/><a class="themebtn btn-brand" onclick="resetToDefaultContent();" href="javascript:void(0)">Reset Editor Content to default</a>';
 $edFld->developerTags['col'] = 12;
 
 $ratioFld = $settingFrm->getField('CONF_EMAIL_TEMPLATE_LOGO_RATIO');
@@ -57,7 +57,7 @@ $fld->htmlAfterField = $htmlAfterField;
                         if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) { ?>
                 <div class="row justify-content-end">
                     <div class="col-auto mb-4">
-                        <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" onClick="editLangForm(<?php echo $lang_id; ?>, 1)">
+                        <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" onclick="editLangForm(<?php echo $lang_id; ?>, 1)">
                     </div>
                 </div>
                 <?php } ?>

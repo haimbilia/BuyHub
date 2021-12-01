@@ -36,7 +36,7 @@
                                 <li
                                     class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $tabMetaType) ? 'is-active' : '' ?>">
                                     <a class="settings-inner-link" href="javascript:void(0)"
-                                        onClick='searchRecords("<?php echo $tabMetaType; ?>")'>
+                                        onclick='searchRecords("<?php echo $tabMetaType; ?>")'>
                                         <i class="settings-inner-icn">
                                             <svg class="svg" width="20" height="20">
                                                 <use

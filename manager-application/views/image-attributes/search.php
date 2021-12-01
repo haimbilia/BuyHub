@@ -23,7 +23,7 @@ foreach ($arrListing as $sn => $row) {
 
                 if ($canEdit) {
                     $data['editButton'] = [
-                        'onClick' => 'attributeForm(' . $row['record_id'] . ')'
+                        'onclick' => 'attributeForm(' . $row['record_id'] . ')'
                     ];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

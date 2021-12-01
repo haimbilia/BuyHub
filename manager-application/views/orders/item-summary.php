@@ -1,9 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="card-body p-0 itemSummaryJs">
-    <?php 
-        $isOrderShipped = (!empty($order['products']) && Shipping::FULFILMENT_PICKUP != current($order['products'])['opshipping_fulfillment_type']);
-        $col = $isOrderShipped ? 6 : 5;
-    ?>
     <div class="table-responsive table-scrollable js-scrollable listingTableJs">
         <table class="table table-orders">
             <thead class="tableHeadJs">
@@ -85,7 +81,7 @@
                                 }
                             }
 
-                            echo OrderProduct::getStatusHtml($op["orderstatus_color_class"], $orderStatus); ?>
+                            echo OrderProduct::getStatusHtml((int)$op["orderstatus_color_class"], $orderStatus); ?>
                         </td>
 
                         <td>
@@ -171,13 +167,13 @@
                                 [
                                     'attr' => [
                                         'href' => 'javascript:void(0)',
-                                        'onclick' => $fn . '(' . $op['order_id'] . ', ' . $op['op_id'] . ')',
+                                        'onclick' => $fn,
                                         'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
                                     ],
                                     'label' => '<i class="icn">
                                                     <svg class="svg" width="18" height="18">
                                                         <use
-                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#inventory">
+                                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#form">
                                                         </use>
                                                     </svg>
                                                 </i>' . Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),

@@ -13,7 +13,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
         'product_active' => Labels::getLabel('LBL_Status', $siteLangId),
         'product_approved' => Labels::getLabel('LBL_Admin_Approval', $siteLangId)
     );
-    $isCustom = $postedData['type'];
+    $isCustom = $postedData['type'] ?? 0;
     if ($canEdit && $canEditShipProfile && 1 > $isCustom) {
         $arr_flds['product_shipped_by'] = Labels::getLabel('LBL_Shipped_by_me', $siteLangId);
     }

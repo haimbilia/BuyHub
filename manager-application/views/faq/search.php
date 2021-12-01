@@ -37,7 +37,7 @@ foreach ($arrListing as $sn => $row) {
 
                 if ($canEdit) {
                     $data['editButton'] = [
-                        'onClick'=>'editRecord(' . $row['faq_id'] .','.$row['faq_faqcat_id'].')'
+                        'onclick'=>'editRecord(' . $row['faq_id'] .','.$row['faq_faqcat_id'].')'
                     ];
                     $data['deleteButton'] = [];
                 }

@@ -89,21 +89,6 @@ if(null != $fld){
     $fld->addFieldtagAttribute('onchange', 'trackInventory(this)');
     $fld->addFieldtagAttribute('id', 'selprod_track_inventory');    
 }
-
-
-
-// $otherButtons = [
-//     [
-//        'attr' => [
-//             'href' => 'javascript:void(0)',
-//             'onclick' => 'mediaForm(' . $recordId . ')',
-//             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
-//         ],
-//         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
-//         'isActive' => false
-//     ]
-// ]; 
-
 $formTitle = Labels::getLabel('LBL_SELLER_INVENTORY_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>

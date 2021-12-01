@@ -20,7 +20,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'user':
                 if (!empty($row['credential_username'])) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",' . $row['afile_record_id'] . ')'), $row['credential_username'] . '( ' . $row['credential_email'] . ' )');
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",' . $row['afile_record_id'] . ')'), $row['credential_username'] . '( ' . $row['credential_email'] . ' )');
                 } else {
                     $td->appendElement('plaintext', $tdAttr, 'Admin', true);
                 }
