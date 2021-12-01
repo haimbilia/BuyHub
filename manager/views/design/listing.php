@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet">
-        <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
         <link rel="shortcut icon" href="images/favicon.ico" />
     </head>
 
@@ -20,8 +20,8 @@
 
             <div class="wrap">
                 <?php
-        include 'includes/new-header.php';
-        ?>
+            include 'includes/new-header.php';
+            ?>
 
                 <button class="help-btn btn btn-light" data-toggle="modal" data-target="#help">
                     <span class="help_label">Help</span>
@@ -41,7 +41,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="help-window">
-                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/retina/no-data-cuate.svg"
+                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg"
                                                 alt="">
 
                                             <div class="data">
@@ -202,7 +202,7 @@
                                             <a href="#" class="btn btn-icon btn-outline-brand btn-add">
                                                 <svg class="svg" width="18" height="18">
                                                     <use
-                                                        xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#add">
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                                     </use>
                                                 </svg>
                                                 <span class="">New</span>
@@ -213,7 +213,7 @@
                                                     <a class="" href="#" title="">
                                                         <svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#active">
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#active">
                                                             </use>
                                                         </svg>
                                                     </a>
@@ -222,7 +222,7 @@
                                                     <a class="" href="#" title="">
                                                         <svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#in-active">
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#in-active">
                                                             </use>
                                                         </svg>
                                                     </a>
@@ -231,7 +231,7 @@
                                                     <a href="javascript:void(0)" class="">
                                                         <svg class="svg" width="18" height="18">
                                                             <use
-                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                             </use>
                                                         </svg>
                                                     </a>
@@ -259,7 +259,7 @@
                                                                 <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
                                                                         </use>
                                                                     </svg>
                                                                 </i>
@@ -268,35 +268,35 @@
                                                         <th class="sorting"> <span> Full Name <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-down">
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-down">
                                                                         </use>
                                                                     </svg>
                                                                 </i></span></th>
                                                         <th class="sorting"> <span>Order Date <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
                                                                         </use>
                                                                     </svg>
                                                                 </i> </span></th>
                                                         <th class="sorting"> <span>Amount <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
                                                                         </use>
                                                                     </svg>
                                                                 </i></span></th>
                                                         <th class="sorting"> <span>Payment Status <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
                                                                         </use>
                                                                     </svg>
                                                                 </i></span></th>
                                                         <th class="sorting"> <span> Status <i class="icn">
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use
-                                                                            xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#arrow-up">
+                                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#arrow-up">
                                                                         </use>
                                                                     </svg>
                                                                 </i></span></th>
@@ -321,7 +321,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_7.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -360,7 +360,7 @@
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -369,7 +369,7 @@
                                                                     <a href="javascript:void(0)" class="">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a>
@@ -390,7 +390,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -425,7 +425,7 @@
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                                                             </use>
                                                                         </svg>
 
@@ -435,7 +435,7 @@
                                                                         title="Product Info" 0="1">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a></li>
@@ -456,7 +456,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_2.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -489,7 +489,7 @@
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                                                             </use>
                                                                         </svg>
 
@@ -499,7 +499,7 @@
                                                                         title="Product Info" 0="1">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a></li>
@@ -519,7 +519,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_3.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_3.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -553,7 +553,7 @@
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                                                             </use>
                                                                         </svg>
 
@@ -563,7 +563,7 @@
                                                                         title="Product Info" 0="1">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a></li>
@@ -583,7 +583,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -617,7 +617,7 @@
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                                                             </use>
                                                                         </svg>
 
@@ -627,7 +627,7 @@
                                                                         title="Product Info" 0="1">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a></li>
@@ -647,7 +647,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_5.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_5.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -681,7 +681,7 @@
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                                                             </use>
                                                                         </svg>
 
@@ -691,7 +691,7 @@
                                                                         title="Product Info" 0="1">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a></li>
@@ -711,7 +711,7 @@
                                                         <td>
                                                             <div class="user-profile">
                                                                 <figure class="user-profile_photo">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg"
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_6.jpg"
                                                                         alt="image">
                                                                 </figure>
                                                                 <div class="user-profile_data">
@@ -745,7 +745,7 @@
 
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#edit">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                                                             </use>
                                                                         </svg>
 
@@ -755,7 +755,7 @@
                                                                         title="Product Info" 0="1">
                                                                         <svg class="svg" width="18" height="18">
                                                                             <use
-                                                                                xlink:href="<?php echo CONF_WEBROOT_URL;?>images/retina/sprite-actions.svg#delete">
+                                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                                                             </use>
                                                                         </svg>
                                                                     </a></li>
@@ -907,8 +907,8 @@
                 </main>
 
                 <?php
-        include 'includes/footer.php';
-        ?>
+            include 'includes/footer.php';
+            ?>
 
 
             </div>
