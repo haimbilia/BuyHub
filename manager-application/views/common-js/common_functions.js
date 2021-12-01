@@ -20,7 +20,7 @@ function getNotifications() {
   );
 }
 
-function getHelpCenterContent(controller, action = "") {
+/* function getHelpCenterContent(controller, action = "") {
   fcom.ajax(
     fcom.makeUrl("HelpCenter", "getContent", [controller, action]),
     "",
@@ -39,7 +39,7 @@ function getHelpCenterContent(controller, action = "") {
       }
     }
   );
-}
+} */
 
 copyText = function (obj, applyToolTipInfo = true) {
   var title = $(obj).data("title");
