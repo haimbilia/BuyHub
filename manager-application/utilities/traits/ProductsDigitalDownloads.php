@@ -57,7 +57,6 @@ trait ProductsDigitalDownloads
 
         $fld = $frm->getField('attach_with_existing_orders');
 
-        // $product = Product::getAttributesById($productId, ['product_attachements_with_inventory']);
         $product = $ddpObj->getProduct($productId);
         if (!is_array($product) && 1 > count($product)) {
             if (1 !== $product['product_attachements_with_inventory']) {
@@ -73,12 +72,9 @@ trait ProductsDigitalDownloads
             'selprod_id' =>  $selProdId,
         ];
         $frm->fill($data);
-        $this->set('canDo', $canDo);
-        $this->set('savedOptions', $savedOptions);
-        $this->set('downloadFrm', $frm);
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('product_id', $productId);
-        $this->set('languages', Language::getAllNames());
+        $this->set('canDo', $canDo);     
+        $this->set('formTitle', Labels::getLabel('LBL_DIGITAL_FILES_OR_LINKS', $this->siteLangId));
+        $this->set('frm', $frm);      
         $this->_template->render(false, false);
     }
 

@@ -9,7 +9,7 @@ if (count($childCategories) > 0) { ?>
             <div>
                 <div class="sorting-bar">
                     <div class="sorting-title">
-                        <span class="clickable" onClick="displaySubCategories(this);"><?php echo $row['bpcategory_name']; ?></span>
+                        <span class="clickable" onclick="displaySubCategories(this);"><?php echo $row['bpcategory_name']; ?></span>
                         <a href="<?php echo commonHelper::generateUrl('BlogPost', 'index', array($row['bpcategory_id'])); ?>" class="count badge badge-success clickable" title="<?php echo  Labels::getLabel('LBL_CATEGORY_BLOGS', $siteLangId); ?>">
                             <?php echo CommonHelper::displayBadgeCount($row['countChildBlogPosts']); ?>
                         </a>
@@ -31,7 +31,7 @@ if (count($childCategories) > 0) { ?>
                             <span></span>
                         </label>
                         <?php if ($canEdit) { ?>   
-                            <button onClick="editRecord(<?php echo $row['bpcategory_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_EDIT', $siteLangId); ?>" class="btn btn-clean btn-sm btn-icon clickable">
+                            <button onclick="editRecord(<?php echo $row['bpcategory_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_EDIT', $siteLangId); ?>" class="btn btn-clean btn-sm btn-icon clickable">
                                 <svg class="svg clickable" width="18" height="18">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                     </use>
@@ -47,7 +47,7 @@ if (count($childCategories) > 0) { ?>
                     </div>
                 </div>
                 <?php if ($row['child_count'] > 0) { ?>
-                    <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['bpcategory_id']; ?>-js" onClick="displaySubCategories(this)"></i></span>
+                    <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['bpcategory_id']; ?>-js" onclick="displaySubCategories(this)"></i></span>
                 <?php } ?>
             </div>
         </li>

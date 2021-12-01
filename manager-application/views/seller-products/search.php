@@ -20,26 +20,17 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'selprod_title':
-                $variantStr = ($row['selprod_title'] != '') ? $row['selprod_title'] . '<br/>' : '';
-                if (is_array($row['options']) && count($row['options'])) {
-                    foreach ($row['options'] as $op) {
-                        $variantStr .= $op['option_name'] . ': ' . $op['optionvalue_name'] . '<br/>';
-                    }
-                }
-                $td->appendElement('plaintext', array(), $variantStr, true);
-                if ($canViewProducts) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Products') . '", ' . $row['selprod_product_id'] . ')'), $row['product_name'], true);
-                } else {
-                    $td->appendElement('plaintext', array(), $row['product_name'], true);
-                }
+                $product = $row;             
+                $str = $this->includeTemplate('seller-products/product-info-card.php', ['product' => $product,'options' => $row['options'],'canViewProducts' => $canViewProducts, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', array(), $str, true);
                 break;
-            case 'user':
-                if ($canViewUsers) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '", ' . $row['selprod_user_id'] . ')'), '<strong>' . Labels::getLabel('LBL_N:', $adminLangId) . ' </strong>' . $row['user_name'], true);
+            case 'user_name':
+                if ($canViewUsers) {                    
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",{user_id:'.$row['selprod_user_id'].'})'), $row['user_name'], true);
                 } else {
-                    $td->appendElement('plaintext', array(), '<strong>' . Labels::getLabel('LBL_N:', $adminLangId) . ' </strong>' . $row['user_name'], true);
+                    $td->appendElement('plaintext', array(), $row['user_name'], true);
                 }
-                $userDetail = '<br/><strong>' . Labels::getLabel('LBL_Email:', $adminLangId) . ' </strong>' . $row['credential_email'] . '<br/>';
+                $userDetail = '<br/>'.$row['credential_email'];
                 $td->appendElement('plaintext', array(), $userDetail, true);
                 break;
             case 'selprod_price':
@@ -67,9 +58,25 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = [];
-                    $data['deleteButton'] = [];
+                    $data['editButton'] = ['onClick'=>'editRecord('.$row['selprod_id'].', false, "modal-dialog-vertical-md")'];
+                    $data['deleteButton'] = [];                    
                 }
+                if ($row['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                    $data['otherButtons'] = [                        [
+                            'attr' => [
+                                'href' => 'javascript:void(0)',
+                                'onclick' => "sellerProductDownloadFrm(" . $row['selprod_id'] . ")",
+                                'title' => Labels::getLabel('LBL_DOWNLOADS', $siteLangId)
+                            ],
+                            'label' => '<svg class="svg" width="18" height="18">
+                                            <use
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#icon-download">
+                                            </use>
+                                        </svg>'
+                        ]
+                    ];
+                }
+
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;

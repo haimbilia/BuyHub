@@ -59,7 +59,7 @@ class OptionValuesController extends LoggedUserController
 
         if (0 < $optionvalue_id) {
             $optionValueObj = new OptionValue();
-            $data = $optionValueObj->getAtttibutesByIdAndOptionId($option_id, $optionvalue_id, array('optionvalue_id'));
+            $data = $optionValueObj->getAttributesByIdAndOptionId($option_id, $optionvalue_id, array('optionvalue_id'));
 
             if ($data === false) {
                 Message::addErrorMessage(

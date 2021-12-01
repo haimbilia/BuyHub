@@ -14,7 +14,7 @@ class TaxStructureController extends ListingBaseController {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $this->setModel();
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_TAX_STRUCTURE', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageData['plang_title'] ?? LibHelper::getControllerName(true));
         $this->set('frmSearch', $frmSearch);

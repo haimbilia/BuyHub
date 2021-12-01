@@ -1,146 +1,16 @@
 <?php
 class OrdersController extends ListingBaseController
 {
-    private array $order;
+    use OrdersPackage;
+    private int $ordersType = Orders::ORDER_PRODUCT;
+
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewOrders();
     }
 
-    public function index()
-    {
-        $fields = $this->getFormColumns();
-        $frmSearch = $this->getSearchForm($fields);
-
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDERS', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
-        $actionItemsData['newRecordBtn'] = false;
-        $actionItemsData['deleteButton'] = true;
-        $actionItemsData['formAction'] = 'deleteSelected';
-        $actionItemsData['performBulkAction'] = true;
-        $actionItemsData['searchFrmTemplate'] = 'orders/search-form.php';
-
-        $this->set('pageData', $pageData);
-        $this->set('pageTitle', $pageTitle);
-        $this->set('actionItemsData', $actionItemsData);
-        $this->set("frmSearch", $frmSearch);
-        $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ORDER_ID,_CUSTOMER_NAME,_USERNAME_OR_EMAIL_ID', $this->siteLangId));
-        $this->getListingData();
-
-        $this->_template->addJs(array('js/select2.js', 'orders/page-js/index.js'));
-        $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render(true, true, '_partial/listing/index.php');
-    }
-
-    public function search()
-    {
-        $this->getListingData();
-        $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'orders/search.php', true),
-            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-        ];
-        LibHelper::exitWithSuccess($jsonData, true);
-    }
-
-    private function getListingData()
-    {
-        $fields = $this->getFormColumns();
-        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
-
-        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'order_date_added');
-        if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
-        }
-
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC));
-
-        $srchFrm = $this->getSearchForm($fields);
-        $postedData = FatApp::getPostedData();
-        $post = $srchFrm->getFormDataFromArray($postedData);
-
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $page = ($page <= 0) ? 1 : $page;
-
-        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-
-        $srch = new OrderSearch();
-        $srch->joinOrderBuyerUser();
-        $srch->joinOrderPaymentMethod($this->siteLangId);
-        $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
-
-        $srch->addMultipleFields(['order_number', 'order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data', 'buyer.user_name', 'user_updated_on', 'user_id', 'credential_username', 'buyer_cred.credential_email']);
-
-        $keyword = FatApp::getPostedData('keyword', null, '');
-        if (!empty($keyword)) {
-            $srch->addKeywordSearch($keyword);
-        }
-
-        $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
-        if (0 < $user_id) {
-            $srch->addCondition('buyer.user_id', '=', $user_id);
-        }
-
-        if (isset($post['order_payment_status']) && $post['order_payment_status'] != '') {
-            $order_payment_status = FatUtility::int($post['order_payment_status']);
-            $srch->addCondition('order_payment_status', '=', $order_payment_status);
-        }
-
-        $dateFrom = FatApp::getPostedData('date_from', null, '');
-        if (!empty($dateFrom)) {
-            $srch->addDateFromCondition($dateFrom);
-        }
-
-        $dateTo = FatApp::getPostedData('date_to', null, '');
-        if (!empty($dateTo)) {
-            $srch->addDateToCondition($dateTo);
-        }
-
-        $priceFrom = FatApp::getPostedData('price_from', null, '');
-        if (!empty($priceFrom)) {
-            $srch->addMinPriceCondition($priceFrom);
-        }
-
-        $priceTo = FatApp::getPostedData('price_to', null, '');
-        if (!empty($priceTo)) {
-            $srch->addMaxPriceCondition($priceTo);
-        }
-
-        $isDeleted = FatApp::getPostedData('order_deleted', FatUtility::VAR_INT, applicationConstants::NO);
-        $srch->addCondition('order_deleted', '=', $isDeleted);
-        $this->set("deletedOrders", ($isDeleted == applicationConstants::YES));
-
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
-        $this->set('sortBy', $sortBy);
-        $this->set('sortOrder', $sortOrder);
-        $this->set('fields', $fields);
-        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
-        $this->set("canEdit", $this->objPrivilege->canEditOrders($this->admin_id, true));
-        $this->set('canViewSellerOrders', $this->objPrivilege->canViewSellerOrders($this->admin_id, true));
-    }
-
-    private function orderData(int $orderId, bool $bindHistory = false)
+    private function orderData(int $orderId)
     {
         $srch = new OrderSearch($this->siteLangId);
         $srch->joinOrderPaymentMethod();
@@ -154,11 +24,12 @@ class OrdersController extends ListingBaseController
             )
         );
         $srch->addCondition('order_id', '=', $orderId);
-        $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
+        $srch->addCondition('order_type', '=', $this->ordersType);
         $rs = $srch->getResultSet();
-        $this->order = FatApp::getDb()->fetch($rs);
-        if (!$this->order) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Order_Data_Not_Found', $this->siteLangId), true);
+        $this->order = (array) FatApp::getDb()->fetch($rs);
+        if (empty($this->order)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_ORDER_DATA_NOT_FOUND', $this->siteLangId), false, true);
+            CommonHelper::redirectUserReferer();
         }
 
         $opSrch = new OrderProductSearch($this->siteLangId, true, true, true);
@@ -239,22 +110,6 @@ class OrdersController extends ListingBaseController
         $this->set("allowedShippingUserStatuses", $orderObj->getAdminAllowedUpdateShippingUser());
     }
 
-    public function view($orderId)
-    {
-        $this->orderData($orderId);
-        $str = Labels::getLabel('LBL_ORDER_#{ORDER-NUMBER}', $this->siteLangId);
-        $pageData = PageLanguageData::getAttributesByKey('ORDER_VIEW', $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? CommonHelper::replaceStringData($str, ['{ORDER-NUMBER}' =>  $this->order['order_number']]);
-        $this->set('pageTitle', $pageTitle);
-
-        $frm = $this->getPaymentForm($this->order['order_id']);
-        $this->set('frm', $frm);
-
-        $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
-        $this->set('orderStatusArr', $orderStatusArr);
-        $this->_template->render();
-    }
-
     public function getOrderParticulars($orderId)
     {
         $this->orderData($orderId);
@@ -263,12 +118,6 @@ class OrdersController extends ListingBaseController
             'orderSummaryHtml' => $this->_template->render(false, false, 'orders/order-summary.php', true)
         ];
         LibHelper::exitWithSuccess($jsonData, true);
-    }
-
-    public function getItem($orderId)
-    {
-        $this->orderData($orderId);
-        $this->_template->render(false, false);
     }
 
     private function rowsData(int $orderId)
@@ -345,6 +194,7 @@ class OrdersController extends ListingBaseController
         $this->set('orderId', $orderId);
         $this->set('recordId', $opId);
         $this->set('formTitle', $opRow['op_selprod_title']);
+        $this->set('displayLangTab', false);
         $this->_template->render(false, false);
     }
 
@@ -392,9 +242,9 @@ class OrdersController extends ListingBaseController
             (
                 (in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])) ||
                 (in_array($opRow['op_status_id'], $allowedShippingUserStatuses))) &&
-            $this->objPrivilege->canEditSellerOrders($this->admin_id, true) &&
-            !$shippingHanldedBySeller &&
-            ($opRow['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL &&
+                $this->objPrivilege->canEditSellerOrders($this->admin_id, true) &&
+                !$shippingHanldedBySeller &&
+                ($opRow['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL &&
                 $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED));
 
 
@@ -403,6 +253,8 @@ class OrdersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('op', $opRow);
         $this->set('displayShippingUserForm', $displayShippingUserForm);
+        $this->set('includeTabs', $displayShippingUserForm);
+        $this->set('displayLangTab', false);
         $this->_template->render(false, false);
     }
 
@@ -1091,7 +943,7 @@ class OrdersController extends ListingBaseController
         $rs = $srch->getResultSet();
         $order = FatApp::getDb()->fetch($rs);
         if (!empty($order) && array_key_exists('plugin_code', $order) && 'CashOnDelivery' == $order['plugin_code']) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_COD_orders_are_not_eligible_for_payment_status_update', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_COD_ORDERS_ARE_NOT_ELIGIBLE_FOR_PAYMENT_STATUS_UPDATE', $this->siteLangId), true);
         }
 
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);
@@ -1099,7 +951,7 @@ class OrdersController extends ListingBaseController
             LibHelper::exitWithError($orderPaymentObj->getError(), true);
         }
 
-        $this->set('msg', Labels::getLabel('LBL_Payment_Details_Added_Successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('LBL_PAYMENT_DETAILS_ADDED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1180,158 +1032,5 @@ class OrdersController extends ListingBaseController
         $db->commitTransaction();
         $this->set('msg', Labels::getLabel("MSG_REJECTED", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function deleteRecord()
-    {
-        $this->objPrivilege->canEditOrders();
-        $orderId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-
-        $this->markAsDeleted($orderId);
-
-        $this->set('msg', $this->str_delete_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function deleteSelected()
-    {
-        $this->objPrivilege->canEditOrders();
-        $orderIdsArr = FatUtility::int(FatApp::getPostedData('order_ids'));
-        if (empty($orderIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
-        }
-
-        foreach ($orderIdsArr as $orderId) {
-            $this->markAsDeleted($orderId);
-        }
-        $this->set('msg', $this->str_delete_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    protected function markAsDeleted($orderId)
-    {
-        $orderObj = new Orders();
-        $order = $orderObj->getOrderById($orderId);
-        if (false === $order) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Error:_Please_perform_this_action_on_valid_record.', $this->siteLangId), true);
-        }
-
-        if (!$order["order_payment_status"]) {
-            $updateArray = array('order_deleted' => applicationConstants::YES);
-            $whr = array('smt' => 'order_id = ?', 'vals' => array($orderId));
-
-            if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL, $updateArray, $whr)) {
-                LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Access', $this->siteLangId), true);
-            }
-        }
-    }
-
-    private function getPaymentForm($orderId = '')
-    {
-        $frm = new Form('frmPayment');
-        $frm->addHiddenField('', 'opayment_order_id', $orderId);
-        $frm->addTextArea(Labels::getLabel('FRM_Comments', $this->siteLangId), 'opayment_comments', '')->requirements()->setRequired();
-        $frm->addRequiredField(Labels::getLabel('FRM_Payment_Method', $this->siteLangId), 'opayment_method');
-        $frm->addRequiredField(Labels::getLabel('FRM_Txn_ID', $this->siteLangId), 'opayment_gateway_txn_id');
-        $frm->addRequiredField(Labels::getLabel('FRM_Amount', $this->siteLangId), 'opayment_amount')->requirements()->setFloatPositive(true);
-        return $frm;
-    }
-
-    protected function getSearchForm($fields = [])
-    {
-        $currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
-        $currencyData = Currency::getAttributesById($currency_id, array('currency_code', 'currency_symbol_left', 'currency_symbol_right'));
-        $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
-
-        $frm = new Form('frmRecordSearch');
-
-        $frm->addHiddenField('', 'page');
-        if (!empty($fields)) {
-            $this->addSortingElements($frm, 'order_date_added', applicationConstants::SORT_DESC);
-        }
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword');
-        $fld->overrideFldType('search');
-
-        $frm->addSelectBox(Labels::getLabel('FRM_BUYER', $this->siteLangId), 'user_id', []);
-
-        $frm->addSelectBox(Labels::getLabel('FRM_DELETED_ORDERS', $this->siteLangId), 'order_deleted', applicationConstants::getYesNoArr($this->siteLangId));
-
-        $frm->addSelectBox(Labels::getLabel('FRM_Payment_Status', $this->siteLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($this->siteLangId));
-
-        $frm->addDateField('', 'date_from', '', array('placeholder' => 'Date From', 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => 'Date To', 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addTextBox('', 'price_from', '', array('placeholder' => 'Order From' . ' [' . $currencySymbol . ']'));
-        $frm->addTextBox('', 'price_to', '', array('placeholder' => 'Order To [' . $currencySymbol . ']'));
-
-        HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
-        return $frm;
-    }
-
-    protected function getFormColumns(): array
-    {
-        $abusiveWordsTblHeadingCols = CacheHelper::get('abusiveWordsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($abusiveWordsTblHeadingCols) {
-            return json_decode($abusiveWordsTblHeadingCols);
-        }
-
-        $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'order_number' => Labels::getLabel('LBL_Order_ID', $this->siteLangId),
-            'buyer_user_name' => Labels::getLabel('LBL_Customer_Name', $this->siteLangId),
-            'order_date_added' => Labels::getLabel('LBL_ORDER_DATE_&_TIME', $this->siteLangId),
-            'order_net_amount' => Labels::getLabel('LBL_Total', $this->siteLangId),
-            'order_payment_status' => Labels::getLabel('LBL_Payment_Status', $this->siteLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
-        ];
-
-        CacheHelper::create('abusiveWordsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        return $arr;
-    }
-
-    protected function getDefaultColumns(): array
-    {
-        return [
-            'select_all',
-            'listSerial',
-            'order_number',
-            'buyer_user_name',
-            'order_date_added',
-            'order_net_amount',
-            'order_payment_status',
-            'action'
-        ];
-    }
-
-    protected function excludeKeysForSort($fields = []): array
-    {
-        return array_diff($fields, Common::excludeKeysForSort());
-    }
-
-    public function getBreadcrumbNodes($action)
-    {
-        switch ($action) {
-            case 'view':
-                $pageData = PageLanguageData::getAttributesByKey('MANAGE_ORDERS', $this->siteLangId);
-                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_ORDERS', $this->siteLangId);
-
-                $url = FatApp::getQueryStringData('url');
-                $urlParts = explode('/', $url);
-                $title = Labels::getLabel('LBL_VIEW_ORDER', $this->siteLangId);
-                if (isset($urlParts[2])) {
-                    $title = Orders::getAttributesById($urlParts[2], 'order_number');
-                }
-
-                $this->nodes = [
-                    ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('Orders')],
-                    ['title' => $title]
-                ];
-                break;
-            default:
-                parent::getBreadcrumbNodes($action);
-                break;
-        }
-        return $this->nodes;
     }
 }

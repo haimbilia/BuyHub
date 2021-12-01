@@ -11,7 +11,7 @@
                 <button type="button" class="menu-link" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
                             </use>
                         </svg>
                     </span>
@@ -177,7 +177,7 @@
                 <button type="button" class="menu-link" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-catelog">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-product-catalog">
                             </use>
                         </svg>
                     </span>
@@ -343,7 +343,7 @@
                 <button type="button" class="menu-link" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-promotions">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-promotions">
                             </use>
                         </svg>
                     </span>
@@ -509,7 +509,7 @@
                 <button type="button" class="menu-link" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-buyer-orders">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-orders">
                             </use>
                         </svg>
                     </span>
@@ -675,7 +675,7 @@
                 <button type="button" class="menu-link" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-users">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-users">
                             </use>
                         </svg>
                     </span>
@@ -841,7 +841,7 @@
                 <button type="button" class="menu-link" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-reports">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-reports">
                             </use>
                         </svg>
                     </span>
@@ -1007,7 +1007,7 @@
                 <button type="button" class="menu-link" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-sales-tax">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-sales-tax">
                             </use>
                         </svg>
                     </span>
@@ -1173,7 +1173,7 @@
                 <button type="button" class="menu-link" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-import-export">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-import-export">
                             </use>
                         </svg>
                     </span>
@@ -1339,7 +1339,7 @@
                 <button type="button" class="menu-link" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-sitemap">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-SEO">
                             </use>
                         </svg>
                     </span>
@@ -1844,7 +1844,7 @@
                 <button type="button" class="menu-link">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-system-settings">
                             </use>
                         </svg>
                     </span>

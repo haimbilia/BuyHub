@@ -129,16 +129,6 @@ class OrderPayment extends Orders
         $defaultSiteLangId = FatApp::getConfig('conf_default_site_lang');
         $orderInfo = $this->attributes;
         if (!empty($orderInfo)) {
-            /* if(isset($_SESSION['subscription_shopping_cart']["order_id"]) && ($orderInfo['order_id'] == $_SESSION['subscription_shopping_cart']["order_id"])){
-            $scartObj = new SubscriptionCart();
-            $scartObj->clear();
-            $scartObj->updateUserSubscriptionCart();
-            }elseif(isset($_SESSION['shopping_cart']["order_id"]) && ($orderInfo['order_id'] == $_SESSION['shopping_cart']["order_id"])){
-            $cartObj=new Cart($orderInfo['order_user_id']);
-            $cartObj->clear();
-            $cartObj->updateUserCart();
-            } */
-
             $orderPaymentFinancials = $this->getOrderPaymentFinancials($paymentOrderId, $this->orderLangId);
             $orderCredits = $orderPaymentFinancials["order_credits_charge"];
 
@@ -231,55 +221,10 @@ class OrderPayment extends Orders
                 }
             }
 
-            /* code added for COD Orders, if Order Product is associated with Shipping Company Users, then credit Shipping Company User's wallet to make balance 0, as debited when the Order Product is marked as delivered[ */
-            /* $opId = FatUtility::int($opId);
-            if( $opId ){
-            $srch = new OrderProductSearch();
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
-            $srch->addCondition( 'op_id', '=', $opId );
-            $rs = $srch->getResultSet();
-            $childOrderInfo = FatApp::getDb()->fetch( $rs );
-            if( $childOrderInfo ){
-            $srch = new SearchBase(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'optosu');
-            $srch->doNotCalculateRecords();
-            $srch->doNotLimitRecords();
-            $srch->addCondition( 'optosu.optsu_op_id', '=', $childOrderInfo['op_id'] );
-            $rs = $srch->getResultSet();
-            $shippingUserRow = FatApp::getDb()->fetch( $rs );
-            if( $shippingUserRow ){
-            $comments = 'Cash Collected against Invoice ID: '.$childOrderInfo['op_invoice_number'];
-            $txnObj = new Transactions();
-            $txnDataArr = array(
-             'utxn_user_id'=> $shippingUserRow['optsu_user_id'],
-             'utxn_comments'=> $comments,
-             'utxn_status'=> Transactions::STATUS_COMPLETED,
-             'utxn_credit'=> $amount,
-             'utxn_op_id'=> $childOrderInfo['op_id'],
-            );
-            if( !$txnObj->addTransaction($txnDataArr) ){
-             $this->error = $txnObj->getError();
-             return false;
-            }
-            }
-            }
-            } */
-            /* ] */
-
-
             /* Credit money to user's wallet, if order_type = Orders::ORDER_WALLET_RECHARGE, i.e loading money to wallet[ */
             if ($orderDetails['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
                 $formattedOrderValue = "#" . $orderDetails["order_id"];
                 $transObj = new Transactions();
-
-                /* $txnArray["utxn_user_id"]= $orderDetails["order_user_id"];
-                $txnArray["utxn_credit"]= $amount;
-                $txnArray["utxn_status"]= Transactions::STATUS_COMPLETED;
-                $txnArray["utxn_order_id"]= $orderDetails["order_id"];
-                $txnArray["utxn_date"]= date('Y-m-d H:i:s');
-                $txnArray["utxn_comments"]= sprintf(Labels::getLabel('LBL_Loaded_Money_to_Wallet',$defaultSiteLangId),$formattedOrderValue);
-                $transObj->assignValues($txnArray);
-                if (!$transObj->save()) { $this->error = $transObj->getError(); return false;} */
 
                 $txnDataArr = array(
                     'utxn_user_id' => $orderDetails["order_user_id"],

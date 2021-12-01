@@ -14,7 +14,7 @@ class OptionValue extends MyAppModel
         $this->db = FatApp::getDb();
     }
 
-    public static function getSearchObject($langId = 0)
+    public static function getSearchObject($langId = 0, $addOrderBy = true)
     {
         $srch = new SearchBase(static::DB_TBL, 'ov');
 
@@ -28,7 +28,9 @@ class OptionValue extends MyAppModel
             );
         }
 
-        $srch->addOrder('ov.' . static::DB_TBL_PREFIX . 'display_order', 'ASC');
+        if (true === $addOrderBy) {
+            $srch->addOrder('ov.' . static::DB_TBL_PREFIX . 'display_order', 'ASC');
+        }
         return $srch;
     }
 
@@ -42,7 +44,7 @@ class OptionValue extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
-        $record = FatApp::getDb()->fetch($rs, static::DB_TBL_PREFIX . 'id');
+        $record = FatApp::getDb()->fetch($rs);
 
         if (!empty($record)) {
             $lang_record = CommonHelper::getLangFields(
@@ -58,7 +60,7 @@ class OptionValue extends MyAppModel
         return $record;
     }
 
-    public function getAtttibutesByIdAndOptionId($optionId, $recordId, $attr = null)
+    public function getAttributesByIdAndOptionId($optionId, $recordId, $attr = null)
     {
         $optionId = FatUtility::convertToType($optionId, FatUtility::VAR_INT);
         $recordId = FatUtility::convertToType($recordId, FatUtility::VAR_INT);
@@ -88,7 +90,7 @@ class OptionValue extends MyAppModel
         return $row;
     }
 
-    public function getAtttibutesByIdentifierAndOptionId($optionId, $recordId, $attr = null)
+    public function getAttributesByIdentifierAndOptionId($optionId, $recordId, $attr = null)
     {
         $optionId = FatUtility::convertToType($optionId, FatUtility::VAR_INT);
 
@@ -117,7 +119,7 @@ class OptionValue extends MyAppModel
         return $row;
     }
 
-    public function getAtttibutesByOptionId($optionId, $attr = null)
+    public function getAttributesByOptionId($optionId, $attr = null)
     {
         $optionId = FatUtility::convertToType($optionId, FatUtility::VAR_INT);
 
@@ -167,26 +169,6 @@ class OptionValue extends MyAppModel
         $srch->addFld('selprod_id');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (!empty($row)) {
-            return true;
-        }
-        return false;
+        return (bool) FatApp::getDb()->fetch($srch->getResultSet());
     }
-
-    /* public function deleteRecordByOptionId($optionId)
-    {
-
-    if (!FatApp::getDb()->deleteRecords(static::DB_TBL, array('smt'=>static::DB_TBL_PREFIX . 'option_id = ?', 'vals'=>array($optionId)))) {
-    $this->error = FatApp::getDb()->getError();
-    return false;
-    }
-    $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
-    if (!FatApp::getDb()->deleteRecords(static::DB_TBL.'_lang', array('smt'=>$prefix . 'lang_' . static::DB_TBL_PREFIX . 'option_id' . ' = ?', 'vals'=>array($optionId)))) {
-    $this->error = FatApp::getDb()->getError();
-    return false;
-    }
-    return true;
-    } */
 }

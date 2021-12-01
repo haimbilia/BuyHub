@@ -1,16 +1,19 @@
 <?php
 
-class RatingTypesController extends ListingBaseController {
+class RatingTypesController extends ListingBaseController
+{
 
     protected $modelClass = 'RatingType';
     protected $pageKey = 'RATING_TYPES';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewRatingTypes();
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
@@ -23,11 +26,12 @@ class RatingTypesController extends ListingBaseController {
             'newRecordBtn' => false
         ]);
         $this->set('actionItemsData', $actionItemsData);
-        $this->getListingData(); 
+        $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'rating-types/search.php', true),
@@ -36,7 +40,8 @@ class RatingTypesController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function getListingData() {
+    public function getListingData()
+    {
         $this->objPrivilege->canViewRatingTypes();
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
@@ -90,7 +95,8 @@ class RatingTypesController extends ListingBaseController {
      * @param  bool $setVariable
      * @return void
      */
-    protected function checkEditPrivilege(bool $setVariable = false): void {
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
         if (true === $setVariable) {
             $this->set("canEdit", $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
         } else {
@@ -104,7 +110,8 @@ class RatingTypesController extends ListingBaseController {
      * @param  array $constructorArgs
      * @return void
      */
-    protected function setLangTemplateData(array $constructorArgs = []): void {
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
         $this->objPrivilege->canEditRatingTypes();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
@@ -112,7 +119,8 @@ class RatingTypesController extends ListingBaseController {
         $this->checkMediaExist = false;
     }
 
-    public function form() {
+    public function form()
+    {
         $this->objPrivilege->canEditRatingTypes();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
@@ -129,7 +137,8 @@ class RatingTypesController extends ListingBaseController {
         $this->_template->render(false, false);
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditRatingTypes();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -153,14 +162,15 @@ class RatingTypesController extends ListingBaseController {
         if (!$rating->save()) {
             LibHelper::exitWithError($rating->getError(), true);
         }
-        
+
         $this->setLangData($rating, [$rating::tblFld('name') => $post[$rating::tblFld('name')]]);
         $this->set('msg', $this->str_setup_successful);
-        $this->set('recordId', $recordId); 
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($recordId = 0) {
+    private function getForm($recordId = 0)
+    {
         $this->objPrivilege->canEditRatingTypes();
         $recordId = FatUtility::int($recordId);
         $frm = new Form('frmRating', array('id' => 'frmRating'));
@@ -175,15 +185,18 @@ class RatingTypesController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0) {
+    protected function getLangForm($recordId = 0, $langId = 0)
+    {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmRatingLang', array('id' => 'frmRatingLang'));
         $frm->addHiddenField('', 'ratingtype_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_RATING_TYPE', $this->siteLangId), 'ratingtype_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_RATING_TYPE', $langId), 'ratingtype_name');
         return $frm;
     }
 
-    public function getSearchForm($fields = []) {
+    public function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
@@ -195,7 +208,8 @@ class RatingTypesController extends ListingBaseController {
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    private function getFormColumns(): array
+    {
         $shopsTblHeadingCols = CacheHelper::get('ratingTypeTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
@@ -207,13 +221,14 @@ class RatingTypesController extends ListingBaseController {
             'ratingtype_name' => Labels::getLabel('LBL_RATING_TYPE', $this->siteLangId),
             'ratingtype_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId),
             'ratingtype_active' => Labels::getLabel('LBL_STATUS/Email', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('ratingTypeTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
-    private function getDefaultColumns(): array {
+    private function getDefaultColumns(): array
+    {
         return [
             'select_all',
             'listSerial',
@@ -224,8 +239,8 @@ class RatingTypesController extends ListingBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
+    private function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, [], Common::excludeKeysForSort());
     }
-
 }

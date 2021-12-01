@@ -17,7 +17,7 @@ if (isset($actionItemsData['formColumns']) && !empty($actionItemsData['formColum
                 </use>
             </svg>
             <label class="checkbox ' . $disabled . '">
-                <input class="filterColumnJs" type="checkbox" name="listingFld" value="' . $key . '" ' . $checked . $disabled . ' onClick=reloadList()>
+                <input class="filterColumnJs" type="checkbox" name="listingFld" value="' . $key . '" ' . $checked . $disabled . ' onclick=reloadList()>
                 ' . $label . ' <span></span></label>
         </li>';
     }
