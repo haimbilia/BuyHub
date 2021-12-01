@@ -184,7 +184,6 @@ class SellerPackagesController extends ListingBaseController
         $frm = new Form('frmSellerPackage');
         $frm->addHiddenField('', 'spackage_id');
         $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'name');
-        /*$frm->addRequiredField(Labels::getLabel('LBL_Package_Identifier', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'identifier');*/
         $disbaleText = array();
         if ($recordId > 0) {
             $disbaleText = array('disabled' => 'disabled');
@@ -218,14 +217,16 @@ class SellerPackagesController extends ListingBaseController
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $langId = 0)
     {
         $this->checkEditPrivilege();
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
+
         $frm = new Form('frmSellerPackageLang');
         $frm->addHiddenField('', SellerPackages::DB_TBL_PREFIX . 'id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'name');
-        $frm->addTextarea(Labels::getLabel('LBL_Package_Description', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'text');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Package_Name', $langId), SellerPackages::DB_TBL_PREFIX . 'name');
+        $frm->addTextarea(Labels::getLabel('LBL_Package_Description', $langId), SellerPackages::DB_TBL_PREFIX . 'text');
         return $frm;
     }
 
@@ -283,7 +284,7 @@ class SellerPackagesController extends ListingBaseController
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'spackage_name' => Labels::getLabel('LBL_PACKAGE_NAME', $this->siteLangId),
             'spackage_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('subsPkgTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

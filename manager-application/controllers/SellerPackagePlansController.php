@@ -273,7 +273,7 @@ class SellerPackagePlansController extends ListingBaseController
             'spplan_price' => Labels::getLabel('LBL_PLAN_PRICE', $this->siteLangId),
             'spplan_interval' => Labels::getLabel('LBL_INTERVAL', $this->siteLangId),
             'spplan_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('subsPkgPlanTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

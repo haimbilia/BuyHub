@@ -131,7 +131,7 @@ class ThresholdProductsController extends ListingBaseController {
             'selprod_stock' => Labels::getLabel('LBL_STOCK_LEFT', $this->siteLangId),
             'selprod_threshold_stock_level' => Labels::getLabel('LBL_THRESHOLD_STOCK', $this->siteLangId),
             'earch_sent_on' => Labels::getLabel('LBL_LAST_EMAIL_SENT', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('productsthresholdTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
