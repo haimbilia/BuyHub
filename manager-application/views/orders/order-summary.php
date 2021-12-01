@@ -58,7 +58,7 @@ $totalSaving = $selProdTotalSpecialPrice + $order['order_discount_total'] + $ord
                     </li>
                 <?php } ?>
                 <li>
-                    <span class="label"><?php echo Labels::getLabel('MSG_Order_Created', $siteLangId); ?></span>
+                    <span class="label"><?php echo Labels::getLabel('LBL_ADDED_ON', $siteLangId); ?></span>
                     <span class="value"><?php echo FatDate::format($order['order_date_added']); ?></span>
                 </li>
                 <?php if (0 < $shippingCharges) { ?>

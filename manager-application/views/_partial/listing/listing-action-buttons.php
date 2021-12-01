@@ -14,8 +14,8 @@ if (isset($dropdownButtons) && is_array($dropdownButtons)) {
         $ddEditButton = $dropdownButtons['editButton'];
 
         $cls = isset($ddEditButton['class']) ?  'dropdown-item ' . $ddEditButton['class'] : 'dropdown-item';
-        $onClick = $ddEditButton['onClick'] ?? 'editRecord(' . $recordId . ')';
-        $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId), "onclick" => $onClick), 
+        $onclick = $ddEditButton['onclick'] ?? 'editRecord(' . $recordId . ')';
+        $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_EDIT', $siteLangId), "onclick" => $onclick), 
         '<i class="icn">
             <svg class="svg" width="18" height="18">
                 <use
@@ -39,10 +39,10 @@ if (isset($dropdownButtons) && is_array($dropdownButtons)) {
     if (isset($dropdownButtons['deleteButton'])) {
         $ddDeleteButton = $dropdownButtons['deleteButton'];
         $cls = isset($ddDeleteButton['class']) ?  'dropdown-item ' . $ddDeleteButton['class'] : 'dropdown-item';
-        $onClick = $ddDeleteButton['onClick'] ?? 'deleteRecord(' . $recordId . ')';
+        $onclick = $ddDeleteButton['onclick'] ?? 'deleteRecord(' . $recordId . ')';
 
         $div->appendElement('div', array('class' => 'dropdown-divider')); 
-        $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => $onClick), 
+        $div->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_DELETE', $siteLangId), "onclick" => $onclick), 
         '<i class="icn">
             <svg class="svg" width="18" height="18">
                 <use
@@ -57,11 +57,11 @@ if (isset($dropdownButtons) && is_array($dropdownButtons)) {
 
 
 if (isset($editButton) && is_array($editButton)) {
-    $onClick = isset($editButton['onClick']) ? $editButton['onClick'] : 'editRecord(' . $recordId . ')';
+    $onclick = isset($editButton['onclick']) ? $editButton['onclick'] : 'editRecord(' . $recordId . ')';
 
     $cls = isset($editButton['class']) ? $editButton['class'] : '';
     $li = $ul->appendElement('li', ['title' => Labels::getLabel('LBL_EDIT', $siteLangId), 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
-    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, "onclick" => $onClick), 
+    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, "onclick" => $onclick), 
     '<svg class="svg" width="18" height="18">
         <use
             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
@@ -83,12 +83,12 @@ if (isset($otherButtons) && is_array($otherButtons)) {
 }
 
 if (isset($deleteButton) && is_array($deleteButton)) {
-    $onClick = isset($deleteButton['onClick']) ? $deleteButton['onClick'] : "deleteRecord(" . $recordId . ")";
+    $onclick = isset($deleteButton['onclick']) ? $deleteButton['onclick'] : "deleteRecord(" . $recordId . ")";
 
     $cls = isset($deleteButton['class']) ? $deleteButton['class'] : '';
     $title = isset($deleteButton['title']) && !empty($deleteButton['title']) ? $deleteButton['title'] : Labels::getLabel('LBL_DELETE_RECORD', $siteLangId);
     $li = $ul->appendElement('li', ['title' => $title, 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
-    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, "onclick" => $onClick), 
+    $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, "onclick" => $onclick), 
     '<svg class="svg" width="18" height="18">
         <use
             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">

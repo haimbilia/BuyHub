@@ -28,14 +28,14 @@ foreach ($arrListing as $sn => $row) {
                 }
                 $td->appendElement('plaintext', array(), $variantStr, true);
                 if ($canViewProducts) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Products') . '", ' . $row['selprod_product_id'] . ')'), $row['product_name'], true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Products') . '", ' . $row['selprod_product_id'] . ')'), $row['product_name'], true);
                 } else {
                     $td->appendElement('plaintext', array(), $row['product_name'], true);
                 }
                 break;
             case 'user':
                 if ($canViewUsers) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '", ' . $row['selprod_user_id'] . ')'), '<strong>' . Labels::getLabel('LBL_N:', $adminLangId) . ' </strong>' . $row['user_name'], true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '", ' . $row['selprod_user_id'] . ')'), '<strong>' . Labels::getLabel('LBL_N:', $adminLangId) . ' </strong>' . $row['user_name'], true);
                 } else {
                     $td->appendElement('plaintext', array(), '<strong>' . Labels::getLabel('LBL_N:', $adminLangId) . ' </strong>' . $row['user_name'], true);
                 }
@@ -67,7 +67,7 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = ['onClick'=>'editRecord('.$row['selprod_id'].', false, "modal-dialog-vertical-md")'];
+                    $data['editButton'] = ['onclick'=>'editRecord('.$row['selprod_id'].', false, "modal-dialog-vertical-md")'];
                     $data['deleteButton'] = [];
                     
                 }

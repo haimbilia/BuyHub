@@ -1,9 +1,3 @@
-/* $(document).ready(function () {
-    $(document).on('click', 'ul.linksvertical li a.redirectJs', function (event) {
-        event.stopPropagation();
-    });
-}); */
-
 (function () {
     var itemSummaryJs = ".itemSummaryJs";
     var orderSummaryJs = ".orderSummaryJs";

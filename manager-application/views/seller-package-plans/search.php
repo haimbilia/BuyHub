@@ -50,7 +50,7 @@ foreach ($arrListing as $sn => $row) {
 
                 if ($canEdit) {
                     $data['editButton'] = [
-                        'onClick' => 'editPlanRecord(' . $row['spplan_spackage_id'] . ',' . $row['spplan_id'] . ')'
+                        'onclick' => 'editPlanRecord(' . $row['spplan_spackage_id'] . ',' . $row['spplan_id'] . ')'
                     ];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

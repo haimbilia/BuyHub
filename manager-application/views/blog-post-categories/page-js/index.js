@@ -56,15 +56,15 @@ $(document).ready(function() {
 		$("#" + catId).children('div').children('.sortableListsOpener').remove();
 		if ($("#" + catId).hasClass('sortableListsClosed')) {
 			$("#" + catId).removeClass('sortableListsClosed').addClass('sortableListsOpen');
-			$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon cat'+catId+'-js" onClick="hideItems(this)"></i></span>');
+			$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon cat'+catId+'-js" onclick="hideItems(this)"></i></span>');
 		} else {
 			$("#" + catId).removeClass('sortableListsOpen').addClass('sortableListsClosed');
-			$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon cat'+catId+'-js" onClick="displaySubCategories(this)"></i></span>');
+			$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon cat'+catId+'-js" onclick="displaySubCategories(this)"></i></span>');
 		}
 
 		$("#" + catId + ' > ul:first > li:has(> ul)').children('div').children('.sortableListsOpener').remove();
 		$("#" + catId + ' > ul:first > li:has(> ul)').removeClass('sortableListsOpen').addClass('sortableListsClosed');
-		$("#" + catId + ' > ul:first > li:has(> ul)').children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onClick="displaySubCategories(this)"></i></span>');
+		$("#" + catId + ' > ul:first > li:has(> ul)').children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onclick="displaySubCategories(this)"></i></span>');
 	}
 
 	updateCatOrder = function (data) {
@@ -83,7 +83,7 @@ $(document).ready(function() {
 		$("#" + catId + ' ul').hide();
 		$("#" + catId).removeClass('sortableListsOpen').addClass('sortableListsClosed');
 		var icon = $("#" + catId).children('div').children('.sortableListsOpener').remove();
-		$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onClick="displaySubCategories(this)"></i></span>');
+		$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onclick="displaySubCategories(this)"></i></span>');
 	}
 
 	var parentIds = [];

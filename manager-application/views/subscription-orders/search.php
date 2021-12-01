@@ -29,7 +29,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'order_number':
-                $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('Orders', 'view', array($row['order_id']))), $row[$key], true);
+                $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('SubscriptionOrders', 'view', array($row['order_id']))), $row[$key], true);
                 break;
             case 'buyer_user_name':
                 $href = "javascript:void(0)";
@@ -93,7 +93,7 @@ foreach ($arrListing as $sn => $row) {
                     $data['otherButtons'] = [
                         [
                             'attr' => [
-                                'href' => UrlHelper::generateUrl('Orders', 'view', array($row['order_id'])),
+                                'href' => UrlHelper::generateUrl('SubscriptionOrders', 'view', array($row['order_id'])),
                                 'title' => Labels::getLabel('LBL_VIEW_ORDER', $siteLangId),
                             ],
                             'label' => '<svg class="svg" width="18" height="18">

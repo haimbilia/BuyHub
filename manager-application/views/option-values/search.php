@@ -37,10 +37,10 @@ foreach ($arrListing as $sn => $row) {
 
                 if ($canEdit) {
                     $data['editButton'] = [
-                        'onClick' => "optionValueForm(" . $row['optionvalue_option_id'] . "," . $row['optionvalue_id'] . ")"
+                        'onclick' => "optionValueForm(" . $row['optionvalue_option_id'] . "," . $row['optionvalue_id'] . ")"
                     ];
                     $data['deleteButton'] = [
-                        'onClick' => "deleteOptionValueRecord(" . $row['optionvalue_option_id'] . "," . $row['optionvalue_id'] . ")"
+                        'onclick' => "deleteOptionValueRecord(" . $row['optionvalue_option_id'] . "," . $row['optionvalue_id'] . ")"
                     ];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
