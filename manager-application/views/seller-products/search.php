@@ -67,8 +67,9 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = [];
+                    $data['editButton'] = ['onClick'=>'editRecord('.$row['selprod_id'].', false, "modal-dialog-vertical-md")'];
                     $data['deleteButton'] = [];
+                    
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);

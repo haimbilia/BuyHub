@@ -1,7 +1,6 @@
-
+var defaultController = controllerName;
 (function () {
     var transactionUserId = 0;
-
     transactions = function (userId) {
         transactionUserId = userId;
         $.facebox(function () {
@@ -9,20 +8,41 @@
         });
     };
 
-    getTransactions = function (userId) {
+    getTransactions = function (userId, frm = '') {
         $.ykmodal(fcom.getLoader(), false, '');
-        fcom.ajax(fcom.makeUrl('transactions', 'search'), 'utxn_user_id=' + userId, function (t) {
-            $.ykmodal(t, true, '');
+        var data = 'utxn_user_id=' + userId;
+        if (frm) {
+            data = fcom.frmData(frm);
+        }
+        fcom.ajax(fcom.makeUrl('transactions', 'shippingTransactionSearch'), data, function (t) {
+            $.ykmodal(t, false, '');
         });
+        fcom.removeLoader();
+    };
+
+    goToSearchPage = function (page) {
+        if (typeof page == undefined || page == null) {
+            page = 1;
+        }
+        var frm = document.frmShippingSearchPaging;
+        $(frm.page).val(page);
+        getTransactions(0, frm);
+    }
+
+    setTranPageSize = function (pageSize) {
+        var frm = document.frmShippingSearchPaging;
+        $(frm).append("<input type='hidden' name='pageSize' value='" + pageSize + "' />");
+        getTransactions(0, frm);
     };
 
     addUserTransaction = function (userId) {
         $.ykmodal(fcom.getLoader(), false, '');
         var data = 'utxn_user_id=' + userId;
         fcom.ajax(fcom.makeUrl('transactions', 'form'), data, function (t) {
-            $.ykmodal(t, false, '');
+            $.ykmodal(t, false, 'modal-dialog-vertical-md');
             fcom.removeLoader();
         });
+        controllerName = defaultController;
     };
 
     saveRecord = function (frm, callback = '') {
@@ -33,7 +53,6 @@
         if (!$(frm).validate()) {
             return;
         }
-
         $.ykmodal(fcom.getLoader());
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
@@ -45,7 +64,12 @@
                 return false;
             }
             $.ykmsg.success(t.msg);
-            frm.reset();
+            if (controllerName == 'Transactions') {
+                frm.reset();
+            } else {
+                reloadList();
+            }
+            controllerName = defaultController;
             return;
         });
     };
@@ -65,3 +89,15 @@
     };
 
 })();
+
+$(document).bind("close.ykmodal", function () {
+    console.log('close.ykmodal');
+    controllerName = defaultController;
+    $.ykmodal.close();
+});
+$(document).on("hidden.bs.modal", "." + $.ykmodal.element, function () {
+    console.log('hidden.bs.modal');
+    controllerName = defaultController;
+    $.ykmodal.close()
+});
+

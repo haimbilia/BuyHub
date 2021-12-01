@@ -1395,6 +1395,8 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('LBL_Order_Payment_Status_Paid', 1, 'Paid', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_ALERT_STOCK_LEVEL', '1', 'Quantity At Which Stock Level Alerts Are Sent', '1') ON DUPLICATE KEY UPDATE label_caption = 'Quantity At Which Stock Level Alerts Are Sent';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('MSG_ALERT_STOCK_LEVEL_HINT_INFO', '1', 'An email notification will be sent out when available quantity is below or equal to the Quantity at which stock Level Alerts is set.', '1') ON DUPLICATE KEY UPDATE label_caption = 'An email notification will be sent out when available quantity is below or equal to the Quantity at which stock Level Alerts is set.';
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_PRESS_{KEY}_KEY_FOR_BROWSER_SEARCH', 1, 'Press {KEY} again to use native browser search.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

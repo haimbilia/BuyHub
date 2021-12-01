@@ -40,32 +40,32 @@ class TransactionsController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    public function shippingTransactionSearch() {
+        $this->getListingData('utxn_id', 'DESC');
+        $this->set('pageTitle', 'tet');
+        $this->_template->render(false, false);
+    }
+
+    private function getListingData($customSortBy = false, $customOrder = false) {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
-
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current($allowedKeysForSorting);
         }
-
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
-
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
-
         $postedData = FatApp::getPostedData();
         $post = $srchFrm->getFormDataFromArray($postedData);
         $post['utxn_user_id'] = $userId;
-
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-
         $balSrch = Transactions::getSearchObject();
         $balSrch->doNotCalculateRecords();
         $balSrch->doNotLimitRecords();
@@ -74,23 +74,23 @@ class TransactionsController extends ListingBaseController {
             $balSrch->addCondition('utxn_user_id', '=', $userId);
         }
         $balSrch->addCondition('utxn_status', '=', 1);
-
         $srch = Transactions::getSearchObject();
         $srch->joinTable(User::DB_TBL, 'LEFT JOIN', 'u.user_id = utxn.utxn_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT JOIN', 'uc.credential_user_id = u.user_id', 'uc');
         if (0 < $userId) {
             $srch->addCondition('utxn.utxn_user_id', '=', $userId);
         }
-
         $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
-
         $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
         $srch->addGroupBy('utxn.utxn_id');
+        if ($customSortBy != false && $customOrder != false) {
+            $srch->addOrder($customSortBy, $customOrder);
+        } else {
+            $srch->addOrder($sortBy, $sortOrder);
+        }
 
-        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
@@ -126,7 +126,7 @@ class TransactionsController extends ListingBaseController {
     public function form() {
         $this->objPrivilege->canEditUsers();
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
-        $frm = $this->getForm($userId); 
+        $frm = $this->getForm($userId);
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
         $this->set('userId', $userId);

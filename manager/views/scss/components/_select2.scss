@@ -38,7 +38,7 @@
             outline: 0;
         }
         &.select2-selection--clearable {
-            padding-right: 25px;
+            padding-#{$end-direction}: 25px;
         }
         .select2-selection__choice {
             background-color: $bg-gray;
@@ -53,7 +53,7 @@
             }
         }
         .select2-selection__choice__remove {
-            border-right: 0;
+            border-#{$end-direction}: 0;
             color: $txt-gray;
             height: 100%;
             line-height: 2;

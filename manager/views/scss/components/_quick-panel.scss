@@ -76,7 +76,7 @@
 .quick-panel--on {
     .quick-panel {
         transition: left 0.3s ease, right 0.3s ease;
-        right: 0;
+        #{$end-direction}: 0;
     }
     &.quick-panel--right {
         .quick-panel-close {
@@ -132,7 +132,7 @@
             padding: 1rem 0;
             .nav {
                 .nav-item {
-                    margin-right: 1rem;
+                    margin-#{$end-direction}: 1rem;
                 }
                 .nav-link {
                     padding-top: 0.5rem;
@@ -151,7 +151,7 @@
         .quick-panel__content {
             padding: 1rem 0.5rem 1rem 1rem;
             .tab-pane {
-                padding-right: 0.5rem;
+                padding-#{$end-direction}: 0.5rem;
             }
         }
     }

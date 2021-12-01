@@ -9,7 +9,6 @@ backgroundImage = function (recordId, imageType, langId) {
 
 deleteBackgroundImage = function (recordId, afileId ,type, langId) {
     if (!confirm(langLbl.confirmDelete)) { return; }
-    console.log(recordId, afileId ,type, langId);
     fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeMedia'), {recordId, afileId, type, langId}, function (t) {
         backgroundImage(recordId, 'THUMB' ,langId);
         reloadList();

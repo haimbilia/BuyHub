@@ -39,8 +39,8 @@
         margin: 3rem 0;
     }
     &-fit {
-        margin-left: -25px;
-        margin-right: -25px;
+        margin-#{$start-direction}: -25px;
+        margin-#{$end-direction}: -25px;
     }
     &-brand {
         border-bottom: 1px solid $brand-color;

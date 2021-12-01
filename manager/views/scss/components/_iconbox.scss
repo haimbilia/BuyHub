@@ -10,7 +10,7 @@
             -webkit-box-flex: 0;
             -ms-flex: 0 0 50px;
             flex: 0 0 50px;
-            padding-right: 20px;
+            padding-#{$end-direction}: 20px;
             svg {
                 height: 50px;
                 width: 50px;
@@ -52,8 +52,8 @@
             content: ' ';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
+            #{$start-direction}: 0;
+            #{$end-direction}: 0;
             bottom: 0;
             background-color: $bg-white;
             z-index: -1;
@@ -82,8 +82,8 @@
             content: ' ';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
+            #{$start-direction}: 0;
+            #{$end-direction}: 0;
             bottom: 0;
             background-color: $bg-white;
             z-index: -1;
@@ -111,8 +111,8 @@
                 content: ' ';
                 position: absolute;
                 top: 0;
-                left: 0;
-                right: 0;
+                #{$start-direction}: 0;
+                #{$end-direction}: 0;
                 bottom: 0;
                 background-color: $bg-white;
                 z-index: -1;
@@ -141,8 +141,8 @@
                 content: ' ';
                 position: absolute;
                 top: 0;
-                left: 0;
-                right: 0;
+                #{$start-direction}: 0;
+                #{$end-direction}: 0;
                 bottom: 0;
                 background-color: $bg-white;
                 z-index: -1;
@@ -171,8 +171,8 @@
                 content: ' ';
                 position: absolute;
                 top: 0;
-                left: 0;
-                right: 0;
+                #{$start-direction}: 0;
+                #{$end-direction}: 0;
                 bottom: 0;
                 background-color: $bg-white;
                 z-index: -1;
@@ -201,8 +201,8 @@
                 content: ' ';
                 position: absolute;
                 top: 0;
-                left: 0;
-                right: 0;
+                #{$start-direction}: 0;
+                #{$end-direction}: 0;
                 bottom: 0;
                 background-color: $bg-white;
                 z-index: -1;

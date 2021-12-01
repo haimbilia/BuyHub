@@ -13,10 +13,10 @@
     </button>
 </div>
 <script>
-    $(document).on('keyup', '#frmImportExportSetting', function(e) {
-        e.stopImmediatePropagation();
-        if (e.keyCode === 13) {
-            $('.submitBtnJs').click();
-        }
-    });
+$(document).on('keyup', '#frmImportExportSetting', function(e) {
+    e.stopImmediatePropagation();
+    if (e.keyCode === 13) {
+        $('.submitBtnJs').click();
+    }
+});
 </script>

@@ -25,10 +25,10 @@
         color: $txt-gray;
         font-size: 1.3rem;
         font-weight: 500;
-        padding-left: 1rem;
+        padding-#{$start-direction}: 1rem;
     }
     .user-card__badge {
-        padding-left: 0.5rem;
+        padding-#{$start-direction}: 0.5rem;
     }
     &.user-card--skin-light {
         .user-card__name {
@@ -62,10 +62,10 @@
         }
         #{&}__name {
             font-size: 1.1rem;
-            padding-left: 0.5rem;
+            padding-#{$start-direction}: 0.5rem;
         }
         #{&}__badge {
-            padding-left: 0.5rem;
+            padding-#{$start-direction}: 0.5rem;
         }
     }
 }
@@ -76,7 +76,7 @@
     padding: 0;
     margin: 0;
     .user-card-v2__pic {
-        padding-right: 0.5rem;
+        padding-#{$end-direction}: 0.5rem;
         .badge {
             width: 40px;
             height: 40px;
@@ -150,7 +150,7 @@
         }
     }
     #{&}__detalis {
-        padding-left: 1.5rem;
+        padding-#{$start-direction}: 1.5rem;
         a.user-card-v3__name {
             font-size: 1.2rem;
             font-weight: 500;
@@ -182,7 +182,7 @@
                     font-size: 0.9rem;
                     font-weight: 400;
                     color: #9e9bb1;
-                    padding-left: 0.8rem;
+                    padding-#{$start-direction}: 0.8rem;
                     transition: all 0.3s;
                 }
                 &:hover {
@@ -418,7 +418,7 @@
         }
     }
     &-sm {
-        margin-left: 1rem;
+        margin-#{$start-direction}: 1rem;
         img {
             width: 100%;
             max-width: 24px;
@@ -518,7 +518,7 @@
         padding: 0;
         margin: 0;
         .user {
-            margin-right: 0.75rem;
+            margin-#{$end-direction}: 0.75rem;
         }
         .user-card {
             &__info {
@@ -561,12 +561,12 @@
         .user {
             position: relative;
             z-index: 0;
-            margin-left: -10px;
+            margin-#{$start-direction}: -10px;
             border: 2px solid #fff;
             transition: all 0.3s ease;
             background-color: #fff;
             &:first-child {
-                margin-left: 0;
+                margin-#{$start-direction}: 0;
             }
             &:hover {
                 transition: all 0.3s ease;

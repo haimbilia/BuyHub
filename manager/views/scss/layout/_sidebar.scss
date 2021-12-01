@@ -6,7 +6,7 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    left: 0;
+    #{$start-direction}: 0;
     z-index: 98;
     width: 80px;
     transition: width .3s ease;
@@ -15,7 +15,7 @@
     box-shadow: 0 0 80px 50px rgba(206, 213, 225, 0.12);
     transition: transform 0.3s ease-out;
     @include media-breakpoint-down(md) {
-        transform: translateX(-100%);
+        transform: translateX(-100% * $transform-direction);
     }
     &-logo {
         max-width: 30px;
@@ -32,7 +32,7 @@
     }
     &-foot {}
     &--on & {
-        transform: translateX(0);
+        transform: translateX(0 * $transform-direction);
     }
 }
 
@@ -51,7 +51,7 @@
     &-item {
         transition: all 0.3s ease;
         text-align: center;
-        &:hover{ 
+        &:hover {
             //.dropdown-menu{ display: block;}
         }
     }
@@ -143,18 +143,25 @@
             &:not(.collapsed) {
                 .nav_arrow {
                     &:before {
-                        transform: translate(2px, 0) rotate( 45deg);
+                        transform: translateX(2px * $transform-direction) rotate( 45deg);
                     }
                     &:after {
-                        transform: translate(-2px, 0) rotate( -45deg);
+                        transform: translateX(-2px * $transform-direction) rotate( -45deg);
                     }
                 }
             }
             &_arrow {
                 position: absolute;
-                transform: translate(-6px, 0);
+                transform: translateX(-6px * $transform-direction);
                 top: 15px;
                 #{$end-direction}: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 1rem;
+                height: 1rem;
+                border-radius: 50%;
+                background-color: $bg-gray;
                 &:after,
                 &:before {
                     content: "";
@@ -165,10 +172,13 @@
                     transition: all 0.25s ease-in-out;
                 }
                 &:before {
-                    transform: translate(-2px, 0) rotate(45deg);
+                    transform: translateX(-2px * $transform-direction) rotate(45deg);
                 }
                 &:after {
-                    transform: translate(2px, 0) rotate(-45deg);
+                    transform: translateX(2px * $transform-direction) rotate(-45deg);
+                }
+                &:hover {
+                    background-color: darken($bg-gray, 10);
                 }
             }
         }

@@ -30,7 +30,7 @@
                         display: block;
                         top: 0;
                         bottom: 0;
-                        left: 0;
+                        #{$start-direction}: 0;
                         content: ' ';
                         transition: all 100ms ease-in;
                         width: 54px;
@@ -42,7 +42,7 @@
                         display: block;
                         top: 0;
                         bottom: 0;
-                        left: 0;
+                        #{$start-direction}: 0;
                         content: ' ';
                         transition: all 100ms ease-in;
                         width: 54px;
@@ -52,7 +52,7 @@
                         line-height: 26px;
                         top: 3px;
                         bottom: 3px;
-                        margin-left: 3px;
+                        margin-#{$start-direction}: 3px;
                         font-size: 0.9em;
                         text-align: center;
                         //vertical-align: middle;
@@ -161,7 +161,7 @@
                             line-height: 34px;
                             top: 3px;
                             bottom: 3px;
-                            margin-left: 3px;
+                            margin-#{$start-direction}: 3px;
                             font-size: 1em;
                             text-align: center;
                             vertical-align: middle;
@@ -173,7 +173,7 @@
                 ~ {
                     .input-helper {
                         &:after {
-                            margin-left: 34px;
+                            margin-#{$start-direction}: 34px;
                         }
                     }
                 }
