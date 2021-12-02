@@ -71,7 +71,8 @@
                     $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true) 
             ) {
                 ?>
                 <li class="menu-item dropdown dropright dropdownJs">
@@ -89,7 +90,10 @@
                             <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('brandRequests'); ?>">
-                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?><?php if ($brandReqCount) { ?>(<?php echo $brandReqCount; ?>)<?php } ?></span>
+                                        <span class="nav_text">
+                                            <?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?>
+                                            <?php if ($brandReqCount) { ?>(<?php echo $brandReqCount; ?>)<?php } ?>
+                                        </span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -121,6 +125,16 @@
                                     </a>
                                 </li>
                             <?php } ?>
+                            <?php if ($objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('OrderReturnRequests'); ?>">
+                                        <span class="nav_text">
+                                            <?php echo Labels::getLabel('NAV_ORDER_RETURN_REQUESTS', $siteLangId); ?>
+                                            <?php if ($orderRetReqCount) { ?>(<?php echo $orderRetReqCount; ?>)<?php } ?>
+                                        </span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
@@ -129,6 +143,7 @@
             <?php
             if (
                 $objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewSubscriptionOrders(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
@@ -150,6 +165,13 @@
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewSubscriptionOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('SubscriptionOrders'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_ORDERS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -183,9 +205,9 @@
             if (
                 $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) /* ||
-              $objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true) ||
-              $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-              $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true) */
+                $objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true) */
             ) {
                 ?>
                 <li class="menu-item dropdown dropright dropdownJs">
@@ -438,6 +460,7 @@
                     || $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) 
                     || $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)
                     || $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)
+                    || $objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
                 <li class="menu-item dropdown dropright dropdownJs">
@@ -452,6 +475,13 @@
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
                         <h6 class=""><?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?></h6>
                         <ul class="nav">
+                            <?php if ($objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Slides'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_HOME_PAGE_SLIDES', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                             <?php if ($objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ContentPages'); ?>">

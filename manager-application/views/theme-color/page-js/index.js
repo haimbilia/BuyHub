@@ -71,6 +71,31 @@ $(document).ready(function () {
             }
         });
     }
+
+    if (0 < $(".colorPickerSecondaryJs").length) {
+        $(document).on("input", ".colorPickerSecondaryJs", function () {
+            var hex = $(this).val();
+            var rgb = hexToRgb(hex);
+            var hsl = hexToHsl(hex);
+            var colorBlock = $(this).closest('.colorBlockJs');
+            if (0 < colorBlock.length) {
+                colorBlock.find('.hexJs').text(hex);
+                colorBlock.find('.rgbJs').text(rgb);
+                colorBlock.find('.hslJs').text(hsl);
+
+                colorBlock.find('.inputRgbJs').val(rgb);
+                colorBlock.find('.inputHslJs').val(hsl);
+            }
+
+            if ($(this).hasClass('themeColorJs')) {
+                $("[data-jsSecondarycolor]:not(text)").attr('fill', hex);
+            }
+
+            if ($(this).hasClass('themeColorInverseJs')) {
+                $("text[data-jsSecondarycolor]").attr('fill', hex);
+            }
+        });
+    }
 });
 
 (function () {

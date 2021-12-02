@@ -5,7 +5,7 @@ $uploadedTime = AttachedFile::setTimeParam($shop['shop_updated_on']);
 $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, 'THUMB'), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
 ?>
-<a href="javascript:void(0)" class="product-profile">
+<a href="javascript:void(0)" class="product-profile" onclick="redirectUser(<?php echo $shop['shop_user_id']; ?>)">
     <div class="product-profile__thumbnail" data-ratio="1:1">
         <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>">
     </div>        

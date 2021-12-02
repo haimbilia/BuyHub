@@ -38,7 +38,7 @@ $langFld->setfieldTagAttribute('onChange', "navigationLinkLangForm(" . $nav_id .
                                         <div class="col-auto mb-4">
                                             <input class="btn btn-outline-brand btn-sm" type="button"
                                                 value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>"
-                                                onClick="navigationLinkLangForm(<?php echo $nav_id; ?>, <?php echo $nlink_id; ?>, <?php echo $nav_lang_id; ?>, 1)">
+                                                onclick="navigationLinkLangForm(<?php echo $nav_id; ?>, <?php echo $nlink_id; ?>, <?php echo $nav_lang_id; ?>, 1)">
                                         </div>
                                     </div>
                                     <?php

@@ -26,7 +26,7 @@ class FaqController extends ListingBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->checkEditPrivilege();
-        $this->modelObj = (new ReflectionClass('Faq'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [
             'faqlang_lang_id',
             'faqlang_faq_id',
@@ -347,8 +347,8 @@ class FaqController extends ListingBaseController
         $frm->addHiddenField('', 'faq_id');
         $siteLangId = $this->siteLangId;
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_Title', $this->siteLangId), 'faq_title');
-        $frm->addTextArea(Labels::getLabel('FRM_Content', $this->siteLangId), 'faq_content');
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'faq_title');
+        $frm->addTextArea(Labels::getLabel('FRM_CONTENT', $this->siteLangId), 'faq_content');
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
@@ -453,7 +453,7 @@ class FaqController extends ListingBaseController
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_FAQ_CATEGORIES', $this->siteLangId), 'href' => UrlHelper::generateUrl('FaqCategories')],
+                    ['title' => Labels::getLabel('NAV_FAQ_CATEGORIES', $this->siteLangId), 'href' => UrlHelper::generateUrl('FaqCategories')],
                     ['title' => $pageTitle]
                 ];
                 break;

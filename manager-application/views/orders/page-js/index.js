@@ -7,12 +7,4 @@ $(document).ready(function () {
             clearSearch();
         });
     }
-
-    redirectUser = function (id) {
-        redirectfunc(fcom.makeUrl('Users'), { user_id: id }, 0, true);
-    };
-    
-    viewSellerOrder = function (id) {
-        redirectfunc(fcom.makeUrl('SellerOrders'), { order_id: id }, 0, true);
-    };
 })();

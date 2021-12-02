@@ -34,7 +34,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'user_name':
                 if ($canViewUsers) {
-                    !empty($row[$key]) ? $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",{user_id:'.$row['product_seller_id'].'})'), $row[$key]) : $td->appendElement('plaintext', $tdAttr, (!empty($row[$key]) ? $row[$key] : 'Admin'), true);
+                    !empty($row[$key]) ? $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",{user_id:'.$row['product_seller_id'].'})'), $row[$key]) : $td->appendElement('plaintext', $tdAttr, (!empty($row[$key]) ? $row[$key] : 'Admin'), true);
                 } else {
                     $td->appendElement('plaintext', $tdAttr, (!empty($row[$key]) ? $row[$key] : 'Admin'), true);
                 }
