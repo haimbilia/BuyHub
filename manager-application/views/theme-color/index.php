@@ -40,22 +40,7 @@ if (!empty($googleFontFamilyUrl)) {
         <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
         <div class="row">
             <div class="col-md-4">
-                <div class="card">
-                    <div class="card-head">
-                        <div class="card-head-label">
-                            <h3 class="card-head-title">
-                                <a class="back" href="">
-                                    <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
-                                        </use>
-                                    </svg>
-
-                                </a>
-
-                                <?php echo Labels::getLabel('LBL_THEME_SETTINGS', $siteLangId); ?>
-                            </h3>
-                        </div>
-                    </div>
+                <div class="card">                    
                     <div class="card-body">
 
                         <?php echo $frm->getFormTag();

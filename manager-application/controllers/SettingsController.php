@@ -12,6 +12,11 @@ class SettingsController extends ListingBaseController
 
     public function index()
     {
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $this->set('pageTitle', $pageTitle);
+
+        $this->set('pageData', $pageData);
         $this->set('objPrivilege', $this->objPrivilege);
         $this->_template->render();
     }

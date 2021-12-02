@@ -3,11 +3,11 @@
 <main class="main mainJs">
     <div class="container">
         <?php
-        /* $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); */ ?>
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
         <div class="card">
             <div class="card-head">
                 <div class="card-head-label">
-                    <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $siteLangId); ?></h3>
+              
                 </div>
                 <div class="card-toolbar">
                     <div class="maintenance-mode">
