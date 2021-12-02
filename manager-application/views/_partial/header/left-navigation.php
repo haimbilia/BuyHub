@@ -747,10 +747,10 @@
                             </li>
                         <?php } ?>
 
-                        <?php if (false && $objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if ($objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
-                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?></span>
+                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_SHIPPING_PROFILE', $siteLangId); ?></span>
                                 </a>
                             </li> 
                         <?php } ?>

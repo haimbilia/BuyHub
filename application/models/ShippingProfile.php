@@ -1,29 +1,27 @@
 <?php
-class ShippingProfile extends MyAppModel
-{
+
+class ShippingProfile extends MyAppModel {
+
     const DB_TBL = 'tbl_shipping_profile';
     const DB_TBL_PREFIX = 'shipprofile_';
-
     public const DB_TBL_LANG = 'tbl_shipping_profile_lang';
     public const DB_TBL_LANG_PREFIX = 'shipprofilelang_';
 
-    public function __construct($id = 0)
-    {
+    public function __construct($id = 0) {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
         $this->db = FatApp::getDb();
     }
 
-    public static function getSearchObject($langId = 0, $isActive = false)
-    {
+    public static function getSearchObject($langId = 0, $isActive = false) {
         $srch = new SearchBase(static::DB_TBL, 'sprofile');
 
         if ($langId > 0) {
             $srch->joinTable(
-                static::DB_TBL_LANG,
-                'LEFT OUTER JOIN',
-                'sprofile_l.' . static::DB_TBL_LANG_PREFIX . static::tblFld('id') . ' = sprofile.' . static::tblFld('id') . ' and
+                    static::DB_TBL_LANG,
+                    'LEFT OUTER JOIN',
+                    'sprofile_l.' . static::DB_TBL_LANG_PREFIX . static::tblFld('id') . ' = sprofile.' . static::tblFld('id') . ' and
 			sprofile_l.' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId,
-                'sprofile_l'
+                    'sprofile_l'
             );
         }
         if ($isActive == true) {
@@ -32,8 +30,7 @@ class ShippingProfile extends MyAppModel
         return $srch;
     }
 
-    public static function  getProfileArr(int $langId, $userId, $assoc = true, $isActive = false, $default = false)
-    {
+    public static function getProfileArr(int $langId, $userId, $assoc = true, $isActive = false, $default = false) {
         $srch = self::getSearchObject($langId, $isActive);
         if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
             $srch->addCondition('shipprofile_user_id', '=', 0);
@@ -49,7 +46,7 @@ class ShippingProfile extends MyAppModel
         if (true == $default) {
             $srch->addCondition('shipprofile_default', '=', applicationConstants::YES);
         }
-        
+
         if ($assoc) {
             return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         } else {
@@ -57,8 +54,7 @@ class ShippingProfile extends MyAppModel
         }
     }
 
-    public static function getShipProfileIdByName($langId, $profileName, $userId = 0)
-    {
+    public static function getShipProfileIdByName($langId, $profileName, $userId = 0) {
         $srch = self::getSearchObject($langId);
         $cnd = $srch->addCondition('shipprofile_name', '=', trim($profileName));
         //$cnd->attachCondition('shipprofile_identifier', '=', trim($profileName));
@@ -72,8 +68,7 @@ class ShippingProfile extends MyAppModel
         return 0;
     }
 
-    public static function setDefaultShipProfile($userId)
-    {
+    public static function setDefaultShipProfile($userId) {
         /* [ CREATE DEFAULT SHIPPING PROFILE */
         $dataToInsert = array(
             'shipprofile_user_id' => $userId,
@@ -91,8 +86,7 @@ class ShippingProfile extends MyAppModel
         return $shippingProfile->getMainTableRecordId();
     }
 
-    public static function setDefaultZone($userId, $shippingProfileId)
-    {
+    public static function setDefaultZone($userId, $shippingProfileId) {
         $zoneData = [
             'shipzone_user_id' => $userId,
             'shipzone_active' => applicationConstants::ACTIVE,
@@ -132,16 +126,14 @@ class ShippingProfile extends MyAppModel
         return $shipProZoneId;
     }
 
-    public static function getShippingZoneArr(int $userId): array
-    {
+    public static function getShippingZoneArr(int $userId): array {
         $shippingZoneSrch = ShippingZone::getSearchObject();
         $shippingZoneSrch->addCondition('shipzone_user_id', '=', $userId);
         $rs = $shippingZoneSrch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs);
     }
 
-    public static function setDefaultRates($shipProZoneId, $shippingProfileId)
-    {
+    public static function setDefaultRates($shipProZoneId, $shippingProfileId) {
         $shipProZoneId = FatUtility::int($shipProZoneId);
         $shippingProfileId = FatUtility::int($shippingProfileId);
 
@@ -171,8 +163,7 @@ class ShippingProfile extends MyAppModel
         return $shippingRate->getMainTableRecordId();
     }
 
-    public static function getDefaultProfileId($userId, $shippingProfileId = 0)
-    {
+    public static function getDefaultProfileId($userId, $shippingProfileId = 0) {
         $shippingProfileId = FatUtility::int($shippingProfileId);
 
         $srch = self::getSearchObject();
@@ -250,4 +241,23 @@ class ShippingProfile extends MyAppModel
         }
         return $row['shipprofile_id'];
     }
+
+    public function getZones($profileIds) {
+        if (empty($profileIds)) {
+            return array();
+        }
+        $zSrch = ShippingProfileZone::getSearchObject();
+        $zSrch->addCondition("shipprozone_shipprofile_id", "IN", $profileIds);
+        $zRs = $zSrch->getResultSet();
+        $zonesData = FatApp::getDb()->fetchAll($zRs);
+        $zones = array();
+        if (!empty($zonesData)) {
+            foreach ($zonesData as $zone) {
+                $profileId = $zone['shipprozone_shipprofile_id'];
+                $zones[$profileId][] = $zone;
+            }
+        }
+        return $zones;
+    }
+
 }

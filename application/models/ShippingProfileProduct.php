@@ -79,4 +79,5 @@ class ShippingProfileProduct extends MyAppModel
         }
         return false;
     }
+    
 }
