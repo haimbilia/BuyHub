@@ -544,7 +544,8 @@ class BrandsController extends ListingBaseController
         $pagesize = 20;
         $post = FatApp::getPostedData();
 
-        $srch = Brand::getSearchObject($this->siteLangId, true, true);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
+        $srch = Brand::getSearchObject($langId, true, true);
         $srch->addMultipleFields(array('brand_id, IFNULL(brand_name, brand_identifier) as brand_name'));
 
         if (!empty($post['keyword'])) {

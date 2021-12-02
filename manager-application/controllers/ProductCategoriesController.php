@@ -507,7 +507,8 @@ class ProductCategoriesController extends ListingBaseController
         $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
         $search_keyword = urldecode($search_keyword);
         $prodCateObj = new ProductCategory();
-        $categories = $prodCateObj->getProdCatAutoSuggest($search_keyword, 10, $this->siteLangId, $collectionId);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
+        $categories = $prodCateObj->getProdCatAutoSuggest($search_keyword, 10, $langId, $collectionId);
         $json = array();
         foreach ($categories as $key => $val) {
             $json['results'][] = array(

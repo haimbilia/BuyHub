@@ -11,9 +11,13 @@ class Tag extends MyAppModel
         $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);        
     }
     
-    public static function getSearchObject()
+    public static function getSearchObject($langId = 0)
     {        
-        return  new SearchBase(static::DB_TBL, 't');     
+        $srch =  new SearchBase(static::DB_TBL, 't');   
+        if(0 < $langId ){
+            $srch->addCondition(self::tblFld('lang_id'),'=',$langId); 
+        }       
+        return  $srch;
     }
 
     public static function requiredTagsFields()
