@@ -446,6 +446,7 @@
                     || $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) 
                     || $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)
                     || $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)
+                    || $objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
                 <li class="menu-item dropdown dropright dropdownJs">
@@ -460,6 +461,13 @@
                     <div class="dropdown-menu dropdown-menu-anim sidebar-dropdown-menu">
                         <h6 class=""><?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?></h6>
                         <ul class="nav">
+                            <?php if ($objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('Slides'); ?>">
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_HOME_PAGE_SLIDES', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                             <?php if ($objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('ContentPages'); ?>">
