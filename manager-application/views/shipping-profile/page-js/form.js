@@ -9,7 +9,8 @@ $(document).ready(function () {
     var zoneListing = '#listing-zones';
 
     setupProfile = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate())
+            return;
         var data = fcom.frmData(frm);
         var profileId = $('input[name="shipprofile_id"]').val();
         fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'setup'), data, function (t) {
@@ -47,6 +48,7 @@ $(document).ready(function () {
             $(prodListing).html(res);
         });
         $(shipListing).html('');
+        fcom.removeLoader();
     };
 
     searchProductsSection = function (profileId) {
@@ -56,10 +58,12 @@ $(document).ready(function () {
             $(dv).html(res);
             searchProducts(profileId);
         });
+        fcom.removeLoader();
     };
 
     setupProfileProduct = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate())
+            return;
         if ($('input[name="shipprofile_id"]').val() <= 0) {
             fcom.displayErrorMessage(langLbl.saveProfileFirst);
             return;
@@ -95,41 +99,22 @@ $(document).ready(function () {
                 }, 500);
             }
         });
+        fcom.removeLoader();
         //searchProductsSection(profileId);
     };
 
     zoneForm = function (profileId, zoneId) {
         if ($('input[name="shipprofile_id"]').val() <= 0) {
-            fcom.displayErrorMessage(langLbl.saveProfileFirst);
+            $.ykmsg.error(langLbl.saveProfileFirst);
             return;
-        }      
+        }
+        $.ykmodal(fcom.getLoader(), false, '');
         fcom.ajax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
-
-            $.facebox(t,'faceboxWidth');        
+            $.ykmodal(t, false, '');
         });
+        fcom.removeLoader();
     };
-    /*
-    getStates = function (countryId, zoneId, profileId) {
-        var shipZoneId = $('input[name="shipzone_id"]').val();
-        var isdataLoaded = $('.link_' + countryId).data('loadedstates');
-        if (isdataLoaded > 0) {
-            return;
-        }
-        var preSelectedCheckbox = 0;
-        if ($(".checkbox_country_" + countryId).is(":checked")) {
-            preSelectedCheckbox = 1;
-        }
-        var dv = '#state_list_' + countryId;
-        $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ShippingZones', 'searchStates', [countryId, zoneId, shipZoneId, profileId, preSelectedCheckbox]), '', function (res) {
-            $(dv).html(res);
-            $('.link_' + countryId).data('loadedstates', 1);
-            if ($(dv + " .state--js:checked").length) {
-                $(dv + " .state--js:checked").prop('checked', false).click();
-            }
-        });
-    }
-    */
+
 
     setupZone = function (frm) {
         if ($('input[name="rest_of_the_world"]:checked').length < 1 && $('input[name="shiploc_zone_ids[]"]:checked').length < 1 && $('input[name="c_id[]"]:checked').length < 1 && $('input[name="s_id[]"]:checked').length < 1) {
@@ -137,23 +122,23 @@ $(document).ready(function () {
             return;
         }
         /* if (!$(frm).validate()) return; */
-       
-        $('.country--js input[type="checkbox"]:checked').each(function(){
+
+        $('.country--js input[type="checkbox"]:checked').each(function () {
             var countryId = $(this).closest('.country--js').data('countryid');
-            if($('.country_'+countryId+' .state--js').length == $('.country_'+countryId+' .state--js:not(:disabled)').length){
-                $('.country_'+countryId+' .state--js').prop('disabled', true);
-            }else{
+            if ($('.country_' + countryId + ' .state--js').length == $('.country_' + countryId + ' .state--js:not(:disabled)').length) {
+                $('.country_' + countryId + ' .state--js').prop('disabled', true);
+            } else {
                 $(this).prop('checked', false);
             }
-        });       
+        });
         /* if (!$(frm).validate()) return; */
-        /*var data = fcom.frmData(frm);*/        
+        /*var data = fcom.frmData(frm);*/
         var data = $(frm).serialize();
         fcom.updateWithAjax(fcom.makeUrl('shippingZones', 'setup'), data, function (t) {
             var profileId = $('input[name="profile_id"]').val();
             searchZone(profileId, true);
             searchProductsSection(profileId);
-            $(document).trigger('close.facebox');            
+            $(document).trigger('close.facebox');
         });
     };
 
@@ -185,53 +170,49 @@ $(document).ready(function () {
     };
 
     addEditShipRates = function (zoneId, rateId) {
-        /* fcom.displayProcessing(); */
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('shippingZoneRates', 'form', [zoneId, rateId]), '', function (t) {
-                
-                /*$(shipListing).html(t);
-                $.systemMessage.close();
-                $('html, body').animate({
-                    scrollTop: $("#shipping--js").offset().top
-                }, 1000);
-                 * 
-                 */                
-                fcom.updateFaceboxContent(t);                
-            });
-        });
-        
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('shippingZoneRates', 'form', [zoneId, rateId]), '', function (t) {
+            $.ykmsg.close();
+            if (isJson(t)) {
+                var ans = JSON.parse(t);
+                $.ykmsg.error(ans.msg);
+                return;
+            } else {
+                $.ykmodal(t, false, '');
+            }
+        }); 
+
     };
 
     setupRate = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate())
+            return;
         $("input[name='btn_submit']").attr('disabled', 'disabled');
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'setup'), data, function (t) {
             $("input[name='btn_submit']").removeAttr('disabled');
-            var profileId = $('input[name="profile_id"]').val();            
-			searchZone(profileId);
+            var profileId = $('input[name="profile_id"]').val();
+            searchZone(profileId);
             if (t.langId > 0) {
                 editRateLangForm(t.zoneId, t.rateId, t.langId);
                 return;
             }
             searchProductsSection(profileId);
-            $(document).trigger('close.facebox');
+            $.ykmodal.close();
         });
     };
 
     editRateLangForm = function (zoneId, rateId, langId) {
-        /* fcom.displayProcessing();*/
-        $.facebox(function() {
-            fcom.ajax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
-                /*$(shipListing).html(t);
-                $.systemMessage.close();*/
-                fcom.updateFaceboxContent(t);                
-            });
+        $.ykmodal(fcom.getLoader(), false, '');
+        fcom.ajax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
+            $.ykmodal(t, false, '');
         });
+        fcom.removeLoader();
     };
 
     setupLangRate = function (frm) {
-        if (!$(frm).validate()) return;
+        if (!$(frm).validate())
+            return;
         $("input[name='btn_submit']").attr('disabled', 'disabled');
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'langSetup'), data, function (t) {
@@ -243,7 +224,7 @@ $(document).ready(function () {
                 return;
             }
             searchProductsSection(profileId);
-            $(document).trigger('close.facebox');
+            $.ykmodal.close();
         });
     };
 
@@ -262,7 +243,7 @@ $(document).ready(function () {
     getZoneLocation = function (zoneId) {
         $.ajax({
             url: fcom.makeUrl('ShippingZones', 'getLocations', [zoneId, 1]),
-            data: { fIsAjax: 1 },
+            data: {fIsAjax: 1},
             dataType: 'json',
             type: 'post',
             success: function (res) {
@@ -284,9 +265,9 @@ $(document).ready(function () {
             },
         });
     }
-	
+
     selectCountryStates = function (countryid) {
-        if ($(".checkbox_country_" + countryid).is(":checked")) {   
+        if ($(".checkbox_country_" + countryid).is(":checked")) {
             var selectedStates = $('.country_' + countryid + ' input[type="checkbox"]:not(:disabled');
             selectedStates.prop('checked', true);
             $('.selectedStateCount--js_' + countryid).html(selectedStates.length);
@@ -326,10 +307,10 @@ $(document).ready(function () {
     $(document).on('click', '.country--js', function () {
         var countryid = $(this).data('countryid');
         selectCountryStates(countryid);
-        if(!$(this).prop("checked")){       
-            var zoneId = $(this).find('input').val().split("-")[0];          
+        if (!$(this).prop("checked")) {
+            var zoneId = $(this).find('input').val().split("-")[0];
             $('.checkbox_zone_' + zoneId).prop('checked', false);
-        } 
+        }
     });
 
     $(document).on('click', '.state--js', function () {
@@ -350,7 +331,7 @@ $(document).ready(function () {
 
 $(document).on('keyup', "input[name='product_name']", function () {
     var currObj = $(this);
-    var parentForm = currObj.closest('form').attr('id');    
+    var parentForm = currObj.closest('form').attr('id');
     var shipProfileId = $("#" + parentForm + " input[name='shippro_shipprofile_id']").val();
     if ('' != currObj.val()) {
         currObj.siblings('ul.dropdown-menu').remove();
@@ -361,17 +342,17 @@ $(document).on('keyup', "input[name='product_name']", function () {
             'source': function (request, response) {
                 $.ajax({
                     url: fcom.makeUrl('shippingProfileProducts', 'autoComplete'),
-                    data: { fIsAjax: 1, keyword: currObj.val(), shipProfileId: shipProfileId },
+                    data: {fIsAjax: 1, keyword: currObj.val(), shipProfileId: shipProfileId},
                     dataType: 'json',
                     type: 'post',
                     success: function (json) {
                         response($.map(json, function (item) {
-                            return { label: item['name'], value: item['name'], id: item['id'] };
+                            return {label: item['name'], value: item['name'], id: item['id']};
                         }));
                     },
                 });
             },
-            select: function (event, ui) {             
+            select: function (event, ui) {
                 $("#" + parentForm + " input[name='shippro_product_id']").val(ui.item.id);
             }
         });
@@ -379,3 +360,12 @@ $(document).on('keyup', "input[name='product_name']", function () {
         $("#" + parentForm + " input[name='shippro_product_id']").val('');
     }
 });
+
+function isJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}

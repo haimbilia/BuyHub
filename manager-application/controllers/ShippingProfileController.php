@@ -2,7 +2,7 @@
 
 class ShippingProfileController extends ListingBaseController {
 
-    protected $modelClass = 'ShippingProfileProduct';
+    protected $modelClass = 'ShippingProfile';
     protected $pageKey = 'MANAGE_SHIPPING_PROFILE';
 
     public function __construct($action) {
@@ -18,7 +18,14 @@ class ShippingProfileController extends ListingBaseController {
         $this->setModel();
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj));
+        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
+            'newRecordBtnAttrs' => ['attr' => [
+                    'href' => UrlHelper::generateUrl('shippingProfile', 'form'),
+                    'onclick' => '',
+                    'title' => Labels::getLabel('LBL_ADD_NEW', $this->siteLangId)
+                ]
+            ]
+        ]);
         $this->set('actionItemsData', $actionItemsData);
         $this->set('canEdit', $this->objPrivilege->canEditShippingManagement($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
@@ -133,43 +140,42 @@ class ShippingProfileController extends ListingBaseController {
         $this->set('languages', Language::getAllNames());
         $this->_template->render();
     }
-    
-    public function setup()
-    {
+
+    public function setup() {
         $this->objPrivilege->canEditShippingManagement();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post)) {
             Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
             FatUtility::dieJsonError(Message::getHtml());
-        } 
+        }
         $profileId = $post['shipprofile_id'];
-        unset($post['shipprofile_id']); 
+        unset($post['shipprofile_id']);
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $post['shipprofile_identifier'] = $post['shipprofile_name'][$siteDefaultLangId] ?? ''; 
+        $post['shipprofile_identifier'] = $post['shipprofile_name'][$siteDefaultLangId] ?? '';
         $spObj = new ShippingProfile($profileId);
-        $spObj->assignValues($post); 
+        $spObj->assignValues($post);
         if (!$spObj->save()) {
             Message::addErrorMessage($spObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
-        }        
-        
+        }
+
         $languages = Language::getAllNames();
-        foreach ($post['shipprofile_name'] as $langId => $profileName) {                       
-            if(empty($profileName)){
+        foreach ($post['shipprofile_name'] as $langId => $profileName) {
+            if (empty($profileName)) {
                 continue;
             }
-            if (!$spObj->updateLangData($langId, ['shipprofile_name'=> $profileName])) {
+            if (!$spObj->updateLangData($langId, ['shipprofile_name' => $profileName])) {
                 Message::addErrorMessage($spObj->getError());
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
-        
+
         if (1 > $profileId) {
             $shipProZoneId = ShippingProfile::setDefaultZone(AdminAuthentication::getLoggedAdminId(), $spObj->getMainTableRecordId());
             ShippingProfile::setDefaultRates($shipProZoneId, $spObj->getMainTableRecordId());
-        } 
-        
+        }
+
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
         $this->set('profileId', $spObj->getMainTableRecordId());
         $this->_template->render(false, false, 'json-success.php');

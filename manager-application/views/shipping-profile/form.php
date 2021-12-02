@@ -53,6 +53,32 @@ $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
                         </div>
                     </div>  
                 </div>
+
+
+                <div class="card"> 
+                    <div class="card-head"> 
+                        <div class="card-head-label">
+                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_Shipping_to', $siteLangId); ?></h3>
+                        </div> 
+                        <div class="card-toolbar">
+                            <div class="maintenance-mode">
+                                <a class="btn btn-clean btn-sm btn-icon" href="javascript:void(0);" onClick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
+                                    <svg class="svg" width="18" height="18">
+                                    <use xlink:href="/admin//images/retina/sprite-actions.svg#add">
+                                    </use>
+                                    </svg></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body"> 
+                        <div class="row"> 
+                            <input type="hidden" name="profile_id" value="<?php echo $profile_id; ?>">
+                            <div id="listing-zones" class="portlet__body col-md-12"></div>
+                        </div>
+                    </div>  
+                </div>
+
+
             </div>
         </div>
     </div>
