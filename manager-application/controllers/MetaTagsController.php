@@ -1,6 +1,8 @@
 <?php
 class MetaTagsController extends ListingBaseController
 {
+    protected $pageKey = 'METATAG_MANAGEMENT';
+
     private array $tabsArr = [];
     private array $postedData = [];
     private string $controller = '';
@@ -14,6 +16,11 @@ class MetaTagsController extends ListingBaseController
 
     public function index()
     {
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);       
         $this->set('activeTab', MetaTag::META_GROUP_DEFAULT);
         $this->set('metaTypeDefault', MetaTag::META_GROUP_DEFAULT);
         $this->getListingData();
@@ -40,7 +47,7 @@ class MetaTagsController extends ListingBaseController
         if (empty($metaType)) {
             $metaType = MetaTag::META_GROUP_DEFAULT;
         }
-        
+
         $fields = $this->getFormColumns($metaType);
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -343,7 +350,7 @@ class MetaTagsController extends ListingBaseController
         return $srch;
     }
 
-    private function getSearchFormForMetaType($metaType, $fields = []): Form 
+    private function getSearchFormForMetaType($metaType, $fields = []): Form
     {
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'metaType', $metaType);
@@ -355,7 +362,7 @@ class MetaTagsController extends ListingBaseController
         return $frm;
     }
 
-    private function getAdvancedSearchForm($metaType, $fields = []): Form 
+    private function getAdvancedSearchForm($metaType, $fields = []): Form
     {
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'metaType', $metaType);
@@ -365,7 +372,7 @@ class MetaTagsController extends ListingBaseController
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-        
+
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -382,7 +389,7 @@ class MetaTagsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
         $frm->addSelectBox(Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId), 'hasTagsAssociated', applicationConstants::getYesNoArr($this->siteLangId), false, array(), Labels::getLabel('FRM_DOESN\'T_MATTER', $this->siteLangId));
-        
+
         HtmlHelper::addSearchButton($frm);
 
         $clearBtnHtm = HtmlHelper::addButtonHtml(Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-light', 'clearSearch(true)');
@@ -493,7 +500,7 @@ class MetaTagsController extends ListingBaseController
         }
         $frm = $this->getForm($metaId, $metaType, $post['meta_record_id']);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         if ($metaType == MetaTag::META_GROUP_ADVANCED) {
             $post['meta_advanced'] = 1;
         } elseif ($metaType == MetaTag::META_GROUP_DEFAULT) {
@@ -717,7 +724,7 @@ class MetaTagsController extends ListingBaseController
 
     protected function getFormColumns(string $metaType): array
     {
-        $metaTagsTblHeadingCols = CacheHelper::get('metaTagsTblHeadingCols'. $metaType . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $metaTagsTblHeadingCols = CacheHelper::get('metaTagsTblHeadingCols' . $metaType . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($metaTagsTblHeadingCols) {
             return json_decode($metaTagsTblHeadingCols);
         }
@@ -726,7 +733,7 @@ class MetaTagsController extends ListingBaseController
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'meta_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId)
         ];
-        
+
         switch ($metaType) {
             case MetaTag::META_GROUP_PRODUCT_DETAIL:
                 $arr['selprod_title'] = Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId);
@@ -775,5 +782,23 @@ class MetaTagsController extends ListingBaseController
     protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('NAV_SEO', $this->siteLangId)],
+                    ['title' => $pageTitle]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
+        }
+        return $this->nodes;
     }
 }

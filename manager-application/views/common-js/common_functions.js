@@ -20,26 +20,26 @@ function getNotifications() {
     );
 }
 
-function getHelpCenterContent(controller, action = "") {
-    fcom.ajax(
-        fcom.makeUrl("HelpCenter", "getContent", [controller, action]),
-        "",
-        function (t) {
-            var res = JSON.parse(t);
-            if (0 == res.status) {
-                return;
-            }
+/* function getHelpCenterContent(controller, action = "") {
+  fcom.ajax(
+    fcom.makeUrl("HelpCenter", "getContent", [controller, action]),
+    "",
+    function (t) {
+      var res = JSON.parse(t);
+      if (0 == res.status) {
+        return;
+      }
 
             if (1 > $("#helpCenterJs").length) {
                 $(".mainJs").after('<div id="helpCenterJs"></div>');
             }
 
-            if ("undefined" != typeof res.html) {
-                $("#helpCenterJs").html(res.html);
-            }
-        }
-    );
-}
+      if ("undefined" != typeof res.html) {
+        $("#helpCenterJs").html(res.html);
+      }
+    }
+  );
+} */
 
 copyText = function (obj, applyToolTipInfo = true) {
     var title = $(obj).data("title");

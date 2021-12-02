@@ -3,7 +3,7 @@
 class ShippingCompanyUsersController extends ListingBaseController {
 
     protected $modelClass = 'User';
-    protected $pageKey = 'MANAGE_SHIPPING_COMPANY_USERS';
+    protected $pageKey = 'SHIPPING_COMPANY_USERS';
 
     public function __construct($action) {
         parent::__construct($action);
