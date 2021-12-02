@@ -17,6 +17,7 @@ $brandName = $order['op_brand_name'];
 $options = $order['op_selprod_options'] ?? '';
 $options = explode(SellerProduct::MULTIPLE_OPTION_SEPARATOR, $options);
 
+$includeShopName = $includeShopName ?? false;
 $shopName = $order['op_shop_name'] ?? '';
 if (isset($order['totOrders']) && $order['totOrders'] > 1) {
     $otherInfo = Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_number'] . "</a>";
@@ -38,19 +39,38 @@ $includeInvoiceNo = $includeInvoiceNo ?? true;
                 <?php echo $order['op_invoice_number']; ?>
             </div>
         <?php } ?>
-
         <div class="title"><?php echo $productTitle; ?></div>
-        <?php if (!empty($options)) { ?>
+
+        <?php if (true === $includeShopName) { ?>
+            <div class="sold_by">
+                <svg class="svg" width="20" height="20">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">
+                    </use>
+                </svg> <?php echo $shopName; ?>
+            </div>
+        <?php } ?>
+
+        <div class="brand">
+            <ul class="list-options list-options--horizontal">
+                <li>
+                    <span class="label"><?php echo Labels::getLabel('LBL_BRAND', $siteLangId); ?>:</span>
+                    <span class="value"><?php echo $order['op_brand_name']; ?></span>
+                </li>
+            </ul>
+        </div>
+
+        <?php 
+        if (!empty($options)) { ?>
             <ul class="list-options <?php echo isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical"'; ?>">
-                <?php foreach ($options as $option) { 
+                <?php foreach ($options as $option) {
                     $option = explode(SellerProduct::OPTION_NAME_SEPARATOR, $option);
                     if (empty(array_filter($option))) {
                         continue;
                     }
-                    ?>
+                ?>
                     <li>
-                        <span class="label"><?php echo $option[0]; ?>:</span>
-                        <span class="value"><?php echo $option[1]; ?></span>
+                        <span class="label"><?php echo trim($option[0]); ?>:</span>
+                        <span class="value"><?php echo trim($option[1]); ?></span>
                     </li>
                 <?php } ?>
             </ul>

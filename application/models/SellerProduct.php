@@ -37,7 +37,7 @@ class SellerProduct extends MyAppModel
     public const UPDATE_OPTIONS_COUNT = 10;
     public const INVENTORY_RESTRICT_LIMIT = 20;
 
-    public const OPTION_NAME_SEPARATOR = ': ';
+    public const OPTION_NAME_SEPARATOR = ':';
     public const MULTIPLE_OPTION_SEPARATOR = ' | ';
 
     public function __construct($id = 0)

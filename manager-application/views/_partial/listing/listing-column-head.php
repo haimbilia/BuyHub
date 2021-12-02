@@ -9,10 +9,7 @@ if (2 > count($arrListing)) {
     $allowedKeysForSorting = [];
 }
 
-$tbl = new HtmlElement(
-    'table',
-    array('width' => '100%', 'class' => 'table table-dashed', 'id' => $tableId)
-);
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-dashed', 'id' => $tableId));
 $th = $tbl->appendElement('thead', ['class' => 'tableHeadJs'])->appendElement('tr');
 foreach ($fields as $key => $val) {
     $defaultSortingClass = HtmlHelper::getDefaultSortingClass($key, $sortBy, $sortOrder);
