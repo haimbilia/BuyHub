@@ -95,9 +95,13 @@ class Configurations extends FatModel
         return $arr;
     }
 
-    public static function getConfigurations()
-    {
+    public static function getConfigurations($attr = [])
+    {        
+      
         $srch = new SearchBase(static::DB_TBL, 'conf');
+        if (!empty($attr)) {
+            $srch->addCondition('conf_name', 'in', $attr);
+        }
         $rs = $srch->getResultSet();
         $record = array();
         while ($row = FatApp::getDb()->fetch($rs)) {

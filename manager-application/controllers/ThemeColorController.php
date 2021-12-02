@@ -21,7 +21,8 @@ class ThemeColorController extends ListingBaseController
 
     public function index()
     {
-        $record = Configurations::getConfigurations();
+        $fields = ['CONF_THEME_COLOR_RGB', 'CONF_THEME_COLOR_HSL', 'CONF_THEME_COLOR_INVERSE_RGB', 'CONF_THEME_COLOR_INVERSE_HSL', 'CONF_SECONDARY_THEME_COLOR_RGB', 'CONF_SECONDARY_THEME_COLOR_HSL', 'CONF_SECONDARY_THEME_COLOR_INVERSE_RGB', 'CONF_SECONDARY_THEME_COLOR_INVERSE_HSL', 'CONF_THEME_FONT_FAMILY_URL', 'CONF_THEME_FONT_FAMILY', 'CONF_THEME_FONT_WEIGHT', 'CONF_THEME_COLOR', 'CONF_THEME_COLOR_INVERSE', 'CONF_SECONDARY_THEME_COLOR', 'CONF_SECONDARY_THEME_COLOR_INVERSE'];
+        $record = Configurations::getConfigurations($fields);
 
         $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
         if (!empty($this->apiKey) && array_key_exists('CONF_THEME_FONT_FAMILY', $record) && ('' == $record['CONF_THEME_FONT_FAMILY'] || 'Poppins' == $googleFontFamily)) {
@@ -50,20 +51,26 @@ class ThemeColorController extends ListingBaseController
         $frm->addHiddenField("", 'CONF_THEME_COLOR_HSL');
         $frm->addHiddenField("", 'CONF_THEME_COLOR_INVERSE_RGB');
         $frm->addHiddenField("", 'CONF_THEME_COLOR_INVERSE_HSL');
+        $frm->addHiddenField("", 'CONF_SECONDARY_THEME_COLOR_RGB');
+        $frm->addHiddenField("", 'CONF_SECONDARY_THEME_COLOR_HSL');
+        $frm->addHiddenField("", 'CONF_SECONDARY_THEME_COLOR_INVERSE_RGB');
+        $frm->addHiddenField("", 'CONF_SECONDARY_THEME_COLOR_INVERSE_HSL');
 
         if (!empty($this->apiKey)) {
             $frm->addHiddenField("", 'CONF_THEME_FONT_FAMILY_URL');
-            $fld = $frm->addRequiredField(Labels::getLabel('LBL_FONT_FAMILY:', $this->siteLangId), 'CONF_THEME_FONT_FAMILY');
+            $fld = $frm->addRequiredField(Labels::getLabel('FRM_FONT_FAMILY:', $this->siteLangId), 'CONF_THEME_FONT_FAMILY');
             $link = "<a href='https://fonts.google.com' target='_blank'>https://fonts.google.com</a>";
-            $url = CommonHelper::replaceStringData(Labels::getLabel('LBL_REFERENCE_:_{URL}', $this->siteLangId), ['{URL}' => $link]);
+            $url = CommonHelper::replaceStringData(Labels::getLabel('FRM_REFERENCE_:_{URL}', $this->siteLangId), ['{URL}' => $link]);
             $fld->htmlAfterField = '<small>' . $url . ' </small>';
-            $frm->addRequiredField(Labels::getLabel('LBL_FONT_WEIGHT:', $this->siteLangId), 'CONF_THEME_FONT_WEIGHT');
+            $frm->addRequiredField(Labels::getLabel('FRM_FONT_WEIGHT:', $this->siteLangId), 'CONF_THEME_FONT_WEIGHT');
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR', $this->siteLangId), 'CONF_THEME_COLOR');
-        $frm->addRequiredField(Labels::getLabel('LBL_THEME_COLOR_INVERSE', $this->siteLangId), 'CONF_THEME_COLOR_INVERSE');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
-        $frm->addButton("", "btn_clear", Labels::getLabel('LBL_RESET', $this->siteLangId), ['title' => Labels::getLabel('LBL_RESET_TO_DEFAULT_VALUES', $this->siteLangId)]);
+        $frm->addRequiredField(Labels::getLabel('FRM_PRIMARY_THEME_COLOR', $this->siteLangId), 'CONF_THEME_COLOR');
+        $frm->addRequiredField(Labels::getLabel('FRM_PRIMARY_THEME_COLOR_INVERSE', $this->siteLangId), 'CONF_THEME_COLOR_INVERSE');
+        $frm->addRequiredField(Labels::getLabel('FRM_SECONDARY_THEME_COLOR', $this->siteLangId), 'CONF_SECONDARY_THEME_COLOR');
+        $frm->addRequiredField(Labels::getLabel('FRM_SECONDARY_THEME_COLOR_INVERSE', $this->siteLangId), 'CONF_SECONDARY_THEME_COLOR_INVERSE');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
+        $frm->addButton("", "btn_clear", Labels::getLabel('BTN_RESET', $this->siteLangId), ['title' => Labels::getLabel('BTN_RESET_TO_DEFAULT_VALUES', $this->siteLangId)]);
         return $frm;
     }
 
@@ -197,6 +204,12 @@ class ThemeColorController extends ListingBaseController
             "CONF_THEME_COLOR_INVERSE" => "#ffffff",
             "CONF_THEME_COLOR_INVERSE_RGB" => "255,255,255",
             "CONF_THEME_COLOR_INVERSE_HSL" => "0,0%,100%",
+            "CONF_SECONDARY_THEME_COLOR" => "#6DCDEF",
+            "CONF_SECONDARY_THEME_COLOR_RGB" => "109 205 239",
+            "CONF_SECONDARY_THEME_COLOR_HSL" => "196,80%,68%",
+            "CONF_SECONDARY_THEME_COLOR_INVERSE" => "#ffffff",
+            "CONF_SECONDARY_THEME_COLOR_INVERSE_RGB" => "255,255,255",
+            "CONF_SECONDARY_THEME_COLOR_INVERSE_HSL" => "0,0%,100%",
             "CONF_THEME_FONT_WEIGHT" => '[{"id":"regular","value":"Poppins - Regular","subset":["devanagari","latin","latin-ext"]}]',
         ];
 
@@ -210,7 +223,7 @@ class ThemeColorController extends ListingBaseController
     }
 
     public function getBreadcrumbNodes($action)
-    {        
+    {
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {

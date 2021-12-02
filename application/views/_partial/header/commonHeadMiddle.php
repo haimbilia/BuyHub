@@ -50,15 +50,13 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     }
 
     :root {
-        <?php if (CommonHelper::isAppUser()) { ?>
-            --brand-color: #<?php echo FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-            --brand-color-inverse: #<?php echo FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-            --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-            --secondary-color-inverse: #<?php echo FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-        <?php } else { ?>
-            --brand-color: <?php echo $themeColor; ?>;
-            --brand-color-alpha: <?php echo strtr($themeColor, ["rgb(" => "", ")" => ""]); ?>;
-            --brand-color-inverse: <?php echo $themeColorInverse; ?>;
+        <?php if (CommonHelper::isAppUser()) { ?>--brand-color: #<?php echo $themeColor; ?>;
+        --brand-color-inverse: #<?php echo FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''); ?>;
+        --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+        --secondary-color-inverse: #<?php echo FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''); ?>;
+        <?php } else { ?>--brand-color: <?php echo $themeColor; ?>;
+        --brand-color-alpha: <?php echo strtr($themeColor, ["rgb(" => "", ")" => ""]); ?>;
+        --brand-color-inverse: <?php echo $themeColorInverse; ?>;
         <?php } ?>
     }
 </style>
