@@ -27,12 +27,12 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
                     'THUMB', 
                     false
                 ), CONF_WEBROOT_FRONT_URL
-                ) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'
-            ),
-            'name' => $image['afile_name'],
-            'afile_id' => $image['afile_id'],
-        ]; 
-    } 
+			) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'
+		),
+		'name' => $image['afile_name'],
+		'afile_id' => $image['afile_id'],
+	]; 
+} 
 
 $slideImage = $imageFrm->getField('slide_image');
 $slideImage->value = '<span id="imageListingJs"></span>';
@@ -63,7 +63,7 @@ $otherButtons = [
     ]
 ];
 
-$formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
+$formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); ?>
 
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
