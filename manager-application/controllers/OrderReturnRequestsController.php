@@ -186,16 +186,16 @@ class OrderReturnRequestsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_BUYER_DETAILS', $this->siteLangId), 'order_user_id', []);
-        $frm->addSelectBox(Labels::getLabel('LBL_VENDER_DETAILS', $this->siteLangId), 'op_selprod_user_id', []);
-        $frm->addSelectBox(Labels::getLabel('LBL_PRODUCT', $this->siteLangId), 'orrequest_op_id', []);
-        $frm->addSelectBox(Labels::getLabel('LBL_REQUEST_STATUS', $this->siteLangId), 'orrequest_status', OrderReturnRequest::getRequestStatusArr($this->siteLangId), '', array(), Labels::getLabel('LBL_All_Request_Status', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_BUYER_DETAILS', $this->siteLangId), 'order_user_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_VENDER_DETAILS', $this->siteLangId), 'op_selprod_user_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'orrequest_op_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId), 'orrequest_status', OrderReturnRequest::getRequestStatusArr($this->siteLangId), '', array(), Labels::getLabel('FRM_ALL_REQUEST_STATUS', $this->siteLangId));
         $requestType = OrderReturnRequest::getRequestTypeArr($this->siteLangId);
         if (count($requestType) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_Request_Type', $this->siteLangId), 'orrequest_type', OrderReturnRequest::getRequestTypeArr($this->siteLangId), '', array(), Labels::getLabel('LBL_All_Request_Type', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_TYPE', $this->siteLangId), 'orrequest_type', OrderReturnRequest::getRequestTypeArr($this->siteLangId), '', array(), Labels::getLabel('FRM_ALL_REQUEST_TYPE', $this->siteLangId));
         }
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -521,7 +521,7 @@ class OrderReturnRequestsController extends ListingBaseController
         $frm = new Form('frmOrderReturnRequestMessge');
         $frm->addHiddenField('', 'orrmsg_orrequest_id');
 
-        $fld = $frm->addTextArea(Labels::getLabel('LBL_Comment', $this->siteLangId), 'orrmsg_msg');
+        $fld = $frm->addTextArea(Labels::getLabel('FRM_COMMENT', $this->siteLangId), 'orrmsg_msg');
         $fld->requirements()->setRequired();
         $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_Message_is_mandatory', $langId));
         return $frm;
@@ -535,7 +535,7 @@ class OrderReturnRequestsController extends ListingBaseController
         $statusArr = OrderReturnRequest::getRequestStatusArr($langId);
         unset($statusArr[OrderReturnRequest::RETURN_REQUEST_STATUS_ESCALATED]);
         unset($statusArr[OrderReturnRequest::RETURN_REQUEST_STATUS_CANCELLED]);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'orrequest_status', $statusArr);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'orrequest_status', $statusArr);
         $fld->requirements()->setRequired(true);
 
         $moveRefundLocationArr = PaymentMethods::moveRefundLocationsArr($this->siteLangId);
@@ -545,9 +545,9 @@ class OrderReturnRequestsController extends ListingBaseController
             unset($moveRefundLocationArr[PaymentMethods::MOVE_TO_CUSTOMER_WALLET]);
         }
 
-        $frm->addRadioButtons(Labels::getLabel('LBL_TRANSFER_REFUND', $this->siteLangId), 'orrequest_refund_in_wallet', $moveRefundLocationArr, PaymentMethods::MOVE_TO_ADMIN_WALLET, array('class' => 'list-inline'));
+        $frm->addRadioButtons(Labels::getLabel('FRM_TRANSFER_REFUND', $this->siteLangId), 'orrequest_refund_in_wallet', $moveRefundLocationArr, PaymentMethods::MOVE_TO_ADMIN_WALLET, array('class' => 'list-inline'));
 
-        $frm->addTextarea(Labels::getLabel('LBL_Comment', $this->siteLangId), 'orrequest_admin_comment');
+        $frm->addTextarea(Labels::getLabel('FRM_COMMENT', $this->siteLangId), 'orrequest_admin_comment');
         return $frm;
     }
 
