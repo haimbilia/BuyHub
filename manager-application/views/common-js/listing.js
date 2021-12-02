@@ -638,6 +638,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 }
                 $.ykmsg.success(ans.msg);
                 if (true === $.ykmodal.isAdded()) {
+                   
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
                     if ("" != callback) {
@@ -737,11 +738,11 @@ $(document).on("click", ".selectItemJs", function () {
     showActionsBtns();
 });
 
-$(document).ready(function () {
+/* $(document).ready(function () {
     if (typeof controllerName != 'undefined') {
         getHelpCenterContent(controllerName);
     }
-});
+}); */
 
 $(window).on('load', function () {
     fixTableColumnWidth();

@@ -23,7 +23,7 @@ if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
 } 
 
 $fld = $langFrm->getField('epage_content');
-$fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onClick="resetToDefaultContent();" href="javascript:void(0)">' . Labels::getLabel('LBL_RESET_EDITOR_CONTENT_TO_DEFAULT', $siteLangId) . '</a>';
+$fld->htmlAfterField = '<a class="btn btn-outline-brand btn-sm" onclick="resetToDefaultContent();" href="javascript:void(0)">' . Labels::getLabel('LBL_RESET_EDITOR_CONTENT_TO_DEFAULT', $siteLangId) . '</a>';
 ?>
 <!-- editor's default content[ -->
 

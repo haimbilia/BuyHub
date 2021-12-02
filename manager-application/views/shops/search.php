@@ -60,7 +60,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'numOfProducts':
                 if ($canViewSellerProducts) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('SellerProducts') . '", ' . $row['shop_user_id'] . ')'), $row[$key]);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('SellerProducts') . '", ' . $row['shop_user_id'] . ')'), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
@@ -72,7 +72,7 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = ['onClick' => 'editRecord(' . $row['shop_id'] . ', false, "modal-dialog-vertical-md")'];
+                    $data['editButton'] = ['onclick' => 'editRecord(' . $row['shop_id'] . ', false, "modal-dialog-vertical-md")'];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);

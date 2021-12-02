@@ -4,7 +4,6 @@ class PageLanguageData extends MyAppModel
 {
     public const DB_TBL = 'tbl_pages_language_data';
     public const DB_TBL_PREFIX = 'plang_';
-    private $db;
 
     public function __construct($id)
     {

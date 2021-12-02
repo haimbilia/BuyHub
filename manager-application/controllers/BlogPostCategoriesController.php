@@ -224,12 +224,13 @@ class BlogPostCategoriesController extends ListingBaseController
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $langId = 0)
     {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmBlogPostCatLang', array('id' => 'frmBlogPostCatLang'));
         $frm->addHiddenField('', 'bpcategory_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_Category_Name', $this->siteLangId), 'bpcategory_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_Category_Name', $langId), 'bpcategory_name');
         return $frm;
     }
 }

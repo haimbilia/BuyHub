@@ -301,17 +301,76 @@ Enhancements :
    => Map listing for products & shops 
 
 Admin UI/UX Enhancements pages:
-   => Manage Countries
-   => Manage States
-   => Manage Zones
-   => Manage Curriences
-   => Manage Languages
-   => login and forgot password 
-   => Admin Profile info 
-   => Content Pages Management  
-   => Content Block Integration
-   => CMS-Faqs
-   => Testimonials Management
+    => Login / Register, Forgot Password
+    => My Profile/ Change Pasword
+    => Product Catalog
+        - Brands
+        - Shops
+        - Categories
+
+    => Requests
+        - Brand request
+        - Categories requests 
+        - Seller approval requests
+        - Threshold products
+        - Rating types
+
+    => Orders
+        - Order Cancel Reasons
+        - Order Return Reasons
+        - Order Statuses
+
+    => Users
+        - Special Price
+        - Volume Discount
+        - Related Products
+        - Promotions
+        - Rewards on purchase
+        - manage weightages
+        - Recommended tag products weightages
+
+    => Promotions
+        - Special Price
+        - Volume Discount
+        - Related Products
+        - Promotions
+        - Rewards on purchase
+        - manage weightages
+        - Recommended tag products weightages
+
+    => Blog
+        - Blog Post Categories
+        - Blog Posts
+        - Blog Contributions
+        - Blog Comments
+
+    => Tax
+        - Tax structure
+        - Tax categories
+        - Tax categories rule
+
+    => CMS
+        - Content Pages
+        - Content Block
+        - Faq's
+        - Testimonials
+
+    => Reports
+        - Sales Report
+        - Financial Report
+        - Subscription Reports
+
+    => Import/Export
+
+    => Seo
+        - Url Rewriting
+        - Image attributes
+        - Generate Sitemap
+        - View Html
+        - View Xml
+        - Meta Tags Management
+
+    => Settings
 
     
 Known Issues and Problems :

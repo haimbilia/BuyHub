@@ -1,3 +1,4 @@
+<?php require_once(CONF_THEME_PATH . 'page-language-data/helping-text.php'); ?>
 <!-- begin:: Footer -->
 <footer class="footer" id="footer">
     <div class="container">
@@ -8,7 +9,7 @@
 </footer>
 
 <div class="footer-action">
-   
+
     <div class="footer-action__item">
         <a class="footer-action__trigger" href="javascript:void(0);">
             <span class="icon">
@@ -29,7 +30,8 @@
                 </svg>
             </span>
         </a>
-    </div> <div class="footer-action__item">
+    </div>
+    <div class="footer-action__item">
         <a href="#" href="javascript:void(0);" class="footer-action__trigger" data-trigger="sidebar">
             <span class="icon">
                 <svg class="svg" width="20" height="20">

@@ -1,7 +1,7 @@
 <?php
 $actionItemsData = $actionItemsData + [
-    'canEdit' => $canEdit ?? false,
-    'keywordPlaceholder' => $keywordPlaceholder ?? Labels::getLabel('FRM_SEARCH', $siteLangId)
+    'canEdit' => ($canEdit ?? false),
+    'keywordPlaceholder' => ($keywordPlaceholder ?? Labels::getLabel('FRM_SEARCH', $siteLangId))
 ];
 ?>
 <main class="main mainJs">
@@ -18,7 +18,8 @@ $actionItemsData = $actionItemsData + [
                             $tableId = "orderStatuses";
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
                             require_once(CONF_THEME_PATH . $actionItemsData['searchListingPage']);
-                            $actionItemsData = $actionItemsData + ['tbl' => $tbl /* Received from listing-column-head.php file. */];
+                            /* "$tbl" Received from listing-column-head.php file. */
+                            $actionItemsData = array_merge($actionItemsData, ['tbl' => $tbl]);
                             $this->includeTemplate('_partial/listing/print-listing-table.php', $actionItemsData, false); ?>
                         </div>
                     </div>

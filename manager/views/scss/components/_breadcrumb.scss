@@ -10,10 +10,11 @@
         padding: 0;
         font-size: .85rem;
         font-weight: 600;
-        position: relative;  
-        &::before{
+        position: relative;
+        &::before {
             font-size: 10px;
-        }      
+            padding-#{$end-direction}: 0.5rem;
+        }
         a {
             color: #a1a5b7;
         }

@@ -187,7 +187,7 @@ class SubscriptionOrdersController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
     
-    public function Cancel($order_id)
+    public function cancel($order_id)
     {
         $this->objPrivilege->canEditSubscriptionOrders();
         

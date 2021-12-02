@@ -37,10 +37,10 @@ $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAu
                     </div>
 
                     <?php if (!$isNewImage) { ?>
-                        <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>" onClick="popupImage()">
+                        <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>" onclick="popupImage()">
                             <i class="fa fa-pen"></i>
                         </label>
-                        <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onClick="removeProfileImage();">
+                        <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
                             <i class="fa fa-times"></i>
                         </span>
                     <?php } else { ?>

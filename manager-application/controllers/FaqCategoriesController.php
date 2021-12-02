@@ -3,6 +3,7 @@
 class FaqCategoriesController extends ListingBaseController
 {
     protected $modelClass = 'FaqCategory';
+    protected $pageKey = 'MANAGE_FAQ_CATEGORIES';
 
     public function __construct($action) {
         parent::__construct($action);
@@ -13,7 +14,7 @@ class FaqCategoriesController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_FAQ_CATEGORIES', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
@@ -237,7 +238,8 @@ class FaqCategoriesController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
-        $siteLangId = $this->siteLangId;
+        
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
 
         if ($recordId == 0 || $langId == 0) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -245,11 +247,11 @@ class FaqCategoriesController extends ListingBaseController
         $frm = new Form('frmFaqCatLang', array('id' => 'frmFaqCatLang'));
         $frm->addHiddenField('', 'faqcat_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $siteLangId), 'faqcat_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $langId), 'faqcat_name');
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        if (!empty($translatorSubscriptionKey) && $langId == $this->siteLangId) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;

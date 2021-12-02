@@ -8,7 +8,7 @@ if (count($childCategories) > 0) {
     <div>
         <div class="sorting-bar">
             <div class="sorting-title">
-                <span class="clickable" onClick="displaySubCategories(this);"><?php echo $row['prodcat_name']; ?></span>
+                <span class="clickable" onclick="displaySubCategories(this);"><?php echo $row['prodcat_name']; ?></span>
                 <a href="<?php echo commonHelper::generateUrl('Products', 'index', array($row['prodcat_id'])); ?>"
                     class="count badge badge-success clickable"
                     title="<?php echo  Labels::getLabel('LBL_Category_Products', $siteLangId); ?>">
@@ -28,7 +28,7 @@ if (count($childCategories) > 0) {
                     </label>
                 </span> 
                 <?php if ($canEdit) { ?>               
-                <button onClick="editRecord(<?php echo $row['prodcat_id']; ?>)"
+                <button onclick="editRecord(<?php echo $row['prodcat_id']; ?>)"
                     title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>"
                     class="btn btn-clean btn-sm btn-icon clickable">
                     <svg class="svg clickable" width="18" height="18">
@@ -50,7 +50,7 @@ if (count($childCategories) > 0) {
         <?php if ($row['subcategory_count'] > 0) { ?>
         <span class="sortableListsOpener"><i
                 class="fa fa-plus clickable sort-icon cat<?php echo $row['prodcat_id']; ?>-js"
-                onClick="displaySubCategories(this)"></i></span>
+                onclick="displaySubCategories(this)"></i></span>
         <?php } ?>
     </div>
 </li>

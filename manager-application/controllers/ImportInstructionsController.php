@@ -191,27 +191,28 @@ class ImportInstructionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getLangForm($recordId = 0, $lang_id = 0)
+    private function getLangForm($recordId = 0, $langId = 0)
     {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmBlockLang');
         $frm->addHiddenField('', 'epage_id', $recordId);
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
+            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', $languages, $langId, array(), '');
         } else {
-            $lang_id = array_key_first($languages);
-            $frm->addHiddenField('', 'lang_id', $lang_id);
+            $langId = array_key_first($languages);
+            $frm->addHiddenField('', 'lang_id', $langId);
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_SECTION_TITLE', $this->siteLangId), 'epage_label');
+        $frm->addRequiredField(Labels::getLabel('LBL_SECTION_TITLE', $langId), 'epage_label');
 
-        $frm->addHtmlEditor(Labels::getLabel('LBL_Section_Content', $this->siteLangId), 'epage_content');
+        $frm->addHtmlEditor(Labels::getLabel('LBL_Section_Content', $langId), 'epage_content');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        if (!empty($translatorSubscriptionKey) && $langId == $this->siteLangId) {
+            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;

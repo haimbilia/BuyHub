@@ -48,7 +48,7 @@ foreach ($arrListing as $sn => $row) {
                 
                 if ($canEdit) {
                     $data['editButton'] = [
-                        'onClick' => 'editRecord(' . $row['post_id'] . ', false, "modal-dialog-vertical-md")'
+                        'onclick' => 'editRecord(' . $row['post_id'] . ', false, "modal-dialog-vertical-md")'
                     ];
                     $data['deleteButton'] = [];
                 }

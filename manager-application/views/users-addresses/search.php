@@ -77,7 +77,7 @@ foreach ($arrListing as $sn => $row) {
 
                 if ($canEdit) {
                     $attr = [
-                        'onClick' => 'editAddress(' . $row['addr_id'] . ', ' . $row['addr_record_id'] . ')'
+                        'onclick' => 'editAddress(' . $row['addr_id'] . ', ' . $row['addr_record_id'] . ')'
                     ];
                     $data['editButton'] = $attr;
                     $data['deleteButton'] = [];

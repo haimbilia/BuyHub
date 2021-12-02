@@ -396,7 +396,7 @@ class ShopsController extends ListingBaseController {
             'shop_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'shop_created_on' => Labels::getLabel('LBL_Created_on', $this->siteLangId),
             'shop_supplier_display_status' => Labels::getLabel('LBL_Status_by_seller', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('shopsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

@@ -48,7 +48,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                                 <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>"
                                     data-listType="<?php echo $formType; ?>">
                                     <a class="settings-inner-link" href="javascript:void(0)"
-                                        onClick="searchRecords(<?php echo $formType; ?>);">
+                                        onclick="searchRecords(<?php echo $formType; ?>);">
                                         <i class="settings-inner-icn">
                                             <svg class="svg" width="20" height="20">
                                                 <use

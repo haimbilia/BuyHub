@@ -231,10 +231,7 @@ class Orders extends MyAppModel
         $srch->addMultipleFields(array('orderstatus_id', 'IFNULL(orderstatus_name,orderstatus_identifier) as orderstatus_name'));
 
         $rs = $srch->getResultSet();
-        if (!$rs) {
-            return array();
-        }
-        return $row = FatApp::getDb()->fetchAllAssoc($rs);
+        return FatApp::getDb()->fetchAllAssoc($rs);
     }
 
     public function getOrderNo()

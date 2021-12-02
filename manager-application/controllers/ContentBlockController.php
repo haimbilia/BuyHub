@@ -3,6 +3,7 @@
 class ContentBlockController extends ListingBaseController
 {
     protected $modelClass = 'Extrapage';
+    protected $pageKey = 'MANAGE_CONTENT_BLOCK';
 
     public function __construct($action) 
     {
@@ -19,7 +20,7 @@ class ContentBlockController extends ListingBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->checkEditPrivilege();
-        $this->modelObj = (new ReflectionClass('Extrapage'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [
             $this->modelObj::tblFld('label'), 
             $this->modelObj::tblFld('content'),
