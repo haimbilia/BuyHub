@@ -1429,10 +1429,10 @@ class HomeController extends MyAppController
         ];
 
         $data['appThemeSetting'] = [
-            'primaryThemeColor' => FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
-            'primaryInverseThemeColor' => FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
-            'secondaryThemeColor' => FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
-            'secondaryInverseThemeColor' => FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'primaryThemeColor' => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'primaryInverseThemeColor' => FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''),
+            'secondaryThemeColor' => FatApp::getConfig('CONF_SECONDARY_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'secondaryInverseThemeColor' => FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''),
         ];
 
         $data['isWishlistEnable'] = FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1);
