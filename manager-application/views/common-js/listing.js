@@ -738,11 +738,11 @@ $(document).on("click", ".selectItemJs", function () {
     showActionsBtns();
 });
 
-$(document).ready(function () {
+/* $(document).ready(function () {
     if (typeof controllerName != 'undefined') {
         getHelpCenterContent(controllerName);
     }
-});
+}); */
 
 $(window).on('load', function () {
     fixTableColumnWidth();

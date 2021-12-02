@@ -3,7 +3,7 @@
 class ShippingCompanyUsersController extends ListingBaseController {
 
     protected $modelClass = 'User';
-    protected $pageKey = 'MANAGE_SHIPPING_COMPANY_USERS';
+    protected $pageKey = 'SHIPPING_COMPANY_USERS';
 
     public function __construct($action) {
         parent::__construct($action);
@@ -289,7 +289,7 @@ class ShippingCompanyUsersController extends ListingBaseController {
             'credential_username' => Labels::getLabel('LBL_USERNAME', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
             'credential_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('shippingUserTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

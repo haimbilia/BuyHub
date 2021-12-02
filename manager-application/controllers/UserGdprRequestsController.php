@@ -220,7 +220,7 @@ class UserGdprRequestsController extends ListingBaseController {
             'ureq_type' => Labels::getLabel('LBL_Request_Type', $this->siteLangId),
             'ureq_date' => Labels::getLabel('LBL_Request_Date', $this->siteLangId),
             'ureq_status' => Labels::getLabel('LBL_Request_Status', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('gdprRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;

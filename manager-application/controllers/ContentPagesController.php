@@ -3,6 +3,8 @@
 class ContentPagesController extends ListingBaseController
 {
     protected $modelClass = 'ContentPage';
+    protected $pageKey = 'MANAGE_CONTENT_PAGES';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -14,7 +16,7 @@ class ContentPagesController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_CONTENT_PAGES', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
@@ -59,7 +61,7 @@ class ContentPagesController extends ListingBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->checkEditPrivilege();
-        $this->modelObj = (new ReflectionClass('ContentPage'))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [
             $this->modelObj::tblFld('title'), 
             $this->modelObj::tblFld('image_title'),
@@ -234,34 +236,35 @@ class ContentPagesController extends ListingBaseController
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0)
+    protected function getLangForm($recordId = 0, $langId = 0)
     {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $cpageData = ContentPage::getAttributesByLangId($this->siteLangId, $recordId, NULL, TRUE);
         $cpage_layout = $cpageData['cpage_layout'];
 
         $frm = new Form('frmContentPageLang', array('id' => 'frmContentPageLang'));
         $frm->addHiddenField('', 'cpage_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $lang_id), 'lang_id', Language::getDropDownList(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $lang_id), 'cpage_title');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $langId), 'cpage_title');
         $frm->addHiddenField('', 'cpage_layout', $cpage_layout);
         if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
-            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('LBL_BACKGROUND_IMAGE', $this->siteLangId) );
+            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $langId), Labels::getLabel('LBL_BACKGROUND_IMAGE', $langId) );
             $frm->addHTML('', 'cpage_bg_image', '');
             $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE);
             $frm->addHiddenField('', 'min_width', 1300);
             $frm->addHiddenField('', 'min_height', 400);
-            $frm->addTextBox(Labels::getLabel('FRM_BACKGROUND_IMAGE_TITLE', $lang_id), 'cpage_image_title');
-            $frm->addTextArea(Labels::getLabel('FRM_BACKGROUND_IMAGE_DESCRIPTION', $lang_id), 'cpage_image_content');
+            $frm->addTextBox(Labels::getLabel('FRM_BACKGROUND_IMAGE_TITLE', $langId), 'cpage_image_title');
+            $frm->addTextArea(Labels::getLabel('FRM_BACKGROUND_IMAGE_DESCRIPTION', $langId), 'cpage_image_content');
             for ($i = 1; $i <= ContentPage::CONTENT_PAGE_LAYOUT1_BLOCK_COUNT; $i++) {
-                $frm->addHtmlEditor(Labels::getLabel('FRM_CONTENT_BLOCK_' . $i, $lang_id), 'cpblock_content_block_' . $i);
+                $frm->addHtmlEditor(Labels::getLabel('FRM_CONTENT_BLOCK_' . $i, $langId), 'cpblock_content_block_' . $i);
             }
         } else {
-            $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_CONTENT', $lang_id), 'cpage_content');
+            $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_CONTENT', $langId), 'cpage_content');
         }
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $lang_id), 'auto_update_other_langs_data', 1, array(), false, 0);
+        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;

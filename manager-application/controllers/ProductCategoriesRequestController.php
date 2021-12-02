@@ -1,11 +1,13 @@
 <?php
 
-class ProductCategoriesRequestController extends ListingBaseController {
+class ProductCategoriesRequestController extends ListingBaseController
+{
 
     protected $modelClass = 'ProductCategory';
     protected $pageKey = 'CATEGORIES_REQUESTS';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewProductCategories();
     }
@@ -16,7 +18,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
      * @param  array $constructorArgs
      * @return void
      */
-    protected function setLangTemplateData(array $constructorArgs = []): void {
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
         $this->objPrivilege->canEditProductCategories();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
@@ -24,7 +27,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $this->checkMediaExist = true;
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
@@ -43,26 +47,32 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function getSearchForm($fields = []) {
+    public function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'prodcat_name');
         }
-        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', [], '',
-                [
-                    'class' => 'form-control',
-                    'id' => 'searchFrmUserIdJs',
-                    'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
-                ]
+        $frm->addSelectBox(
+            Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId),
+            'user_id',
+            [],
+            '',
+            [
+                'class' => 'form-control',
+                'id' => 'searchFrmUserIdJs',
+                'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
+            ]
         );
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'product-categories-request/search.php', true),
@@ -71,7 +81,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    private function getListingData()
+    {
         $this->objPrivilege->canEditProductCategories();
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
@@ -124,7 +135,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
     }
 
-    public function form() {
+    public function form()
+    {
         $this->objPrivilege->canEditProductCategories();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
@@ -135,13 +147,14 @@ class ProductCategoriesRequestController extends ListingBaseController {
             }
             $frm->fill($data);
         }
-        
+
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditProductCategories();
         $recordId = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
@@ -172,7 +185,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($recordId = 0) {
+    private function getForm($recordId = 0)
+    {
         $this->objPrivilege->canEditProductCategories();
         $frm = new Form('frmProdCategory', array('id' => 'frmProdCategory'));
         $frm->addHiddenField('', 'prodcat_id');
@@ -192,15 +206,18 @@ class ProductCategoriesRequestController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getLangForm($recordId = 0, $lang_id = 0) {
+    protected function getLangForm($recordId = 0, $langId = 0)
+    {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmProdCategoryLang', array('id' => 'frmProdCategoryLang'));
         $frm->addHiddenField('', 'prodcat_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $this->siteLangId), 'prodcat_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $langId), 'prodcat_name');
         return $frm;
     }
 
-    public function media($recordId = 0, $langId = 0, $slide_screen = 0) {
+    public function media($recordId = 0, $langId = 0, $slide_screen = 0)
+    {
         $this->objPrivilege->canEditProductCategories();
         $recordId = FatUtility::int($recordId);
         $logoFrm = $this->getLogoForm($recordId);
@@ -228,7 +245,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $this->_template->render(false, false);
     }
 
-    public function images($recordId, $file_type, $lang_id = 0, $slide_screen = 0) {
+    public function images($recordId, $file_type, $lang_id = 0, $slide_screen = 0)
+    {
         $languages = Language::getAllNames();
         $slide_screen = FatUtility::int($slide_screen);
         $recordId = FatUtility::int($recordId);
@@ -252,7 +270,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $this->_template->render(false, false);
     }
 
-    public function requestMedia($brand_id = 0) {
+    public function requestMedia($brand_id = 0)
+    {
         $this->objPrivilege->canEditProductCategories();
         $brand_id = FatUtility::int($brand_id);
         $brandLogoFrm = $this->getLogoForm($brand_id);
@@ -264,7 +283,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $this->_template->render(false, false);
     }
 
-    public function uploadMedia() {
+    public function uploadMedia()
+    {
         $this->objPrivilege->canEditProductCategories();
         $post = FatApp::getPostedData();
         if (empty($post)) {
@@ -295,17 +315,17 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $fileHandlerObj->deleteFile($file_type, $recordId, 0, 0, $lang_id, $slide_screen);
 
         if (!$fileHandlerObj->saveAttachment(
-                        $_FILES['cropped_image']['tmp_name'],
-                        $file_type,
-                        $recordId,
-                        0,
-                        $_FILES['cropped_image']['name'],
-                        -1,
-                        false,
-                        $lang_id,
-                        $slide_screen,
-                        $aspectRatio
-                )) {
+            $_FILES['cropped_image']['tmp_name'],
+            $file_type,
+            $recordId,
+            0,
+            $_FILES['cropped_image']['name'],
+            -1,
+            false,
+            $lang_id,
+            $slide_screen,
+            $aspectRatio
+        )) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -315,7 +335,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function isMediaUploaded($recordId) {
+    protected function isMediaUploaded($recordId)
+    {
         $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $recordId, 0);
         if (false !== $attachment && 0 < $attachment['afile_id']) {
             return true;
@@ -327,7 +348,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         return false;
     }
 
-    public function getLogoForm($catId) {
+    public function getLogoForm($catId)
+    {
         $frm = new Form('frmLogo');
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'prodcat_id', $catId);
@@ -350,7 +372,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         return $frm;
     }
 
-    public function getImageForm($catId) {
+    public function getImageForm($catId)
+    {
         $frm = new Form('frmImage');
         $languagesAssocArr = Language::getAllNames();
         $frm->addHiddenField('', 'prodcat_id', $catId);
@@ -370,7 +393,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    private function getFormColumns(): array
+    {
         $shopsTblHeadingCols = CacheHelper::get('productCatRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
@@ -381,13 +405,14 @@ class ProductCategoriesRequestController extends ListingBaseController {
             'prodcat_parent' => Labels::getLabel('LBL_PARENT_CATEGORY', $this->siteLangId),
             'prodcat_name' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
             'prodcat_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
-            'action' => '',
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('productCatRequestTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             'listSerial',
             'prodcat_parent',
@@ -397,8 +422,8 @@ class ProductCategoriesRequestController extends ListingBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
+    private function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, [], Common::excludeKeysForSort());
     }
-
 }

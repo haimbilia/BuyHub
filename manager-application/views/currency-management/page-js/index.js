@@ -21,7 +21,7 @@ $(document).ajaxComplete(function () {
                 var data = '';
                 const bindData = new Promise((resolve, reject) => {
                     for (let i = 0; i < order.length; i++) {
-                        data += 'currencyIds[]=' + order[i];
+                        data += 'currencyIds[' + (i+1) + ']=' + order[i];
                         if (i + 1 < order.length) {
                             data += '&';
                         }
@@ -48,7 +48,7 @@ $(document).ajaxComplete(function () {
                 );
             },
         });
-        $("#currencyIds > tbody").disableSelection();
+        $("#orderStatuses > tbody").disableSelection();
     };
 
     updateCurrencyRates = function (converterClass) {

@@ -9,14 +9,13 @@ if (isset($htmlContent) && !empty($htmlContent)) {
 
 $msg = isset($msg) ? $msg : '';
 if (isset($statusButtons) && true === $statusButtons && $canEdit) {
-    $li = $ul->appendElement('li');
+    $li = $ul->appendElement('li', ['title' => Labels::getLabel('BTN_MARK_AS_ACTIVE', $siteLangId), 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
 
     $li->appendElement(
         'a',
         [
             'href' => 'javascript:void(0)',
             'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
-            'title' => Labels::getLabel('BTN_ACTIVE', $siteLangId),
             'onclick' => "toggleBulkStatues(1, '" . $msg . "')"
         ],
         '<svg class="svg" width="18" height="18">
@@ -27,13 +26,12 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         true
     );
 
-    $li = $ul->appendElement('li');
+    $li = $ul->appendElement('li', ['title' => Labels::getLabel('BTN_MARK_AS_IN-ACTIVE', $siteLangId), 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
     $li->appendElement(
         'a',
         [
             'href' => 'javascript:void(0)',
             'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
-            'title' => Labels::getLabel('BTN_IN-ACTIVE', $siteLangId),
             'onclick' => "toggleBulkStatues(0, '" . $msg . "')"
         ],
         '<svg class="svg" width="18" height="18">
@@ -46,13 +44,12 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
 }
 
 if (isset($deleteButton) && true === $deleteButton && $canEdit) {
-    $li = $ul->appendElement('li');
+    $li = $ul->appendElement('li', ['title' => Labels::getLabel('BTN_DELETE_RECORDS', $siteLangId), 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
     $li->appendElement(
         'a',
         [
             'href' => 'javascript:void(0)',
             'class' => 'btn btn-outline-gray btn-icon toolbarBtnJs disabled',
-            'title' => Labels::getLabel('BTN_DELETE', $siteLangId),
             'onclick' => "deleteSelected()"
         ],
         '<svg class="svg" width="18" height="18">
@@ -66,7 +63,12 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
 
 if (isset($otherButtons) && is_array($otherButtons)) {
     foreach ($otherButtons as $attr) {
-        $li = $ul->appendElement('li');
+        $liAttr = [];
+        if (isset($attr['attr']['title'])) {
+            $liAttr = ['title' => $attr['attr']['title'], 'data-toggle' => 'tooltip', 'data-placement' => 'top'];
+            unset($attr['attr']['title']);
+        }
+        $li = $ul->appendElement('li', $liAttr);
         $li->appendElement('a', $attr['attr'], (string) html_entity_decode($attr['label'], ENT_QUOTES, 'utf-8'), true);
     }
 }
@@ -94,6 +96,6 @@ if (!empty($columnButtons)) {
 }
 if (!empty($htmlContent) || !empty($statusButtons) || !empty($deleteButton) || !empty($otherButtons) || !empty($columnButtons)) {
     echo '<div class="card-toolbar">';
-    echo $ul->getHtml();
+        echo $ul->getHtml();
     echo '</div>';
 }

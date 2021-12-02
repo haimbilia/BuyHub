@@ -105,31 +105,15 @@ foreach ($arrListing as $sn => $row) {
                     ];
 
                     $twoDaysAfter = date('Y-m-d H:i:s', strtotime($row['order_date_added'] . ' + 2 days'));
-                    $class = 'disabled';
-                    $title = Labels::getLabel('LBL_NOT_ALLOWED_TO_DELETE_THIS_ORDER', $siteLangId);
-                    if (!$row['order_deleted'] && $row['order_payment_status'] == Orders::ORDER_PAYMENT_PENDING && $twoDaysAfter < date('Y-m-d H:i:s')) {
-                        $class = '';
-                        $title = '';
-                    }
-                    $data['deleteButton'] = [
-                        'class' => $class,
-                        'title' => $title,
+                    $attr = [
+                        'class' => 'disabled',
+                        'title' => Labels::getLabel('ERR_NOT_ALLOWED_TO_DELETE_THIS_ORDER', $siteLangId),
+                        'onclick' => 'javascript:void(0);',
                     ];
-                }
-
-                if (!$row['order_deleted'] && $canViewSellerOrders) {
-                    /* $data['otherButtons'][] = [
-                        'attr' => [
-                            'href' => 'javascript:void(0)',
-                            'onclick' => 'viewSellerOrder(' . $row['order_id'] . ')',
-                            'title' => Labels::getLabel('LBL_VIEW_SELLER_ORDER', $siteLangId),
-                        ],
-                        'label' => '<svg class="svg" width="18" height="18">
-                                        <use
-                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#seller-order">
-                                        </use>
-                                    </svg>',
-                    ]; */
+                    if (!$row['order_deleted'] && $row['order_payment_status'] == Orders::ORDER_PAYMENT_PENDING && $twoDaysAfter < date('Y-m-d H:i:s')) {
+                        $attr = [];
+                    }
+                    $data['deleteButton'] = $attr;
                 }
 
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

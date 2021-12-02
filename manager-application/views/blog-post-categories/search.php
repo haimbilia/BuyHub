@@ -15,7 +15,7 @@
                                 <span class="clickable">
                                     <?php echo !empty($row['bpcategory_name']) ? $row['bpcategory_name'] : $row['bpcategory_identifier']; ?>
                                 </span>
-                                <a onClick="goToBlog(<?php echo $row['bpcategory_id']; ?>)" href="javascript:void(0)" class="count badge badge-success clickable" title="<?php echo  Labels::getLabel('LBL_CATEGORY_BLOGS', $siteLangId); ?>">
+                                <a onclick="goToBlog(<?php echo $row['bpcategory_id']; ?>)" href="javascript:void(0)" class="count badge badge-success clickable" title="<?php echo  Labels::getLabel('LBL_CATEGORY_BLOGS', $siteLangId); ?>">
                                     <?php echo CommonHelper::displayBadgeCount($row['countChildBlogPosts']); ?>
                                 </a>
                             </div>
@@ -38,7 +38,7 @@
                                     <span></span>
                                 </label>
                                 <?php if ($canEdit) { ?>                                   
-                                    <button onClick="editRecord(<?php echo $row['bpcategory_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm btn-icon clickable">
+                                    <button onclick="editRecord(<?php echo $row['bpcategory_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm btn-icon clickable">
                                         <svg class="svg clickable" width="18" height="18">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                             </use>
@@ -54,7 +54,7 @@
                             </div>
                         </div>
                         <?php if ($row['child_count'] > 0) { ?>
-                            <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['bpcategory_id']; ?>-js" onClick="displaySubCategories(this)"></i></span>
+                            <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['bpcategory_id']; ?>-js" onclick="displaySubCategories(this)"></i></span>
                         <?php } ?>
                     </div>
                 </li>
@@ -110,7 +110,7 @@
                         $("#" + rootCat).removeClass('sortableListsClosed').addClass(
                             'sortableListsOpen');
                         $("#" + rootCat).children('div').append(
-                            '<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon" onClick="hideItems(this)"></i></span>'
+                            '<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon" onclick="hideItems(this)"></i></span>'
                         );
                     });
                     $("#" + catId).parent('ul').addClass('append-ul');
@@ -121,8 +121,8 @@
             opener: {
                 active: true,
                 as: 'html', // if as is not set plugin uses background image
-                close: '<i class="fa fa-minus clickable sort-icon" onClick="hideItems(this)"></i>',
-                open: '<i class="fa fa-plus c3 clickable sort-icon" onClick="displaySubCategories(this)"></i>',
+                close: '<i class="fa fa-minus clickable sort-icon" onclick="hideItems(this)"></i>',
+                open: '<i class="fa fa-plus c3 clickable sort-icon" onclick="displaySubCategories(this)"></i>',
                 openerCss: {}
             },
             ignoreClass: 'clickable'

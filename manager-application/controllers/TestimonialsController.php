@@ -20,7 +20,7 @@ class TestimonialsController extends ListingBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->checkEditPrivilege();
-        $this->modelObj = (new ReflectionClass($this->modelClass))->newInstanceArgs($constructorArgs);
+        $this->setModel($constructorArgs);
         $this->formLangFields = [
             'testimoniallang_testimonial_id',
             'testimoniallang_lang_id',

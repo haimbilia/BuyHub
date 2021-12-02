@@ -5027,7 +5027,7 @@ class Importexport extends ImportexportCommon
                         if (1 > $optionId) {
                             $invalid = true;
                         } else {
-                            $optionValueData = $optionValueObj->getAtttibutesByIdentifierAndOptionId($optionId, $optionvalue_identifier, array('optionvalue_id'));
+                            $optionValueData = $optionValueObj->getAttributesByIdentifierAndOptionId($optionId, $optionvalue_identifier, array('optionvalue_id'));
                         }
                     }
 

@@ -30,7 +30,7 @@ foreach ($arrListing as $sn => $row) {
             case 'shop_name':
                 if (!empty($row['shop_name'])) {
                     if ($canViewShops) {
-                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Shops') . '", ' . $row['shop_id'] . ')'), $row['shop_name'], true);
+                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Shops') . '", ' . $row['shop_id'] . ')'), $row['shop_name'], true);
                     } else {
                         $td->appendElement('plaintext', $tdAttr, $row['shop_name'], true);
                     }
@@ -60,7 +60,7 @@ foreach ($arrListing as $sn => $row) {
                     $attr = [];
                     if (1 === count($languages)) {
                         $attr = [
-                            'onClick' => 'editRecord(' . $row['promotion_id'] . ')'
+                            'onclick' => 'editRecord(' . $row['promotion_id'] . ')'
                         ];
                     }
                     $data['editButton'] = $attr;

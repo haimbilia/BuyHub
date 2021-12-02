@@ -260,6 +260,20 @@ class HtmlHelper
         return $htmlFld;
     }
 
+    public static function addFieldLabelInfo(&$frm, $fldName, $msg, $setFieldTagAttrs = [])
+    {
+        $str = self::getFieldHtml($frm, $fldName, 6, $setFieldTagAttrs, '', $msg, [], true);
+        $fld = $frm->getField($fldName);
+
+        $oldFldPostion = $fld->getFormIndex();
+        $frm->removeField($fld);
+
+        $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
+        $htmlFld->setFormIndex($oldFldPostion);
+        $htmlFld->developerTags = $fld->developerTags;
+        return $htmlFld;
+    }
+
     /**
      * options array ex. [1 => 'optionName'];
      */
@@ -410,9 +424,8 @@ class HtmlHelper
      *    ]
      * @return void
      */
-    public static function getFieldHtml($frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [],  string $fieldInfoText = '', string $labelInfoText = '', array $labelExtraArr = [])
+    public static function getFieldHtml($frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [],  string $fieldInfoText = '', string $labelInfoText = '', array $labelExtraArr = [], $doNotAddFieldWrapper = false)
     {
-
         $fld = $frm->getField($fldName);
         if (null == $fld) {
             return;
@@ -433,23 +446,40 @@ class HtmlHelper
                 break;
         }
 
-        $mainDiv = new HtmlElement("div", [
-            'class' => 'col-md-' . $col,
-        ]);
+        if ($doNotAddFieldWrapper) {
+            if (!empty($labelExtraArr)) {
+                $mainDiv = $div = new HtmlElement('div', [
+                    'class' => 'd-flex justify-content-between',
+                ]);
 
-        $div1 =  $div = $mainDiv->appendElement('div', [
-            'class' => 'form-group',
-        ]);
+                $label = $div->appendElement('label', [
+                    'class' => 'label',
+                ], $caption);
+            } else {
 
-        if (!empty($labelExtraArr)) {
-            $div =  $div->appendElement('div', [
-                'class' => 'd-flex justify-content-between',
+                $mainDiv = $div = $label =  new HtmlElement('label', [
+                    'class' => 'label',
+                ], $caption);
+            }
+        } else {
+            $mainDiv = new HtmlElement("div", [
+                'class' => 'col-md-' . $col,
             ]);
-        }
 
-        $label = $div->appendElement('label', [
-            'class' => 'label',
-        ], $caption);
+            $div1 =  $div = $mainDiv->appendElement('div', [
+                'class' => 'form-group',
+            ]);
+
+            if (!empty($labelExtraArr)) {
+                $div =  $div->appendElement('div', [
+                    'class' => 'd-flex justify-content-between',
+                ]);
+            }
+
+            $label = $div->appendElement('label', [
+                'class' => 'label',
+            ], $caption);
+        }
 
         if ($fld->requirements()->isRequired()) {
             $label->appendElement('span', [
@@ -468,13 +498,17 @@ class HtmlHelper
         if (isset($labelExtraArr['attr']) && isset($labelExtraArr['label'])) {
             $div->appendElement('a', $labelExtraArr['attr'], $labelExtraArr['label']);
         }
+        /*** label  ] */
 
         if (!empty($fieldInfoText)) {
             $fld->htmlAfterField = '<span class="form-text text-muted">' . $fieldInfoText . '</span>';
         }
 
-        $div1->appendElement('plaintext', [], $fld->getHtml(), true);
-
-        return $mainDiv->getHtml();
+        if ($doNotAddFieldWrapper) {
+            return $mainDiv->getHtml() . (new HtmlElement('plaintext', [], $fld->getHtml(), true))->getHtml();
+        } else {
+            $div1->appendElement('plaintext', [], $fld->getHtml(), true);
+            return $mainDiv->getHtml();
+        }
     }
 }
