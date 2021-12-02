@@ -259,9 +259,9 @@ class AbusiveWordsController extends ListingBaseController
 
     protected function getFormColumns(): array
     {
-        $abusiveWordsTblHeadingCols = CacheHelper::get('abusiveWordsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($abusiveWordsTblHeadingCols) {
-            return json_decode($abusiveWordsTblHeadingCols);
+        $tblHeadingCols = CacheHelper::get('abusiveWordsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols);
         }
 
         $arr = [
