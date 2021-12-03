@@ -51,7 +51,7 @@ foreach ($messagesList as $sn => $row) {
                 $td->appendElement('plaintext', [], $html, true);
                 break;
             case 'orrmsg_date':
-                $td->appendElement('plaintext', [], FatDate::format($row['orrmsg_date'], true), true);
+                $td->appendElement('plaintext', [], HtmlHelper::formatDateTime($row['orrmsg_date'], true), true);
                 break;
             case 'orrmsg_msg':
                 $data = ['siteLangId' => $siteLangId];

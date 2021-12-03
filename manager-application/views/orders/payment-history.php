@@ -20,7 +20,7 @@ if (!empty($order['payments'])) { ?>
             <tbody>
                 <?php foreach ($order["payments"] as $key => $row) { ?>
                     <tr>
-                        <td><?php echo FatDate::format($row['opayment_date']); ?></td>
+                        <td><?php echo HtmlHelper::formatDateTime($row['opayment_date']); ?></td>
                         <td><?php echo $row['opayment_gateway_txn_id']; ?></td>
                         <td><?php echo $row['opayment_method']; ?></td>
                         <td><?php echo CommonHelper::displayMoneyFormat($row['opayment_amount'], true, true); ?></td>

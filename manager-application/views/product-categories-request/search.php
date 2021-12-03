@@ -37,7 +37,7 @@ foreach ($arrListing as $sn => $row) {
                 }
                 break;
             case 'prodcat_requested_on':
-                $td->appendElement('plaintext', array(), FatDate::Format($row[$key]), true);
+                $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key]), true);
                 break;
             case 'action':
                 $data = [

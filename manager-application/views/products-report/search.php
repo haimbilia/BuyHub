@@ -74,7 +74,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
 
                 /* case 'order_date':
-                $td->appendElement('plaintext', $tdAttr, '<a href="'.UrlHelper::generateUrl('SalesReport','index',array($row[$key])).'">'.FatDate::format($row[$key]).'</a>',true);
+                $td->appendElement('plaintext', $tdAttr, '<a href="'.UrlHelper::generateUrl('SalesReport','index',array($row[$key])).'">'.HtmlHelper::formatDateTime($row[$key]).'</a>',true);
                 break;
             */
 

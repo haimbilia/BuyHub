@@ -21,7 +21,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'user_regdate':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format(
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime(
                     $row[$key],
                     true,
                     true,

@@ -52,7 +52,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'user_regdate':
-                $date = FatDate::format(
+                $date = HtmlHelper::formatDateTime(
                     $row[$key],
                     true,
                     true,

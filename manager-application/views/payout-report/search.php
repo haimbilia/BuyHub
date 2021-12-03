@@ -17,7 +17,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'orderDate':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key]), true);
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
                 break;
             case 'rewardDiscount':
             case 'affiliateCommissionCharged':
