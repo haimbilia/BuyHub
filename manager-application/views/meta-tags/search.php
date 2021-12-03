@@ -73,11 +73,17 @@ if (count($arrListing) == 0) {
         Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
+
+$keyWordFld = $frmSearch->getField('keyword');
 if (1 > $loadRows) {
-    echo '<div class="card">';
+    if (null != $keyWordFld) {
+        echo '<div class="card">';
+    }
     $onSubmit = 'searchRecords(this, true); return(false);';
     require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php');
-    echo '</div>';
+    if (null != $keyWordFld) {
+        echo '</div>';
+    }
 } ?>
 <div class="card listingTableJs">
     <div class="card-head">
