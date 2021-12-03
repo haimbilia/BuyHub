@@ -5,7 +5,8 @@ $onclick = !empty($onclick) ? "onclick = " . $onclick : "";
 
 $uploadedTime = AttachedFile::setTimeParam($user['user_updated_on']);
 $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($user['user_id'], $siteLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-$username = !empty($user['user_name']) ? $user['user_name'] . ' ( ' . $user['credential_username'] . ')' : $user['credential_username']; 
+$username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['credential_username'] . ')' : $user['credential_username']; 
+$userType = !empty($userType) ? $userType : '';
 ?>
 <div class="user-profile">
     <figure class="user-profile_photo">
@@ -14,5 +15,10 @@ $username = !empty($user['user_name']) ? $user['user_name'] . ' ( ' . $user['cre
     <div class="user-profile_data">
         <a class="user-profile_title" href="<?php echo $href; ?>" <?php echo $onclick; ?>><?php echo $username; ?></a>
         <span class="text-muted fw-bold"><?php echo $user['credential_email']; ?></span>
+        <?php 
+            if(!empty($userType)) {
+                echo '<span>'.$userType.'</span>';
+            } 
+        ?>
     </div>
 </div>
