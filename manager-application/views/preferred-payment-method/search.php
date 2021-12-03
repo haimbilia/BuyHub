@@ -17,7 +17,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'orderDate':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key]));
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]));
                 break;
             case 'transactionAmount':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));

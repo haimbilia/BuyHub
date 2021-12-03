@@ -63,7 +63,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'product_added_on':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key], true));
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key], true));
                 break;
             case 'action':
                 $data = [

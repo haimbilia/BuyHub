@@ -29,8 +29,7 @@ class OrderReturnRequestSearch extends SearchBase
             $this->joinTable(
                 Orders::DB_TBL_ORDER_PRODUCTS_LANG,
                 'LEFT OUTER JOIN',
-                'op.op_id = op_l.oplang_op_id
-			AND oplang_lang_id = ' . $langId,
+                'op.op_id = op_l.oplang_op_id AND oplang_lang_id = ' . $langId,
                 'op_l'
             );
         }

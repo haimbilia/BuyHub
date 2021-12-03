@@ -264,8 +264,9 @@ class CountriesController extends ListingBaseController
             $page = 1;
         }
         $pagesize = 20;
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        $srch = Countries::getSearchObject(true, $this->siteLangId);
+        $srch = Countries::getSearchObject(true, $langId);
         $srch->addMultipleFields(
             array(
                 'country_id',

@@ -213,8 +213,10 @@ class TaxCategoriesController extends ListingBaseController
         if ($page < 2) {
             $page = 1;
         }
+
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
         $keyword = FatApp::getPostedData('keyword');
-        $srch = Tax::getSearchObject($this->siteLangId, true);
+        $srch = Tax::getSearchObject($langId, true);
         $srch->addCondition('taxcat_deleted', '=', 0);
         $activatedTaxServiceId = Tax::getActivatedServiceId();
 

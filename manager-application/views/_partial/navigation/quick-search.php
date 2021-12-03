@@ -25,7 +25,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -36,7 +36,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -47,7 +47,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -69,7 +69,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -80,7 +80,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -91,7 +91,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -102,7 +102,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -113,7 +113,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -133,7 +133,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -144,7 +144,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -155,7 +155,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -173,7 +173,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -182,7 +182,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -191,7 +191,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -200,7 +200,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -209,7 +209,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -218,7 +218,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -239,7 +239,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -249,7 +249,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -259,7 +259,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -270,7 +270,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -281,7 +281,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -292,7 +292,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -301,7 +301,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -323,7 +323,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -334,7 +334,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -345,7 +345,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -356,7 +356,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -374,7 +374,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -383,7 +383,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -401,7 +401,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -410,7 +410,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -432,7 +432,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -443,7 +443,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -454,7 +454,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -465,7 +465,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -476,7 +476,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -494,7 +494,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -503,7 +503,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -512,7 +512,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -521,7 +521,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -530,7 +530,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -546,7 +546,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -555,7 +555,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -572,7 +572,7 @@
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                     </use>
                                 </svg>
                             </span>
@@ -591,7 +591,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -602,7 +602,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -613,7 +613,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -622,7 +622,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -631,7 +631,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -642,7 +642,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -673,7 +673,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -684,7 +684,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -695,7 +695,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -706,7 +706,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -717,7 +717,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -728,7 +728,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -739,7 +739,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -750,7 +750,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -761,7 +761,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -772,7 +772,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -783,7 +783,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -794,7 +794,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>
@@ -805,7 +805,7 @@
                             <div class="search-result">
                                 <span class="search-result__icon">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-link">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-goto">
                                         </use>
                                     </svg>
                                 </span>

@@ -1033,4 +1033,44 @@ class OrdersController extends ListingBaseController
         $this->set('msg', Labels::getLabel("MSG_REJECTED", $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
+
+    public function itemAutoComplete()
+    {
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+        
+        $srch = new OrderProductSearch($this->siteLangId, true, true, true);
+        $srch->addMultipleFields(['op_id as id', 'CONCAT("#", op_invoice_number, " | ", op_selprod_title) as text']);
+        
+        $isReturnOrder = FatApp::getPostedData('return_order', FatUtility::VAR_INT, 0);
+        if (0 < $isReturnOrder) {
+            $srch->joinTable(OrderReturnRequest::DB_TBL, 'INNER JOIN', 'op.op_id = orr.orrequest_op_id', 'orr');
+        }
+
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
+        if (!empty($keyword)) {
+            $cnd = $srch->addCondition('op_product_name', 'LIKE', "%" . $keyword . "%");
+            $cnd->attachCondition('op_selprod_title', 'LIKE', "%" . $keyword . "%");
+            $cnd->attachCondition('op_selprod_options', 'LIKE', "%" . $keyword . "%");
+            $cnd->attachCondition('op_brand_name', 'LIKE', "%" . $keyword . "%");
+            $cnd->attachCondition('op_shop_name', 'LIKE', "%" . $keyword . "%");
+        }
+
+        $srch->addGroupby('op_id');
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $srch->addOrder('op_id', 'DESC');
+
+        $result = FatApp::getDb()->fetchAll($srch->getResultSet());
+        
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => $result
+        );
+
+        die(FatUtility::convertToJson($json));
+    }
 }

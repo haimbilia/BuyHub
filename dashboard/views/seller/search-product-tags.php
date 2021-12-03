@@ -75,7 +75,7 @@ $("document").ready(function() {
             for (i = 0; i < ans.length; i++) {
                 list.push({
                     "id" : ans[i].id,
-                    "value" : ans[i].tag_identifier,
+                    "value" : ans[i].tag_name,
                 });
             }
             e.detail.tagify.settings.whitelist = list;        

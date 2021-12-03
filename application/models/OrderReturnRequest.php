@@ -29,8 +29,7 @@ class OrderReturnRequest extends MyAppModel
 
     public static function getSearchObject($langId = 0)
     {
-        $srch = new SearchBase(static::DB_TBL, 'orr');
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'orr');
     }
 
     public static function getRequestTypeArr($langId)
@@ -41,19 +40,19 @@ class OrderReturnRequest extends MyAppModel
         }
 
         return array(
-        /* static::RETURN_REQUEST_TYPE_REPLACE => Labels::getLabel( 'LBL_Order_Request_Type_Replace', $langId ), */
-        static::RETURN_REQUEST_TYPE_REFUND => Labels::getLabel('LBL_Order_Request_Type_Refund', $langId),
+            /* static::RETURN_REQUEST_TYPE_REPLACE => Labels::getLabel( 'LBL_Order_Request_Type_Replace', $langId ), */
+            static::RETURN_REQUEST_TYPE_REFUND => Labels::getLabel('LBL_Order_Request_Type_Refund', $langId),
         );
     }
 
     public static function getRequestStatusClass()
     {
         return array(
-        static::RETURN_REQUEST_STATUS_PENDING => static::CLASS_REQUEST_STATUS_PENDING,
-        static::RETURN_REQUEST_STATUS_ESCALATED => static::CLASS_REQUEST_STATUS_ESCALATED,
-        static::RETURN_REQUEST_STATUS_REFUNDED => static::CLASS_REQUEST_STATUS_REFUNDED,
-        static::RETURN_REQUEST_STATUS_WITHDRAWN => static::CLASS_REQUEST_STATUS_WITHDRAWN,
-        static::RETURN_REQUEST_STATUS_CANCELLED => static::CLASS_REQUEST_STATUS_CANCELLED,
+            static::RETURN_REQUEST_STATUS_PENDING => static::CLASS_REQUEST_STATUS_PENDING,
+            static::RETURN_REQUEST_STATUS_ESCALATED => static::CLASS_REQUEST_STATUS_ESCALATED,
+            static::RETURN_REQUEST_STATUS_REFUNDED => static::CLASS_REQUEST_STATUS_REFUNDED,
+            static::RETURN_REQUEST_STATUS_WITHDRAWN => static::CLASS_REQUEST_STATUS_WITHDRAWN,
+            static::RETURN_REQUEST_STATUS_CANCELLED => static::CLASS_REQUEST_STATUS_CANCELLED,
         );
     }
 
@@ -65,22 +64,22 @@ class OrderReturnRequest extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-        static::RETURN_REQUEST_STATUS_PENDING => Labels::getLabel('LBL_Return_Request_Status_Pending', $langId),
-        static::RETURN_REQUEST_STATUS_ESCALATED => Labels::getLabel('LBL_Return_Request_Status_Escalated', $langId),
-        static::RETURN_REQUEST_STATUS_REFUNDED => Labels::getLabel('LBL_Return_Request_Status_Refunded', $langId),
-        static::RETURN_REQUEST_STATUS_WITHDRAWN => Labels::getLabel('LBL_Return_Request_Status_Withdrawn', $langId),
-        static::RETURN_REQUEST_STATUS_CANCELLED => Labels::getLabel('LBL_Return_Request_Status_Cancelled', $langId),
+            static::RETURN_REQUEST_STATUS_PENDING => Labels::getLabel('LBL_Return_Request_Status_Pending', $langId),
+            static::RETURN_REQUEST_STATUS_ESCALATED => Labels::getLabel('LBL_Return_Request_Status_Escalated', $langId),
+            static::RETURN_REQUEST_STATUS_REFUNDED => Labels::getLabel('LBL_Return_Request_Status_Refunded', $langId),
+            static::RETURN_REQUEST_STATUS_WITHDRAWN => Labels::getLabel('LBL_Return_Request_Status_Withdrawn', $langId),
+            static::RETURN_REQUEST_STATUS_CANCELLED => Labels::getLabel('LBL_Return_Request_Status_Cancelled', $langId),
         );
     }
 
     public static function getRequestStatusClassArr()
     {
         return array(
-        static::RETURN_REQUEST_STATUS_PENDING => applicationConstants::CLASS_INFO,
-        static::RETURN_REQUEST_STATUS_ESCALATED => applicationConstants::CLASS_INFO,
-        static::RETURN_REQUEST_STATUS_REFUNDED => applicationConstants::CLASS_SUCCESS,
-        static::RETURN_REQUEST_STATUS_WITHDRAWN => applicationConstants::CLASS_WARNING,
-        static::RETURN_REQUEST_STATUS_CANCELLED => applicationConstants::CLASS_DANGER,
+            static::RETURN_REQUEST_STATUS_PENDING => applicationConstants::CLASS_INFO,
+            static::RETURN_REQUEST_STATUS_ESCALATED => applicationConstants::CLASS_INFO,
+            static::RETURN_REQUEST_STATUS_REFUNDED => applicationConstants::CLASS_SUCCESS,
+            static::RETURN_REQUEST_STATUS_WITHDRAWN => applicationConstants::CLASS_WARNING,
+            static::RETURN_REQUEST_STATUS_CANCELLED => applicationConstants::CLASS_DANGER,
         );
     }
 
@@ -93,19 +92,19 @@ class OrderReturnRequest extends MyAppModel
             trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed', $this->commonLangId), E_USER_ERROR);
         }
         $db = FatApp::getDb();
-        $dataToUpdate = array( 'orrequest_status' => static::RETURN_REQUEST_STATUS_ESCALATED );
-        $whereArr = array( 'smt' => 'orrequest_id = ?', 'vals' => array($orrequest_id) );
+        $dataToUpdate = array('orrequest_status' => static::RETURN_REQUEST_STATUS_ESCALATED);
+        $whereArr = array('smt' => 'orrequest_id = ?', 'vals' => array($orrequest_id));
         if (!$db->updateFromArray(static::DB_TBL, $dataToUpdate, $whereArr)) {
             $this->error = $db->getError();
             return false;
         }
         $orrmsg_msg = str_replace('{website_name}', FatApp::getConfig('CONF_WEBSITE_NAME_' . $langId), Labels::getLabel('LBL_Return_Request_Escalated_to', $langId));
         $dataToSave = array(
-        'orrmsg_orrequest_id' => $orrequest_id,
-        'orrmsg_from_user_id' => $user_id,
-        'orrmsg_msg' => $orrmsg_msg,
-        'orrmsg_date' => date('Y-m-d H:i:s'),
-        'orrmsg_deleted' => 0,
+            'orrmsg_orrequest_id' => $orrequest_id,
+            'orrmsg_from_user_id' => $user_id,
+            'orrmsg_msg' => $orrmsg_msg,
+            'orrmsg_date' => date('Y-m-d H:i:s'),
+            'orrmsg_deleted' => 0,
         );
         if (!$db->insertFromArray(OrderReturnRequestMessage::DB_TBL, $dataToSave)) {
             $this->error = $db->getError();
@@ -127,8 +126,8 @@ class OrderReturnRequest extends MyAppModel
         }
         $db = FatApp::getDb();
 
-        $dataToUpdate = array( 'orrequest_status' => static::RETURN_REQUEST_STATUS_WITHDRAWN );
-        $whereArr = array( 'smt' => 'orrequest_id = ?', 'vals' => array($orrequest_id) );
+        $dataToUpdate = array('orrequest_status' => static::RETURN_REQUEST_STATUS_WITHDRAWN);
+        $whereArr = array('smt' => 'orrequest_id = ?', 'vals' => array($orrequest_id));
         if (!$db->updateFromArray(static::DB_TBL, $dataToUpdate, $whereArr)) {
             $this->error = $db->getError();
             return false;
@@ -136,11 +135,11 @@ class OrderReturnRequest extends MyAppModel
 
         $orrmsg_msg = Labels::getLabel('LBL_Return_Request_Withdrawn', $this->commonLangId);
         $dataToSave = array(
-        'orrmsg_orrequest_id' => $orrequest_id,
-        'orrmsg_from_user_id' => $user_id,
-        'orrmsg_msg' => $orrmsg_msg,
-        'orrmsg_date' => date('Y-m-d H:i:s'),
-        'orrmsg_deleted' => 0,
+            'orrmsg_orrequest_id' => $orrequest_id,
+            'orrmsg_from_user_id' => $user_id,
+            'orrmsg_msg' => $orrmsg_msg,
+            'orrmsg_date' => date('Y-m-d H:i:s'),
+            'orrmsg_deleted' => 0,
         );
 
         if (!$user_id && AdminAuthentication::isAdminLogged()) {
@@ -193,12 +192,12 @@ class OrderReturnRequest extends MyAppModel
         $orderLangId = $requestRow['order_language_id'];
 
         $db->startTransaction();
-        $dataToUpdate = array( 
-            'orrequest_status' => static::RETURN_REQUEST_STATUS_REFUNDED, 
-            'orrequest_refund_in_wallet' => $moveRefundInWallet, 
+        $dataToUpdate = array(
+            'orrequest_status' => static::RETURN_REQUEST_STATUS_REFUNDED,
+            'orrequest_refund_in_wallet' => $moveRefundInWallet,
             'orrequest_admin_comment' => $adminComment,
         );
-        $whereArr = array( 'smt' => 'orrequest_id = ?', 'vals' => array( $requestRow['orrequest_id'] ) );
+        $whereArr = array('smt' => 'orrequest_id = ?', 'vals' => array($requestRow['orrequest_id']));
         if (!$db->updateFromArray(static::DB_TBL, $dataToUpdate, $whereArr)) {
             $this->error = $db->getError();
             $db->rollbackTransaction();
@@ -228,16 +227,16 @@ class OrderReturnRequest extends MyAppModel
             $db->rollbackTransaction();
             return false;
         }
-        
+
         if ($requestRow['orrequest_type'] == static::RETURN_REQUEST_TYPE_REPLACE) {
             $moveRefundInWallet = false;
         }
-        
+
         if ($moveRefundInWallet && $requestRow['orrequest_type'] == static::RETURN_REQUEST_TYPE_REFUND) {
             $opDataToUpdate = CommonHelper::getOrderProductRefundAmtArr($requestRow);
             unset($opDataToUpdate['op_cart_amount']);
             unset($opDataToUpdate['op_prod_price']);
-            $whereArr = array( 'smt' => 'op_id = ?', 'vals' => array( $requestRow['orrequest_op_id'] ) );
+            $whereArr = array('smt' => 'op_id = ?', 'vals' => array($requestRow['orrequest_op_id']));
             if (!$db->updateFromArray(OrderProduct::DB_TBL, $opDataToUpdate, $whereArr)) {
                 $this->error = $db->getError();
                 $db->rollbackTransaction();
@@ -277,7 +276,7 @@ class OrderReturnRequest extends MyAppModel
                     }
 
                     $dataToUpdate = ['orrequest_payment_gateway_req_id' => $resp->id];
-                    $whereArr = array( 'smt' => 'orrequest_id = ?', 'vals' => [$orrequest_id]);
+                    $whereArr = array('smt' => 'orrequest_id = ?', 'vals' => [$orrequest_id]);
                     if (!$db->updateFromArray(static::DB_TBL, $dataToUpdate, $whereArr)) {
                         $this->error = $db->getError();
                         $db->rollbackTransaction();
@@ -315,7 +314,7 @@ class OrderReturnRequest extends MyAppModel
         }
 
         $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);    
+        $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = $db->fetch($rs);
 
@@ -327,5 +326,33 @@ class OrderReturnRequest extends MyAppModel
             return $row[$attr];
         }
         return $row;
+    }
+
+
+    public static function getStatusHtml(int $langId, int $status): string
+    {
+        $arr = self::getRequestStatusArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::RETURN_REQUEST_STATUS_PENDING:
+                $status = HtmlHelper::INFO;
+                break;
+            case static::RETURN_REQUEST_STATUS_ESCALATED:
+                $status = HtmlHelper::PRIMARY;
+                break;
+            case static::RETURN_REQUEST_STATUS_REFUNDED:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::RETURN_REQUEST_STATUS_WITHDRAWN:
+                $status = HtmlHelper::WARNING;
+                break;
+            case static::RETURN_REQUEST_STATUS_CANCELLED:
+                $status = HtmlHelper::DANGER;
+                break;
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, rtrim($msg));
     }
 }

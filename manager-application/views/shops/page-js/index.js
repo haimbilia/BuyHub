@@ -1,16 +1,4 @@
 (function () {
-    redirectfunc = function (url, id, nid, newTab) {
-        newTab = (typeof newTab != "undefined") ? newTab : true;
-        if (nid > 0) {
-            $.systemMessage(langLbl.processing, 'alert--process');
-            markRead(nid, url, id);
-        } else {
-            var target = (newTab) ? ' target="_blank" ' : ' ';
-            var form = '<input type="hidden" name="id" value="' + id + '">';
-            $('<form' + target + 'action="' + url + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
-        }
-    };
-
     mediaForm = function (banner_id, langId = 0, slide_screen = 1) {
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('Shops', 'media', [banner_id, langId, slide_screen]), '', function (t) {

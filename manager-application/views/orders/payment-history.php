@@ -20,7 +20,7 @@ if (!empty($order['payments'])) { ?>
             <tbody>
                 <?php foreach ($order["payments"] as $key => $row) { ?>
                     <tr>
-                        <td><?php echo FatDate::format($row['opayment_date']); ?></td>
+                        <td><?php echo HtmlHelper::formatDateTime($row['opayment_date']); ?></td>
                         <td><?php echo $row['opayment_gateway_txn_id']; ?></td>
                         <td><?php echo $row['opayment_method']; ?></td>
                         <td><?php echo CommonHelper::displayMoneyFormat($row['opayment_amount'], true, true); ?></td>
@@ -56,25 +56,7 @@ if (!empty($order['payments'])) { ?>
                             <span class="badge <?php echo $cls; ?>"><?php echo $msg; ?></span>
                         </td>
                         <td class="align-right">
-                            <div class="modal fade" id="modal<?php echo $key; ?>" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle"><?php echo Labels::getLabel('LBL_COMMENT', $siteLangId); ?></h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="cms">
-                                                <p>
-                                                    <?php echo nl2br($row['opayment_comments']); ?>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php echo HtmlHelper::getModalStructure("modal" . $key, Labels::getLabel('LBL_COMMENT', $siteLangId), nl2br($row['opayment_comments'])); ?>
                             <ul class="actions">
                                 <li data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId); ?>">
                                     <a href="javascript:void(0)" data-toggle="modal" data-target="#modal<?php echo $key; ?>">

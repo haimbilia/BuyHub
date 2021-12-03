@@ -38,6 +38,7 @@ class ThemeColorController extends ListingBaseController
         $this->set('pageTitle', $pageTitle);
 
         $this->set('frm', $frm);
+        $this->set('pageData', $pageData);
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->_template->addJs(array('js/tagify.min.js', 'js/tagify.polyfills.min.js'));
         $this->_template->addCss(array('css/tagify.min.css'));
