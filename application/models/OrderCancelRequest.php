@@ -23,9 +23,9 @@ class OrderCancelRequest extends MyAppModel
     public static function getStatusClassArr()
     {
         return array(
-        static::CANCELLATION_REQUEST_STATUS_PENDING => applicationConstants::CLASS_INFO,
-        static::CANCELLATION_REQUEST_STATUS_APPROVED => applicationConstants::CLASS_SUCCESS,
-        static::CANCELLATION_REQUEST_STATUS_DECLINED => applicationConstants::CLASS_DANGER,
+            static::CANCELLATION_REQUEST_STATUS_PENDING => applicationConstants::CLASS_INFO,
+            static::CANCELLATION_REQUEST_STATUS_APPROVED => applicationConstants::CLASS_SUCCESS,
+            static::CANCELLATION_REQUEST_STATUS_DECLINED => applicationConstants::CLASS_DANGER,
         );
     }
 
@@ -75,5 +75,26 @@ class OrderCancelRequest extends MyAppModel
             return $row[$attr];
         }
         return $row;
+    }
+
+    public static function getStatusHtml(int $langId, int $status): string
+    {
+        $arr = self::getRequestStatusArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::CANCELLATION_REQUEST_STATUS_PENDING:
+                $status = HtmlHelper::INFO;
+                break;
+            case static::CANCELLATION_REQUEST_STATUS_APPROVED:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::CANCELLATION_REQUEST_STATUS_DECLINED:
+                $status = HtmlHelper::DANGER;
+                break;
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, rtrim($msg));
     }
 }
