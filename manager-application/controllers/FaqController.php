@@ -15,8 +15,7 @@ class FaqController extends ListingBaseController
     {
         FatApp::redirectUser(UrlHelper::generateUrl('FaqCategories'));
     }
-
-
+    
     /**
      * setLangTemplateData - This function is use to automate load langform and save it. 
      *

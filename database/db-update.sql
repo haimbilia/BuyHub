@@ -1401,3 +1401,8 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('LBL_PRESS_{KEY}_KEY_FOR_BROWSER_SEARCH', 1, 'Press {KEY} again to use native browser search.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 ALTER TABLE `tbl_pages_language_data` ADD `plang_helping_text` LONGTEXT NOT NULL AFTER `plang_replacements`;
+
+DELETE FROM tbl_configurations WHERE conf_name = "CONF_PRIMARY_APP_THEME_COLOR";
+DELETE FROM tbl_configurations WHERE conf_name = "CONF_PRIMARY_INVERSE_APP_THEME_COLOR";
+DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_APP_THEME_COLOR";
+DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_INVERSE_APP_THEME_COLOR";

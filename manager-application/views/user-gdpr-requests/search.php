@@ -27,7 +27,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $userDetail, true);
                 break;
             case 'ureq_date':
-                $td->appendElement('plaintext', array(), FatDate::format($row[$key], true, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())), true);
+                $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key], true, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())), true);
                 break;
             case 'ureq_type':
                 $str = ($row['ureq_type'] == UserGdprRequest::TYPE_TRUNCATE) ? UserGdprRequest::TYPE_TRUNCATE : UserGdprRequest::TYPE_DATA_REQUEST;

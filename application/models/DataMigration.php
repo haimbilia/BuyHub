@@ -1249,14 +1249,13 @@ class DataMigration
 
         $srch = Tag::getSearchObject();
         $srch->addFld('tag_id');
-        $cnd = $srch->addCondition('tag_identifier', "=", $name);
+        $cnd = $srch->addCondition('tag_name', "=", $name);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (empty($row)) {
             $tagObj = new Tag();
             $tagSaveData = array(
-                'tag_identifier' => $name,
-                'tag_admin_id' => 1,
+                'tag_name' => $name,              
             );
             $tagObj->assignValues($tagSaveData);
             $data = $tagObj->getFlds();

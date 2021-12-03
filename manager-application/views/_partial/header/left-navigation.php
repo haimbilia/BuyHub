@@ -111,7 +111,8 @@
                 $objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
             <li class="menu-item dropdownJs">
@@ -199,8 +200,29 @@
                                             xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span
-                                    class="nav_text"><?php echo Labels::getLabel('NAV_RATING_TYPES', $siteLangId); ?></span>
+                                </span>
+                                <span class="nav_text">
+                                    <?php echo Labels::getLabel('NAV_RATING_TYPES', $siteLangId); ?>
+                                </span>
+                            </a>
+                        </li>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom"
+                                href="<?php echo UrlHelper::generateUrl('OrderReturnRequests'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <span class="nav_text">
+                                    <?php echo Labels::getLabel('NAV_ORDER_RETURN_REQUESTS', $siteLangId); ?>
+                                    <?php if ($orderRetReqCount) { ?>(<?php echo $orderRetReqCount; ?>)<?php } ?>
+                                </span>
                             </a>
                         </li>
                         <?php } ?>
@@ -215,9 +237,9 @@
                 $objPrivilege->canViewSubscriptionOrders(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewWithdrawRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
-            ) {
-            ?>
+            ) { ?>
             <li class="menu-item dropdownJs">
                 <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                     title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
@@ -287,8 +309,31 @@
                                             xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span
-                                    class="nav_text"><?php echo Labels::getLabel('NAV_ORDER_RETURN_REASONS', $siteLangId); ?></span>
+                                </span>
+                                <span class="nav_text">
+                                    <?php echo Labels::getLabel('NAV_ORDER_RETURN_REASONS', $siteLangId); ?>
+                                </span>
+                            </a>
+                        </li>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewWithdrawRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom"
+                                href="<?php echo UrlHelper::generateUrl('WithdrawalRequests'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <span class="nav_text">
+                                    <?php
+                                            $menuLabel =  Labels::getLabel('NAV_WITHDRAWL_REQUESTS', $siteLangId);
+                                            $menuLabel .= $drReqCount ? ' (' . $drReqCount . ')' : '';
+                                            echo $menuLabel;
+                                            ?>
+                                </span>
                             </a>
                         </li>
                         <?php } ?>
@@ -316,9 +361,9 @@
             if (
                 $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) /* ||
-              $objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true) ||
-              $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-              $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true) */
+                $objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true) */
             ) {
             ?>
             <li class="menu-item dropdownJs">
@@ -759,10 +804,11 @@
 
             <?php
             if (
-                $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true)
-                || $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)
-                || $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)
-                || $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
             <li class="menu-item dropdownJs">
@@ -779,6 +825,23 @@
                 </div>
                 <div class="sidebar-dropdown-menu">
                     <ul class="nav">
+                        <?php if ($objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom"
+                                href="<?php echo UrlHelper::generateUrl('Slides'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <span class="nav_text">
+                                    <?php echo Labels::getLabel('NAV_HOME_PAGE_SLIDES', $siteLangId); ?>
+                                </span>
+                            </a>
+                        </li>
+                        <?php } ?>
                         <?php if ($objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item">
                             <a class="nav_link navLinkJs dropdown-toggle-custom"
@@ -789,8 +852,10 @@
                                             xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
                                     </svg>
-                                </span> <span
-                                    class="nav_text"><?php echo Labels::getLabel('NAV_CONTENT_PAGES', $siteLangId); ?></span>
+                                </span>
+                                <span class="nav_text">
+                                    <?php echo Labels::getLabel('NAV_CONTENT_PAGES', $siteLangId); ?>
+                                </span>
                             </a>
                         </li>
                         <?php } ?>

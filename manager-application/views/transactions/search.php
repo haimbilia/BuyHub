@@ -24,7 +24,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionNumber($row[$key]) );
             break;
             case 'utxn_date':
-                $td->appendElement('plaintext', $tdAttr,FatDate::format($row[$key]));
+                $td->appendElement('plaintext', $tdAttr,HtmlHelper::formatDateTime($row[$key]));
             break;
             case 'utxn_credit':
             case 'utxn_debit':

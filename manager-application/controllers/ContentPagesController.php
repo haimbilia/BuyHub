@@ -35,7 +35,7 @@ class ContentPagesController extends ListingBaseController
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js']);
         $this->set('includeEditor', true);
-        $this->_template->render(true, true);
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     /**

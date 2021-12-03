@@ -20,10 +20,6 @@ foreach ($arrListing as $sn => $row) {
     $metaId = FatUtility::int($row['meta_id']);
     $metaRecordId = FatUtility::int($row['meta_record_id']);
     foreach ($fields as $key => $val) {
-        if (!array_key_exists($key, $tableHeadAttrArr)) {
-            continue;
-        }
-
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
@@ -59,6 +55,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:
+
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
@@ -75,10 +72,18 @@ if (count($arrListing) == 0) {
         ),
         Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
-} 
+}
+
+$keyWordFld = $frmSearch->getField('keyword');
 if (1 > $loadRows) {
+    if (null != $keyWordFld) {
+        echo '<div class="card">';
+    }
     $onSubmit = 'searchRecords(this, true); return(false);';
-    require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); 
+    require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php');
+    if (null != $keyWordFld) {
+        echo '</div>';
+    }
 } ?>
 <div class="card listingTableJs">
     <div class="card-head">
@@ -88,8 +93,8 @@ if (1 > $loadRows) {
             </h3>
         </div>
         <?php if ($metaType == MetaTag::META_GROUP_ADVANCED) { ?>
-        <div class="card-toolbar">
-            <?php
+            <div class="card-toolbar">
+                <?php
                 $data = [
                     'canEdit' => $canEdit,
                     'siteLangId' => $siteLangId,
@@ -113,7 +118,7 @@ if (1 > $loadRows) {
                 ];
                 $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
                 ?>
-        </div>
+            </div>
         <?php } ?>
     </div>
     <div class="card-body">

@@ -37,7 +37,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
                 break;
             case 'selprod_available_from':
-                $td->appendElement('plaintext', array(), FatDate::format($row[$key], false), true);
+                $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key], false), true);
                 break;
             case 'selprod_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['selprod_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';

@@ -19,7 +19,7 @@ foreach ($arrListing as $sn => $row) {
 
             case 'shop_name':
                 $shop = $row['shop_name'];
-                $shop .= '<br/>Created On: ' . FatDate::format($row['shop_created_on'], false, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get()));
+                $shop .= '<br/>Created On: ' . HtmlHelper::formatDateTime($row['shop_created_on'], false, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get()));
 
                 $td->appendElement('plaintext', $tdAttr, $shop, true);
                 break;

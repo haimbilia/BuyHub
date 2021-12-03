@@ -252,14 +252,121 @@
 
     getCurrentFrmLangId = function (){
         return $("#addProductfrm [name='lang_id']").val();
+    };
+
+    imagesForm =  function (productId = 0){
+        if (false === checkControllerName()) {
+            return false;
+        }     
+        $.ykmodal(fcom.getLoader());     
+        fcom.ajax(fcom.makeUrl(controllerName, "imagesForm",[productId]),'', function (t) {
+            $.ykmodal(t);
+            productImages(productId);
+            fcom.removeLoader();
+        });
+    };
+
+    productImages = function( product_id,option_id = 0,lang_id = 0){
+        fcom.ajax(fcom.makeUrl('Products', 'images', [product_id,option_id,lang_id]), '', function(t) {
+            $('#imageupload_div').html(t);
+        });
+    };
+
+    /** on option select/deselect */
+    resetOptionValuesTag = function (e){
+        let index = $(e.target.closest('.rowJs')).find('input.optionValuesJs').data('index'); 
+        if(index in tagifyObjs){
+            tagifyObjs[index].settings.whitelist = [];
+            tagifyObjs[index].removeAllTags();
+        }
     }
 
+    getOptionValues = function(e) {         
+        let optionId = $(e.detail.tagify.DOM.originalInput).closest('.rowJs').find('.optionsJs').val();
+        if(optionId  == null){         
+            e.detail.tagify.settings.whitelist = [];
+            e.detail.tagify.removeAllTags();
+            return;
+        }
+
+        var keyword = e.detail.value;
+        var list = [];
+        fcom.ajax(fcom.makeUrl('OptionValues', 'autoComplete'), {
+            keyword: keyword,
+            optionId :optionId,
+            langId : getCurrentFrmLangId()
+        }, function(t) {
+            var ans = JSON.parse(t); 
+            $(ans['results']).each(function(id,val){
+                list.push({
+                    "id": val.id,
+                    "value": val.text,
+                });
+            }); 
+            e.detail.tagify.settings.whitelist = list;
+            e.detail.tagify.loading(false).dropdown.show.call(tagify, keyword);
+        });
+    }
     
+    tagifyOptionValue = function(element) {          
+        let index = $(element).data('index');
+        $(element).siblings(".tagify").remove();
+        var tagify = new Tagify(document.querySelector(element), {
+            whitelist : [],
+            delimiters : "#",
+            dropdown: {
+                closeOnSelect: false,
+                enabled: 0, 
+                classname: "tags-look",             
+            },                
+            enforceWhitelist : true,
+            skipInvalid:true,
+        }).on('input', getOptionValues).on('focus', getOptionValues);
+        tagifyObjs[index] = tagify;
+    };    
 
 })();
 
-$(document).on('click', '.warrantyTypeJs', function (event) {
+$(document).on('click', '.warrantyTypeJs', function () {
     let type = $(this).data('type');
     $(this).closest('div').siblings('.warrantyTypeButtonJs').text($(this).text());
     $("#product_warranty_unit").val(type);
 });
+
+$(document).on('click', '.optionsAddJs', function () {
+
+    let clonedRow = $('#variantsJs .rowJs:first').clone(); 
+    let index = clonedRow.find('.optionValuesJs').data('index');
+    let newIndex = $('#variantsJs .rowJs').length + 1;
+    let optionId = clonedRow.find('.optionsJs').attr('id').replace(index, ""); 
+    let newOptionId = optionId + newIndex;  
+    clonedRow.find('.optionsJs').attr('id',newOptionId);
+
+    let optionValueId = clonedRow.find('.optionValuesJs').attr('id').replace(index, "");
+    let newOptionValueId = optionValueId + newIndex;
+    clonedRow.find('.optionValuesJs').attr('id',newOptionValueId);  
+
+    clonedRow.removeClass('hide');
+    clonedRow.find('.optionsAddJs').removeClass('hide');     
+    clonedRow.insertAfter('#variantsJs .rowJs:last');  
+
+    select2(newOptionId, fcom.makeUrl('Options', 'autoComplete'),{},function(e){           
+        resetOptionValuesTag(e);
+    },function(e){
+        resetOptionValuesTag(e);
+    });
+
+    $('#'+newOptionId).data("select2").$container.addClass("w-100");
+    tagifyOptionValue("#"+newOptionValueId); 
+  
+});
+
+$(document).on('click', '.optionsDeleteJs', function () {
+
+    $(this).closest('.rowJs').remove();
+  
+});
+
+
+
+

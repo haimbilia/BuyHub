@@ -1157,14 +1157,10 @@ class CustomProductsController extends ListingBaseController
             return false;
         }
 
-        $srch = Tag::getSearchObject();
-        $srch->addOrder('tag_identifier');
-        $srch->joinTable(
-            Tag::DB_TBL . '_lang',
-            'LEFT OUTER JOIN',
-            'taglang_tag_id = tag_id AND taglang_lang_id = ' . $this->siteLangId
-        );
-        $srch->addMultipleFields(array('tag_id, tag_name, tag_identifier'));
+        $srch = Tag::getSearchObject($this->siteLangId);
+        $srch->addOrder('tag_name');
+       
+        $srch->addMultipleFields(array('tag_id', 'tag_name'));
         $srch->addCondition('tag_id', 'IN', $post['tags']);
 
         $rs = $srch->getResultSet();
@@ -1173,7 +1169,7 @@ class CustomProductsController extends ListingBaseController
         $li = '';
         foreach ($tags as $key => $tag) {
             $li .= '<li id="product-tag' . $tag['tag_id'] . '"><span class="left "><a href="javascript:void(0)" title="Remove" onClick="removeProductTag(' . $tag['tag_id'] . ');"><i class="icon ion-close remove_tag-js" data-tag-id="' . $tag['tag_id'] . '"></i></a></span>';
-            $li .= '<span class="left">' . $tag['tag_name'] . ' (' . $tag['tag_identifier'] . ')' . '<input type="hidden" value="' . $tag['tag_id'] . '"  name="product_tags[]"></span></li>';
+            $li .= '<span class="left">' . $tag['tag_name']  . '<input type="hidden" value="' . $tag['tag_id'] . '"  name="product_tags[]"></span></li>';
         }
         echo $li;
         exit;

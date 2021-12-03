@@ -156,7 +156,7 @@ $frm->setFormTagAttribute('class', 'form');
                         <div class="row">
                             <?php
                             echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)']);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_seller_id', 6, ['id' => 'product_seller_id','placeholder'=> Labels::getLabel('FRM_SELECT_USER', $langId)]);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_seller_id', 6, ['id' => 'product_seller_id', 'placeholder' => Labels::getLabel('FRM_SELECT_USER', $langId)]);
 
                             echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
                             echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
@@ -212,12 +212,55 @@ $frm->setFormTagAttribute('class', 'form');
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
                     <div class="card-body show" id="stock-block1">
-
-
                         <div class="form-group row justify-content-between">
                             <div class="col">
                                 <label class="label">This product has multiple options,
                                     like different sizes or colors</label>
+                            </div>
+                        </div>
+                        <table class="table table-variants" id="variantsJs">
+                            <tbody>                      
+                                <?php for($i =-1; $i <= 0; $i++ ){
+                                    // $i == -1 use to clone row
+                                    ?>
+                                    <tr class="rowJs <?php echo $i == -1 ? 'hide': '';?>">
+                                    <td width="30%">
+                                        <select class="optionsJs" id="options<?php echo $i; ?>" name="options[]" class="form-control">                               
+                                        </select>
+                                    </td>
+                                    <td width="50%">
+                                        <input class="form-tagify optionValuesJs" id="optionValues<?php echo $i; ?>" data-index="<?php echo $i; ?>" name="optionValues[]" value="">
+                                    </td>
+                                    <td class="align-right" width="20%">
+                                        <ul class="actions">
+                                            <li class="<?php echo $i == 0 ? 'hide': '';?> optionsDeleteJs">
+                                                <a href="javascript:void(0)" class="">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                        </use>
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" class="optionsAddJs">
+                                                    <svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                        </use>
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td> 
+                                    </tr>
+                                    <?php                                    
+                                } ?>   
+                             
+                            </tbody>
+                        </table>
+                        <div class="separator separator-dashed my-4"></div>
+                        <div class="form-group row justify-content-between">
+                            <div class="col">
+                                <label class="label">This product has same EAN/UPC code for all variants</label>
                             </div>
                             <div class="col-auto">
                                 <ul class="list-radio">
@@ -227,7 +270,6 @@ $frm->setFormTagAttribute('class', 'form');
                                         </label>
                                     </li>
                                     <li>
-
                                         <label class="radio"><input type="radio" name="radio7" value="0">
                                             No
                                         </label>
@@ -235,230 +277,27 @@ $frm->setFormTagAttribute('class', 'form');
                                 </ul>
                             </div>
                         </div>
-                        <table class="table table-variants">
-                            <tbody>
-                                <tr>
-
-                                    <td width="25%"><select name="optionsSelect" class="form-control">
-                                            <option disabled="disabled" value="">
-                                                Select Option</option>
-                                            <option value="1">Color</option>
-                                            <option value="2">Size</option>
-                                            <option value="3">Carat</option>
-                                            <option value="4">Clarity</option>
-                                            <option value="5">Strap</option>
-                                        </select></td>
-                                    <td> <input class=" form-tagify" name='tags' value='Red, Green, Blue' autofocus>
-                                    </td>
-                                    <td class="align-right">
-                                        <ul class="actions">
-                                            <li>
-                                                <a href="javascript:void(0)" class="">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
-
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td><select name="optionsSelect" class="form-control">
-                                            <option value="">
-                                                Size</option>
-                                            <option value="1">Color</option>
-                                            <option value="2">Size</option>
-                                            <option value="3">Carat</option>
-                                            <option value="4">Clarity</option>
-                                            <option value="5">Strap</option>
-                                        </select></td>
-                                    <td> <input class="form-tagify" name='tags' value='Small, , Medium, Large, XL, XXL' autofocus>
-                                    </td>
-                                    <td class="align-right">
-                                        <ul class="actions">
-
-
-
-                                            <li>
-                                                <a href="javascript:void(0)" class="">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
-
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td><select name="optionsSelect" class="form-control">
-                                            <option value="">
-                                                Select Option</option>
-                                            <option value="1">Color</option>
-                                            <option value="2">Size</option>
-                                            <option value="3">Carat</option>
-                                            <option value="4">Clarity</option>
-                                            <option value="5">Strap</option>
-                                        </select></td>
-                                    <td> <input class=" form-tagify" name='tags' value='Lorem, Lorem2, Lorem5' autofocus>
-                                    </td>
-                                    <td class="align-right">
-                                        <ul class="actions">
-                                            <li>
-                                                <a href="javascript:void(0)" class="">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)" class="">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="separator separator-dashed my-4"></div>
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>Variant</th>
-                                    <th>EAN/UPC code</th>
-                                    <th class="align-right">
-                                        <a class="link disabled" disabled="disabled">Undo</a>
-                                    </th>
+                                    <th>EAN/UPC code</th>                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>Red / Small </td>
-                                    <td><input class="form-control" type="text" placeholder=""></td>
-                                    <td class="align-right">
-                                        <ul class="actions">
-                                            <li>
-                                                <a title="Copy to all" href="javascript:void(0)" class="">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
+                                    <td><input class="form-control" type="text" placeholder=""></td>                                  
                                 </tr>
-                                <tr>
-                                    <td>Red / Small </td>
-                                    <td><input class="form-control" type="text" placeholder=""></td>
-                                    <td class="align-right">
-                                        <ul class="actions">
-                                            <li>
-                                                <a title="Copy to all" href="javascript:void(0)" class="">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Red / Small </td>
-                                    <td><input class="form-control" type="text" placeholder=""></td>
-                                    <td class="align-right">
-                                        <ul class="actions">
-                                            <li>
-                                                <a title="Copy to all" href="javascript:void(0)" class="">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Red / Small </td>
-                                    <td><input class="form-control" type="text" placeholder=""></td>
-                                    <td class="align-right">
-                                        <ul class="actions">
-                                            <li>
-                                                <a title="Copy to all" href="javascript:void(0)" class="">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Red / Small </td>
-                                    <td><input class="form-control" type="text" placeholder=""></td>
-                                    <td class="align-right">
-                                        <ul class="actions">
-                                            <li>
-                                                <a title="Copy to all" href="javascript:void(0)" class="">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-
                             </tbody>
-                        </table>
-                        <div class="separator separator-dashed my-4"></div>
-
-                        <div class="form-group mb-0">
-                            <label class="label">Select Default Product Variant</label>
-                            <select name="default" data-vv-as="Default" data-vv-validate-on="none" class="form-control" aria-required="true" aria-invalid="false">
-                                <option disabled="disabled" value="">Select
-                                </option>
-                                <option value="0"><span>red / small</span></option>
-                                <option value="1"><span>red / medium</span></option>
-                                <option value="2"><span>red / large</span></option>
-                                <option value="3"><span>green / small</span></option>
-                                <option value="4"><span>green / medium</span></option>
-                                <option value="5"><span>green / large</span></option>
-                                <option value="6"><span>blue / small</span></option>
-                                <option value="7"><span>blue / medium</span></option>
-                                <option value="8"><span>blue / large</span></option>
-                            </select>
-
-
-                        </div>
-
-
+                        </table>                        
                     </div>
-
-
-
-
-
                 </div>
                 <div class="card" id="media">
                     <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Media
+                                <a href="javascript:void(0)" onclick="imagesForm()" class="link">Advance Media</a>
                             </h3>
                             <span class="text-muted">Attach media files for the product </span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
@@ -706,7 +545,7 @@ $frm->setFormTagAttribute('class', 'form');
                             echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6 ,['id'=>'shipping_profile']);
+                            echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6, ['id' => 'shipping_profile']);
                             ?>
                         </div>
                     </div>
@@ -813,27 +652,55 @@ $frm->setFormTagAttribute('class', 'form');
 <script>
     var canEditTags = <?php echo $canEditTags ? 1 : 0; ?>;
     var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';
-    $(function() {
+    var tagifyObjs = {};
+    $(function() {     
 
         prodSpecifications();
         tagifyProducts();
+        let langId = getCurrentFrmLangId();
         select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
-            brand_active: 1
+            brand_active: 1,
+            langId :langId
         });
-        select2('ptc_prodcat_id', fcom.makeUrl('ProductCategories', 'autoComplete'));
-        select2('ptt_taxcat_id', fcom.makeUrl('TaxCategories', 'autoComplete'));
-        select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'));
+        select2('ptc_prodcat_id', fcom.makeUrl('ProductCategories', 'autoComplete'),{langId});
+        select2('ptt_taxcat_id', fcom.makeUrl('TaxCategories', 'autoComplete'),{langId});
+        select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'),{langId});
+
+        $('.optionsJs').each(function(index){
+            if($(this).closest('.rowJs').hasClass('hide')) {
+                return;
+            }    
+            select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'),{},function(e){           
+                resetOptionValuesTag(e);
+            },function(e){
+                resetOptionValuesTag(e);
+            });
+           $(this).data("select2").$container.addClass("w-100");
+        }); 
 
 
-        getShippingProfileOptions(<?php echo $frm->getField('product_seller_id')->value;?>);
+        $('.optionValuesJs').each(function(index){  
+            if($(this).closest('.rowJs').hasClass('hide')) {
+                return;
+            }    
+            tagifyOptionValue("#"+$(this).attr('id')); 
+        });
+
+        
+
+        getShippingProfileOptions(<?php echo $frm->getField('product_seller_id')->value; ?>);
 
         <?php if ($isProductAddedByAdmin  && !$isProductAddedBySeller) { ?>
-            select2('product_seller_id', fcom.makeUrl('Users', 'autoComplete'),{joinShop:1,user_is_supplier:1},function(e){
-                getShippingProfileOptions(e.params.args.data.id)              
+            select2('product_seller_id', fcom.makeUrl('Users', 'autoComplete'), {
+                joinShop: 1,
+                user_is_supplier: 1,
+                langId
+            }, function(e) {
+                getShippingProfileOptions(e.params.args.data.id)
             });
-        <?php } else { ?>           
+        <?php } else { ?>
             $('select[name=\'product_seller_id\']').attr('disabled', true);
-        <?php } ?>  
+        <?php } ?>
 
         $('#addProductfrm').find('input,select').each(function() {
             if ($(this).data('fatreq') == undefined) {

@@ -167,6 +167,11 @@ class SlidesController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_OPEN_IN', $this->siteLangId), 'slide_target', $linkTargetsArr, '', [], '');
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'slide_active', applicationConstants::getActiveInactiveArr($this->siteLangId), 
         applicationConstants::ACTIVE, array(), '');
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
         return $frm;
     }
 
@@ -205,6 +210,14 @@ class SlidesController extends ListingBaseController
         
         if (!$slideObj->updateLangData($this->siteLangId, $langData)) {
             LibHelper::exitWithError($slideObj->getError(), true);
+        }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(Slides::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
         }
 
         $newTabLangId = 0;
@@ -278,12 +291,6 @@ class SlidesController extends ListingBaseController
         $frm->addHiddenField('', 'slide_id');
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_SLIDE_TITLE', $langId), 'slide_title');
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
         return $frm;
     }
 
@@ -525,7 +532,7 @@ class SlidesController extends ListingBaseController
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'slide_title' => Labels::getLabel('LBL_TESTIMONIAL_TITLE', $this->siteLangId),
+            'slide_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'slide_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];

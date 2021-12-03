@@ -7,7 +7,35 @@
         </div>
     </div>
 </footer>
+<div class="header-action__target modal fade" id="search-main">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-5">
+                <?php
+                $data = [
+                    'siteLangId' => $siteLangId,
+                    'objPrivilege' => AdminPrivilege::getInstance()
+                ];
+                $this->includeTemplate('_partial/navigation/quick-search.php', $data, false); ?>
 
+            </div>
+            <div class="modal-footer">
+                <div class="search-native">
+                    <label class="checkbox" for="">
+                        <?php
+                        $preferences = $_COOKIE['quickSearchCtrlJs'] ?? 0;
+                        $str = Labels::getLabel('LBL_PRESS_{KEY}_KEY_FOR_BROWSER_SEARCH', $siteLangId);
+                        echo CommonHelper::replaceStringData($str, ['{KEY}' => '<kbd>Ctrl-F</kbd>']); ?>
+                        <input type="checkbox" id="quickSearchCtrlJs"
+                            <?php echo (0 < $preferences ? 'checked="checked"' : ''); ?> data-toggle="tooltip"
+                            data-placement="top"
+                            title="<?php echo Labels::getLabel('MSG_MARK_AS_CHECKED_TO_USE_THE_ONLY_NATIVE_BROWSER_SEARCH', $siteLangId); ?>">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="footer-action">
 
     <div class="footer-action__item">

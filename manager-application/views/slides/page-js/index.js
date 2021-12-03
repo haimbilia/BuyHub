@@ -60,7 +60,6 @@ deleteMedia = function (recordId, afileId ,fileType, langId, slideScreen) {
 
 
 loadImages = function (recordId, imageType, slide_screen, langId) {
-    console.log('loadimages -- ',recordId, imageType, slide_screen, langId);
     fcom.ajax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId, slide_screen}, function (t) {	
         $('#imageListingJs').html(t);
     });
@@ -68,7 +67,7 @@ loadImages = function (recordId, imageType, slide_screen, langId) {
 $(document).on('change', '#imageLanguageJs', function() {
     let langId = $(this).val();
     let recordId = $(this).closest("form").find('input[name="slide_id"]').val();
-    let slideScreen = $(this).closest("form").find('input[name="slide_screen"]').val();
+    let slideScreen = $(this).closest("form").find('[name="slide_screen"]').val();
     loadImages(recordId, 'THUMB', slideScreen, langId);
 });
 
