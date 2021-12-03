@@ -2,8 +2,7 @@
 class WithdrawalRequestsController extends ListingBaseController
 {
     protected $modelClass = 'Transactions';
-    protected $pageKey = 'MANAGE_WITHDRAWAL_REQUESTS
-    ';
+    protected $pageKey = 'MANAGE_WITHDRAWAL_REQUESTS';
 
     public function __construct($action)
     {
@@ -36,7 +35,6 @@ class WithdrawalRequestsController extends ListingBaseController
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['newRecordBtn'] = false;
         $this->set('actionItemsData', $actionItemsData);
-
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set("frmSearch", $frmSearch);
@@ -104,7 +102,6 @@ class WithdrawalRequestsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
-
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
@@ -148,8 +145,9 @@ class WithdrawalRequestsController extends ListingBaseController
             $srch->addCondition('tuwr.withdrawal_id', '=', $post['withdrawal_id']);
         }
 
-        if (isset($post['status']) && $post['status'] >= 0) {
-            $srch->addCondition('tuwr.withdrawal_status', '=', $post['status']);
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        if (isset($status) && $status >= 0) {
+            $srch->addCondition('tuwr.withdrawal_status', '=', $status);
         }
 
         if (isset($post['date_from']) && $post['date_from']) {
@@ -247,8 +245,6 @@ class WithdrawalRequestsController extends ListingBaseController
         $allowedStatusUpdateArr = array(Transactions::WITHDRAWL_STATUS_APPROVED, Transactions::WITHDRAWL_STATUS_DECLINED);
         $row = WithdrawalRequest::getAttributesById($recordId);
 
-        print_rr($row, );
-
         if (!$row || !in_array($post['withdrawal_status'], $allowedStatusUpdateArr)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -322,9 +318,9 @@ class WithdrawalRequestsController extends ListingBaseController
      */
     protected function getFormColumns(): array
     {
-        $ContentPageTblHeadingCols = CacheHelper::get('ContentPageTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($ContentPageTblHeadingCols) {
-            return json_decode($ContentPageTblHeadingCols);
+        $withdrawalRequestsTblHeadingCols = CacheHelper::get('withdrawalRequestsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($withdrawalRequestsTblHeadingCols) {
+            return json_decode($withdrawalRequestsTblHeadingCols);
         }
 
         $arr = [
@@ -338,7 +334,7 @@ class WithdrawalRequestsController extends ListingBaseController
             'withdrawal_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
-        CacheHelper::create('ContentPageTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        CacheHelper::create('withdrawalRequestsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
