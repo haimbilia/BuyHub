@@ -196,7 +196,7 @@ select2 = function (
                     postdata
                 );
             },
-            processResults: function (data, params) {
+            processResults: function (data, params) {            
                 params.page = params.page || 1;
                 data.pageCount = data.pageCount || 1;
                 return {

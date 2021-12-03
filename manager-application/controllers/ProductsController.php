@@ -1,5 +1,7 @@
 <?php
 
+use PhpParser\Node;
+
 class ProductsController extends ListingBaseController
 {
     protected $modelClass = 'Product';
@@ -373,7 +375,7 @@ class ProductsController extends ListingBaseController
 
         $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_IDENTIFIER', $langId), 'product_identifier');
         $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_NAME', $langId), 'product_name');
-
+        
 
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_BRAND', $langId), 'product_brand_id', []);
         if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
@@ -469,6 +471,10 @@ class ProductsController extends ListingBaseController
             $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', [], '', [], '');
         }  
         
+        $fld = $frm->addRadioButtons('', 'upc_type', applicationConstants::getYesNoArr($langId), applicationConstants::NO);
+        $fld->requirements()->setRequired();
+     
+        $frm->addHiddenField('', 'product_upcs');
         $frm->addHiddenField('', 'options');
         $frm->addHiddenField('', 'optionValues');
         $frm->addHiddenField('', 'specifications');
@@ -621,9 +627,42 @@ class ProductsController extends ListingBaseController
                     LibHelper::exitWithError($prodObj->getError(), true);
                 }
             }
-
-            Tag::updateProductTagString($productId);
+           
         }
+
+
+        $prodObj = new Product($product_id);
+        if (!$prodObj->addUpdateProductOption($option_id)) {
+            FatUtility::dieJsonError($prodObj->getError());
+        }
+
+        UpcCode::remove($productId);
+        foreach($post['product_upcs'] as $optionsIds => $upcCode ){
+            if(empty($upcCode)){
+                continue;
+            }
+            $row = UpcCode::getUpcDataByCode($upcCode); 
+         
+            if ($row && $row['upc_product_id'] != $productId) {
+                $db->rollbackTransaction();  
+                LibHelper::exitWithError(Labels::getLabel('ERR_THIS_UPC/EAN_CODE_ALREADY_ASSIGNED_TO_ANOTHER_PRODUCT', $this->siteLangId), true);
+                          
+            }
+           
+            $dataToSave = array(
+                'upc_code' => $upcCode,
+                'upc_product_id' => $productId,
+                'upc_options' => $optionsIds,
+            );         
+            if (!$db->insertFromArray(UpcCode::DB_TBL, $dataToSave, false, [], $dataToSave)) {
+              
+                $db->rollbackTransaction();  
+                LibHelper::exitWithError($db->getError(), true);
+            }
+
+        } 
+
+        Tag::updateProductTagString($productId);
 
         $db->commitTransaction();
         $this->set('msg', $this->str_setup_successful);
@@ -1144,6 +1183,8 @@ class ProductsController extends ListingBaseController
         }
     }
 
+    /*
+
     public function updateUpc($product_id = 0)
     {
         $this->objPrivilege->canEditProducts();
@@ -1204,6 +1245,8 @@ class ProductsController extends ListingBaseController
         $this->set('lang_id', FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1));
         $this->_template->render(false, false, 'json-success.php');
     }
+
+    */
 
     public function autoCompleteSellerJson()
     {
@@ -1844,25 +1887,37 @@ class ProductsController extends ListingBaseController
         $this->_template->render(false, false, 'products/product-options-and-tag.php');
     }
 
-    public function upcListing($productId)
+    public function upcListing($productId = 76)
     {
         $productId = FatUtility::int($productId);
         if ($productId < 1) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
 
-        $srch = UpcCode::getSearchObject();
-        $srch->addCondition('upc_product_id', '=', $productId);
-        $srch->doNotCalculateRecords();
-        $rs = $srch->getResultSet();
-        $upcCodeData = FatApp::getDb()->fetchAll($rs, 'upc_options');
-        $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '|');
+        $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        $productOptions = FatApp::getPostedData('productOptions');
 
-        $this->set('productOptions', $productOptions);
+        $type = FatApp::getPostedData('type', FatUtility::VAR_INT, 0);
+
+        $upcCodeData = [];
+        if(0 < $productId ){
+            $srch = UpcCode::getSearchObject();
+            $srch->addCondition('upc_product_id', '=', $productId);
+            $srch->doNotCalculateRecords();       
+            $upcCodeData = FatApp::getDb()->fetchAll($srch->getResultSet(), 'upc_options');
+        }
+
+        $optionCombinations = [];
+        if($type == applicationConstants::YES && is_array($productOptions)){
+            $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues'); 
+        }       
+        // $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
+             
         $this->set('optionCombinations', $optionCombinations);
         $this->set('upcCodeData', $upcCodeData);
         $this->set('productId', $productId);
+        $this->set('langId', $langId);
         $this->_template->render(false, false);
     }
 
