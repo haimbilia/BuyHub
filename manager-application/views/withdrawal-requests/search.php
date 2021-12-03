@@ -92,7 +92,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $txt, true);;
                 break;
             case 'withdrawal_request_date':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key]), true);
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
                 break;
             case 'withdrawal_status':
                 $td->appendElement('plaintext', $tdAttr, $statusArr[$row[$key]], true);
