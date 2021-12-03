@@ -263,34 +263,19 @@ $frm->setFormTagAttribute('class', 'form');
                                 <label class="label">This product has same EAN/UPC code for all variants</label>
                             </div>
                             <div class="col-auto">
-                                <ul class="list-radio">
-                                    <li>
-                                        <label class="radio"><input type="radio" checked="checked" name="radio7" value="1">
-                                            Yes
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="radio"><input type="radio" name="radio7" value="0">
-                                            No
-                                        </label>
-                                    </li>
-                                </ul>
+                                <?php 
+                                $fld = $frm->getField('upc_type');                               
+                                HtmlHelper::configureSwitchForRadio($fld);
+                                $fld->addOptionListTagAttribute('class', 'list-radio');   
+                                $fld->addFieldTagAttribute('onchange', 'upcType()'); 
+                                $fld->addFieldTagAttribute('class', 'upc_type');
+                                echo $fld->getHtml();
+                                ?>  
                             </div>
                         </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Variant</th>
-                                    <th>EAN/UPC code</th>                                    
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Red / Small </td>
-                                    <td><input class="form-control" type="text" placeholder=""></td>                                  
-                                </tr>
-                            </tbody>
-                        </table>                        
+
+                        <div id="variantsListJs"></div>
+                                             
                     </div>
                 </div>
                 <div class="card" id="media">

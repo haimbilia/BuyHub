@@ -306,7 +306,7 @@ class OptionsController extends ListingBaseController
 
         $srch = Option::getSearchObject($langId);
         $srch->addOrder('option_identifier');
-        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as text'));
+        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as text','option_is_separate_images'));
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('option_name', 'LIKE', '%' . $post['keyword'] . '%');

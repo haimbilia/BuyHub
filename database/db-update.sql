@@ -1406,3 +1406,6 @@ DELETE FROM tbl_configurations WHERE conf_name = "CONF_PRIMARY_APP_THEME_COLOR";
 DELETE FROM tbl_configurations WHERE conf_name = "CONF_PRIMARY_INVERSE_APP_THEME_COLOR";
 DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_APP_THEME_COLOR";
 DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_INVERSE_APP_THEME_COLOR";
+
+ALTER TABLE `tbl_upc_codes` DROP `upc_msrp`;
+ALTER TABLE `tbl_upc_codes` DROP `upc_code_id`;

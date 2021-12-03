@@ -121,9 +121,9 @@ class Tag extends MyAppModel
         $upcCode->addCondition('upc_product_id', '=', $productId);
         $upcCode->doNotCalculateRecords();
         $upcCode->doNotLimitRecords();
-        $upcCode->addMultipleFields(array('upc_code_id', 'upc_code'));
+        $upcCode->addMultipleFields(array('upc_options', 'upc_code'));
         $rs = $upcCode->getResultSet();
-        $codeArr = FatApp::getDb()->fetchAllAssoc($rs);
+        $codeArr = FatApp::getDb()->fetchAllAssoc($rs);     
         $code = '';
         if (!empty($codeArr)) {
             $code = implode(" | ", $codeArr);

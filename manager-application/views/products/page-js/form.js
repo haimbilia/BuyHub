@@ -4,13 +4,7 @@
         if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
-            fcom.removeLoader();
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-                return false;
-            }
-            $.ykmsg.success(t.msg);
+            
         });
     };
 
@@ -254,6 +248,10 @@
         return $("#addProductfrm [name='lang_id']").val();
     };
 
+    getCurrentFrmProductId = function (){
+        return $("#addProductfrm [name='product_id']").val();
+    };
+
     imagesForm =  function (productId = 0){
         if (false === checkControllerName()) {
             return false;
@@ -279,8 +277,13 @@
             tagifyObjs[index].settings.whitelist = [];
             tagifyObjs[index].removeAllTags();
         }
+        upcType();
     }
 
+    optionValuesChanges = function (e){
+        upcType();      
+    }
+  
     getOptionValues = function(e) {         
         let optionId = $(e.detail.tagify.DOM.originalInput).closest('.rowJs').find('.optionsJs').val();
         if(optionId  == null){         
@@ -321,9 +324,45 @@
             },                
             enforceWhitelist : true,
             skipInvalid:true,
-        }).on('input', getOptionValues).on('focus', getOptionValues);
+        }).on('input', getOptionValues).on('focus', getOptionValues).on('change', optionValuesChanges)
         tagifyObjs[index] = tagify;
     };    
+
+    upcType = function () {
+
+        let type = $('.upc_type:checked').val();
+        let productId = getCurrentFrmProductId();
+        let langId = getCurrentFrmLangId();
+        let productOptions = {};
+        if(type == 1){
+                $('select.optionsJs').each(function(){
+                    if($(this).closest('.rowJs').hasClass('hide')) {
+                        return;
+                    }
+                    let optionData = $(this).select2('data');
+                    if(1 < optionData.length){
+                        return;                    
+                    }
+                   
+                    optionData = optionData[0];
+                    let optionValueData = $(this).closest('.rowJs').find('input.optionValuesJs').val();
+                    if(optionValueData == ''){
+                        return; 
+                    }                 
+                    optionValueData = jQuery.parseJSON(optionValueData);
+
+                    productOptions[optionData.id] = {option_id: optionData.id,option_name: optionData.text, optionValues:{}};
+                    
+                    $.each(optionValueData, function( index, opval ) {
+                        productOptions[optionData.id]['optionValues'][opval.id] =  opval.value;
+                    });
+                });
+        }
+
+        fcom.ajax(fcom.makeUrl(controllerName, "upcListing"), {productId, langId, type ,productOptions}, function (t) {
+            $('#variantsListJs').html(t);
+        });
+    };
 
 })();
 
@@ -362,9 +401,8 @@ $(document).on('click', '.optionsAddJs', function () {
 });
 
 $(document).on('click', '.optionsDeleteJs', function () {
-
     $(this).closest('.rowJs').remove();
-  
+    upcType();  
 });
 
 
