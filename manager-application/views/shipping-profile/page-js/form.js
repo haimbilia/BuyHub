@@ -159,12 +159,12 @@ $(document).ready(function () {
             $('input[name="is_condition"]').val(1);
             $('.add-condition--js').hide();
             $('.remove-condition--js').show();
-            $('.condition-field--js').removeClass('hide-extra-fields');
+            $('.condition-field--js').removeClass('hide');
         } else {
             $('input[name="is_condition"]').val(0);
             $('.remove-condition--js').hide();
             $('.add-condition--js').show();
-            $('.condition-field--js').addClass('hide-extra-fields');
+            $('.condition-field--js').addClass('hide');
         }
         $('input[name="is_condition"]').trigger('change');
     };

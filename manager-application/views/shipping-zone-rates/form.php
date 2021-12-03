@@ -1,20 +1,24 @@
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="generalForm"></div>
 <?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'web_form form_horizontal');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'setupRate(this); return(false);');
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 
-$nameFld = $frm->getField('shiprate_identifier');
-$nameFld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Customers_will_see_this_at_checkout.", $siteLangId) . "</span>";
+$formTitle = Labels::getLabel('LBL_SHIPPING_RATES_SETUP', $siteLangId);
+$activeGentab = !empty($activeGentab) ? 'active' : '';
+$activeLangtab = !empty($activeLangtab) ? 'active' : '';
+$languages = $languages ?? [];
+unset($languages[CommonHelper::getDefaultFormLangId()]);
+$label = isset($generalTab['label']) ? $generalTab['label'] : '';
 
 $costFld = $frm->getField('shiprate_cost');
 $costFld->htmlAfterField = "<div class='gap'></div><p class='add-condition--js'><a href='javascript:void(0);' onclick='modifyRateFields(1);'>" . Labels::getLabel("LBL_Add_Condition", $siteLangId) . "</a></p> <p class='remove-condition--js' style='display : none;'><a href='javascript:void(0);' onclick='modifyRateFields(0);'>" . Labels::getLabel("LBL_Remove_Condition", $siteLangId) . "</a></p>";
-$extraClass = 'hide-extra-fields';
+$extraClass = 'hide';
 if (!empty($rateData) && $rateData['shiprate_condition_type'] > 0) {
     $extraClass = '';
 }
-
 $cndFld = $frm->getField('shiprate_condition_type');
 $cndFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass);
 
@@ -23,48 +27,36 @@ $minFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass);
 
 $maxFld = $frm->getField('shiprate_max_val');
 $maxFld->setWrapperAttribute('class', 'condition-field--js ' . $extraClass);
-/*
-  $cancelFld = $frm->getField('btn_cancel');
-  $cancelFld->setFieldTagAttribute('onClick', 'searchProductsSection($(\'input[name="profile_id"]\').val()); return false;');
- * 
- */
-?>
-<div class="portlet">
-    <div class="portlet__head">
-        <div class="portlet__head-label">
-            <h3 class="portlet__head-title"><?php echo Labels::getLabel('LBL_Manage_Rates', $siteLangId); ?>
-            </h3>
-        </div>
-    </div>
-    <div class="portlet__body">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="tabs_nav_container responsive flat">
-                    <ul class="tabs_nav">
-                        <li>
-                            <a class="active" href="javascript:void(0)"
-                               onclick="addEditShipRates(<?php echo $zoneId ?>, <?php echo $rateId ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a>
-                        </li>
-                        <?php
-                        $inactive = ($rateId == 0) ? 'fat-inactive' : '';
-                        foreach ($languages as $langId => $langName) {
-                            ?>
-                            <li class="<?php echo $inactive; ?>">
-                                <a href="javascript:void(0);" <?php if ($rateId > 0) { ?>
-                                       onclick="editRateLangForm(<?php echo $zoneId ?>, <?php echo $rateId ?>, <?php echo $langId; ?>);" <?php } ?>><?php echo Labels::getLabel('LBL_' . $langName, $siteLangId); ?></a>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                    <div class="tabs_panel_wrap">
-                        <div class="tabs_panel">
-                            <?php echo $frm->getFormHtml(); ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+?> 
+<div class="modal-header">
+    <h5 class="modal-title">
+        <?php echo $formTitle; ?> 
+    </h5>
 </div>
+<div class="modal-body form-edit">
+    <!-- Closing tag must be added inside the files who include this file. -->
+    <?php if (0 < count($languages)) { ?>
+        <div class="form-edit-head">
+            <nav class="nav nav-tabs navTabsJs"> 
+                <a class="nav-link <?php echo $activeGentab; ?>" href="javascript:void(0);" onclick="addEditShipRates('<?php echo $zoneId; ?>', '<?php echo $rateId; ?>');"  >
+                    <?php echo Labels::getLabel('LBL_GENERAL', $siteLangId); ?>
+                </a>
+                <?php if (0 < count($languages)) { ?>
+                    <a class="nav-link <?php echo $activeLangtab; ?>" href="javascript:void(0);" <?php if (0 < $recordId) { ?>onclick="editRateLangForm('<?php echo $zoneId; ?>', '<?php echo $rateId; ?>', '<?php echo array_key_first($languages); ?>');" <?php } ?> title="<?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>">
+                        <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
+                    </a>
+                <?php } ?> 
+            </nav>
+        </div>
+    <?php } ?> 
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormHtml(); ?>
+        </form>
+    </div>
+    <?php
+    require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php');
+    ?>
+</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
 <?php if (!empty($rateData) && $rateData['shiprate_condition_type'] > 0) { ?>
     <script>
         $(document).ready(function () {

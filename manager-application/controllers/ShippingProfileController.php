@@ -26,6 +26,7 @@ class ShippingProfileController extends ListingBaseController {
                 ]
             ]
         ]);
+        $this->_template->addJs('shipping-profile/page-js/index.js');
         $this->set('actionItemsData', $actionItemsData);
         $this->set('canEdit', $this->objPrivilege->canEditShippingManagement($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
@@ -106,7 +107,7 @@ class ShippingProfileController extends ListingBaseController {
         if (0 < $profileId) {
             $data = ShippingProfile::getAttributesById($profileId);
             if (empty($data)) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             if ($data['shipprofile_user_id'] != 0) {
                 Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
@@ -146,8 +147,7 @@ class ShippingProfileController extends ListingBaseController {
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            FatUtility::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
         }
         $profileId = $post['shipprofile_id'];
         unset($post['shipprofile_id']);
@@ -156,8 +156,7 @@ class ShippingProfileController extends ListingBaseController {
         $spObj = new ShippingProfile($profileId);
         $spObj->assignValues($post);
         if (!$spObj->save()) {
-            Message::addErrorMessage($spObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($spObj->getError(), true);
         }
 
         $languages = Language::getAllNames();
@@ -166,8 +165,7 @@ class ShippingProfileController extends ListingBaseController {
                 continue;
             }
             if (!$spObj->updateLangData($langId, ['shipprofile_name' => $profileName])) {
-                Message::addErrorMessage($spObj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($spObj->getError(), true);
             }
         }
 
@@ -178,6 +176,63 @@ class ShippingProfileController extends ListingBaseController {
 
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
         $this->set('profileId', $spObj->getMainTableRecordId());
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function deleteRecord() {
+        $this->objPrivilege->canEditShippingManagement();
+
+        $shipprofileId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
+        if ($shipprofileId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id,true);   
+        }
+
+        $shippingProfile = ShippingProfile::getAttributesById($shipprofileId);
+        if (false == $shippingProfile) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $whr = array('smt' => 'shipprofile_id = ? and shipprofile_default != ?', 'vals' => array($shipprofileId, applicationConstants::YES));
+        if (!FatApp::getDb()->deleteRecords(ShippingProfile::DB_TBL, $whr)) {
+            LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+        }
+
+        $shippingProfData = ShippingProfileZone::getAttributesByProfileId($shipprofileId);
+        if (false == $shippingProfData) {
+            $this->set('msg', Labels::getLabel('MSG_DELETE_SUCCESSFULLY', $this->siteLangId));
+            $this->_template->render(false, false, 'json-success.php');
+        }
+
+        $shipprozoneId = $shippingProfData['shipprozone_id'];
+
+        $shippingProfileZone = new ShippingProfileZone($shipprozoneId);
+        if (!$shippingProfileZone->deleteRecord()) {
+            LibHelper::exitWithError($shippingProfileZone->getError(), true);
+        }
+
+        $shippingProfileZone = new ShippingZone($shippingProfData['shipprozone_shipzone_id']);
+        if (!$shippingProfileZone->deleteRates($shipprozoneId)) {
+            LibHelper::exitWithError($shippingProfileZone->getError(), true);
+        }
+
+        if (!$shippingProfileZone->deleteLocations($shippingProfData['shipprozone_shipzone_id'])) {
+            LibHelper::exitWithError($shippingProfileZone->getError(), true);
+        }
+
+        if (!$shippingProfileZone->deleteRecord()) {
+            LibHelper::exitWithError($shippingProfileZone->getError(), true);
+        }
+
+        $defaultShipProfileId = ShippingProfile::getDefaultProfileId(0);
+        if (0 < $defaultShipProfileId) {
+            $data = [
+                'shippro_shipprofile_id' => $defaultShipProfileId
+            ];
+            $whr = array('smt' => 'shippro_shipprofile_id = ? and shippro_user_id = ?', 'vals' => array($shipprofileId, 0));
+            FatApp::getDb()->updateFromArray(ShippingProfileProduct::DB_TBL, $data, $whr);
+        }
+
+        $this->set('msg', Labels::getLabel('MSG_DELETE_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

@@ -28,12 +28,8 @@ class ShippingProfileProductsController extends ListingBaseController {
         $srch->addOrder('product_name', 'ASC');
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        $profileData = ShippingProfile::getAttributesById($profileId);
-
-        $this->set('productsData', $records);
-        $this->set('profileData', $profileData);
+        $this->set('productsData', FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $this->set('profileData', ShippingProfile::getAttributesById($profileId));
         $this->set('profile_id', $profileId);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -63,11 +59,11 @@ class ShippingProfileProductsController extends ListingBaseController {
             $srch->joinTable(ShippingProfileProduct::DB_TBL, 'LEFT OUTER JOIN', 'p.product_id = sppro.shippro_product_id and sppro.shippro_user_id = ' . applicationConstants::NO, 'sppro');
             $cnd = $srch->addCondition(ShippingProfileProduct::DB_TBL_PREFIX . 'shipprofile_id', '!=', $shipProfileId);
         }
-        
+
         $srch->addGroupBy('product_id');
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
-        
+
         $products = array();
         if ($rs) {
             $products = $db->fetchAll($rs, 'id');
@@ -82,21 +78,19 @@ class ShippingProfileProductsController extends ListingBaseController {
         }
         die(json_encode($json));
     }
-    
-    public function setup()
-    {
+
+    public function setup() {
         $this->objPrivilege->canEditShippingManagement();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         if (false == $post) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $prodType = Product::getAttributesById($post['shippro_product_id'], 'product_type');
         if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId), true);
         }
 
         $data = array(
@@ -104,19 +98,17 @@ class ShippingProfileProductsController extends ListingBaseController {
             'shippro_product_id' => $post['shippro_product_id'],
             'shippro_shipprofile_id' => $post['shippro_shipprofile_id']
         );
-        
+
         $spObj = new ShippingProfileProduct();
         if (!$spObj->addProduct($data)) {
-            Message::addErrorMessage($spObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($spObj->getError(), true);
         }
-        
+
         $this->set('msg', Labels::getLabel('LBL_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-    
-    public function removeProduct($productId)
-    {
+
+    public function removeProduct($productId) {
         $this->objPrivilege->canEditShippingManagement();
         $defaultProfileId = ShippingProfile::getDefaultProfileId(0);
         /* [ REMOVE PRODUCT FROM CURRENT PROFILE AND ADD TO DEFAULT PROFILE */
@@ -124,18 +116,17 @@ class ShippingProfileProductsController extends ListingBaseController {
             'shippro_shipprofile_id' => $defaultProfileId,
             'shippro_product_id' => $productId
         );
-        
+
         $spObj = new ShippingProfileProduct();
         if (!$spObj->addProduct($data)) {
-            Message::addErrorMessage($spObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($spObj->getError(), true);
         }
         /* ] */
-        
+
         $this->set('msg', Labels::getLabel('LBL_Product_Removed_from_current_profile.', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     private function getForm($profileId = 0) {
         $profileId = FatUtility::int($profileId);
         $frm = new Form('frmProfileProducts');

@@ -46,12 +46,23 @@ class ShippingZoneRatesController extends ListingBaseController {
             }
             $frm->fill($data);
         }
+        $generalTab = [
+            'attr' => [
+                'href' => 'javascript:void(0);',
+                'onclick' => "addEditShipRates(" . $zoneId . "," . $rateId . ");",
+                'title' => Labels::getLabel('LBL_GENERAL', $this->siteLangId)
+            ],
+            'label' => Labels::getLabel('LBL_GENERAL', $this->siteLangId),
+            'isActive' => true
+        ];
+        $this->set('activeGentab', true);
         $this->set('languages', Language::getAllNames());
         $this->set('zoneId', $zoneId);
         $this->set('rateId', $rateId);
+        $this->set('recordId', $zoneId);
         $this->set('frm', $frm);
         $this->set('rateData', $data);
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->_template->render(false, false);
     }
 
     public function setup() {
@@ -90,16 +101,70 @@ class ShippingZoneRatesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function setLangTemplateData(array $constructorArgs = []): void {
+    public function langForm($zoneId = 0, $rateId = 0, $langId = 0) {
         $this->objPrivilege->canEditShippingManagement();
-        $this->setModel();
-        $this->formLangFields = [
-            $this->modelObj::tblFld('name')
-        ];
-        $this->set('formTitle', Labels::getLabel('LBL_SHIPPING_RATES_SETUP', $this->siteLangId));
+        $zoneId = FatUtility::int($zoneId);
+        $rateId = FatUtility::int($rateId);
+        $langId = FatUtility::int($langId);
+
+        if ($rateId == 0 || $langId == 0) {
+            LibHelper::exitWithError($this->str_invalid_request);
+        }
+
+        $langFrm = $this->getLangForm($zoneId, $rateId, $langId);
+        $langData = ShippingRate::getAttributesByLangId($langId, $rateId);
+        if ($langData) {
+            $langFrm->fill($langData);
+        }
+
+        $this->set('languages', Language::getAllNames());
+        $this->set('zoneId', $zoneId);
+        $this->set('rateId', $rateId);
+        $this->set('langId', $langId);
+        $this->set('langFrm', $langFrm);
+        $this->set('activeLangtab', true);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->_template->render(false, false);
     }
 
-    
+    public function langSetup() {
+        $this->objPrivilege->canEditShippingManagement();
+        $post = FatApp::getPostedData();
+        $zoneId = $post['zone_id'];
+        $rateId = $post['rate_id'];
+        $langId = $post['lang_id'];
+
+        if ($rateId == 0 || $langId == 0) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $frm = $this->getLangForm($zoneId, $rateId, $langId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $data = array(
+            'shipratelang_lang_id' => $langId,
+            'shipratelang_shiprate_id' => $rateId,
+            'shiprate_name' => $post['shiprate_name']
+        );
+        $srObj = new ShippingRate($rateId);
+        if (!$srObj->updateLangData($langId, $data)) {
+            LibHelper::exitWithError($srObj->getError(), true);
+        }
+        $newTabLangId = 0;
+        $languages = Language::getAllNames();
+        foreach ($languages as $key => $langName) {
+            if (!$row = ShippingRate::getAttributesByLangId($key, $rateId)) {
+                $newTabLangId = $key;
+                break;
+            }
+        }
+
+        $this->set('msg', $this->str_setup_successful);
+        $this->set('zoneId', $zoneId);
+        $this->set('rateId', $rateId);
+        $this->set('langId', $newTabLangId);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     public function deleteRate($rateId) {
         $this->objPrivilege->canEditShippingManagement();
 
@@ -142,15 +207,13 @@ class ShippingZoneRatesController extends ListingBaseController {
 
             if (false === $canDelete) {
                 $msg = Labels::getLabel('MSG_PLEASE_MAINTAIN_ATLEASE_ONE_SHIPPING_RATE_WITHOUT_CONDITION', $this->siteLangId);
-                Message::addErrorMessage($msg);
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError($msg, true);    
             }
         }
 
         $sObj = new ShippingRate($rateId);
         if (!$sObj->deleteRecord(true)) {
-            Message::addErrorMessage($sObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+             LibHelper::exitWithError($sObj->getError(), true);   
         }
         $this->set('msg', Labels::getLabel('LBL_Rate_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -214,29 +277,16 @@ class ShippingZoneRatesController extends ListingBaseController {
         return $frm;
     }
 
-     protected function getLangForm($recordId = 0, $langId = 0)
-    {
+    protected function getLangForm($zoneId = 0, $rateId = 0, $langId = 0) {
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmzoneLang', array('id' => 'frmzoneLang'));
-         $frm->addHiddenField('', 'shiprate_id', $recordId);  
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $langId), 'shiprate_name');
-        return $frm;
-    }
-    private function getLangForm_a($zoneId = 0, $rateId = 0, $langId = 0) {
-        $frm = new Form('frmRateLang');
         $frm->addHiddenField('', 'zone_id', $zoneId);
         $frm->addHiddenField('', 'rate_id', $rateId);
         $frm->addHiddenField('', 'lang_id', $langId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $this->siteLangId), 'shiprate_name');
-        $fld = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        /*
-          $btn = $frm->addButton('', 'btn_cancel', Labels::getLabel('LBL_Cancel', $this->siteLangId));
-          $fld->attachField($btn);
-         * 
-         */
+        $langFld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $langFld->setfieldTagAttribute('onChange', "editRateLangForm($zoneId,$rateId,this.value);");
+        $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $langId), 'shiprate_name');
         return $frm;
     }
-    
 
 }

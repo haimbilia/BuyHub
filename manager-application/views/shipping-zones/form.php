@@ -30,18 +30,7 @@ if (!empty($excludeLocations)) {
     }
 }
 ?>
-<style>
-    .child-checkbox-ul {
-        padding-left: 30px;
-        list-style: none;
-        margin-top: 15px;
-    }
-    .simplebar-resize-wrapper {
-        max-height: 400px;
-        overflow-y: auto;
-        padding: 20px;
-    }
-</style>
+ 
 <div class="modal-header">
     <h5 class="modal-title">
         <?php echo Labels::getLabel('LBL_Zone_Setup', $siteLangId); ?>

@@ -9,16 +9,11 @@ $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
         <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
 
         <div class="row"> 
-            <div class="col-md-12"> 
-                <div class="card"> 
-                    <div class="card-body">  
-                        <h5><?php echo Labels::getLabel('LBL_SHIPPING_PROFILE', $siteLangId); ?>
-                    </div>
-                </div>
+            <div class="col-md-12">  
                 <div class="card"> 
                     <div class="card-head"> 
                         <div class="card-head-label">
-                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_Name', $siteLangId); ?></h3>
+                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_PROFILE_Name', $siteLangId); ?></h3>
                         </div> 
 
                     </div>
@@ -36,7 +31,7 @@ $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
                     <div class="card-body"> 
                         <div class="row">
                             <?php if (empty($profileData) || ((isset($profileData['shipprofile_default'])))) { ?>
-                                <div class="portlet" id="product-section--js">
+                                <div class="portlet col-md-12" id="product-section--js">
                                     <div class="portlet__head">
                                         <div class="portlet__head-label">
                                             <h3 class="portlet__head-title"><?php echo Labels::getLabel('LBL_Total_Products', $siteLangId); ?>

@@ -61,9 +61,20 @@ foreach ($arrListing as $sn => $row) {
             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
         </use>
     </svg>'
+                    ],
+                    [
+                        'attr' => [
+                            'href' => 'Javascript:void(0)',
+                            'onclick' => 'deleteRecord(' . $row['shipprofile_id'] . ')',
+                            'title' => Labels::getLabel('LBL_Delete', $siteLangId)
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#delete">
+                                            </use>
+                                        </svg>'
                     ]
                 ];
-
+            
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;

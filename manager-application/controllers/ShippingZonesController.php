@@ -58,7 +58,7 @@ class ShippingZonesController extends ListingBaseController {
         }
         die(json_encode($json));
     }
-    
+
     public function searchStates($countryId, $zoneId, $shipZoneId, $profileId, $selected = 0) {
         $stateObj = new States();
         $states = $stateObj->getStatesByCountryId($countryId, $this->siteLangId, true);
@@ -74,7 +74,7 @@ class ShippingZonesController extends ListingBaseController {
         $this->set("excludeLocations", $excludeLocations);
         $this->_template->render(false, false);
     }
- 
+
     public function form($profileId, $zoneId = 0) {
         $this->objPrivilege->canEditShippingManagement();
         $profileId = FatUtility::int($profileId);
@@ -106,33 +106,28 @@ class ShippingZonesController extends ListingBaseController {
         $this->_template->render(false, false);
     }
 
-    
     public function setup() {
         $this->objPrivilege->canEditShippingManagement();
         $post = FatApp::getPostedData();
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
         }
 
         if (isset($post['shipzone_name']) && empty(trim($post['shipzone_name']))) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
         }
 
         $shipZoneId = (isset($post['shipzone_id'])) ? $post['shipzone_id'] : 0;
         $msg = 0 < $shipZoneId ? Labels::getLabel('LBL_UPDATED_SUCCESSFULLY', $this->siteLangId) : Labels::getLabel('LBL_ADDED_SUCCESSFULLY', $this->siteLangId);
         if (!$this->checkForLocations($post['shipzone_profile_id'], $shipZoneId, $post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Locations_already_added_in_other_zone_of_same_profile', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Locations_already_added_in_other_zone_of_same_profile', $this->siteLangId), true);
         }
 
         unset($post['shipzone_id']);
         $sObj = new ShippingZone($shipZoneId);
         $sObj->assignValues($post);
         if (!$sObj->save()) {
-            Message::addErrorMessage($sObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($sObj->getError(), true);
         }
         $shipZoneId = $sObj->getMainTableRecordId();
 
@@ -147,8 +142,7 @@ class ShippingZonesController extends ListingBaseController {
         $spObj = new ShippingProfileZone($shipProZoneId);
         $spObj->assignValues($data);
         if (!$spObj->save($data)) {
-            Message::addErrorMessage($spObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($spObj->getError(), true);
         }
         $shipProZoneId = $spObj->getMainTableRecordId();
         ShippingProfile::setDefaultRates($shipProZoneId, $post['shipzone_profile_id']);
@@ -156,12 +150,10 @@ class ShippingZonesController extends ListingBaseController {
         if ($shipZoneId > 0) {
             if (!$this->eligibleForUpdateLocations($shipZoneId, $post)) {
                 $db->rollbackTransaction();
-                Message::addErrorMessage(Labels::getLabel('LBL_This_zone_is_also_used_with_another_profile._Please_change_the_zone_name_to_update_it.', $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError(Labels::getLabel('LBL_This_zone_is_also_used_with_another_profile._Please_change_the_zone_name_to_update_it.', $this->siteLangId), true);
             }
             if (!$this->setupLocations($post, $shipZoneId)) {
-                Message::addErrorMessage(Labels::getLabel('LBL_Unable_to_update_locations', $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError(Labels::getLabel('LBL_Unable_to_update_locations', $this->siteLangId), true);
             }
         }
         $db->commitTransaction();
@@ -176,8 +168,7 @@ class ShippingZonesController extends ListingBaseController {
         $shippingProfData = ShippingProfileZone::getAttributesById($shipprozoneId);
 
         if (false == $shippingProfData) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $shippingProfileId = $shippingProfData['shipprozone_shipprofile_id'];
@@ -391,33 +382,26 @@ class ShippingZonesController extends ListingBaseController {
 
         if (isset($data['rest_of_the_world'])) {
             $dataToAdd = array(
-                //'shiploc_shipprofile_id' => $data['shipzone_profile_id'],
                 'shiploc_zone_id' => -1,
                 'shiploc_country_id' => -1,
                 'shiploc_state_id' => -1,
                 'shiploc_shipzone_id' => $shipZoneId
             );
             if (!$sZoneObj->updateLocations($dataToAdd)) {
-                //Message::addErrorMessage($sZoneObj->getError());
-                //FatUtility::dieJsonError(Message::getHtml());
                 return false;
             }
         } elseif (isset($data['c_id'])) {
-            // CommonHelper::printArray($data['c_id'], true);
             foreach ($data['c_id'] as $countryData) {
                 $arr = explode('-', $countryData);
                 $zoneId = $arr[0];
                 $countryId = $arr[1];
                 $dataToAdd = array(
-                    //'shiploc_shipprofile_id' => $data['shipzone_profile_id'],
                     'shiploc_zone_id' => $zoneId,
                     'shiploc_country_id' => $countryId,
                     'shiploc_state_id' => -1,
                     'shiploc_shipzone_id' => $shipZoneId
                 );
                 if (!$sZoneObj->updateLocations($dataToAdd)) {
-                    //Message::addErrorMessage($sZoneObj->getError());
-                    //FatUtility::dieJsonError(Message::getHtml());
                     return false;
                 }
             }
@@ -444,8 +428,6 @@ class ShippingZonesController extends ListingBaseController {
                         'shiploc_shipzone_id' => $shipZoneId
                     );
                     if (!$sZoneObj->updateLocations($dataToAdd)) {
-                        //Message::addErrorMessage($sZoneObj->getError());
-                        //FatUtility::dieJsonError(Message::getHtml());
                         return false;
                     }
                 }

@@ -31,6 +31,8 @@ echo $frm->getFormTag();
 $postedData['page'] = $page;
 echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging'));
 //$pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'recordCount' => $recordCount, 'siteLangId' => $siteLangId);
+
+$pageCount = ($pageCount == 1) ? 0 : $pageCount;
 $pagingArr = array('pageCount' => $pageCount, 'page' => $page, 'pageSize' => $pageSize, 'recordCount' => $recordCount, 'siteLangId' => (isset($langId) && 0 < $langId ? $langId : $siteLangId));
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 ?>
