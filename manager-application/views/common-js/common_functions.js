@@ -196,7 +196,7 @@ select2 = function (
                     postdata
                 );
             },
-            processResults: function (data, params) {
+            processResults: function (data, params) {            
                 params.page = params.page || 1;
                 data.pageCount = data.pageCount || 1;
                 return {
@@ -293,7 +293,6 @@ $(document).ready(function () {
             var urlParts = uri.split('/');
             var hrefParts = href.split('/');
             if ("undefined" != typeof(urlParts[1]) && "undefined" != typeof(hrefParts[1]) && urlParts[1] == hrefParts[1]) {
-                console.log(hrefParts[1]);
                 markNavActive($(this));
             }
         }
