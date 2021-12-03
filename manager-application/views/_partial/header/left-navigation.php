@@ -238,6 +238,7 @@
                 $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewWithdrawRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewOrderCancellationRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
             ) { ?>
             <li class="menu-item dropdownJs">
@@ -331,6 +332,27 @@
                                     <?php
                                             $menuLabel =  Labels::getLabel('NAV_WITHDRAWL_REQUESTS', $siteLangId);
                                             $menuLabel .= $drReqCount ? ' (' . $drReqCount . ')' : '';
+                                            echo $menuLabel;
+                                            ?>
+                                </span>
+                            </a>
+                        </li>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewOrderCancellationRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <li class="nav_item navItemJs">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom"
+                                href="<?php echo UrlHelper::generateUrl('OrderCancellationRequests'); ?>">
+                                <span class="nav_icon">
+                                    <svg class="svg" width="24" height="24">
+                                        <use
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                        </use>
+                                    </svg>
+                                </span>
+                                <span class="nav_text">
+                                    <?php
+                                            $menuLabel =  Labels::getLabel('NAV_CANCELLATION_REQUESTS', $siteLangId);
+                                            $menuLabel .= $orderCancelReqCount ? ' (' . $orderCancelReqCount . ')' : '';
                                             echo $menuLabel;
                                             ?>
                                 </span>
