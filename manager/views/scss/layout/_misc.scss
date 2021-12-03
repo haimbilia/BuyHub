@@ -1,3 +1,4 @@
+$header-height:65px;
 .fb-body {
     background-color: $bg-gray;
     flex: 1;
@@ -13,10 +14,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-#{$start-direction}: 80px;
-    //transition: all 0.5s ease-out;
-    @include media-breakpoint-down(md) {
-        padding-#{$start-direction}: 0;
+    @include media-breakpoint-up(lg) {
+        padding-#{$start-direction}: $side-bar-size;
     }
 }
 
@@ -27,6 +26,10 @@
 }
 
 .main-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: $header-height;
     background-color: #fff;
     // position: fixed;
     // top: 0;

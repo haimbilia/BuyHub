@@ -9,7 +9,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet">
         <link href="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.css" rel="stylesheet" type="text/css" />
-        <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
         <link rel="shortcut icon" href="images/favicon.ico" />
     </head>
 
@@ -21,8 +21,8 @@
 
             <div class="wrap">
                 <?php
-        include 'includes/new-header.php';
-        ?>
+            include 'includes/new-header.php';
+            ?>
                 <main class="main">
                     <div class="container">
                         <div class="add-stock">
@@ -940,8 +940,8 @@
                 </main>
 
                 <?php
-        include 'includes/footer.php';
-        ?> <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.min.js"></script>
+            include 'includes/footer.php';
+            ?> <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.min.js"></script>
                 <script src="https://unpkg.com/@yaireo/tagify@4.8.0/dist/tagify.polyfills.min.js"></script>
 
                 <script>
