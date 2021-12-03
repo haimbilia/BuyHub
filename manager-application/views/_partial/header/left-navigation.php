@@ -1457,12 +1457,10 @@
     <div class="sidebar-foot">
         <ul class="menu">
             <li class="menu-item dropdownJs">
-
-
                 <div class="sidebar-dropdown-menu">
                     <ul class="nav">
                         <li class="nav_item navItemJs">
-                            <a href="" class="nav_link navLinkJs">
+                            <a href="javascript:void(0);" class="nav_link navLinkJs" onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use
