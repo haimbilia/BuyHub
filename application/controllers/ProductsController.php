@@ -1394,7 +1394,7 @@ class ProductsController extends MyAppController
             $srch = Tag::getSearchObject($this->siteLangId);
             $srch->doNotCalculateRecords();
             $srch->setPageSize(10);
-            $srch->addMultipleFields(array('tag_id', 'COALESCE(tag_name, tag_identifier) as tag_name', 'if(LOCATE("' . $keyword . '", COALESCE(tag_name, tag_identifier)) > 0 , LOCATE("' . $keyword . '", COALESCE(tag_name, tag_identifier)), 99) as level'));
+            $srch->addMultipleFields(array('tag_id', 'tag_name', 'if(LOCATE("' . $keyword . '", tag_name) > 0 , LOCATE("' . $keyword . '", tag_name), 99) as level'));
             $srch->addOrder('level');
             $srch->addGroupby('tag_id');
             $srch->addHaving('tag_name', 'LIKE', '%' . urldecode($keyword) . '%');

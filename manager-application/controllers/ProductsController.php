@@ -253,7 +253,7 @@ class ProductsController extends ListingBaseController
             $tagData = [];
             foreach ($productTags as $key => $data) {
                 $tagData[$key]['id'] = $data['tag_id'];
-                $tagData[$key]['value'] = htmlspecialchars($data['tag_identifier'], ENT_QUOTES, 'UTF-8');
+                $tagData[$key]['value'] = htmlspecialchars($data['tag_name'], ENT_QUOTES, 'UTF-8');
             }
 
             $productData['product_tags'] = json_encode($tagData);
@@ -467,8 +467,10 @@ class ProductsController extends ListingBaseController
             // }               
             
             $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', [], '', [], '');
-        }
-
+        }  
+        
+        $frm->addHiddenField('', 'options');
+        $frm->addHiddenField('', 'optionValues');
         $frm->addHiddenField('', 'specifications');
         $frm->addHiddenField('', 'product_id',0);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_AND_NEXT', $langId));
@@ -604,13 +606,8 @@ class ProductsController extends ListingBaseController
             foreach ($productTags as $tag) {
                 if (!isset($tag['id'])) {
                     $tagObj = new Tag();
-                    $tagObj->assignValues(['tag_identifier' => $tag['value']]);
+                    $tagObj->assignValues(['tag_name' => $tag['value'],'tag_lang_id' => $langId]);
                     if (!$tagObj->save()) {
-                        $db->rollbackTransaction();
-                        LibHelper::exitWithError($tagObj->getError(), true);
-                    }
-
-                    if (!$tagObj->updateLangData($langId, ['tag_name' => $tag['value']])) {
                         $db->rollbackTransaction();
                         LibHelper::exitWithError($tagObj->getError(), true);
                     }
@@ -1248,22 +1245,20 @@ class ProductsController extends ListingBaseController
         CommonHelper::jsonEncodeUnicode($data, true);
     }
 
-    public function imagesForm($productId)
+    public function imagesForm(int $productId)
     {
-        $productId = FatUtility::int($productId);
-        if ($productId < 1) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        if (!$row = Product::getAttributesById($productId)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_No_Record_Found', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $imagesFrm = $this->getImagesFrm($productId, $this->siteLangId);
-        $productType = Product::getAttributesById($productId, 'product_type');
-        $this->set('imagesFrm', $imagesFrm);
-        $this->set('productId', $productId);
-        $this->set('productType', $productType);
+        // $productId = FatUtility::int($productId);
+        // if ($productId < 1) {
+        //     Message::addErrorMessage($this->str_invalid_request);
+        //     FatUtility::dieWithError(Message::getHtml());
+        // }
+        // if (!$row = Product::getAttributesById($productId)) {
+        //     Message::addErrorMessage(Labels::getLabel('LBL_No_Record_Found', $this->siteLangId));
+        //     FatUtility::dieWithError(Message::getHtml());
+        // }
+        $frm = $this->getImagesFrm($productId);      
+        $this->set('frm', $frm);  
+   
         $this->_template->render(false, false);
     }
 
@@ -1279,8 +1274,6 @@ class ProductsController extends ListingBaseController
             $langId = array_key_first($languagesAssocArr);
             $frm->addHiddenField('', 'lang_id', $langId);
         }
-
-
 
         $frm->addHiddenField('', 'min_width', 500);
         $frm->addHiddenField('', 'min_height', 500);

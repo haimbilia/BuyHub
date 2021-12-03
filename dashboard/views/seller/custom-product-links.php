@@ -87,7 +87,7 @@
                         response($.map(json, function(item) {
 
                             return {
-                                label: item['name'] + ' (' + item['tag_identifier'] + ')',
+                                label: item['name'],
                                 value: item['id']
                             };
                         }));
@@ -108,7 +108,7 @@
         });
         <?php foreach($product_tags as $key => $val){?>
         $('#product-tag').append(
-            "<li id='product-tag<?php echo $val["tag_id"];?>'><i class='remove_tag remove_param fa fa-trash'></i> <?php echo $val["tag_name"]." (".$val["tag_identifier"].")";?><input type='hidden' name='product_tag[]' value='<?php echo $val["tag_id"];?>' /></li>"
+            "<li id='product-tag<?php echo $val["tag_id"];?>'><i class='remove_tag remove_param fa fa-trash'></i> <?php echo $val["tag_name"]." (".$val["tag_name"].")";?><input type='hidden' name='product_tag[]' value='<?php echo $val["tag_id"];?>' /></li>"
             );
         <?php } ?>
 
