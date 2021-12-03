@@ -325,13 +325,13 @@ class WithdrawalRequestsController extends ListingBaseController
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId),
-            'user_details' => Labels::getLabel('LBL_User_Details', $this->siteLangId),
-            'user_balance' => Labels::getLabel('LBL_Balance', $this->siteLangId),
-            'withdrawal_amount' => Labels::getLabel('LBL_Amount', $this->siteLangId),
-            'withdrawal_payment_method' => Labels::getLabel('LBL_Withdrawal_Mode', $this->siteLangId),
-            'account_details' => Labels::getLabel('LBL_Account_Details', $this->siteLangId),
-            'withdrawal_request_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
-            'withdrawal_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
+            'user_details' => Labels::getLabel('LBL_USER_DETAILS', $this->siteLangId),
+            'user_balance' => Labels::getLabel('LBL_BALANCE', $this->siteLangId),
+            'withdrawal_amount' => Labels::getLabel('LBL_AMOUNT', $this->siteLangId),
+            'withdrawal_payment_method' => Labels::getLabel('LBL_WITHDRAWAL_MODE', $this->siteLangId),
+            'account_details' => Labels::getLabel('LBL_ACCOUNT_DETAILS', $this->siteLangId),
+            'withdrawal_request_date' => Labels::getLabel('LBL_DATE', $this->siteLangId),
+            'withdrawal_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('withdrawalRequestsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
