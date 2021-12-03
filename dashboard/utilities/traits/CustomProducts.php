@@ -921,18 +921,13 @@ trait CustomProducts
     {
         $post = FatApp::getPostedData();
 
-        $srch = Tag::getSearchObject();
-        $srch->addOrder('tag_identifier');
-        $srch->joinTable(
-            Tag::DB_TBL . '_lang',
-            'LEFT OUTER JOIN',
-            'taglang_tag_id = tag_id AND taglang_lang_id = ' . $this->siteLangId
-        );
-        $srch->addMultipleFields(array('tag_id, tag_name, tag_identifier'));
+        $srch = Tag::getSearchObject($this->siteLangId);
+        $srch->addOrder('tag_name');    
+        $srch->addMultipleFields(array('tag_id', 'tag_name'));
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('tag_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd->attachCondition('tag_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+            $cnd->attachCondition('tag_name', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
 
         $rs = $srch->getResultSet();
@@ -942,8 +937,7 @@ trait CustomProducts
         foreach ($options as $key => $option) {
             $json[] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($option['tag_name'], ENT_QUOTES, 'UTF-8')),
-                'tag_identifier' => strip_tags(html_entity_decode($option['tag_identifier'], ENT_QUOTES, 'UTF-8'))
+                'name' => strip_tags(html_entity_decode($option['tag_name'], ENT_QUOTES, 'UTF-8')),        
             );
         }
         die(json_encode($json));
@@ -1056,7 +1050,7 @@ trait CustomProducts
         $frm = $this->getTagsForm($tag_id);
 
         if (0 < $tag_id) {
-            $data = Tag::getAttributesById($tag_id, array('tag_id', 'tag_identifier'));
+            $data = Tag::getAttributesById($tag_id, array('tag_id', 'tag_name'));
             if ($data === false) {
                 FatUtility::dieWithError($this->str_invalid_request);
             }

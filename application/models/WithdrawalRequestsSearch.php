@@ -5,7 +5,7 @@ class WithdrawalRequestsSearch extends SearchBase
     private $langId;
     private $joinUsers = false;
     private $commonLangId;
-    public const DB_TBL = 'tbl_user_withdrawal_requests';
+    public const DB_TBL = WithdrawalRequest::DB_TBL;
 
     public function __construct()
     {

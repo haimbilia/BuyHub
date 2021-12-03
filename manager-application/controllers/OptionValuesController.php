@@ -267,6 +267,48 @@ class OptionValuesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    public function autoComplete()
+    {
+        $post = FatApp::getPostedData();
+        $this->objPrivilege->canViewOptions();
+
+        $post = FatApp::getPostedData();
+
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
+        $optionId = FatApp::getPostedData('optionId', FatUtility::VAR_INT, 0);
+
+        $srch = OptionValue::getSearchObject($langId, true);    
+        $srch->addCondition('ov.optionvalue_option_id', '=', $optionId);
+        $srch->addMultipleFields(array('optionvalue_id as id, COALESCE(optionvalue_name, optionvalue_identifier) as text'));
+
+        if (!empty($post['keyword'])) {
+            $cnd = $srch->addCondition('optionvalue_identifier', 'LIKE', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('optionvalue_name', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+        }
+
+        if(FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 1)){
+            $pagesize = 20;
+            $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+            if ($page < 2) {
+                $page = 1;
+            }    
+            $srch->setPageNumber($page);
+            $srch->setPageSize($pagesize);
+        }else{
+
+            $srch->doNotLimitRecords();
+        }       
+
+        $options = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => $options
+        );
+        
+        die(FatUtility::convertToJson($json));
+    }
+
     private function getForm($optionId, $recordId = 0)
     {
         $this->objPrivilege->canEditOptions();

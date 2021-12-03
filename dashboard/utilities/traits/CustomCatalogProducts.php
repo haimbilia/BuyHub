@@ -823,14 +823,9 @@ trait CustomCatalogProducts
             return false;
         }
 
-        $srch = Tag::getSearchObject();
-        $srch->addOrder('tag_identifier');
-        $srch->joinTable(
-            Tag::DB_TBL . '_lang',
-            'LEFT OUTER JOIN',
-            'taglang_tag_id = tag_id AND taglang_lang_id = ' . $this->siteLangId
-        );
-        $srch->addMultipleFields(array('tag_id, tag_name, tag_identifier'));
+        $srch = Tag::getSearchObject($this->siteLangId);
+        $srch->addOrder('tag_name');
+        $srch->addMultipleFields(array('tag_id, tag_name'));
         $srch->addCondition('tag_id', 'IN', $post['tags']);
 
         $rs = $srch->getResultSet();
@@ -839,7 +834,7 @@ trait CustomCatalogProducts
         $li = '';
         foreach ($tags as $key => $tag) {
             $li .= '<li id="product-tag' . $tag['tag_id'] . '"> <i class="remove_tag-js remove_param fa fa-trash"></i> ';
-            $li .= $tag['tag_name'] . ' (' . $tag['tag_identifier'] . ')' . '<input type="hidden" value="' . $tag['tag_id'] . '"  name="product_tags[]"></li>';
+            $li .= $tag['tag_name'] . '<input type="hidden" value="' . $tag['tag_id'] . '"  name="product_tags[]"></li>';
         }
 
         echo $li;
@@ -1496,14 +1491,9 @@ trait CustomCatalogProducts
         }
         $productTags = array();
         if (!empty($preqContentData['product_tags'])) {
-            $srch = Tag::getSearchObject();
-            $srch->addOrder('tag_identifier');
-            $srch->joinTable(
-                Tag::DB_TBL . '_lang',
-                'LEFT OUTER JOIN',
-                'taglang_tag_id = tag_id AND taglang_lang_id = ' . $this->siteLangId
-            );
-            $srch->addMultipleFields(array('tag_id, tag_name, tag_identifier'));
+            $srch = Tag::getSearchObject($this->siteLangId);
+            $srch->addOrder('tag_name');          
+            $srch->addMultipleFields(array('tag_id', 'tag_name'));
             $srch->addCondition('tag_id', 'IN', $preqContentData['product_tags']);
 
             $rs = $srch->getResultSet();

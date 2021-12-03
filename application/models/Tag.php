@@ -11,9 +11,13 @@ class Tag extends MyAppModel
         $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);        
     }
     
-    public static function getSearchObject()
+    public static function getSearchObject($langId = 0)
     {        
-        return  new SearchBase(static::DB_TBL, 't');     
+        $srch =  new SearchBase(static::DB_TBL, 't');   
+        if(0 < $langId ){
+            $srch->addCondition(self::tblFld('lang_id'),'=',$langId); 
+        }       
+        return  $srch;
     }
 
     public static function requiredTagsFields()
@@ -117,9 +121,9 @@ class Tag extends MyAppModel
         $upcCode->addCondition('upc_product_id', '=', $productId);
         $upcCode->doNotCalculateRecords();
         $upcCode->doNotLimitRecords();
-        $upcCode->addMultipleFields(array('upc_code_id', 'upc_code'));
+        $upcCode->addMultipleFields(array('upc_options', 'upc_code'));
         $rs = $upcCode->getResultSet();
-        $codeArr = FatApp::getDb()->fetchAllAssoc($rs);
+        $codeArr = FatApp::getDb()->fetchAllAssoc($rs);     
         $code = '';
         if (!empty($codeArr)) {
             $code = implode(" | ", $codeArr);

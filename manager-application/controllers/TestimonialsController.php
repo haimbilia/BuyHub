@@ -142,6 +142,11 @@ class TestimonialsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'testimonial_active', $activeInactiveArr, '', [], '');
         $fld = $frm->addTextarea(Labels::getLabel('LBL_Testimonial_Text', $this->siteLangId), 'testimonial_text');
         $fld->requirements()->setRequired();
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
         return $frm;
     }
 
@@ -204,6 +209,14 @@ class TestimonialsController extends ListingBaseController
 
         if (!$record->updateLangData($this->siteLangId, $LangdataArray)) {
             LibHelper::exitWithError($record->getError(), true);
+        }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(Testimonial::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
         }
 
         $newTabLangId = 0;

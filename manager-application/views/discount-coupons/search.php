@@ -1,0 +1,117 @@
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$printData = false;
+if (!isset($tbody)) {
+    $printData = true;
+    $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
+}
+
+$serialNo = ($page - 1) * $pageSize + 1;
+foreach ($arrListing as $sn => $row) {
+    $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['coupon_id']]);
+    foreach ($fields as $key => $val) {
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+
+        $td = $tr->appendElement('td', $tdAttr);
+        switch ($key) {
+            case 'select_all':
+                $isExpired = ($row['coupon_end_date'] != "0000-00-00" && strtotime($row['coupon_end_date']) < strtotime(date('Y-m-d'))) ? true : false;
+                $disabled = ($isExpired) ? 'disabled' : '';
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs ' . $disabled . '" type="checkbox" name="record_ids[]" ' . $disabled . ' value=' . $row['coupon_id'] . '><i class="input-helper"></i></label>', true);
+                break;
+            case 'listSerial':
+                $td->appendElement('plaintext', $tdAttr, $serialNo);
+                break;
+            case 'coupon_title':
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
+                break;
+            case 'coupon_type':
+                $td->appendElement('plaintext', $tdAttr, $discountTypeArr[$row[$key]], true);
+                break;
+            case 'coupon_discount_value':
+                $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row[$key] . ' %' : CommonHelper::displayMoneyFormat($row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $discountValue);
+                break;
+            case 'coupon_start_date':
+                $dispDate = HtmlHelper::formatDateTime($row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $dispDate, true);
+                break;
+            case 'coupon_end_date':
+                $dispDate = HtmlHelper::formatDateTime($row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $dispDate, true);
+                break;
+            case 'coupon_active':
+                $isExpired = ($row['coupon_end_date'] != "0000-00-00" && strtotime($row['coupon_end_date']) < strtotime(date('Y-m-d'))) ? true : false;
+                if ($isExpired) {
+                    $htm = HtmlHelper::addStatusButHtml($canEdit, $row['coupon_id'], $row[$key], true, Labels::getLabel("LBL_EXPIRED", $siteLangId));
+                } else {
+                    $htm = HtmlHelper::addStatusButHtml($canEdit, $row['coupon_id'], $row[$key]);
+                }
+                $td->appendElement('plaintext', $tdAttr, $htm, true);
+                break;
+            case 'action':
+                $data = [
+                    'siteLangId' => $siteLangId,
+                    'recordId' => $row['coupon_id']
+                ];
+
+                if ($canEdit) {
+                    $fn = 'addCouponLinkPlanForm';
+                    if ($row['coupon_type'] != DiscountCoupons::TYPE_SELLER_PACKAGE) {
+                        $fn = 'addCouponLinkProductForm';
+                    }
+
+                    $data['editButton'] = [];
+                    $data['otherButtons'] = [
+                        [
+                            'attr' => [
+                                'href' => 'javascript:void(0);',
+                                'onclick' => 'couponHistory(' . $row['coupon_id'] . ')',
+                                'title' => Labels::getLabel('LBL_LINKS', $siteLangId)
+                            ],
+                            'label' => '<svg class="svg" width="18" height="18">
+                                            <use
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#linking">
+                                            </use>
+                                        </svg>'
+                        ]
+                    ];
+                }
+                if ($canView) {
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0);',
+                            'onclick' => $fn . '(' . $row['coupon_id'] . ')',
+                            'title' => Labels::getLabel('LBL_HISTORY', $siteLangId)
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#history">
+                                        </use>
+                                    </svg>'
+                    ];
+                }
+                $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                $td->appendElement('plaintext', $tdAttr, $actionItems, true);
+                break;
+            default:
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
+                break;
+        }
+    }
+}
+
+if (count($arrListing) == 0) {
+    $tbody->appendElement('tr')->appendElement(
+        'td',
+        array(
+            'colspan' => count($fields),
+            'class' => 'noRecordFoundJs'
+        ),
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
+    );
+}
+
+if ($printData) {
+    echo $tbody->getHtml();
+}

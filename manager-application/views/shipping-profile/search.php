@@ -61,8 +61,10 @@ foreach ($arrListing as $sn => $row) {
             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
         </use>
     </svg>'
-                    ],
-                    [
+                    ]
+                ];
+                if (!$row['shipprofile_default']) {
+                    array_push($data['otherButtons'],[
                         'attr' => [
                             'href' => 'Javascript:void(0)',
                             'onclick' => 'deleteRecord(' . $row['shipprofile_id'] . ')',
@@ -72,8 +74,8 @@ foreach ($arrListing as $sn => $row) {
                                             <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#delete">
                                             </use>
                                         </svg>'
-                    ]
-                ];
+                    ]);
+                }
             
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);

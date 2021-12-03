@@ -49,6 +49,22 @@ class OrderCancelRequestSearch extends SearchBase
         $this->isOrdersJoined = true;
     }
 
+    public function joinSellerProducts($langId = 0)
+    {
+        if (!$this->isJoinedOrderProducts) {
+            trigger_error(Labels::getLabel('MSG_joinOrders_cannot_be_applied_until_joinOrderProducts_is_not_applied.', $this->commonLangId), E_USER_ERROR);
+        }
+        
+        $langId = FatUtility::int($langId);
+        if ($this->langId) {
+            $langId = $this->langId;
+        }
+        $this->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN', 'sp.selprod_id = op.op_selprod_id and op.op_is_batch = 0', 'sp');
+        if ($langId) {
+            $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sp_l.selprodlang_selprod_id = sp.selprod_id AND sp_l.selprodlang_lang_id = ' . $langId, 'sp_l');
+        }
+    }
+
     public function joinOrderProductStatus($langId = 0)
     {
         if (!$this->isJoinedOrderProducts) {

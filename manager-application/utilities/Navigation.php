@@ -118,6 +118,14 @@ class Navigation
         $badgeRequest->getResultSet();
         $badgeRequestCount = $badgeRequest->recordCount();
 
+        /* Order return requests */
+        $orderRetReqSrchObj = OrderReturnRequest::getSearchObject();
+        $orderRetReqSrchObj->addCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING);
+        $orderRetReqSrchObj->addMultipleFields(array('count(orrequest_id) as countOfRec'));
+        $orderRetReqResult = $db->fetch($orderRetReqSrchObj->getResultset());
+        $orderRetReqCount = FatUtility::int($orderRetReqResult['countOfRec']);
+        
+
         /* set counter variables [ */
         $template->set('brandReqCount', $brandReqCount);
         $template->set('categoryReqCount', $categoryReqCount);
@@ -132,6 +140,7 @@ class Navigation
         $template->set('blogCommentsCount', $blogCommentsCount);
         $template->set('threshSelProdCount', $threshSelProdCount);
         $template->set('gdprReqCount', $gdprReqCount);
+        $template->set('orderRetReqCount', $orderRetReqCount);
         $template->set('siteLangId', CommonHelper::getLangId());
         /* ] */
         
