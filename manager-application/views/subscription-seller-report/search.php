@@ -25,7 +25,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'ossubs_from_date':
             case 'ossubs_till_date':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key]));
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]));
                 break;
             case 'ossubs_subscription_name':
                 $name = $row['ossubs_subscription_name'] . ' ';

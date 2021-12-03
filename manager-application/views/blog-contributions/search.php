@@ -20,7 +20,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'bcontributions_added_on':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format($row['bcontributions_added_on'], true));
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row['bcontributions_added_on'], true));
                 break;
             case 'author_name':
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);

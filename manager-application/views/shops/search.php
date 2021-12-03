@@ -31,6 +31,10 @@ foreach ($arrListing as $sn => $row) {
             case 'shop_supplier_display_status':
                 $td->appendElement('plaintext', array(), applicationConstants::getOnOffArr($siteLangId)[$row[$key]], true);
                 break;           
+            case 'shop_created_on':
+                $dispDate = HtmlHelper::formatDateTime($row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $dispDate, true);
+                break;           
             case 'shop_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['shop_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
                 $statusClass = ($canEdit) ? '' : 'disabled';

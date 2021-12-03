@@ -2,7 +2,7 @@
 
 class AbusiveWordsController extends ListingBaseController
 {
-    protected $pageKey = 'MANAGE_ABUSIVE_KEYWORDS';
+    protected string $pageKey = 'MANAGE_ABUSIVE_KEYWORDS';
 
     public function __construct($action)
     {

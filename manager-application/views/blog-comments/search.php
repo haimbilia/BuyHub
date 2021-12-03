@@ -21,7 +21,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'bpcomment_added_on':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format($row['bpcomment_added_on'], true));
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row['bpcomment_added_on'], true));
                 break;
             case 'bpcomment_author_name':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayName($row[$key]), true);

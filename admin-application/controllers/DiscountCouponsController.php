@@ -185,7 +185,7 @@ class DiscountCouponsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function isMediaUploaded($coupon_id)
+    protected function isMediaUploaded($coupon_id)
     {
         if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $coupon_id, 0)) {
             return true;

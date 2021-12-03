@@ -46,7 +46,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row['order_net_amount'], true, true));
                 break;
             case 'order_date_added':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format(
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime(
                     $row[$key],
                     true,
                     true,

@@ -36,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, isset($requestTypeArr[$row[$key]]) ? $requestTypeArr[$row[$key]] : '', true);
                 break;
             case 'orrequest_date':
-                $td->appendElement('plaintext', $tdAttr, FatDate::format($row[$key], true), true);
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key], true), true);
                 break;
             case 'amount':
                 $amt = '';
