@@ -8,361 +8,312 @@ $(document).ready(function () {
     var screenHeight = $(window).height() - 100;
     window.onresize = function (event) {
         var screenHeight = $(window).height() - 100;
-        window.onresize = function (event) {
-            var screenHeight = $(window).height() - 100;
-        };
 
-        $.extend(fcom, {
-            scrollToTop: function (obj) {
-                if (typeof obj == undefined || obj == null) {
-                    $('html, body').animate({
-                        scrollTop: $('html, body').offset().top - 100
-                    }, 'slow');
-                } else {
-                    $('html, body').animate({
-                        scrollTop: $(obj).offset().top - 100
-                    }, 'slow');
-                }
-            },
-
-            resetEditorInstance: function () {
-                if (typeof oUtil != 'undefined') {
-                    var editors = oUtil.arrEditor;
-                    for (x in editors) {
-                        eval('delete window.' + editors[x]);
-                    }
-                    oUtil.arrEditor = [];
-                }
-            },
-
-            resetEditorWidth: function (width = "100%") {
-                if (typeof oUtil != 'undefined') {
-                    (oUtil.arrEditor).forEach(function (input) {
-                        var oEdit1 = eval(input);
-                        $("#idArea" + oEdit1.oName).attr("width", width);
-                    });
-                }
-            },
-
-            setEditorLayout: function (lang_id) {
-                var editors = oUtil.arrEditor;
-                layout = langLbl['language' + lang_id];
-                for (x in editors) {
-                    var oEdit1 = eval(editors[x]);
-                    if ($('#idArea' + oEdit1.oName).parents(".layout--rtl").length) {
-                        $('#idContent' + editors[x]).contents().find("body").css('direction', layout);
-                        $('#idArea' + oEdit1.oName + ' td[dir="ltr"]').attr('dir', layout);
-                    }
-                }
-            },
-
-            getLoader: function () {
-                $(document.body).css({ 'cursor': 'wait' });
-                $('.loaderJs').remove();
-                return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
-            },
-
-            getModalBody: function () {
-                return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
-            },
-
-            displayProcessing: function () {
-                $.ykmsg.close();
-                $.ykmsg.info(langLbl.processing, 0);
-            },
-            displaySuccessMessage: function (msg) {
-                $.ykmsg.close();
-                $.ykmsg.success(msg);
-            },
-            displayErrorMessage: function (msg) {
-                $.ykmsg.close();
-                $.ykmsg.error(msg);
-            },
-
-            removeLoader: function (cls) {
-                $(document.body).css({ 'cursor': 'default' });
-                $('.loaderJs').remove();
-                $('.submitBtnJs').removeClass('loading');
-            },
-
-            getRowSpinner: function () {
-                return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
-            },
-        });
-
-        clearCache = function () {
-            // $(document.body).prepend(fcom.getLoader());
-            fcom.updateWithAjax(fcom.makeUrl('Home', 'clear'), '', function (t) {
-                window.location.reload();
-            });
-        };
-
-        quickMenuItemSearch = function (e) {
-            var value = e.val().toLowerCase();
-            if (value.length < 1) {
-                return;
+    };
+    $.extend(fcom, {
+        scrollToTop: function (obj) {
+            if (typeof obj == undefined || obj == null) {
+                $('html, body').animate({
+                    scrollTop: $('html, body').offset().top - 100
+                }, 'slow');
+            } else {
+                $('html, body').animate({
+                    scrollTop: $(obj).offset().top - 100
+                }, 'slow');
             }
-            oUtil.arrEditor = [];
-        }
-    },
+        },
+
+        resetEditorInstance: function () {
+            if (typeof oUtil != 'undefined') {
+                var editors = oUtil.arrEditor;
+                for (x in editors) {
+                    eval('delete window.' + editors[x]);
+                }
+                oUtil.arrEditor = [];
+            }
+        },
 
         resetEditorWidth: function (width = "100%") {
-            if (typeof oUtil != "undefined") {
-                oUtil.arrEditor.forEach(function (input) {
+            if (typeof oUtil != 'undefined') {
+                (oUtil.arrEditor).forEach(function (input) {
                     var oEdit1 = eval(input);
                     $("#idArea" + oEdit1.oName).attr("width", width);
                 });
             }
         },
 
-    setEditorLayout: function (lang_id) {
-        var editors = oUtil.arrEditor;
-        layout = langLbl["language" + lang_id];
-        for (x in editors) {
-            var oEdit1 = eval(editors[x]);
-            if ($("#idArea" + oEdit1.oName).parents(".layout--rtl").length) {
-                $("#idContent" + editors[x])
-                    .contents()
-                    .find("body")
-                    .css("direction", layout);
-                $("#idArea" + oEdit1.oName + ' td[dir="ltr"]').attr("dir", layout);
-            }
-        }
-    },
-
-    getLoader: function () {
-        $(document.body).css({ cursor: "wait" });
-        $(".loaderJs").remove();
-        return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
-    },
-
-    getModalBody: function () {
-        return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
-    },
-
-    removeLoader: function (cls) {
-        $(document.body).css({ cursor: "default" });
-        $(".loaderJs").remove();
-        $(".submitBtnJs").removeClass("loading");
-    },
-
-    getRowSpinner: function () {
-        return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
-    },
-});
-
-clearCache = function () {
-    // $(document.body).prepend(fcom.getLoader());
-    fcom.updateWithAjax(fcom.makeUrl("Home", "clear"), "", function (t) {
-        window.location.reload();
-    });
-};
-
-quickMenuItemSearch = function (e) {
-    var value = e.val().toLowerCase();
-    if (value.length < 1) {
-        return;
-    }
-    $(".navMenuItems li").find("h6").hide();
-    $(".navMenuItems li").find(".search-result").hide();
-
-    $(".navMenuItems li .search-result").each(function () {
-        if ($(this).find("a").text().toLowerCase().search(value) > -1) {
-            $(this).parent("li").find("h6").show();
-            $(this).show();
-            $(".navMenuItems").show();
-        } else {
-            $(this).hide();
-            $(".navMenuItems").show();
-        }
-    });
-
-    $(".navMenuItems li").each(function () {
-        if ($(this).find("h6").text().toLowerCase().search(value) > -1) {
-            $(this).show();
-            $(this).find("h6").show();
-            $(this).find(".search-result").show();
-            $(".navMenuItems").show();
-        }
-    });
-};
-
-isJson = function (str) {
-    try {
-        var json = JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return json;
-};
-
-getCountryStates = function (countryId, stateId, dv) {
-    fcom.displayProcessing();
-    fcom.ajax(
-        fcom.makeUrl("Configurations", "getStates", [countryId, stateId]),
-        "",
-        function (res) {
-            $.ykmsg.close();
-            $(dv).empty();
-            $(dv).append(res);
-        }
-    );
-};
-
-getStatesByCountryCode = function (
-    countryCode,
-    stateCode,
-    dv,
-    idCol = "state_id"
-) {
-    fcom.displayProcessing();
-    fcom.ajax(
-        fcom.makeUrl("Configurations", "getStatesByCountryCode", [
-            countryCode,
-            stateCode,
-            idCol,
-        ]),
-        "",
-        function (res) {
-            $.ykmsg.close();
-            $(dv).empty();
-            $(dv).append(res).change();
-        }
-    );
-};
-
-sortObjectByKeys = function (o) {
-    return Object.keys(o)
-        .sort()
-        .reduce((r, k) => ((r[k] = o[k]), r), {});
-};
-
-stylePhoneNumberFld = function (
-    element = "input[name='user_phone']",
-    destroy = false
-) {
-    var inputList = document.querySelectorAll(element);
-    var country =
-        "" == langLbl.defaultCountryCode ||
-            "undefined" == typeof langLbl.defaultCountryCode
-            ? "in"
-            : langLbl.defaultCountryCode;
-    inputList.forEach(function (input) {
-        if (true == destroy) {
-            $(input).removeAttr("style");
-            var clone = input.cloneNode(true);
-            $(".iti").replaceWith(clone);
-        } else {
-            if ($(input).hasClass("hasFlag-js")) {
-                return;
-            }
-            $(input).addClass("hasFlag-js");
-            var elementName = $(input).attr("name") + "_dcode";
-            var dialCodeElement = $('input[name="' + elementName + '"]');
-            if (
-                0 < dialCodeElement.length &&
-                "" != dialCodeElement.val() &&
-                "undefined" != typeof dialCodeElement.val()
-            ) {
-                var elementVal = dialCodeElement.val();
-                var countryCodePos = elementVal.indexOf("-");
-                if (0 < countryCodePos) {
-                    country = elementVal.substring(
-                        countryCodePos + 1,
-                        elementVal.length
-                    );
-                } else {
-                    country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
+        setEditorLayout: function (lang_id) {
+            var editors = oUtil.arrEditor;
+            layout = langLbl['language' + lang_id];
+            for (x in editors) {
+                var oEdit1 = eval(editors[x]);
+                if ($('#idArea' + oEdit1.oName).parents(".layout--rtl").length) {
+                    $('#idContent' + editors[x]).contents().find("body").css('direction', layout);
+                    $('#idArea' + oEdit1.oName + ' td[dir="ltr"]').attr('dir', layout);
                 }
             }
-
-            var iti = window.intlTelInput(input, {
-                separateDialCode: true,
-                initialCountry: country,
-            });
-
-            var dCode =
-                "+" +
-                iti.getSelectedCountryData().dialCode +
-                "-" +
-                iti.getSelectedCountryData().iso2;
-            if (0 < dialCodeElement.length) {
-                if (
-                    typeof iti.getSelectedCountryData().dialCode !== "undefined" &&
-                    "" == dialCodeElement.val()
-                ) {
-                    dialCodeElement.val(dCode);
-                }
-            } else {
-                $("<input>")
-                    .attr({
-                        type: "hidden",
-                        name: elementName,
-                        value: dCode,
-                    })
-                    .insertAfter(input);
-            }
-
-            input.addEventListener("countrychange", function (e) {
-                if (typeof iti.getSelectedCountryData().dialCode !== "undefined") {
-                    var dCode =
-                        "+" +
-                        iti.getSelectedCountryData().dialCode +
-                        "-" +
-                        iti.getSelectedCountryData().iso2;
-                    if ($('input[name="' + elementName + '"]').length < 1) {
-                        $.systemMessage(
-                            $(input).attr("name") + " " + langLbl.dialCodeFieldNotFound,
-                            "alert-danger"
-                        );
-                        return;
-                    }
-                    $('input[name="' + elementName + '"]').val(dCode);
-                }
-            });
-        }
-    });
-};
-
-copyText = function (obj) {
-    var copyText = $(obj).text();
-
-    document.addEventListener(
-        "copy",
-        function (e) {
-            e.clipboardData.setData("text/plain", copyText.trim());
-            e.preventDefault();
         },
-        true
-    );
-    document.execCommand("copy");
-    var elOriginalText = $(obj).attr("data-original-title");
-    $(obj)
-        .attr("data-original-title", langLbl.copied)
-        .tooltip("show")
-        .attr("data-original-title", elOriginalText);
-};
 
-installJsColor = function () {
-    if (0 < $(".jscolor").length) {
-        $(".jscolor").each(function () {
-            $(this).attr("data-jscolor", "{}");
+        getLoader: function () {
+            $(document.body).css({ 'cursor': 'wait' });
+            $('.loaderJs').remove();
+            return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
+        },
+
+        getModalBody: function () {
+            return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
+        },
+
+        displayProcessing: function () {
+            $.ykmsg.close();
+            $.ykmsg.info(langLbl.processing, 0);
+        },
+        displaySuccessMessage: function (msg) {
+            $.ykmsg.close();
+            $.ykmsg.success(msg);
+        },
+        displayErrorMessage: function (msg) {
+            $.ykmsg.close();
+            $.ykmsg.error(msg);
+        },
+
+        removeLoader: function (cls) {
+            $(document.body).css({ 'cursor': 'default' });
+            $('.loaderJs').remove();
+            $('.submitBtnJs').removeClass('loading');
+        },
+
+        getRowSpinner: function () {
+            return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
+        },
+    });
+
+    clearCache = function () {
+        // $(document.body).prepend(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl('Home', 'clear'), '', function (t) {
+            window.location.reload();
         });
-        jscolor.install();
+    };
+
+    quickMenuItemSearch = function (e) {
+        var value = e.val().toLowerCase();
+        if (value.length < 1) {
+            return;
+        }
+        oUtil.arrEditor = [];
     }
-};
+    clearCache = function () {
+        // $(document.body).prepend(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl("Home", "clear"), "", function (t) {
+            window.location.reload();
+        });
+    };
 
-$(document).ajaxComplete(function () {
-    /* Bind bootstrap tooltip with ajax elements. */
-    $('[data-toggle="tooltip"]').tooltip();
+    quickMenuItemSearch = function (e) {
+        var value = e.val().toLowerCase();
+        if (value.length < 1) {
+            return;
+        }
+        $(".navMenuItems li").find("h6").hide();
+        $(".navMenuItems li").find(".search-result").hide();
 
-    /* Bind Scoll hand if table width is wider. */
-    new ScrollHint(".js-scrollable");
+        $(".navMenuItems li .search-result").each(function () {
+            if ($(this).find("a").text().toLowerCase().search(value) > -1) {
+                $(this).parent("li").find("h6").show();
+                $(this).show();
+                $(".navMenuItems").show();
+            } else {
+                $(this).hide();
+                $(".navMenuItems").show();
+            }
+        });
 
-    /* Bind colors with all color fields. */
-    installJsColor();
-});
-}) ();
+        $(".navMenuItems li").each(function () {
+            if ($(this).find("h6").text().toLowerCase().search(value) > -1) {
+                $(this).show();
+                $(this).find("h6").show();
+                $(this).find(".search-result").show();
+                $(".navMenuItems").show();
+            }
+        });
+    };
+
+    isJson = function (str) {
+        try {
+            var json = JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return json;
+    };
+
+    getCountryStates = function (countryId, stateId, dv) {
+        fcom.displayProcessing();
+        fcom.ajax(
+            fcom.makeUrl("Configurations", "getStates", [countryId, stateId]),
+            "",
+            function (res) {
+                $.ykmsg.close();
+                $(dv).empty();
+                $(dv).append(res);
+            }
+        );
+    };
+
+    getStatesByCountryCode = function (
+        countryCode,
+        stateCode,
+        dv,
+        idCol = "state_id"
+    ) {
+        fcom.displayProcessing();
+        fcom.ajax(
+            fcom.makeUrl("Configurations", "getStatesByCountryCode", [
+                countryCode,
+                stateCode,
+                idCol,
+            ]),
+            "",
+            function (res) {
+                $.ykmsg.close();
+                $(dv).empty();
+                $(dv).append(res).change();
+            }
+        );
+    };
+
+    sortObjectByKeys = function (o) {
+        return Object.keys(o)
+            .sort()
+            .reduce((r, k) => ((r[k] = o[k]), r), {});
+    };
+
+    stylePhoneNumberFld = function (
+        element = "input[name='user_phone']",
+        destroy = false
+    ) {
+        var inputList = document.querySelectorAll(element);
+        var country =
+            "" == langLbl.defaultCountryCode ||
+                "undefined" == typeof langLbl.defaultCountryCode
+                ? "in"
+                : langLbl.defaultCountryCode;
+        inputList.forEach(function (input) {
+            if (true == destroy) {
+                $(input).removeAttr("style");
+                var clone = input.cloneNode(true);
+                $(".iti").replaceWith(clone);
+            } else {
+                if ($(input).hasClass("hasFlag-js")) {
+                    return;
+                }
+                $(input).addClass("hasFlag-js");
+                var elementName = $(input).attr("name") + "_dcode";
+                var dialCodeElement = $('input[name="' + elementName + '"]');
+                if (
+                    0 < dialCodeElement.length &&
+                    "" != dialCodeElement.val() &&
+                    "undefined" != typeof dialCodeElement.val()
+                ) {
+                    var elementVal = dialCodeElement.val();
+                    var countryCodePos = elementVal.indexOf("-");
+                    if (0 < countryCodePos) {
+                        country = elementVal.substring(
+                            countryCodePos + 1,
+                            elementVal.length
+                        );
+                    } else {
+                        country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
+                    }
+                }
+
+                var iti = window.intlTelInput(input, {
+                    separateDialCode: true,
+                    initialCountry: country,
+                });
+
+                var dCode =
+                    "+" +
+                    iti.getSelectedCountryData().dialCode +
+                    "-" +
+                    iti.getSelectedCountryData().iso2;
+                if (0 < dialCodeElement.length) {
+                    if (
+                        typeof iti.getSelectedCountryData().dialCode !== "undefined" &&
+                        "" == dialCodeElement.val()
+                    ) {
+                        dialCodeElement.val(dCode);
+                    }
+                } else {
+                    $("<input>")
+                        .attr({
+                            type: "hidden",
+                            name: elementName,
+                            value: dCode,
+                        })
+                        .insertAfter(input);
+                }
+
+                input.addEventListener("countrychange", function (e) {
+                    if (typeof iti.getSelectedCountryData().dialCode !== "undefined") {
+                        var dCode =
+                            "+" +
+                            iti.getSelectedCountryData().dialCode +
+                            "-" +
+                            iti.getSelectedCountryData().iso2;
+                        if ($('input[name="' + elementName + '"]').length < 1) {
+                            $.systemMessage(
+                                $(input).attr("name") + " " + langLbl.dialCodeFieldNotFound,
+                                "alert-danger"
+                            );
+                            return;
+                        }
+                        $('input[name="' + elementName + '"]').val(dCode);
+                    }
+                });
+            }
+        });
+    };
+
+    copyText = function (obj) {
+        var copyText = $(obj).text();
+
+        document.addEventListener(
+            "copy",
+            function (e) {
+                e.clipboardData.setData("text/plain", copyText.trim());
+                e.preventDefault();
+            },
+            true
+        );
+        document.execCommand("copy");
+        var elOriginalText = $(obj).attr("data-original-title");
+        $(obj)
+            .attr("data-original-title", langLbl.copied)
+            .tooltip("show")
+            .attr("data-original-title", elOriginalText);
+    };
+
+    installJsColor = function () {
+        if (0 < $(".jscolor").length) {
+            $(".jscolor").each(function () {
+                $(this).attr("data-jscolor", "{}");
+            });
+            jscolor.install();
+        }
+    };
+
+    $(document).ajaxComplete(function () {
+        /* Bind bootstrap tooltip with ajax elements. */
+        $('[data-toggle="tooltip"]').tooltip();
+
+        /* Bind Scoll hand if table width is wider. */
+        new ScrollHint(".js-scrollable");
+
+        /* Bind colors with all color fields. */
+        installJsColor();
+    });
+})();
 
 var map;
 var marker;
