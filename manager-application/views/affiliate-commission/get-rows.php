@@ -33,7 +33,7 @@ foreach ($arrListing as $sn => $row) {
                         <?php } ?>
                         <?php if (!empty($row['vendor'])) { ?>
                             <span class="timeline-v4__item-user-name">
-                                <a href="#" class="link link--dark timeline-v4__item-link">
+                                <a href="#" class="link link--inline link--dark timeline-v4__item-link">
                                     <?php echo Labels::getLabel('LBL_BY', $siteLangId); ?> <?php echo CommonHelper::displayText($row['vendor']); ?>
                                 </a>
                             </span>
