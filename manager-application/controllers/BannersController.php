@@ -861,7 +861,7 @@ class BannersController extends ListingBaseController
 
     private function bannerTypeArr()
     {
-        return applicationConstants::bannerTypeArr();
+        return applicationConstants::getAllLanguages();
     }
 
     private function getDisplayScreenName()

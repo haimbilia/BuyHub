@@ -1413,3 +1413,8 @@ ALTER TABLE `tbl_product_to_options` ADD `prodoption_optionvalue_ids` TEXT NOT N
 SET SESSION group_concat_max_len = 1000000;
 
 Update tbl_product_to_options as po inner join ( SELECT o.option_id,GROUP_CONCAT(optionvalue_id) as opv FROM tbl_options o inner join tbl_option_values ov on ov.optionvalue_option_id = o.option_id GROUP by o.option_id ) as temp ON temp.option_id = po.prodoption_option_id set po.prodoption_optionvalue_ids = temp.opv;
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 1, '{PACKAGE-NAME} - {PLAN-DAYS}', 1),
+('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 2, '{PACKAGE-NAME} - {PLAN-DAYS}', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

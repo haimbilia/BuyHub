@@ -4,7 +4,7 @@ if (!isset($tbody)) {
     $printData = true;
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
-$subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($siteLangId);
+
 $serialNo = ($page - 1) * $pageSize + 1;
 foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
@@ -16,25 +16,20 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'subscriptionCharges':
+            case 'name':
+                $td->appendElement('plaintext', $tdAttr, $row['name'] . '<br/>(' . $row['email'] . ')', true);
+                break;
+            case 'affiliateLink':
+                $url = UrlHelper::generateFullUrl('Home', 'referral', [$row['user_referral_code']], CONF_WEBROOT_FRONTEND);
+                $td->appendElement('plaintext', $tdAttr, '<a href="' . $url . '" target="_blank">' . $url, '</a>', true);
+                break;
+            case 'availableBalance':
+            case 'totAffilateRevenue':
+            case 'totAffilateSignupRevenue':
+            case 'totAffilateOrdersRevenue':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
-            case 'user_name':
-                $name = $row['user_name'];
-                $td->appendElement('plaintext', $tdAttr, $name);
-                break;
-            case 'ossubs_from_date':
-            case 'ossubs_till_date':
-                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
-                break;
-            case 'ossubs_subscription_name':
-                $name = $row['ossubs_subscription_name'] . ' ';
-                $name .= ($row['ossubs_type'] == SellerPackages::PAID_TYPE) ? " /" . " " . Labels::getLabel("LBL_Per", $siteLangId) : Labels::getLabel("LBL_For", $siteLangId);
 
-                $name .= " " . (($row['ossubs_interval'] > 0) ? $row['ossubs_interval'] : '')
-                    . "  " . $subcriptionPeriodArr[$row['ossubs_frequency']];
-                $td->appendElement('plaintext', $tdAttr, $name);
-                break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;

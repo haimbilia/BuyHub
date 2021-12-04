@@ -6,7 +6,7 @@ class PromotionsController extends ListingBaseController
 
     private int $minWidth = 1200;
     private int $minHeight = 360;
-    protected $modelClass = 'Promotion';
+    protected string $modelClass = 'Promotion';
 
     public function __construct($action)
     {
@@ -698,7 +698,7 @@ class PromotionsController extends ListingBaseController
         $this->set('promotionType', $promotionType);
         $this->set("canEdit", $this->objPrivilege->canEditPromotions($this->admin_id, true));
         $this->set('promotionId', $recordId);
-        $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
+        $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->set('screenTypeArr', array(0 => '') + applicationConstants::getDisplaysArr($this->siteLangId));
         $this->set('language', Language::getAllNames());
         $this->_template->render(false, false);
@@ -984,7 +984,7 @@ class PromotionsController extends ListingBaseController
         $frm->addHiddenField('', 'record_id', $recordId);
         $frm->addHiddenField('', 'promotion_type', $promotionType);
 
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 
         if (count($bannerTypeArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');

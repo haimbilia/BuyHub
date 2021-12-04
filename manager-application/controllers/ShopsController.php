@@ -1,11 +1,13 @@
 <?php
 
-class ShopsController extends ListingBaseController {
+class ShopsController extends ListingBaseController
+{
 
-    protected $modelClass = 'Shop';
+    protected string $modelClass = 'Shop';
     protected $pageKey = 'MANAGE_SHOPS';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewShops();
     }
@@ -16,7 +18,8 @@ class ShopsController extends ListingBaseController {
      * @param  bool $setVariable
      * @return void
      */
-    protected function checkEditPrivilege(bool $setVariable = false): void {
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
         if (true === $setVariable) {
             $this->set("canEdit", $this->objPrivilege->canEditShops($this->admin_id, true));
         } else {
@@ -24,7 +27,8 @@ class ShopsController extends ListingBaseController {
         }
     }
 
-    public function index() {
+    public function index()
+    {
         $this->search();
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
@@ -44,7 +48,8 @@ class ShopsController extends ListingBaseController {
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search() {
+    public function search()
+    {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -83,11 +88,12 @@ class ShopsController extends ListingBaseController {
             LibHelper::exitWithSuccess([
                 'listingHtml' => $this->_template->render(false, false, 'shops/search.php', true),
                 'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-                    ], true);
+            ], true);
         }
     }
 
-    public function form() {
+    public function form()
+    {
         $this->checkEditPrivilege();
         $shop_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($shop_id);
@@ -113,7 +119,8 @@ class ShopsController extends ListingBaseController {
         $this->_template->render(false, false);
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->checkEditPrivilege();
         $shop_id = FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($shop_id);
@@ -169,7 +176,8 @@ class ShopsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function setLangTemplateData(array $constructorArgs = []): void {
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
         $this->objPrivilege->canEditShops();
         $this->modelObj = (new ReflectionClass('Shop'))->newInstanceArgs([FatApp::getPostedData('shop_id', FatUtility::VAR_INT, 0)]);
         $this->formLangFields = [
@@ -187,7 +195,8 @@ class ShopsController extends ListingBaseController {
         $this->checkMediaExist = true;
     }
 
-    protected function isMediaUploaded($shopId) {
+    protected function isMediaUploaded($shopId)
+    {
         $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_LOGO, $shopId, 0);
         if (false !== $attachment && 0 < $attachment['afile_id']) {
             return true;
@@ -200,7 +209,8 @@ class ShopsController extends ListingBaseController {
         return false;
     }
 
-    public function media($shop_id) {
+    public function media($shop_id)
+    {
         $this->checkEditPrivilege();
         $shop_id = FatUtility::int($shop_id);
         $shopLogoFrm = $this->getShopLogoForm($shop_id, $this->siteLangId);
@@ -221,12 +231,13 @@ class ShopsController extends ListingBaseController {
         $this->set('shopLayoutTemplateId', $shopLayoutTemplateId);
         $this->set('logoFrm', $shopLogoFrm);
         $this->set('shopBannerFrm', $shopBannerFrm);
-        $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
+        $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
 
         $this->_template->render(false, false);
     }
 
-    public function images($shop_id, $file_type, $lang_id = 0, $slide_screen = 0) {
+    public function images($shop_id, $file_type, $lang_id = 0, $slide_screen = 0)
+    {
         $languages = Language::getAllNames();
         $slide_screen = FatUtility::int($slide_screen);
         $shop_id = FatUtility::int($shop_id);
@@ -248,7 +259,8 @@ class ShopsController extends ListingBaseController {
         $this->_template->render(false, false);
     }
 
-    public function uploadMedia() {
+    public function uploadMedia()
+    {
         $this->objPrivilege->canEditBrands();
         $post = FatApp::getPostedData();
         if (empty($post)) {
@@ -277,17 +289,17 @@ class ShopsController extends ListingBaseController {
         $fileHandlerObj->deleteFile($file_type, $shop_id, 0, 0, $lang_id, $slide_screen);
 
         if (!$fileHandlerObj->saveAttachment(
-                        $_FILES['cropped_image']['tmp_name'],
-                        $file_type,
-                        $shop_id,
-                        0,
-                        $_FILES['cropped_image']['name'],
-                        -1,
-                        false,
-                        $lang_id,
-                        $slide_screen,
-                        $aspectRatio
-                )) {
+            $_FILES['cropped_image']['tmp_name'],
+            $file_type,
+            $shop_id,
+            0,
+            $_FILES['cropped_image']['name'],
+            -1,
+            false,
+            $lang_id,
+            $slide_screen,
+            $aspectRatio
+        )) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -297,7 +309,8 @@ class ShopsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function removeMedia($recordId, $imageType = '', $afileId = 0) {
+    public function removeMedia($recordId, $imageType = '', $afileId = 0)
+    {
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -317,12 +330,13 @@ class ShopsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getShopLogoForm($shop_id, $land_id) {
+    private function getShopLogoForm($shop_id, $land_id)
+    {
         $land_id = FatUtility::int($land_id);
         $frm = new Form('frmShopLogo');
         $frm->addHTML('', Labels::getLabel('FRM_LOGO', $this->siteLangId), '<h3>' . Labels::getLabel('FRM_LOGO', $this->siteLangId) . '</h3>');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 
         if (count($bannerTypeArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
@@ -339,12 +353,13 @@ class ShopsController extends ListingBaseController {
         return $frm;
     }
 
-    private function getShopBannerForm($shop_id, $land_id) {
+    private function getShopBannerForm($shop_id, $land_id)
+    {
         $land_id = FatUtility::int($land_id);
         $frm = new Form('frmShopBanner');
         $frm->addHTML('', Labels::getLabel('FRM_BANNERS', $this->siteLangId), '<h3>' . Labels::getLabel('FRM_BANNERS', $this->siteLangId) . '</h3>');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
         if (count($bannerTypeArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
         } else {
@@ -361,7 +376,8 @@ class ShopsController extends ListingBaseController {
         return $frm;
     }
 
-    public function getSearchForm($fields = []) {
+    public function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
@@ -379,7 +395,8 @@ class ShopsController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getFormColumns(): array {
+    protected function getFormColumns(): array
+    {
         $shopsTblHeadingCols = CacheHelper::get('shopsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
@@ -402,7 +419,8 @@ class ShopsController extends ListingBaseController {
         return $arr;
     }
 
-    private function getForm($shop_id = 0) {
+    private function getForm($shop_id = 0)
+    {
         $shop_id = FatUtility::int($shop_id);
         $frm = new Form('frmShop');
         $action = ($shop_id > 0) ? Labels::getLabel('FRM_Add_New', $this->siteLangId) : Labels::getLabel('FRM_UPDATE', $this->siteLangId);
@@ -446,7 +464,8 @@ class ShopsController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getLangForm($shop_id = 0, $lang_id = 0) {
+    protected function getLangForm($shop_id = 0, $lang_id = 0)
+    {
         $frm = new Form('frmShopLang', array('id' => 'frmShopLang'));
         $frm->addHiddenField('', 'shop_id', $shop_id);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
@@ -456,7 +475,8 @@ class ShopsController extends ListingBaseController {
         return $frm;
     }
 
-    private function appendLangFormFields(&$frm, $lang_id = 0) {
+    private function appendLangFormFields(&$frm, $lang_id = 0)
+    {
         $frm->addTextBox(Labels::getLabel('FRM_SHOP_CITY', $lang_id), 'shop_city');
         $frm->addTextBox(Labels::getLabel('FRM_CONTACT_PERSON', $lang_id), 'shop_contact_person');
         $frm->addTextarea(Labels::getLabel('FRM_DESCRIPTION', $lang_id), 'shop_description');
@@ -473,7 +493,44 @@ class ShopsController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getDefaultColumns(): array {
+    public function autoComplete()
+    {
+        $this->objPrivilege->canViewShops();
+        $srch = Shop::getSearchObject(false, $this->siteLangId);
+
+        $post = FatApp::getPostedData();
+        if (!empty($post['keyword'])) {
+            $srch->addCondition('shop_name', 'LIKE', '%' . $post['keyword'] . '%');
+        }
+
+        if (isset($post['shop_user_id'])) {
+            $srch->addCondition('shop_user_id', '=', $post['shop_user_id']);
+        }
+
+        $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
+        $srch->addMultipleFields(array('shop_id', 'IFNULL(shop_name,shop_identifier) as shop_name'));
+
+        $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
+        $alreadyAdded = Collections::getRecords($collectionId);
+        if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
+            $srch->addCondition('shop_id', 'NOT IN', array_keys($alreadyAdded));
+        }
+
+        $rs = $srch->getResultSet();
+        $db = FatApp::getDb();
+        $products = $db->fetchAll($rs, 'shop_id');
+        $json = array();
+        foreach ($products as $key => $product) {
+            $json['results'][] = array(
+                'id' => $key,
+                'text' => strip_tags(html_entity_decode($product['shop_name'], ENT_QUOTES, 'UTF-8'))
+            );
+        }
+        die(json_encode($json));
+    }
+
+    protected function getDefaultColumns(): array
+    {
         return [
             'select_all',
             'listSerial',
@@ -489,8 +546,8 @@ class ShopsController extends ListingBaseController {
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, ['shop_active', 'numOfReports', 'numOfProducts', 'numOfReviews'], Common::excludeKeysForSort());
     }
-
 }

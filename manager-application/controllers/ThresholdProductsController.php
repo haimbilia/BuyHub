@@ -2,7 +2,7 @@
 
 class ThresholdProductsController extends ListingBaseController {
 
-    protected $modelClass = 'SellerProduct';
+    protected string $modelClass = 'SellerProduct';
     protected $pageKey = 'THRESHOLD_PRODUCTS';
 
     public function __construct($action) {

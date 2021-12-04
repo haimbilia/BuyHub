@@ -2,7 +2,7 @@
 
 class SlidesController extends ListingBaseController
 {
-    protected $modelClass = 'Slides';
+    protected string $modelClass = 'Slides';
     protected $pageKey = 'MANAGE_SLIDES';
 
     public function __construct($action)

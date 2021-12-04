@@ -2,6 +2,7 @@
 
 class SubscriptionOrdersController extends ListingBaseController
 {
+    protected string $pageKey = 'MANAGE_SUBSCRIPTION_ORDERS';
     use OrdersPackage;
     private int $ordersType = Orders::ORDER_SUBSCRIPTION;
 

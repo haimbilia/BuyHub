@@ -1,6 +1,6 @@
-viewComment = function(id,langId){
+viewDetails = function(id,langId){
     $.ykmodal(function() {
-        fcom.ajax(fcom.makeUrl(controllerName, 'viewComment', [id, langId]), '', function(t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'viewDetails', [id, langId]), '', function(t) {
             $.ykmodal(t);
         });
     }, true);

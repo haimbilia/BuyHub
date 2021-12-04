@@ -1,63 +1,13 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-$spPlanFrm->setFormTagAttribute('class', 'web_form form_horizontal');
-$spPlanFrm->developerTags['colClassPrefix'] = 'col-md-';
-$spPlanFrm->developerTags['fld_default_col'] = 12; 
-$fld = $spPlanFrm->getField('plan_name');
-$fld->setWrapperAttribute('class', 'ui-front');
-?>
-<section class="section">
-	<div class="sectionhead">
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-		<h4><?php echo Labels::getLabel('LBL_Coupon_Setup',$siteLangId); ?></h4>
-	</div>
-	<div class="sectionbody space">
-		<div class="row">	
+$fld = $frm->getField('plan_name');
+$fld->addFieldTagAttribute('class', 'tagifyJs');
+$fld->addFieldTagAttribute('data-record-id', $recordId);
 
-<div class="col-sm-12">
-	<h1><?php //echo Labels::getLabel('LBL_Coupon_Setup',$siteLangId);?></h1>
-	<div class="tabs_nav_container responsive flat" style='min-height:380px;'>
-		<ul class="tabs_nav">
-			<li><a href="javascript:void(0)" onclick="couponLinkPlanForm(<?php echo $coupon_id ?>);"><?php echo Labels::getLabel('LBL_Link_Plan',$siteLangId);?></a></li>			
-		</ul>
-		<div class="tabs_panel_wrap" >
-			<div class="tabs_panel">
-				<?php echo $spPlanFrm->getFormHtml(); ?>
-				<div id="coupon_plans_list" class="col-xs-9 box--scroller"></div>
-			</div>			
-		</div>
-	</div>
-</div>
-</div>
-</div>
-</section>
-<script type="text/javascript">
-$("document").ready(function(){
-	reloadCouponPlan(<?php echo $coupon_id; ?>);
-	
-	$('input[name=\'plan_name\']').autocomplete({
-        'classes': {
-            "ui-autocomplete": "custom-ui-autocomplete"
-        },
-		'source': function(request, response) {			
-			$.ajax({
-				url: fcom.makeUrl('SellerPackages', 'autoComplete'),
-				data: {keyword: request['term'],fIsAjax:1},
-				dataType: 'json',
-				type: 'post',
-				success: function(json) {
-					response($.map(json, function(item) {
-						return { label: item['name'], value: item['name'], id: item['id']	};
-					}));
-				},
-			});
-		},
-		'select': function(event, ui) {
-			updateCouponPlan(<?php echo $coupon_id; ?>, ui.item.id );
-            $('input[name=\'plan_name\']').val('');
-            return false;
-		}
-	});
-	
-});
+require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
+
+<script>
+    $(document).ready(function() {
+        bindTagify();
+    });
 </script>

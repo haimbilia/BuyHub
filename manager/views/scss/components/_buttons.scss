@@ -53,6 +53,11 @@
     &-light {
         background: $bg-gray;
         border-color: $bg-gray;
+        &.loading{
+            &:before{
+                border-color: $txt-body!important;
+            }
+        }
     }
     &-white {
         background: $bg-white;
@@ -193,6 +198,9 @@ a.link {
             width: auto;
             opacity: 1;
         }
+    }
+    &--inline{
+        display: inline-flex;
     }
 }
 

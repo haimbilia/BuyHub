@@ -4,7 +4,6 @@ trait OrdersPackage
 {
     private array $order;
     private string $directory;
-    protected string $pageKey;
     protected string $viewPageKey;
     protected string $tblHeadingKey;
 
@@ -13,13 +12,11 @@ trait OrdersPackage
         switch ($this->ordersType) {
             case Orders::ORDER_PRODUCT:
                 $this->directory = 'orders';
-                $this->pageKey = 'MANAGE_ORDERS';
                 $this->viewPageKey = 'ORDER_VIEW';
                 $this->tblHeadingKey = 'ordersTblHeadingCols';
                 break;
             case Orders::ORDER_SUBSCRIPTION:
                 $this->directory = 'subscription-orders';
-                $this->pageKey = 'MANAGE_SUBSCRIPTION_ORDERS';
                 $this->viewPageKey = 'SUBSCRIPTION_ORDER_VIEW';
                 $this->tblHeadingKey = 'subscriptionOrdersTblHeadingCols';
                 break;
@@ -83,10 +80,10 @@ trait OrdersPackage
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'order_date_added');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'order_date_added';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
         $postedData = FatApp::getPostedData();

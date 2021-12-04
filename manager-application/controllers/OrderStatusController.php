@@ -2,7 +2,7 @@
 
 class OrderStatusController extends ListingBaseController
 {
-    protected $modelClass = 'OrderStatus';
+    protected string $modelClass = 'OrderStatus';
     protected $pageKey = 'MANAGE_ORDER_STATUS';
 
     public function __construct($action)

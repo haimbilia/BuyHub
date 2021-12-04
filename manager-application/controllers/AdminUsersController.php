@@ -2,7 +2,7 @@
 
 class AdminUsersController extends ListingBaseController
 {
-    protected $modelClass = 'AdminUsers';
+    protected string $modelClass = 'AdminUsers';
     public function __construct($action)
     {
         parent::__construct($action);

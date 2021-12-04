@@ -3,7 +3,7 @@
 class SellerProductsController extends ListingBaseController
 {
     use ProductsDigitalDownloads;
-    protected $modelClass = 'SellerProduct';
+    protected string $modelClass = 'SellerProduct';
     protected $pageKey = 'MANAGE_SELLER_INVENTORIES';
 
     public function __construct($action)
