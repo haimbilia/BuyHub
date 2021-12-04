@@ -53,7 +53,7 @@ foreach ($arrListing as $sn => $row) {
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                             <use
-                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#timeline">
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#history">
                                             </use>
                                         </svg>'
                         ]

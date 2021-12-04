@@ -2,7 +2,7 @@
 
 class ShippingPackagesController extends ListingBaseController {
 
-    protected $modelClass = 'ShippingPackage';
+    protected string $modelClass = 'ShippingPackage';
     protected $pageKey = 'MANAGE_SHIPPING_PACKAGES';
 
     public function __construct($action) {

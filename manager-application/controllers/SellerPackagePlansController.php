@@ -2,7 +2,7 @@
 
 class SellerPackagePlansController extends ListingBaseController
 {
-    protected $modelClass = 'SellerPackagePlans';
+    protected string $modelClass = 'SellerPackagePlans';
 
     public function __construct($action)
     {

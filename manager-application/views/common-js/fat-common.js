@@ -215,11 +215,6 @@ var fcom = {
 
         return obj;
     },
-
-    displayProcessing: function () {
-        $.ykmsg.close();
-        $.ykmsg.info(langLbl.processing, 0);
-    }
 };
 
 $.fn.selectRange = function (start, end) {

@@ -101,12 +101,11 @@ class applicationConstants {
         );
     }
 
-    public static function bannerTypeArr() {
+    public static function getAllLanguages() {
         $languagesArr = Language::getAllNames();
         if (count($languagesArr) > 1) {
-            return array(0 => Labels::getLabel('LBL_All_Languages', CommonHelper::getLangId())) + $languagesArr;
+            return [0 => Labels::getLabel('LBL_ALL_LANGUAGES')] + $languagesArr;
         }
-
         return $languagesArr;
     }
 
@@ -452,9 +451,9 @@ class applicationConstants {
         return $pageSize;
     }
 
-    public static function getSortOrder(string $sortOrder) {
+    public static function getSortOrder(string $sortOrder, string $defaultOrder = self::SORT_ASC) {
         if (!in_array($sortOrder, [self::SORT_ASC, self::SORT_DESC])) {
-            return self::SORT_ASC;
+            return $defaultOrder;
         }
         return $sortOrder;
     }

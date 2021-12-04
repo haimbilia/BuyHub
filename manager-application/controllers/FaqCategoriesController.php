@@ -2,7 +2,7 @@
 
 class FaqCategoriesController extends ListingBaseController
 {
-    protected $modelClass = 'FaqCategory';
+    protected string $modelClass = 'FaqCategory';
     protected $pageKey = 'MANAGE_FAQ_CATEGORIES';
 
     public function __construct($action) {

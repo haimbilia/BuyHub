@@ -1,7 +1,7 @@
 <?php
 class ZonesController extends ListingBaseController
 {
-    protected $modelClass = 'Zone';
+    protected string $modelClass = 'Zone';
     protected $pageKey = 'MANAGE_SHIPPING_ZONES';
 
     public function __construct($action)
@@ -179,7 +179,7 @@ class ZonesController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmZoneLang');
         $frm->addHiddenField('', 'zone_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $langId), 'zone_name');
         return $frm;
     }

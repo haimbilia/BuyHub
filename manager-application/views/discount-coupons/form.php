@@ -1,78 +1,59 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'web_form form_horizontal');
-$frm->setFormTagAttribute('onsubmit', 'setupCoupon(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 12;
+$fld = $frm->getField('coupon_title');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-$minOrder_fld = $frm->getField('coupon_min_order_value');
-$minOrder_fld->setWrapperAttribute('id', 'coupon_minorder_div');
+$fld = $frm->getField('coupon_code');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-$ctype_fld = $frm->getField('coupon_type');
-$ctype_fld->addFieldTagAttribute('onChange', 'callCouponTypePopulate(this.value); ');
+$fld = $frm->getField('coupon_type');
+$fld->addFieldTagAttribute('onChange', 'callCouponTypePopulate(this.value); ');
 
-$coupon_max_discount_value_fld = $frm->getField('coupon_max_discount_value');
-$coupon_max_discount_value_fld->setWrapperAttribute('id', 'coupon_max_discount_value_div');
+$fld = $frm->getField('coupon_discount_in_percent');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld->addFieldTagAttribute('onChange', 'callCouponDiscountIn(this.value, ' . applicationConstants::PERCENTAGE . ', ' . applicationConstants::FLAT . '); ');
+$fld->addFieldTagAttribute('class', 'discountTypeJs');
 
-$discountValueFld = $frm->getField('coupon_discount_value');
-$discountValueFld->addFieldTagAttribute('class', 'discountValue-js');
+$fld = $frm->getField('coupon_discount_value');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld->addFieldTagAttribute('class', 'discountValueJs');
 
-$coupon_discount_in_percent_fld = $frm->getField('coupon_discount_in_percent');
-$coupon_discount_in_percent_fld->addFieldTagAttribute('onChange', 'callCouponDiscountIn(this.value, ' . applicationConstants::PERCENTAGE . ', ' . applicationConstants::FLAT . '); ');
-$coupon_discount_in_percent_fld->addFieldTagAttribute('class', 'discountType-js');
+$fld = $frm->getField('coupon_max_discount_value');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld->setWrapperAttribute('id', 'coupon_max_discount_value_div');
 
-/* $cvalid_fld = $frm->getField('coupon_valid_for');
-$cvalid_fld->setWrapperAttribute('id', 'coupon_validfor_div'); */
+$fld = $frm->getField('coupon_start_date');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-/* $reqTrue = new FormFieldRequirement('coupon_min_order_value','value');
-$reqTrue->setRequired();
-$reqFalse = new FormFieldRequirement('coupon_min_order_value','value');
-$reqFalse->setRequired(false);
+$fld = $frm->getField('coupon_end_date');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-$cType_fld = $frm->getField('coupon_type');
-$cType_fld->requirements()->addOnChangerequirementUpdate(DiscountCoupons::TYPE_DISCOUNT, 'eq', 'coupon_min_order_value', $reqTrue) ;
-$cType_fld->requirements()->addOnChangerequirementUpdate(DiscountCoupons::TYPE_SELLER_PACKAGE, 'eq', 'coupon_min_order_value' , $reqFalse) ; */
+$fld = $frm->getField('coupon_uses_count');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
+$fld = $frm->getField('coupon_uses_coustomer');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$fld = $frm->getField('coupon_active');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$otherButtons = [
+    [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'mediaForm(' . $recordId . ')',
+            'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+        'isActive' => false
+    ]
+];
+
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>
-<section class="section">
-    <div class="sectionhead">
-
-        <h4><?php echo Labels::getLabel('LBL_Coupon_Setup', $siteLangId); ?></h4>
-    </div>
-    <div class="sectionbody space">
-        <div class="row">
-
-            <div class="col-sm-12">
-                <h1><?php // echo Labels::getLabel('LBL_Coupon_Setup',$siteLangId);
-                    ?></h1>
-                <div class="tabs_nav_container responsive flat">
-                    <ul class="tabs_nav">
-                        <li><a class="active" href="javascript:void(0)" onclick="addCouponForm(<?php echo $coupon_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
-                        <li class="<?php echo ($coupon_id == 0) ? 'fat-inactive' : ''; ?>">
-                            <a href="javascript:void(0);" <?php echo ($coupon_id) ? "onclick='addCouponLangForm(" . $coupon_id . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                            </a>
-                        </li>
-                        <li class="<?php echo ($coupon_id == 0) ? 'fat-inactive' : ''; ?>"><a href="javascript:void(0);" <?php if ($coupon_id > 0) { ?> onclick="couponMediaForm(<?php echo $coupon_id ?>);" <?php } ?>><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
-                    </ul>
-                    <div class="tabs_panel_wrap">
-                        <div class="tabs_panel">
-                            <?php echo $frm->getFormHtml(); ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 <script type="text/javascript">
     $(document).ready(function() {
         callCouponTypePopulate(<?php echo $coupon_type; ?>);
         callCouponDiscountIn(<?php echo $couponDiscountIn; ?>, <?php echo applicationConstants::PERCENTAGE; ?>, <?php echo applicationConstants::FLAT; ?>);
     });
-    $(document).on('keyup','.discountValue-js',function(){
-        if ($('.discountType-js option:selected').val() == "<?php echo applicationConstants::PERCENTAGE; ?>" && $(this).val() > 100) {
-            $(this).val(100);
-            return false;
-        }
-    });
+    var PERCENTAGE = <?php echo applicationConstants::PERCENTAGE; ?>
 </script>

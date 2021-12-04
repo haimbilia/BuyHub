@@ -2,7 +2,7 @@
 
 class OrderCancelReasonsController extends ListingBaseController
 {
-    protected $modelClass = 'OrderCancelReason';
+    protected string $modelClass = 'OrderCancelReason';
     protected $pageKey = 'MANAGE_ORDER_CANCEL_REASONS';
 
     public function __construct($action)
@@ -198,7 +198,7 @@ class OrderCancelReasonsController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmOrderCancelReasonLang');
         $frm->addHiddenField('', 'ocreason_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $langId), 'ocreason_title');
         // $frm->addTextarea('Reason Description', 'ocreason_description');
         return $frm;

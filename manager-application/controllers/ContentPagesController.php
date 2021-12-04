@@ -2,7 +2,7 @@
 
 class ContentPagesController extends ListingBaseController
 {
-    protected $modelClass = 'ContentPage';
+    protected string $modelClass = 'ContentPage';
     protected $pageKey = 'MANAGE_CONTENT_PAGES';
 
     public function __construct($action)

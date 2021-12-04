@@ -141,9 +141,10 @@ class Commission extends MyAppModel
         $srch->addMultipleFields(
             array(
                 'tcsh.*',
-                'IFNULL(tp_l.product_name,tp.product_identifier)as product_name',
-                'IFNULL(tpc_l.prodcat_name,tpc.prodcat_identifier)as prodcat_name',
-                'CONCAT(tu.user_name," [",tuc.credential_username,"]") as vendor'
+                'IFNULL(tp_l.product_name, tp.product_identifier)as product_name',
+                'IFNULL(tpc_l.prodcat_name, tpc.prodcat_identifier)as prodcat_name',
+                'CONCAT(tu.user_name," (", tuc.credential_username, ")") as vendor',
+                'user_id as vendor_id'
             )
         );
 

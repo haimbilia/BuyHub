@@ -32,9 +32,9 @@ foreach ($arrListing as $sn => $row) {
                             </span>
                         <?php } ?>
                         <?php if (!empty($row['vendor'])) { ?>
-                            <span class="timeline-v4__item-user-name">
-                                <a href="#" class="link link--dark timeline-v4__item-link">
-                                    <?php echo Labels::getLabel('LBL_BY', $siteLangId); ?> <?php echo CommonHelper::displayText($row['vendor']); ?>
+                            <span class="timeline-v4__item-user-name" data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_AFFILIATE_USER', $siteLangId); ?>">
+                                <a href="javascript:void(0);" onclick="redirectUser(<?php echo $row['vendor_id']; ?>)" class="link link--dark timeline-v4__item-link">
+                                    <?php echo CommonHelper::displayText($row['vendor']); ?>
                                 </a>
                             </span>
                         <?php } ?>

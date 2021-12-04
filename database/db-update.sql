@@ -1406,3 +1406,8 @@ DELETE FROM tbl_configurations WHERE conf_name = "CONF_PRIMARY_APP_THEME_COLOR";
 DELETE FROM tbl_configurations WHERE conf_name = "CONF_PRIMARY_INVERSE_APP_THEME_COLOR";
 DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_APP_THEME_COLOR";
 DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_INVERSE_APP_THEME_COLOR";
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 1, '{PACKAGE-NAME} - {PLAN-DAYS}', 1),
+('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 2, '{PACKAGE-NAME} - {PLAN-DAYS}', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
