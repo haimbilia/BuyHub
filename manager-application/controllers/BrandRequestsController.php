@@ -2,7 +2,7 @@
 
 class BrandRequestsController extends ListingBaseController {
 
-    protected $modelClass = 'Brand';
+    protected string $modelClass = 'Brand';
     protected $pageKey = 'MANAGE_PRODUCT_BRAND_REQUEST';
 
     public function __construct($action) {

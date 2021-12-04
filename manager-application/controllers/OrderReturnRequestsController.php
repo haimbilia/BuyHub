@@ -600,11 +600,20 @@ class OrderReturnRequestsController extends ListingBaseController
             case 'view':
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_ORDER_RETURN_REQUESTS', $this->siteLangId);
-                
                 $this->nodes = [
                     ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('OrderReturnRequests')],
-                    ['title' => Labels::getLabel('LBL_VIEW', $this->siteLangId)]
                 ];
+
+                $url = FatApp::getQueryStringData('url');
+                $urlParts = explode('/', $url);
+                $title = Labels::getLabel('LBL_VIEW', $this->siteLangId);
+                if (isset($urlParts[2])) {
+                    $referenceNo = OrderReturnRequest::getAttributesById($urlParts[2], 'orrequest_reference');
+                    if (!empty($referenceNo)) {
+                        $this->nodes[] = ['title' => $referenceNo];
+                    }
+                }
+                $this->nodes[] = ['title' => $title];
                 break;
             default:
                 parent::getBreadcrumbNodes($action);

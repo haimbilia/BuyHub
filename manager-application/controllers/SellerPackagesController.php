@@ -2,7 +2,7 @@
 
 class SellerPackagesController extends ListingBaseController
 {
-    protected $modelClass = 'SellerPackages';
+    protected string $modelClass = 'SellerPackages';
     protected $pageKey = 'SELLER_SUBSCRIPTION_PACKAGES';
 
     public function __construct($action)
@@ -257,16 +257,22 @@ class SellerPackagesController extends ListingBaseController
             $cnd = $srch->addCondition('spackage_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('spackage_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
-        $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
 
-        $plans = $db->fetchAll($rs, 'spplan_id');
+        $doNotLimitRecords = FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 0);
+        if (0 < $doNotLimitRecords) {
+            $srch->doNotLimitRecords();
+        } else {
+            $srch->setPageSize($pagesize);
+        }
+
+        $rs = $srch->getResultSet();
+
+        $plans = FatApp::getDb()->fetchAll($rs, 'spplan_id');
         $json = array();
         foreach ($plans as $key => $plan) {
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $plan['spplan_id'],
-                'name' => DiscountCoupons::getPlanTitle($plan, $this->siteLangId),
+                'text' => DiscountCoupons::getPlanTitle($plan, $this->siteLangId),
             );
         }
         die(json_encode($json));

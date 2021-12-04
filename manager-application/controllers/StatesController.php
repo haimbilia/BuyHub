@@ -2,7 +2,7 @@
 
 class StatesController extends ListingBaseController
 {
-    protected $modelClass = 'States';
+    protected string $modelClass = 'States';
 
     public function __construct($action)
     {
@@ -226,7 +226,7 @@ class StatesController extends ListingBaseController
         $this->objPrivilege->canViewStates();
         $frm = new Form('frmStateLang');
         $frm->addHiddenField('', 'state_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_State_Name', $langId), 'state_name');
         return $frm;
     }

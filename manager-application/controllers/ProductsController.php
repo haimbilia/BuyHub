@@ -4,7 +4,7 @@ use PhpParser\Node;
 
 class ProductsController extends ListingBaseController
 {
-    protected $modelClass = 'Product';
+    protected string $modelClass = 'Product';
     public function __construct($action)
     {
         parent::__construct($action);
@@ -806,7 +806,7 @@ class ProductsController extends ListingBaseController
     public function autoComplete()
     {
         $srch = Product::getSearchObject($this->siteLangId);
-
+        $srch->doNotLimitRecords();
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
@@ -818,13 +818,12 @@ class ProductsController extends ListingBaseController
             $srch->addCondition('product_seller_id', '=', $sellerId);
         }
 
-        $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
-        $srch->addMultipleFields(array('product_id', 'product_name', 'product_identifier'));
-        $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as name'));
+        $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as text'));
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
-        die(json_encode($products));
+        $json['results'] = $products;
+        die(json_encode($json));
     }
 
     private function getSeparateImageOptions($product_id, $langId)

@@ -54,9 +54,6 @@ class OrderCancellationRequestsController extends ListingBaseController
 
     protected function getSearchForm($fields = [])
     {
-        $currency_id = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
-        $currencyData = Currency::getAttributesById($currency_id, array('currency_code', 'currency_symbol_left', 'currency_symbol_right'));
-        $currencySymbol = ($currencyData['currency_symbol_left'] != '') ? $currencyData['currency_symbol_left'] : $currencyData['currency_symbol_right'];
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
@@ -81,7 +78,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $frm->addHiddenField('', 'ocrequest_id', 0);
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 

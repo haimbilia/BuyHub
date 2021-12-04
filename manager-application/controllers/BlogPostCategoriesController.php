@@ -2,7 +2,7 @@
 
 class BlogPostCategoriesController extends ListingBaseController
 {
-    protected $modelClass = 'BlogPostCategory';
+    protected string $modelClass = 'BlogPostCategory';
     protected $pageKey = 'BLOG_CATEGORIES';
 
     public function __construct($action)
@@ -229,7 +229,7 @@ class BlogPostCategoriesController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmBlogPostCatLang', array('id' => 'frmBlogPostCatLang'));
         $frm->addHiddenField('', 'bpcategory_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_Category_Name', $langId), 'bpcategory_name');
         return $frm;
     }

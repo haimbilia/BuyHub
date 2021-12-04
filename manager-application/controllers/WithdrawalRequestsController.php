@@ -81,7 +81,7 @@ class WithdrawalRequestsController extends ListingBaseController
         $frm->addTextBox('', 'price_to', '', array('placeholder' => $str));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -228,6 +228,7 @@ class WithdrawalRequestsController extends ListingBaseController
         $this->set('frm', $this->getForm($recordId));
         $this->set('withdrawal_payment_method', $row['withdrawal_payment_method']);
         $this->set('displayLangTab', false);
+        $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_WITHDRAWAL_REQUEST_UPDATE', $this->siteLangId));
         $this->_template->render(false, false, '_partial/listing/form.php');
     }
@@ -296,15 +297,27 @@ class WithdrawalRequestsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewComment($recordId, $langId = 0)
+    public function viewDetails($recordId, $langId = 0)
     {
         $this->checkEditPrivilege();
-        $row = WithdrawalRequest::getAttributesById($recordId);
-        if (!$row) {
+        $srch = new WithdrawalRequestsSearch();
+        $srch->joinUsers(true);
+        $srch->joinForUserBalance();
+        $srch->joinTable(User::DB_TBL_USR_WITHDRAWAL_REQ_SPEC, 'LEFT JOIN', User::DB_TBL_USR_WITHDRAWAL_REQ_SPEC_PREFIX . 'withdrawal_id = tuwr.withdrawal_id');
+        $srch->addCondition('withdrawal_id', '=', $recordId);
+        $srch->addMultipleFields(
+            array(
+                'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email', 
+                'credential_username as user_username', 'user_balance', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 
+                'user_is_affiliate', 'user_id', 'user_updated_on', 'credential_username', 'credential_email'
+            )
+        );
+        $record = FatApp::getDb()->fetch($srch->getResultSet());
+
+        if (!$record) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }  
-        $this->set('title', Labels::getLabel('LBL_VIEW_COMMENT', $langId));
-        $this->set('comment', $row['withdrawal_comments']);
+        $this->set('details', $record);
         $this->_template->render(false, false);
     }
     
@@ -329,7 +342,6 @@ class WithdrawalRequestsController extends ListingBaseController
             'user_balance' => Labels::getLabel('LBL_BALANCE', $this->siteLangId),
             'withdrawal_amount' => Labels::getLabel('LBL_AMOUNT', $this->siteLangId),
             'withdrawal_payment_method' => Labels::getLabel('LBL_WITHDRAWAL_MODE', $this->siteLangId),
-            'account_details' => Labels::getLabel('LBL_ACCOUNT_DETAILS', $this->siteLangId),
             'withdrawal_request_date' => Labels::getLabel('LBL_DATE', $this->siteLangId),
             'withdrawal_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -351,7 +363,6 @@ class WithdrawalRequestsController extends ListingBaseController
             'user_balance',
             'withdrawal_amount',
             'withdrawal_payment_method',
-            'account_details',
             'withdrawal_request_date',
             'withdrawal_status',
             'action'
@@ -366,6 +377,6 @@ class WithdrawalRequestsController extends ListingBaseController
      */
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, [ 'user_details', 'user_balance', 'withdrawal_amount', 'withdrawal_payment_method', 'account_details','withdrawal_request_date', 'withdrawal_status'], Common::excludeKeysForSort());
+        return array_diff($fields, [ 'user_details', 'user_balance', 'withdrawal_amount', 'withdrawal_payment_method', 'withdrawal_request_date', 'withdrawal_status'], Common::excludeKeysForSort());
     }
 }

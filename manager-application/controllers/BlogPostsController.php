@@ -2,7 +2,7 @@
 
 class BlogPostsController extends ListingBaseController
 {
-    protected $modelClass = 'BlogPost';
+    protected string $modelClass = 'BlogPost';
     protected $pageKey = 'BLOG_POSTS';
 
     public function __construct($action)
@@ -314,11 +314,11 @@ class BlogPostsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
 
         if (!BlogPost::getAttributesById($recordId)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_NO_RECORD_FOUND', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
         $imagesFrm = $this->getImagesFrm($recordId);
         $this->set('languages', Language::getAllNames());
@@ -335,13 +335,13 @@ class BlogPostsController extends ListingBaseController
         }
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
 
         if (!$row = BlogPost::getAttributesById($recordId)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_NO_RECORD_FOUND', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
-        $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $recordId, 0, $langId, (1 < count($languages)), 0, 1);
+        $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
         $this->set('languages', Language::getAllNames());
         $this->set('images', $post_images);
         $this->set('recordId', $recordId);
@@ -422,6 +422,7 @@ class BlogPostsController extends ListingBaseController
 
     public function deleteImage($recordId = 0, $afile_id = 0, $langId = 0)
     {
+        $this->objPrivilege->canEditBlogPosts();
         $recordId = FatUtility::int($recordId);
         $afile_id = FatUtility::int($afile_id);
         $langId = FatUtility::int($langId);
@@ -445,10 +446,13 @@ class BlogPostsController extends ListingBaseController
 
     private function getImagesFrm($recordId = 0)
     {
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 
         $frm = new Form('frmRecordImage', array('id' => 'imageFrm'));
         $frm->addHiddenField('', 'record_id', $recordId);
+        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BLOG_POST_IMAGE);
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');
 
         if (count($bannerTypeArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
@@ -456,9 +460,6 @@ class BlogPostsController extends ListingBaseController
             $langId = array_key_first($bannerTypeArr);
             $frm->addHiddenField('', 'lang_id', $langId);
         }
-        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BLOG_POST_IMAGE);
-        $frm->addHiddenField('', 'min_width');
-        $frm->addHiddenField('', 'min_height');
         $frm->addHtml('', 'post_image', '');
         return $frm;
     }

@@ -618,7 +618,13 @@ class UsersController extends ListingBaseController
             $srch->addCondition('uc.credential_verified', '=', $credential_verified);
         }
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        
+        $doNotLimitRecords = FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 0);
+        if (0 < $doNotLimitRecords) {
+            $srch->doNotLimitRecords();
+        } else {
+            $srch->setPageSize($pagesize);
+        }
 
         $rs = $srch->getResultSet();
         $users = FatApp::getDb()->fetchAll($rs, 'user_id');
