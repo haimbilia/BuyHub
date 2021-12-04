@@ -58,12 +58,14 @@ $pagination .=     FatUtility::getPageString(
     ' <li class="prev"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"></a></li>',
     ' <li class="next"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"></a></li>'
 );
+
+$displayPageSizeDropdown = isset($displayPageSizeDropdown)?$displayPageSizeDropdown:true;
 ?>
 <div class="row justify-content-between">
     <div class="col">
         <div class="data-length">
             <?php $pageSizeArr = applicationConstants::getPageSizeValues();
-            if (!empty($pageSizeArr)) { ?>
+            if (!empty($pageSizeArr) && $displayPageSizeDropdown) { ?>
                 <select name="pageSize" id="pageSize" class="form-select data-length-select" onchange="<?php echo $setPageSizeJsFunc; ?>">
                     <?php foreach ($pageSizeArr as $val) { ?>
                         <option value="<?php echo $val; ?>" <?php echo ($pageSize == $val) ? 'selected' : ''; ?>><?php echo $val; ?></option>
