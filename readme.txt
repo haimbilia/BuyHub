@@ -299,6 +299,8 @@ Enhancements :
    => Price surge based on special price. 
    => Admin Reports.
    => Map listing for products & shops 
+   => Withdrawal Requests
+   => Order Cancellation Requests 
 
 Admin UI/UX Enhancements pages:
     => Login / Register, Forgot Password

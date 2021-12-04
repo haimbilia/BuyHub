@@ -76,10 +76,10 @@ class Transactions extends MyAppModel
             trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
         }
         $arr = array(
-            static::WITHDRAWL_STATUS_PENDING => Labels::getLabel('LBL_Withdrawal_Request_Pending', $langId),
-            static::WITHDRAWL_STATUS_COMPLETED => Labels::getLabel('LBL_Withdrawal_Request_Completed', $langId),
-            static::WITHDRAWL_STATUS_APPROVED => Labels::getLabel('LBL_Withdrawal_Request_Approved', $langId),
-            static::WITHDRAWL_STATUS_DECLINED => Labels::getLabel('LBL_Withdrawal_Request_Declined', $langId),
+            static::WITHDRAWL_STATUS_PENDING => Labels::getLabel('LBL_WITHDRAWAL_REQUEST_PENDING', $langId),
+            static::WITHDRAWL_STATUS_COMPLETED => Labels::getLabel('LBL_WITHDRAWAL_REQUEST_COMPLETED', $langId),
+            static::WITHDRAWL_STATUS_APPROVED => Labels::getLabel('LBL_WITHDRAWAL_REQUEST_APPROVED', $langId),
+            static::WITHDRAWL_STATUS_DECLINED => Labels::getLabel('LBL_WITHDRAWAL_REQUEST_DECLINED', $langId),
             static::WITHDRAWL_STATUS_PROCESSED => Labels::getLabel('LBL_WITHDRAWAL_REQUEST_PROCESSED', $langId),
             static::WITHDRAWL_STATUS_PAYOUT_FAILED => Labels::getLabel('LBL_WITHDRAWAL_REQUEST_PAYOUT_FAILED', $langId),
             static::WITHDRAWL_STATUS_PAYOUT_UNCLAIMED => Labels::getLabel('LBL_WITHDRAWAL_REQUEST_PAYOUT_UNCLAMED', $langId),
@@ -306,6 +306,39 @@ class Transactions extends MyAppModel
                 break;
             case applicationConstants::DRAFT:
                 $status = HtmlHelper::INFO;
+                break;
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
+
+    public static function getWithdrawlStatusHtml(int $langId, int $status): string
+    {
+        $arr = Transactions::getWithdrawlStatusArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::WITHDRAWL_STATUS_PENDING : 
+                $status = HtmlHelper::INFO;
+                break;
+            case static::WITHDRAWL_STATUS_COMPLETED : 
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::WITHDRAWL_STATUS_APPROVED : 
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::WITHDRAWL_STATUS_DECLINED : 
+                $status = HtmlHelper::DANGER;
+                break;
+            case static::WITHDRAWL_STATUS_PAYOUT_UNCLAIMED : 
+                $status = HtmlHelper::WARNING;
+                break;
+            case static::WITHDRAWL_STATUS_PROCESSED : 
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::WITHDRAWL_STATUS_PAYOUT_FAILED : 
+                $status = HtmlHelper::DANGER;
                 break;
             default:
                 $status = HtmlHelper::PRIMARY;

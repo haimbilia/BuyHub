@@ -1407,6 +1407,9 @@ DELETE FROM tbl_configurations WHERE conf_name = "CONF_PRIMARY_INVERSE_APP_THEME
 DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_APP_THEME_COLOR";
 DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_INVERSE_APP_THEME_COLOR";
 
+ALTER TABLE `tbl_upc_codes` DROP `upc_msrp`;
+ALTER TABLE `tbl_upc_codes` DROP `upc_code_id`;
+
 INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
 ('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 1, '{PACKAGE-NAME} - {PLAN-DAYS}', 1),
 ('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 2, '{PACKAGE-NAME} - {PLAN-DAYS}', 1)
