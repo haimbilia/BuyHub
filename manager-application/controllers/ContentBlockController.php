@@ -2,7 +2,7 @@
 
 class ContentBlockController extends ListingBaseController
 {
-    protected $modelClass = 'Extrapage';
+    protected string $modelClass = 'Extrapage';
     protected $pageKey = 'MANAGE_CONTENT_BLOCK';
 
     public function __construct($action) 
@@ -306,7 +306,7 @@ class ContentBlockController extends ListingBaseController
         }
         
         $bgImages = AttachedFile::getMultipleAttachments($fileType, $recordId, 0, $langId);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
             $universalImage = true;

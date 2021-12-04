@@ -3,7 +3,7 @@
 class TaxCategoriesRuleController extends ListingBaseController
 {
 
-    protected $modelClass = 'Tax';
+    protected string $modelClass = 'Tax';
     protected $pageKey = 'MANAGE_TAX_CATEGORIES_RULE';
 
     public function __construct($action)

@@ -1,6 +1,7 @@
 <?php
 class OrdersController extends ListingBaseController
 {
+    protected string $pageKey = 'MANAGE_ORDERS';
     use OrdersPackage;
     private int $ordersType = Orders::ORDER_PRODUCT;
 

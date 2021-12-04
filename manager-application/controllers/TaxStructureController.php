@@ -2,7 +2,7 @@
 
 class TaxStructureController extends ListingBaseController {
 
-    protected $modelClass = 'TaxStructure';
+    protected string $modelClass = 'TaxStructure';
     protected $pageKey = 'MANAGE_TAX_STRUCTURE';
 
     public function __construct($action) {

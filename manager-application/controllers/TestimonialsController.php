@@ -2,7 +2,7 @@
 
 class TestimonialsController extends ListingBaseController
 {
-    protected $modelClass = 'Testimonial';
+    protected string $modelClass = 'Testimonial';
     protected $pageKey = 'MANAGE_TESTIMONIAL';
 
     public function __construct($action)

@@ -3,7 +3,7 @@
 class TagsController extends ListingBaseController
 {
 
-    protected $modelClass = 'Tag';
+    protected string $modelClass = 'Tag';
     protected $pageKey = 'MANAGE_TAGS';
 
     public function __construct($action)

@@ -1,7 +1,7 @@
 <?php
 class OptionValuesController extends ListingBaseController
 {
-    protected $modelClass = 'OptionValue';
+    protected string $modelClass = 'OptionValue';
     public function __construct($action)
     {
         parent::__construct($action);

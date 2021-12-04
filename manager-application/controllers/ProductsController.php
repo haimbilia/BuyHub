@@ -4,7 +4,7 @@ use PhpParser\Node;
 
 class ProductsController extends ListingBaseController
 {
-    protected $modelClass = 'Product';
+    protected string $modelClass = 'Product';
     public function __construct($action)
     {
         parent::__construct($action);
@@ -500,22 +500,23 @@ class ProductsController extends ListingBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        /* [] select2 data */
+        /* [select2 data */
         $post['product_brand_id'] = FatApp::getPostedData('product_brand_id', FatUtility::VAR_INT, 0);
         $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
         $post['ptt_taxcat_id'] = FatApp::getPostedData('ptt_taxcat_id', FatUtility::VAR_INT, 0);
         $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);
-        $post['product_seller_id'] = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
-        $post['product_approved'] = 0;
-        
+        $post['product_seller_id'] = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);        
         /* select2 data ] */
+
+        $this->validateGetForm($post);
+
 
         $productId = $post['product_id'];
         $langId = $post['lang_id'];
 
         /* sendApprovalStatusUpdate to seller */
         $sendApprovalStatusUpdate = false;
-        if (0 < $productId) {
+        if (0 < $productId && isset($post['product_approved'])) {
             $oldProductData = Product::getAttributesById($productId, ['product_approved', 'product_seller_id']);
             if (0 < $oldProductData['product_seller_id'] && $oldProductData['product_approved'] != $post['product_approved']) {
                 $sendApprovalStatusUpdate = true;
@@ -556,9 +557,9 @@ class ProductsController extends ListingBaseController
             $emailData['status'] = $post['product_approved'];
             $emailData['product_name'] = $post['product_name'];
             $emailData['seller_id'] = $oldProductData['product_seller_id'];
-            if (!$email->sendCatalogRequestStatusChangeNotification($this->siteLangId, $emailData)) {
+            if (!$email->sendCatalogRequestStatusChangeNotification($langId, $emailData)) {
                 $db->rollbackTransaction();
-                LibHelper::exitWithError(Labels::getLabel('ERR_EMAIL_COULD_NOT_BE_SENT', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_EMAIL_COULD_NOT_BE_SENT', $langId), true);
             }
         }
 
@@ -626,14 +627,17 @@ class ProductsController extends ListingBaseController
                     $db->rollbackTransaction();
                     LibHelper::exitWithError($prodObj->getError(), true);
                 }
+            }           
+        }        
+        
+        if (isset($post['options'])  && isset($post['optionValues'])) {
+            foreach ($post['options'] as $index => $optionId) {
+                $opValuesArr = array_column(json_decode($post['optionValues'][$index]), 'id');
+                if (!$prodObj->addUpdateProductOption($optionId, implode(",", $opValuesArr))) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($prodObj->getError(), true);
+                }
             }
-           
-        }
-
-
-        $prodObj = new Product($product_id);
-        if (!$prodObj->addUpdateProductOption($option_id)) {
-            FatUtility::dieJsonError($prodObj->getError());
         }
 
         UpcCode::remove($productId);
@@ -645,7 +649,7 @@ class ProductsController extends ListingBaseController
          
             if ($row && $row['upc_product_id'] != $productId) {
                 $db->rollbackTransaction();  
-                LibHelper::exitWithError(Labels::getLabel('ERR_THIS_UPC/EAN_CODE_ALREADY_ASSIGNED_TO_ANOTHER_PRODUCT', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_THIS_UPC/EAN_CODE_ALREADY_ASSIGNED_TO_ANOTHER_PRODUCT', $langId), true);
                           
             }
            
@@ -669,7 +673,84 @@ class ProductsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    private function validateGetForm(&$post){
 
+        $langId = $post['lang_id'];
+        $productId = $post['product_id'];
+
+        if (isset($post['options'])  && !empty($post['options'])) {
+            if(!isset($post['optionValues']) || empty($post['optionValues']) ||  count($post['options']) != count($post['optionValues'])){
+                LibHelper::exitWithError(Labels::getLabel('ERR_OPTION_VALUES_IS_REQUIRED', $langId), true);
+            }        
+
+            $srch = Option::getSearchObject(0);   
+            $srch->addMultipleFields(['option_id','option_is_separate_images']);     
+            $srch->doNotLimitRecords();
+            $srch->addCondition(Option::tblFld('id'), 'IN', $post['options']);
+            $rs = $srch->getResultSet();
+            
+            if($srch->recordCount() != count($post['options'])){
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OPTION_ID', $langId), true);
+            }
+            $records =  FatApp::getDb()->fetchAll($rs);
+            $opImageCount = 0;
+            foreach($records as $records){
+                if($records['option_is_separate_images'] == 1){
+                    $opImageCount++;
+                }
+                if(1 < $opImageCount){
+                    LibHelper::exitWithError(Labels::getLabel('ERR_YOU_HAVE_ALREADY_ADDED_OPTION_HAVING_SEPARATE_IMAGE', $langId), true);
+                    break;
+                }
+            }  
+
+        if(0 < $productId){
+                $srch = new SearchBase(Product::DB_PRODUCT_TO_OPTION);
+                $srch->doNotLimitRecords();
+                $srch->addCondition(Product::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id', '=', $productId);
+                $srch->addFld('prodoption_option_id');
+                $oldOptions = FatApp::getDb()->fetchAll($srch->getResultSet());
+                if($oldOptions){   
+                    $oldOptions = array_column($records,'prodoption_option_id');            
+                    $oldDeletedOptions = array_diff(array_column($records,'prodoption_option_id'),$post['options']);
+                    if($oldDeletedOptions){
+                            /* Get Linked Products [ */
+                        $srch = SellerProduct::getSearchObject();
+                        $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
+                        $srch->addCondition('selprod_product_id', '=', $productId);
+                        $srch->addCondition('tspo.selprodoption_option_id', 'IN', $oldDeletedOptions);
+                        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+                        $srch->addFld(array('selprod_id'));
+                        $srch->doNotCalculateRecords();
+                        $srch->setPageSize(1);
+                        $rs = $srch->getResultSet();
+                        $row = FatApp::getDb()->fetch($rs);
+                        if (!empty($row)) {
+                            LibHelper::exitWithError(Labels::getLabel('ERR_OPTION_IS_LINKED_WITH_SELLER_INVENTORY', $langId), true);                             
+                        }
+                            /* ] */
+    
+                    }
+                }            
+            } 
+
+            foreach ($post['options'] as $index => $optionId) {
+                if( !isset($post['optionValues'][$index])){
+                    LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OPTION_VALUES_ID', $langId), true);
+                }  
+                $opValuesArr = array_column(json_decode($post['optionValues'][$index]), 'id');          
+                $srch = OptionValue::getSearchObject(0, false);        
+                $srch->doNotLimitRecords();
+                $srch->addCondition(OptionValue::tblFld('option_id'), '=', $optionId);
+                $srch->addCondition(OptionValue::tblFld('id'), 'IN', $opValuesArr);
+                $srch->getResultSet();
+                if($srch->recordCount() != count($opValuesArr)){
+                    LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OPTION_VALUES_ID', $langId), true);
+                }
+            }
+        }
+
+    }
 
     public function productAttributeGroupForm()
     {
@@ -686,79 +767,79 @@ class ProductsController extends ListingBaseController
         return $frm;
     }
 
-    public function updateProductOption()
-    {
-        $this->objPrivilege->canEditProducts();
-        $post = FatApp::getPostedData();
-        if (false === $post) {
-            FatUtility::dieJsonError($this->str_invalid_request);
-        }
-        $product_id = FatUtility::int($post['product_id']);
-        $option_id = FatUtility::int($post['option_id']);
-        if (!$product_id || !$option_id) {
-            FatUtility::dieJsonError($this->str_invalid_request);
-        }
+    // public function updateProductOption()
+    // {
+    //     $this->objPrivilege->canEditProducts();
+    //     $post = FatApp::getPostedData();
+    //     if (false === $post) {
+    //         FatUtility::dieJsonError($this->str_invalid_request);
+    //     }
+    //     $product_id = FatUtility::int($post['product_id']);
+    //     $option_id = FatUtility::int($post['option_id']);
+    //     if (!$product_id || !$option_id) {
+    //         FatUtility::dieJsonError($this->str_invalid_request);
+    //     }
 
-        $productOptions = Product::getProductOptions($product_id, $this->siteLangId, false, 1);
-        $optionSeparateImage = Option::getAttributesById($option_id, 'option_is_separate_images');
-        if (count($productOptions) > 0 && $optionSeparateImage == 1) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_you_have_already_added_option_having_separate_image', $this->siteLangId));
-        }
+    //     $productOptions = Product::getProductOptions($product_id, $this->siteLangId, false, 1);
+    //     $optionSeparateImage = Option::getAttributesById($option_id, 'option_is_separate_images');
+    //     if (count($productOptions) > 0 && $optionSeparateImage == 1) {
+    //         FatUtility::dieJsonError(Labels::getLabel('LBL_you_have_already_added_option_having_separate_image', $this->siteLangId));
+    //     }
 
-        $prodObj = new Product($product_id);
-        if (!$prodObj->addUpdateProductOption($option_id)) {
-            FatUtility::dieJsonError($prodObj->getError());
-        }
+    //     $prodObj = new Product($product_id);
+    //     if (!$prodObj->addUpdateProductOption($option_id)) {
+    //         FatUtility::dieJsonError($prodObj->getError());
+    //     }
 
-        UpcCode::remove($product_id);
-        Product::updateMinPrices($product_id);
-        Tag::updateProductTagString($product_id);
-        $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    //     UpcCode::remove($product_id);
+    //     Product::updateMinPrices($product_id);
+    //     Tag::updateProductTagString($product_id);
+    //     $this->set('msg', Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId));
+    //     $this->_template->render(false, false, 'json-success.php');
+    // }
 
-    public function removeProductOption()
-    {
-        $this->objPrivilege->canEditProducts();
-        $post = FatApp::getPostedData();
-        if (false === $post) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $product_id = FatUtility::int($post['product_id']);
-        $option_id = FatUtility::int($post['option_id']);
-        if (!$product_id || !$option_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    // public function removeProductOption()
+    // {
+    //     $this->objPrivilege->canEditProducts();
+    //     $post = FatApp::getPostedData();
+    //     if (false === $post) {
+    //         Message::addErrorMessage($this->str_invalid_request);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     $product_id = FatUtility::int($post['product_id']);
+    //     $option_id = FatUtility::int($post['option_id']);
+    //     if (!$product_id || !$option_id) {
+    //         Message::addErrorMessage($this->str_invalid_request);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        /* Get Linked Products [ */
-        $srch = SellerProduct::getSearchObject();
-        $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
-        $srch->addCondition('selprod_product_id', '=', $product_id);
-        $srch->addCondition('tspo.selprodoption_option_id', '=', $option_id);
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addFld(array('selprod_id'));
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (!empty($row)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Option_is_linked_with_seller_inventory', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        /* ] */
+    //     /* Get Linked Products [ */
+    //     $srch = SellerProduct::getSearchObject();
+    //     $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
+    //     $srch->addCondition('selprod_product_id', '=', $product_id);
+    //     $srch->addCondition('tspo.selprodoption_option_id', '=', $option_id);
+    //     $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+    //     $srch->addFld(array('selprod_id'));
+    //     $srch->doNotCalculateRecords();
+    //     $srch->setPageSize(1);
+    //     $rs = $srch->getResultSet();
+    //     $row = FatApp::getDb()->fetch($rs);
+    //     if (!empty($row)) {
+    //         Message::addErrorMessage(Labels::getLabel('LBL_Option_is_linked_with_seller_inventory', $this->siteLangId));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     /* ] */
 
-        $prodObj = new Product($product_id);
-        if (!$prodObj->removeProductOption($option_id)) {
-            Message::addErrorMessage(Labels::getLabel($prodObj->getError(), $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        UpcCode::remove($product_id);
-        Tag::updateProductTagString($product_id);
-        $this->set('msg', Labels::getLabel('MSG_Option_Removed_Successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    //     $prodObj = new Product($product_id);
+    //     if (!$prodObj->removeProductOption($option_id)) {
+    //         Message::addErrorMessage(Labels::getLabel($prodObj->getError(), $this->siteLangId));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     UpcCode::remove($product_id);
+    //     Tag::updateProductTagString($product_id);
+    //     $this->set('msg', Labels::getLabel('MSG_Option_Removed_Successfully', $this->siteLangId));
+    //     $this->_template->render(false, false, 'json-success.php');
+    // }
 
     public function updateProductTag()
     {
@@ -806,7 +887,7 @@ class ProductsController extends ListingBaseController
     public function autoComplete()
     {
         $srch = Product::getSearchObject($this->siteLangId);
-
+        $srch->doNotLimitRecords();
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $keyword . '%');
@@ -818,13 +899,12 @@ class ProductsController extends ListingBaseController
             $srch->addCondition('product_seller_id', '=', $sellerId);
         }
 
-        $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
-        $srch->addMultipleFields(array('product_id', 'product_name', 'product_identifier'));
-        $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as name'));
+        $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as text'));
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
         $products = $db->fetchAll($rs);
-        die(json_encode($products));
+        $json['results'] = $products;
+        die(json_encode($json));
     }
 
     private function getSeparateImageOptions($product_id, $langId)

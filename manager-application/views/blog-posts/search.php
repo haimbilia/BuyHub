@@ -21,7 +21,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="post_ids[]" value=' . $row['post_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'post_published_on':
-                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row['post_published_on'], true));
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row['post_published_on'], true), true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);

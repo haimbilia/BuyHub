@@ -17,12 +17,34 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'orderDate':
-                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
+                $td->appendElement('plaintext', $tdAttr, '<a href="' . UrlHelper::generateUrl('SalesReport', 'index', array($row[$key])) . '">' . HtmlHelper::formatDateTime($row[$key]) . '</a>', true);
                 break;
+            case 'order_net_amount':
+                $amt = CommonHelper::orderProductAmount($row);
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($amt, true, true));
+                break;
+            case 'grossSales':
             case 'transactionAmount':
+            case 'inventoryValue':
+            case 'taxTotal':
+            case 'adminTaxTotal':
+            case 'sellerTaxTotal':
+            case 'shippingTotal':
+            case 'sellerShippingTotal':
+            case 'adminShippingTotal':
+            case 'discountTotal':
+            case 'couponDiscount':
+            case 'volumeDiscount':
+            case 'rewardDiscount':
+            case 'refundedAmount':
+            case 'refundedShipping':
+            case 'refundedTax':
+            case 'orderNetAmount':
+            case 'commissionCharged':
+            case 'refundedCommission':
+            case 'adminSalesEarnings':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key], true, true));
                 break;
-
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;

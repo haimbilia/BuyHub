@@ -2,6 +2,7 @@
 
 class DiscountCouponsController extends ListingBaseController
 {
+    protected string $modelClass = 'DiscountCoupons';
     protected string $pageKey = 'MANAGE_DISCOUNT_COUPONS';
 
     public function __construct($action)
@@ -39,7 +40,7 @@ class DiscountCouponsController extends ListingBaseController
             $this->modelObj::tblFld('title'),
             $this->modelObj::tblFld('description')
         ];
-        $this->set('formTitle', Labels::getLabel('LBL_DISCOUNT_COUPONS_SETUP', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_DISCOUNT_COUPON_SETUP', $this->siteLangId));
     }
 
     public function index()
@@ -66,8 +67,9 @@ class DiscountCouponsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_COUPON_TITLE_OR_COUPON_TITLE', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'discount-coupons/page-js/index.js']);
-        $this->_template->addCss('css/cropper.css');
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js','js/tagify.min.js', 'js/tagify.polyfills.min.js', 'discount-coupons/page-js/index.js']);
+        $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css']);
+
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -91,14 +93,15 @@ class DiscountCouponsController extends ListingBaseController
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'coupon_active');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'coupon_active';
         }
-
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC));
+        
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
-
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        
+        $postedData = FatApp::getPostedData();
+        $post = $srchFrm->getFormDataFromArray($postedData);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
@@ -112,8 +115,8 @@ class DiscountCouponsController extends ListingBaseController
             $cnd->attachCondition('dc.coupon_code', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('dc_l.coupon_title', 'like', '%' . $post['keyword'] . '%');
         }
-        if (!empty($post['type'])) {
-            $srch->addCondition('dc.coupon_type', '=', $post['type']);
+        if (!empty($post['coupon_type'])) {
+            $srch->addCondition('dc.coupon_type', '=', $post['coupon_type']);
         }
 
         $srch->addOrder($sortBy, $sortOrder);
@@ -129,7 +132,9 @@ class DiscountCouponsController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -152,7 +157,7 @@ class DiscountCouponsController extends ListingBaseController
         if (0 < $recordId) {
             $data = DiscountCoupons::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
-                LibHelper::exitWithError($this->str_invalid_request, true);
+                LibHelper::exitWithError($this->str_invalid_request, false, false, true);
             }
             $frm->fill($data);
         } else {
@@ -163,6 +168,7 @@ class DiscountCouponsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('coupon_type', (isset($data['coupon_type']) ? $data['coupon_type'] : DiscountCoupons::TYPE_DISCOUNT));
         $this->set('couponDiscountIn', isset($data['coupon_discount_in_percent']) ? $data['coupon_discount_in_percent'] : applicationConstants::PERCENTAGE);
+        $this->set('formTitle', Labels::getLabel('LBL_DISCOUNT_COUPON_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -182,29 +188,28 @@ class DiscountCouponsController extends ListingBaseController
         unset($post['coupon_id']);
 
         $record = new DiscountCoupons($recordId);
+        $post['coupon_identifier'] = $post['coupon_title'];
         $record->assignValues($post);
 
         if (!$record->save()) {
             LibHelper::exitWithError($record->getError(), true);
         }
+        $recordId = $record->getMainTableRecordId();
+        $this->setLangData($record, [
+            $record::tblFld('title') => $post[$record::tblFld('title')],
+            $record::tblFld('description') => $post[$record::tblFld('description')]
+        ]);
 
-        $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = DiscountCoupons::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(DiscountCoupons::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
-        } else {
-            $recordId = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Coupon_Setup_Successful.', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_COUPON_SETUP_SUCCESSFUL.', $this->siteLangId));
         $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -216,8 +221,6 @@ class DiscountCouponsController extends ListingBaseController
         }
         return false;
     }
-
-
 
     public function updateStatus()
     {
@@ -277,7 +280,7 @@ class DiscountCouponsController extends ListingBaseController
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-        $frm->addSelectBox(Labels::getLabel('FRM_COUPON_TYPE', $this->siteLangId), 'coupon_type', DiscountCoupons::getTypeArr($this->siteLangId, true));
+        $frm->addSelectBox(Labels::getLabel('FRM_COUPON_TYPE', $this->siteLangId), 'coupon_type', DiscountCoupons::getTypeArr($this->siteLangId), '', [], Labels::getLabel('FRM_COUPON_TYPE', $this->siteLangId));
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -292,12 +295,13 @@ class DiscountCouponsController extends ListingBaseController
         $frm = new Form('frmCoupon');
         $frm->addHiddenField('', 'coupon_id', $recordId);
 
-        $frm->addRequiredField(Labels::getLabel('FRM_COUPON_IDENTIFIER', $this->siteLangId), 'coupon_identifier');
+        $typeArr = DiscountCoupons::getTypeArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_DISCOUNT_TYPE', $this->siteLangId), 'coupon_type', $typeArr)->requirements()->setRequired();
+
+        $frm->addRequiredField(Labels::getLabel('FRM_COUPON_TITLE', $this->siteLangId), 'coupon_title');
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_COUPON_CODE', $this->siteLangId), 'coupon_code');
         $fld->setUnique(DiscountCoupons::DB_TBL, 'coupon_code', 'coupon_id', 'coupon_id', 'coupon_id');
-        $typeArr = DiscountCoupons::getTypeArr($this->siteLangId, true);
-
-        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_DISCOUNT_TYPE', $this->siteLangId), 'coupon_type', $typeArr)->requirements()->setRequired();
+        $frm->addTextArea(Labels::getLabel('FRM_COUPON_DESCRIPTION', $this->siteLangId), 'coupon_description');
 
         $percentageFlatArr = applicationConstants::getPercentageFlatArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_DISCOUNT_IN', $this->siteLangId), 'coupon_discount_in_percent', $percentageFlatArr, '', array(), '');
@@ -306,13 +310,12 @@ class DiscountCouponsController extends ListingBaseController
         $frm->addFloatField(Labels::getLabel('FRM_MIN_ORDER_VALUE', $this->siteLangId), 'coupon_min_order_value')->requirements()->setFloatPositive();
         $frm->addFloatField(Labels::getLabel('FRM_MAX_DISCOUNT_VALUE', $this->siteLangId), 'coupon_max_discount_value');
 
-        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'coupon_start_date', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-
-        $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'coupon_end_date', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $fld->requirements()->setCompareWith('coupon_start_date', 'ge', Labels::getLabel('FRM_DATE_TO', $this->siteLangId));
-
         $frm->addIntegerField(Labels::getLabel('FRM_USES_PER_COUPON', $this->siteLangId), 'coupon_uses_count', 1);
         $frm->addIntegerField(Labels::getLabel('FRM_USES_PER_CUSTOMER', $this->siteLangId), 'coupon_uses_coustomer', 1);
+
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'coupon_start_date', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'coupon_end_date', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $fld->requirements()->setCompareWith('coupon_start_date', 'ge', Labels::getLabel('FRM_DATE_TO', $this->siteLangId));
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_COUPON_STATUS', $this->siteLangId), 'coupon_active', $activeInactiveArr, '', array(), '');
@@ -349,6 +352,12 @@ class DiscountCouponsController extends ListingBaseController
         $coupon_discount_in_percent_fld->requirements()->addOnChangerequirementUpdate(applicationConstants::PERCENTAGE, 'eq', 'coupon_max_discount_value', $couponMaxDiscountValueReqTrue);
         $coupon_discount_in_percent_fld->requirements()->addOnChangerequirementUpdate(applicationConstants::FLAT, 'eq', 'coupon_max_discount_value', $couponMaxDiscountValueReqFalse);
 
+        $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 0 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+
         return $frm;
     }
 
@@ -360,20 +369,262 @@ class DiscountCouponsController extends ListingBaseController
 
         $frm = new Form('frmCouponLang');
         $frm->addHiddenField('', 'coupon_id', $recordId);
-        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', $languages, $langId, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 
         $frm->addRequiredField(Labels::getLabel('FRM_COUPON_TITLE', $langId), 'coupon_title');
         $frm->addTextArea(Labels::getLabel('FRM_COUPON_DESCRIPTION', $langId), 'coupon_description');
 
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        return $frm;
+    }
 
-        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+    /* Coupon Type Product Purchase. */
+    public function links(int $recordId)
+    {
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, true);
+            CommonHelper::redirectUserReferer();
+        }
+        $this->checkEditPrivilege(true);
+        
+        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], true);
+        if (empty($couponData)) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, true);
+            CommonHelper::redirectUserReferer();
         }
 
+        $fields = [
+            'linkType' => Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId),
+            'items' => Labels::getLabel('LBL_ITEMS', $this->siteLangId),
+        ];
+        
+        $linksTypeArr = [
+            'products' => Labels::getLabel('LBL_PRODUCTS', $this->siteLangId),
+            'categories' => Labels::getLabel('LBL_CATEGORIES', $this->siteLangId),
+            'users' => Labels::getLabel('LBL_USERS', $this->siteLangId),
+            'shops' => Labels::getLabel('LBL_SHOPS', $this->siteLangId),
+            'brands' => Labels::getLabel('LBL_BRANDS', $this->siteLangId),
+        ];
+
+        $linksTypeData = [
+            'products' => DiscountCoupons::getCouponProducts($recordId, $this->siteLangId),
+            'categories' => DiscountCoupons::getCouponCategories($recordId, $this->siteLangId),
+            'users' => DiscountCoupons::getCouponUsers($recordId, $this->siteLangId),
+            'shops' => DiscountCoupons::getCouponShops($recordId, $this->siteLangId),
+            'brands' => DiscountCoupons::getCouponBrands($recordId, $this->siteLangId),
+        ];
+
+        $str = Labels::getLabel('LBL_BIND_LINKS_FOR_{LINK-TYPE}', $this->siteLangId);
+        $pageTitle = CommonHelper::replaceStringData($str, ['{LINK-TYPE}' => current($couponData)]);
+
+        $this->set('pageTitle', $pageTitle);
+        $this->set('linksTypeArr', $linksTypeArr);
+        $this->set('linksTypeData', $linksTypeData);
+        $this->set('recordId', $recordId);
+        $this->set('fields', $fields);
+
+        $this->_template->addJs(['js/tagify.min.js', 'js/tagify.polyfills.min.js', 'discount-coupons/page-js/index.js']);
+        $this->_template->addCss(['css/tagify.min.css']);
+        $this->_template->render();
+    }
+    
+    /* Coupon Type Subscription Purchase. */
+    public function linkPlanForm()
+    {
+        $this->objPrivilege->canEditDiscountCoupons();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
+        }
+        $data = DiscountCoupons::getCouponPlans($recordId, $this->siteLangId);
+        $tagifyData = [];
+        array_walk($data, function ($item) use (&$tagifyData, $recordId) {
+            $planName = DiscountCoupons::getPlanTitle($item, $this->siteLangId);
+            $tagifyData[] = [
+                'id' => $item['spplan_id'],
+                'value' => htmlentities($planName, ENT_QUOTES),
+                'linkType' => 'subscription',
+                'recordId' => $recordId,
+            ];
+        });
+
+        $frm = $this->getPlanForm();
+        if (!empty($tagifyData)) {
+            $frm->fill(['plan_name' => json_encode($tagifyData)]);
+        }
+        $this->checkEditPrivilege(true);
+        
+        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], true);
+        if (empty($couponData)) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            CommonHelper::redirectUserReferer();
+        }
+        $str = Labels::getLabel('LBL_BIND_LINKS_FOR_{LINK-TYPE}', $this->siteLangId);
+        $formTitle = CommonHelper::replaceStringData($str, ['{LINK-TYPE}' => current($couponData)]);
+
+        $this->set('formTitle', $formTitle);
+        $this->set('recordId', $recordId);
+        $this->set('frm', $frm);
+        $this->set('includeTabs', false);
+        $this->set('displayFooterButtons', false);
+
+        $this->_template->render(false, false);
+    }
+
+    private function getPlanForm()
+    {
+        $this->objPrivilege->canEditDiscountCoupons();
+        $frm = new Form('frmCouponProduct');
+        $frm->addTextBox(Labels::getLabel('FRM_SELECT_PLAN', $this->siteLangId), 'plan_name', '', ['data-link-type' => 'subscription']);
         return $frm;
+    }
+
+    public function bindItem()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $linkType = FatApp::getPostedData('linkType', FatUtility::VAR_STRING, '');
+        $itemId = FatApp::getPostedData('id', FatUtility::VAR_STRING, '');
+        if (1 > $recordId || empty($linkType) || 1 > $itemId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $obj = new DiscountCoupons();
+        switch ($linkType) {
+            case 'products':
+                if (!$obj->addUpdateCouponProduct($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            case 'categories':
+                if (!$obj->addUpdateCouponCategory($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            case 'users':
+                if (!$obj->addUpdateCouponUser($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            case 'shops':
+                if (!$obj->addUpdateCouponShop($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            case 'brands':
+                if (!$obj->addUpdateCouponBrand($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            case 'subscription':
+                if (!$obj->addUpdateCouponPlan($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            
+            default:
+                LibHelper::exitWithError($this->str_invalid_request, true);
+                break;
+        }
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function removeItem()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $linkType = FatApp::getPostedData('linkType', FatUtility::VAR_STRING, '');
+        $itemId = FatApp::getPostedData('id', FatUtility::VAR_STRING, '');
+        if (1 > $recordId || empty($linkType) || 1 > $itemId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $obj = new DiscountCoupons();
+        switch ($linkType) {
+            case 'products':
+                if (!$obj->removeCouponProduct($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            case 'categories':
+                if (!$obj->removeCouponCategory($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            case 'users':
+                if (!$obj->removeCouponUser($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            case 'shops':
+                if (!$obj->removeCouponShop($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            case 'brands':
+                if (!$obj->removeCouponBrand($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            case 'subscription':
+                if (!$obj->removeCouponPlan($recordId, $itemId)) {
+                    LibHelper::exitWithError($obj->getError(), true);
+                }
+                break;
+            default:
+                LibHelper::exitWithError($this->str_invalid_request, true);
+                break;
+        }
+        $this->set('msg', $this->str_delete_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function rowsData()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $srch = CouponHistory::getSearchObject();
+        $srch->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_id = couponhistory_order_id', 'o');
+        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'user_id = couponhistory_user_id');
+        $srch->joinTable(Credential::DB_TBL, 'LEFT OUTER JOIN', 'credential_user_id = user_id');
+        $srch->addCondition('couponhistory_coupon_id', '=', $recordId);
+        $srch->addMultipleFields(array('couponhistory_id', 'couponhistory_coupon_id', 'order_number as couponhistory_order_no', 'couponhistory_order_id', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'CONCAT(user_name, " (", credential_username, ")") as user_name', 'user_id'));
+        $srch->addOrder('couponhistory_added_on', 'DESC');
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $this->set("arrListing", $records);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pagesize);
+        $this->set('postedData', FatApp::getPostedData());
+    }
+
+    public function usesHistory()
+    {
+        $this->objPrivilege->canViewDiscountCoupons();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+
+        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title', 'coupon_code'], true);
+        if ($couponData == false) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $this->rowsData();
+
+        $this->set('couponData', $couponData);
+
+        $this->_template->render(false, false);
+    }
+
+    public function getRows()
+    {
+        $this->rowsData();
+        $this->_template->render(false, false);
     }
 
     private function getMediaForm($recordId = 0)
@@ -381,784 +632,137 @@ class DiscountCouponsController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
         $frm = new Form('frmCouponMedia');
         $frm->addHiddenField('', 'coupon_id', $recordId);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE);
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');
 
-        if (count($bannerTypeArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
+        $languagesArr = applicationConstants::getAllLanguages();
+        if (count($languagesArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languagesArr, '', array(), '');
         } else {
-            $lang_id = array_key_first($bannerTypeArr);
+            $lang_id = array_key_first($languagesArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD', $this->siteLangId), 'coupon_image', array('accept' => 'image/*', 'data-frm' => 'frmCouponMedia'));
+        $frm->addHtml('', 'coupon_image', '');
         return $frm;
     }
 
-    public function linkProductForm($recordId = 0)
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $frmProduct = $this->getProductForm();
-
-        $srch = DiscountCoupons::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
-        $srch->addCondition('coupon_id', '=', $recordId);
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-
-        $row['coupon_name'] = "<h3> " . Labels::getLabel('LBL_Coupon_Name', $this->siteLangId) . " : " . $row['coupon_name'] . " | " . Labels::getLabel('LBL_Coupon_Code', $this->siteLangId) . " : " . $row['coupon_code'] . "</h3>";
-        $frmProduct->fill($row);
-        $this->set('coupon_id', $recordId);
-        $this->set('couponData', $row);
-        $this->set('frmProduct', $frmProduct);
-        $this->_template->render(false, false);
-    }
-
-    public function linkCategoryForm($recordId = 0)
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $frmCategory = $this->getCategoryForm();
-
-        $srch = DiscountCoupons::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
-        $srch->addCondition('coupon_id', '=', $recordId);
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-
-        $row['coupon_name'] = "<h3> " . Labels::getLabel('LBL_Coupon_Name', $this->siteLangId) . " : " . $row['coupon_name'] . " | " . Labels::getLabel('LBL_Coupon_Code', $this->siteLangId) . " : " . $row['coupon_code'] . "</h3>";
-        $frmCategory->fill($row);
-        $this->set('coupon_id', $recordId);
-        $this->set('couponData', $row);
-        $this->set('frmCategory', $frmCategory);
-        $this->_template->render(false, false);
-    }
-
-    public function linkUserForm($recordId = 0)
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $frmCategory = $this->getCategoryForm();
-        $frmProduct = $this->getProductForm();
-        $frmUser = $this->getDiscountUserForm();
-
-        $srch = DiscountCoupons::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
-        $srch->addCondition('coupon_id', '=', $recordId);
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-
-        $row['coupon_name'] = "<h3> " . Labels::getLabel('LBL_Coupon_Name', $this->siteLangId) . " : " . $row['coupon_name'] . " | " . Labels::getLabel('LBL_Coupon_Code', $this->siteLangId) . " : " . $row['coupon_code'] . "</h3>";
-        $frmCategory->fill($row);
-        $frmProduct->fill($row);
-        $frmUser->fill($row);
-        $this->set('coupon_id', $recordId);
-        $this->set('couponData', $row);
-        $this->set('frmCategory', $frmCategory);
-        $this->set('frmProduct', $frmProduct);
-        $this->set('frmUser', $frmUser);
-        $this->_template->render(false, false);
-    }
-    public function linkPlanForm($recordId = 0)
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $frmPlan = $this->getPlanForm();
-
-        $srch = DiscountCoupons::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
-        $srch->addCondition('coupon_id', '=', $recordId);
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-
-        $row['coupon_name'] = "<h3> " . Labels::getLabel('LBL_Coupon_Name', $this->siteLangId) . " : " . $row['coupon_name'] . " | " . Labels::getLabel('LBL_Coupon_Code', $this->siteLangId) . " : " . $row['coupon_code'] . "</h3>";
-
-        $this->set('coupon_id', $recordId);
-        $this->set('couponData', $row);
-        $this->set('spPlanFrm', $frmPlan);
-
-        $this->_template->render(false, false);
-    }
-
-    public function linkShopForm($recordId = 0)
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $frm = $this->getShopForm();
-
-        $srch = DiscountCoupons::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
-        $srch->addCondition('coupon_id', '=', $recordId);
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-
-        $row['coupon_name'] = "<h3> " . Labels::getLabel('LBL_Coupon_Name', $this->siteLangId) . " : " . $row['coupon_name'] . " | " . Labels::getLabel('LBL_Coupon_Code', $this->siteLangId) . " : " . $row['coupon_code'] . "</h3>";
-        $frm->fill($row);
-        $this->set('coupon_id', $recordId);
-        $this->set('couponData', $row);
-        $this->set('frm', $frm);
-        $this->_template->render(false, false);
-    }
-
-    public function linkBrandForm($recordId = 0)
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $frm = $this->getBrandForm();
-
-        $srch = DiscountCoupons::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('coupon_id', 'IFNULL(coupon_title,coupon_identifier) as coupon_name', 'coupon_code'));
-        $srch->addCondition('coupon_id', '=', $recordId);
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-
-        $row['coupon_name'] = "<h3> " . Labels::getLabel('LBL_Coupon_Name', $this->siteLangId) . " : " . $row['coupon_name'] . " | " . Labels::getLabel('LBL_Coupon_Code', $this->siteLangId) . " : " . $row['coupon_code'] . "</h3>";
-        $frm->fill($row);
-        $this->set('coupon_id', $recordId);
-        $this->set('couponData', $row);
-        $this->set('frm', $frm);
-        $this->_template->render(false, false);
-    }
-
-    public function media($recordId = 0)
+    public function media($recordId)
     {
         $recordId = FatUtility::int($recordId);
         $couponData = DiscountCoupons::getAttributesById($recordId);
 
         if (false == $couponData) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
-        $couponMediaFrm = $this->getMediaForm($recordId);
-        $this->set('coupon_id', $recordId);
-        $this->set('couponMediaFrm', $couponMediaFrm);
-        $this->set('languages', Language::getAllNames());
+        $frm = $this->getMediaForm($recordId);
+        $this->set('recordId', $recordId);
+        $this->set('frm', $frm);
+        $this->set('formTitle', Labels::getLabel('LBL_DISCOUNT_COUPON_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
-    public function images($recordId = 0, $lang_id = 0)
+    public function images($recordId, $langId = 0)
     {
-        $recordId = FatUtility::int($recordId);
-        $couponData = DiscountCoupons::getAttributesById($recordId);
         $languages = Language::getAllNames();
-        if (count($languages) > 1) {
-            $lang_id = FatUtility::int($lang_id);
-        } else {
-            $lang_id = array_key_first($languages);
+        if (count($languages) <= 1) {
+            $langId =  array_key_first($languages);
         }
 
-        if (false == $couponData) {
+        $recordId = FatUtility::int($recordId);
+        if (!$recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+        }
+
+        if (!$row = DiscountCoupons::getAttributesById($recordId, 'coupon_id')) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+        }
+
+        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
+        $this->set('languages', Language::getAllNames());
+        $this->set('images', $images);
+        $this->set('recordId', $recordId);
+        $this->set('canEdit', $this->objPrivilege->canEditDiscountCoupons($this->admin_id, true));
+        $this->_template->render(false, false);
+    }
+
+    public function uploadMedia()
+    {
+        $this->objPrivilege->canEditDiscountCoupons();
+
+        $recordId = FatApp::getPostedData('coupon_id', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        $couponImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $recordId, 0, $lang_id, (count($languages) > 1) ? false : true);
-        $this->set('coupon_id', $recordId);
-        $this->set('images', $couponImages);
-        $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
-    }
-
-    public function couponCategories($recordId = 0)
-    {
-        $this->objPrivilege->canViewDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $couponCategories = DiscountCoupons::getCouponCategories($recordId, $this->siteLangId);
-        $this->set('couponCategories', $couponCategories);
-        $this->set('coupon_id', $recordId);
-        $this->_template->render(false, false);
-    }
-
-    public function couponProducts($recordId = 0)
-    {
-        $this->objPrivilege->canViewDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $couponProducts = DiscountCoupons::getCouponProducts($recordId, $this->siteLangId);
-        $this->set('couponProducts', $couponProducts);
-        $this->set('coupon_id', $recordId);
-        $this->_template->render(false, false);
-    }
-    public function couponPlans($recordId = 0)
-    {
-        $this->objPrivilege->canViewDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $couponPlans = DiscountCoupons::getCouponPlans($recordId, $this->siteLangId);
-        $this->set('couponPlans', $couponPlans);
-        $this->set('coupon_id', $recordId);
-        $this->_template->render(false, false);
-    }
-
-    public function couponUsers($recordId = 0)
-    {
-        $this->objPrivilege->canViewDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $couponUsers = DiscountCoupons::getCouponUsers($recordId, $this->siteLangId);
-        $this->set('couponUsers', $couponUsers);
-        $this->set('coupon_id', $recordId);
-        $this->_template->render(false, false);
-    }
-
-    public function couponShops($recordId = 0)
-    {
-        $this->objPrivilege->canViewDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $couponShops = DiscountCoupons::getCouponShops($recordId, $this->siteLangId);
-        $this->set('couponShops', $couponShops);
-        $this->set('coupon_id', $recordId);
-        $this->_template->render(false, false);
-    }
-
-    public function couponBrands($recordId = 0)
-    {
-        $this->objPrivilege->canViewDiscountCoupons();
-        $recordId = FatUtility::int($recordId);
-
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $couponBrands = DiscountCoupons::getCouponBrands($recordId, $this->siteLangId);
-        $this->set('couponBrands', $couponBrands);
-        $this->set('coupon_id', $recordId);
-        $this->_template->render(false, false);
-    }
-
-    public function updateCouponCategory()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $prodcat_id = FatUtility::int($post['prodcat_id']);
-
-        if (1 > $recordId || 1 > $prodcat_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->addUpdateCouponCategory($recordId, $prodcat_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function updateCouponProduct()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $product_id = FatUtility::int($post['product_id']);
-
-        if (1 > $recordId || 1 > $product_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->addUpdateCouponProduct($recordId, $product_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-    public function updateCouponPlan()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $spplan_id = FatUtility::int($post['spplan_id']);
-
-        if (1 > $recordId || 1 > $spplan_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->addUpdateCouponPlan($recordId, $spplan_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function updateCouponShop()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $shop_id = FatUtility::int($post['shop_id']);
-
-        if (1 > $recordId || 1 > $shop_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->addUpdateCouponShop($recordId, $shop_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function updateCouponBrand()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $brand_id = FatUtility::int($post['brand_id']);
-
-        if (1 > $recordId || 1 > $brand_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->addUpdateCouponBrand($recordId, $brand_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeCouponPlan()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $spplan_id = FatUtility::int($post['spplan_id']);
-        if (1 > $recordId || 1 > $spplan_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->removeCouponPlan($recordId, $spplan_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-    public function removeCouponCategory()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $prodcat_id = FatUtility::int($post['prodcat_id']);
-        if (1 > $recordId || 1 > $prodcat_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->removeCouponCategory($recordId, $prodcat_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeCouponProduct()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $product_id = FatUtility::int($post['product_id']);
-        if (1 > $recordId || 1 > $product_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->removeCouponProduct($recordId, $product_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function updateCouponUser()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $user_id = FatUtility::int($post['user_id']);
-
-        if (1 > $recordId || 1 > $user_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->addUpdateCouponUser($recordId, $user_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeCouponShop()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $shop_id = FatUtility::int($post['shop_id']);
-        if (1 > $recordId || 1 > $shop_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->removeCouponShop($recordId, $shop_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeCouponBrand()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $brand_id = FatUtility::int($post['brand_id']);
-        if (1 > $recordId || 1 > $brand_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->removeCouponBrand($recordId, $brand_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeCouponUser()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $user_id = FatUtility::int($post['user_id']);
-        if (1 > $recordId || 1 > $user_id) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $obj = new DiscountCoupons();
-        if (!$obj->removeCouponUser($recordId, $user_id)) {
-            LibHelper::exitWithError(Labels::getLabel($obj->getError(), $this->siteLangId), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Updated_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function removeCouponImage()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $post = FatApp::getPostedData();
-        if (false === $post) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $recordId = FatUtility::int($post['coupon_id']);
-        $lang_id = FatUtility::int($post['lang_id']);
-        if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $recordId, 0, 0, $lang_id)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_Record_Deleted_Successfully.', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function uploadImage($recordId = 0, $lang_id = 0)
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-
-        $recordId = FatUtility::int($recordId);
-
-        $lang_id = FatUtility::int($lang_id);
 
         $languages = Language::getAllNames();
         if (count($languages) <= 1) {
-            $lang_id =  array_key_first($languages);
+            $langId = array_key_first($languages);
         }
 
-        if ($recordId == 0) {
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $post = FatApp::getPostedData();
+        if (empty($post)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
+        }
+
+        $fileType = $post['file_type'];
+        if ($fileType != AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $post = FatApp::getPostedData();
-
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_a_file.', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
-        $fileHandlerObj->deleteFile(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $recordId, 0, 0, $lang_id);
-        if (!$res = $fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $recordId, 0, $_FILES['cropped_image']['name'], -1, true, $lang_id)) {
+        if (false === $fileHandlerObj->deleteFile($fileType, $recordId, 0, 0, $langId)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('coupon_id', $recordId);
-        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('MSG_Uploaded_Successfully.', $this->siteLangId));
+        if (!$res = $fileHandlerObj->saveAttachment(
+            $_FILES['cropped_image']['tmp_name'],
+            $fileType,
+            $recordId,
+            0,
+            $_FILES['cropped_image']['name'],
+            -1,
+            false,
+            $langId
+        )) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+        $this->set('msg', Labels::getLabel('MSG_IMAGE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteRecord()
+    public function deleteImage($recordId = 0, $afile_id = 0, $langId = 0)
     {
         $this->objPrivilege->canEditDiscountCoupons();
-        $recordId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
-
-        if ($recordId < 1) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $data = DiscountCoupons::getAttributesById($recordId);
-        if ($data == false) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $obj = new DiscountCoupons($recordId);
-        $obj->assignValues(array(DiscountCoupons::tblFld('deleted') => 1));
-        if (!$obj->save()) {
-            LibHelper::exitWithError($obj->getError(), true);
-        }
-
-        FatUtility::dieJsonSuccess($this->str_delete_record);
-    }
-
-    public function usesHistory($recordId)
-    {
-        $this->objPrivilege->canViewDiscountCoupons();
         $recordId = FatUtility::int($recordId);
-        if (1 > $recordId) {
+        $afile_id = FatUtility::int($afile_id);
+        $langId = FatUtility::int($langId);
+        if (!$recordId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $couponData = DiscountCoupons::getAttributesById($recordId, array('coupon_code'));
-        if ($couponData == false) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
+        $languages = Language::getAllNames();
+        if (1 == count($languages)) {
+            $afile_id = 0;
+            $langId = -1;
         }
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-
-        $post = FatApp::getPostedData();
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : $post['page'];
-        $page = (empty($page) || $page <= 0) ? 1 : FatUtility::int($page);
-
-        $srch = CouponHistory::getSearchObject();
-        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'user_id = couponhistory_user_id');
-        $srch->joinTable(Credential::DB_TBL, 'LEFT OUTER JOIN', 'credential_user_id = user_id');
-        $srch->addCondition('couponhistory_coupon_id', '=', $recordId);
-        $srch->addMultipleFields(array('couponhistory_id', 'couponhistory_coupon_id', 'couponhistory_order_id', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username'));
-        $srch->addOrder('couponhistory_added_on', 'DESC');
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
-        $this->set('couponId', $recordId);
-        $this->set('couponData', $couponData);
-
-        $this->_template->render(false, false);
-    }
-
-    private function getCategoryForm()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $frm = new Form('frmCouponCategory');
-        $frm->addHiddenField('', 'coupon_id');
-        $frm->addHtml('', 'coupon_name', '');
-        $fld1 = $frm->addTextBox(Labels::getLabel('FRM_ADD_CATEGORY', $this->siteLangId), 'category_name');
-        $fld2 = $frm->addHtml('', 'addNewCategoryLink', '<small class="text--small"><a target="_blank" href="' . UrlHelper::generateUrl('productCategories') . '">' . Labels::getLabel('FRM_CATEGORY_NOT_FOUND?_Click_here_to_add_new_category', $this->siteLangId) . '</a></small>');
-        $fld1->attachField($fld2);
-        return $frm;
-    }
-
-    private function getProductForm()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $frm = new Form('frmCouponProduct');
-        $frm->addHiddenField('', 'coupon_id');
-        $frm->addHtml('', 'coupon_name', '');
-        $fld1 = $frm->addTextBox(Labels::getLabel('FRM_ADD_PRODUCT', $this->siteLangId), 'product_name');
-        $fld1->htmlAfterField = '<small class="text--small"><a target="_blank" href="' . UrlHelper::generateUrl('products') . '">' . Labels::getLabel('FRM_PRODUCT_NOT_FOUND?_Click_here_to_add_new_product', $this->siteLangId) . '</a></small>';
-        return $frm;
-    }
-    private function getPlanForm()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $frm = new Form('frmCouponProduct');
-        $frm->addHiddenField('', 'coupon_id');
-        $frm->addHtml('', 'coupon_name', '');
-        $fld1 = $frm->addTextBox(Labels::getLabel('FRM_ADD_PLAN', $this->siteLangId), 'plan_name');
-        $fld2 = $frm->addHtml('', 'addNewPlanLink', '<br/><a target="_blank" href="' . UrlHelper::generateUrl('sellerPackages') . '">' . Labels::getLabel('FRM_PLAN_NOT_FOUND?_Click_here_to_add_new_plan', $this->siteLangId) . '</a>');
-        $fld1->attachField($fld2);
-        return $frm;
-    }
-
-    private function getDiscountUserForm()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $frm = new Form('frmCouponUser');
-        $frm->addHiddenField('', 'coupon_id');
-        $frm->addHtml('', 'coupon_name', '');
-        $frm->addTextBox(Labels::getLabel('FRM_ADD_USER', $this->siteLangId), 'user_name');
-        return $frm;
-    }
-
-    private function getShopForm()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $frm = new Form('frmCouponProduct');
-        $frm->addHiddenField('', 'coupon_id');
-        $frm->addHtml('', 'coupon_name', '');
-        $fld1 = $frm->addTextBox(Labels::getLabel('FRM_ADD_SHOP', $this->siteLangId), 'shop_name');
-        return $frm;
-    }
-
-    private function getBrandForm()
-    {
-        $this->objPrivilege->canEditDiscountCoupons();
-        $frm = new Form('frmCouponProduct');
-        $frm->addHiddenField('', 'coupon_id');
-        $frm->addHtml('', 'coupon_name', '');
-        $fld1 = $frm->addTextBox(Labels::getLabel('FRM_ADD_BRAND', $this->siteLangId), 'brand_name');
-        $fld1->htmlAfterField = '<small class="text--small"><a target="_blank" href="' . UrlHelper::generateUrl('brands') . '">' . Labels::getLabel('FRM_BRAND_NOT_FOUND?_Click_here_to_add_new_brand', $this->siteLangId) . '</a></small>';
-        return $frm;
+        $fileHandlerObj = new AttachedFile();
+        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $recordId, $afile_id, 0, $langId)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     protected function getFormColumns(): array
@@ -1203,5 +807,34 @@ class DiscountCouponsController extends ListingBaseController
     protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'links':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_DISCOUNT_COUPONS', $this->siteLangId);
+                $this->nodes = [
+                    ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('DiscountCoupons')],
+                ];
+
+                $url = FatApp::getQueryStringData('url');
+                $urlParts = explode('/', $url);
+                $title = Labels::getLabel('LBL_LINKS', $this->siteLangId);
+                if (isset($urlParts[2])) {
+                    $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $urlParts[2], ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], true);
+                    if (!empty($couponData)) {
+                        $this->nodes[] = ['title' => current($couponData)];
+                    }
+                }
+                $this->nodes[] = ['title' => $title];
+
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
+        }
+        return $this->nodes;
     }
 }

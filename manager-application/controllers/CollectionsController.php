@@ -658,7 +658,7 @@ class CollectionsController extends ListingBaseController
             $frm->fill($data);
         }
 
-        $mediaLanguages = applicationConstants::bannerTypeArr();
+        $mediaLanguages = applicationConstants::getAllLanguages();
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
 
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -737,7 +737,7 @@ class CollectionsController extends ListingBaseController
 
     private function bannerTypeArr()
     {
-        return applicationConstants::bannerTypeArr();
+        return applicationConstants::getAllLanguages();
     }
 
     private function getDisplayScreenName()
@@ -910,7 +910,7 @@ class CollectionsController extends ListingBaseController
             $frm->addTextBox(Labels::getLabel('LBL_Banner_Title', $this->siteLangId), 'banner_title[' . $langId . ']');
         }
 
-        $mediaLanguages = applicationConstants::bannerTypeArr();
+        $mediaLanguages = applicationConstants::getAllLanguages();
        
 		if(count($mediaLanguages) > 1){
 			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'banner_lang_id', $mediaLanguages, '', array(), '');

@@ -2,7 +2,7 @@
 
 class OrderReturnReasonsController extends ListingBaseController
 {
-    protected $modelClass = 'OrderReturnReason';
+    protected string $modelClass = 'OrderReturnReason';
     protected $pageKey = 'MANAGE_ORDER_RETURN_REASONS';
 
     public function __construct($action)

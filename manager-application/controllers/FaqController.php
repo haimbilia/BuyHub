@@ -2,7 +2,7 @@
 
 class FaqController extends ListingBaseController
 {
-    protected $modelClass = 'Faq';
+    protected string $modelClass = 'Faq';
     protected $pageKey = 'MANAGE_FAQ';
     protected $faqCatId;
 
