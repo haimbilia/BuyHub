@@ -8,34 +8,40 @@ $(document).ready(function () {
     var screenHeight = $(window).height() - 100;
     window.onresize = function (event) {
         var screenHeight = $(window).height() - 100;
-
     };
+
     $.extend(fcom, {
         scrollToTop: function (obj) {
             if (typeof obj == undefined || obj == null) {
-                $('html, body').animate({
-                    scrollTop: $('html, body').offset().top - 100
-                }, 'slow');
+                $("html, body").animate(
+                    {
+                        scrollTop: $("html, body").offset().top - 100,
+                    },
+                    "slow"
+                );
             } else {
-                $('html, body').animate({
-                    scrollTop: $(obj).offset().top - 100
-                }, 'slow');
+                $("html, body").animate(
+                    {
+                        scrollTop: $(obj).offset().top - 100,
+                    },
+                    "slow"
+                );
             }
         },
 
         resetEditorInstance: function () {
-            if (typeof oUtil != 'undefined') {
+            if (typeof oUtil != "undefined") {
                 var editors = oUtil.arrEditor;
                 for (x in editors) {
-                    eval('delete window.' + editors[x]);
+                    eval("delete window." + editors[x]);
                 }
                 oUtil.arrEditor = [];
             }
         },
 
         resetEditorWidth: function (width = "100%") {
-            if (typeof oUtil != 'undefined') {
-                (oUtil.arrEditor).forEach(function (input) {
+            if (typeof oUtil != "undefined") {
+                oUtil.arrEditor.forEach(function (input) {
                     var oEdit1 = eval(input);
                     $("#idArea" + oEdit1.oName).attr("width", width);
                 });
@@ -44,19 +50,22 @@ $(document).ready(function () {
 
         setEditorLayout: function (lang_id) {
             var editors = oUtil.arrEditor;
-            layout = langLbl['language' + lang_id];
+            layout = langLbl["language" + lang_id];
             for (x in editors) {
                 var oEdit1 = eval(editors[x]);
-                if ($('#idArea' + oEdit1.oName).parents(".layout--rtl").length) {
-                    $('#idContent' + editors[x]).contents().find("body").css('direction', layout);
-                    $('#idArea' + oEdit1.oName + ' td[dir="ltr"]').attr('dir', layout);
+                if ($("#idArea" + oEdit1.oName).parents(".layout--rtl").length) {
+                    $("#idContent" + editors[x])
+                        .contents()
+                        .find("body")
+                        .css("direction", layout);
+                    $("#idArea" + oEdit1.oName + ' td[dir="ltr"]').attr("dir", layout);
                 }
             }
         },
 
         getLoader: function () {
-            $(document.body).css({ 'cursor': 'wait' });
-            $('.loaderJs').remove();
+            $(document.body).css({ cursor: "wait" });
+            $(".loaderJs").remove();
             return '<div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div>';
         },
 
@@ -78,9 +87,9 @@ $(document).ready(function () {
         },
 
         removeLoader: function (cls) {
-            $(document.body).css({ 'cursor': 'default' });
-            $('.loaderJs').remove();
-            $('.submitBtnJs').removeClass('loading');
+            $(document.body).css({ cursor: "default" });
+            $(".loaderJs").remove();
+            $(".submitBtnJs").removeClass("loading");
         },
 
         getRowSpinner: function () {
@@ -88,20 +97,6 @@ $(document).ready(function () {
         },
     });
 
-    clearCache = function () {
-        // $(document.body).prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('Home', 'clear'), '', function (t) {
-            window.location.reload();
-        });
-    };
-
-    quickMenuItemSearch = function (e) {
-        var value = e.val().toLowerCase();
-        if (value.length < 1) {
-            return;
-        }
-        oUtil.arrEditor = [];
-    }
     clearCache = function () {
         // $(document.body).prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl("Home", "clear"), "", function (t) {

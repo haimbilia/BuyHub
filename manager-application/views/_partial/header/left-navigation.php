@@ -146,8 +146,7 @@
                                             </svg>
                                         </span>
                                         <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLang
-                                            Id); ?>
+                                            <?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?>
                                             <?php if ($categoryReqCount) { ?>(<?php echo $categoryReqCount; ?>)<?php } ?></span>
                                     </a>
                                 </li>
