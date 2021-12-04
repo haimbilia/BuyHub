@@ -2,6 +2,7 @@
 
 class AdvertisersReportController extends ListingBaseController
 {
+    protected $pageKey = 'ADVERTISERS_REPORT';
 
     public function __construct($action)
     {
@@ -13,16 +14,25 @@ class AdvertisersReportController extends ListingBaseController
     {
         $formColumns = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($formColumns);
-        $pageData = PageLanguageData::getAttributesByKey('ADVERTISERS_REPORT', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
+        $actionItemsData = array_merge($actionItemsData, [
+            'newRecordBtn' => false,
+            'formColumns' => $formColumns,
+            'columnButtons' => true,
+            'defaultColumns' => $this->getDefaultColumns()
+        ]);
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('formColumns', $formColumns);
+        $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false);
-        $this->_template->render();
+        $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
 
     public function search($type = false)
@@ -199,5 +209,24 @@ class AdvertisersReportController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return ['name', 'user_regdate', 'user_is_supplier', 'promotionsCount', 'activePromotions', 'promotionCharged', 'availableBalance'];
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('NAV_REPORTS', $this->siteLangId)],
+                    ['title' => Labels::getLabel('NAV_USERS_REPORTS', $this->siteLangId)],
+                    ['title' => $pageTitle]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
+        }
+        return $this->nodes;
     }
 }
