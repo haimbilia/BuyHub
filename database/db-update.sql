@@ -1409,3 +1409,8 @@ DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_INVERSE_APP_THE
 
 ALTER TABLE `tbl_upc_codes` DROP `upc_msrp`;
 ALTER TABLE `tbl_upc_codes` DROP `upc_code_id`;
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 1, '{PACKAGE-NAME} - {PLAN-DAYS}', 1),
+('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 2, '{PACKAGE-NAME} - {PLAN-DAYS}', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

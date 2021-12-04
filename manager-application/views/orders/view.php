@@ -2,6 +2,7 @@
 
 <main class="main">
     <div class="container">
+        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
         <div class="row">
             <div class="col-md-9">
                 <div class="card">

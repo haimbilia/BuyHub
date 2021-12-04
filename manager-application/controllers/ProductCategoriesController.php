@@ -2,7 +2,7 @@
 
 class ProductCategoriesController extends ListingBaseController
 {
-    protected $modelClass = 'ProductCategory';
+    protected string $modelClass = 'ProductCategory';
 
     public function __construct($action)
     {
@@ -213,7 +213,7 @@ class ProductCategoriesController extends ListingBaseController
         $frm = new Form('frmRecordImage', array('id' => 'imageFrm'));
         $frm->addHiddenField('', 'prodcat_id', $recordId);
         $frm->addHTML('', 'heading_icon', '');
-        $mediaLanguages = applicationConstants::bannerTypeArr();
+        $mediaLanguages = applicationConstants::getAllLanguages();
 
         if (count($mediaLanguages) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
@@ -501,7 +501,7 @@ class ProductCategoriesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function autocomplete()
+    public function autoComplete()
     {
         $search_keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);

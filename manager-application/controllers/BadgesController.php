@@ -301,7 +301,7 @@ class BadgesController extends ListingBaseController
         $fld->requirement->setRequired(true);
 
         if (Badge::TYPE_BADGE == $type) {
-            $mediaLanguages = applicationConstants::bannerTypeArr();
+            $mediaLanguages = applicationConstants::getAllLanguages();
             $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
             $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_BADGE);
             $frm->addHiddenField('', 'logo_min_width');

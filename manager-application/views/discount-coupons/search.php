@@ -26,7 +26,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
             case 'coupon_type':
-                $td->appendElement('plaintext', $tdAttr, $discountTypeArr[$row[$key]], true);
+                $statusHtm = DiscountCoupons::getTypeHtml($siteLangId, $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
                 break;
             case 'coupon_discount_value':
                 $discountValue = ($row['coupon_discount_in_percent'] == ApplicationConstants::PERCENTAGE) ? $row[$key] . ' %' : CommonHelper::displayMoneyFormat($row[$key]);
@@ -55,18 +56,20 @@ foreach ($arrListing as $sn => $row) {
                     'recordId' => $row['coupon_id']
                 ];
 
-                if ($canEdit) {
-                    $fn = 'addCouponLinkPlanForm';
-                    if ($row['coupon_type'] != DiscountCoupons::TYPE_SELLER_PACKAGE) {
-                        $fn = 'addCouponLinkProductForm';
+                if ($canEdit) {                 
+                    $href = UrlHelper::generateUrl('DiscountCoupons', 'links', [$row['coupon_id']]);
+                    $onclick = '';
+                    if ($row['coupon_type'] == DiscountCoupons::TYPE_SELLER_PACKAGE) {
+                        $href = 'javascript:void(0);';
+                        $onclick = 'couponLinkPlanForm(' . $row['coupon_id'] . ')';
                     }
 
                     $data['editButton'] = [];
                     $data['otherButtons'] = [
                         [
                             'attr' => [
-                                'href' => 'javascript:void(0);',
-                                'onclick' => 'couponHistory(' . $row['coupon_id'] . ')',
+                                'href' => $href,
+                                'onclick' => $onclick,
                                 'title' => Labels::getLabel('LBL_LINKS', $siteLangId)
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
@@ -81,7 +84,7 @@ foreach ($arrListing as $sn => $row) {
                     $data['otherButtons'][] = [
                         'attr' => [
                             'href' => 'javascript:void(0);',
-                            'onclick' => $fn . '(' . $row['coupon_id'] . ')',
+                            'onclick' => 'couponHistory(' . $row['coupon_id'] . ')',
                             'title' => Labels::getLabel('LBL_HISTORY', $siteLangId)
                         ],
                         'label' => '<svg class="svg" width="18" height="18">

@@ -3,7 +3,7 @@
 class RatingTypesController extends ListingBaseController
 {
 
-    protected $modelClass = 'RatingType';
+    protected string $modelClass = 'RatingType';
     protected $pageKey = 'RATING_TYPES';
 
     public function __construct($action)
@@ -190,7 +190,7 @@ class RatingTypesController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmRatingLang', array('id' => 'frmRatingLang'));
         $frm->addHiddenField('', 'ratingtype_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_RATING_TYPE', $langId), 'ratingtype_name');
         return $frm;
     }

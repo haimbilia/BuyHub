@@ -4,7 +4,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
 
 <main class="main">
     <div class="container">
-        <div class="row">
+        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>    <div class="row">
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-head">
