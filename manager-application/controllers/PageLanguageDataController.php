@@ -46,6 +46,7 @@ class PageLanguageDataController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_KEY_OR_TITLE', $this->siteLangId));
         $this->getListingData();
+        $this->set('includeEditor', true);
         $this->_template->addJs('page-language-data/page-js/index.js');
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -98,7 +99,7 @@ class PageLanguageDataController extends ListingBaseController
         }
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
         $searchForm = $this->getSearchForm(false, $fields);
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 :  FatUtility::int($data['page']);
         $post = $searchForm->getFormDataFromArray($data);
         $srch = PageLanguageData::getSearchObject();
 
@@ -108,8 +109,6 @@ class PageLanguageDataController extends ListingBaseController
         }
         $srch->addGroupBy(PageLanguageData::DB_TBL_PREFIX . 'key');
 
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageSize($pageSize);
@@ -121,7 +120,6 @@ class PageLanguageDataController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -129,15 +127,16 @@ class PageLanguageDataController extends ListingBaseController
         $this->checkEditPrivilege(true);
     }
 
-    public function form($pLangKey = '', $langId = 0, $autoFillLangData = 0)
+    public function langForm($pLangKey = '', $langId = 0, $autoFillLangData = 0)
     {
         $this->checkEditPrivilege();
         $langId = FatUtility::int($langId);
         
         if ($pLangKey == '' || $langId == 0) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true, false, true);
         }
-        $langFrm = $this->getForm($pLangKey, $langId);
+        $langId =  $langId == 1 ? -1 : $langId;
+        $langFrm = $this->getLangForm($pLangKey, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(PageLanguageData::DB_TBL);
             $translatedData = $updateLangDataobj->getTranslatedData($pLangKey, $langId);
@@ -158,18 +157,17 @@ class PageLanguageDataController extends ListingBaseController
             $langFrm->getField('plang_replacements')->value = $etplData['plang_replacements'];
         }
 
-      
         $this->set('languages', Language::getAllNames());
         $this->set('pLangKey', $pLangKey);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->set('frm', $langFrm);
+        $this->set('langFrm', $langFrm);
        
         $this->_template->render(false, false);
     }
 
-    private function getForm($pLangKey = 0, $lang_id = 0)
+    private function getLangForm($pLangKey = '', $lang_id = 0)
     {
         $frm = new Form('frmCMSPage');
         $frm->addHiddenField('', 'plang_key', $pLangKey);
@@ -182,50 +180,47 @@ class PageLanguageDataController extends ListingBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $this->siteLangId), 'plang_title');
-        $frm->addTextArea(Labels::getLabel('FRM_PAGE_SUMMARY', $this->siteLangId), 'plang_summary');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_SUMMARY', $this->siteLangId), 'plang_summary');
         $frm->addTextArea(Labels::getLabel('FRM_WARNING_MESSAGE', $this->siteLangId), 'plang_warring_msg');
         $frm->addTextArea(Labels::getLabel('FRM_RECOMMENDATIONS', $this->siteLangId), 'plang_recommendations');
-        $frm->addTextArea(Labels::getLabel('FRM_REPLACEMENTS', $this->siteLangId), 'plang_replacements');
+        $frm->addHtml(Labels::getLabel('FRM_REPLACEMENT_VARS', $this->siteLangId), 'plang_replacements','');
         return $frm;
     }
 
-    public function setup() 
+    public function langSetup() 
     {
-
         $this->checkEditPrivilege();
+        $data = FatApp::getPostedData();
+        $plangKey = $data['plang_key'];
+        $langId = $data['lang_id'];
 
-        $frm = $this->getForm();
+        $frm = $this->getLangForm($plangKey, $langId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true, false, true);
         }
+        $langId =  $langId == 1 ? -1 : $langId;
+        $langData = PageLanguageData::getAttributesByKey($plangKey, $langId);
+        $recordId = $langData['plang_id'];
+        $pLangDataPage = new PageLanguageData($plangKey);
+        $data = [
+            'plang_lang_id' => $langId,
+            'plang_key' => $plangKey,
+            'plang_title' => $post['plang_title'],
+            'plang_summary' => $post['plang_summary'],
+            'plang_warring_msg' => $post['plang_warring_msg'],
+            'plang_replacements' => $langData['plang_replacements'],
+            'plang_recommendations' => $post['plang_recommendations']
+        ];
 
-        $recordId = $post['plang_id'];
-        // unset($post['plang_id']);
-        $contentPage = new PageLanguageData($recordId);
-        $contentPage->assignValues($post);
-        if (!$contentPage->save()) {
-            LibHelper::exitWithError($contentPage->getError(), true, false, true);
+        if (!$pLangDataPage->addUpdateData($data)) {
+            LibHelper::exitWithError($pLangDataPage->getError(), true, false, true);
         }
-
-        $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!ContentPage::getAttributesByLangId($langId, $recordId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $recordId = $contentPage->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
-
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $this->set('lang_Id', $langId);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
