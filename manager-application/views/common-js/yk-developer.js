@@ -111,7 +111,8 @@ $(document).ready(function () {
 
         $(li + ', ' + searchResult).show();
         $('.noResultsFoundJs').hide();
-    }
+    };
+
     quickMenuItemSearch = function (e) {
         var value = e.val().toLowerCase();
         if (value.length < 1) {
@@ -139,189 +140,188 @@ $(document).ready(function () {
                 $(liObj).hide();
             }
         });
+
+        if (1 > $(li + ":visible").length) {
+            $(noResults).show();
+        }
     };
 
-    if (1 > $(li + ":visible").length) {
-        $(noResults).show();
-    }
-};
-
-isJson = function (str) {
-    try {
-        var json = JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return json;
-};
-
-getCountryStates = function (countryId, stateId, dv) {
-    fcom.displayProcessing();
-    fcom.ajax(
-        fcom.makeUrl("Configurations", "getStates", [countryId, stateId]),
-        "",
-        function (res) {
-            $.ykmsg.close();
-            $(dv).empty();
-            $(dv).append(res);
+    isJson = function (str) {
+        try {
+            var json = JSON.parse(str);
+        } catch (e) {
+            return false;
         }
-    );
-};
+        return json;
+    };
 
-getStatesByCountryCode = function (
-    countryCode,
-    stateCode,
-    dv,
-    idCol = "state_id"
-) {
-    fcom.displayProcessing();
-    fcom.ajax(
-        fcom.makeUrl("Configurations", "getStatesByCountryCode", [
-            countryCode,
-            stateCode,
-            idCol,
-        ]),
-        "",
-        function (res) {
-            $.ykmsg.close();
-            $(dv).empty();
-            $(dv).append(res).change();
-        }
-    );
-};
-
-sortObjectByKeys = function (o) {
-    return Object.keys(o)
-        .sort()
-        .reduce((r, k) => ((r[k] = o[k]), r), {});
-};
-
-stylePhoneNumberFld = function (
-    element = "input[name='user_phone']",
-    destroy = false
-) {
-    var inputList = document.querySelectorAll(element);
-    var country =
-        "" == langLbl.defaultCountryCode ||
-            "undefined" == typeof langLbl.defaultCountryCode
-            ? "in"
-            : langLbl.defaultCountryCode;
-    inputList.forEach(function (input) {
-        if (true == destroy) {
-            $(input).removeAttr("style");
-            var clone = input.cloneNode(true);
-            $(".iti").replaceWith(clone);
-        } else {
-            if ($(input).hasClass("hasFlag-js")) {
-                return;
+    getCountryStates = function (countryId, stateId, dv) {
+        fcom.displayProcessing();
+        fcom.ajax(
+            fcom.makeUrl("Configurations", "getStates", [countryId, stateId]),
+            "",
+            function (res) {
+                $.ykmsg.close();
+                $(dv).empty();
+                $(dv).append(res);
             }
-            $(input).addClass("hasFlag-js");
-            var elementName = $(input).attr("name") + "_dcode";
-            var dialCodeElement = $('input[name="' + elementName + '"]');
-            if (
-                0 < dialCodeElement.length &&
-                "" != dialCodeElement.val() &&
-                "undefined" != typeof dialCodeElement.val()
-            ) {
-                var elementVal = dialCodeElement.val();
-                var countryCodePos = elementVal.indexOf("-");
-                if (0 < countryCodePos) {
-                    country = elementVal.substring(
-                        countryCodePos + 1,
-                        elementVal.length
-                    );
-                } else {
-                    country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
-                }
+        );
+    };
+
+    getStatesByCountryCode = function (
+        countryCode,
+        stateCode,
+        dv,
+        idCol = "state_id"
+    ) {
+        fcom.displayProcessing();
+        fcom.ajax(
+            fcom.makeUrl("Configurations", "getStatesByCountryCode", [
+                countryCode,
+                stateCode,
+                idCol,
+            ]),
+            "",
+            function (res) {
+                $.ykmsg.close();
+                $(dv).empty();
+                $(dv).append(res).change();
             }
+        );
+    };
 
-            var iti = window.intlTelInput(input, {
-                separateDialCode: true,
-                initialCountry: country,
-            });
+    sortObjectByKeys = function (o) {
+        return Object.keys(o)
+            .sort()
+            .reduce((r, k) => ((r[k] = o[k]), r), {});
+    };
 
-            var dCode =
-                "+" +
-                iti.getSelectedCountryData().dialCode +
-                "-" +
-                iti.getSelectedCountryData().iso2;
-            if (0 < dialCodeElement.length) {
-                if (
-                    typeof iti.getSelectedCountryData().dialCode !== "undefined" &&
-                    "" == dialCodeElement.val()
-                ) {
-                    dialCodeElement.val(dCode);
-                }
+    stylePhoneNumberFld = function (
+        element = "input[name='user_phone']",
+        destroy = false
+    ) {
+        var inputList = document.querySelectorAll(element);
+        var country =
+            "" == langLbl.defaultCountryCode ||
+                "undefined" == typeof langLbl.defaultCountryCode
+                ? "in"
+                : langLbl.defaultCountryCode;
+        inputList.forEach(function (input) {
+            if (true == destroy) {
+                $(input).removeAttr("style");
+                var clone = input.cloneNode(true);
+                $(".iti").replaceWith(clone);
             } else {
-                $("<input>")
-                    .attr({
-                        type: "hidden",
-                        name: elementName,
-                        value: dCode,
-                    })
-                    .insertAfter(input);
-            }
-
-            input.addEventListener("countrychange", function (e) {
-                if (typeof iti.getSelectedCountryData().dialCode !== "undefined") {
-                    var dCode =
-                        "+" +
-                        iti.getSelectedCountryData().dialCode +
-                        "-" +
-                        iti.getSelectedCountryData().iso2;
-                    if ($('input[name="' + elementName + '"]').length < 1) {
-                        $.systemMessage(
-                            $(input).attr("name") + " " + langLbl.dialCodeFieldNotFound,
-                            "alert-danger"
-                        );
-                        return;
-                    }
-                    $('input[name="' + elementName + '"]').val(dCode);
+                if ($(input).hasClass("hasFlag-js")) {
+                    return;
                 }
-            });
-        }
-    });
-};
+                $(input).addClass("hasFlag-js");
+                var elementName = $(input).attr("name") + "_dcode";
+                var dialCodeElement = $('input[name="' + elementName + '"]');
+                if (
+                    0 < dialCodeElement.length &&
+                    "" != dialCodeElement.val() &&
+                    "undefined" != typeof dialCodeElement.val()
+                ) {
+                    var elementVal = dialCodeElement.val();
+                    var countryCodePos = elementVal.indexOf("-");
+                    if (0 < countryCodePos) {
+                        country = elementVal.substring(
+                            countryCodePos + 1,
+                            elementVal.length
+                        );
+                    } else {
+                        country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
+                    }
+                }
 
-copyText = function (obj) {
-    var copyText = $(obj).text();
+                var iti = window.intlTelInput(input, {
+                    separateDialCode: true,
+                    initialCountry: country,
+                });
 
-    document.addEventListener(
-        "copy",
-        function (e) {
-            e.clipboardData.setData("text/plain", copyText.trim());
-            e.preventDefault();
-        },
-        true
-    );
-    document.execCommand("copy");
-    var elOriginalText = $(obj).attr("data-original-title");
-    $(obj)
-        .attr("data-original-title", langLbl.copied)
-        .tooltip("show")
-        .attr("data-original-title", elOriginalText);
-};
+                var dCode =
+                    "+" +
+                    iti.getSelectedCountryData().dialCode +
+                    "-" +
+                    iti.getSelectedCountryData().iso2;
+                if (0 < dialCodeElement.length) {
+                    if (
+                        typeof iti.getSelectedCountryData().dialCode !== "undefined" &&
+                        "" == dialCodeElement.val()
+                    ) {
+                        dialCodeElement.val(dCode);
+                    }
+                } else {
+                    $("<input>")
+                        .attr({
+                            type: "hidden",
+                            name: elementName,
+                            value: dCode,
+                        })
+                        .insertAfter(input);
+                }
 
-installJsColor = function () {
-    if (0 < $(".jscolor").length) {
-        $(".jscolor").each(function () {
-            $(this).attr("data-jscolor", "{}");
+                input.addEventListener("countrychange", function (e) {
+                    if (typeof iti.getSelectedCountryData().dialCode !== "undefined") {
+                        var dCode =
+                            "+" +
+                            iti.getSelectedCountryData().dialCode +
+                            "-" +
+                            iti.getSelectedCountryData().iso2;
+                        if ($('input[name="' + elementName + '"]').length < 1) {
+                            $.systemMessage(
+                                $(input).attr("name") + " " + langLbl.dialCodeFieldNotFound,
+                                "alert-danger"
+                            );
+                            return;
+                        }
+                        $('input[name="' + elementName + '"]').val(dCode);
+                    }
+                });
+            }
         });
-        jscolor.install();
-    }
-};
+    };
 
-$(document).ajaxComplete(function () {
-    /* Bind bootstrap tooltip with ajax elements. */
-    $('[data-toggle="tooltip"]').tooltip();
+    copyText = function (obj) {
+        var copyText = $(obj).text();
 
-    /* Bind Scoll hand if table width is wider. */
-    new ScrollHint(".js-scrollable");
+        document.addEventListener(
+            "copy",
+            function (e) {
+                e.clipboardData.setData("text/plain", copyText.trim());
+                e.preventDefault();
+            },
+            true
+        );
+        document.execCommand("copy");
+        var elOriginalText = $(obj).attr("data-original-title");
+        $(obj)
+            .attr("data-original-title", langLbl.copied)
+            .tooltip("show")
+            .attr("data-original-title", elOriginalText);
+    };
 
-    /* Bind colors with all color fields. */
-    installJsColor();
-});
-}) ();
+    installJsColor = function () {
+        if (0 < $(".jscolor").length) {
+            $(".jscolor").each(function () {
+                $(this).attr("data-jscolor", "{}");
+            });
+            jscolor.install();
+        }
+    };
+
+    $(document).ajaxComplete(function () {
+        /* Bind bootstrap tooltip with ajax elements. */
+        $('[data-toggle="tooltip"]').tooltip();
+
+        /* Bind Scoll hand if table width is wider. */
+        new ScrollHint(".js-scrollable");
+
+        /* Bind colors with all color fields. */
+        installJsColor();
+    });
+})();
 
 var map;
 var marker;
