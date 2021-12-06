@@ -131,7 +131,7 @@ class SlidesController extends ListingBaseController
             ];
             $data = Slides::getAttributesByLangId($langId, $recordId, $fields, true);
             if ($data === false) {
-                LibHelper::exitWithError($this->str_invalid_request, true);
+                LibHelper::exitWithError($this->str_invalid_request, false,false,true);
             }
             $frm->fill($data);
         }
@@ -182,7 +182,7 @@ class SlidesController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+            LibHelper::exitWithError(current($frm->getValidationErrors()), false, false, true);
         }
 
         $recordId = $post['slide_id'];
@@ -216,7 +216,7 @@ class SlidesController extends ListingBaseController
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Slides::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+                LibHelper::exitWithError($updateLangDataobj->getError(), false, false, true);
             }
         }
 
@@ -248,7 +248,7 @@ class SlidesController extends ListingBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId || 1 > $langId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
+            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
         }
         $langFrm = $this->getLangForm($langId);
         if (0 < $autoFillLangData) {
@@ -282,7 +282,21 @@ class SlidesController extends ListingBaseController
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $langId);
+        $this->set('formTitle', $formTitle);
+        $otherButtons = [
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'onclick' => 'mediaForm('.$recordId.')',
+                    'title' => Labels::getLabel('LBL_MEDIA', $langId),
+                ],
+                'label' => Labels::getLabel('LBL_MEDIA', $langId),
+                'isActive' => false
+            ]
+        ];
+        $this->set('otherButtons', $otherButtons);
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
     }
 
     private function getLangForm($langId = 0)
