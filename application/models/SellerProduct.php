@@ -1413,4 +1413,29 @@ class SellerProduct extends MyAppModel
         }
         return (float) $avgRatingData['rating'];
     }
+    /**
+     * $optionId int|array
+     */
+
+    public static function isOptionLinked($optionId, $productId = 0)
+    {
+        /* Get Linked Products [ */
+        $srch = SellerProduct::getSearchObject();
+        $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
+        if (0 < $productId) {
+            $srch->addCondition('selprod_product_id', '=', $productId);
+        }
+        if(is_array($optionId)){
+            $srch->addCondition('tspo.selprodoption_option_id', 'IN', $optionId);
+        }else{
+            $srch->addCondition('tspo.selprodoption_option_id', '=', $optionId);
+        }        
+        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $srch->addFld(array('selprod_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        return $row != false ? true : false;
+    }
 }

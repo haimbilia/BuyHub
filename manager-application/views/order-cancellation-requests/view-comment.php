@@ -35,7 +35,7 @@
         <?php if (!empty($cancelMessage['ocrequest_admin_comment'])) { ?>
             <div class="row">
                 <div class="col-md-4">
-                    <?php echo Labels::getLabel('LBL_ADMIN/SELLER_MESSAGE', $siteLangId);?> :
+                    <?php echo Labels::getLabel('LBL_ADMIN_MESSAGE', $siteLangId);?> :
                 </div>
                 <div class="col-md-8">
                     <?php echo nl2br($cancelMessage['ocrequest_admin_comment']); ?>

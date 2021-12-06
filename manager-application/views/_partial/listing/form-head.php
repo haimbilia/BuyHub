@@ -36,9 +36,9 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
                             'isActive' => $activeGentab
                         ];
                     }
-                    $generalTabAttr = isset($generalTab['attr']) ? $generalTab['attr'] : [];
-                    $label = isset($generalTab['label']) ? $generalTab['label'] : '';
-                    $isActive = isset($generalTab['isActive']) ? $generalTab['isActive'] : false;
+                    $generalTabAttr = $generalTab['attr'] ?? [];
+                    $label = $generalTab['label'] ?? '';
+                    $isActive = $generalTab['isActive'] ?? false;
                     $active = $isActive ? 'active' : '';
 
                     $href = !empty($generalTabAttr) ? $generalTabAttr['href'] : 'javascript:void(0);';

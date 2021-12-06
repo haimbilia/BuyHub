@@ -1,29 +1,20 @@
 .sticky-demo-header {
     .demo-header {
         background: #fff;
-        position: -webkit-sticky;
         position: sticky;
         top: 0;
         z-index: 99;
-
         display: flex;
-        
-        
         justify-content: space-between;
         padding: 0 2rem;
         line-height: 4rem;
         -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
         box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
         .restore-wrapper {
-            
-            
             display: flex;
-            >a {
-                
-                
+            > a {
                 display: flex;
-                
-                
+
                 align-items: center;
                 -webkit-box-orient: vertical;
                 -webkit-box-direction: normal;
@@ -35,14 +26,12 @@
                 padding: 0px 8px;
                 font-size: 1rem;
                 color: $brand-color;
-                margin: 0.10rem 0;
+                margin: 0.1rem 0;
                 font-weight: 800;
                 line-height: 1;
                 letter-spacing: 4px;
             }
             .restore__progress {
-                
-                
                 display: flex;
                 height: 4px;
                 width: 100%;
@@ -54,15 +43,12 @@
                 max-width: 96px;
             }
             .restore__progress-bar {
-                
-                
                 display: flex;
                 -webkit-box-orient: vertical;
                 -webkit-box-direction: normal;
                 -ms-flex-direction: column;
                 flex-direction: column;
-                
-                
+
                 justify-content: center;
                 color: #fff;
                 text-align: center;
@@ -83,7 +69,6 @@
 }
 
 .switch-interface {
-    
     display: flex;
     li {
         margin: 0 1rem;
@@ -91,14 +76,11 @@
         display: flex;
         a {
             position: relative;
-            
-            
+
             display: flex;
-            
-            
+
             align-items: center;
-            
-            
+
             justify-content: center;
         }
         &.is-active {
@@ -130,9 +112,8 @@
 }
 
 .demo-cta {
-    
     display: flex;
-    
+
     align-items: center;
 
     justify-content: space-between;
@@ -145,13 +126,13 @@
 }
 
 .restore-demo-bg {
-    background-image: url('../images/catalog-bg.png') !important;
+    background-image: url("../images/catalog-bg.png") !important;
     background-color: #fff !important;
     background-repeat: no-repeat !important;
     background-position: 130% top !important;
 }
 
-.restore-demo .demo-data-inner>ul,
+.restore-demo .demo-data-inner > ul,
 .restore-demo .demo-data-inner .heading {
     max-width: 500px;
     margin-#{$end-direction}: 250px;

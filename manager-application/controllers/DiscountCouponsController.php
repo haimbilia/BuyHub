@@ -200,14 +200,6 @@ class DiscountCouponsController extends ListingBaseController
             $record::tblFld('description') => $post[$record::tblFld('description')]
         ]);
 
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(DiscountCoupons::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
-
         $this->set('msg', Labels::getLabel('MSG_COUPON_SETUP_SUCCESSFUL.', $this->siteLangId));
         $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
@@ -291,7 +283,6 @@ class DiscountCouponsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
 
-        $this->objPrivilege->canViewDiscountCoupons();
         $frm = new Form('frmCoupon');
         $frm->addHiddenField('', 'coupon_id', $recordId);
 
@@ -607,7 +598,6 @@ class DiscountCouponsController extends ListingBaseController
 
     public function usesHistory()
     {
-        $this->objPrivilege->canViewDiscountCoupons();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
         $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title', 'coupon_code'], true);

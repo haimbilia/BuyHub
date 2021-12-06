@@ -8,10 +8,10 @@
             ?>
             <img width="34" height="34" <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
         </a> <button class="sidebar-toggle sidebarOpenerBtnJs" type="button">
-            <i class="fas fa-angle-double-right"></i>
+            <i class="fas fa-angle-double-left"></i>
         </button>
     </div>
-    <div class="sidebar-menu sidebarMenuJs">
+    <div class="sidebar-menu sidebarMenuJs" id="sidebar-menu">
         <ul class="menu">
             <?php
             if (
@@ -22,7 +22,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_PRODUCT_CATALOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
@@ -30,9 +30,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_PRODUCT_CATALOG" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Brands'); ?>">
@@ -42,9 +43,7 @@
                                                 </use>
                                             </svg>
                                         </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_BRANDS', $siteLangId); ?>
-                                        </span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_BRANDS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -56,10 +55,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -71,10 +67,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -86,10 +79,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_OPTIONS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_OPTIONS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -110,7 +100,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_REQUESTS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-requests">
@@ -118,9 +108,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_REQUESTS" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('brandRequests'); ?>">
@@ -129,10 +120,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?><?php if ($brandReqCount) { ?>(<?php echo $brandReqCount; ?>)<?php } ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_BRAND_REQUEST', $siteLangId); ?><?php if ($brandReqCount) { ?>(<?php echo $brandReqCount; ?>)<?php } ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -144,9 +132,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?>
                                             <?php if ($categoryReqCount) { ?>(<?php echo $categoryReqCount; ?>)<?php } ?></span>
                                     </a>
                                 </li>
@@ -159,10 +145,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?><?php if ($supReqCount) { ?>(<?php echo $supReqCount; ?>)<?php } ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $siteLangId); ?><?php if ($supReqCount) { ?>(<?php echo $supReqCount; ?>)<?php } ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -174,10 +157,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -227,10 +207,9 @@
                 $objPrivilege->canViewWithdrawRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderCancellationRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
-            ) {
-            ?>
+            ) { ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_ORDERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-orders">
@@ -238,9 +217,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_ORDERS" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
@@ -249,10 +229,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -264,10 +241,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_SUBSCRIPTION_ORDERS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_ORDERS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -279,10 +253,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_ORDER_CANCEL_REASONS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_ORDER_CANCEL_REASONS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -312,7 +283,7 @@
                                         </span>
                                         <span class="nav_text">
                                             <?php
-                                            $menuLabel = Labels::getLabel('NAV_WITHDRAWL_REQUESTS', $siteLangId);
+                                            $menuLabel =  Labels::getLabel('NAV_WITHDRAWL_REQUESTS', $siteLangId);
                                             $menuLabel .= $drReqCount ? ' (' . $drReqCount . ')' : '';
                                             echo $menuLabel;
                                             ?>
@@ -347,10 +318,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_ORDER_STATUSES', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_ORDER_STATUSES', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -369,7 +337,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_USERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-users">
@@ -377,9 +345,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_USERS" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('AdminUsers') ?>">
@@ -389,9 +358,7 @@
                                                 </use>
                                             </svg>
                                         </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_ADMIN_USERS', $siteLangId); ?>
-                                        </span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_ADMIN_USERS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -415,9 +382,7 @@
                                                 </use>
                                             </svg>
                                         </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?>
-                                        </span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_REWARDS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
@@ -452,9 +417,7 @@
                                                 </use>
                                             </svg>
                                         </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?>
-                                        </span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_USERS_ADDRESSES', $siteLangId); ?></span>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
@@ -465,9 +428,7 @@
                                                 </use>
                                             </svg>
                                         </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_GDPR_REQUESTS', $siteLangId); ?>
-                                        </span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_GDPR_REQUESTS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -510,7 +471,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_PROMOTIONS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-promotions">
@@ -518,9 +479,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_PROMOTIONS" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('SpecialPrice'); ?>">
@@ -530,9 +492,7 @@
                                                 </use>
                                             </svg>
                                         </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_SPECIAL_PRICE', $siteLangId); ?>
-                                        </span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_SPECIAL_PRICE', $siteLangId); ?></span>
                                     </a>
                                 </li>
 
@@ -544,9 +504,7 @@
                                                 </use>
                                             </svg>
                                         </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_VOLUME_DISCOUNT', $siteLangId); ?>
-                                        </span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_VOLUME_DISCOUNT', $siteLangId); ?></span>
                                     </a>
                                 </li>
 
@@ -650,7 +608,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_BLOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-blog">
@@ -658,9 +616,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_BLOG" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('BlogPostCategories'); ?>">
@@ -669,10 +628,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_BLOG_POST_CATEGORIES', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_POST_CATEGORIES', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -684,10 +640,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_BLOG_POSTS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_POSTS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -699,10 +652,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_BLOG_CONTRIBUTIONS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_CONTRIBUTIONS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -714,10 +664,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_BLOG_COMMENTS', $siteLangId); ?>
-                                        </span>
+                                        </span><span class="nav_text"><?php echo Labels::getLabel('NAV_BLOG_COMMENTS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -732,7 +679,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_TAX" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-sales-tax">
@@ -740,9 +687,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_TAX" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('TaxStructure'); ?>">
@@ -751,10 +699,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_TAX_STRUCTURE', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_STRUCTURE', $siteLangId); ?></span>
                                     </a>
                                 </li>
 
@@ -765,10 +710,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES', $siteLangId); ?></span>
                                     </a>
                                 </li>
                                 <li class="nav_item">
@@ -778,10 +720,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TAX_CATEGORIES_RULE', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -800,7 +739,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_CMS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-CMS">
@@ -808,9 +747,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_CMS" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Slides'); ?>">
@@ -849,10 +789,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_CONTENT_BLOCK', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CONTENT_BLOCK', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -864,10 +801,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_FAQS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_FAQS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -879,10 +813,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_TESTIMONIALS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TESTIMONIALS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -910,7 +841,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" title="<?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_REPORTS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-reports">
@@ -918,9 +849,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav" id="reportsNav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_REPORTS" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level" id="reportsNav">
                             <?php
                             if (
                                 $objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true) ||
@@ -931,16 +863,13 @@
                             ) {
                             ?>
                                 <li class="nav_item hasNestedChildJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-toggle="collapse" data-parent="#reportsNav" href="#salesReportNav" aria-expanded="true">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-toggle="collapse" data-parent="#salesReportNav" href="#salesReportNav" aria-expanded="true">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_SALES_REPORTS', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SALES_REPORTS', $siteLangId); ?></span>
                                         <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
                                     </a>
                                     <div id="salesReportNav" class="panel-collapse collapse collapseJs">
@@ -948,45 +877,35 @@
                                             <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>">
-                                                        <span class="nav_text">
-                                                            <?php echo Labels::getLabel('NAV_SALES_OVER_TIME', $siteLangId); ?>
-                                                        </span>
+                                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_SALES_OVER_TIME', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>">
-                                                        <span class="nav_text">
-                                                            <?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?>
-                                                        </span>
+                                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>">
-                                                        <span class="nav_text">
-                                                            <?php echo Labels::getLabel('NAV_PRODUCT_VARIENTS', $siteLangId); ?>
-                                                        </span>
+                                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_VARIENTS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>">
-                                                        <span class="nav_text">
-                                                            <?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?>
-                                                        </span>
+                                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('BuyersReport'); ?>">
-                                                        <span class="nav_text">
-                                                            <?php echo Labels::getLabel('NAV_CUSTOMERS', $siteLangId); ?>
-                                                        </span>
+                                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_CUSTOMERS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
@@ -1001,7 +920,7 @@
                                 $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)
                             ) { ?>
                                 <li class="nav_item hasNestedChildJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-toggle="collapse" data-parent="#reportsNav" href="#usersReportNav" aria-expanded="true">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-toggle="collapse" data-parent="#usersReportNav" href="#usersReportNav" aria-expanded="true">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1064,46 +983,34 @@
                                                 </use>
                                             </svg>
                                         </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_FINANCIAL_REPORT', $siteLangId); ?>
-                                        </span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_FINANCIAL_REPORT', $siteLangId); ?></span>
                                         <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
                                     </a>
                                     <div id="financialReportNav" class="panel-collapse collapse collapseJs">
                                         <ul class="nav nav-level">
                                             <li class="nav_item navItemJs">
                                                 <a href="<?php echo UrlHelper::generateUrl('EarningsReport'); ?>" class="nav_link navLinkJs ">
-                                                    <span class="nav_text">
-                                                        <?php echo Labels::getLabel('NAV_EARNINGS', $siteLangId); ?>
-                                                    </span>
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_EARNINGS', $siteLangId); ?></span>
                                                 </a>
                                             </li>
                                             <li class="nav_item navItemJs">
                                                 <a href="<?php echo UrlHelper::generateUrl('ProductProfitReport'); ?>" class="nav_link navLinkJs ">
-                                                    <span class="nav_text">
-                                                        <?php echo Labels::getLabel('NAV_PROFIT_BY_PRODUCTS', $siteLangId); ?>
-                                                    </span>
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_PROFIT_BY_PRODUCTS', $siteLangId); ?></span>
                                                 </a>
                                             </li>
                                             <li class="nav_item navItemJs">
                                                 <a href="<?php echo UrlHelper::generateUrl('PreferredPaymentMethod'); ?>" class="nav_link navLinkJs ">
-                                                    <span class="nav_text">
-                                                        <?php echo Labels::getLabel('NAV_PREFERRED_PAYMENT_METHOD', $siteLangId); ?>
-                                                    </span>
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_PREFERRED_PAYMENT_METHOD', $siteLangId); ?></span>
                                                 </a>
                                             </li>
                                             <li class="nav_item navItemJs">
                                                 <a href="<?php echo UrlHelper::generateUrl('payoutReport'); ?>" class="nav_link navLinkJs ">
-                                                    <span class="nav_text">
-                                                        <?php echo Labels::getLabel('NAV_PAYOUT', $siteLangId); ?>
-                                                    </span>
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_PAYOUT', $siteLangId); ?></span>
                                                 </a>
                                             </li>
                                             <li class="nav_item navItemJs">
                                                 <a href="<?php echo UrlHelper::generateUrl('TransactionReport'); ?>" class="nav_link navLinkJs ">
-                                                    <span class="nav_text">
-                                                        <?php echo Labels::getLabel('NAV_TRANSACTION_REPORT', $siteLangId); ?>
-                                                    </span>
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_TRANSACTION_REPORT', $siteLangId); ?></span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -1118,26 +1025,19 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?></span>
                                         <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
                                     </a>
                                     <div id="subscriptionReportNav" class="panel-collapse collapse collapseJs">
                                         <ul class="nav nav-level">
                                             <li class="nav_item navItemJs">
                                                 <a href="<?php echo UrlHelper::generateUrl('SubscriptionPlanReport'); ?>" class="nav_link navLinkJs ">
-                                                    <span class="nav_text">
-                                                        <?php echo Labels::getLabel('NAV_BY_PLAN', $siteLangId); ?>
-                                                    </span>
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_BY_PLAN', $siteLangId); ?></span>
                                                 </a>
                                             </li>
                                             <li class="nav_item navItemJs">
                                                 <a href="<?php echo UrlHelper::generateUrl('SubscriptionSellerReport'); ?>" class="nav_link navLinkJs ">
-                                                    <span class="nav_text">
-                                                        <?php echo Labels::getLabel('NAV_BY_SELLER', $siteLangId); ?>
-                                                    </span>
+                                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_BY_SELLER', $siteLangId); ?></span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -1170,7 +1070,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_IMPORT_EXPORT" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-import-export">
@@ -1178,9 +1078,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_IMPORT_EXPORT" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level">
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ImportExport'); ?>">
                                     <span class="nav_icon">
@@ -1188,10 +1089,7 @@
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                             </use>
                                         </svg>
-                                    </span>
-                                    <span class="nav_text">
-                                        <?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>
-                                    </span>
+                                    </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?></span>
                                 </a>
                             </li>
 
@@ -1211,7 +1109,7 @@
             ?>
             <?php } ?>
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?>">
+                <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_SHIPPING" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?>">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-shipping-pickup">
@@ -1219,9 +1117,10 @@
                         </svg>
                     </span>
                     <span class="menu-title"><?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?></span>
-                </div>
-                <div class="sidebar-dropdown-menu">
-                    <ul class="nav">
+                    <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                </button>
+                <div class="sidebar-dropdown-menu collapse" id="NAV_SHIPPING" aria-labelledby="" data-parent="#sidebar-menu">
+                    <ul class="nav nav-level">
                         <?php if ($objPrivilege->canViewShippingCompanyUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ShippingCompanyUsers'); ?>">
@@ -1230,10 +1129,7 @@
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                             </use>
                                         </svg>
-                                    </span>
-                                    <span class="nav_text">
-                                        <?php echo Labels::getLabel('NAV_SHIPPING_COMPANY_USERS', $siteLangId); ?>
-                                    </span>
+                                    </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SHIPPING_COMPANY_USERS', $siteLangId); ?></span>
                                 </a>
                             </li>
                         <?php } ?>
@@ -1242,6 +1138,11 @@
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
                                     <span class="nav_icon">
+                                        <svg class="svg" width="24" height="24">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                            </use>
+                                        </svg>
+                                    </span> <span class="nav_icon">
                                         <svg class="svg" width="24" height="24">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                             </use>
@@ -1275,9 +1176,7 @@
                                             </use>
                                         </svg>
                                     </span>
-                                    <span class="nav_text">
-                                        <?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?>
-                                    </span>
+                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?></span>
                                 </a>
                             </li>
                         <?php } ?>
@@ -1290,10 +1189,7 @@
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                             </use>
                                         </svg>
-                                    </span>
-                                    <span class="nav_text">
-                                        <?php echo Labels::getLabel('NAV_PICKUP_ADDRESSES', $siteLangId); ?>
-                                    </span>
+                                    </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_PICKUP_ADDRESSES', $siteLangId); ?></span>
                                 </a>
                             </li>
                         <?php } ?>
@@ -1305,10 +1201,7 @@
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                             </use>
                                         </svg>
-                                    </span>
-                                    <span class="nav_text">
-                                        <?php echo Labels::getLabel('NAV_SHIPPED_PRODUCTS', $siteLangId); ?>
-                                    </span>
+                                    </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SHIPPED_PRODUCTS', $siteLangId); ?></span>
                                 </a>
                             </li>
                         <?php } ?>
@@ -1320,10 +1213,7 @@
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                             </use>
                                         </svg>
-                                    </span>
-                                    <span class="nav_text">
-                                        <?php echo Labels::getLabel('NAV_TRACKING_CODE_RELATION', $siteLangId); ?>
-                                    </span>
+                                    </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TRACKING_CODE_RELATION', $siteLangId); ?></span>
                                 </a>
                             </li>
                         <?php } ?>
@@ -1338,7 +1228,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_SEO" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-SEO">
@@ -1346,9 +1236,10 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?></span>
-                    </div>
-                    <div class="sidebar-dropdown-menu">
-                        <ul class="nav">
+                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="sidebar-dropdown-menu collapse" id="NAV_SEO" aria-labelledby="" data-parent="#sidebar-menu">
+                        <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('UrlRewriting'); ?>">
@@ -1357,10 +1248,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_URL_REWRITING', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_URL_REWRITING', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -1388,10 +1276,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?>
-                                        </span>
+                                        </span><span class="nav_text"><?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?></span>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
@@ -1401,10 +1286,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_VIEW_HTML', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_VIEW_HTML', $siteLangId); ?></span>
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
@@ -1414,10 +1296,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_VIEW_XML', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_VIEW_XML', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -1430,10 +1309,7 @@
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                                 </use>
                                             </svg>
-                                        </span>
-                                        <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_META_TAGS_MANAGEMENT', $siteLangId); ?>
-                                        </span>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_META_TAGS_MANAGEMENT', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -1446,22 +1322,17 @@
     <div class="sidebar-foot">
         <ul class="menu">
             <li class="menu-item dropdownJs">
-                <div class="sidebar-dropdown-menu">
-                    <ul class="nav">
-                        <li class="nav_item navItemJs">
-                            <a href="" class="nav_link navLinkJs">
-                                <span class="nav_icon">
-                                    <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-system-settings">
-                                        </use>
-                                    </svg>
-                                </span>
-                                <span class="nav_text">Settings</span>
-                            </a>
-                        </li>
+                <button class="sidebar-dropdown-menu menu-section" onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-system-settings">
+                            </use>
+                        </svg>
+                    </span>
+                    <span class="menu-title"><?php echo Labels::getLabel('NAV_SETTINGS', $siteLangId); ?></span>
+                </button>
 
-                    </ul>
-                </div>
+
             </li>
         </ul>
     </div>

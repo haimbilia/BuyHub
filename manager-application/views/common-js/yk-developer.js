@@ -111,7 +111,8 @@ $(document).ready(function () {
 
         $(li + ', ' + searchResult).show();
         $('.noResultsFoundJs').hide();
-    }
+    };
+
     quickMenuItemSearch = function (e) {
         var value = e.val().toLowerCase();
         if (value.length < 1) {
