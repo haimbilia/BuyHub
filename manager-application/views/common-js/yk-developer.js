@@ -104,33 +104,45 @@ $(document).ready(function () {
         });
     };
 
+    resetQuickSearchResults = function () {
+        var ul = '.navMenuItems';
+        var li = ul + ' li';
+        var searchResult = li + ' .search-result';
+
+        $(li + ', ' + searchResult).show();
+        $('.noResultsFoundJs').hide();
+    }
     quickMenuItemSearch = function (e) {
         var value = e.val().toLowerCase();
         if (value.length < 1) {
             return;
         }
-        $(".navMenuItems li").find("h6").hide();
-        $(".navMenuItems li").find(".search-result").hide();
+        var noResults = '.noResultsFoundJs';
+        var ul = '.navMenuItems';
+        var li = ul + ' li';
+        var searchResult = li + ' .search-result';
 
-        $(".navMenuItems li .search-result").each(function () {
-            if ($(this).find("a").text().toLowerCase().search(value) > -1) {
-                $(this).parent("li").find("h6").show();
-                $(this).show();
-                $(".navMenuItems").show();
-            } else {
-                $(this).hide();
-                $(".navMenuItems").show();
+        $(noResults + ', ' + searchResult).hide();
+        $(li).each(function () {
+            var liObj = this;
+            $(".search-result", liObj).each(function () {
+                var resultObj = $(this);
+                var text = resultObj.find('a').text().toLowerCase();
+                var search = text.search(value);
+                if (-1 < search) {
+                    $(resultObj).show();
+                }
+            });
+
+            $(liObj).show();
+            if (1 > $(".search-result:visible", liObj).length) {
+                $(liObj).hide();
             }
         });
 
-        $(".navMenuItems li").each(function () {
-            if ($(this).find("h6").text().toLowerCase().search(value) > -1) {
-                $(this).show();
-                $(this).find("h6").show();
-                $(this).find(".search-result").show();
-                $(".navMenuItems").show();
-            }
-        });
+        if (1 > $(li + ":visible").length) {
+            $(noResults).show();
+        }
     };
 
     isJson = function (str) {
@@ -488,20 +500,31 @@ function geocodeSetData(results) {
     }
 }
 
-$(document).on("search", "#quickSearch", function (e) {
+/* Reset result on clear(cross) icon on keyword search field. */
+$(document).on("search", "#quickSearchJs", function () {
+    if ("" == $(this).val()) {
+        resetQuickSearchResults();
+    }
+});
+
+$(document).on("keyup", "#quickSearchJs", function (e) {
+    if ("" == $(this).val()) {
+        resetQuickSearchResults();
+        return;
+    }
+
     quickMenuItemSearch($(this));
 });
 
-$(document).on("keyup", "#quickSearch", function (e) {
-    quickMenuItemSearch($(this));
+$(document).on("shown.bs.modal", "#search-main", function () {
+    if (0 < $("#quickSearchJs").length) {
+        $("#quickSearchJs").focus();
+    }
 });
 
 $(window).keydown(function (e) {
     if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
-        if (
-            0 == $.cookie("quickSearchCtrlJs") ||
-            "undefined" == typeof $.cookie("quickSearchCtrlJs")
-        ) {
+        if (0 == $.cookie("quickSearchCtrlJs") || "undefined" == typeof $.cookie("quickSearchCtrlJs")) {
             $(".quickSearchMain").trigger("click");
             e.preventDefault();
         }
