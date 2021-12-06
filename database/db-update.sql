@@ -1418,3 +1418,5 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 1, '{PACKAGE-NAME} - {PLAN-DAYS}', 1),
 ('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 2, '{PACKAGE-NAME} - {PLAN-DAYS}', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_navigations` ADD UNIQUE(`nav_identifier`);

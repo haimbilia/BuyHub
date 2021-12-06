@@ -1,64 +1,162 @@
 <?php
-
 class NavigationsController extends ListingBaseController
 {
-    private $canView;
-    private $canEdit;
+    protected string $modelClass = 'Navigations';
+    protected $pageKey = 'MANAGE_NAVIGATIONS';
 
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewNavigationManagement($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditNavigationManagement($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewNavigationManagement();
+    }
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditNavigationManagement($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditNavigationManagement();
+        }
+    }
+
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setLangTemplateData(array $constructorArgs = []): void
+    {
+        $this->checkEditPrivilege();
+        $this->setModel($constructorArgs);
+        $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->set('formTitle', Labels::getLabel('LBL_NAVIGATION_SETUP', $this->siteLangId));
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewNavigationManagement();
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        
+        $fields = $this->getFormColumns();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['statusButtons'] = true;
+        
+        $this->getListingData();
+        
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->_template->addJs(['js/jquery-sortable-lists.js']);
         $this->_template->render();
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewNavigationManagement();
-
-        $srch = Navigations::getSearchObject($this->siteLangId, false);
-        $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords();
-        $srch->addOrder('nav_active', 'DESC');
-        $srch->addOrder('nav_id', 'DESC');
-        $rs = $srch->getResultSet();
-
-        $records = array();
-        if ($rs) {
-            $records = FatApp::getDb()->fetchAll($rs);
-        }
-        $this->set("arrListing", $records);
+        $this->getListingData();
         $this->_template->render(false, false);
     }
 
-    public function form($nav_id = 0)
+    private function getListingData()
     {
-        $this->objPrivilege->canViewNavigationManagement();
+        $this->checkEditPrivilege(true);
+        $srch = Navigations::getSearchObject($this->siteLangId, false);
+        $srch->joinTable(
+            NavigationLinks::DB_TBL,
+            'LEFT JOIN',
+            'lnk.' . NavigationLinks::DB_TBL_PREFIX . 'nav_id = nav.' . Navigations::tblFld('id'), 'lnk'
+        );
+        $srch->addMultipleFields([
+            'nav.*',
+            'navlang_lang_id',
+            'COALESCE(nav_name, nav_identifier) as nav_name',
+            'COUNT(nlink_id) as nlink_count'
+        ]);
+        $srch->addOrder('nav_active', 'DESC');
+        $srch->addOrder('nav_id', 'DESC');
+        $srch->addGroupBy('nav.nav_id');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetchAll($rs);
 
-        $nav_id = FatUtility::int($nav_id);
-        $frm = $this->getForm($nav_id);
+        $this->set("arrListing", $records);
+        $this->set('canView', $this->objPrivilege->canViewNavigationManagement($this->admin_id, true));
+    }
 
-        if (0 < $nav_id) {
-            $data = Navigations::getAttributesById($nav_id, array('nav_id', 'nav_identifier', 'nav_active', 'nav_type', 'nav_deleted'));
+    public function navLinks()
+    {
+        $this->checkEditPrivilege(true);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $includeWrapper = FatApp::getPostedData('includeWrapper', FatUtility::VAR_INT, applicationConstants::YES);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+        }
+        $records = $this->getNavLinks();
+        $this->set("includeWrapper", $includeWrapper);
+        $this->set("arrListing", $records);
+        $this->set("navId", $recordId);
+        $this->_template->render(false, false);
+    }
+
+    private function getNavLinks(): array
+    {
+        $srch = new NavigationLinkSearch($this->siteLangId);
+        $srch->joinNavigation();
+        $srch->doNotLimitRecords();
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(
+            array(
+                'nlink_id', 'nlink_nav_id', 'nlink_cpage_id', 'nlink_target', 'nlink_type', 'nlink_parent_id', 'COALESCE(nlink_caption, nlink_identifier) as nlink_caption'
+            )
+        );
+        if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == applicationConstants::YES) {
+            $srch->addCondition('nlink_category_id', '=', 0);
+        }
+        
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 < $recordId) {
+            $srch->addCondition('nlink_nav_id', '=', $recordId);
+        }
+        
+        $nlinkId = FatApp::getPostedData('nlinkId', FatUtility::VAR_INT, 0);
+        if (0 < $nlinkId) {
+            $srch->addCondition('nlink_id', '=', $nlinkId);
+        }
+
+        $srch->addOrder('nlink_display_order', 'asc');
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
+
+    public function form()
+    {
+        $this->checkEditPrivilege();
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm($recordId);
+
+        if (0 < $recordId) {
+            $data = Navigations::getAttributesByLangId($this->siteLangId, $recordId, null, true);
             if ($data === false) {
                 FatUtility::dieWithError($this->str_invalid_request);
             }
+            $data['nav_name'] = $data['nav_name'] ?? $data['nav_identifier'];
             $frm->fill($data);
         }
 
-        $this->set('languages', Language::getAllNames());
-        $this->set('nav_id', $nav_id);
+        $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_NAVIGATION_SETUP', $this->siteLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -73,140 +171,134 @@ class NavigationsController extends ListingBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $nav_id = $post['nav_id'];
-        if (1 > $nav_id) {
+        $recordId = $post['nav_id'];
+        if (1 > $recordId) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $data = Navigations::getAttributesById($nav_id, array('nav_id', 'nav_identifier'));
+        $validateIdentifier = Navigations::getAttributesByIdentifier($post['nav_name'], 'nav_id');
+        if (0 < $validateIdentifier && $recordId != $validateIdentifier) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_NAVIGATION_WITH_SAME_NAME_ALREADY_EXISTS', $this->siteLangId), true);
+        }
+
+        $data = Navigations::getAttributesById($recordId, array('nav_id', 'nav_identifier'));
         if ($data === false) {
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $record = new Navigations($nav_id);
-        if (!$record->updateContent($post)) {
+        $record = new Navigations($recordId);
+        $post['nav_identifier'] = $post['nav_name'];
+        $record->assignValues($post);
+        if (!$record->save()) {
             Message::addErrorMessage($record->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = Navigations::getAttributesByLangId($langId, $nav_id)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('navId', $nav_id);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function langForm($nav_id = 0, $lang_id = 0, $autoFillLangData = 0)
-    {
-        $this->objPrivilege->canViewNavigationManagement();
-
-        $nav_id = FatUtility::int($nav_id);
-        $lang_id = FatUtility::int($lang_id);
-
-        if ($nav_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $langFrm = $this->getLangForm($nav_id, $lang_id);
-        if (0 < $autoFillLangData) {
-            $updateLangDataobj = new TranslateLangData(Navigations::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($nav_id, $lang_id);
-            if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            $langData = current($translatedData);
-        } else {
-            $langData = Navigations::getAttributesByLangId($lang_id, $nav_id);
-        }
-
-        if ($langData) {
-            $langFrm->fill($langData);
-        }
-
-        $this->set('languages', Language::getAllNames());
-        $this->set('nav_id', $nav_id);
-        $this->set('nav_lang_id', $lang_id);
-        $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
-    }
-
-    public function langSetup()
-    {
-        $this->objPrivilege->canEditNavigationManagement();
-        $post = FatApp::getPostedData();
-
-        $nav_id = $post['nav_id'];
-
-        $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $lang_id = $post['lang_id'];
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
-        
-
-        if ($nav_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $frm = $this->getLangForm($nav_id, $lang_id);
-        $post = $frm->getFormDataFromArray($post);
-        unset($post['nav_id']);
-        unset($post['lang_id']);
-        $data = array(
-            'navlang_nav_id' => $nav_id,
-            'navlang_lang_id' => $lang_id,
-            'nav_name' => $post['nav_name']
-        );
-
-        $obj = new Navigations($nav_id);
-        if (!$obj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
+        $this->setLangData($record, [
+            $record::tblFld('name') => $post[$record::tblFld('name')]
+        ]);
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Navigations::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($nav_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = Navigations::getAttributesByLangId($langId, $nav_id)) {
-                $newTabLangId = $langId;
-                break;
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
         $this->set('msg', $this->str_setup_successful);
-        $this->set('navId', $nav_id);
-        $this->set('langId', $newTabLangId);
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function pages($nav_id)
+    private function getForm()
     {
-        $this->objPrivilege->canViewNavigationManagement();
-        $nav_id = FatUtility::int($nav_id);
-        if (!$nav_id) {
+        $frm = new Form('frmNavigation');
+        $frm->addHiddenField('', 'nav_id', 0);
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'nav_name');
+
+        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'nav_active', $activeInactiveArr, '', array(), '');
+        
+        $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 0 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+        return $frm;
+    }
+
+    protected function getLangForm($recordId = 0, $langId = 0)
+    {
+        $recordId = FatUtility::int($recordId);
+        $langId = FatUtility::int($langId);
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
+
+        $frm = new Form('frmNavigationLang');
+        $frm->addHiddenField('', 'nav_id', $recordId);
+
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+       
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $langId), 'nav_name');
+        return $frm;
+    }
+
+    public function updateStatus()
+    {
+        $this->objPrivilege->canEditZones();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 >= $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $this->changeStatus($recordId, $status);
+        FatUtility::dieJsonSuccess($this->str_update_record);
+    }
+
+    public function toggleBulkStatuses()
+    {
+        $this->objPrivilege->canEditZones();
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
+        if (empty($recordIdsArr) || -1 == $status) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
+                continue;
+            }
+            $this->changeStatus($recordId, $status);
+        }
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    protected function changeStatus($recordId, $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        $navObj = new Navigations($recordId);
+        if (!$navObj->changeStatus($status)) {
+            Message::addErrorMessage($navObj->getError());
+            FatUtility::dieWithError(Message::getHtml());
+        }
+    }
+
+    /* public function pages($recordId)
+    {
+        $recordId = FatUtility::int($recordId);
+        if (!$recordId) {
             Message::addErrorMessage($this->str_invalid_request);
             if (FatUtility::isAjaxCall()) {
                 FatUtility::dieWithError(Message::getHtml());
@@ -227,50 +319,50 @@ class NavigationsController extends ListingBaseController
         if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == applicationConstants::YES) {
             $srch->addCondition('nlink_category_id', '=', 0);
         }
-        $srch->addCondition('nav_id', '=', $nav_id);
+        $srch->addCondition('nav_id', '=', $recordId);
         $srch->addOrder('nlink_display_order', 'asc');
         $rs = $srch->getResultSet();
         $arrListing = FatApp::getDb()->fetchAll($rs);
-        $this->set('nav_id', $nav_id);
+
+        $this->set('recordId', $recordId);
         $this->set('arrListing', $arrListing);
         $this->_template->render(false, false);
-    }
+    } */
 
-    public function navigationLinkForm()
+    public function linkForm()
     {
         $this->objPrivilege->canEditNavigationManagement();
-        $post = FatApp::getPostedData();
-        $nav_id = FatUtility::int($post['nav_id']);
-        $nlink_id = FatUtility::int($post['nlink_id']);
-        if (!$nav_id) {
+        $navId = FatApp::getPostedData('nav_id', FatUtility::VAR_INT, 0);
+        $nlinkId = FatApp::getPostedData('nlink_id', FatUtility::VAR_INT, 0);
+        if (!$navId) {
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieWithError(Message::getHtml());
         }
-        $frm = $this->getNavigationLinksForm();
-        if (!$nlink_id) {
-            $frm->fill(array('nlink_nav_id' => $nav_id, 'nlink_id' => $nlink_id));
+        $frm = $this->getLinksForm();
+        if (!$nlinkId) {
+            $frm->fill(array('nlink_nav_id' => $navId, 'nlink_id' => $nlinkId));
         } else {
             $srch = new NavigationLinkSearch($this->siteLangId);
             $srch->joinNavigation();
             $srch->setPageSize(1);
             $srch->doNotCalculateRecords();
-            $srch->addCondition('nlink_id', '=', $nlink_id);
+            $srch->addCondition('nlink_id', '=', $nlinkId);
             $rs = $srch->getResultSet();
             $nlinkRow = FatApp::getDb()->fetch($rs);
             $frm->fill($nlinkRow);
         }
-        $this->set('nav_id', $nav_id);
-        $this->set('nlink_id', $nlink_id);
+        $this->set('nav_id', $navId);
+        $this->set('nlink_id', $nlinkId);
         $this->set('frm', $frm);
-        $this->set('languages', Language::getAllNames());
+        $this->set('formTitle', Labels::getLabel('LBL_NAVIGATION_LINK_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
-    public function setupNavigationLink()
+    public function setupLink()
     {
         $this->objPrivilege->canEditNavigationManagement();
 
-        $frm = $this->getNavigationLinksForm();
+        $frm = $this->getLinksForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
@@ -279,7 +371,7 @@ class NavigationsController extends ListingBaseController
         }
 
         $nlink_nav_id = FatUtility::int($post['nlink_nav_id']);
-        $nlink_id = FatUtility::int($post['nlink_id']);
+        $nlinkId = FatUtility::int($post['nlink_id']);
         unset($post['nlink_id']);
 
         if (1 > $nlink_nav_id) {
@@ -314,168 +406,181 @@ class NavigationsController extends ListingBaseController
             $post['nlink_url'] = '';
             $post['nlink_cpage_id'] = 0;
         }
+        $post['nlink_identifier'] = $post['nlink_caption'];
 
-        $navLinkObj = new NavigationLinks($nlink_id);
-        $dataToSaveArr = $post;
-        $navLinkObj->assignValues($dataToSaveArr);
+        $navLinkObj = new NavigationLinks($nlinkId);
+        $navLinkObj->assignValues($post);
         if (!$navLinkObj->save()) {
             Message::addErrorMessage($navLinkObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-        $newTabLangId = 0;
-        if ($nlink_id > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = Navigations::getAttributesByLangId($langId, $nlink_id)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $nlink_id = $navLinkObj->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
-        $this->set('langId', $newTabLangId);
-        $this->set('nlinkId', $nlink_id);
+
+        $nlinkId = $navLinkObj->getMainTableRecordId();
+        $this->setLangData($navLinkObj, [
+            $navLinkObj::tblFld('caption') => $post[$navLinkObj::tblFld('caption')]
+        ]);
+
+        $this->set('navId', $nlink_nav_id);
+        $this->set('nlinkId', $nlinkId);
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
-        /* $data = Navigations::getAttributesById($nav_id,array('nav_id','nav_identifier'));
-        if ($data === false) {
-        Message::addErrorMessage($this->str_invalid_request);
-        FatUtility::dieJsonError( Message::getHtml() );
-        }
-
-        $record = new Navigations($nav_id);
-        if (!$record->updateContent($post)) {
-        Message::addErrorMessage($record->getError());
-        FatUtility::dieJsonError( Message::getHtml() );
-        }
-
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach($languages as $langId => $langName ){
-        if(!$row = Navigations::getAttributesByLangId($langId,$nav_id)){
-        $newTabLangId = $langId;
-        break;
-        }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->set('navId', $nav_id);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php'); */
     }
 
-    public function navigationLinkLangForm($autoFillLangData = 0)
+    public function linkLangForm($autoFillLangData = 0)
     {
         $post = FatApp::getPostedData();
-        $nav_id = FatUtility::int($post['nav_id']);
-        $nlink_id = FatUtility::int($post['nlink_id']);
-        $lang_id = FatUtility::int($post['lang_id']);
-        if (!$nav_id || !$lang_id || !$nlink_id) {
-            Message::addErrorMessage($this->str_invalid_request);
+        $navId = FatUtility::int($post['nav_id']);
+        $nlinkId = FatUtility::int($post['nlink_id']);
+        $langId = FatUtility::int($post['langId']);
+        if (1 > $navId || 1 > $langId || 1 > $nlinkId) {
+            Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $langFrm = $this->getNavigationLinksLangForm($lang_id);
+        $dbNavId = NavigationLinks::getAttributesById($nlinkId, 'nlink_nav_id');
+        if ($dbNavId != $navId) {
+            Message::addErrorMessage($this->str_invalid_request_id);
+            FatUtility::dieWithError(Message::getHtml());
+        }
+
+        $langFrm = $this->getLinksLangForm($langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(NavigationLinks::DB_TBL_LANG);
-            $translatedData = $updateLangDataobj->getTranslatedData($nlink_id, $lang_id);
+            $translatedData = $updateLangDataobj->getTranslatedData($nlinkId, $langId);
             if (false === $translatedData) {
                 Message::addErrorMessage($updateLangDataobj->getError());
                 FatUtility::dieWithError(Message::getHtml());
             }
             $langData = current($translatedData);
         } else {
-            $langData = NavigationLinks::getAttributesByLangId($lang_id, $nlink_id);
+            $langData = NavigationLinks::getAttributesByLangId($langId, $nlinkId);
         }
 
         if ($langData) {
             $langData['nlink_id'] = $langData['nlinklang_nlink_id'];
-            $langData['nav_id'] = $nav_id;
+            $langData['nav_id'] = $navId;
             $langFrm->fill($langData);
         } else {
-            $langFrm->fill(array('lang_id' => $lang_id, 'nav_id' => $nav_id, 'nlink_id' => $nlink_id));
+            $langFrm->fill(array('lang_id' => $langId, 'nav_id' => $navId, 'nlink_id' => $nlinkId));
         }
 
-        /* if( !$nlink_id ){
-        $langFrm->fill( array('lang_id' => $lang_id, 'nav_id' => $nav_id ) );
-        } */
-
         $this->set('languages', Language::getAllNames());
-        $this->set('nav_id', $nav_id);
-        $this->set('nlink_id', $nlink_id);
-        $this->set('nav_lang_id', $lang_id);
+        $this->set('nav_id', $navId);
+        $this->set('nlink_id', $nlinkId);
+        $this->set('nav_lang_id', $langId);
         $this->set('langFrm', $langFrm);
-        $this->set('formLayout', Language::getLayoutDirection($lang_id));
+        $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->set('formTitle', Labels::getLabel('LBL_NAVIGATION_LINK_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
-    public function setupNavigationLinksLang()
+    public function setupLinksLang()
     {
         $this->objPrivilege->canEditNavigationManagement();
         $post = FatApp::getPostedData();
 
-        $nlink_id = FatUtility::int($post['nlink_id']);
+        $nlinkId = FatUtility::int($post['nlink_id']);
         $lang_id = $post['lang_id'];
 
-        if ($nlink_id == 0 || $lang_id == 0) {
+        if ($nlinkId == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $frm = $this->getNavigationLinksLangForm($lang_id);
+        $frm = $this->getLinksLangForm($lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['nlink_id']);
         unset($post['lang_id']);
 
         $data = array(
-            'nlinklang_nlink_id' => $nlink_id,
+            'nlinklang_nlink_id' => $nlinkId,
             'nlinklang_lang_id' => $lang_id,
             'nlink_caption' => $post['nlink_caption'],
         );
 
-        $navLinkObj = new NavigationLinks($nlink_id);
+        $navLinkObj = new NavigationLinks($nlinkId);
         if (!$navLinkObj->updateLangData($lang_id, $data)) {
             Message::addErrorMessage($navLinkObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(NavigationLinks::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($nlink_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
         $newTabLangId = 0;
-        if ($nlink_id > 0) {
+        if ($nlinkId > 0) {
             $languages = Language::getAllNames();
             foreach ($languages as $langId => $langName) {
-                if (!$row = NavigationLinks::getAttributesByLangId($langId, $nlink_id)) {
+                if (!$row = NavigationLinks::getAttributesByLangId($langId, $nlinkId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
         } else {
-            $nlink_id = $navLinkObj->getMainTableRecordId();
+            $nlinkId = $navLinkObj->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
+
         $this->set('langId', $newTabLangId);
-        $this->set('nlinkId', $nlink_id);
-        $this->set('msg', Labels::getLabel('LBL_Navigation_Link_Setup_Successful', $this->siteLangId));
+        $this->set('nlinkId', $nlinkId);
+        $this->set('msg', $this->str_update_record);
 
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteNavigationLink()
+    private function getLinksForm()
+    {
+        $frm = new Form('frmNavigationLink');
+        $frm->addHiddenField('', 'nlink_nav_id');
+        $frm->addHiddenField('', 'nlink_id');
+        $frm->addRequiredField(Labels::getLabel('FRM_CAPTION', $this->siteLangId), 'nlink_caption');
+        $linkTypes = NavigationLinks::getLinkTypeArr($this->siteLangId);
+        if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == applicationConstants::YES) {
+            unset($linkTypes[NavigationLinks::NAVLINK_TYPE_CATEGORY_PAGE]);
+        }
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'nlink_type', $linkTypes, '', array(), '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_LINK_TARGET', $this->siteLangId), 'nlink_target', NavigationLinks::getLinkTargetArr($this->siteLangId), '', array(), '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_LOGIN_PROTECTED', $this->siteLangId), 'nlink_login_protected', NavigationLinks::getLinkLoginTypeArr($this->siteLangId), '', array(), '')->requirements()->setRequired();
+        $frm->addTextBox(Labels::getLabel('FRM_DISPLAY_ORDER', $this->siteLangId), 'nlink_display_order')->requirements()->setInt();
+
+        $contentPages = ContentPage::getPagesForSelectBox($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_LINK_TO_CMS_PAGE', $this->siteLangId), 'nlink_cpage_id', $contentPages, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
+
+        $categoryPages = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, 0, false, true);
+        $frm->addSelectBox(Labels::getLabel('FRM_LINK_TO_CATEGORY', $this->siteLangId), 'nlink_category_id', $categoryPages, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
+
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_EXTERNAL_PAGE', $this->siteLangId), 'nlink_url');
+        $fld->htmlAfterField = '<br/>' . Labels::getLabel('FRM_PREFIX_WITH_{SITEROOT}_if_u_want_to_generate_system_site_url', $this->siteLangId) . '<br/>E.g: {SITEROOT}products, {SITEROOT}contact_us' . Labels::getLabel('FRM_ETC', $this->siteLangId) . '.';
+
+        $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 0 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
+
+        return $frm;
+    }
+
+    private function getLinksLangForm($langId)
+    {
+        $frm = new Form('frmNavigationLink');
+        $frm->addHiddenField('', 'nav_id');
+        $frm->addHiddenField('', 'nlink_id');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('LBL_Caption', $this->siteLangId), 'nlink_caption');
+        return $frm;
+    }
+
+    public function deleteLink()
     {
         $this->objPrivilege->canEditNavigationManagement();
 
         $nlinkId = FatApp::getPostedData('nlinkId', FatUtility::VAR_INT, 0);
+        $navId = FatApp::getPostedData('navId', FatUtility::VAR_INT, 0);
         if ($nlinkId < 1) {
+            Message::addErrorMessage($this->str_invalid_request_id);
+            FatUtility::dieJsonError(Message::getHtml());
+        }
+        
+        $dbNavId = NavigationLinks::getAttributesById($nlinkId, 'nlink_nav_id');
+        if ($navId != $dbNavId) {
             Message::addErrorMessage($this->str_invalid_request_id);
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -486,7 +591,18 @@ class NavigationsController extends ListingBaseController
             FatUtility::dieJsonError(Message::getHtml());
         }
 
-        FatUtility::dieJsonSuccess($this->str_delete_record);
+        $srch = new NavigationLinkSearch($this->siteLangId);
+        $srch->doNotLimitRecords();
+        $srch->addFld('nlink_id');
+        $srch->addCondition('nlink_nav_id', '=', $navId);
+        $srch->getResultSet();
+        
+        $json = [
+            'msg' => $this->str_delete_record,
+            'subRecordsCount' => $srch->recordCount()
+        ];
+
+        FatUtility::dieJsonSuccess($json);
     }
 
     public function updateNlinkOrder()
@@ -504,154 +620,37 @@ class NavigationsController extends ListingBaseController
         }
     }
 
-    public function changeStatus()
+    protected function getFormColumns(): array
     {
-        $this->objPrivilege->canEditNavigationManagement();
-        $navId = FatApp::getPostedData('navId', FatUtility::VAR_INT, 0);
-        if (0 == $navId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $navigationData = Navigations::getAttributesById($navId, array('nav_active'));
-
-        if (!$navigationData) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+        $tblHeadingCols = CacheHelper::get('navigationsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols);
         }
 
-        $status = ($navigationData['nav_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
-
-        $this->updateNavigationStatus($navId, $status);
-
-        FatUtility::dieJsonSuccess($this->str_update_record);
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'nav_identifier' => Labels::getLabel('LBL_Title', $this->siteLangId),
+            'nav_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('navigationsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
     }
 
-    public function toggleBulkStatuses()
+    protected function getDefaultColumns(): array
     {
-        $this->objPrivilege->canEditNavigationManagement();
-
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $navIdsArr = FatUtility::int(FatApp::getPostedData('nav_ids'));
-        if (empty($navIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        foreach ($navIdsArr as $navId) {
-            if (1 > $navId) {
-                continue;
-            }
-
-            $this->updateNavigationStatus($navId, $status);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
+        return [
+            'select_all',
+            'listSerial',
+            'nav_identifier',
+            'nav_active',
+            'action',
+        ];
     }
 
-    private function updateNavigationStatus($navId, $status)
+    protected function excludeKeysForSort($fields = []): array
     {
-        $status = FatUtility::int($status);
-        $navId = FatUtility::int($navId);
-        if (1 > $navId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
-            );
-        }
-
-        $navObj = new Navigations($navId);
-        if (!$navObj->changeStatus($status)) {
-            Message::addErrorMessage($navObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-    }
-
-    private function getNavigationLinksForm()
-    {
-        $frm = new Form('frmNavigationLink');
-        $frm->addRequiredField(Labels::getLabel('LBL_Caption_Identifier', $this->siteLangId), 'nlink_identifier');
-        $linkTypes = NavigationLinks::getLinkTypeArr($this->siteLangId);
-        if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == applicationConstants::YES) {
-            unset($linkTypes[NavigationLinks::NAVLINK_TYPE_CATEGORY_PAGE]);
-        }
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'nlink_type', $linkTypes, '', array(), '')->requirements()->setRequired();
-        $frm->addSelectBox(Labels::getLabel('LBL_Link_Target', $this->siteLangId), 'nlink_target', NavigationLinks::getLinkTargetArr($this->siteLangId), '', array(), '')->requirements()->setRequired();
-        $frm->addSelectBox(Labels::getLabel('LBL_Login_Protected', $this->siteLangId), 'nlink_login_protected', NavigationLinks::getLinkLoginTypeArr($this->siteLangId), '', array(), '')->requirements()->setRequired();
-
-        $contentPages = ContentPage::getPagesForSelectBox($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Link_to_CMS_Page', $this->siteLangId), 'nlink_cpage_id', $contentPages, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-
-        $categoryPages = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, 0, false, true);
-        $frm->addSelectBox(Labels::getLabel('LBL_Link_to_Category', $this->siteLangId), 'nlink_category_id', $categoryPages, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_External_Page', $this->siteLangId), 'nlink_url');
-        $fld->htmlAfterField = '<br/>' . Labels::getLabel('LBL_Prefix_with_{SITEROOT}_if_u_want_to_generate_system_site_url', $this->siteLangId) . '<br/>E.g: {SITEROOT}products, {SITEROOT}contact_us' . Labels::getLabel('LBL_etc', $this->siteLangId) . '.';
-
-        $frm->addTextBox(Labels::getLabel('LBL_Display_Order', $this->siteLangId), 'nlink_display_order')->requirements()->setInt();
-
-        $frm->addHiddenField('', 'nlink_nav_id');
-        $frm->addHiddenField('', 'nlink_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getNavigationLinksLangForm($lang_id)
-    {
-        $frm = new Form('frmNavigationLink');
-        $frm->addHiddenField('', 'nav_id');
-        $frm->addHiddenField('', 'nlink_id');
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Caption', $this->siteLangId), 'nlink_caption');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getForm()
-    {
-        $this->objPrivilege->canViewNavigationManagement();
-
-        $frm = new Form('frmNavigation');
-        $frm->addHiddenField('', 'nav_id', 0);
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'nav_identifier');
-        $fld->setUnique('tbl_navigations', 'nav_identifier', 'nav_id', 'nav_id', 'nav_id');
-
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'nav_active', $activeInactiveArr, '', array(), '');
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    private function getLangForm($nav_id = 0, $lang_id = 0)
-    {
-        $frm = new Form('frmNavigationLang');
-        $frm->addHiddenField('', 'nav_id', $nav_id);
-
-        $languages = Language::getAllNames();
-		if(count($languages) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $lang_id, array(), '');
-		} else  {
-			$lang_id = array_key_first($languages); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
-       
-        $frm->addRequiredField(Labels::getLabel('LBL_Title', $this->siteLangId), 'nav_name');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
-        return $frm;
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

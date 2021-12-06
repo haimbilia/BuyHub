@@ -28,7 +28,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'orderstatus_is_active':
-                $htm = HtmlHelper::addStatusButHtml($canEdit, $row['orderstatus_id'], $row[$key]);
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['orderstatus_id'], $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'action':

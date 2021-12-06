@@ -13,10 +13,10 @@ class Navigations extends MyAppModel
     public const NAVTYPE_HEADER = 3;
     public const NAVTYPE_SELLER_LEFT = 4;
     public const NAVTYPE_SELLER_RIGHT = 5;
-    
+
     public const LAYOUT_MEGA_MENU = 1;
     public const LAYOUT_SIMPLE_MENU = 2;
-    
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -30,9 +30,9 @@ class Navigations extends MyAppModel
         if ($langId > 0) {
             $srch->joinTable(
                 static::DB_TBL_LANG,
-                'LEFT OUTER JOIN',
+                'LEFT JOIN',
                 'nav_l.' . static::DB_TBL_LANG_PREFIX . 'nav_id = nav.' . static::tblFld('id') . ' and
-			nav_l.' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId,
+			    nav_l.' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId,
                 'nav_l'
             );
         }
@@ -62,7 +62,7 @@ class Navigations extends MyAppModel
 
         $srch->addMultipleFields(
             array(
-            'IFNULL(nav_l.nav_name,nav.nav_identifier) as nav_name'
+                'IFNULL(nav_l.nav_name,nav.nav_identifier) as nav_name'
             )
         );
         return $srch;
@@ -79,8 +79,8 @@ class Navigations extends MyAppModel
         unset($data['nav_id']);
 
         $assignValues = array(
-        'nav_identifier' => $data['nav_identifier'],
-        'nav_active' => $data['nav_active'],
+            'nav_identifier' => $data['nav_identifier'],
+            'nav_active' => $data['nav_active'],
         );
 
         if (!FatApp::getDb()->updateFromArray(
