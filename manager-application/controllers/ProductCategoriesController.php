@@ -1,5 +1,4 @@
 <?php
-
 class ProductCategoriesController extends ListingBaseController
 {
     protected string $modelClass = 'ProductCategory';

@@ -48,7 +48,6 @@ class TestimonialsController extends ListingBaseController
 
     public function index()
     {
-
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         
@@ -115,9 +114,7 @@ class TestimonialsController extends ListingBaseController
         $srch->addOrder('testimonial_active', 'desc');
         $srch->addOrder($sortBy, $sortOrder);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-    
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -167,11 +164,9 @@ class TestimonialsController extends ListingBaseController
             }
             $frm->fill($data);
         }
-
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        
         $this->_template->render(false, false);
     }
 
@@ -180,12 +175,9 @@ class TestimonialsController extends ListingBaseController
         $this->checkEditPrivilege();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        // print_rr($post, 1);
-
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-
         $recordId = $post['testimonial_id'];
         unset($post['testimonial_id']);
         if ($recordId == 0) {
@@ -204,11 +196,11 @@ class TestimonialsController extends ListingBaseController
         unset($post['testimonial_title'], $post['testimonial_text'] );
         $record->assignValues($post);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            LibHelper::exitWithError($record->getError(), false, false, true);
         }
 
         if (!$record->updateLangData($this->siteLangId, $LangdataArray)) {
-            LibHelper::exitWithError($record->getError(), true);
+            LibHelper::exitWithError($record->getError(), false, false, true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
@@ -285,7 +277,21 @@ class TestimonialsController extends ListingBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $formTitle = Labels::getLabel('LBL_TESTIMONIAL_SETUP', $langId);
+        $otherButtons = [
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'onclick' => 'mediaForm('.$recordId.')',
+                    'title' => Labels::getLabel('LBL_MEDIA', $langId),
+                ],
+                'label' => Labels::getLabel('LBL_MEDIA', $langId),
+                'isActive' => false
+            ]
+        ]; 
+        $this->set('formTitle', $formTitle);
+        $this->set('otherButtons', $otherButtons);
+        $this->_template->render(false, false, '_partial/listing/lang-form.php');
     }
 
     public function langSetup()
@@ -304,8 +310,7 @@ class TestimonialsController extends ListingBaseController
 
 
         if ($recordId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
 
         $frm = $this->getLangForm($recordId, $lang_id);
@@ -337,7 +342,7 @@ class TestimonialsController extends ListingBaseController
         $newTabLangId = 0;
         $languages = Language::getAllNames();
         foreach ($languages as $langId => $langName) {
-            if (!$row = Testimonial::getAttributesByLangId($langId, $recordId)) {
+            if (!Testimonial::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
                 break;
             }
@@ -353,7 +358,6 @@ class TestimonialsController extends ListingBaseController
     {
         $this->checkEditPrivilege();
         $recordId = FatUtility::int($recordId);
-
         $imageFrm = $this->getMediaForm($recordId);
         $testimonialImages = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, $langId);
         $this->set('image', $testimonialImages);
@@ -374,8 +378,6 @@ class TestimonialsController extends ListingBaseController
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_TESTIMONIAL_IMAGE);
         $frm->addHiddenField('', 'min_width', 32);
         $frm->addHiddenField('', 'min_height', 32);
-
-
         return $frm;
     }
 
@@ -394,7 +396,6 @@ class TestimonialsController extends ListingBaseController
             $langId = array_key_first($languages);
         }
         $langId = $langId == 0 ?  $this->siteLangId : $langId;
-        
         $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, $langId, $universalImage );
         $this->set('image', $cbgImage);
         $this->set('imageFunction', 'testimonial');
@@ -410,7 +411,6 @@ class TestimonialsController extends ListingBaseController
         $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
 
-        $fileType = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $recordId = FatApp::getPostedData('testimonial_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
@@ -451,26 +451,16 @@ class TestimonialsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
+            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
         }
 
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile($fileType, $recordId, $aFileId, 0, -1)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+            LibHelper::exitWithError($fileHandlerObj->getError(), false, false, true);
         }
-
         $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-
-  
-    // private function isMediaUploaded($testimonialId)
-    // {
-    //     if ($attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $testimonialId, 0)) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
 
 
      /**
