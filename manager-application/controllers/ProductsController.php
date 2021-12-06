@@ -461,7 +461,7 @@ class ProductsController extends ListingBaseController
                 $weightFld->requirements()->setRange('0.01', '9999999999');
             }
 
-            // $shippingObj = new Shipping($this->adminLangId);
+            // $shippingObj = new Shipping($this->siteLangId);
                   
             // if(!$shippingObj->getShippingApiObj($shippedByUserId)){
             //     $shipProfileArr = ShippingProfile::getProfileArr($langId, $shippedByUserId, true, true); 
@@ -628,8 +628,8 @@ class ProductsController extends ListingBaseController
                     LibHelper::exitWithError($prodObj->getError(), true);
                 }
             }           
-        }        
-        
+        }
+                
         if (isset($post['options'])  && isset($post['optionValues'])) {
             foreach ($post['options'] as $index => $optionId) {
                 $opValuesArr = array_column(json_decode($post['optionValues'][$index]), 'id');
@@ -714,21 +714,9 @@ class ProductsController extends ListingBaseController
                     $oldOptions = array_column($records,'prodoption_option_id');            
                     $oldDeletedOptions = array_diff(array_column($records,'prodoption_option_id'),$post['options']);
                     if($oldDeletedOptions){
-                            /* Get Linked Products [ */
-                        $srch = SellerProduct::getSearchObject();
-                        $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
-                        $srch->addCondition('selprod_product_id', '=', $productId);
-                        $srch->addCondition('tspo.selprodoption_option_id', 'IN', $oldDeletedOptions);
-                        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-                        $srch->addFld(array('selprod_id'));
-                        $srch->doNotCalculateRecords();
-                        $srch->setPageSize(1);
-                        $rs = $srch->getResultSet();
-                        $row = FatApp::getDb()->fetch($rs);
-                        if (!empty($row)) {
-                            LibHelper::exitWithError(Labels::getLabel('ERR_OPTION_IS_LINKED_WITH_SELLER_INVENTORY', $langId), true);                             
-                        }
-                            /* ] */
+                        if(SellerProduct::isOptionLinked($oldDeletedOptions,$productId)){
+                            LibHelper::exitWithError(Labels::getLabel('ERR_OPTION_IS_LINKED_WITH_SELLER_INVENTORY', $this->siteLangId), true);           
+                        } 
     
                     }
                 }            
@@ -798,48 +786,29 @@ class ProductsController extends ListingBaseController
     //     $this->_template->render(false, false, 'json-success.php');
     // }
 
-    // public function removeProductOption()
-    // {
-    //     $this->objPrivilege->canEditProducts();
-    //     $post = FatApp::getPostedData();
-    //     if (false === $post) {
-    //         Message::addErrorMessage($this->str_invalid_request);
-    //         FatUtility::dieWithError(Message::getHtml());
-    //     }
-    //     $product_id = FatUtility::int($post['product_id']);
-    //     $option_id = FatUtility::int($post['option_id']);
-    //     if (!$product_id || !$option_id) {
-    //         Message::addErrorMessage($this->str_invalid_request);
-    //         FatUtility::dieWithError(Message::getHtml());
-    //     }
+    public function removeProductOption()
+    {
+        $this->objPrivilege->canEditProducts();
 
-    //     /* Get Linked Products [ */
-    //     $srch = SellerProduct::getSearchObject();
-    //     $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
-    //     $srch->addCondition('selprod_product_id', '=', $product_id);
-    //     $srch->addCondition('tspo.selprodoption_option_id', '=', $option_id);
-    //     $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-    //     $srch->addFld(array('selprod_id'));
-    //     $srch->doNotCalculateRecords();
-    //     $srch->setPageSize(1);
-    //     $rs = $srch->getResultSet();
-    //     $row = FatApp::getDb()->fetch($rs);
-    //     if (!empty($row)) {
-    //         Message::addErrorMessage(Labels::getLabel('LBL_Option_is_linked_with_seller_inventory', $this->siteLangId));
-    //         FatUtility::dieWithError(Message::getHtml());
-    //     }
-    //     /* ] */
+        $productId = FatApp::getPostedData('productId',FatUtility::VAR_INT,0);       
+        $optionId = FatApp::getPostedData('optionId',FatUtility::VAR_INT,0);
+          
+        if (1 > $productId || 1 > $optionId) {
+            LibHelper::exitWithError(Labels::getLabel($this->str_invalid_request, $this->siteLangId));
+           
+        }
+        
+        if(SellerProduct::isOptionLinked($optionId,$productId)){
+            LibHelper::exitWithError(Labels::getLabel('ERR_OPTION_IS_LINKED_WITH_SELLER_INVENTORY', $this->siteLangId), true);           
+        }       
 
-    //     $prodObj = new Product($product_id);
-    //     if (!$prodObj->removeProductOption($option_id)) {
-    //         Message::addErrorMessage(Labels::getLabel($prodObj->getError(), $this->siteLangId));
-    //         FatUtility::dieWithError(Message::getHtml());
-    //     }
-    //     UpcCode::remove($product_id);
-    //     Tag::updateProductTagString($product_id);
-    //     $this->set('msg', Labels::getLabel('MSG_Option_Removed_Successfully', $this->siteLangId));
-    //     $this->_template->render(false, false, 'json-success.php');
-    // }
+        $prodObj = new Product($productId);
+        if (!$prodObj->removeProductOption($optionId)) {      
+            LibHelper::exitWithError($prodObj->getError(), true);
+        }     
+        $this->set('msg', Labels::getLabel('MSG_OPTION_REMOVED_SUCCESSFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
 
     public function updateProductTag()
     {

@@ -621,20 +621,16 @@ $frm->setFormTagAttribute('class', 'form');
         select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'),{langId});
 
         $('#addProductfrm .optionsJs').each(function(index){            
-            select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'),{},function(e){           
-                resetOptionValuesTag(e);
-            },function(e){
-                resetOptionValuesTag(e);
-            });
+            select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'),{},
+            resetOptionValuesTag,
+            resetOptionValuesTag,
+            processResultsCallback);
            $(this).data("select2").$container.addClass("w-100");
-        }); 
-
+        });
 
         $('#addProductfrm .optionValuesJs').each(function(index){  
             tagifyOptionValue("#"+$(this).attr('id')); 
         });
-
-        
 
         getShippingProfileOptions(<?php echo $frm->getField('product_seller_id')->value; ?>);
 

@@ -1,4 +1,4 @@
-$header-height:65px;
+$header-height: 65px;
 .fb-body {
     background-color: $bg-gray;
     flex: 1;
@@ -29,13 +29,13 @@ $header-height:65px;
     position: sticky;
     top: 0;
     z-index: 100;
-    height: $header-height;
+    //height: $header-height;
     background-color: #fff;
     // position: fixed;
     // top: 0;
-    // right: 0; 
+    // right: 0;
     // left: 100px;
-    // z-index: 100; 
+    // z-index: 100;
     box-shadow: 0 10px 30px 0 rgba(82, 63, 105, 0.05);
     // height: 80px;
     display: flex;
@@ -83,8 +83,8 @@ $header-height:65px;
             color: darken($warning-color, 20);
         }
         &.alert-solid-success {
-            // background: lighten($success-color, 10);  
-            // color: darken($success-color, 30);  
+            // background: lighten($success-color, 10);
+            // color: darken($success-color, 30);
         }
         .alert-icon i {
             font-size: 1.4rem;
@@ -109,7 +109,7 @@ $header-height:65px;
         border-color: $brand-color;
         color: $brand-color;
         .svg {
-            transform: rotate( -180deg);
+            transform: rotate(-180deg);
         }
     }
     .svg {
@@ -142,7 +142,7 @@ $header-height:65px;
         h6 {
             margin-bottom: 1.5rem;
         }
-        >ul {
+        > ul {
             li {
                 font-size: 0.9rem;
                 margin: 0.5rem 0;
@@ -156,15 +156,15 @@ $header-height:65px;
 
 .help-window {
     @extend .empty-stats;
-    text-align:#{$start-direction};
+    text-align: #{$start-direction};
 }
 
 .accounts-nav {
     display: flex;
     align-items: center;
-    >li {
+    > li {
         list-style: none;
-        >a {
+        > a {
             background: transparent;
             border: none;
             display: flex;
@@ -173,7 +173,7 @@ $header-height:65px;
             border-radius: 50%;
             margin: 0 auto;
             padding: 10px;
-            >&:hover {
+            > &:hover {
                 background-color: rgba(0, 0, 0, 0.1);
             }
         }
@@ -201,7 +201,7 @@ $header-height:65px;
 }
 
 .text-link {
-    font-size: .875rem;
+    font-size: 0.875rem;
     color: #7e8299;
     position: relative;
     &--arrow {
@@ -309,7 +309,7 @@ $header-height:65px;
     display: flex;
     text-align: center;
     &:after {
-        content: '';
+        content: "";
         height: 1px;
         width: 100%;
         background: $border-color;
@@ -484,7 +484,7 @@ $header-height:65px;
             }
             .value {
                 font-weight: 500;
-                text-align:#{$end-direction};
+                text-align: #{$end-direction};
                 margin-#{$start-direction}: auto;
             }
             &.highlighted {
@@ -532,13 +532,12 @@ $header-height:65px;
         }
     }
     &:not(.collapsed) {
-        border-bottom: $border;
         .dropdown-toggle-custom-arrow {
             &:before {
-                transform: translate(3px, 0) rotate( 45deg);
+                transform: translate(3px, 0) rotate(45deg);
             }
             &:after {
-                transform: translate(-3px, 0) rotate( -45deg);
+                transform: translate(-3px, 0) rotate(-45deg);
             }
         }
     }
@@ -550,7 +549,7 @@ $header-height:65px;
         flex: 0 0 33%;
         max-width: 33%;
         padding: 0;
-        +li {
+        + li {
             padding-#{$start-direction}: 1.5rem;
         }
     }
@@ -583,10 +582,10 @@ $header-height:65px;
 .float-btn {
     will-change: transform, opacity;
     border: none;
-    box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
     overflow: hidden;
     // background-color: $brand-color;
-    // color:  lighten($brand-color, 55%); 
+    // color:  lighten($brand-color, 55%);
     @include bg-brand();
     border-radius: 50%;
     width: 45px;
@@ -599,7 +598,7 @@ $header-height:65px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all .1s ease-out;
+    transition: all 0.1s ease-out;
     @include media-breakpoint-up(lg) {
         display: none;
     }

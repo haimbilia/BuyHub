@@ -26,7 +26,7 @@
     }
     .list-cart {
         margin-bottom: 2rem;
-        >li {
+        > li {
             //padding: 2.5rem;
         }
         &:last-child {
@@ -142,7 +142,8 @@
     top: 175px;
     .card {
         box-shadow: none;
-        &-body {}
+        &-body {
+        }
     }
     .buttons-group {
         margin-top: 1rem;
@@ -282,7 +283,7 @@
             // position: absolute;
             // opacity: 0;
             // z-index: -1;
-            &:checked+.control-label {
+            &:checked + .control-label {
                 color: $brand-color;
                 border-color: $brand-color;
                 border-width: 2px;

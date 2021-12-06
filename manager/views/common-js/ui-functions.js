@@ -154,3 +154,13 @@ _tab.each(function () {
     });
   });
 });
+
+$(document).on("click", ".sidebarOpenerBtnJs", function () {
+  if (0 < $("body[data-sidebar-minimize]").length) {
+    $(this).addClass("active");
+    $("body[data-sidebar-minimize]").removeAttr("data-sidebar-minimize");
+  } else {
+    $(this).removeClass("active");
+    $("body").attr("data-sidebar-minimize", "on");
+  }
+});
