@@ -42,7 +42,11 @@ class TransactionsController extends ListingBaseController {
 
     public function shippingTransactionSearch() {
         $this->getListingData('utxn_id', 'DESC');
-        $this->set('pageTitle', 'tet');
+        $this->_template->render(false, false);
+    }
+    
+    public function getRows() {
+        $this->getListingData('utxn_id', 'DESC');
         $this->_template->render(false, false);
     }
 
@@ -65,7 +69,7 @@ class TransactionsController extends ListingBaseController {
         $post['utxn_user_id'] = $userId;
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+        $pageSize = 5;//applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $balSrch = Transactions::getSearchObject();
         $balSrch->doNotCalculateRecords();
         $balSrch->doNotLimitRecords();

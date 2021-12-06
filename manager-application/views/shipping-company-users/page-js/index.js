@@ -65,7 +65,7 @@ var defaultController = controllerName;
             }
             $.ykmsg.success(t.msg);
             if (controllerName == 'Transactions') {
-                frm.reset();
+                $.ykmodal.close();
             } else {
                 reloadList();
             }
@@ -86,6 +86,49 @@ var defaultController = controllerName;
             fcom.updateFaceboxContent(t);
         });
         $.systemMessage.close();
+    };
+
+
+    loadMore = function () {
+        if (false === checkControllerName()) {
+            return false;
+        }
+
+        var frm = document.frmLoadMoreRecordsPaging;
+        var page = 1;
+        if (
+                "undefined" != typeof frm.page.value &&
+                "" != frm.page.value &&
+                0 < frm.page.value
+                ) {
+            page += parseInt(frm.page.value);
+        }
+
+        $(frm.page).val(page);
+        var reference = $(".appendRowsJs .rowJs:last").data("reference");
+        if (
+                "undefined" != typeof reference &&
+                "undefined" != typeof frm.reference
+                ) {
+            $(frm.reference).val(reference);
+        }
+
+        var data = fcom.frmData(frm);
+
+        $(".appendRowsJs .rowJs:last")
+                .clone()
+                .removeAttr("class")
+                .addClass("rowJs")
+                .appendTo(".appendRowsJs")
+                .html(fcom.getRowSpinner());
+        fcom.ajax(fcom.makeUrl('transactions', "getRows"), data, function (rows) {
+            $(".appendRowsJs .rowJs:last").remove();
+            $(".appendRowsJs").append(rows);
+
+            if (page == frm.pageCount.value) {
+                $(".loadMorePaginationJs").remove();
+            }
+        });
     };
 
 })();
