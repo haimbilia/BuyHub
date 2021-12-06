@@ -1,7 +1,7 @@
 <div class="quick-search">
     <form method="get" class="form form--quick-search">
         <div class="quick-search__form">
-            <input id="quickSearch" type="search" class="form-control" placeholder="<?php echo Labels::getLabel('LBL_GO_TO..', $siteLangId); ?>">
+            <input id="quickSearchJs" type="search" class="form-control" placeholder="<?php echo Labels::getLabel('LBL_GO_TO..', $siteLangId); ?>">
         </div>
         <div class="quick-search__wrapper">
             <ul class="list list--search-result navMenuItems">
@@ -814,6 +814,9 @@
                         <?php } ?>
                     </li>
                 <?php } ?>
+                <li class="noResultsFoundJs" style="display: none;">
+                    <h6 class="title"><?php echo Labels::getLabel('NAV_NO_RESULTS_FOUND', $siteLangId); ?></h6>
+                </li>
             </ul>
         </div>
     </form>

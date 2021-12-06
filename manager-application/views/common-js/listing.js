@@ -51,7 +51,7 @@ $(function () {
     }).disableSelection();
 });
 
-/* Reset result on clear on keyword. */
+/* Reset result on clear(cross) icon on keyword search field. */
 $(document).on("search", "input[name='keyword']", function () {
     if ("" == $(this).val()) {
         searchRecords(document.frmRecordSearch);
