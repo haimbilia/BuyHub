@@ -187,18 +187,18 @@ class AdvertisersReportController extends ListingBaseController
 
     protected function getFormColumns()
     {
-        $avdertiserUserReportsCacheVar = FatCache::get('avdertiserUserReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        $avdertiserUserReportsCacheVar = CacheHelper::get('avdertiserUserReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$avdertiserUserReportsCacheVar) {
             $arr = [
-                'name' => Labels::getLabel('LBL_Name', $this->siteLangId),
-                'user_regdate' => Labels::getLabel('LBL_Registration_Date', $this->siteLangId),
-                'user_is_supplier' => Labels::getLabel('LBL_Is_Seller', $this->siteLangId),
-                'promotionsCount' => Labels::getLabel('LBL_Total_Promotions', $this->siteLangId),
-                'activePromotions' => Labels::getLabel('LBL_Active_Promotions', $this->siteLangId),
-                'promotionCharged' => Labels::getLabel('LBL_Promotions_Cost', $this->siteLangId),
-                'availableBalance' => Labels::getLabel('LBL_Available_Balance', $this->siteLangId),
+                'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
+                'user_regdate' => Labels::getLabel('LBL_REGISTRATION_DATE', $this->siteLangId),
+                'user_is_supplier' => Labels::getLabel('LBL_IS_SELLER', $this->siteLangId),
+                'promotionsCount' => Labels::getLabel('LBL_TOTAL_PROMOTIONS', $this->siteLangId),
+                'activePromotions' => Labels::getLabel('LBL_ACTIVE_PROMOTIONS', $this->siteLangId),
+                'promotionCharged' => Labels::getLabel('LBL_PROMOTIONS_COST', $this->siteLangId),
+                'availableBalance' => Labels::getLabel('LBL_AVAILABLE_BALANCE', $this->siteLangId),
             ];
-            FatCache::set('avdertiserUserReportsCacheVar' . $this->siteLangId, serialize($arr), '.txt');
+            CacheHelper::set('avdertiserUserReportsCacheVar' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         } else {
             $arr =  unserialize($avdertiserUserReportsCacheVar);
         }
