@@ -933,7 +933,7 @@
                                         <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
                                     </a>
                                     <div id="usersReportNav" class="panel-collapse collapse collapseJs">
-                                        <ul class="nav nav-level">                                            
+                                        <ul class="nav nav-level">
                                             <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>">
@@ -951,7 +951,7 @@
                                                         </span>
                                                     </a>
                                                 </li>
-                                            <?php } ?>                                           
+                                            <?php } ?>
                                             <?php if ($objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>">
