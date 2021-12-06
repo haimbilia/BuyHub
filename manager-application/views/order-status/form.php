@@ -1,5 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$fld = $frm->getField('orderstatus_color_class');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$fld = $frm->getField('orderstatus_type');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
 $fld = $frm->getField('orderstatus_is_digital');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
