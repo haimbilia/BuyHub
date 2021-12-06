@@ -28,6 +28,7 @@
 .sticky-top {
     position: sticky;
     top: 2rem;
+    z-index: 01;
 }
 
 .stock-nav {
@@ -43,7 +44,7 @@
         &.is-active {
             a {
                 // background-color: $brand-color;
-                // color:  lighten($brand-color, 55%); 
+                // color:  lighten($brand-color, 55%);
                 @include bg-brand();
                 text-decoration: none;
                 .stock-nav-title {
@@ -88,7 +89,7 @@
     display: grid;
     grid-gap: 1rem;
     grid-template-columns: repeat(4, 1fr);
-    >li {
+    > li {
         list-style: none;
         border: dashed 1px $border-color;
         padding: 0.5rem;
@@ -109,16 +110,16 @@
         height: 100%;
         position: relative;
         &[data-ratio="1:1"] {
-            padding-bottom: calc(100%/(var(--aspect-ratio1)));
+            padding-bottom: calc(100% / (var(--aspect-ratio1)));
         }
         &[data-ratio="4:3"] {
-            padding-bottom: calc(100%/(var(--aspect-ratio2)));
+            padding-bottom: calc(100% / (var(--aspect-ratio2)));
         }
         &[data-ratio="3:4"] {
-            padding-bottom: calc(100%/(var(--aspect-ratio3)));
+            padding-bottom: calc(100% / (var(--aspect-ratio3)));
         }
         &[data-ratio="16:9"] {
-            padding-bottom: calc(100%/(var(--aspect-ratio4)));
+            padding-bottom: calc(100% / (var(--aspect-ratio4)));
         }
         &:hover {
             .uploaded-stocks-actions {

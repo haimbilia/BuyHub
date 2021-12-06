@@ -2,82 +2,151 @@
 
 class DiscountCouponsReportController extends ListingBaseController
 {
-    private $canView;
-    private $canEdit;
+    protected $pageKey = 'DISCOUNT_REPORT';
 
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewDiscountCoupons($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewDiscountCoupons();
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewDiscountCoupons();
-        $frmSearch = $this->getSearchForm();
+        $formColumns = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($formColumns);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
+        $actionItemsData = array_merge($actionItemsData, [
+            'newRecordBtn' => false,
+            'formColumns' => $formColumns,
+            'columnButtons' => true,
+            'defaultColumns' => $this->getDefaultColumns()
+        ]);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
-        $this->_template->render();
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('formColumns', $formColumns);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->getListingData(false);
+        $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
 
     public function search($type = false)
     {
-        $this->objPrivilege->canViewDiscountCoupons();
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $this->getListingData($type);
+        $jsonData = [
+            'headSection' => $this->_template->render(false, false, '_partial/listing/head-section.php', true),
+            'listingHtml' => $this->_template->render(false, false, 'discount-coupons-report/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $post = FatApp::getPostedData();
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : $post['page'];
-        $page = (empty($page) || $page <= 0) ? 1 : FatUtility::int($page);
+    public function getListingData($type = false)
+    {
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('listingColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'couponhistory_added_on');
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = 'couponhistory_added_on';
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
 
         $srch = CouponHistory::getSearchObject();
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'user_id = couponhistory_user_id');
         $srch->joinTable(DiscountCoupons::DB_TBL, 'LEFT OUTER JOIN', 'coupon_id = couponhistory_coupon_id');
         $srch->joinTable(Credential::DB_TBL, 'LEFT OUTER JOIN', 'credential_user_id = user_id');
-        $srch->addMultipleFields(array('coupon_code', 'couponhistory_id', 'couponhistory_coupon_id', 'couponhistory_order_id', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username'));
+        $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'couponhistory_order_id = order_id');
+        $srch->addMultipleFields(array('coupon_code', 'couponhistory_id', 'couponhistory_coupon_id', 'order_number', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username','order_id'));
+
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         if (!empty($date_from)) {
             $srch->addCondition('couponhistory_added_on', '>=', $date_from . ' 00:00:00');
         }
+
         $date_to = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
         if (!empty($date_to)) {
             $srch->addCondition('couponhistory_added_on', '<=', $date_to . ' 23:59:59');
         }
-        $keyword = FatApp::getPostedData('keyword', null, '');
+
         if (!empty($keyword)) {
-            $cond = $srch->addCondition('coupon_code', '=', $keyword);
+            $srch->addCondition('coupon_code', 'like', '%' . $keyword . '%');
         }
 
-        $srch->addOrder('couponhistory_added_on', 'DESC');
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+
+        switch ($sortBy) {
+            default:
+                $srch->addOrder($sortBy, $sortOrder);
+                break;
+        }
+
 
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
             $rs = $srch->getResultSet();
             $sheetData = array();
-            $arr = array(Labels::getLabel('LBL_Coupon_Code', $this->siteLangId), Labels::getLabel('LBL_Order_Id', $this->siteLangId), Labels::getLabel('LBL_Customer', $this->siteLangId), Labels::getLabel('LBL_Amount', $this->siteLangId), Labels::getLabel('LBL_Date', $this->siteLangId));
-            array_push($sheetData, $arr);
+
+            array_push($sheetData, array_values($fields));
+
+            $count = 1;
             while ($row = FatApp::getDb()->fetch($rs)) {
-                $arr = array($row['coupon_code'], $row['couponhistory_order_id'], $row['credential_username'], FatApp::getConfig('conf_currency_symbol') . $row['couponhistory_amount'],  FatDate::format($row['couponhistory_added_on']));
+                $arr = [];
+                foreach ($fields as $key => $val) {
+                    switch ($key) {
+                        case 'couponhistory_amount':
+                            $arr[] = CommonHelper::displayMoneyFormat($row[$key]);
+                            break;
+                        case 'couponhistory_added_on':
+                            $arr[] = FatDate::format($row[$key]);
+                            break;
+                        default:
+                            $arr[] = $row[$key];
+                            break;
+                    }
+                }
+
                 array_push($sheetData, $arr);
+                $count++;
             }
 
             CommonHelper::convertToCsv($sheetData, str_replace("{reportgenerationdate}", date("d-M-Y"), Labels::getLabel("LBL_Discount_Coupons_Report_{reportgenerationdate}", $this->siteLangId)) . '.csv', ',');
             exit;
-        } else {
-            $srch->setPageNumber($page);
-            $srch->setPageSize($pagesize);
-            $rs = $srch->getResultSet();
-            $records = FatApp::getDb()->fetchAll($rs);
-            $this->set("arrListing", $records);
-            $this->set('pageCount', $srch->pages());
-            $this->set('recordCount', $srch->recordCount());
-            $this->set('page', $page);
-            $this->set('pageSize', $pagesize);
-            $this->set('postedData', $post);
-            $this->_template->render(false, false);
         }
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $rs = $srch->getResultSet();
+
+        $arrListing = FatApp::getDb()->fetchAll($rs);
+        
+        $this->set("arrListing", $arrListing);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', array_keys($fields));
     }
 
     public function export()
@@ -85,45 +154,63 @@ class DiscountCouponsReportController extends ListingBaseController
         $this->search('export');
     }
 
-    public function getSearchForm($couponDate = '')
+    public function getSearchForm($fields = [], $couponDate = '')
     {
-        $frm = new Form('frmDiscountCouponsReportSearch');
-        $frm->addHiddenField('', 'page');
-        $frm->addHiddenField('', 'couponDate', $couponDate);
-        $frm->addHiddenField('', 'coupon_id');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
-        if (empty($couponDate)) {
-            $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender' ));
-            $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-            $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-            $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-            $fld_submit->attachField($fld_cancel);
+        $frm = new Form('frmRecordSearch');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'couponhistory_added_on', applicationConstants::SORT_DESC);
         }
+
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+
         return $frm;
     }
 
-    public function autoCompleteJson()
+    protected function getFormColumns()
     {
-        $this->objPrivilege->canViewDiscountCoupons();
-        $coupon = new DiscountCoupons();
-        $srch = $coupon->getSearchObject($this->siteLangId, false, false);
-
-        $post = FatApp::getPostedData();
-        if (!empty($post['keyword'])) {
-            $cnd = $srch->addCondition('coupon_code', 'LIKE', '%' . $post['keyword'] . '%');
-            /* $cnd->attachCondition('uc.credential_email', 'LIKE', '%' . $post['keyword'] . '%'); */
+        $discountReportsCacheVar = CacheHelper::get('discountReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$discountReportsCacheVar) {
+            $arr = [
+                'coupon_code' => Labels::getLabel('LBL_COUPON_CODE', $this->siteLangId),
+                'order_number' => Labels::getLabel('LBL_ORDER_NUMBER', $this->siteLangId),
+                'credential_username' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
+                'couponhistory_amount' => Labels::getLabel('LBL_AMOUNT', $this->siteLangId),
+                'couponhistory_added_on' => Labels::getLabel('LBL_DATE', $this->siteLangId)
+            ];
+            CacheHelper::set('discountReportsCacheVar' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        } else {
+            $arr =  unserialize($discountReportsCacheVar);
         }
 
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $data = $db->fetchAll($rs, 'coupon_id');
-        $json = array();
-        foreach ($data as $key => $value) {
-            $json[] = array(
-            'id' => $key,
-            'code' => strip_tags(html_entity_decode($value['coupon_code'], ENT_QUOTES, 'UTF-8')),
-            );
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array
+    {
+        return ['coupon_code', 'order_number', 'credential_username', 'couponhistory_amount', 'couponhistory_added_on'];
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('NAV_REPORTS', $this->siteLangId)],
+                    ['title' => $pageTitle]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
         }
-        die(json_encode($json));
+        return $this->nodes;
     }
 }
