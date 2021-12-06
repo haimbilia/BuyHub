@@ -2,41 +2,75 @@
 
 class UsersReportController extends ListingBaseController
 {
+    protected $pageKey = 'USERS_REPORT';
 
     public function __construct($action)
     {
         parent::__construct($action);
     }
 
-    public function index($usertype = User::USER_TYPE_BUYER)
+    public function index($userType = User::USER_TYPE_BUYER)
     {
-        $this->validateViewPermission($usertype);
-        $flds = $this->getFormColumns($usertype);
-        $frmSearch = $this->getSearchForm($flds, $usertype);
-        // $frmSearch->fill(array('sortBy' => 'totOrders', 'sortOrder' => 'DESC'));
+        $this->validateViewPermission($userType);
+        $formColumns = $this->getFormColumns($userType);
+        $frmSearch = $this->getSearchForm($formColumns, $userType);
+        $this->setPageKey($userType);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($formColumns);
+        $actionItemsData = array_merge($actionItemsData, [
+            'newRecordBtn' => false,
+            'formColumns' => $formColumns,
+            'columnButtons' => true,
+            'defaultColumns' => $this->getDefaultColumns($userType)
+        ]);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
-        $this->set('usertype', $usertype);
-        $this->_template->addJs('js/report.js');
-        $this->_template->render();
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set('userType', $userType);
+        $this->getListingData($userType, false);
+        $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
 
     public function search($type = false)
     {
-        $usertype = FatApp::getPostedData('user_type', FatUtility::VAR_INT, User::USER_TYPE_BUYER);
-        $this->validateViewPermission($usertype);
+        $userType = FatApp::getPostedData('user_type', FatUtility::VAR_INT, User::USER_TYPE_BUYER);
+        $this->getListingData($userType, $type);
+        $jsonData = [
+            'headSection' => $this->_template->render(false, false, '_partial/listing/head-section.php', true),
+            'listingHtml' => $this->_template->render(false, false, 'users-report/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $fields = $this->getFormColumns($usertype);
-        $srchFrm = $this->getSearchForm($fields, $usertype);
+    public function getListingData(int $userType, $type = false)
+    {
+        /*  $userType = FatApp::getPostedData('user_type', FatUtility::VAR_INT, User::USER_TYPE_BUYER); */
+        $this->validateViewPermission($userType);
+
+        $fields = $this->getFormColumns($userType);
+        $selectedFlds = FatApp::getPostedData('listingColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns($userType) : $this->getDefaultColumns($userType);
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current(array_keys($fields)));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current(array_keys($fields));
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $srchFrm = $this->getSearchForm($fields, $userType);
 
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'name');
-        $sortOrder = FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, 'DESC');
-
-        $shopSpecific = ($usertype == User::USER_TYPE_SELLER) ? true : false;
+        $shopSpecific = ($userType == User::USER_TYPE_SELLER) ? true : false;
 
         $rSrch = new Report(0, array_keys($fields), $shopSpecific);
         $rSrch->joinOrders();
@@ -53,7 +87,7 @@ class UsersReportController extends ListingBaseController
         $srch->includeTransactionBalance();
         $srch->includePromotionCharges();
         $srch->addRatingsCount();
-        switch ($usertype) {
+        switch ($userType) {
             case  User::USER_TYPE_SELLER:
                 $rSrch->joinOrderProductTaxCharges();
                 $rSrch->joinOrderProductShipCharges();
@@ -144,7 +178,7 @@ class UsersReportController extends ListingBaseController
         }
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
 
         $arrListing = FatApp::getDb()->fetchAll($rs);
@@ -153,13 +187,13 @@ class UsersReportController extends ListingBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('usertype', $usertype);
-        $this->_template->render(false, false);
+        $this->set('userType', $userType);
+        $this->set('allowedKeysForSorting', array_keys($fields));
     }
 
     public function export()
@@ -167,24 +201,19 @@ class UsersReportController extends ListingBaseController
         $this->search('export');
     }
 
-    public function getSearchForm($fields = [], $usertype = User::USER_TYPE_BUYER)
+    public function getSearchForm($fields = [], $userType = User::USER_TYPE_BUYER)
     {
-        $frm = new Form('frmReportSearch');
-        $frm->addHiddenField('', 'page', 1);
-        $frm->addHiddenField('', 'user_type', $usertype);
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addTextBox(Labels::getLabel('LBL_Name_Or_Email', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-
+        $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_By", $this->siteLangId), 'sortBy', $fields, '', array(), '');
-
-            $frm->addSelectBox(Labels::getLabel("LBL_Sort_Order", $this->siteLangId), 'sortOrder', applicationConstants::sortOrder($this->siteLangId), 0, array(),  '');
+            $this->addSortingElements($frm, 'name', applicationConstants::SORT_ASC);
         }
+        $frm->addHiddenField('', 'user_type', $userType);
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addTextBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
 
         return $frm;
     }
@@ -235,9 +264,27 @@ class UsersReportController extends ListingBaseController
         return $arr;
     }
 
-    private function validateViewPermission($usertype = User::USER_TYPE_BUYER)
+    protected function getDefaultColumns($userType = User::USER_TYPE_BUYER): array
     {
-        switch ($usertype) {
+        $arr = [];
+        switch ($userType) {
+            case User::USER_TYPE_SELLER:
+                $arr = $arr + [
+                    'name', 'totOrders', 'totQtys', 'totRefundedQtys', 'refundedAmount', 'orderNetAmount', 'availableBalance', 'promotionCharged', 'totRating',
+                ];
+                break;
+            default:
+                $arr = $arr + [
+                    'name', 'rewardsPoints', 'rewardsPointsEarned', 'rewardsPointsRedeemed', 'netSoldQty', 'orderNetAmount', 'availableBalance',
+                ];
+                break;
+        }
+        return $arr;
+    }
+
+    private function validateViewPermission($userType = User::USER_TYPE_BUYER)
+    {
+        switch ($userType) {
             case User::USER_TYPE_SELLER;
                 $this->objPrivilege->canViewSellersReport($this->admin_id);
                 break;
@@ -245,5 +292,37 @@ class UsersReportController extends ListingBaseController
                 $this->objPrivilege->canViewUsersReport($this->admin_id);
                 break;
         }
+    }
+
+    private function setPageKey($userType = User::USER_TYPE_BUYER)
+    {
+        switch ($userType) {
+            case User::USER_TYPE_SELLER;
+                $this->pageKey = 'SELLERS_REPORT';
+                break;
+            case User::USER_TYPE_BUYER;
+                $this->pageKey = 'BUYERS_REPORT';
+                break;
+        }
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $this->setPageKey(current(FatApp::getParameters()));
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('NAV_REPORTS', $this->siteLangId)],
+                    ['title' => Labels::getLabel('NAV_USERS_REPORTS', $this->siteLangId)],
+                    ['title' => $pageTitle]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
+        }
+        return $this->nodes;
     }
 }

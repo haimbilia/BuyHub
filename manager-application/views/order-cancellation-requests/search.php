@@ -38,6 +38,9 @@ foreach ($arrListing as $sn => $row) {
                 $amt = CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($row,'netamount'), true, true);
                 $td->appendElement('plaintext', $tdAttr, $amt, true);
                 break;
+            case 'ocrequest_date':
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key], true), true);
+                break;
             case 'ocrequest_status':
                 $statusHtml = OrderCancelRequest::getStatusHtml($siteLangId, $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $statusHtml, true);

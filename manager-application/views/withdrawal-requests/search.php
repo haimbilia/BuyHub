@@ -57,45 +57,12 @@ foreach ($arrListing as $sn => $row) {
                 $methodName = (isset($row[$key]) && isset($methodType[$row[$key]]) ? $methodType[$row[$key]] : Labels::getLabel('LBL_N/A', $siteLangId));
                 $td->appendElement('plaintext', $tdAttr, $methodName);
                 break;
-            case 'account_details':
-                $txt = '';
-                switch ($row['withdrawal_payment_method']) {
-                    case User::AFFILIATE_PAYMENT_METHOD_CHEQUE:
-                        $txt .= '<strong>' . Labels::getLabel('LBL_CHEQUE_PAYEE_NAME', $siteLangId) . ': </strong>' . $row['withdrawal_cheque_payee_name'];
-                        break;
-
-                    case User::AFFILIATE_PAYMENT_METHOD_BANK:
-                        $txt = '<strong>' . Labels::getLabel('LBL_BANK_NAME', $siteLangId) . ': </strong>' . $row["withdrawal_bank"] . '<br>';
-                        $txt .= '<strong>' . Labels::getLabel('LBL_A/C_NAME', $siteLangId) . ': </strong>' . $row["withdrawal_account_holder_name"] . '<br>';
-                        $txt .= '<strong>' . Labels::getLabel('LBL_A/C_NUMBER', $siteLangId) . ': </strong>' . $row["withdrawal_account_number"] . '<br>';
-                        $txt .= '<strong>' . Labels::getLabel('LBL_IFSC_CODE/SWIFT_CODE', $siteLangId) . ': </strong>' . $row["withdrawal_ifc_swift_code"] . '<br>';
-                        $txt .= '<strong>' . Labels::getLabel('LBL_BANK_ADDRESS', $siteLangId) . ': </strong>' . $row["withdrawal_bank_address"] . '<br>';
-                        break;
-
-                    case User::AFFILIATE_PAYMENT_METHOD_PAYPAL:
-                        $txt .= '<strong>' . Labels::getLabel('LBL_PAYPAL_EMAIL_ACCOUNT', $siteLangId) . ': </strong>' . $row['withdrawal_paypal_email_id'];
-                        break;
-                }
-                if (!empty($row['payout_detail'])) {
-                    foreach (explode(',', $row["payout_detail"]) as $data) {
-                        $data = explode(':', $data);
-						if (!empty($data) && isset($data[1]) && !empty($data[1])) {
-							$txt .= '<strong>' . ucwords(str_replace('_', ' ', $data[0])) . ': </strong>' . $data[1] . '<br>';
-						}
-                    }
-                }
-
-                if (!empty($row["withdrawal_instructions"])) {
-                    $txt .= '<br><strong>' . Labels::getLabel('LBL_INSTRUCTIONS', $siteLangId) . ': </strong>' . $row["withdrawal_instructions"];
-                }
-
-                $td->appendElement('plaintext', $tdAttr, $txt, true);;
-                break;
             case 'withdrawal_request_date':
                 $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
                 break;
             case 'withdrawal_status':
-                $td->appendElement('plaintext', $tdAttr, $statusArr[$row[$key]], true);
+                $statusHtml = Transactions::getWithdrawlStatusHtml($siteLangId, $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $statusHtml, true);
                 break;
             case 'action':
                 $data = [   
@@ -104,21 +71,19 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit && $row['withdrawal_status'] == Transactions::STATUS_PENDING) {
-                    $data['editButton'] = [];
+                    $data['editButton'] = ['onclick'=>'editRecord(' . $row['withdrawal_id'] . ', false)'];
                 }
 
-                if (!empty($row['withdrawal_comments'])) {
-                    $data['otherButtons'] = [
-                        [
-                            'attr' => [
-                                'href' =>  'javascript:void(0);',
-                                'onclick' => 'viewComment('.$row['withdrawal_id'].','.$siteLangId.')' ,
-                                'title' => Labels::getLabel('LBL_VIEW_COMMENT', $siteLangId),
-                            ],
-                            'label' => "<i class='far fa-eye icon'></i>"
-                        ]
-                    ];	                    
-                }
+                $data['otherButtons'] = [
+                    [
+                        'attr' => [
+                            'href' =>  'javascript:void(0);',
+                            'onclick' => 'viewDetails('.$row['withdrawal_id'].','.$siteLangId.')' ,
+                            'title' => Labels::getLabel('LBL_VIEW_DETAILS', $siteLangId),
+                        ],
+                        'label' => "<i class='far fa-eye icon'></i>"
+                    ]
+                ];	                    
 
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);

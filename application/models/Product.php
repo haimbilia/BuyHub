@@ -425,17 +425,18 @@ class Product extends MyAppModel
         return true;
     }
 
-    public function addUpdateProductOption($option_id)
+    public function addUpdateProductOption($optionId, $optionValuesIds)
     {
-        $option_id = FatUtility::int($option_id);
-        if (!$this->mainTableRecordId || !$option_id) {
+        $optionId = FatUtility::int($optionId);
+        if (!$this->mainTableRecordId || !$optionId) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
         $record = new TableRecord(static::DB_PRODUCT_TO_OPTION);
         $to_save_arr = array();
         $to_save_arr[static::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id'] = $this->mainTableRecordId;
-        $to_save_arr[static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id'] = $option_id;
+        $to_save_arr[static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id'] = $optionId;
+        $to_save_arr[static::DB_PRODUCT_TO_OPTION_PREFIX . 'optionvalue_ids'] = $optionValuesIds;
         $record->assignValues($to_save_arr);
         if (!$record->addNew(array(), $to_save_arr)) {
             $this->error = $record->getError();

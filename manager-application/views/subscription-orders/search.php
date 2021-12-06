@@ -51,7 +51,7 @@ foreach ($arrListing as $sn => $row) {
                     true,
                     true,
                     FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())
-                ));
+                ), true);
                 break;
             case 'order_payment_status':
                 $statusHtm = Orders::getPaymentStatusHtml($siteLangId, $row[$key]);

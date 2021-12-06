@@ -335,10 +335,7 @@
         let langId = getCurrentFrmLangId();
         let productOptions = {};
         if(type == 1){
-                $('select.optionsJs').each(function(){
-                    if($(this).closest('.rowJs').hasClass('hide')) {
-                        return;
-                    }
+                $('#addProductfrm select.optionsJs').each(function(){                   
                     let optionData = $(this).select2('data');
                     if(1 < optionData.length){
                         return;                    
@@ -374,7 +371,7 @@ $(document).on('click', '.warrantyTypeJs', function () {
 
 $(document).on('click', '.optionsAddJs', function () {
 
-    let clonedRow = $('#variantsJs .rowJs:first').clone(); 
+    let clonedRow = $('#variantCloneJs .rowJs').clone();  
     let index = clonedRow.find('.optionValuesJs').data('index');
     let newIndex = $('#variantsJs .rowJs').length + 1;
     let optionId = clonedRow.find('.optionsJs').attr('id').replace(index, ""); 

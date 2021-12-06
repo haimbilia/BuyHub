@@ -64,12 +64,12 @@ class AffiliateCommission extends MyAppModel
     {
         $data = AffiliateCommission::getAttributesById($commissionId);
         $assignValues = array(
-        'acsh_afcommsetting_id' => $data['afcommsetting_id'],
-        'acsh_afcommsetting_prodcat_id' => $data['afcommsetting_prodcat_id'],
-        'acsh_afcommsetting_user_id' => $data['afcommsetting_user_id'],
-        'acsh_afcommsetting_fees' => $data['afcommsetting_fees'],
-        'acsh_afcommsetting_is_mandatory' => $data['afcommsetting_is_mandatory'],
-        'acsh_added_on' => date('Y-m-d H:i:s'),
+            'acsh_afcommsetting_id' => $data['afcommsetting_id'],
+            'acsh_afcommsetting_prodcat_id' => $data['afcommsetting_prodcat_id'],
+            'acsh_afcommsetting_user_id' => $data['afcommsetting_user_id'],
+            'acsh_afcommsetting_fees' => $data['afcommsetting_fees'],
+            'acsh_afcommsetting_is_mandatory' => $data['afcommsetting_is_mandatory'],
+            'acsh_added_on' => date('Y-m-d H:i:s'),
         );
         if ($this->db->insertFromArray(static::DB_TBL_HISTORY, $assignValues)) {
             return true;
@@ -93,9 +93,10 @@ class AffiliateCommission extends MyAppModel
 
         $srch->addMultipleFields(
             array(
-            'tacsh.*',
-            'IFNULL(tpc_l.prodcat_name,tpc.prodcat_identifier)as prodcat_name',
-            'CONCAT(tu.user_name," [",tuc.credential_username,"]") as vendor'
+                'tacsh.*',
+                'IFNULL(tpc_l.prodcat_name, tpc.prodcat_identifier) as prodcat_name',
+                'CONCAT(tu.user_name, " (", tuc.credential_username, ")") as vendor',
+                'user_id as vendor_id'
             )
         );
 

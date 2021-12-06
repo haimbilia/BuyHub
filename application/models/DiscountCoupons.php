@@ -41,8 +41,7 @@ class DiscountCoupons extends MyAppModel
             $srch->joinTable(
                 static::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
-                'couponlang_coupon_id = dc.coupon_id
-AND couponlang_lang_id = ' . $langId,
+                'couponlang_coupon_id = dc.coupon_id AND couponlang_lang_id = ' . $langId,
                 'dc_l'
             );
         }
@@ -57,24 +56,18 @@ AND couponlang_lang_id = ' . $langId,
         return $srch;
     }
 
-    public static function getTypeArr($langId, $select = false)
+    public static function getTypeArr($langId)
     {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
-        $select_arr = array('' => Labels::getLabel('LBL_Coupon_Type', $langId));
 
-        $coupon_type_arr = array(
-            static::TYPE_DISCOUNT => Labels::getLabel('LBL_Product_Purchase', $langId),
-            /* static::TYPE_FREE_SHIPPING    =>    Labels::getLabel('LBL_Free_Shipping', $langId),     */
-            static::TYPE_SELLER_PACKAGE => Labels::getLabel('LBL_Subscription_Package', $langId),
+        return array(
+            static::TYPE_DISCOUNT => Labels::getLabel('LBL_PRODUCT_PURCHASE', $langId),
+            static::TYPE_SELLER_PACKAGE => Labels::getLabel('LBL_SUBSCRIPTION_PURCHASE', $langId),
+            /* static::TYPE_FREE_SHIPPING => Labels::getLabel('LBL_Free_Shipping', $langId),     */
         );
-        if ($select) {
-            return $select_arr + $coupon_type_arr;
-        } else {
-            return $coupon_type_arr;
-        }
     }
 
     public static function getValidForArr($langId)
@@ -738,13 +731,13 @@ AND couponlang_lang_id = ' . $langId,
             return false;
         }
 
-       /* $cartSubTotal = $scartObj->getSubTotal($langId); */
-        $cartSubTotalAfterAdjustment = $scartObj->getSubTotalAfterAdjustment();       
+        /* $cartSubTotal = $scartObj->getSubTotal($langId); */
+        $cartSubTotalAfterAdjustment = $scartObj->getSubTotalAfterAdjustment();
 
         if ($couponData['coupon_min_order_value'] > $cartSubTotalAfterAdjustment) {
             $status = false;
         }
-        
+
         $chistorySrch = CouponHistory::getSearchObject();
         $chistorySrch->addCondition('couponhistory_coupon_id', '=', $couponData['coupon_id']);
         $chistorySrch->addMultipleFields(array('count(couponhistory_id) as total'));
@@ -1047,8 +1040,8 @@ AND couponlang_lang_id = ' . $langId,
             $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);;
             return false;
         }
-
-        if (!FatApp::getDb()->deleteRecords(static::DB_TBL_COUPON_TO_USER, array('smt' => 'ctu_coupon_id = ? AND ctu_user_id = ?', 'vals' => array($coupon_id, $user_id)))) {
+        $db = FatApp::getDb();
+        if (!$db->deleteRecords(static::DB_TBL_COUPON_TO_USER, array('smt' => 'ctu_coupon_id = ? AND ctu_user_id = ?', 'vals' => array($coupon_id, $user_id)))) {
             $this->error = $db->getError();
             return false;
         }
@@ -1062,20 +1055,35 @@ AND couponlang_lang_id = ' . $langId,
         }
         $siteLangId = FatUtility::int($siteLangId);
         if (!$siteLangId) {
-            trigger_error(Labels::getLabel("ERR_Language_Id_Not_Passed.", $siteLangId), E_USER_ERROR);
+            trigger_error(Labels::getLabel("ERR_LANGUAGE_ID_NOT_PASSED.", $siteLangId), E_USER_ERROR);
         }
 
 
-        $str = Labels::getLabel('LBL_Seller_AutoSuggest_Plan_Name', $siteLangId);
+        $str = Labels::getLabel('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', $siteLangId);
         $planIntervals = SellerPackagePlans::getSubscriptionPeriods($siteLangId);
-        $replacementArr = array(
-            '{package_name}' => $sPlanRow['spackage_name'],
-            '{plan_days}' => $sPlanRow['spplan_interval'] . " " . $planIntervals[$sPlanRow['spplan_frequency']],
 
-        );
-        foreach ($replacementArr as $key => $val) {
-            $str = str_replace($key, $val, $str);
+        return CommonHelper::replaceStringData($str, [
+            '{PACKAGE-NAME}' => $sPlanRow['spackage_name'],
+            '{PLAN-DAYS}' => $sPlanRow['spplan_interval'] . " " . $planIntervals[$sPlanRow['spplan_frequency']],
+        ]);
+    }
+
+    public static function getTypeHtml(int $langId, int $status): string
+    {
+        $arr = self::getTypeArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::TYPE_DISCOUNT:
+                $status = HtmlHelper::INFO;
+                break;
+            case static::TYPE_SELLER_PACKAGE:
+                $status = HtmlHelper::SUCCESS;
+                break;
+
+            default:
+                $status = HtmlHelper::WARNING;
+                break;
         }
-        return $str;
+        return HtmlHelper::getStatusHtml($status, $msg);
     }
 }

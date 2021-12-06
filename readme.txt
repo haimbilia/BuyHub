@@ -301,6 +301,7 @@ Enhancements :
    => Map listing for products & shops 
    => Withdrawal Requests
    => Order Cancellation Requests 
+   => Manage Alert text
 
 Admin UI/UX Enhancements pages:
     => Login / Register, Forgot Password

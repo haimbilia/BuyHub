@@ -3,7 +3,7 @@
 class ProductCategoriesRequestController extends ListingBaseController
 {
 
-    protected $modelClass = 'ProductCategory';
+    protected string $modelClass = 'ProductCategory';
     protected $pageKey = 'CATEGORIES_REQUESTS';
 
     public function __construct($action)
@@ -211,7 +211,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmProdCategoryLang', array('id' => 'frmProdCategoryLang'));
         $frm->addHiddenField('', 'prodcat_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('LBL_Category_Name', $langId), 'prodcat_name');
         return $frm;
     }

@@ -2,7 +2,7 @@
 
 class SpecialPriceController extends ListingBaseController
 {
-    protected $modelClass = 'SellerProduct';
+    protected string $modelClass = 'SellerProduct';
     protected $pageKey = 'SPECIAL_PRICE';
 
     public function __construct($action)

@@ -552,7 +552,7 @@ class DataMigration
                     return false;
                 }
 
-                if (!$productObj->addUpdateProductOption($optionId)) {
+                if (!$productObj->addUpdateProductOption($optionId,'')) {
                     $this->error = $productObj->getError();
                     $db->rollbackTransaction();
                     return false;

@@ -2,7 +2,7 @@
 
 class ShippingPackagesController extends ListingBaseController {
 
-    protected $modelClass = 'ShippingPackage';
+    protected string $modelClass = 'ShippingPackage';
     protected $pageKey = 'MANAGE_SHIPPING_PACKAGES';
 
     public function __construct($action) {
@@ -57,10 +57,11 @@ class ShippingPackagesController extends ListingBaseController {
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = ShippingPackage::getSearchObject();
-        $srch->addOrder('shippack_name', 'ASC');
         if (!empty($post['keyword'])) {
             $srch->addCondition('spack.shippack_name', 'like', '%' . $post['keyword'] . '%');
         }
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
@@ -149,7 +150,7 @@ class ShippingPackagesController extends ListingBaseController {
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    protected function getFormColumns(): array {
         $shopsTblHeadingCols = CacheHelper::get('shippingPackTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
@@ -173,7 +174,7 @@ class ShippingPackagesController extends ListingBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array {
         return array_diff($fields, ['shippack_units'], Common::excludeKeysForSort());
     }
 

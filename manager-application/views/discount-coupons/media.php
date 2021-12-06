@@ -1,49 +1,52 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$couponMediaFrm->setFormTagAttribute('class', 'web_form form_horizontal');
-$couponMediaFrm->developerTags['colClassPrefix'] = 'col-md-';
-$couponMediaFrm->developerTags['fld_default_col'] = 12;
-$fld = $couponMediaFrm->getField('coupon_image');
-$fld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
-$fld->addFieldTagAttribute('onChange', 'popupImage(this)');
-$langFld = $couponMediaFrm->getField('lang_id');
-$langFld->addFieldTagAttribute('class', 'language-js');
 
-$preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $siteLangId), '60*60').'</small>';
+HtmlHelper::formatFormFields($frm);
+$frm->setFormTagAttribute('data-onclear', 'mediaForm(' . $recordId . ')');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
 
-$htmlAfterField = $preferredDimensionsStr;
-$htmlAfterField .= '<div id="image-listing"></div>';
+$fld = $frm->getField('coupon_image');
+$fld->value = HtmlHelper::getfileInputHtml(
+    [
+        'onChange' => 'loadImageCropper(this)',
+        'accept' => 'image/*',
+        'data-name' => Labels::getLabel("FRM_DISCOUNT_COUPON_IMAGE", $siteLangId),
+        'data-frm'=> $frm->getFormTagAttribute('name')
+    ],
+    $siteLangId,
+    '',
+    '',
+    [],
+    'dropzone-custom dropzoneContainerJs'
+);
+
+$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions', $siteLangId), '60*60') . '</span>';
+$htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
-?>
-<div id="cropperBox-js"></div>
-<section class="section" id="mediaForm-js">
-    <div class="sectionhead">
-        <h4><?php echo Labels::getLabel('LBL_Coupon_Media_Setup', $siteLangId); ?></h4>
+
+$langFld = $frm->getField('lang_id');
+$langFld->addFieldTagAttribute('onchange', 'loadImages(' . $recordId . ', this.value);');
+
+$otherButtons = [
+    [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'mediaForm(' . $recordId . ')',
+            'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+        'isActive' => true
+    ]
+]; 
+
+require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormHtml(); ?>
     </div>
-    <div class="sectionbody space">
-        <div class="row">
-            <div class="col-sm-12">
-                <h1><?php //echo Labels::getLabel('LBL_Coupon_Media_Setup',$siteLangId);?></h1>
-                <div class="tabs_nav_container responsive flat">
-                    <ul class="tabs_nav">
-                        <li><a href="javascript:void(0);" onclick="addCouponForm(<?php echo $coupon_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
-						<li class="<?php echo ($coupon_id == 0) ? 'fat-inactive' : ''; ?>">
-                            <a href="javascript:void(0);" <?php echo ($coupon_id) ? "onclick='addCouponLangForm(" . $coupon_id . "," . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1) . ");'" : ""; ?>>
-                                <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
-                            </a>
-                        </li>
-                        <li><a class="active" href="javascript:void(0);"
-                        <?php if ($coupon_id > 0) {?>
-                            onclick="couponMediaForm(<?php echo $coupon_id ?>);"
-                        <?php } ?> >
-                        <?php echo Labels::getLabel('LBL_Media', $siteLangId);?></a></li>
-                    </ul>
-                    <div class="tabs_panel_wrap">
-                        <div class="tabs_panel">
-                            <?php echo $couponMediaFrm->getFormHtml();?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
+
+<script type="text/javascript">
+    $('input[name=min_width]').val(60);
+    $('input[name=min_height]').val(60);
+    var aspectRatio = 60 / 60;
+</script>

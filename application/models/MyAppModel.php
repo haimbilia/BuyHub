@@ -275,7 +275,7 @@ class MyAppModel extends FatModel {
         if (is_string($attr)) {
             return $row[$attr];
         }
-
+        
         return $row;
     }
 

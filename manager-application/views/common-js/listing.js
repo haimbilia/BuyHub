@@ -51,7 +51,7 @@ $(function () {
     }).disableSelection();
 });
 
-/* Reset result on clear on keyword. */
+/* Reset result on clear(cross) icon on keyword search field. */
 $(document).on("search", "input[name='keyword']", function () {
     if ("" == $(this).val()) {
         searchRecords(document.frmRecordSearch);
@@ -704,6 +704,11 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     /* Fix width of table headings. */
     fixTableColumnWidth = function () {
         var thWidthArr = [];
+        var autoTableColumWidth = $('.listingTableJs').data('autoColumnWidth');
+        if (1 > autoTableColumWidth) {
+            return false;
+        }
+
         $('.listingTableJs .tableHeadJs th').each(function () {
             var arr = {
                 'width': $(this).width(),

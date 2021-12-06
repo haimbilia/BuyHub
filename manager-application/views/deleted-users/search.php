@@ -26,7 +26,7 @@ foreach ($arrListing as $sn => $row) {
                     true,
                     true,
                     FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())
-                ));
+                ), true);
                 break;
             case 'user_is_buyer':
                 $class = ($row['user_is_buyer']) ? 'is-check' : '';

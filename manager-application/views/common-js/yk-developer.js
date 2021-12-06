@@ -73,6 +73,19 @@ $(document).ready(function () {
             return '<div class="modal fade" id="modalBoxJs"  data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalBoxJsLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg" role="document"><div class="modal-content"><div class="modal-header"><h6 class="modal-title"></h6><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"><div class="table-processing loaderJs"><div class="spinner spinner--sm spinner--brand"></div></div></div><div class="modal-footer"></div></div></div></div>';
         },
 
+        displayProcessing: function () {
+            $.ykmsg.close();
+            $.ykmsg.info(langLbl.processing, 0);
+        },
+        displaySuccessMessage: function (msg) {
+            $.ykmsg.close();
+            $.ykmsg.success(msg);
+        },
+        displayErrorMessage: function (msg) {
+            $.ykmsg.close();
+            $.ykmsg.error(msg);
+        },
+
         removeLoader: function (cls) {
             $(document.body).css({ cursor: "default" });
             $(".loaderJs").remove();
@@ -91,211 +104,224 @@ $(document).ready(function () {
         });
     };
 
+    resetQuickSearchResults = function () {
+        var ul = '.navMenuItems';
+        var li = ul + ' li';
+        var searchResult = li + ' .search-result';
+
+        $(li + ', ' + searchResult).show();
+        $('.noResultsFoundJs').hide();
+    }
     quickMenuItemSearch = function (e) {
         var value = e.val().toLowerCase();
         if (value.length < 1) {
             return;
         }
-        $(".navMenuItems li").find("h6").hide();
-        $(".navMenuItems li").find(".search-result").hide();
+        var noResults = '.noResultsFoundJs';
+        var ul = '.navMenuItems';
+        var li = ul + ' li';
+        var searchResult = li + ' .search-result';
 
-        $(".navMenuItems li .search-result").each(function () {
-            if ($(this).find("a").text().toLowerCase().search(value) > -1) {
-                $(this).parent("li").find("h6").show();
-                $(this).show();
-                $(".navMenuItems").show();
-            } else {
-                $(this).hide();
-                $(".navMenuItems").show();
-            }
-        });
-
-        $(".navMenuItems li").each(function () {
-            if ($(this).find("h6").text().toLowerCase().search(value) > -1) {
-                $(this).show();
-                $(this).find("h6").show();
-                $(this).find(".search-result").show();
-                $(".navMenuItems").show();
-            }
-        });
-    };
-
-    isJson = function (str) {
-        try {
-            var json = JSON.parse(str);
-        } catch (e) {
-            return false;
-        }
-        return json;
-    };
-
-    getCountryStates = function (countryId, stateId, dv) {
-        fcom.displayProcessing();
-        fcom.ajax(
-            fcom.makeUrl("Configurations", "getStates", [countryId, stateId]),
-            "",
-            function (res) {
-                $.ykmsg.close();
-                $(dv).empty();
-                $(dv).append(res);
-            }
-        );
-    };
-
-    getStatesByCountryCode = function (
-        countryCode,
-        stateCode,
-        dv,
-        idCol = "state_id"
-    ) {
-        fcom.displayProcessing();
-        fcom.ajax(
-            fcom.makeUrl("Configurations", "getStatesByCountryCode", [
-                countryCode,
-                stateCode,
-                idCol,
-            ]),
-            "",
-            function (res) {
-                $.ykmsg.close();
-                $(dv).empty();
-                $(dv).append(res).change();
-            }
-        );
-    };
-
-    sortObjectByKeys = function (o) {
-        return Object.keys(o)
-            .sort()
-            .reduce((r, k) => ((r[k] = o[k]), r), {});
-    };
-
-    stylePhoneNumberFld = function (
-        element = "input[name='user_phone']",
-        destroy = false
-    ) {
-        var inputList = document.querySelectorAll(element);
-        var country =
-            "" == langLbl.defaultCountryCode ||
-                "undefined" == typeof langLbl.defaultCountryCode
-                ? "in"
-                : langLbl.defaultCountryCode;
-        inputList.forEach(function (input) {
-            if (true == destroy) {
-                $(input).removeAttr("style");
-                var clone = input.cloneNode(true);
-                $(".iti").replaceWith(clone);
-            } else {
-                if ($(input).hasClass("hasFlag-js")) {
-                    return;
+        $(noResults + ', ' + searchResult).hide();
+        $(li).each(function () {
+            var liObj = this;
+            $(".search-result", liObj).each(function () {
+                var resultObj = $(this);
+                var text = resultObj.find('a').text().toLowerCase();
+                var search = text.search(value);
+                if (-1 < search) {
+                    $(resultObj).show();
                 }
-                $(input).addClass("hasFlag-js");
-                var elementName = $(input).attr("name") + "_dcode";
-                var dialCodeElement = $('input[name="' + elementName + '"]');
-                if (
-                    0 < dialCodeElement.length &&
-                    "" != dialCodeElement.val() &&
-                    "undefined" != typeof dialCodeElement.val()
-                ) {
-                    var elementVal = dialCodeElement.val();
-                    var countryCodePos = elementVal.indexOf("-");
-                    if (0 < countryCodePos) {
-                        country = elementVal.substring(
-                            countryCodePos + 1,
-                            elementVal.length
-                        );
-                    } else {
-                        country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
-                    }
-                }
-
-                var iti = window.intlTelInput(input, {
-                    separateDialCode: true,
-                    initialCountry: country,
-                });
-
-                var dCode =
-                    "+" +
-                    iti.getSelectedCountryData().dialCode +
-                    "-" +
-                    iti.getSelectedCountryData().iso2;
-                if (0 < dialCodeElement.length) {
-                    if (
-                        typeof iti.getSelectedCountryData().dialCode !== "undefined" &&
-                        "" == dialCodeElement.val()
-                    ) {
-                        dialCodeElement.val(dCode);
-                    }
-                } else {
-                    $("<input>")
-                        .attr({
-                            type: "hidden",
-                            name: elementName,
-                            value: dCode,
-                        })
-                        .insertAfter(input);
-                }
-
-                input.addEventListener("countrychange", function (e) {
-                    if (typeof iti.getSelectedCountryData().dialCode !== "undefined") {
-                        var dCode =
-                            "+" +
-                            iti.getSelectedCountryData().dialCode +
-                            "-" +
-                            iti.getSelectedCountryData().iso2;
-                        if ($('input[name="' + elementName + '"]').length < 1) {
-                            $.systemMessage(
-                                $(input).attr("name") + " " + langLbl.dialCodeFieldNotFound,
-                                "alert-danger"
-                            );
-                            return;
-                        }
-                        $('input[name="' + elementName + '"]').val(dCode);
-                    }
-                });
-            }
-        });
-    };
-
-    copyText = function (obj) {
-        var copyText = $(obj).text();
-
-        document.addEventListener(
-            "copy",
-            function (e) {
-                e.clipboardData.setData("text/plain", copyText.trim());
-                e.preventDefault();
-            },
-            true
-        );
-        document.execCommand("copy");
-        var elOriginalText = $(obj).attr("data-original-title");
-        $(obj)
-            .attr("data-original-title", langLbl.copied)
-            .tooltip("show")
-            .attr("data-original-title", elOriginalText);
-    };
-
-    installJsColor = function () {
-        if (0 < $(".jscolor").length) {
-            $(".jscolor").each(function () {
-                $(this).attr("data-jscolor", "{}");
             });
-            jscolor.install();
-        }
+
+            $(liObj).show();
+            if (1 > $(".search-result:visible", liObj).length) {
+                $(liObj).hide();
+            }
+        });
     };
 
-    $(document).ajaxComplete(function () {
-        /* Bind bootstrap tooltip with ajax elements. */
-        $('[data-toggle="tooltip"]').tooltip();
+    if (1 > $(li + ":visible").length) {
+        $(noResults).show();
+    }
+};
 
-        /* Bind Scoll hand if table width is wider. */
-        new ScrollHint(".js-scrollable");
+isJson = function (str) {
+    try {
+        var json = JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return json;
+};
 
-        /* Bind colors with all color fields. */
-        installJsColor();
+getCountryStates = function (countryId, stateId, dv) {
+    fcom.displayProcessing();
+    fcom.ajax(
+        fcom.makeUrl("Configurations", "getStates", [countryId, stateId]),
+        "",
+        function (res) {
+            $.ykmsg.close();
+            $(dv).empty();
+            $(dv).append(res);
+        }
+    );
+};
+
+getStatesByCountryCode = function (
+    countryCode,
+    stateCode,
+    dv,
+    idCol = "state_id"
+) {
+    fcom.displayProcessing();
+    fcom.ajax(
+        fcom.makeUrl("Configurations", "getStatesByCountryCode", [
+            countryCode,
+            stateCode,
+            idCol,
+        ]),
+        "",
+        function (res) {
+            $.ykmsg.close();
+            $(dv).empty();
+            $(dv).append(res).change();
+        }
+    );
+};
+
+sortObjectByKeys = function (o) {
+    return Object.keys(o)
+        .sort()
+        .reduce((r, k) => ((r[k] = o[k]), r), {});
+};
+
+stylePhoneNumberFld = function (
+    element = "input[name='user_phone']",
+    destroy = false
+) {
+    var inputList = document.querySelectorAll(element);
+    var country =
+        "" == langLbl.defaultCountryCode ||
+            "undefined" == typeof langLbl.defaultCountryCode
+            ? "in"
+            : langLbl.defaultCountryCode;
+    inputList.forEach(function (input) {
+        if (true == destroy) {
+            $(input).removeAttr("style");
+            var clone = input.cloneNode(true);
+            $(".iti").replaceWith(clone);
+        } else {
+            if ($(input).hasClass("hasFlag-js")) {
+                return;
+            }
+            $(input).addClass("hasFlag-js");
+            var elementName = $(input).attr("name") + "_dcode";
+            var dialCodeElement = $('input[name="' + elementName + '"]');
+            if (
+                0 < dialCodeElement.length &&
+                "" != dialCodeElement.val() &&
+                "undefined" != typeof dialCodeElement.val()
+            ) {
+                var elementVal = dialCodeElement.val();
+                var countryCodePos = elementVal.indexOf("-");
+                if (0 < countryCodePos) {
+                    country = elementVal.substring(
+                        countryCodePos + 1,
+                        elementVal.length
+                    );
+                } else {
+                    country = getCountryIso2CodeFromDialCode(parseInt(elementVal));
+                }
+            }
+
+            var iti = window.intlTelInput(input, {
+                separateDialCode: true,
+                initialCountry: country,
+            });
+
+            var dCode =
+                "+" +
+                iti.getSelectedCountryData().dialCode +
+                "-" +
+                iti.getSelectedCountryData().iso2;
+            if (0 < dialCodeElement.length) {
+                if (
+                    typeof iti.getSelectedCountryData().dialCode !== "undefined" &&
+                    "" == dialCodeElement.val()
+                ) {
+                    dialCodeElement.val(dCode);
+                }
+            } else {
+                $("<input>")
+                    .attr({
+                        type: "hidden",
+                        name: elementName,
+                        value: dCode,
+                    })
+                    .insertAfter(input);
+            }
+
+            input.addEventListener("countrychange", function (e) {
+                if (typeof iti.getSelectedCountryData().dialCode !== "undefined") {
+                    var dCode =
+                        "+" +
+                        iti.getSelectedCountryData().dialCode +
+                        "-" +
+                        iti.getSelectedCountryData().iso2;
+                    if ($('input[name="' + elementName + '"]').length < 1) {
+                        $.systemMessage(
+                            $(input).attr("name") + " " + langLbl.dialCodeFieldNotFound,
+                            "alert-danger"
+                        );
+                        return;
+                    }
+                    $('input[name="' + elementName + '"]').val(dCode);
+                }
+            });
+        }
     });
-})();
+};
+
+copyText = function (obj) {
+    var copyText = $(obj).text();
+
+    document.addEventListener(
+        "copy",
+        function (e) {
+            e.clipboardData.setData("text/plain", copyText.trim());
+            e.preventDefault();
+        },
+        true
+    );
+    document.execCommand("copy");
+    var elOriginalText = $(obj).attr("data-original-title");
+    $(obj)
+        .attr("data-original-title", langLbl.copied)
+        .tooltip("show")
+        .attr("data-original-title", elOriginalText);
+};
+
+installJsColor = function () {
+    if (0 < $(".jscolor").length) {
+        $(".jscolor").each(function () {
+            $(this).attr("data-jscolor", "{}");
+        });
+        jscolor.install();
+    }
+};
+
+$(document).ajaxComplete(function () {
+    /* Bind bootstrap tooltip with ajax elements. */
+    $('[data-toggle="tooltip"]').tooltip();
+
+    /* Bind Scoll hand if table width is wider. */
+    new ScrollHint(".js-scrollable");
+
+    /* Bind colors with all color fields. */
+    installJsColor();
+});
+}) ();
 
 var map;
 var marker;
@@ -475,20 +501,31 @@ function geocodeSetData(results) {
     }
 }
 
-$(document).on("search", "#quickSearch", function (e) {
+/* Reset result on clear(cross) icon on keyword search field. */
+$(document).on("search", "#quickSearchJs", function () {
+    if ("" == $(this).val()) {
+        resetQuickSearchResults();
+    }
+});
+
+$(document).on("keyup", "#quickSearchJs", function (e) {
+    if ("" == $(this).val()) {
+        resetQuickSearchResults();
+        return;
+    }
+
     quickMenuItemSearch($(this));
 });
 
-$(document).on("keyup", "#quickSearch", function (e) {
-    quickMenuItemSearch($(this));
+$(document).on("shown.bs.modal", "#search-main", function () {
+    if (0 < $("#quickSearchJs").length) {
+        $("#quickSearchJs").focus();
+    }
 });
 
 $(window).keydown(function (e) {
     if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
-        if (
-            0 == $.cookie("quickSearchCtrlJs") ||
-            "undefined" == typeof $.cookie("quickSearchCtrlJs")
-        ) {
+        if (0 == $.cookie("quickSearchCtrlJs") || "undefined" == typeof $.cookie("quickSearchCtrlJs")) {
             $(".quickSearchMain").trigger("click");
             e.preventDefault();
         }
@@ -506,10 +543,10 @@ $(document).on("click", "#quickSearchCtrlJs", function () {
 
 $(document).on("click", ".sidebarOpenerBtnJs", function () {
     if (0 < $("body[data-sidebar-minimize]").length) {
-        $(this).removeClass("active");
+        $(this).addClass("active");
         $("body[data-sidebar-minimize]").removeAttr("data-sidebar-minimize");
     } else {
-        $(this).addClass("active");
+        $(this).removeClass("active");
         $("body").attr("data-sidebar-minimize", "on");
     }
 });

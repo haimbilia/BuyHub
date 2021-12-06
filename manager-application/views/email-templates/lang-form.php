@@ -16,8 +16,7 @@ $fld->value ='<a class="btn btn-link btn-test" href="javascript:void(0)" onclick
 $fld = $langFrm->getField('etpl_replacements');
 $repVarArr = array_filter(explode("<br>", $fld->value));
 
-$repVarHtml = '<label class="label">'.Labels::getLabel('LBL_REPLACEMENT_VARS', $siteLangId).'</label>
-                <ul class="click-to-copy">';
+$repVarHtml = '<ul class="click-to-copy">';
 foreach($repVarArr as $rVar){  
     $placeholder =  trim(substr($rVar,0,(strpos($rVar ,"}")+1)));
     $repVarHtml .= '<li title="'.Labels::getLabel('LBL_CLICK_TO_COPY', $siteLangId).'" onclick="copyText(this, true);" data-title="'.$placeholder.'" data-toggle="tooltip" data-placement="top">

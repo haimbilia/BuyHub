@@ -22,7 +22,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'urp_date_added':
             case 'urp_date_expiry':
-                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]));
+                $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
                 break;
             case 'urp_comments':
                 $td->appendElement('plaintext', $tdAttr, nl2br($row[$key]), true);
