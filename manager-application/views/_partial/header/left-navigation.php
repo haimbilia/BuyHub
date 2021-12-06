@@ -913,70 +913,67 @@
                                     </div>
                                 </li>
                             <?php } ?>
-                            <?php /* if (
-                              $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                              $objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                              $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
-                              $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)
-                              ) { ?>
-                              <li class="nav_item hasNestedChildJs">
-                              <a class="nav_link navLinkJs dropdown-toggle-custom" data-toggle="collapse"
-                              data-parent="#usersReportNav" href="#usersReportNav" aria-expanded="true">
-                              <span
-                              class="nav_text"><?php echo Labels::getLabel('NAV_USERS_REPORT', $siteLangId); ?></span>
-                              <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
-                              </a>
-                              <div id="usersReportNav" class="panel-collapse collapse collapseJs">
-                              <ul class="nav">
-                              <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>"
-                              class="nav_link navLinkJs ">
-                              <span
-                              class="nav_text"><?php echo Labels::getLabel('NAV_BUYERS', $siteLangId); ?></span>
-                              </a>
-                              </li>
-                              <?php } ?>
-                              <?php if ($objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>"
-                              class="nav_link navLinkJs ">
-                              <span
-                              class="nav_text"><?php echo Labels::getLabel('NAV_SELLERS', $siteLangId); ?></span>
-                              </a>
-                              </li>
-                              <?php } ?>
-                              <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>"
-                              class="nav_link navLinkJs ">
-                              <span
-                              class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_VARIENTS', $siteLangId); ?></span>
-                              </a>
-                              </li>
-                              <?php } ?>
-                              <?php if ($objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>"
-                              class="nav_link navLinkJs ">
-                              <span
-                              class="nav_text"><?php echo Labels::getLabel('NAV_AFFILIATES', $siteLangId); ?></span>
-                              </a>
-                              </li>
-                              <?php } ?>
-                              <?php if ($objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a href="<?php echo UrlHelper::generateUrl('AdvertisersReport'); ?>"
-                              class="nav_link navLinkJs ">
-                              <span
-                              class="nav_text"><?php echo Labels::getLabel('NAV_ADVERTISERS', $siteLangId); ?></span>
-                              </a>
-                              </li>
-                              <?php } ?>
-                              </ul>
-                              </div>
-                              </li>
-                              <?php } */ ?>
+                            <?php if (
+                                $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
+                                $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)
+                            ) { ?>
+                                <li class="nav_item hasNestedChildJs">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-toggle="collapse" data-parent="#reportsNav" href="#usersReportNav" aria-expanded="true">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="nav_text">
+                                            <?php echo Labels::getLabel('NAV_BUYERS_REPORTS', $siteLangId); ?>
+                                        </span>
+                                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                                    </a>
+                                    <div id="usersReportNav" class="panel-collapse collapse collapseJs">
+                                        <ul class="nav nav-level">                                            
+                                            <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                                <li class="nav_item navItemJs">
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>">
+                                                        <span class="nav_text">
+                                                            <?php echo Labels::getLabel('NAV_BUYERS', $siteLangId); ?>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            <?php } ?>
+                                            <?php if ($objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                                <li class="nav_item navItemJs">
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>">
+                                                        <span class="nav_text">
+                                                            <?php echo Labels::getLabel('NAV_SELLERS', $siteLangId); ?>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            <?php } ?>                                           
+                                            <?php if ($objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                                <li class="nav_item navItemJs">
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>">
+                                                        <span class="nav_text">
+                                                            <?php echo Labels::getLabel('NAV_AFFILIATES', $siteLangId); ?>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            <?php } ?>
+                                            <?php if ($objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                                <li class="nav_item navItemJs">
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('AdvertisersReport'); ?>">
+                                                        <span class="nav_text">
+                                                            <?php echo Labels::getLabel('NAV_ADVERTISERS', $siteLangId); ?>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            <?php } ?>
+                                        </ul>
+                                    </div>
+                                </li>
+                            <?php } ?>
                             <?php if ($objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item hasNestedChildJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" data-toggle="collapse" data-parent="#financialReportNav" href="#financialReportNav" aria-expanded="true">
@@ -1045,6 +1042,22 @@
                                             </li>
                                         </ul>
                                     </div>
+                                </li>
+                            <?php } ?>
+
+                            <?php if ($objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('DiscountCouponsReport'); ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="nav_text">
+                                            <?php echo Labels::getLabel('NAV_DISCOUNT_COUPONS', $siteLangId); ?>
+                                        </span>
+                                    </a>
                                 </li>
                             <?php } ?>
                         </ul>
