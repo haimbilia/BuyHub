@@ -220,41 +220,10 @@ $frm->setFormTagAttribute('class', 'form');
                         </div>
                         <table class="table table-variants" id="variantsJs">
                             <tbody>                      
-                                <?php for($i =-1; $i <= 0; $i++ ){
-                                    // $i == -1 use to clone row
-                                    ?>
-                                    <tr class="rowJs <?php echo $i == -1 ? 'hide': '';?>">
-                                    <td width="30%">
-                                        <select class="optionsJs" id="options<?php echo $i; ?>" name="options[]" class="form-control">                               
-                                        </select>
-                                    </td>
-                                    <td width="50%">
-                                        <input class="form-tagify optionValuesJs" id="optionValues<?php echo $i; ?>" data-index="<?php echo $i; ?>" name="optionValues[]" value="">
-                                    </td>
-                                    <td class="align-right" width="20%">
-                                        <ul class="actions">
-                                            <li class="<?php echo $i == 0 ? 'hide': '';?> optionsDeleteJs">
-                                                <a href="javascript:void(0)" class="">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)" class="optionsAddJs">
-                                                    <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td> 
-                                    </tr>
-                                    <?php                                    
-                                } ?>   
-                             
+                                <?php for($i = 0; $i <= 0; $i++ ){                                   
+                                     echo getVariantUiTr($langId,$i);                                                                       
+                                } 
+                                ?> 
                             </tbody>
                         </table>
                         <div class="separator separator-dashed my-4"></div>
@@ -651,10 +620,7 @@ $frm->setFormTagAttribute('class', 'form');
         select2('ptt_taxcat_id', fcom.makeUrl('TaxCategories', 'autoComplete'),{langId});
         select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'),{langId});
 
-        $('.optionsJs').each(function(index){
-            if($(this).closest('.rowJs').hasClass('hide')) {
-                return;
-            }    
+        $('#addProductfrm .optionsJs').each(function(index){            
             select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'),{},function(e){           
                 resetOptionValuesTag(e);
             },function(e){
@@ -664,10 +630,7 @@ $frm->setFormTagAttribute('class', 'form');
         }); 
 
 
-        $('.optionValuesJs').each(function(index){  
-            if($(this).closest('.rowJs').hasClass('hide')) {
-                return;
-            }    
+        $('#addProductfrm .optionValuesJs').each(function(index){  
             tagifyOptionValue("#"+$(this).attr('id')); 
         });
 
@@ -699,3 +662,50 @@ $frm->setFormTagAttribute('class', 'form');
         });
     });
 </script>
+
+<?php 
+
+function getVariantUiTr($langId,$i){
+   
+    $deleteClass = $i == 0 ? 'hide': '';
+    $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
+    $confWebUrl = CONF_WEBROOT_URL;
+    return <<<HTML
+    <tr class="rowJs">
+    <td width="30%">
+        <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel">   
+           <option></option> 
+        </select>
+    </td>
+    <td width="50%">
+        <input class="form-tagify optionValuesJs" id="optionValues$i" data-index="$i" name="optionValues[]" value="">
+    </td>
+    <td class="align-right" width="20%">
+        <ul class="actions">
+            <li class="$deleteClass optionsDeleteJs">
+                <a href="javascript:void(0)" class="">
+                    <svg class="svg" width="18" height="18">
+                        <use xlink:href="{$confWebUrl}images/retina/sprite-actions.svg#delete">
+                        </use>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="optionsAddJs">
+                    <svg class="svg" width="18" height="18">
+                        <use xlink:href="{$confWebUrl}images/retina/sprite-actions.svg#add">
+                        </use>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </td> 
+    </tr>
+    HTML;
+}
+
+?>
+
+<table class="hide" id="variantCloneJs">   
+<?php echo getVariantUiTr($langId,$i);  ?>
+</table>

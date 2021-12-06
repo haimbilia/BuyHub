@@ -109,10 +109,8 @@ class MetaTagsController extends ListingBaseController
 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);        
-       
+        $srch->setPageSize($pageSize);
         $arrListing = $db->fetchAll($srch->getResultSet());
-       
         $this->set("arrListing", $arrListing);
 
         $searchForm->fill($this->postedData);

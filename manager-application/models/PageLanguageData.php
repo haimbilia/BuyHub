@@ -5,9 +5,15 @@ class PageLanguageData extends MyAppModel
     public const DB_TBL = 'tbl_pages_language_data';
     public const DB_TBL_PREFIX = 'plang_';
 
-    public function __construct($id)
+    public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
+    }
+
+    public static function getSearchObject()
+    {
+        $srch = new SearchBase(static::DB_TBL, 'ep');
+        return $srch;
     }
 
     public static function getAttributesByKey(string $key, int $langId = 0, $attr = null)
