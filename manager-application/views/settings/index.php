@@ -37,6 +37,7 @@
                     $objPrivilege->canViewStates(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewEmptyCartItems(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)   ||
+                    $objPrivilege->canEditPagesLanguageData(AdminAuthentication::getLoggedAdminId(), true)   ||
                     $objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true)
 
                 ) { ?>
@@ -97,6 +98,22 @@
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_LABELS', $siteLangId); ?></h6>
                                     <span>Manage application labels</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canEditPagesLanguageData(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('PageLanguageData'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_PAGES_LANGUAGE_DATA', $siteLangId); ?></h6>
+                                    <span>Manage Pages Language Data</span>
                                 </div>
                             </a>
                         <?php } ?>
