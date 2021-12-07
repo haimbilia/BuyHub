@@ -7,7 +7,7 @@
             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
             ?>
             <img width="34" height="34" <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
-        </a> <button class="sidebar-toggle sidebarOpenerBtnJs" type="button">
+        </a> <button class="sidebar-toggle sidebarOpenerBtnJs " type="button">
             <i class="fas fa-angle-double-left"></i>
         </button>
     </div>
@@ -735,7 +735,8 @@
                 $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
                 <li class="menu-item dropdownJs">
@@ -814,6 +815,18 @@
                                                 </use>
                                             </svg>
                                         </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TESTIMONIALS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Navigations'); ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                                </use>
+                                            </svg>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_NAVIGATIONS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -933,7 +946,7 @@
                                         <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
                                     </a>
                                     <div id="usersReportNav" class="panel-collapse collapse collapseJs">
-                                        <ul class="nav nav-level">                                            
+                                        <ul class="nav nav-level">
                                             <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>">
@@ -951,7 +964,7 @@
                                                         </span>
                                                     </a>
                                                 </li>
-                                            <?php } ?>                                           
+                                            <?php } ?>
                                             <?php if ($objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
                                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>">
@@ -1181,7 +1194,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if (false && $objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if ($objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>">
                                     <span class="nav_icon">
@@ -1193,7 +1206,7 @@
                                 </a>
                             </li>
                         <?php } ?>
-                        <?php if (false && $objPrivilege->canViewShippedProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if ($objPrivilege->canViewShippedProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ShippedProducts'); ?>">
                                     <span class="nav_icon">

@@ -533,7 +533,7 @@ class HtmlHelper
                 </div>';
     }
 
-    public static function addStatusButHtml(bool $canEdit, int $recordId, int $status, bool $disabled = false, string $title = '')
+    public static function addStatusBtnHtml(bool $canEdit, int $recordId, int $status, bool $disabled = false, string $title = '')
     {
         $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $recordId . ', ' . ((int) !$status) . ')' : 'return false;';
         $statusClass = ($canEdit) ? '' : 'disabled';

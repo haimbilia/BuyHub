@@ -31,7 +31,7 @@
                         top: 0;
                         bottom: 0;
                         #{$start-direction}: 0;
-                        content: ' ';
+                        content: " ";
                         transition: all 100ms ease-in;
                         width: 54px;
                         border-radius: 15px;
@@ -43,7 +43,7 @@
                         top: 0;
                         bottom: 0;
                         #{$start-direction}: 0;
-                        content: ' ';
+                        content: " ";
                         transition: all 100ms ease-in;
                         width: 54px;
                         border-radius: 15px;
@@ -68,7 +68,7 @@
                     &:after {
                         margin-#{$start-direction}: 26px;
                         // background-color: $brand-color;
-                        // color:  lighten($brand-color, 55%); 
+                        // color:  lighten($brand-color, 55%);
                         @include bg-brand();
                         color: #ffffff;
                     }
@@ -114,7 +114,7 @@
                 ~ {
                     .input-helper {
                         &:after {
-                            content: '\f17b';
+                            content: "\f17b";
                         }
                     }
                 }
@@ -230,7 +230,7 @@
                         .input-helper {
                             &:before {
                                 // background-color: $brand-color;
-                                // color:  lighten($brand-color, 55%); 
+                                // color:  lighten($brand-color, 55%);
                                 @include bg-brand();
                             }
                             &:after {
@@ -246,7 +246,7 @@
                         .input-helper {
                             &:before {
                                 // background-color: $brand-color;
-                                // color:  lighten($brand-color, 55%); 
+                                // color:  lighten($brand-color, 55%);
                                 @include bg-brand();
                             }
                             &:after {
@@ -282,7 +282,7 @@
                             }
                             &:after {
                                 // background-color: $brand-color;
-                                // color:  lighten($brand-color, 55%); 
+                                // color:  lighten($brand-color, 55%);
                                 @include bg-brand();
                                 opacity: 1;
                             }
@@ -420,7 +420,7 @@
                         .input-helper {
                             &:before {
                                 // background-color: $brand-color;
-                                // color:  lighten($brand-color, 55%); 
+                                // color:  lighten($brand-color, 55%);
                                 @include bg-brand();
                                 border-color: $brand-color;
                             }
@@ -432,12 +432,12 @@
                             &:hover {
                                 &:before {
                                     // background-color: $brand-color;
-                                    // color:  lighten($brand-color, 55%); 
+                                    // color:  lighten($brand-color, 55%);
                                     @include bg-brand();
                                     border-color: $brand-color;
                                 }
                                 &::after {
-                                    background-color:  lighten($brand-color, 55%);
+                                    background-color: lighten($brand-color, 55%);
                                 }
                             }
                         }

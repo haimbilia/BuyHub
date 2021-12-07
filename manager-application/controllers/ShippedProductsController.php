@@ -1,30 +1,66 @@
 <?php
 
-class ShippedProductsController extends ListingBaseController
-{
-    public function __construct($action)
-    {
+class ShippedProductsController extends ListingBaseController {
+
+    protected string $modelClass = 'Product';
+    protected $pageKey = 'MANAGE_SHIPPED_PRODUCTS';
+
+    public function __construct($action) {
         parent::__construct($action);
         $this->objPrivilege->canViewShippedProducts();
     }
 
-    public function index()
-    {
-        $this->objPrivilege->canViewShippedProducts();
-        $frmSearch = $this->getShippedProducts();
-        $this->set('frmSearch', $frmSearch);
-        $this->_template->render();
+    public function index() {
+        $this->setModel([0]);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('canEdit', $this->objPrivilege->canEditShippedProducts($this->admin_id, true));
+        $this->set("frmSearch", $this->getSearchForm($this->getFormColumns()));
+        $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($this->getFormColumns(), $this->modelObj), [
+            'newRecordBtn' => false
+        ]);
+        $this->set('actionItemsData', $actionItemsData);
+
+        $this->_template->addCss(['css/select2.min.css']);
+        $this->_template->addJs([
+            'js/select2.js',
+            'shipped-products/page-js/index.js'
+        ]);
+        $this->getListingData();
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search()
-    {
-        $this->objPrivilege->canViewShippedProducts();
+    public function search() {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'shipped-products/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    private function getListingData() {
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
-        $keyword = FatApp::getPostedData('keyword', null, '');
-        $shippingProfile =  (isset($data['shipping_profile'])) ? $data['shipping_profile'] : 0;
-        $userName =  (isset($data['user_name'])) ? $data['user_name'] : 0;
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : intval($data['page']);
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+
+        $searchForm = $this->getSearchForm($fields);
+
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
+        $post = $searchForm->getFormDataFromArray($data, ['user_id']);
 
         $srch = new ShippedProducts($this->siteLangId);
         $srch->joinShipProfileProd();
@@ -33,30 +69,27 @@ class ShippedProductsController extends ListingBaseController
         $srch->addProductDeletedCondition();
         $srch->addProductAdminShipCondition();
         $srch->addPhyProductCheckCondition();
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
         $srch->addMultipleFields(array('sppro.shippro_shipprofile_id, sppro.shippro_product_id, ifnull(tp_l.product_name, tp.product_identifier) as product_name, COALESCE(spprof_l.shipprofile_name, spprof.shipprofile_identifier) as shipprofile_name, tp.product_added_by_admin_id'));
         $srch->addGroupBy('sppro.shippro_product_id');
-        $srch->addOrder('shippro_product_id', 'DESC');
-        if (!empty($keyword)) {
-            $srch->addCondition('tp_l.product_name', 'like', '%' . $keyword . '%');
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
+
+        if (!empty($post['keyword'])) {
+            $srch->addCondition('tp_l.product_name', 'like', '%' . $post['keyword'] . '%');
         }
-        if (!empty($shippingProfile)) {
-            $srch->addCondition('sppro.shippro_shipprofile_id', '=', $shippingProfile);
-        }
-        if (!empty($userName)) {
+        if (!empty($post['user_id']) && $post['user_id'] > 0) {
             $srch->joinSelProdTable();
             $srch->joinUserTable();
             $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'u.user_id = uc.credential_user_id', 'uc');
-            $cond = $srch->addCondition('u.user_name', 'like', '%' . $userName . '%');
-            $cond->attachCondition('uc.credential_email', 'like', '%' . $userName . '%');
+            $srch->addCondition('u.user_id', '=', $post['user_id']);
         }
 
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        if (!empty($post['shipping_profile']) && $post['shipping_profile'] > 0) {
+            $srch->addCondition('sppro.shippro_shipprofile_id', '=', $post['shipping_profile']);
+        }
 
-
-
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         /* Get Catelog shipped by Admin/seller */
         if (!empty($records)) {
             $prodIdArr = array_column($records, 'shippro_product_id');
@@ -86,99 +119,46 @@ class ShippedProductsController extends ListingBaseController
                 }
             }
         }
-        /* End here */
 
         $this->set("arrListing", $records);
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
-        $this->set('postedData', $data);
-        $this->set('canEdit', $this->objPrivilege->canEditShippedProducts(0, true));
-        $this->_template->render(false, false);
-    }
-    
-    public function viewSellerList()
-    {
-        $this->objPrivilege->canViewShippedProducts();
-        
-        $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT); 
-        $adminShip = FatApp::getPostedData('adminShip', FatUtility::VAR_INT, 0);
-
-        if (1 > $productId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $post = FatApp::getPostedData();
-        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
-        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);       
-        /* Get all Products */
-        $srch = new ShippedProducts($this->siteLangId);
-        $srch->joinShipProfileProd();
-        $srch->joinShippingProfile();
-        $srch->joinSelProdTable();
-        $srch->joinSellerShop();
-        $srch->joinUserTable();
-        $srch->addProductDeletedCondition();
-        $srch->addPhyProductCheckCondition();
-        $srch->addCondition('tp.product_id', '=', $productId);      
-        $srch->addMultipleFields(array('u.user_name', 'u.user_id', 'shop.shop_identifier','shop.shop_id'));
-        $srch->joinTable(Product::DB_PRODUCT_SHIPPED_BY_SELLER, 'LEFT OUTER JOIN', 'psbs.psbs_product_id = tp.product_id and psbs.psbs_user_id = sp.selprod_user_id', 'psbs');
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $srch->addGroupBy('u.user_id');
-        
-        if( applicationConstants::YES == $adminShip){
-            $srch->addCondition('psbs.psbs_product_id', 'is', 'mysql_func_NULL', 'AND', true);
-        }else{
-            $srch->addCondition('psbs.psbs_product_id', 'is not', 'mysql_func_NULL', 'AND', true);
-        }
-        
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-   
-        $this->set("arrListing", $records);
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('adminShip', $adminShip);
-        $this->set('siteLangId', $this->siteLangId);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
     }
 
-    public function updateProductsShipping($productId, $shipProfileId)
-    {
+    public function form() {
         $this->objPrivilege->canEditShippedProducts();
-        $productId = FatUtility::int($productId);
-        $shipProfileId = FatUtility::int($shipProfileId);
-
-        if (1 > $productId || 1 > $shipProfileId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $profileId = FatApp::getPostedData('profileId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId || 1 > $profileId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $data = array('productId' => $productId, 'shipping_profile' => $shipProfileId);
-        $frm = $this->productsShippingForm();
-        $frm->fill($data);
+        $frm = $this->getForm();
+        $frm->fill(['productId' => $recordId, 'shipping_profile' => $profileId]);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('recordId', $recordId);
+        $this->set('includeTabs', false);
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
-    public function updateStatus()
-    {
+    public function setup() {
         $this->objPrivilege->canEditShippedProducts();
-        $frm = $this->productsShippingForm();
+        $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         if (1 > $post['productId']) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (isset($post['shipping_profile']) && $post['shipping_profile'] > 0) {
@@ -189,35 +169,126 @@ class ShippedProductsController extends ListingBaseController
             );
             $spObj = new ShippingProfileProduct();
             if (!$spObj->addProduct($shipProProdData)) {
-                Message::addErrorMessage($spObj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($spObj->getError(), true);
             }
         }
-        $this->set('msg', Labels::getLabel('LBL_Shipping_Updated_Successfully', $this->siteLangId));
+        $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getShippedProducts()
-    {
-        $frm = new Form('frmShippedProductsSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $frm->addTextBox(Labels::getLabel('LBL_Seller_Name_Or_Email', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
-        $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true);
-        $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
-        $frm->addHiddenField('', 'page');
+    public function getRows() {
+        $this->viewSellerList(false);
+        $this->_template->render(false, false);
+    }
+
+    public function viewSellerList($render = true) {
+        $this->objPrivilege->canViewShippedProducts();
+        $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT);
+        $adminShip = FatApp::getPostedData('adminShip', FatUtility::VAR_INT, 0);
+        if (1 > $productId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $post = FatApp::getPostedData();
+        $page = (empty($post['page']) || $post['page'] <= 0) ? 1 : FatUtility::int($post['page']);
+        $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        /* Get all Products */
+        $srch = new ShippedProducts($this->siteLangId);
+        $srch->joinShipProfileProd();
+        $srch->joinShippingProfile();
+        $srch->joinSelProdTable();
+        $srch->joinSellerShop();
+        $srch->joinUserTable();
+        $srch->addProductDeletedCondition();
+        $srch->addPhyProductCheckCondition();
+        $srch->addCondition('tp.product_id', '=', $productId);
+        $srch->addMultipleFields(array('u.user_name', 'u.user_id', 'shop.shop_identifier', 'shop.shop_id'));
+        $srch->joinTable(Product::DB_PRODUCT_SHIPPED_BY_SELLER, 'LEFT OUTER JOIN', 'psbs.psbs_product_id = tp.product_id and psbs.psbs_user_id = sp.selprod_user_id', 'psbs');
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addGroupBy('u.user_id');
+        if (applicationConstants::YES == $adminShip) {
+            $srch->addCondition('psbs.psbs_product_id', 'is', 'mysql_func_NULL', 'AND', true);
+        } else {
+            $srch->addCondition('psbs.psbs_product_id', 'is not', 'mysql_func_NULL', 'AND', true);
+        }
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->set("arrListing", $records);
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('adminShip', $adminShip);
+        $this->set('siteLangId', $this->siteLangId);
+        $this->set('postedData', $post);
+        if ($render != false) {
+            $this->_template->render(false, false);
+        }
+    }
+
+    public function getSearchForm($fields = []) {
+        $frm = new Form('frmRecordSearch');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
+        $fld->overrideFldType('search');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'shop_name');
+        }
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', [], '',
+                [
+                    'class' => 'form-control',
+                    'id' => 'searchFrmUserIdJs',
+                    'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
+                ]
+        );
+        $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $this->siteLangId), 'shipping_profile', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
-    private function productsShippingForm()
-    {
+    private function getFormColumns(): array {
+        $shopsTblHeadingCols = CacheHelper::get('shippedProductHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($shopsTblHeadingCols) {
+            return json_decode($shopsTblHeadingCols);
+        }
+
+        $arr = [
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
+            'total_seller_ship' => Labels::getLabel('LBL_SHIPPED_BY_SELLER', $this->siteLangId),
+            'total_admin_seller_ship' => Labels::getLabel('LBL_SHIPPED_BY_ADMIN', $this->siteLangId),
+            'shipprofile_name' => Labels::getLabel('LBL_SHIPPING_PROFILE', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('shippedProductHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array {
+        return [
+            'listSerial',
+            'product_name',
+            'total_seller_ship',
+            'total_admin_seller_ship',
+            'shipprofile_name',
+            'action',
+        ];
+    }
+
+    private function excludeKeysForSort($fields = []): array {
+        return array_diff($fields, ['total_seller_ship', 'total_admin_seller_ship'], Common::excludeKeysForSort());
+    }
+
+    private function getForm() {
         $frm = new Form('productsShippingForm');
-        $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0,  true, true);
-        $frm->addSelectBox(Labels::getLabel('LBL_Shipping_Profile', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+        $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true);
+        $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
         $frm->addHiddenField('', 'productId', 0);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
+        $languageArr = Language::getDropDownList();
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        }
         return $frm;
     }
+
 }
