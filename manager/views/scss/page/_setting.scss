@@ -35,12 +35,12 @@
             h6 {
                 color: $txt-body;
                 font-size: 1rem;
-                margin-bottom: .25rem;
+                margin-bottom: 0.25rem;
             }
             span {
                 display: block;
                 color: $txt-gray;
-                font-size: .8rem;
+                font-size: 0.8rem;
             }
         }
     }
@@ -73,7 +73,7 @@
         &.is-active {
             a {
                 // background-color: $brand-color;
-                // color:  lighten($brand-color, 55%); 
+                // color:  lighten($brand-color, 55%);
                 @include bg-brand();
                 text-decoration: none;
                 .settings-inner-title {
