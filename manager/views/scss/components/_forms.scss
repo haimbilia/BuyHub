@@ -2,8 +2,8 @@ $input-height: 2.625rem;
 $input-padding: 0.6rem 0.75rem;
 $input-line-height: 1.5;
 $input-font-size: 0.85rem;
-$input-border-style:solid;
-$input-border-width:2px;
+$input-border-style: solid;
+$input-border-width: 2px;
 $input-border-color: transparent;
 $input-border: none;
 $input-border-radius: 1px;
@@ -76,6 +76,7 @@ $input-color: #474747;
     .form-group {
         margin-bottom: 1.8rem;
     }
+    &-label,
     .label {
         font-size: 0.8rem;
         color: $txt-body;
@@ -214,19 +215,19 @@ $input-color: #474747;
             }
         }
         &:disabled {
-             :before {
+            :before {
                 //opacity: 0;
             }
         }
         &:active {
-             :after {
+            :after {
                 opacity: 0.4;
                 transform: translate(-50%, -50%) scale(0);
                 transition: transform 0s;
             }
         }
         &:disabled {
-             :after {
+            :after {
                 opacity: 0;
             }
         }
@@ -416,11 +417,11 @@ form.custom-form {
         &:focus {
             outline-color: $brand-color;
             border-color: $brand-color;
-            +.form-floating__label {
+            + .form-floating__label {
                 transform: translateY(-6px) scale(0.8);
             }
         }
-        &.filled+.form-floating__label {
+        &.filled + .form-floating__label {
             opacity: 0.7;
             transform: translateY(-6px) scale(0.8);
         }
@@ -594,7 +595,7 @@ form.custom-form {
 .checkbox input:checked,
 .radio input:checked {
     // background-color: $brand-color;
-    // color:  lighten($brand-color, 55%); 
+    // color:  lighten($brand-color, 55%);
     @include bg-brand();
 }
 
@@ -620,7 +621,7 @@ form.custom-form {
 .radio input:checked::after {
     //animation: click-wave 0.65s;
     // background-color: $brand-color;
-    // color:  lighten($brand-color, 55%); 
+    // color:  lighten($brand-color, 55%);
     @include bg-brand();
     content: "";
     display: block;
@@ -691,7 +692,7 @@ form.custom-form {
 
 .switch-button:after {
     // background-color: $brand-color;
-    // color:  lighten($brand-color, 55%); 
+    // color:  lighten($brand-color, 55%);
     @include bg-brand();
     width: 18px;
     height: 18px;
@@ -753,11 +754,11 @@ form.custom-form {
     .item {
         max-width: 120px;
         width: 100%;
-        &:first-of-type .radio-button+label {
+        &:first-of-type .radio-button + label {
             border-top-left-radius: $input-border-radius;
             border-bottom-left-radius: $input-border-radius;
         }
-        &:last-of-type .radio-button+label {
+        &:last-of-type .radio-button + label {
             border-top-right-radius: $input-border-radius;
             border-bottom-right-radius: $input-border-radius;
         }
@@ -767,7 +768,7 @@ form.custom-form {
         width: 1px;
         height: 1px;
         opacity: 0;
-        &+label {
+        & + label {
             font-size: 0.85rem;
             padding: $input-padding;
             cursor: pointer;
@@ -778,11 +779,11 @@ form.custom-form {
             display: block;
             text-align: center;
         }
-        &:checked+label {
+        &:checked + label {
             // // background-color: $brand-color;
-            // color:  lighten($brand-color, 55%); 
+            // color:  lighten($brand-color, 55%);
             @include bg-brand();
-            // color:  lighten($brand-color, 55%); 
+            // color:  lighten($brand-color, 55%);
             @include bg-brand();
         }
     }
@@ -799,7 +800,7 @@ form.custom-form {
 }
 
 .field-translate {
-    >div {
+    > div {
         display: flex;
     }
 }
@@ -814,7 +815,7 @@ form.custom-form {
             align-items: inherit;
         }
     }
-    .card-head-label~.card-toolbar {
+    .card-head-label ~ .card-toolbar {
         @include media-breakpoint-up(lg) {
             // max-width: 60%;
             // flex: 0 0 60%;
