@@ -1181,7 +1181,7 @@
                             </li>
                         <?php } ?>
 
-                        <?php if (false && $objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if ($objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>">
                                     <span class="nav_icon">
