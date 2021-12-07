@@ -117,7 +117,7 @@ $frm->setFormTagAttribute('class', 'form');
 
                     <?php
                     $langFld =  $frm->getField('lang_id');
-                    if (null != $langFld &&  0 < $productId) {
+                    if (0 < $productId) {
                         $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
                         $langFld->setfieldTagAttribute('onchange', 'langForm()');
                         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -141,7 +141,9 @@ $frm->setFormTagAttribute('class', 'form');
                                 ?>
                             </div>
                         </div>
-                    <?php } ?>
+                    <?php }else{
+                        echo $langFld->getHtml();
+                    } ?>
 
                 </div>
 
@@ -220,8 +222,11 @@ $frm->setFormTagAttribute('class', 'form');
                         </div>
                         <table class="table table-variants" id="variantsJs">
                             <tbody>                      
-                                <?php for($i = 0; $i <= 0; $i++ ){                                   
-                                     echo getVariantUiTr($langId,$i);                                                                       
+                                <?php 
+                                $optionCount = count($productOptions);
+                                
+                                for($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1 ); $i++ ){                                   
+                                     echo getVariantUiTr($langId,$i, ($productOptions[$i] ?? []));                                                                       
                                 } 
                                 ?> 
                             </tbody>
@@ -611,6 +616,7 @@ $frm->setFormTagAttribute('class', 'form');
 
         prodSpecifications();
         tagifyProducts();
+        
         let langId = getCurrentFrmLangId();
         select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
             brand_active: 1,
@@ -656,46 +662,62 @@ $frm->setFormTagAttribute('class', 'form');
                 $(this).attr('name', '');
             }
         });
+        upcType();
     });
 </script>
 
 <?php 
-
-function getVariantUiTr($langId,$i){
+function getVariantUiTr($langId,$i, $productOption = []){
    
     $deleteClass = $i == 0 ? 'hide': '';
     $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
     $confWebUrl = CONF_WEBROOT_URL;
+    
+    $optionId = '';
+    $optionText = '';
+    $opSelected='';
+    $tagData = [];
+    if(!empty($productOption)){        
+        $optionId = $productOption['option_id'];
+        $optionText = $productOption['option_name'];
+        $opSelected = 'selected';        
+        foreach ($productOption['optionValues'] as $key => $name) {
+            $tagData[] = ['id'=> $key,'value' =>htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ];           
+        }
+    }
+
+    $tagData = json_encode($tagData);
+   
     return <<<HTML
     <tr class="rowJs">
-    <td width="30%">
-        <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel">   
-           <option></option> 
-        </select>
-    </td>
-    <td width="50%">
-        <input class="form-tagify optionValuesJs" id="optionValues$i" data-index="$i" name="optionValues[]" value="">
-    </td>
-    <td class="align-right" width="20%">
-        <ul class="actions">
-            <li class="$deleteClass optionsDeleteJs">
-                <a href="javascript:void(0)" class="">
-                    <svg class="svg" width="18" height="18">
-                        <use xlink:href="{$confWebUrl}images/retina/sprite-actions.svg#delete">
-                        </use>
-                    </svg>
-                </a>
-            </li>
-            <li>
-                <a href="javascript:void(0)" class="optionsAddJs">
-                    <svg class="svg" width="18" height="18">
-                        <use xlink:href="{$confWebUrl}images/retina/sprite-actions.svg#add">
-                        </use>
-                    </svg>
-                </a>
-            </li>
-        </ul>
-    </td> 
+        <td width="30%">
+            <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel">   
+            <option value="$optionId" $opSelected >$optionText</option> 
+            </select>
+        </td>
+        <td width="50%">
+            <input class="form-tagify optionValuesJs" id="optionValues$i" data-index="$i" name="optionValues[]" value='$tagData'>
+        </td>
+        <td class="align-right" width="20%">
+            <ul class="actions">
+                <li class="$deleteClass optionsDeleteJs">
+                    <a href="javascript:void(0)" class="">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="{$confWebUrl}images/retina/sprite-actions.svg#delete">
+                            </use>
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="optionsAddJs">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="{$confWebUrl}images/retina/sprite-actions.svg#add">
+                            </use>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </td> 
     </tr>
     HTML;
 }
@@ -703,5 +725,5 @@ function getVariantUiTr($langId,$i){
 ?>
 
 <table class="hide" id="variantCloneJs">   
-<?php echo getVariantUiTr($langId,$i);  ?>
+<?php echo getVariantUiTr($langId,-1);  ?>
 </table>

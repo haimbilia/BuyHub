@@ -629,6 +629,16 @@ class Product extends MyAppModel
         return $row;
     }
 
+    public static function getOption($product_id,$optionId)
+    {
+        $srch = new SearchBase(static::DB_PRODUCT_TO_OPTION);
+        $srch->addCondition(static::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id', '=', $product_id);
+        $srch->addCondition(static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id', '=', $optionId);
+        $srch->joinTable(Option::DB_TBL, 'INNER JOIN', Option::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id');
+        $srch->setPageSize(1);
+        return FatApp::getDb()->fetch($srch->getResultSet());
+    }
+
     private static function getOptions($product_id, $lang_id = 0, $option_is_separate_images = 0)
     {
         $srch = new SearchBase(static::DB_PRODUCT_TO_OPTION);
@@ -639,10 +649,10 @@ class Product extends MyAppModel
 
         $srch->joinTable(Option::DB_TBL, 'INNER JOIN', Option::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id');
 
-        $attr = array('option_id', 'option_identifier');
+        $attr = array('option_id', 'option_identifier','prodoption_optionvalue_ids');
         if (0 < $lang_id) {
             $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT JOIN', 'lang.optionlang_option_id = ' . Option::DB_TBL_PREFIX . 'id AND optionlang_lang_id = ' . $lang_id, 'lang');
-            $attr[] = 'option_name';
+            $attr[] = 'IFNULL(option_name, option_identifier) as option_name';
         }
 
         $srch->addMultipleFields($attr);
@@ -650,9 +660,8 @@ class Product extends MyAppModel
         if ($option_is_separate_images) {
             $srch->addCondition('option_is_separate_images', '=', applicationConstants::YES);
         }
-
-        $rs = $srch->getResultSet();
-        return (array) FatApp::getDb()->fetchAll($rs);
+       
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     public static function validateProductOptionValue(int $product_id, string $needle): bool
@@ -703,7 +712,7 @@ class Product extends MyAppModel
         $data = array();
         foreach ($records as $row) {
             if ($includeOptionValues) {
-                $row['optionValues'] = static::getOptionValues($row['option_id'], $lang_id);
+                $row['optionValues'] = static::getOptionValues($row['option_id'], $lang_id ,explode(",",$row['prodoption_optionvalue_ids']));
                 $found = (false === $found ? !empty($row['optionValues']) : true);
             }
             $data[] = $row;
@@ -811,7 +820,7 @@ class Product extends MyAppModel
         return FatApp::getDb()->fetchAll($rs);
     }
 
-    public static function getOptionValues($option_id, $lang_id)
+    public static function getOptionValues($option_id, $lang_id, $valuesIds = [])
     {
         $option_id = FatUtility::int($option_id);
         $lang_id = FatUtility::int($lang_id);
@@ -821,6 +830,9 @@ class Product extends MyAppModel
         $srch = new SearchBase(OptionValue::DB_TBL);
         $srch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT JOIN', 'lang.optionvaluelang_optionvalue_id = ' . OptionValue::DB_TBL_PREFIX . 'id AND optionvaluelang_lang_id = ' . $lang_id, 'lang');
         $srch->addCondition(OptionValue::DB_TBL_PREFIX . 'option_id', '=', $option_id);
+        if(!empty($valuesIds)){
+            $srch->addCondition(OptionValue::tblFld('id'), 'IN', $valuesIds);
+        }       
 
         if (!empty(self::$optionValueName)) {
             $srch->addCondition('optionvalue_name', 'LIKE', "%" . self::$optionValueName . "%");

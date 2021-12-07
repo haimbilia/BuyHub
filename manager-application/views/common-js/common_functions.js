@@ -199,8 +199,7 @@ select2 = function (
             },
             processResults: function (data, params) {            
                 params.page = params.page || 1;
-                data.pageCount = data.pageCount || 1;    
-                console.log(typeof processResultsCallback);           
+                data.pageCount = data.pageCount || 1; 
                 if ("function" == typeof processResultsCallback) {
                     return processResultsCallback(data, params,ele);
                 }
