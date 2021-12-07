@@ -17,14 +17,14 @@ if ($includeWrapper) { ?>
                     <div class="clickable">
                         <div class="sorting-actions">
                             <?php if ($canEdit) { ?>
-                                <button onclick="addNewLinkForm(<?php echo $row['nlink_nav_id']; ?>, <?php echo $row['nlink_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_EDIT', $siteLangId); ?>" class="btn btn-clean btn-sm clickable">
-                                    <svg class="svg clickable" width="18" height="18" data-toggle="tooltip" data-placement="top">
+                                <button onclick="addNewLinkForm(<?php echo $row['nlink_nav_id']; ?>, <?php echo $row['nlink_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_EDIT', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-toggle="tooltip" data-placement="top">
+                                    <svg class="svg clickable" width="18" height="18">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                         </use>
                                     </svg>
                                 </button>
-                                <button onclick="deleteLink(<?php echo $row['nlink_nav_id']; ?>, <?php echo $row['nlink_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_DELETE_RECORD', $siteLangId); ?>" class="btn btn-clean btn-sm clickable">
-                                    <svg class="svg clickable" width="18" height="18" data-toggle="tooltip" data-placement="top">
+                                <button onclick="deleteLink(<?php echo $row['nlink_nav_id']; ?>, <?php echo $row['nlink_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_DELETE_RECORD', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-toggle="tooltip" data-placement="top">
+                                    <svg class="svg clickable" width="18" height="18">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
                                         </use>
                                     </svg>
