@@ -44,18 +44,10 @@ class NavigationsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         
-        $fields = $this->getFormColumns();
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
-        $actionItemsData['newRecordBtn'] = false;
-        $actionItemsData['performBulkAction'] = true;
-        $actionItemsData['statusButtons'] = true;
-        
         $this->getListingData();
         
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('actionItemsData', $actionItemsData);
-        $this->set('defaultColumns', $this->getDefaultColumns());
         $this->_template->addJs(['js/jquery-sortable-lists.js']);
         $this->_template->render();
     }
@@ -70,17 +62,26 @@ class NavigationsController extends ListingBaseController
     {
         $this->checkEditPrivilege(true);
         $srch = Navigations::getSearchObject($this->siteLangId, false);
+
+        $qry = '';
+        if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == applicationConstants::YES) {
+            $qry = ' AND lnk.' . NavigationLinks::DB_TBL_PREFIX . 'category_id = 0';
+        }
+
         $srch->joinTable(
             NavigationLinks::DB_TBL,
             'LEFT JOIN',
-            'lnk.' . NavigationLinks::DB_TBL_PREFIX . 'nav_id = nav.' . Navigations::tblFld('id'), 'lnk'
+            'lnk.' . NavigationLinks::DB_TBL_PREFIX . 'nav_id = nav.' . Navigations::tblFld('id') . $qry, 'lnk'
         );
+
+
         $srch->addMultipleFields([
             'nav.*',
             'navlang_lang_id',
             'COALESCE(nav_name, nav_identifier) as nav_name',
             'COUNT(nlink_id) as nlink_count'
         ]);
+
         $srch->addOrder('nav_active', 'DESC');
         $srch->addOrder('nav_id', 'DESC');
         $srch->addGroupBy('nav.nav_id');
@@ -119,6 +120,7 @@ class NavigationsController extends ListingBaseController
                 'nlink_id', 'nlink_nav_id', 'nlink_cpage_id', 'nlink_target', 'nlink_type', 'nlink_parent_id', 'COALESCE(nlink_caption, nlink_identifier) as nlink_caption'
             )
         );
+
         if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == applicationConstants::YES) {
             $srch->addCondition('nlink_category_id', '=', 0);
         }
@@ -147,7 +149,7 @@ class NavigationsController extends ListingBaseController
         if (0 < $recordId) {
             $data = Navigations::getAttributesByLangId($this->siteLangId, $recordId, null, true);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request_id, true);
             }
             $data['nav_name'] = $data['nav_name'] ?? $data['nav_identifier'];
             $frm->fill($data);
@@ -167,14 +169,12 @@ class NavigationsController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $recordId = $post['nav_id'];
         if (1 > $recordId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $validateIdentifier = Navigations::getAttributesByIdentifier($post['nav_name'], 'nav_id');
@@ -184,16 +184,14 @@ class NavigationsController extends ListingBaseController
 
         $data = Navigations::getAttributesById($recordId, array('nav_id', 'nav_identifier'));
         if ($data === false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $record = new Navigations($recordId);
         $post['nav_identifier'] = $post['nav_name'];
         $record->assignValues($post);
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $this->setLangData($record, [
@@ -258,76 +256,13 @@ class NavigationsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $this->changeStatus($recordId, $status);
-        FatUtility::dieJsonSuccess($this->str_update_record);
-    }
-
-    public function toggleBulkStatuses()
-    {
-        $this->objPrivilege->canEditZones();
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $recordIdsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
-        if (empty($recordIdsArr) || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
-        }
-        foreach ($recordIdsArr as $recordId) {
-            if (1 > $recordId) {
-                continue;
-            }
-            $this->changeStatus($recordId, $status);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    protected function changeStatus($recordId, $status)
-    {
-        $status = FatUtility::int($status);
-        $recordId = FatUtility::int($recordId);
-        if (1 > $recordId || -1 == $status) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
-        }
-
         $navObj = new Navigations($recordId);
         if (!$navObj->changeStatus($status)) {
-            Message::addErrorMessage($navObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($navObj->getError(), true);
         }
+
+        FatUtility::dieJsonSuccess($this->str_update_record);
     }
-
-    /* public function pages($recordId)
-    {
-        $recordId = FatUtility::int($recordId);
-        if (!$recordId) {
-            Message::addErrorMessage($this->str_invalid_request);
-            if (FatUtility::isAjaxCall()) {
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            FatApp::redirectUser(UrlHelper::generateUrl('navigations'));
-        }
-
-        $srch = new NavigationLinkSearch($this->siteLangId);
-        $srch->joinNavigation();
-        $srch->doNotLimitRecords();
-        $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(
-            array(
-                'nlink_id', 'nlink_nav_id', 'nlink_cpage_id', 'nlink_target', 'nlink_type', 'nlink_parent_id',
-                'nlink_caption', 'nlink_identifier'
-            )
-        );
-        if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == applicationConstants::YES) {
-            $srch->addCondition('nlink_category_id', '=', 0);
-        }
-        $srch->addCondition('nav_id', '=', $recordId);
-        $srch->addOrder('nlink_display_order', 'asc');
-        $rs = $srch->getResultSet();
-        $arrListing = FatApp::getDb()->fetchAll($rs);
-
-        $this->set('recordId', $recordId);
-        $this->set('arrListing', $arrListing);
-        $this->_template->render(false, false);
-    } */
 
     public function linkForm()
     {
@@ -335,8 +270,7 @@ class NavigationsController extends ListingBaseController
         $navId = FatApp::getPostedData('nav_id', FatUtility::VAR_INT, 0);
         $nlinkId = FatApp::getPostedData('nlink_id', FatUtility::VAR_INT, 0);
         if (!$navId) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
         }
         $frm = $this->getLinksForm();
         if (!$nlinkId) {
@@ -366,8 +300,7 @@ class NavigationsController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $nlink_nav_id = FatUtility::int($post['nlink_nav_id']);
@@ -375,8 +308,7 @@ class NavigationsController extends ListingBaseController
         unset($post['nlink_id']);
 
         if (1 > $nlink_nav_id) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $db = FatApp::getDb();
 
@@ -387,8 +319,7 @@ class NavigationsController extends ListingBaseController
         $rs = $srch->getResultSet();
         $navRow = $db->fetch($rs);
         if (!$navRow) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $post['nlink_category_id'] = FatApp::getPostedData('nlink_category_id', FatUtility::VAR_INT, 0);
@@ -411,8 +342,7 @@ class NavigationsController extends ListingBaseController
         $navLinkObj = new NavigationLinks($nlinkId);
         $navLinkObj->assignValues($post);
         if (!$navLinkObj->save()) {
-            Message::addErrorMessage($navLinkObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($navLinkObj->getError(), true);
         }
 
         $nlinkId = $navLinkObj->getMainTableRecordId();
@@ -420,8 +350,18 @@ class NavigationsController extends ListingBaseController
             $navLinkObj::tblFld('caption') => $post[$navLinkObj::tblFld('caption')]
         ]);
 
+        $srch = new NavigationLinkSearch($this->siteLangId);
+        $srch->doNotLimitRecords();
+        $srch->addFld('nlink_id');
+        if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == applicationConstants::YES) {
+            $srch->addCondition('nlink_category_id', '=', 0);
+        }
+        $srch->addCondition('nlink_nav_id', '=', $nlink_nav_id);
+        $srch->getResultSet();
+        
         $this->set('navId', $nlink_nav_id);
         $this->set('nlinkId', $nlinkId);
+        $this->set('subRecordsCount', $srch->recordCount());
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -433,14 +373,12 @@ class NavigationsController extends ListingBaseController
         $nlinkId = FatUtility::int($post['nlink_id']);
         $langId = FatUtility::int($post['langId']);
         if (1 > $navId || 1 > $langId || 1 > $nlinkId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $dbNavId = NavigationLinks::getAttributesById($nlinkId, 'nlink_nav_id');
         if ($dbNavId != $navId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $langFrm = $this->getLinksLangForm($langId);
@@ -448,8 +386,7 @@ class NavigationsController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(NavigationLinks::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($nlinkId, $langId);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -483,8 +420,7 @@ class NavigationsController extends ListingBaseController
         $lang_id = $post['lang_id'];
 
         if ($nlinkId == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $frm = $this->getLinksLangForm($lang_id);
@@ -500,8 +436,7 @@ class NavigationsController extends ListingBaseController
 
         $navLinkObj = new NavigationLinks($nlinkId);
         if (!$navLinkObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($navLinkObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($navLinkObj->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -575,25 +510,25 @@ class NavigationsController extends ListingBaseController
         $nlinkId = FatApp::getPostedData('nlinkId', FatUtility::VAR_INT, 0);
         $navId = FatApp::getPostedData('navId', FatUtility::VAR_INT, 0);
         if ($nlinkId < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $dbNavId = NavigationLinks::getAttributesById($nlinkId, 'nlink_nav_id');
         if ($navId != $dbNavId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $obj = new NavigationLinks($nlinkId);
         if (!$obj->deleteRecord(true)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
 
         $srch = new NavigationLinkSearch($this->siteLangId);
         $srch->doNotLimitRecords();
         $srch->addFld('nlink_id');
+        if (FatApp::getConfig('CONF_LAYOUT_MEGA_MENU', FatUtility::VAR_INT, 1) == applicationConstants::YES) {
+            $srch->addCondition('nlink_category_id', '=', 0);
+        }
         $srch->addCondition('nlink_nav_id', '=', $navId);
         $srch->getResultSet();
         
@@ -605,52 +540,17 @@ class NavigationsController extends ListingBaseController
         FatUtility::dieJsonSuccess($json);
     }
 
-    public function updateNlinkOrder()
+    public function updateNavlinksOrder()
     {
         $this->objPrivilege->canEditNavigationManagement();
 
         $post = FatApp::getPostedData();
         if (!empty($post)) {
             $nlinkObj = new NavigationLinks();
-            if (!$nlinkObj->updateOrder($post['pageList'])) {
-                Message::addErrorMessage($nlinkObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+            if (!$nlinkObj->updateOrder($post['nlinksIds'])) {
+                LibHelper::exitWithError($nlinkObj->getError(), true);
             }
-            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successful', $this->siteLangId));
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_ORDER_UPDATED_SUCCESSFUL', $this->siteLangId));
         }
-    }
-
-    protected function getFormColumns(): array
-    {
-        $tblHeadingCols = CacheHelper::get('navigationsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
-        }
-
-        $arr = [
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'nav_identifier' => Labels::getLabel('LBL_Title', $this->siteLangId),
-            'nav_active' => Labels::getLabel('LBL_Status', $this->siteLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
-        ];
-        CacheHelper::create('navigationsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        return $arr;
-    }
-
-    protected function getDefaultColumns(): array
-    {
-        return [
-            'select_all',
-            'listSerial',
-            'nav_identifier',
-            'nav_active',
-            'action',
-        ];
-    }
-
-    protected function excludeKeysForSort($fields = []): array
-    {
-        return array_diff($fields, Common::excludeKeysForSort());
     }
 }

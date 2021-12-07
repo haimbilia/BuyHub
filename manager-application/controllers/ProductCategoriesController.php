@@ -1,7 +1,8 @@
 <?php
+
 class ProductCategoriesController extends ListingBaseController
 {
-    protected string $modelClass = 'ProductCategory';
+    protected $modelClass = 'ProductCategory';
 
     public function __construct($action)
     {
@@ -202,7 +203,7 @@ class ProductCategoriesController extends ListingBaseController
     {
         $frm = new Form('frmEmptyCartItemLang');
         $frm->addHiddenField('', 'prodcat_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name');
         return $frm;
     }
@@ -212,7 +213,7 @@ class ProductCategoriesController extends ListingBaseController
         $frm = new Form('frmRecordImage', array('id' => 'imageFrm'));
         $frm->addHiddenField('', 'prodcat_id', $recordId);
         $frm->addHTML('', 'heading_icon', '');
-        $mediaLanguages = applicationConstants::getAllLanguages();
+        $mediaLanguages = applicationConstants::bannerTypeArr();
 
         if (count($mediaLanguages) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
@@ -365,7 +366,7 @@ class ProductCategoriesController extends ListingBaseController
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Please_Select_A_File', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId), true);
         }
 
         ProductCategory::deleteImagesWithOutCategoryId($file_type);
@@ -500,7 +501,7 @@ class ProductCategoriesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function autoComplete()
+    public function autocomplete()
     {
         $search_keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);

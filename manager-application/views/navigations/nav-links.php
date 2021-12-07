@@ -6,7 +6,7 @@ if ($includeWrapper) { ?>
 <?php } ?>
 
     <?php foreach ($arrListing as $sn => $row) {  ?>
-        <li id="children-<?php echo $row['nlink_nav_id'] . '-' . $row['nlink_id']; ?>" data-nlinkId="<?php echo $row['nlink_id']; ?>" data-parent="<?php echo $row['nlink_nav_id']; ?>" class="sortableListsClosed">
+        <li id="<?php echo $row['nlink_id']; ?>" data-nav-id="<?php echo $row['nlink_nav_id']; ?>" class="sortableListsClosed children-<?php echo $row['nlink_nav_id'] . '-' . $row['nlink_id']; ?>">
             <div>
                 <div class="sorting-bar ">
                     <div class="sorting-title">
@@ -33,6 +33,15 @@ if ($includeWrapper) { ?>
                         </div>
                     </div>
                 </div>
+                <span class="sortableListsOpener">
+                    <i class="clickable sort-icon" data-nav-id="<?php echo $row['nlink_nav_id']; ?>" data-nlink-id="<?php echo $row['nlink_id']; ?>">
+                        <svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#drag">
+                            </use>
+                        </svg>
+                    </i>
+                </span>
             </div>
         </li>
     <?php } ?>

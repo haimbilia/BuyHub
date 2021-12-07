@@ -3,9 +3,9 @@
 <div class="accordion-categories">
     <?php if (count($arrListing) > 0) { ?>
         <ul class="sorting-categories navigationsJs">
-            <?php foreach ($arrListing as $sn => $row) { 
+            <?php foreach ($arrListing as $sn => $row) {
                 $subRecordCount = $row['nlink_count'];
-                ?>
+            ?>
                 <li id="parent-<?php echo $row['nav_id']; ?>" class="sortableListsClosed">
                     <div>
                         <div class="sorting-bar ">
@@ -13,7 +13,7 @@
                                 <span class="clickable">
                                     <?php echo $row['nav_name']; ?>
                                 </span>
-                                <span class="count badge badge-success clickable subRecordsCountJs" title="<?php echo  Labels::getLabel('LBL_NAV_LINKS_COUNT', $siteLangId); ?>" data-toggle="tooltip" data-placement="top">
+                                <span class="count badge badge-success clickable subRecordsCountJs-<?php echo $row['nav_id']; ?>" title="<?php echo  Labels::getLabel('LBL_NAV_LINKS_COUNT', $siteLangId); ?>" data-toggle="tooltip" data-placement="top">
                                     <?php echo CommonHelper::displayBadgeCount($subRecordCount); ?>
                                 </span>
                             </div>
@@ -38,11 +38,10 @@
                             </div>
                         </div>
                         <!-- static -->
-                        <?php if ($subRecordCount > 0) { ?>
-                            <span class="sortableListsOpener">
-                                <i class="fa fa-plus clickable sort-icon" onclick="displaySubRows(this, 1)" data-record-id="<?php echo $row['nav_id']; ?>"></i>
-                            </span>
-                        <?php } ?>
+                        <?php $display = ($subRecordCount > 0) ? '' : 'display:none'; ?>
+                        <span class="sortableListsOpener">
+                            <i class="fas fa-caret-right clickable sort-icon openerJs" onclick="displaySubRows(this, 1)" data-record-id="<?php echo $row['nav_id']; ?>" style="<?php echo $display; ?>"></i>
+                        </span>
                     </div>
                 </li>
             <?php } ?>
