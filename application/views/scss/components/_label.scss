@@ -13,7 +13,7 @@
     }
     &.label-primary {
         //background-color: $brand-color;
-        //color:lighten($brand-color, 55%);        
+        //color:lighten($brand-color, 55%);
         @include bg-brand();
     }
     &.label-secondary {

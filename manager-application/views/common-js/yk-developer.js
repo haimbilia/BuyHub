@@ -2,6 +2,11 @@ $(document).ready(function () {
     if (/ip(hone|od)|ipad/i.test(navigator.userAgent)) {
         $("body").css("cursor", "pointer");
     }
+
+    if ("undefined" == typeof $.cookie("adminSidebar")) {
+        $("body").attr("data-sidebar-minimize", "on");
+        $('.sidebarOpenerBtnJs').removeClass("active");
+    }
 });
 
 (function () {
@@ -543,9 +548,11 @@ $(document).on("click", "#quickSearchCtrlJs", function () {
 
 $(document).on("click", ".sidebarOpenerBtnJs", function () {
     if (0 < $("body[data-sidebar-minimize]").length) {
+        $.cookie('adminSidebar', true, { expires: 30 });
         $(this).addClass("active");
         $("body[data-sidebar-minimize]").removeAttr("data-sidebar-minimize");
     } else {
+        $.removeCookie("adminSidebar");
         $(this).removeClass("active");
         $("body").attr("data-sidebar-minimize", "on");
     }
