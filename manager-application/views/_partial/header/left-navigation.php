@@ -735,7 +735,8 @@
                 $objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
                 <li class="menu-item dropdownJs">
@@ -814,6 +815,18 @@
                                                 </use>
                                             </svg>
                                         </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_TESTIMONIALS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Navigations'); ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                                </use>
+                                            </svg>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_NAVIGATIONS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
