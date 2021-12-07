@@ -42,7 +42,11 @@ class TransactionsController extends ListingBaseController {
 
     public function shippingTransactionSearch() {
         $this->getListingData('utxn_id', 'DESC');
-        $this->set('pageTitle', 'tet');
+        $this->_template->render(false, false);
+    }
+    
+    public function getRows() {
+        $this->getListingData('utxn_id', 'DESC');
         $this->_template->render(false, false);
     }
 
