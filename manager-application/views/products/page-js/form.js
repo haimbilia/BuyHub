@@ -4,7 +4,7 @@
         if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
-            
+            langForm();
         });
     };
 
@@ -270,17 +270,7 @@
         });
     };
 
-    /** on option select/deselect */
-    resetOptionValuesTag = function (e){
-        let index = $(e.target.closest('.rowJs')).find('input.optionValuesJs').data('index'); 
-        if(index in tagifyObjs){
-            tagifyObjs[index].settings.whitelist = [];
-            tagifyObjs[index].removeAllTags();
-        }
-        upcType();
-    }
-
-    optionValuesChanges = function (e){
+    optionValuesChanges = function (e){     
         upcType();      
     }
   
@@ -310,12 +300,13 @@
             e.detail.tagify.loading(false).dropdown.show.call(tagify, keyword);
         });
     }
-    
+ 
     tagifyOptionValue = function(element) {          
         let index = $(element).data('index');
+        let value = $.parseJSON($(element).val());
         $(element).siblings(".tagify").remove();
         var tagify = new Tagify(document.querySelector(element), {
-            whitelist : [],
+            whitelist : value,
             delimiters : "#",
             dropdown: {
                 closeOnSelect: false,
@@ -324,7 +315,31 @@
             },                
             enforceWhitelist : true,
             skipInvalid:true,
-        }).on('input', getOptionValues).on('focus', getOptionValues).on('change', optionValuesChanges)
+            hooks: {
+                beforeRemoveTag: function (tags) {           
+                    return new Promise((resolve, reject) => {
+                        let productId = getCurrentFrmProductId();
+                        if (0 < productId) {
+                            let optionId = $(element).closest('.rowJs').find('.optionsJs').val()
+                            let optionValueId = tags[0]['data']['id'];                
+                            fcom.ajax(fcom.makeUrl(controllerName, "canDeleteOpValue"), { productId, optionId, optionValueId }, function (t) {
+                                t = $.parseJSON(t);                            
+                                if (t.status == 0) {
+                                    fcom.displayErrorMessage(t.msg);
+                                    reject();
+                                }else{
+                                    resolve();
+                                }
+                            });
+                        }else{
+                            resolve();
+                        }                       
+                    })
+                }
+            },
+        })
+        .on('input', getOptionValues).on('focus', getOptionValues)
+        .on('change', optionValuesChanges);
         tagifyObjs[index] = tagify;
     };    
 
@@ -334,34 +349,116 @@
         let productId = getCurrentFrmProductId();
         let langId = getCurrentFrmLangId();
         let productOptions = {};
-        if(type == 1){
-                $('#addProductfrm select.optionsJs').each(function(){                   
-                    let optionData = $(this).select2('data');
-                    if(1 < optionData.length){
-                        return;                    
-                    }
-                   
-                    optionData = optionData[0];
-                    let optionValueData = $(this).closest('.rowJs').find('input.optionValuesJs').val();
-                    if(optionValueData == ''){
-                        return; 
-                    }                 
-                    optionValueData = jQuery.parseJSON(optionValueData);
+        if (type == 1) {
+            $('#addProductfrm select.optionsJs').each(function () {
+                let optionData = $(this).select2('data');
+                if (1 < optionData.length) {
+                    return;
+                }
 
-                    productOptions[optionData.id] = {option_id: optionData.id,option_name: optionData.text, optionValues:{}};
-                    
-                    $.each(optionValueData, function( index, opval ) {
-                        productOptions[optionData.id]['optionValues'][opval.id] =  opval.value;
-                    });
+                optionData = optionData[0];
+                let optionValueData = $(this).closest('.rowJs').find('input.optionValuesJs').val();
+                console.log(optionValueData);
+                if (optionValueData == '') {
+                    return;
+                }
+                optionValueData = jQuery.parseJSON(optionValueData);
+
+                productOptions[optionData.id] = { option_id: optionData.id, option_name: optionData.text, optionValues: {} };
+
+                $.each(optionValueData, function (index, opval) {
+                    productOptions[optionData.id]['optionValues'][opval.id] = opval.value;
                 });
+            });
         }
 
-        fcom.ajax(fcom.makeUrl(controllerName, "upcListing"), {productId, langId, type ,productOptions}, function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, "upcListing"), { productId, langId, type, productOptions }, function (t) {
             $('#variantsListJs').html(t);
         });
     };
 
 })();
+
+  /** on option select/deselect */
+async function resetOptionValuesTag(e){    
+    console.log(e);
+    let productId = getCurrentFrmProductId();    
+    if (productId ) {        
+        let optionId = e.params.args.data.id;
+        if(e.type == 'select2:selecting'){            
+            optionId = $(e.currentTarget).select2('data')[0].id || 0; 
+        }
+
+        if(0 < optionId ){
+            e.preventDefault();
+            let response = await $.ajax({
+                url: fcom.makeUrl('Products', 'removeProductOption'),
+                type: 'POST',
+                data: { productId, optionId}
+            });
+
+            response = $.parseJSON(response)
+            if(response.status != 1){          
+                fcom.displayErrorMessage(response.msg);          
+                return; 
+            }
+            if(e.type == 'select2:selecting'){
+                var newOption = new Option(e.params.args.data.text, e.params.args.data.id,true, true);
+                let currentEl = $(e.currentTarget);
+                currentEl.append(newOption).trigger('change');               
+                currentEl.select2('close');                
+            }else{
+                $(e.currentTarget).val(null).trigger("change");
+            }
+       }       
+       
+        let index = $(e.target.closest('.rowJs')).find('input.optionValuesJs').data('index'); 
+        if(index in tagifyObjs){
+            tagifyObjs[index].settings.whitelist = [];
+            tagifyObjs[index].removeAllTags();
+        }  
+        
+        
+    }
+
+    let index = $(e.target.closest('.rowJs')).find('input.optionValuesJs').data('index'); 
+    if(index in tagifyObjs){
+        tagifyObjs[index].settings.whitelist = [];
+        tagifyObjs[index].removeAllTags();
+    }
+
+    if('deleteRow' in  e.params.args.data){
+        $(e.currentTarget).closest('.rowJs').remove();
+    }
+    upcType(); 
+}
+
+
+ /** on select2 option  */
+function processResultsCallback(data, params, ele) {
+
+    let selectedSiblingOption = [];
+    ele.closest('.rowJs').siblings().find('.optionsJs')
+        .each(function (i) {
+            if ($(this).val() != '') {
+                selectedSiblingOption.push(parseInt($(this).val()));
+            }
+        });
+
+    let results = data.results;
+    if (selectedSiblingOption.length) {
+        results = results.filter(function (val, i) {
+            return -1 < $.inArray(val.id, selectedSiblingOption) ? false : true;
+        });
+    }
+
+    return {
+        results: results,
+        pagination: {
+            more: params.page < data.pageCount,
+        },
+    };
+}
 
 $(document).on('click', '.warrantyTypeJs', function () {
     let type = $(this).data('type');
@@ -386,20 +483,31 @@ $(document).on('click', '.optionsAddJs', function () {
     clonedRow.find('.optionsAddJs').removeClass('hide');     
     clonedRow.insertAfter('#variantsJs .rowJs:last');  
 
-    select2(newOptionId, fcom.makeUrl('Options', 'autoComplete'),{},function(e){           
-        resetOptionValuesTag(e);
-    },function(e){
-        resetOptionValuesTag(e);
-    });
+    select2(newOptionId, fcom.makeUrl('Options', 'autoComplete'),{},
+        resetOptionValuesTag,
+        resetOptionValuesTag,
+        processResultsCallback
+    );
 
     $('#'+newOptionId).data("select2").$container.addClass("w-100");
-    tagifyOptionValue("#"+newOptionValueId); 
-  
+    tagifyOptionValue("#"+newOptionValueId);   
 });
 
+
 $(document).on('click', '.optionsDeleteJs', function () {
-    $(this).closest('.rowJs').remove();
-    upcType();  
+
+    let el = $(this).closest('.rowJs').find('.optionsJs');
+    let optionId = el.val();
+    if (0 < optionId) {
+        el.trigger({
+            type: 'select2:unselecting',
+            params: {
+                args: { data: { id: optionId, deleteRow: 1 } },
+            }
+        });
+    } else {
+        $(this).closest('.rowJs').remove();
+    }
 });
 
 

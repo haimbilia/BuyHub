@@ -173,7 +173,8 @@ select2 = function (
     url,
     postdata = {},
     callbackOnSelect = "",
-    callbackOnUnSelect = ""
+    callbackOnUnSelect = "",
+    processResultsCallback = ""
 ) {
     let ele = $("#" + elmId);
     ele.select2({
@@ -198,7 +199,11 @@ select2 = function (
             },
             processResults: function (data, params) {            
                 params.page = params.page || 1;
-                data.pageCount = data.pageCount || 1;
+                data.pageCount = data.pageCount || 1; 
+                if ("function" == typeof processResultsCallback) {
+                    return processResultsCallback(data, params,ele);
+                }
+
                 return {
                     results: data.results,
                     pagination: {

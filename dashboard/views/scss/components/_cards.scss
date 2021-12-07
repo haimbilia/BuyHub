@@ -5,8 +5,8 @@
     border: none;
     position: relative;
     border-radius: $radius4;
-    margin-bottom: 0 !important;
-    height: 100%;
+    margin-bottom: 0;
+    //height: 100%;
     //animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
     display: flex;
     flex-direction: column;
@@ -22,8 +22,32 @@
         color: $txt-body;
         background: none;
         border: none;
-        &~.card-body {
+        & ~ .card-body {
             padding-top: 0;
+        }
+
+        &-label {
+            color: $txt-body;
+            font-size: 1.2rem;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            //margin-#{$end-direction}: 8rem;
+        }
+        &-title {
+            font-size: 1.1rem;
+            font-weight: inherit;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            > i {
+                margin-#{$end-direction}: 0.5rem;
+            }
+        }
+        .text-muted {
+            font-size: 0.8rem;
+            color: $txt-gray;
         }
     }
     &-body {

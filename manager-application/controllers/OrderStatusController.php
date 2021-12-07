@@ -89,7 +89,7 @@ class OrderStatusController extends ListingBaseController
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orderstatus_priority');
         if (!array_key_exists($sortBy, $fields) && 'orderstatus_priority' != $sortBy) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'orderstatus_priority';
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
