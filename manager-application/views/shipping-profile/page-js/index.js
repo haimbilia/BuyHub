@@ -8,6 +8,5 @@
         fcom.updateWithAjax(fcom.makeUrl('shippingProfile', 'deleteRecord'), data, function () {
             reloadList();
         });
-    };
-
+    }; 
 })(); 

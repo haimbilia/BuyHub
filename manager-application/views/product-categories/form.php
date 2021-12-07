@@ -2,7 +2,6 @@
 
 HtmlHelper::formatFormFields($frm);
 
-
 $fld = $frm->getField('prodcat_parent');
 $fld->setFieldTagAttribute('id', "prodcat_parent");
 
@@ -27,6 +26,7 @@ $otherButtons = [
 ];
 $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
+
 <script>
     var canEditRating = <?php echo $canEditRating ? 1 : 0; ?>;
     var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATING_TYPE', $siteLangId); ?>';

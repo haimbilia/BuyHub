@@ -1,99 +1,53 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="sectionhead">
-    <h4><?php echo Labels::getLabel('LBL_Navigations', $siteLangId); ?> </h4>
-    <?php
-    if ($canEdit) {
-        $data = [
-            'siteLangId' => $siteLangId,
-            'statusButtons' => true,
-        ];
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');  ?>
 
-        $this->includeTemplate('_partial/listing/action-buttons.php', $data, false);
+<div class="accordion-categories">
+    <?php if (count($arrListing) > 0) { ?>
+        <ul class="sorting-categories navigationsJs">
+            <?php foreach ($arrListing as $sn => $row) {
+                $subRecordCount = $row['nlink_count'];
+            ?>
+                <li id="parent-<?php echo $row['nav_id']; ?>" class="sortableListsClosed">
+                    <div>
+                        <div class="sorting-bar ">
+                            <div class="sorting-title">
+                                <span class="clickable">
+                                    <?php echo $row['nav_name']; ?>
+                                </span>
+                                <span class="count badge badge-success clickable subRecordsCountJs-<?php echo $row['nav_id']; ?>" title="<?php echo  Labels::getLabel('LBL_NAV_LINKS_COUNT', $siteLangId); ?>" data-toggle="tooltip" data-placement="top">
+                                    <?php echo CommonHelper::displayBadgeCount($subRecordCount); ?>
+                                </span>
+                            </div>
+                            <div class="clickable">
+                                <div class="sorting-actions">
+                                    <?php echo HtmlHelper::addStatusBtnHtml($canEdit, $row['nav_id'], $row['nav_active']); ?>
+                                    <?php if ($canEdit) { ?>
+                                        <button onclick="editRecord('<?php echo $row['nav_id']; ?>')" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-toggle="tooltip" data-placement="top">
+                                            <svg class="svg clickable" width="18" height="18">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                </use>
+                                            </svg>
+                                        </button>
+                                        <button onclick="addNewLinkForm(<?php echo $row['nav_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_ADD_NEW_LINK', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-toggle="tooltip" data-placement="top">
+                                            <svg class="svg clickable" width="18" height="18">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                </use>
+                                            </svg>
+                                        </button>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- static -->
+                        <?php $display = ($subRecordCount > 0) ? '' : 'display:none'; ?>
+                        <span class="sortableListsOpener">
+                            <i class="fas fa-caret-right clickable sort-icon openerJs" onclick="displaySubRows(this, 1)" data-record-id="<?php echo $row['nav_id']; ?>" style="<?php echo $display; ?>"></i>
+                        </span>
+                    </div>
+                </li>
+            <?php } ?>
+        </ul>
+    <?php } else {
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
     }
     ?>
-</div>
-<div class="sectionbody">
-    <div class="tablewrap">
-        <?php 
-        $arr_flds = array(
-            'select_all' => Labels::getLabel('LBL_Select_all', $siteLangId),
-            'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
-            'nav_identifier' => Labels::getLabel('LBL_Title', $siteLangId),
-            'nav_active'    =>    Labels::getLabel('LBL_Status', $siteLangId),
-            'action' => '',
-        );
-        if (!$canEdit) {
-            unset($arr_flds['select_all'], $arr_flds['action']);
-        }
-        $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-responsive table-scrollable js-scrollable table--hovered'));
-        $th = $tbl->appendElement('thead')->appendElement('tr');
-        foreach ($arr_flds as $key => $val) {
-            if ('select_all' == $key) {
-                $th->appendElement('th')->appendElement('plaintext', array(), '<label class="checkbox"><input title="' . $val . '" type="checkbox" onclick="selectAll( $(this) )" class="selectAll-js"><i class="input-helper"></i></label>', true);
-            } else {
-                $e = $th->appendElement('th', array(), $val);
-            }
-        }
-
-        $sr_no = 0;
-        foreach ($arrListing as $sn => $row) {
-            $sr_no++;
-            $tr = $tbl->appendElement('tr', array());
-            foreach ($arr_flds as $key => $val) {
-                $td = $tr->appendElement('td');
-                switch ($key) {
-                    case 'select_all':
-                        $td->appendElement('plaintext', array(), '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="nav_ids[]" value=' . $row['nav_id'] . '><i class="input-helper"></i></label>', true);
-                        break;
-                    case 'listSerial':
-                        $td->appendElement('plaintext', array(), $sr_no);
-                        break;
-                    case 'nav_identifier':
-                        if ($row['nav_name'] != '') {
-                            $td->appendElement('plaintext', array(), $row['nav_name'], true);
-                            $td->appendElement('br', array());
-                            $td->appendElement('plaintext', array(), '(' . $row[$key] . ')', true);
-                        } else {
-                            $td->appendElement('plaintext', array(), $row[$key], true);
-                        }
-                        break;
-                    case 'nav_active':
-                        $active = "";
-                        if ($row['nav_active']) {
-                            $active = 'checked';
-                        }
-                        $statusAct = ($canEdit === true) ? 'toggleStatus(event,this,' . applicationConstants::YES . ')' : 'toggleStatus(event,this,' . applicationConstants::NO . ')';
-                        $statusClass = ($canEdit === false) ? 'disabled' : '';
-                        $str = '<label class="statustab -txt-uppercase">
-                         <input ' . $active . ' type="checkbox" id="switch' . $row['nav_id'] . '" value="' . $row['nav_id'] . '" onclick="' . $statusAct . '" class="switch-labels"/>
-                        <i class="switch-handles ' . $statusClass . '"></i> </label>';
-                        $td->appendElement('plaintext', array(), $str, true);
-                        break;
-                    case 'action':
-                        if ($canEdit) {
-                            $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "addFormNew(" . $row['nav_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
-                        }
-                        $td->appendElement('a', array('href' => "javascript:void(0)", 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Pages', $siteLangId), "onclick" => "pages(" . $row['nav_id'] . ")"), "<i class='ion-ios-paper icon'></i>", true);
-                        break;
-                    default:
-                        $td->appendElement('plaintext', array(), $row[$key], true);
-                        break;
-                }
-            }
-        }
-        if (count($arrListing) == 0) {
-            $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds),
-            'class' => 'noRecordFoundJs'), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
-        }
-        $frm = new Form('frmNavListing', array('id' => 'frmNavListing'));
-        $frm->setFormTagAttribute('class', 'web_form last_td_nowrap actionButtons-js');
-        $frm->setFormTagAttribute('onsubmit', 'formAction(this, reloadList ); return(false);');
-        $frm->setFormTagAttribute('action', UrlHelper::generateUrl('Navigations', 'toggleBulkStatuses'));
-        $frm->addHiddenField('', 'status');
-
-        echo $frm->getFormTag();
-        echo $frm->getFieldHtml('status');
-        echo $tbl->getHtml(); ?>
-        </form>
-    </div>
 </div>

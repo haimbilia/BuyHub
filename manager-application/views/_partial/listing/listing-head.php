@@ -23,7 +23,5 @@ if (isset($actionItemsData['formColumns']) && !empty($actionItemsData['formColum
     }
     $actionItemsData['columnButtons'] .= ' </ul>';
 }
-?>
 
-
-<?php $this->includeTemplate('_partial/listing/action-buttons.php', $actionItemsData, false); ?>
+$this->includeTemplate('_partial/listing/action-buttons.php', $actionItemsData, false);

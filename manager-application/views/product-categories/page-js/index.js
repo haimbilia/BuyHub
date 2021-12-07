@@ -133,15 +133,15 @@ $(document).ready(function () {
 		$("#" + prodCatId).children('div').children('.sortableListsOpener').remove();
 		if ($("#" + prodCatId).hasClass('sortableListsClosed')) {
 			$("#" + prodCatId).removeClass('sortableListsClosed').addClass('sortableListsOpen');
-			$("#" + prodCatId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon cat'+prodCatId+'-js" onclick="hideItems(this)"></i></span>');
+			$("#" + prodCatId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon cat'+prodCatId+'-js" onClick="hideItems(this)"></i></span>');
 		} else {
 			$("#" + prodCatId).removeClass('sortableListsOpen').addClass('sortableListsClosed');
-			$("#" + prodCatId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon cat'+prodCatId+'-js" onclick="displaySubCategories(this)"></i></span>');
+			$("#" + prodCatId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon cat'+prodCatId+'-js" onClick="displaySubCategories(this)"></i></span>');
 		}
 
 		$("#" + prodCatId + ' > ul:first > li:has(> ul)').children('div').children('.sortableListsOpener').remove();
 		$("#" + prodCatId + ' > ul:first > li:has(> ul)').removeClass('sortableListsOpen').addClass('sortableListsClosed');
-		$("#" + prodCatId + ' > ul:first > li:has(> ul)').children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onclick="displaySubCategories(this)"></i></span>');
+		$("#" + prodCatId + ' > ul:first > li:has(> ul)').children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onClick="displaySubCategories(this)"></i></span>');
 	}
 
 	hideItems = function (obj) {
@@ -149,7 +149,7 @@ $(document).ready(function () {
 		$("#" + prodCatId + ' ul').hide();
 		$("#" + prodCatId).removeClass('sortableListsOpen').addClass('sortableListsClosed');
 		var icon = $("#" + prodCatId).children('div').children('.sortableListsOpener').remove();
-		$("#" + prodCatId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onclick="displaySubCategories(this)"></i></span>');
+		$("#" + prodCatId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onClick="displaySubCategories(this)"></i></span>');
 	}
 
 	updateCatOrder = function (data) {

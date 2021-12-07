@@ -8,6 +8,7 @@ if (!$langFrm->getFormTagAttribute('id')) {
 if (!$langFrm->getFormTagAttribute('data-onclear')) {
     $langFrm->setFormTagAttribute('data-onclear', 'editLangData(' . $recordId . ',' . $lang_id . ')');
 }
+
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
 $langFrm->setFormTagAttribute('dir', $formLayout);
 if (!$langFrm->getFormTagAttribute('onsubmit')) {

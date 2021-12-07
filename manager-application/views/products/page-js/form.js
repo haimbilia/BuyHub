@@ -270,17 +270,10 @@
         });
     };
 
-    /** on option select/deselect */
-    resetOptionValuesTag = function (e){
-        let index = $(e.target.closest('.rowJs')).find('input.optionValuesJs').data('index'); 
-        if(index in tagifyObjs){
-            tagifyObjs[index].settings.whitelist = [];
-            tagifyObjs[index].removeAllTags();
+    optionValuesChanges = function (e){     
+        if(e.type =='remove'){
+           
         }
-        upcType();
-    }
-
-    optionValuesChanges = function (e){
         upcType();      
     }
   
@@ -324,7 +317,43 @@
             },                
             enforceWhitelist : true,
             skipInvalid:true,
-        }).on('input', getOptionValues).on('focus', getOptionValues).on('change', optionValuesChanges)
+            hooks: {
+                beforeRemoveTag: function (tags) {
+
+
+                    var  aa =  new Promise((resolve, reject) => {
+                        $.ajax({
+                          url: fcom.makeUrl('OptionValues', 'autoComplete'),
+                          type: 'POST',                          
+                          success: function (data) {
+                            resolve(data)
+                          },
+                          error: function (error) {
+                            reject(error)
+                          },
+                        })
+                      }).then((data) => {
+                        console.log(data);                     
+                      });
+
+                      console.log('ggg');
+                      
+
+
+                    // return new Promise((resolve, reject) => {
+                    //     let response = $.ajax({
+                    //         url: fcom.makeUrl('OptionValues', 'autoComplete'),
+                    //         type: 'POST',                           
+                    //     });
+
+                    //     console.log(response);        
+                    //     console.log('promise');             
+                    //     //removeItem(tags[0]);
+                    //     resolve();
+                    // })
+                }
+            },
+        }).on('input', getOptionValues).on('focus', getOptionValues).on('remove', optionValuesChanges).on('dropdown:select', optionValuesChanges)
         tagifyObjs[index] = tagify;
     };    
 
@@ -363,6 +392,73 @@
 
 })();
 
+  /** on option select/deselect */
+async function resetOptionValuesTag(e){    
+    let productId = getCurrentFrmProductId();    
+    if (productId ) {        
+        let optionId = e.params.args.data.id;
+        if(e.type == 'select2:selecting'){            
+            optionId = $(e.currentTarget).select2('data')[0].id || 0; 
+        }
+
+        if(0 < optionId ){
+            e.preventDefault();
+            let response = await $.ajax({
+                url: fcom.makeUrl('Products', 'removeProductOption'),
+                type: 'POST',
+                data: { productId, optionId}
+            });
+
+            response = $.parseJSON(response)
+            if(response.status != 1){          
+                fcom.displayErrorMessage(response.msg);          
+                return; 
+            }
+            if(e.type == 'select2:selecting'){
+                var newOption = new Option(e.params.args.data.text, e.params.args.data.id,true, true);
+                let currentEl = $(e.currentTarget);
+                currentEl.append(newOption).trigger('change');               
+                currentEl.select2('close');                
+            }else{
+                $(e.currentTarget).val(null).trigger("change");
+            }
+       }        
+    }
+
+    let index = $(e.target.closest('.rowJs')).find('input.optionValuesJs').data('index'); 
+    if(index in tagifyObjs){
+        tagifyObjs[index].settings.whitelist = [];
+        tagifyObjs[index].removeAllTags();
+    }
+    upcType();
+ 
+}
+ /** on select2 option  */
+function processResultsCallback(data, params, ele) {
+
+    let selectedSiblingOption = [];
+    ele.closest('.rowJs').siblings().find('.optionsJs')
+        .each(function (i) {
+            if ($(this).val() != '') {
+                selectedSiblingOption.push(parseInt($(this).val()));
+            }
+        });
+
+    let results = data.results;
+    if (selectedSiblingOption.length) {
+        results = results.filter(function (val, i) {
+            return -1 < $.inArray(val.id, selectedSiblingOption) ? false : true;
+        });
+    }
+
+    return {
+        results: results,
+        pagination: {
+            more: params.page < data.pageCount,
+        },
+    };
+}
+
 $(document).on('click', '.warrantyTypeJs', function () {
     let type = $(this).data('type');
     $(this).closest('div').siblings('.warrantyTypeButtonJs').text($(this).text());
@@ -386,11 +482,11 @@ $(document).on('click', '.optionsAddJs', function () {
     clonedRow.find('.optionsAddJs').removeClass('hide');     
     clonedRow.insertAfter('#variantsJs .rowJs:last');  
 
-    select2(newOptionId, fcom.makeUrl('Options', 'autoComplete'),{},function(e){           
-        resetOptionValuesTag(e);
-    },function(e){
-        resetOptionValuesTag(e);
-    });
+    select2(newOptionId, fcom.makeUrl('Options', 'autoComplete'),{},
+        resetOptionValuesTag,
+        resetOptionValuesTag,
+        processResultsCallback
+    );
 
     $('#'+newOptionId).data("select2").$container.addClass("w-100");
     tagifyOptionValue("#"+newOptionValueId); 

@@ -2,7 +2,6 @@
 
 class ProductCategoriesRequestController extends ListingBaseController
 {
-
     protected string $modelClass = 'ProductCategory';
     protected $pageKey = 'CATEGORIES_REQUESTS';
 

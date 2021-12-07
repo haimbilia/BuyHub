@@ -44,9 +44,9 @@ foreach ($arrListing as $sn => $row) {
             case 'coupon_active':
                 $isExpired = ($row['coupon_end_date'] != "0000-00-00" && strtotime($row['coupon_end_date']) < strtotime(date('Y-m-d'))) ? true : false;
                 if ($isExpired) {
-                    $htm = HtmlHelper::addStatusButHtml($canEdit, $row['coupon_id'], $row[$key], true, Labels::getLabel("LBL_EXPIRED", $siteLangId));
+                    $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['coupon_id'], $row[$key], true, Labels::getLabel("LBL_EXPIRED", $siteLangId));
                 } else {
-                    $htm = HtmlHelper::addStatusButHtml($canEdit, $row['coupon_id'], $row[$key]);
+                    $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['coupon_id'], $row[$key]);
                 }
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
