@@ -35,7 +35,7 @@
                                                     <a class="stock-nav-link" href="#basic-details">
                                                         <i class="stock-nav-icn">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
                                                                 </use>
                                                             </svg>
                                                         </i>
@@ -53,7 +53,7 @@
                                                     <a class="stock-nav-link" href="#variants-options">
                                                         <i class="stock-nav-icn">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
                                                                 </use>
                                                             </svg>
                                                         </i>
@@ -70,7 +70,7 @@
                                                     <a class="stock-nav-link" href="#media">
                                                         <i class="stock-nav-icn">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
                                                                 </use>
                                                             </svg>
                                                         </i>
@@ -86,7 +86,7 @@
                                                     <a class="stock-nav-link" href="#specifications">
                                                         <i class="stock-nav-icn">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
                                                                 </use>
                                                             </svg>
                                                         </i>
@@ -102,7 +102,7 @@
                                                     <a class="stock-nav-link" href="#tax-shipping">
                                                         <i class="stock-nav-icn">
                                                             <svg class="svg" width="20" height="20">
-                                                                <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-system-setting">
                                                                 </use>
                                                             </svg>
                                                         </i>
@@ -411,7 +411,7 @@
                                                             <li>
                                                                 <a title="Copy to all" href="javascript:void(0)" class="">
                                                                     <svg class="svg" width="18" height="18">
-                                                                        <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#copy-to-all">
                                                                         </use>
                                                                     </svg>
                                                                 </a>
@@ -428,7 +428,7 @@
                                                             <li>
                                                                 <a title="Copy to all" href="javascript:void(0)" class="">
                                                                     <svg class="svg" width="18" height="18">
-                                                                        <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#copy-to-all">
                                                                         </use>
                                                                     </svg>
                                                                 </a>
@@ -444,7 +444,7 @@
                                                             <li>
                                                                 <a title="Copy to all" href="javascript:void(0)" class="">
                                                                     <svg class="svg" width="18" height="18">
-                                                                        <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#copy-to-all">
                                                                         </use>
                                                                     </svg>
                                                                 </a>
@@ -460,7 +460,7 @@
                                                             <li>
                                                                 <a title="Copy to all" href="javascript:void(0)" class="">
                                                                     <svg class="svg" width="18" height="18">
-                                                                        <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#copy-to-all">
                                                                         </use>
                                                                     </svg>
                                                                 </a>
@@ -476,7 +476,7 @@
                                                             <li>
                                                                 <a title="Copy to all" href="javascript:void(0)" class="">
                                                                     <svg class="svg" width="18" height="18">
-                                                                        <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
+                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#copy-to-all">
                                                                         </use>
                                                                     </svg>
                                                                 </a>

@@ -2,7 +2,7 @@
     // display: flex;
     // justify-content: space-between;
     display: grid;
-    grid-template-columns: 25% 1fr 25%;
+    grid-template-columns: 1fr 30%;
     grid-gap: 2rem;
     &-column {
         &-head {
@@ -22,6 +22,13 @@
                 min-width: 190px;
             }
         }
+    }
+
+    .card {
+        margin-bottom: 1rem;
+    }
+    .dropdown-toggle-custom-arrow {
+        #{$end-direction}: 1rem;
     }
 }
 

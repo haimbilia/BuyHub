@@ -65,7 +65,7 @@
 @import "components/switch";
 @import "components/print";
 // @import 'components/progress-checkout';
-// @import 'components/list-group';
+@import "components/list-group";
 // @import 'components/media-more';
 // @import 'components/bg';
 // @import 'components/location-permission';
@@ -78,6 +78,8 @@
 @import "components/badges";
 @import "components/scrollbar";
 @import "components/packages";
+@import "components/dropzone";
+
 @import "../../../application/views/scss/components/product-profile";
 @import "../../../application/views/scss/components/list-cart";
 @import "../../../application/views/scss/components/cart-summary";

@@ -18,7 +18,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                     <div class="input-group-append">
                         <a href="javascript:void(0)" class="btn btn-brand">
                             <svg class="svg" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-translate">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icon-translate">
                                 </use>
                             </svg>
                         </a>
@@ -31,105 +31,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         </div>
         <div class="content-body">
             <div class="add-stock">
-                <div class="add-stock-column column-nav">
-                    <div class="sticky-top">
-                        <div class="card">
-                            <div class="card-body p-0">
-                                <div class="stock-nav">
-                                    <ul>
-                                        <li class="stock-nav-item is-active">
-                                            <a class="stock-nav-link" href="#basic-details">
-                                                <i class="stock-nav-icn">
-                                                    <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                        </use>
-                                                    </svg>
-                                                </i>
-                                                <div class="">
-                                                    <h6 class="stock-nav-title">
-                                                        Basic details</h6>
-                                                    <span class="stock-nav-desc"> Add general details about
-                                                        the
-                                                        product
-                                                    </span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="stock-nav-item">
-                                            <a class="stock-nav-link" href="#variants-options">
-                                                <i class="stock-nav-icn">
-                                                    <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                        </use>
-                                                    </svg>
-                                                </i>
-                                                <div class="">
-                                                    <h6 class="stock-nav-title">
-                                                        Variants and options</h6>
-                                                    <span class="stock-nav-desc"> Add options like Color,
-                                                        size
-                                                        etc for your product</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="stock-nav-item">
-                                            <a class="stock-nav-link" href="#media">
-                                                <i class="stock-nav-icn">
-                                                    <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                        </use>
-                                                    </svg>
-                                                </i>
-                                                <div class="">
-                                                    <h6 class="stock-nav-title">
-                                                        Media</h6>
-                                                    <span class="stock-nav-desc"> Attach media files for the
-                                                        product </span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="stock-nav-item">
-                                            <a class="stock-nav-link" href="#specifications">
-                                                <i class="stock-nav-icn">
-                                                    <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                        </use>
-                                                    </svg>
-                                                </i>
-                                                <div class="">
-                                                    <h6 class="stock-nav-title">
-                                                        Specifications</h6>
-                                                    <span class="stock-nav-desc"> Product Specifications are
-                                                        added in this section </span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="stock-nav-item">
-                                            <a class="stock-nav-link" href="#tax-shipping">
-                                                <i class="stock-nav-icn">
-                                                    <svg class="svg" width="20" height="20">
-                                                        <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                        </use>
-                                                    </svg>
-                                                </i>
-                                                <div class="">
-                                                    <h6 class="stock-nav-title">
-                                                        Tax and Shipping</h6>
-                                                    <span class="stock-nav-desc"> Add Tax and Shipping
-                                                        details
-                                                        from this section </span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
                 <div class="add-stock-column column-main">
-
                     <div class="card" id="basic-details">
                         <div class="card-header">
                             <div class="card-header-label">
@@ -142,7 +44,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="label required"> Product type </label>
+                                            <label class="form-label required"> Product type </label>
                                             <div class="">
                                                 <ul class="list-radio">
                                                     <li>
@@ -162,7 +64,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="label required">
+                                            <label class="form-label required">
                                                 Product name
                                                 <i class="fas fa-exclamation-circle ms-2 fs-7" data-toggle="tooltip" title="" data-original-title="Lorem ipsum dolor sit amet consectetur adipisicing elit" aria-label="Lorem ipsum dolor sit amet consectetur adipisicing elit"></i>
                                             </label>
@@ -174,7 +76,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <div class="d-flex justify-content-between">
-                                                <label class="label required "> Brand </label> <a class="link" href="">Add brand</a>
+                                                <label class="form-label required "> Brand </label> <a class="link" href="">Add brand</a>
                                             </div>
                                             <input type="text" placeholder="">
                                         </div>
@@ -182,7 +84,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <div class="d-flex justify-content-between">
-                                                <label class="label required ">Category </label> <a class="link" href="">Add category</a>
+                                                <label class="form-label required ">Category </label> <a class="link" href="">Add category</a>
                                             </div>
                                             <input type="text" placeholder="">
                                         </div>
@@ -193,13 +95,13 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="label"> Model Number </label>
+                                            <label class="form-label"> Model Number </label>
                                             <input type="text" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="label">Minimum Selling Price</label>
+                                            <label class="form-label">Minimum Selling Price</label>
                                             <input type="text" placeholder="">
                                         </div>
                                     </div>
@@ -208,7 +110,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="label">Warranty </label>
+                                            <label class="form-label">Warranty </label>
                                             <div class="input-group">
                                                 <input type="text" placeholder="">
                                                 <div class="input-group-append ">
@@ -229,7 +131,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="label">Description</label>
+                                            <label class="form-label">Description</label>
                                             <textarea></textarea>
                                         </div>
                                     </div>
@@ -253,7 +155,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
                                 <div class="form-group row justify-content-between">
                                     <div class="col">
-                                        <label class="label">This product has multiple options,
+                                        <label class="form-label">This product has multiple options,
                                             like different sizes or colors</label>
                                     </div>
                                     <div class="col-auto">
@@ -292,7 +194,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -322,7 +224,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -349,7 +251,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -357,7 +259,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#add">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -368,9 +270,6 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                         </tr>
                                     </tbody>
                                 </table>
-
-
-
                                 <div class="separator separator-dashed my-4"></div>
                                 <table class="table">
                                     <thead>
@@ -391,7 +290,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a title="Copy to all" href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#copy-to-all">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -408,7 +307,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a title="Copy to all" href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#copy-to-all">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -424,7 +323,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a title="Copy to all" href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#copy-to-all">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -440,7 +339,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a title="Copy to all" href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#copy-to-all">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -456,7 +355,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a title="Copy to all" href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="/yokart/manager/images/retina/sprite-actions.svg#copy-to-all">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#copy-to-all">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -470,7 +369,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="separator separator-dashed my-4"></div>
 
                                 <div class="form-group mb-0">
-                                    <label class="label">Select Default Product Variant</label>
+                                    <label class="form-label">Select Default Product Variant</label>
                                     <select name="default" data-vv-as="Default" data-vv-validate-on="none" class="form-control" aria-required="true" aria-invalid="false">
                                         <option disabled="disabled" value="">Select
                                         </option>
@@ -533,7 +432,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                         <a href="#" title="Edit">
 
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -541,7 +440,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -560,7 +459,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                         <a href="#" title="Edit">
 
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#edit">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -568,7 +467,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -587,7 +486,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                         <a href="#" title="Edit">
 
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#edit">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -595,7 +494,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -614,7 +513,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                         <a href="#" title="Edit">
 
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#edit">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -622,7 +521,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -641,7 +540,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                         <a href="#" title="Edit">
 
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#edit">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -649,7 +548,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                                     <li>
                                                         <a href="javascript:void(0)" class="">
                                                             <svg class="svg" width="18" height="18">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#delete">
                                                                 </use>
                                                             </svg>
                                                         </a>
@@ -682,7 +581,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="label">Label Text</label>
+                                            <label class="form-label">Label Text</label>
                                             <input type="text" value="">
                                             <span class="form-text text-muted"> Lorem ipsum dolor sit,
                                                 amet consectetur adipisicing elit. </span>
@@ -690,7 +589,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="label"> Value</label>
+                                            <label class="form-label"> Value</label>
                                             <input type="text" value="">
 
                                         </div>
@@ -699,14 +598,14 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="label">Group </label>
+                                            <label class="form-label">Group </label>
                                             <input type="text" value="">
 
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="label"></label> <button type="submit" class="btn btn-brand btn-wide">Add</button>
+                                            <label class="form-label"></label> <button type="submit" class="btn btn-brand btn-wide">Add</button>
                                         </div>
                                     </div>
 
@@ -750,7 +649,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <div class="d-flex justify-content-between">
-                                                <label class="label">Tax category</label>
+                                                <label class="form-label">Tax category</label>
                                                 <a class="link" href="">Add Tax Category</a>
                                             </div>
                                             <select name="" id=""></select>
@@ -762,14 +661,14 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="label">Order Fulfllment Method</label>
+                                            <label class="form-label">Order Fulfllment Method</label>
                                             <select name="" id=""></select>
 
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="label">Country of origin </label>
+                                            <label class="form-label">Country of origin </label>
                                             <input type="text" value="">
 
                                         </div>
@@ -786,15 +685,15 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 <div class="add-stock-column column-actions">
                     <div class="sticky-top">
                         <div class="card">
-
                             <div class="card-body">
                                 <button type="button" class="btn btn-brand btn-block">Save</button>
-
                                 <div class="mt-3">
                                     <label class="switch switch-sm switch-icon">
                                         <input type="checkbox" checked="checked" name="">
                                         <span class="input-helper"></span> Active
                                     </label>
+
+
                                 </div>
 
 

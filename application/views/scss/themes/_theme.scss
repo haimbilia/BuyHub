@@ -18,7 +18,7 @@ $text-muted: #888888 !default;
 //border colors
 $border-color: #dee2e6;
 $border: solid 1px $border-color;
-$border-light: solid 1px lighten($border-color, 5%);
+$border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
 //backgrounds colors
 $bg-white: #fff;
@@ -44,8 +44,8 @@ $danger-color: #fd397a;
 
 //Bg brand
 @mixin bg-brand {
-    // background-color: $brand-color;
-    // color: lighten($brand-color, 55%);
+    background-color: $brand-color;
+    //color: lighten($brand-color, 55%);
 }
 //Push auto
 @mixin push--auto {
