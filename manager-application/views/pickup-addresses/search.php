@@ -33,15 +33,18 @@ foreach ($arrListing as $sn => $row) {
                 $addrState = (strlen($row['state_name']) > 0) ? $row['state_name'] . ', ' : '';
                 $addrCountry = (strlen($row['country_name']) > 0) ? $row['country_name'] . '<br>' : '';
                 $addrZip = (strlen($row['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $row['addr_zip'] : '';
+               
+                $address = "<address>
+                                <p>" . $row['addr_address1'] . ' ' . $addr2 . $addrCity . $addrState . $addrCountry . $addrZip .
+                        "</address>";
+                $td->appendElement('plaintext', array(), $address, true);
+                break;
+            case 'addr_phone':
                 $addrPhone = (strlen($row['addr_phone']) > 0) ? $row['addr_phone'] : '';
                 if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $row)) {
                     $addrPhone = ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone;
                 }
-                $addrPhone = ', ' . Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone;
-                $address = "<address>
-                                <p>" . $row['addr_address1'] . ' ' . $addr2 . $addrCity . $addrState . $addrCountry . $addrZip . $addrPhone .
-                        "</address>";
-                $td->appendElement('plaintext', array(), $address, true);
+                $td->appendElement('plaintext', array(), $addrPhone, true);
                 break;
             case 'action':
                 $data = [

@@ -12,7 +12,7 @@ if (!isset($options)) {
     $options = SellerProduct::getSellerProductOptions($product['selprod_id'], true, $siteLangId);
 }
 ?>
-<a href="javascript:void(0)" class="product-profile">
+<a href="javascript:void(0)" class="product-profile" onclick="redirectToProduct(<?php echo $product['selprod_product_id']; ?>)">
     <div class="product-profile__thumbnail" data-ratio="1:1">
         <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>">
     </div>

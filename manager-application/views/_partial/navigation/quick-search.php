@@ -14,7 +14,7 @@
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-catelog">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
                                     </use>
                                 </svg>
                             </i>
@@ -64,7 +64,15 @@
                     $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-requests">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>
+                        </h6>
                         <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <div class="search-result">
                                 <span class="search-result__icon">
@@ -128,7 +136,15 @@
                     $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-orders">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>
+                        </h6>
                         <?php if ($objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <div class="search-result">
                                 <span class="search-result__icon">
@@ -168,7 +184,15 @@
                     $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-users">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>
+                        </h6>
                         <?php if ($objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <div class="search-result">
                                 <span class="search-result__icon">
@@ -234,7 +258,15 @@
                     $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-promotions">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>
+                        </h6>
                         <?php if ($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <div class="search-result">
                                 <span class="search-result__icon">
@@ -318,7 +350,15 @@
                     $objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-blog">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>
+                        </h6>
                         <?php if ($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <div class="search-result">
                                 <span class="search-result__icon">
@@ -370,7 +410,15 @@
                     $objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-sales-tax">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>
+                        </h6>
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
@@ -397,7 +445,15 @@
                     $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-CMS">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>
+                        </h6>
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
@@ -427,7 +483,15 @@
                     $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_SALES_REPORTS', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_SALES_REPORTS', $siteLangId); ?>
+                        </h6>
                         <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <div class="search-result">
                                 <span class="search-result__icon">
@@ -490,7 +554,15 @@
                     $objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_FINANCIAL_REPORT', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_FINANCIAL_REPORT', $siteLangId); ?>
+                        </h6>
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
@@ -542,7 +614,15 @@
                     $objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?>
+                        </h6>
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
@@ -568,7 +648,15 @@
                     $objPrivilege->canViewImportExport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-import-export">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>
+                        </h6>
                         <div class="search-result">
                             <span class="search-result__icon">
                                 <svg class="svg" width="16" height="16">
@@ -586,7 +674,15 @@
                     $objPrivilege->canViewMetaTags(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-SEO">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?>
+                        </h6>
                         <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <div class="search-result">
                                 <span class="search-result__icon">
@@ -668,7 +764,15 @@
                     $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
                     <li>
-                        <h6 class="title"><?php echo Labels::getLabel('NAV_SETTINGS', $siteLangId); ?></h6>
+                        <h6 class="title">
+                            <i class="title-icon">
+                                <svg class="svg" width="14" height="14">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-system-settings">
+                                    </use>
+                                </svg>
+                            </i>
+                            <?php echo Labels::getLabel('NAV_SETTINGS', $siteLangId); ?>
+                        </h6>
                         <?php if ($objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <div class="search-result">
                                 <span class="search-result__icon">
@@ -815,7 +919,9 @@
                     </li>
                 <?php } ?>
                 <li class="noResultsFoundJs" style="display: none;">
-                    <h6 class="title"><?php echo Labels::getLabel('NAV_NO_RESULTS_FOUND', $siteLangId); ?></h6>
+                    <h6 class="title">
+                        <?php echo Labels::getLabel('NAV_NO_RESULTS_FOUND', $siteLangId); ?>
+                    </h6>
                 </li>
             </ul>
         </div>
