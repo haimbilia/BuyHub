@@ -467,7 +467,8 @@
                 $objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
                 <li class="menu-item dropdownJs">
@@ -591,6 +592,20 @@
                                         </span>
                                         <span class="nav_text">
                                             <?php echo Labels::getLabel('NAV_DISCOUNT_COUPONS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('PushNotifications'); ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#mobile">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="nav_text">
+                                            <?php echo Labels::getLabel('NAV_PUSH_NOTIFICATIONS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
