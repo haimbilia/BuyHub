@@ -306,7 +306,7 @@ class PickupAddressesController extends ListingBaseController {
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'addr_id' => Labels::getLabel('LBL_ADDRESS', $this->siteLangId),
-            'addr_phone' => Labels::getLabel('LBL_PHONE', $this->siteLangId),
+            'addr_phone' => Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('pickupAddressTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);

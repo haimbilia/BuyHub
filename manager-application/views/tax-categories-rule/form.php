@@ -51,6 +51,15 @@ $taxStrFld->setFieldTagAttribute("onChange", "getCombinedTaxes(this.value)");
 $otherButtons = [
 ];
 
+$fld = $frm->getField('taxrule_name');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
+$fld = $frm->getField('trr_rate');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
+$fld = $frm->getField('taxruleloc_to_country_id');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
+$fld = $frm->getField('taxruleloc_type');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
+
 $formTitle = Labels::getLabel('LBL_TAX_CATEGORIES_RULE_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>

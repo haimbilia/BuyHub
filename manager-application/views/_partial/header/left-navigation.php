@@ -1,6 +1,6 @@
 <sidebar class="sidebar sidebar-hoverable" id="sidebar" data-close-on-click-outside="sidebar">
     <div class="sidebar-logo">
-        <a href="#" class="logo">
+        <a href="<?php echo UrlHelper::generateUrl();?>" class="logo">
             <?php
             $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
             $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
