@@ -1,12 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<table class="table table--hovered table--striped">
+<table class="table">
 	 <thead>
 			<tr>
-			  <th><?php echo Labels::getLabel('LBL_Date',$siteLangId); ?></th>
-			  <th><?php echo Labels::getLabel('LBL_Order_ID',$siteLangId); ?></th>
-			  <th><?php echo Labels::getLabel('LBL_Customer',$siteLangId); ?></th>
-			  <th><?php echo Labels::getLabel('LBL_Order_Total',$siteLangId); ?></th>
-			  <th><?php echo Labels::getLabel('LBL_Status',$siteLangId); ?></th>
+			  <th><?php echo Labels::getLabel('LBL_DATE',$siteLangId); ?></th>
+			  <th><?php echo Labels::getLabel('LBL_ORDER_ID',$siteLangId); ?></th>
+			  <th><?php echo Labels::getLabel('LBL_CUSTOMER',$siteLangId); ?></th>
+			  <th><?php echo Labels::getLabel('LBL_ORDER_TOTAL',$siteLangId); ?></th>
+			  <th><?php echo Labels::getLabel('LBL_STATUS',$siteLangId); ?></th>
 			</tr>
 		</thead>  
 		<tbody>

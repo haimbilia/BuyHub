@@ -361,7 +361,7 @@
                                         echo Labels::getLabel('LBL_No_Record_Found', $adminLangId);
                                     } 
                                      * 
-                                     */                                    
+                                     */
                                     ?>
                                 </ul>
                             </div>
@@ -600,7 +600,9 @@
             optionConversion['hAxis'] = {
                 direction: '-1'
             };
-            optionConversion['series'] = [{targetAxisIndex: 1}];
+            optionConversion['series'] = [{
+                targetAxisIndex: 1
+            }];
         <?php } ?>
 
         var conversion = new google.visualization.ColumnChart(document.getElementById('conversionStats'));
