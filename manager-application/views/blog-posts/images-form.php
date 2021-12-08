@@ -1,16 +1,16 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-HtmlHelper::formatFormFields($imagesFrm);
-$imagesFrm->setFormTagAttribute('data-onclear', 'mediaForm(' . $recordId . ')');
-$imagesFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+HtmlHelper::formatFormFields($frm);
+$frm->setFormTagAttribute('data-onclear', 'mediaForm(' . $recordId . ')');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
 
-$fld = $imagesFrm->getField('post_image');
+$fld = $frm->getField('post_image');
 $fld->value = HtmlHelper::getfileInputHtml(
     [
         'onChange' => 'loadImageCropper(this)',
         'accept' => 'image/*',
         'data-name' => Labels::getLabel("FRM_BLOG_POST_IMAGE", $siteLangId),
-        'data-frm'=> $imagesFrm->getFormTagAttribute('name')
+        'data-frm'=> $frm->getFormTagAttribute('name')
     ],
     $siteLangId,
     '',
@@ -24,7 +24,7 @@ $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
 
 
-$langFld = $imagesFrm->getField('lang_id');
+$langFld = $frm->getField('lang_id');
 $langFld->addFieldTagAttribute('onchange', 'loadImages(' . $recordId . ', this.value);');
 
 $otherButtons = [
@@ -39,14 +39,9 @@ $otherButtons = [
     ]
 ]; 
 
-$formTitle = Labels::getLabel('LBL_BLOG_POST_SETUP', $siteLangId); ?>
+$formTitle = Labels::getLabel('LBL_BLOG_POST_SETUP', $siteLangId);
 
-<?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
-    <div class="form-edit-body loaderContainerJs">
-        <?php echo $imagesFrm->getFormHtml(); ?>
-    </div>
-    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
-</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
+require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script type="text/javascript">
     $('input[name=min_width]').val(1000);

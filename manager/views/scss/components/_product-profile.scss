@@ -3,7 +3,7 @@
     flex-wrap: wrap;
     flex: 1;
     /*max-width: 300px;*/
-    min-width: 0;
+    min-width: 200px;
     // @include media-breakpoint-down(md) {
     //     max-width: 80%;
     //     margin-bottom: 1rem;
@@ -102,7 +102,7 @@
             flex-direction: row;
             li {
                 line-height: 1;
-                +li {
+                + li {
                     margin-#{$start-direction}: 0.5rem;
                     padding-#{$start-direction}: 0.5rem;
                     border-#{$start-direction}: 1px solid $border-color;

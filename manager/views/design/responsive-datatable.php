@@ -57,7 +57,7 @@
                                     <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                         <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
                                         <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
                                         <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New Download</a>
@@ -88,7 +88,7 @@
                         <div class="card-body card__body--fit">
                             <!--begin: Datatable -->
                             <div class="dataTables_wrapper dt-bootstrap4" id="local_data">
-                                <table class="table table-dashed" id="m_table_1" role="grid" aria-describedby="m_table_1_info" >
+                                <table class="table table-dashed" id="m_table_1" role="grid" aria-describedby="m_table_1_info">
                                     <thead>
                                         <tr role="row">
                                             <th class="sorting_asc" tabindex="0" aria-controls="m_table_1" rowspan="1" colspan="1" style="width: 50.25px;" aria-sort="ascending" aria-label="OrderID: activate to sort column descending">OrderID</th>
@@ -138,7 +138,7 @@
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -173,7 +173,7 @@
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -208,7 +208,7 @@
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -243,7 +243,7 @@
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -278,7 +278,7 @@
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -313,7 +313,7 @@
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -348,7 +348,7 @@
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -383,7 +383,7 @@
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -418,7 +418,7 @@
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -453,7 +453,7 @@
                                                     <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                         <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -491,31 +491,31 @@
                                 </table>
                                 <div class="row justify-content-between ">
                                     <div class="col">
-                                    <div class="data-length">
-                                                    <select name="" class="form-select data-length-select">
-                                                        <option value="10">10</option>
-                                                        <option value="25">25</option>
-                                                        <option value="50">50</option>
-                                                        <option value="100">100</option>
-                                                    </select>
-                                                    <div class="data-length-info"></div> Showing 1 to 10 of 29 records
-                                                </div>
+                                        <div class="data-length">
+                                            <select name="" class="form-select data-length-select">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                            <div class="data-length-info"></div> Showing 1 to 10 of 29 records
+                                        </div>
                                     </div>
                                     <div class="col-auto">
-                                    <ul class="pagination">
-                                                    <li class="prev">
-                                                        <a href="javascript:void(0);"> </a>
-                                                    </li>
-                                                    <li><a href="javascript:void(0);">1</a></li>
-                                                    <li class="selected"><a href="javascript:void(0);">2</a></li>
-                                                    <li><a href="javascript:void(0);">...</a></li>
-                                                    <li class="next"><a href="javascript:void(0);"> </a>
-                                                    </li>
+                                        <ul class="pagination">
+                                            <li class="prev">
+                                                <a href="javascript:void(0);"> </a>
+                                            </li>
+                                            <li><a href="javascript:void(0);">1</a></li>
+                                            <li class="selected"><a href="javascript:void(0);">2</a></li>
+                                            <li><a href="javascript:void(0);">...</a></li>
+                                            <li class="next"><a href="javascript:void(0);"> </a>
+                                            </li>
 
-                                                </ul>
+                                        </ul>
                                     </div>
-                                    
-                                    
+
+
                                 </div>
                             </div>
                             <!--end: Datatable -->
@@ -537,14 +537,14 @@
 
     <script>
         $(document).ready(function() {
-    $('#m_table_1').DataTable({
-        responsive: true,
-        paging: false,
-        "searching": false,
-        "info": false,
-    
-    });
-} );
+            $('#m_table_1').DataTable({
+                responsive: true,
+                paging: false,
+                "searching": false,
+                "info": false,
+
+            });
+        });
     </script>
 </body>
 

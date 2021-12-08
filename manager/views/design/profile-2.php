@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
@@ -22,8 +22,8 @@
 <body class="">
     <div class="wrapper">
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body " id="body">
             <div class="content " id="content">
 
@@ -34,7 +34,8 @@
                             <h3 class="subheader__title">
                                 <button class="subheader__mobile-toggle subheader__mobile-toggle--left" id="subheader_mobile_toggle"><span></span></button>
 
-                                Profile 2 </h3>
+                                Profile 2
+                            </h3>
 
                             <div class="subheader__breadcrumbs">
                                 <a href="#" class="subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
@@ -59,7 +60,7 @@
                                     <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                         <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
                                         <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
                                         <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New Download</a>
@@ -92,7 +93,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="image">
 
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest font-light hidden">
                                                     JD
@@ -206,7 +207,7 @@
                                                     <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="flaticon-more-1"></i>
                                                     </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                         <ul class="nav">
                                                             <li class="nav__item">
                                                                 <a href="#" class="nav__link">
@@ -831,7 +832,7 @@
                                                         <div class="widget31__item">
                                                             <div class="widget31__content">
                                                                 <div class="widget31__pic">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="">
                                                                 </div>
                                                                 <div class="widget31__info">
                                                                     <a href="#" class="widget31__username">
@@ -860,7 +861,7 @@
                                                         <div class="widget31__item">
                                                             <div class="widget31__content">
                                                                 <div class="widget31__pic">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_14.jpg" alt="">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_14.jpg" alt="">
                                                                 </div>
                                                                 <div class="widget31__info">
                                                                     <a href="#" class="widget31__username">
@@ -889,7 +890,7 @@
                                                         <div class="widget31__item">
                                                             <div class="widget31__content">
                                                                 <div class="widget31__pic widget4__pic--pic">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_11.jpg" alt="">
                                                                 </div>
                                                                 <div class="widget31__info">
                                                                     <a href="#" class="widget31__username">
@@ -917,7 +918,7 @@
                                                         <div class="widget31__item">
                                                             <div class="widget31__content">
                                                                 <div class="widget31__pic widget4__pic--pic">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="">
                                                                 </div>
                                                                 <div class="widget31__info">
                                                                     <a href="#" class="widget31__username">
@@ -945,7 +946,7 @@
                                                         <div class="widget31__item">
                                                             <div class="widget31__content">
                                                                 <div class="widget31__pic">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg" alt="">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_6.jpg" alt="">
                                                                 </div>
                                                                 <div class="widget31__info">
                                                                     <a href="#" class="widget31__username">
@@ -976,7 +977,7 @@
                                                         <div class="widget31__item">
                                                             <div class="widget31__content">
                                                                 <div class="widget31__pic widget4__pic--pic">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg" alt="">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_11.jpg" alt="">
                                                                 </div>
                                                                 <div class="widget31__info">
                                                                     <a href="#" class="widget31__username">
@@ -1004,7 +1005,7 @@
                                                         <div class="widget31__item">
                                                             <div class="widget31__content">
                                                                 <div class="widget31__pic widget4__pic--pic">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_1.jpg" alt="">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="">
                                                                 </div>
                                                                 <div class="widget31__info">
                                                                     <a href="#" class="widget31__username">
@@ -1032,7 +1033,7 @@
                                                         <div class="widget31__item">
                                                             <div class="widget31__content">
                                                                 <div class="widget31__pic">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_14.jpg" alt="">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_14.jpg" alt="">
                                                                 </div>
                                                                 <div class="widget31__info">
                                                                     <a href="#" class="widget31__username">
@@ -1061,7 +1062,7 @@
                                                         <div class="widget31__item">
                                                             <div class="widget31__content">
                                                                 <div class="widget31__pic">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg" alt="">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_6.jpg" alt="">
                                                                 </div>
                                                                 <div class="widget31__info">
                                                                     <a href="#" class="widget31__username">
@@ -1089,7 +1090,7 @@
                                                         <div class="widget31__item">
                                                             <div class="widget31__content">
                                                                 <div class="widget31__pic">
-                                                                    <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="">
+                                                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="">
                                                                 </div>
                                                                 <div class="widget31__info">
                                                                     <a href="#" class="widget31__username">
@@ -1132,8 +1133,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
     </div>
 
 </body>

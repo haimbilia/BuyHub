@@ -2,55 +2,111 @@
 
 class PushNotificationsController extends ListingBaseController
 {
+    protected string $modelClass = 'PushNotification';
+    protected string $pageKey = 'MANAGE_PUSH_NOTIFICATIONS';
+
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewPushNotification();
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_PUSH_NOTIFICATION, 'plugin_active');
-        if (false == $active || empty($active)) {
-            Message::addErrorMessage(Labels::getlabel("MSG_NO_DEFAULT_PUSH_NOTIFICATION_PLUGIN__FOUND", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl());
+    }
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditPushNotification($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditPushNotification();
         }
     }
 
-    private function validateRequest($pNotificationId)
+    private function validateRequest($recordId)
     {
-        $pNotificationId = FatUtility::int($pNotificationId);
-        $status = PushNotification::getAttributesById($pNotificationId, 'pnotification_status');
+        $recordId = FatUtility::int($recordId);
+        $status = PushNotification::getAttributesById($recordId, 'pnotification_status');
         if (0 != $status) {
-            FatUtility::dieJsonError(Labels::getLabel("LBL_NOT_ALLOWED", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_ALLOWED", $this->siteLangId), true);
+        }
+    }
+
+    private function validatePlugin()
+    {
+        $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_PUSH_NOTIFICATION, 'plugin_active');
+        if (false == $active || empty($active)) {
+            LibHelper::exitWithError(Labels::getlabel("MSG_NO_DEFAULT_PUSH_NOTIFICATION_PLUGIN__FOUND", $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl());
         }
     }
 
     public function index()
     {
-        $this->canEdit = $this->objPrivilege->canEditPushNotification($this->admin_id, true);
-        $frmSearch = $this->getSearchForm();
-        $this->set("canEdit", $this->canEdit);
+        $this->validatePlugin();
+
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
-        $this->_template->addJs(array('js/jquery.datetimepicker.js', 'js/cropper.js', 'js/cropper-main.js'), false);
-        $this->_template->addCss(array('css/jquery.datetimepicker.css', 'css/cropper.css'), false);
-        $this->_template->render();
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NOTIFICATION_TITLE', $this->siteLangId));
+        $this->getListingData();
+
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'push-notifications/page-js/index.js']);
+        $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css']);
+
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
     {
-        $this->canEdit = $this->objPrivilege->canEditPushNotification($this->admin_id, true);
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'push-notifications/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+    private function getListingData()
+    {
+        $this->checkEditPrivilege(true);
 
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
-        $srchFrm = $this->getSearchForm();
-        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
-
-        $page = $post['page'];
-        if ($page < 2) {
-            $page = 1;
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'pnotification_status');
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = 'pnotification_status';
         }
 
-        $srch = PushNotification::getSearchObject();
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
+        $srchFrm = $this->getSearchForm($fields);
+
+        $postedData = FatApp::getPostedData();
+        $post = $srchFrm->getFormDataFromArray($postedData);
+
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $srch = PushNotification::getSearchObject();
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $srch->addCondition('pnotification_title', 'LIKE', '%' . $keyword . '%');
@@ -65,309 +121,256 @@ class PushNotificationsController extends ListingBaseController
         if ('' != $deviceType && -1 < $deviceType) {
             $srch->addCondition('pnotification_device_os', '=', $deviceType);
         }
+        
+        $authType = $post['pnotification_user_auth_type'];
+        if ('' != $authType && -1 < $authType) {
+            $srch->addCondition('pnotification_user_auth_type', '=', $authType);
+        }
 
-        /* $notifyTo = $post['notify_to'];
-        if (0 < $notifyTo) {
-            switch ($notifyTo) {
-                case PushNotification::NOTIFY_TO_BUYER:
-                    $srch->addCondition('pnotification_for_buyer', '=', applicationConstants::YES);
-                    break;
-                case PushNotification::NOTIFY_TO_SELLER:
-                    $srch->addCondition('pnotification_for_seller', '=', applicationConstants::YES);
-                    break;
-            }
-        } */
+        $srch->addOrder($sortBy, $sortOrder);
 
-        $srch->addOrder('pn.pnotification_id', 'DESC');
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $statusArr = PushNotification::getStatusArr($this->siteLangId);
 
-        $this->set('arrListing', $records);
+        $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
         $this->set('recordCount', $srch->recordCount());
-        $this->set("canEdit", $this->canEdit);
-        $this->set("statusArr", $statusArr);
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+
+        $this->set('canView', $this->objPrivilege->canViewPushNotification($this->admin_id, true));
+    }
+
+    public function view()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+        }
+
+        $data = PushNotification::getAttributesById($recordId);
+        if (empty($data)) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+        }
+
+        $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_DETAIL', $this->siteLangId));
+        $this->set('data', $data);
         $this->_template->render(false, false);
     }
 
-    public function getSearchForm()
+    public function form()
     {
-        $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
-
-        $statusArr = [-1 => Labels::getLabel('LBL_DOES_NOT_MATTER', $this->siteLangId)] + PushNotification::getStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'pnotification_status', $statusArr, '', array(), '');
-
-        $deviceTypeArr = [-1 => Labels::getLabel('LBL_DOES_NOT_MATTER', $this->siteLangId)] + User::getDeviceTypeArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_DEVICE_OPERATING_SYSTEM', $this->siteLangId), 'pnotification_device_os', $deviceTypeArr, '', array(), '');
-
-        // $notifyToArr = array_merge([Labels::getLabel('LBL_DOES_NOT_MATTER', $this->siteLangId)], PushNotification::getUserTypeArr($this->siteLangId));
-        // $frm->addSelectBox(Labels::getLabel('LBL_NOTIFY_TO', $this->siteLangId), 'notify_to', $notifyToArr, '', array(), '');
-
-        $frm->addHiddenField('', 'page');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), ['onclick' => 'clearSearch();']);
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
-
-    public function form($status = 0)
-    {
-        $frm = new Form('PushNotificationForm', array('id' => 'PushNotificationForm'));
-        $frm->addHiddenField('', 'pnotification_id');
-
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'pnotification_lang_id', Language::getAllNames(), $this->siteLangId, array(), '');
-        
-        $userAuthType = $frm->addSelectBox(Labels::getLabel('LBL_USER_AUTH_TYPE', $this->siteLangId), 'pnotification_user_auth_type', User::getUserAuthTypeArr($this->siteLangId), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        $userAuthType->requirements()->setRequired(true);
-        $userAuthType->htmlAfterField = '<small>' . Labels::getLabel('LBL_YOU_CAN_CLONE_TO_SEND_THIS_NOTIFICATION_TO_OTHER_USER_AUTH_TYPE', $this->siteLangId) . '</small>';
-
-        $frm->addRequiredField(Labels::getLabel('LBL_TITLE', $this->siteLangId), 'pnotification_title');
-        $fld = $frm->addTextArea(Labels::getLabel('LBL_BODY', $this->siteLangId), 'pnotification_description');
-        $fld->requirements()->setRequired(true);
-
-        $frm->addTextBox(Labels::getLabel('LBL_URL', $this->siteLangId), 'pnotification_url');
-
-        $dateFld = $frm->addDateTimeField(Labels::getLabel('LBL_SCHEDULE_DATE', $this->siteLangId), 'pnotification_notified_on', date('Y-m-d H:00'), ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
-        $dateFld->requirements()->setRequired(true);
-
-        $deviceType = $frm->addSelectBox(Labels::getLabel('LBL_DEVICE_OPERATING_SYSTEM', $this->siteLangId), 'pnotification_device_os', User::getDeviceTypeArr($this->siteLangId), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
-        $deviceType->requirements()->setRequired(true);
-
-        // $frm->addCheckBox(Labels::getLabel('LBL_NOTIFY_TO_BUYERS', $this->siteLangId), 'pnotification_for_buyer', 1, [], false, 0);
-        // $frm->addCheckBox(Labels::getLabel('LBL_NOTIFY_TO_SELLER', $this->siteLangId), 'pnotification_for_seller', 1, [], false, 0);
-
-        if (0 == $status) {
-            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
-        }
-        return $frm;
-    }
-
-    public function getMediaForm($pNotificationId, $status = 0)
-    {
-        $frm = new Form('frmPushNotificationMedia');
-        $frm->addHiddenField('', 'pnotification_id', $pNotificationId);
-        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE);
-        $ul = $frm->addHtml('', 'MediaGrids', '<ul class="grids--onethird">');
-
-        $ul->htmlAfterField .= '<li>' . Labels::getLabel('LBL_PUSH_NOTIFICATION_IMAGE', $this->siteLangId) . '<div class="logoWrap"><div class="uploaded--image">';
-
-        if ($imgData = AttachedFile::getAttachment(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $pNotificationId)) {
-            $uploadedTime = AttachedFile::setTimeParam($imgData['afile_updated_at']);
-            $ul->htmlAfterField .= '<img src="' . UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'pushNotificationImage', [$pNotificationId], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">';
-            if (0 == $status) {
-                $ul->htmlAfterField .= '<a  class="remove--img" href="javascript:void(0);" onclick="removeImage(' . $pNotificationId . ')" ><i class="ion-close-round"></i></a>';
-            }
-        }
-
-        if (0 == $status) {
-            $ul->htmlAfterField .= ' </div></div><input accept="image/*" data-frm="frmPushNotificationMedia" class="btn btn-brand btn-sm" onchange="popupImage(this)" title="Upload" type="file" name="app_push_notification_image" value="'. Labels::getLabel('LBL_Upload_File', $this->siteLangId).'"><small>' . Labels::getLabel('LBL_SIZE_MUST_BE_LESS_THAN_300KB', $this->siteLangId) . '</small></li>';
-        }
-        return $frm;
-    }
-
-    public function selectedUsersform($status = 0)
-    {
-        $frm = new Form('PushNotificationUserForm', array('id' => 'PushNotificationUserForm'));
-        $frm->addHiddenField('', 'pnotification_id');
-
-        $attributes = ['placeholder' => Labels::getLabel('LBL_Search...', $this->siteLangId)];
-        if (0 != $status) {
-            $attributes['class'] = 'd-none';
-        }
-
-        $userFld = $frm->addTextBox(Labels::getLabel('LBL_SELECT_USER', $this->siteLangId), 'users', '', $attributes);
-        $userFld->htmlAfterField = '<small>' . Labels::getLabel('LBL_SELECTED_USER_LIST_WILL_BE_DISPLAYED_HERE', $this->siteLangId) . '</small><div class="box--scroller"><ul class="columlist list--vertical" id="selectedUsersList-js"></ul></div>';
-        return $frm;
-    }
-
-    public function addNotificationForm($pNotificationId = 0)
-    {
-        $frm = $this->form();
-        $pNotificationId = FatUtility::int($pNotificationId);
+        $this->objPrivilege->canEditPushNotification();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
+        $frm = $this->getForm($langId);
         $status = 0;
         $userAuthType = '';
-        if (0 < $pNotificationId) {
-            $data = PushNotification::getAttributesById($pNotificationId);
+        $isUsersSelected = false;
+        if (0 < $recordId) {
+            $data = PushNotification::getAttributesById($recordId);
             $status = $data['pnotification_status'];
-            $frm = $this->form($data['pnotification_status']);
             $userAuthType = $data['pnotification_user_auth_type'];
+            $data['pnotification_lang_id'] = $langId;
             $frm->fill($data);
+
+            $isUsersSelected = (0 < count($this->getSelectedUsers($recordId)));
         }
         $this->set('status', $status);
-        $this->set('pNotificationId', $pNotificationId);
+        $this->set('isUsersSelected', $isUsersSelected);
+        $this->set('recordId', $recordId);
         $this->set('userAuthType', $userAuthType);
         $this->set('frm', $frm);
+        $this->set('displayLangTab', false);
+        $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_SETUP', $this->siteLangId));
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
 
-    public function addMediaForm($pNotificationId)
+    public function clone()
     {
-        $pNotificationId = FatUtility::int($pNotificationId);
-        if (1 > $pNotificationId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $data = PushNotification::getAttributesById($pNotificationId, ['pnotification_status', 'pnotification_user_auth_type']);
-        
         $this->objPrivilege->canEditPushNotification();
-        $mediaFrm = $this->getMediaForm($pNotificationId, $data['pnotification_status']);
-        $this->set('status', $data['pnotification_status']);
-        $this->set('languages', Language::getAllNames());
-        $this->set('pNotificationId', $pNotificationId);
-        $this->set('userAuthType', $data['pnotification_user_auth_type']);
-        $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        $this->set('frm', $mediaFrm);
-        $this->_template->render(false, false);
-    }
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
 
-    public function setup()
-    {
-        $frm = $this->form();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        if (false === $post) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        if (1 > $recordId) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), false, false, true);
         }
-
-        /* if (empty($post['pnotification_for_buyer']) && empty($post['pnotification_for_seller'])) {
-            FatUtility::dieJsonError(Labels::getLabel("LBL_MUST_SELECT_EITHER_BUYER_OR_SELLER", $this->siteLangId));
-        } */
-
-        unset($post['btn_submit']);
-
-        $post['pnotification_type'] = PushNotification::TYPE_APP;
-        $post['pnotification_for_buyer'] = applicationConstants::YES;
-
-        /* if (!empty($post['pnotification_id'])) {
-            $this->validateRequest($post['pnotification_id']);
-            $recordDetail = PushNotification::getAttributesById($post['pnotification_id'], ['pnotification_for_buyer', 'pnotification_for_seller']);
-            if ($post['pnotification_for_buyer'] != $recordDetail['pnotification_for_buyer'] || $post['pnotification_for_seller'] != $recordDetail['pnotification_for_seller']) {
-                $db = FatApp::getDb();
-                if (!$db->deleteRecords(PushNotification::DB_TBL_NOTIFICATION_TO_USER, ['smt' => 'pntu_pnotification_id = ?', 'vals' => [$post['pnotification_id']]])) {
-                    FatUtility::dieJsonError($db->getError());
-                }
-            }
-        } */
-
-        $db = FatApp::getDb();
-        if (!$db->insertFromArray(PushNotification::DB_TBL, $post, true, array(), $post)) {
-            FatUtility::dieJsonError($db->getError());
-        }
-
-        $recordId = !empty($post['pnotification_id']) ? $post['pnotification_id'] : $db->getInsertId();
-
-        $json['msg'] = Labels::getLabel("LBL_SETUP_SUCCESSFULLY", $this->siteLangId);
-        $json['status'] = true;
-        $json['recordId'] = $recordId;
-        FatUtility::dieJsonSuccess($json);
-    }
-
-    public function clone($pNotificationId)
-    {
-        $pNotificationId = FatUtility::int($pNotificationId);
-        if (1 > $pNotificationId) {
-            FatUtility::dieJsonError(Labels::getLabel("LBL_INVALID_REQUEST", $this->siteLangId));
-        }
-        $data = PushNotification::getAttributesById($pNotificationId);
+        
+        $data = PushNotification::getAttributesById($recordId);
         unset($data['pnotification_id'], $data['pnotification_status'], $data['pnotification_uauth_last_access']);
         $db = FatApp::getDb();
         if (!$db->insertFromArray(PushNotification::DB_TBL, $data, true, array(), $data)) {
-            FatUtility::dieJsonError($db->getError());
+            LibHelper::exitWithError($db->getError(), false, false, true);
         }
 
         $recordId = $db->getInsertId();
         $data['pnotification_id'] = $recordId;
 
-        $frm = $this->form();
+        $frm = $this->getForm($langId);
+        $data['pnotification_lang_id'] = $langId;
         $frm->fill($data);
-        $this->set('pNotificationId', $recordId);
+        $this->set('recordId', $recordId);
         $this->set('userAuthType', $data['pnotification_user_auth_type']);
         $this->set('frm', $frm);
         $this->set('status', 0);
-        $this->_template->render(false, false, 'push-notifications/add-notification-form.php');
+        $this->set('displayLangTab', false);
+        $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_SETUP', $this->siteLangId));
+        $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->_template->render(false, false, 'push-notifications/form.php');
     }
 
-    public function addSelectedUsersForm($pNotificationId)
+    public function setup()
     {
-        $this->objPrivilege->canEditPushNotification();
-        $pNotificationId = FatUtility::int($pNotificationId);
-        if (1 > $pNotificationId) {
-            FatUtility::dieJsonError(Labels::getLabel("LBL_INVALID_REQUEST", $this->siteLangId));
+        $langId = FatApp::getPostedData('pnotification_lang_id', FatUtility::VAR_INT, $this->siteLangId);
+        $frm = $this->getForm($langId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        $data = PushNotification::getAttributesById($pNotificationId, ['pnotification_status', 'pnotification_user_auth_type']);
-        if (User::AUTH_TYPE_GUEST == $data['pnotification_user_auth_type']) {
-            FatUtility::dieJsonError(Labels::getLabel("LBL_NOT_ALLOWED", $this->siteLangId));
+        $recordId = FatUtility::int($post['pnotification_id']);
+
+        $post['pnotification_type'] = PushNotification::TYPE_APP;
+        $post['pnotification_for_buyer'] = applicationConstants::YES;
+        $pushNotification = new PushNotification($recordId);
+        $pushNotification->assignValues($post);
+        if (!$pushNotification->save()) {
+            LibHelper::exitWithError($pushNotification->getError(), true);
         }
 
-        $frm = $this->selectedUsersform($data['pnotification_status']);
-        $frm->fill(['pnotification_id' => $pNotificationId]);
-        $srch = PushNotification::getSearchObject(true);
-        $srch->addMultipleFields(['pnotification_id', 'pntu_user_id', 'user_name', 'credential_username', 'pnotification_user_auth_type']);
-        $srch->joinTable('tbl_users', 'INNER JOIN', 'pntu_user_id = tu.user_id', 'tu');
-        $srch->joinTable('tbl_user_credentials', 'INNER JOIN', 'tu.user_id = tuc.credential_user_id', 'tuc');
-        $srch->addCondition('pnotification_id', "=", $pNotificationId);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        if (!empty($records) && 0 < count($records)) {
-            $this->set('data', $records);
+        $recordId = $pushNotification->getMainTableRecordId();
+
+        $json['msg'] = $this->str_setup_successful;
+        $json['recordId'] = $recordId;
+        $json['openMediaForm'] = true;
+        FatUtility::dieJsonSuccess($json);
+    }
+
+    private function getForm($langId)
+    {
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
+
+        $frm = new Form('PushNotificationForm');
+        $frm->addHiddenField('', 'pnotification_id');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'pnotification_lang_id', Language::getAllNames(), $langId, [], '');
+        $fld->requirements()->setRequired(true);
+
+        $userAuthType = $frm->addSelectBox(Labels::getLabel('FRM_USER_AUTH_TYPE', $langId), 'pnotification_user_auth_type', User::getUserAuthTypeArr($langId), '', [], Labels::getLabel('FRM_SELECT', $langId));
+        $userAuthType->requirements()->setRequired(true);
+        
+        $dateFld = $frm->addDateTimeField(Labels::getLabel('FRM_SCHEDULE_DATE', $langId), 'pnotification_notified_on', date('Y-m-d H:00'), ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
+        $dateFld->requirements()->setRequired(true);
+
+        $deviceType = $frm->addSelectBox(Labels::getLabel('FRM_DEVICE_TYPE', $langId), 'pnotification_device_os', User::getDeviceTypeArr($langId), '', [], Labels::getLabel('LBL_Select', $langId));
+        $deviceType->requirements()->setRequired(true);
+
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $langId), 'pnotification_title');
+        $frm->addTextBox(Labels::getLabel('FRM_URL', $langId), 'pnotification_url');
+        $fld = $frm->addTextArea(Labels::getLabel('FRM_BODY', $langId), 'pnotification_description');
+        $fld->requirements()->setRequired(true);
+        
+        return $frm;
+    }
+
+    protected function getSearchForm($fields = [])
+    {
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'coupon_active', applicationConstants::SORT_ASC);
         }
-        $this->set('notifyTo', PushNotification::getAttributesById($pNotificationId, ['pnotification_for_buyer', 'pnotification_for_seller']));
-        $this->set('pNotificationId', $pNotificationId);
+
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        $statusArr = [-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)] + PushNotification::getStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'pnotification_status', $statusArr, '', array(), '');
+
+        $authType = [-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)] + User::getUserAuthTypeArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_NOTIFICATION_FOR_(USERS)', $this->siteLangId), 'pnotification_user_auth_type', $authType, '', array(), '');
+       
+        $deviceTypeArr = [-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)] + User::getDeviceTypeArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_DEVICE_TYPE', $this->siteLangId), 'pnotification_device_os', $deviceTypeArr, '', array(), '');
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
+        return $frm;
+    }
+
+    public function media($recordId)
+    {
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+        $data = PushNotification::getAttributesById($recordId, ['pnotification_status', 'pnotification_user_auth_type', 'pnotification_lang_id']);
+
+        $this->objPrivilege->canEditPushNotification();
+        $mediaFrm = $this->getMediaForm($recordId);
+
+        $this->set('recordId', $recordId);
+        $this->set('langId', $data['pnotification_lang_id']);
         $this->set('status', $data['pnotification_status']);
-        $this->set('frm', $frm);
+        $this->set('pNotificationId', $recordId);
+        $this->set('userAuthType', $data['pnotification_user_auth_type']);
+        $this->set('frm', $mediaFrm);
+        $this->set('displayLangTab', false);
+        $this->set('displayFooterButtons', false);
+        $this->set('activeGentab', false);
+        $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
-    public function bindUser($pNotificationId, $userId)
+    public function images($recordId)
     {
-        $this->objPrivilege->canEditPushNotification();
-        $pNotificationId = FatUtility::int($pNotificationId);
-        $this->validateRequest($pNotificationId);
-        $userId = FatUtility::int($userId);
-        if (1 > $pNotificationId || 1 > $userId) {
-            FatUtility::dieJsonError(Labels::getLabel("LBL_INVALID_REQUEST", $this->siteLangId));
+        $this->checkEditPrivilege(true);
+
+        $recordId = FatUtility::int($recordId);
+        if (!$recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
-        $PushNotificationData = [
-            'pntu_pnotification_id' => $pNotificationId,
-            'pntu_user_id' => $userId
-        ];
-        $db = FatApp::getDb();
-        if (!$db->insertFromArray(PushNotification::DB_TBL_NOTIFICATION_TO_USER, $PushNotificationData, true, array(), $PushNotificationData)) {
-            FatUtility::dieJsonError($db->getError());
+
+        if (!$row = DiscountCoupons::getAttributesById($recordId, 'coupon_id')) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
+
+        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $recordId);
+        $this->set('images', $images);
+        $this->set('recordId', $recordId);
+        $this->_template->render(false, false);
     }
 
-    public function unlinkUser($pNotificationId, $userId)
+    private function getMediaForm($recordId)
     {
-        $this->objPrivilege->canEditPushNotification();
-        $pNotificationId = FatUtility::int($pNotificationId);
-        $this->validateRequest($pNotificationId);
-        $userId = FatUtility::int($userId);
-        if (1 > $pNotificationId || 1 > $userId) {
-            FatUtility::dieJsonError(Labels::getLabel("LBL_INVALID_REQUEST", $this->siteLangId));
-        }
-        $db = FatApp::getDb();
-        if (!$db->deleteRecords(PushNotification::DB_TBL_NOTIFICATION_TO_USER, ['smt' => 'pntu_pnotification_id = ? AND pntu_user_id = ?', 'vals' => [$pNotificationId, $userId]])) {
-            FatUtility::dieJsonError($db->getError());
-        }
-        FatUtility::dieJsonSuccess(Labels::getLabel("LBL_SUCCESS", $this->siteLangId));
+        $frm = new Form('frmPushNotificationMedia');
+
+        $frm->addHiddenField('', 'pnotification_id', $recordId);
+        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE);
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');
+
+        $frm->addHtml('', 'pnotification_image', '');
+        return $frm;
     }
 
-    public function removeImage($pNotificationId)
+    public function removeMedia($recordId)
     {
         $this->objPrivilege->canEditPushNotification();
-        $pNotificationId = FatUtility::int($pNotificationId);
-        $this->validateRequest($pNotificationId);
+        $recordId = FatUtility::int($recordId);
+        $this->validateRequest($recordId);
         $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $pNotificationId)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $recordId)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
         FatUtility::dieJsonSuccess(Labels::getLabel("LBL_SUCCESS", $this->siteLangId));
     }
@@ -378,35 +381,159 @@ class PushNotificationsController extends ListingBaseController
         $post = FatApp::getPostedData();
 
         if (empty($post)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request_Or_File_not_supported', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
         }
-        $this->validateRequest($post['pnotification_id']);
+        $recordId = $post['pnotification_id'];
+        $this->validateRequest($recordId);
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
 
         if (!$file_type) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if ($file_type != AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
-        if (!$res = $fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], $file_type, $post['pnotification_id'], 0, $_FILES['cropped_image']['name'], -1, true)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+        if (false === $fileHandlerObj->deleteFile($file_type, $recordId)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_Uploaded_Successfully', $this->siteLangId));
+        if (!$res = $fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], $file_type, $recordId, 0, $_FILES['cropped_image']['name'], -1, true)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+
+        $this->set('msg', Labels::getLabel('MSG_IMAGE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    private function getSelectedUsers(int $recordId): array
+    {
+        $srch = PushNotification::getSearchObject(true);
+        $srch->addMultipleFields(['pntu_user_id as id', 'CONCAT(user_name, " (", credential_username, ")") as value', $recordId . ' as recordId']);
+        $srch->joinTable('tbl_users', 'INNER JOIN', 'pntu_user_id = tu.user_id', 'tu');
+        $srch->joinTable('tbl_user_credentials', 'INNER JOIN', 'tu.user_id = tuc.credential_user_id', 'tuc');
+        $srch->addCondition('pnotification_id', "=", $recordId);
+        $rs = $srch->getResultSet();
+        return FatApp::getDb()->fetchAll($rs);
+    }
+
+    public function notifyUsersForm($recordId)
+    {
+        $this->objPrivilege->canEditPushNotification();
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), false, false, true);
+        }
+        $data = PushNotification::getAttributesById($recordId, ['pnotification_status', 'pnotification_user_auth_type', 'pnotification_lang_id']);
+        if (User::AUTH_TYPE_GUEST == $data['pnotification_user_auth_type']) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_ALLOWED_TO_ADD_USERS_FOR_GUESTS", $this->siteLangId), false, false, true);
+        }
+
+        $frm = $this->selectedUsersform($data['pnotification_status']);
+        $frm->fill(['pnotification_id' => $recordId]);
+
+        $records = $this->getSelectedUsers($recordId);
+        if (!empty($records) && 0 < count($records)) {
+            $frm->fill(['users' => json_encode($records)]);
+        }
+        $this->set('notifyTo', PushNotification::getAttributesById($recordId, ['pnotification_for_buyer', 'pnotification_for_seller']));
+        $this->set('recordId', $recordId);
+        $this->set('status', $data['pnotification_status']);
+        $this->set('langId', $data['pnotification_lang_id']);
+        $this->set('frm', $frm);
+        $this->set('displayFooterButtons', false);
+        $this->set('displayLangTab', false);
+        $this->set('activeGentab', false);
+        $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_SETUP', $this->siteLangId));
+        $this->_template->render(false, false);
+    }
+
+    private function selectedUsersform($status = 0)
+    {
+        $frm = new Form('PushNotificationUserForm', array('id' => 'PushNotificationUserForm'));
+        $frm->addHiddenField('', 'pnotification_id');
+        $frm->addTextBox(Labels::getLabel('FRM_SELECT_USER', $this->siteLangId), 'users', '', ['placeholder' => Labels::getLabel('FRM_Search...', $this->siteLangId)]);
+        return $frm;
+    }
+
+    public function bindUser($recordId, $userId)
+    {
+        $this->objPrivilege->canEditPushNotification();
+        $recordId = FatUtility::int($recordId);
+        $this->validateRequest($recordId);
+        $userId = FatUtility::int($userId);
+        if (1 > $recordId || 1 > $userId) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), true);
+        }
+        $PushNotificationData = [
+            'pntu_pnotification_id' => $recordId,
+            'pntu_user_id' => $userId
+        ];
+        $db = FatApp::getDb();
+        if (!$db->insertFromArray(PushNotification::DB_TBL_NOTIFICATION_TO_USER, $PushNotificationData, true, array(), $PushNotificationData)) {
+            LibHelper::exitWithError($db->getError(), true);
+        }
+        FatUtility::dieJsonSuccess($this->str_update_record);
+    }
+
+    public function unlinkUser($recordId, $userId)
+    {
+        $this->objPrivilege->canEditPushNotification();
+        $recordId = FatUtility::int($recordId);
+        $this->validateRequest($recordId);
+        $userId = FatUtility::int($userId);
+        if (1 > $recordId || 1 > $userId) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), true);
+        }
+        $db = FatApp::getDb();
+        if (!$db->deleteRecords(PushNotification::DB_TBL_NOTIFICATION_TO_USER, ['smt' => 'pntu_pnotification_id = ? AND pntu_user_id = ?', 'vals' => [$recordId, $userId]])) {
+            LibHelper::exitWithError($db->getError(), true);
+        }
+        FatUtility::dieJsonSuccess($this->str_update_record);
+    }
+
+    protected function getFormColumns(): array
+    {
+        $tblHeadingCols = CacheHelper::get('pushNotificationsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols);
+        }
+
+        $arr = [
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'pnotification_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
+            'pnotification_user_auth_type' => Labels::getLabel('FRM_NOTIFICATION_FOR_(USERS)', $this->siteLangId),
+            'pnotification_device_os' => Labels::getLabel('LBL_DEVICE_TYPE', $this->siteLangId),
+            'pnotification_notified_on' => Labels::getLabel('LBL_SCHEDULED_FOR', $this->siteLangId),
+            'pnotification_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('pushNotificationsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'listSerial',
+            'pnotification_title',
+            'pnotification_user_auth_type',
+            'pnotification_device_os',
+            'pnotification_notified_on',
+            'pnotification_status',
+            'action',
+        ];
+    }
+
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 }
