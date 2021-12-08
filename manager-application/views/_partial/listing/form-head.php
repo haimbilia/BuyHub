@@ -25,25 +25,25 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
         <div class="form-edit-head">
             <nav class="nav nav-tabs navTabsJs">
                 <?php
-                    if(!isset($generalTab)){
-                        $generalTab = [
-                            'attr' => [
-                                'href' => 'javascript:void(0);',
-                                'onclick' => "editRecord(".$recordId .");",
-                                'title' => Labels::getLabel('LBL_GENERAL', $siteLangId)
-                            ],
-                            'label' => Labels::getLabel('LBL_GENERAL', $siteLangId),
-                            'isActive' => $activeGentab
-                        ];
-                    }
-                    $generalTabAttr = $generalTab['attr'] ?? [];
-                    $label = $generalTab['label'] ?? '';
-                    $isActive = $generalTab['isActive'] ?? false;
-                    $active = $isActive ? 'active' : '';
+                if (!isset($generalTab)) {
+                    $generalTab = [
+                        'attr' => [
+                            'href' => 'javascript:void(0);',
+                            'onclick' => "editRecord(" . $recordId . ");",
+                            'title' => Labels::getLabel('LBL_GENERAL', $siteLangId)
+                        ],
+                        'label' => Labels::getLabel('LBL_GENERAL', $siteLangId),
+                        'isActive' => $activeGentab
+                    ];
+                }
+                $generalTabAttr = $generalTab['attr'] ?? [];
+                $label = $generalTab['label'] ?? '';
+                $isActive = $generalTab['isActive'] ?? false;
+                $active = $isActive ? 'active' : '';
 
-                    $href = !empty($generalTabAttr) ? $generalTabAttr['href'] : 'javascript:void(0);';
-                    $onclick = !empty($generalTabAttr) ? $generalTabAttr['onclick'] : '';
-                    $title = !empty($generalTabAttr) ? $generalTabAttr['title'] : '';
+                $href = !empty($generalTabAttr) ? $generalTabAttr['href'] : 'javascript:void(0);';
+                $onclick = !empty($generalTabAttr) ? $generalTabAttr['onclick'] : '';
+                $title = !empty($generalTabAttr) ? $generalTabAttr['title'] : '';
 
                 ?>
                 <a class="nav-link <?php echo $active . $disabled; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
@@ -90,5 +90,5 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
     <?php } ?>
     <!-- Todo need to refine logic [override lisiting page variable name {controllerName}so we can able to save/edit popup of other controller like brands]  -->
     <script>
-        var controllerName = '<?php  echo LibHelper::getControllerName(true); ?>';
+        var controllerName = '<?php echo LibHelper::getControllerName(true); ?>';
     </script>

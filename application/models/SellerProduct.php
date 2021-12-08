@@ -1438,4 +1438,21 @@ class SellerProduct extends MyAppModel
         $row = FatApp::getDb()->fetch($rs);
         return $row != false ? true : false;
     }
+
+    public static function isOptionValueLinked($optionId, $optionValueId, $productId )
+    {
+        /* Get Linked Products [ */
+        $srch = SellerProduct::getSearchObject();
+        $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
+        $srch->addCondition('selprod_product_id', '=', $productId);
+        $srch->addCondition('tspo.selprodoption_option_id', '=', $optionId);
+        $srch->addCondition('tspo.selprodoption_optionvalue_id', '=', $optionValueId);
+        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $srch->addFld(array('selprod_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        return $row != false ? true : false;
+    }
 }

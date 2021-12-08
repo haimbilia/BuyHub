@@ -1,18 +1,18 @@
 @-webkit-keyframes spin {
     from {
-        transform: rotate(0)
+        transform: rotate(0);
     }
     to {
-        transform: rotate(1turn)
+        transform: rotate(1turn);
     }
 }
 
 @keyframes spin {
     from {
-        transform: rotate(0)
+        transform: rotate(0);
     }
     to {
-        transform: rotate(1turn)
+        transform: rotate(1turn);
     }
 }
 
@@ -34,7 +34,7 @@
     //versions
     &-brand {
         // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
+        // color:  lighten($brand-color, 55%);
         @include bg-brand();
         &:hover {
             background-color: darken($brand-color, 5%);
@@ -53,9 +53,9 @@
     &-light {
         background: $bg-gray;
         border-color: $bg-gray;
-        &.loading{
-            &:before{
-                border-color: $txt-body!important;
+        &.loading {
+            &:before {
+                border-color: $txt-body !important;
             }
         }
     }
@@ -115,7 +115,7 @@
         font-weight: 600;
         .arrow {
             display: inline-block;
-            transition: all .2s ease-in-out;
+            transition: all 0.2s ease-in-out;
             .svg {
                 width: 12px;
                 height: 12px;
@@ -124,7 +124,7 @@
         }
         &:hover {
             .arrow {
-                transform: translateX(.25rem);
+                transform: translateX(0.25rem);
             }
         }
     }
@@ -149,7 +149,7 @@
             border: 2px solid #fff;
             clip-path: inset(0 0 50% 0);
             transform: rotate(0);
-            animation: spin .6s linear infinite;
+            animation: spin 0.6s linear infinite;
         }
         &:hover {
             color: transparent !important;
@@ -182,7 +182,7 @@ a.link {
     transition: background-size 0.3s;
     display: flex;
     align-items: center;
-    &:after { 
+    &:after {
         transition: all 0.5s ease;
         position: absolute;
         right: -0.5rem;
@@ -199,7 +199,7 @@ a.link {
             opacity: 1;
         }
     }
-    &--inline{
+    &--inline {
         display: inline-flex;
     }
 }

@@ -1,333 +1,297 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light" dir="ltr">
 
-    <head>
-        <meta charset="utf-8" />
-        <title>FATbit | Dashboard</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-            rel="stylesheet">
-        <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-        <link rel="shortcut icon" href="images/favicon.ico" />
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <title>FATbit | Dashboard</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="images/favicon.ico" />
+</head>
 
-    <body class="">
-        <div class="wrapper">
-            <?php
-  include 'includes/header.php';
-?>
-            <div class="body " id="body">
-                <div class="content " id="content">
-                    <!-- begin:: Subheader -->
-                    <div class="subheader grid__item" id="subheader">
-                        <div class="container ">
-                            <div class="subheader__main">
-                                <h3 class="subheader__title">Toastr </h3>
+<body class="">
+    <div class="wrapper">
+        <?php
+        include 'includes/header.php';
+        ?>
+        <div class="body " id="body">
+            <div class="content " id="content">
+                <!-- begin:: Subheader -->
+                <div class="subheader grid__item" id="subheader">
+                    <div class="container ">
+                        <div class="subheader__main">
+                            <h3 class="subheader__title">Toastr </h3>
 
-                                <div class="subheader__breadcrumbs">
-                                    <a href="#" class="subheader__breadcrumbs-home"><i
-                                            class="flaticon2-shelter"></i></a>
-                                    <span class="subheader__breadcrumbs-separator"></span>
-                                    <a href="" class="subheader__breadcrumbs-link">
-                                        Components </a>
-                                    <span class="subheader__breadcrumbs-separator"></span>
-                                    <a href="" class="subheader__breadcrumbs-link">
-                                        Extended </a>
-                                    <span class="subheader__breadcrumbs-separator"></span>
-                                    <a href="" class="subheader__breadcrumbs-link">
-                                        Toastr </a>
-                                </div>
+                            <div class="subheader__breadcrumbs">
+                                <a href="#" class="subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                                <span class="subheader__breadcrumbs-separator"></span>
+                                <a href="" class="subheader__breadcrumbs-link">
+                                    Components </a>
+                                <span class="subheader__breadcrumbs-separator"></span>
+                                <a href="" class="subheader__breadcrumbs-link">
+                                    Extended </a>
+                                <span class="subheader__breadcrumbs-separator"></span>
+                                <a href="" class="subheader__breadcrumbs-link">
+                                    Toastr </a>
                             </div>
-                            <div class="subheader__toolbar">
-                                <div class="subheader__wrapper">
-                                    <a href="#" class="btn subheader__btn-secondary">
-                                        Reports
+                        </div>
+                        <div class="subheader__toolbar">
+                            <div class="subheader__wrapper">
+                                <a href="#" class="btn subheader__btn-secondary">
+                                    Reports
+                                </a>
+
+                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Products
                                     </a>
-
-                                    <div class="dropdown dropdown-inline" data-toggle="tooltip" title=""
-                                        data-placement="top" data-original-title="Quick actions">
-                                        <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            Products
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
-                                            <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
-                                            <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New
-                                                Download</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#"><i class="la la-cog"></i> Settings</a>
-                                        </div>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
+                                        <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
+                                        <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
+                                        <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New
+                                            Download</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#"><i class="la la-cog"></i> Settings</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- end:: Subheader -->
-
-                    <!-- begin:: Content -->
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <div class="alert alert-light alert-elevate fade show" role="alert">
-                                    <div class="alert-icon"><i class="flaticon-warning font-brand"></i></div>
-                                    <div class="alert-text">
-                                        toastr is a Javascript library for Gnome / Growl type non-blocking
-                                        notifications. jQuery is required. The goal is to create a simple core library
-                                        that can be customized and extended.
-                                        <br>
-                                        For more info please visit the plugin's <a class="link font-bold"
-                                            href="https://codeseven.github.io/toastr/demo.html" target="_blank">Demo
-                                            Page</a> or <a class="link font-bold"
-                                            href="https://github.com/CodeSeven/toastr" target="_blank">Github Repo</a>.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-head">
-                                <div class="card-head-label">
-                                    <h3 class="card-head-title">
-                                        Toastr Notifications Examples
-                                    </h3>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="form">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="control-group">
-                                                <div class="form-group">
-                                                    <label class="label" for="title">Title</label>
-                                                    <input id="title" type="text" class=""
-                                                        placeholder="Enter a title ..." />
-
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="label" for="message">Message</label>
-                                                    <textarea class="" id="message" rows="3"
-                                                        placeholder="Enter a message ..."></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="control-group">
-                                                <div class="controls">
-                                                    <label class="checkbox" for="closeButton">
-                                                        <input id="closeButton" type="checkbox" value="checked"
-                                                            class="input-mini" />Close Button
-                                                    </label>
-                                                </div>
-                                                <div class="controls">
-                                                    <label class="checkbox" for="addBehaviorOnToastClick">
-                                                        <input id="addBehaviorOnToastClick" type="checkbox"
-                                                            value="checked" class="input-mini" />Add behavior on
-                                                        toast click
-                                                    </label>
-                                                </div>
-                                                <div class="controls">
-                                                    <label class="checkbox" for="debugInfo">
-                                                        <input id="debugInfo" type="checkbox" value="checked"
-                                                            class="input-mini" />Debug
-                                                    </label>
-                                                </div>
-                                                <div class="controls">
-                                                    <label class="checkbox" for="progressBar">
-                                                        <input id="progressBar" type="checkbox" value="checked"
-                                                            class="input-mini" />Progress Bar
-                                                    </label>
-                                                </div>
-                                                <div class="controls">
-                                                    <label class="checkbox" for="preventDuplicates">
-                                                        <input id="preventDuplicates" type="checkbox" value="checked"
-                                                            class="input-mini" />Prevent Duplicates
-                                                    </label>
-                                                </div>
-                                                <div class="controls">
-                                                    <label class="checkbox" for="addClear">
-                                                        <input id="addClear" type="checkbox" value="checked"
-                                                            class="input-mini" />Add button to force clearing a
-                                                        toast,
-                                                        ignoring focus
-                                                    </label>
-                                                </div>
-                                                <div class="controls">
-                                                    <label class="checkbox" for="newestOnTop">
-                                                        <input id="newestOnTop" type="checkbox" value="checked"
-                                                            class="input-mini" />Newest on top
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-2">
-                                            <div class="control-group" id="toastTypeGroup">
-                                                <div class="controls">
-                                                    <h6 class="mb-3">Toast Type</h6>
-                                                    <div class="d-flex flex-column">
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="toasts" value="success"
-                                                                checked />Success
-                                                        </label>
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="toasts" value="info" />Info
-                                                        </label>
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="toasts" value="warning" />Warning
-                                                        </label>
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="toasts" value="error" />Error
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="control-group" id="positionGroup">
-                                                <div class="controls">
-                                                    <h6 class="my-3">Position</h6>
-                                                    <div class="d-flex flex-column">
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="positions" value="toast-top-right"
-                                                                checked />Top Right
-                                                        </label>
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="positions"
-                                                                value="toast-bottom-right" />Bottom Right
-                                                        </label>
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="positions"
-                                                                value="toast-bottom-left" />Bottom Left
-                                                        </label>
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="positions"
-                                                                value="toast-top-left" />Top
-                                                            Left
-                                                        </label>
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="positions"
-                                                                value="toast-top-full-width" />Top Full Width
-                                                        </label>
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="positions"
-                                                                value="toast-bottom-full-width" />Bottom Full Width
-                                                        </label>
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="positions"
-                                                                value="toast-top-center" />Top
-                                                            Center
-                                                        </label>
-                                                        <label class="radio mb-2">
-                                                            <input type="radio" name="positions"
-                                                                value="toast-bottom-center" />Bottom Center
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-2">
-                                            <div class="control-group">
-                                                <div class="controls">
-
-                                                    <div class="form-group">
-                                                        <label class="label" for="showEasing">Show
-                                                            Easing</label>
-                                                        <input id="showEasing" type="text" placeholder="swing, linear"
-                                                            class="input-mini" value="swing" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="label" for="hideEasing">Hide
-                                                            Easing</label>
-                                                        <input id="hideEasing" type="text" placeholder="swing, linear"
-                                                            class="input-mini" value="linear" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="label" for="showMethod">Show
-                                                            Method</label>
-
-
-                                                        <input id="showMethod" type="text"
-                                                            placeholder="show, fadeIn, slideDown" class="input-mini"
-                                                            value="fadeIn" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="label" for="hideMethod">Hide
-                                                            Method</label>
-                                                        <input id="hideMethod" type="text"
-                                                            placeholder="hide, fadeOut, slideUp" class="input-mini"
-                                                            value="fadeOut" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-2">
-                                            <div class="control-group">
-                                                <div class="controls">
-                                                    <div class="form-group">
-                                                        <label class="label" for="showDuration">Show
-                                                            Duration</label>
-                                                        <input id="showDuration" type="text" placeholder="ms"
-                                                            class="input-mini" value="300" />
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label class="label" for="hideDuration">Hide
-                                                            Duration</label>
-                                                        <input id="hideDuration" type="text" placeholder="ms"
-                                                            class="input-mini" value="1000" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="label" for="timeOut">Time out</label>
-                                                        <input id="timeOut" type="text" placeholder="ms"
-                                                            class="input-mini" value="5000" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="label" for="extendedTimeOut">Extended time
-                                                            out</label>
-                                                        <input id="extendedTimeOut" type="text" placeholder="ms"
-                                                            class="input-mini" value="1000" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <pre id="toastrOptions"
-                                                    style="border:4px solid #efefef;padding:15px; margin:20px 0;">Output:</pre>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="card-foot">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-8">
-                                        <div class="text-center">
-                                            <button type="button" class="btn btn-brand" id="showtoast">Show
-                                                Toast</button>
-                                            <button type="button" class="btn btn-outline-brand" id="cleartoasts">Clear
-                                                Toasts</button>
-                                            <button type="button" class="btn btn-outline-brand"
-                                                id="clearlasttoast">Clear
-                                                Last
-                                                Toast</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end:: Content -->
                 </div>
+                <!-- end:: Subheader -->
+
+                <!-- begin:: Content -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="alert alert-light alert-elevate fade show" role="alert">
+                                <div class="alert-icon"><i class="flaticon-warning font-brand"></i></div>
+                                <div class="alert-text">
+                                    toastr is a Javascript library for Gnome / Growl type non-blocking
+                                    notifications. jQuery is required. The goal is to create a simple core library
+                                    that can be customized and extended.
+                                    <br>
+                                    For more info please visit the plugin's <a class="link font-bold" href="https://codeseven.github.io/toastr/demo.html" target="_blank">Demo
+                                        Page</a> or <a class="link font-bold" href="https://github.com/CodeSeven/toastr" target="_blank">Github Repo</a>.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-head">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">
+                                    Toastr Notifications Examples
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <div class="form-group">
+                                                <label class="label" for="title">Title</label>
+                                                <input id="title" type="text" class="" placeholder="Enter a title ..." />
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="label" for="message">Message</label>
+                                                <textarea class="" id="message" rows="3" placeholder="Enter a message ..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <label class="checkbox" for="closeButton">
+                                                    <input id="closeButton" type="checkbox" value="checked" class="input-mini" />Close Button
+                                                </label>
+                                            </div>
+                                            <div class="controls">
+                                                <label class="checkbox" for="addBehaviorOnToastClick">
+                                                    <input id="addBehaviorOnToastClick" type="checkbox" value="checked" class="input-mini" />Add behavior on
+                                                    toast click
+                                                </label>
+                                            </div>
+                                            <div class="controls">
+                                                <label class="checkbox" for="debugInfo">
+                                                    <input id="debugInfo" type="checkbox" value="checked" class="input-mini" />Debug
+                                                </label>
+                                            </div>
+                                            <div class="controls">
+                                                <label class="checkbox" for="progressBar">
+                                                    <input id="progressBar" type="checkbox" value="checked" class="input-mini" />Progress Bar
+                                                </label>
+                                            </div>
+                                            <div class="controls">
+                                                <label class="checkbox" for="preventDuplicates">
+                                                    <input id="preventDuplicates" type="checkbox" value="checked" class="input-mini" />Prevent Duplicates
+                                                </label>
+                                            </div>
+                                            <div class="controls">
+                                                <label class="checkbox" for="addClear">
+                                                    <input id="addClear" type="checkbox" value="checked" class="input-mini" />Add button to force clearing a
+                                                    toast,
+                                                    ignoring focus
+                                                </label>
+                                            </div>
+                                            <div class="controls">
+                                                <label class="checkbox" for="newestOnTop">
+                                                    <input id="newestOnTop" type="checkbox" value="checked" class="input-mini" />Newest on top
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <div class="control-group" id="toastTypeGroup">
+                                            <div class="controls">
+                                                <h6 class="mb-3">Toast Type</h6>
+                                                <div class="d-flex flex-column">
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="toasts" value="success" checked />Success
+                                                    </label>
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="toasts" value="info" />Info
+                                                    </label>
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="toasts" value="warning" />Warning
+                                                    </label>
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="toasts" value="error" />Error
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group" id="positionGroup">
+                                            <div class="controls">
+                                                <h6 class="my-3">Position</h6>
+                                                <div class="d-flex flex-column">
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="positions" value="toast-top-right" checked />Top Right
+                                                    </label>
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="positions" value="toast-bottom-right" />Bottom Right
+                                                    </label>
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="positions" value="toast-bottom-left" />Bottom Left
+                                                    </label>
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="positions" value="toast-top-left" />Top
+                                                        Left
+                                                    </label>
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="positions" value="toast-top-full-width" />Top Full Width
+                                                    </label>
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="positions" value="toast-bottom-full-width" />Bottom Full Width
+                                                    </label>
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="positions" value="toast-top-center" />Top
+                                                        Center
+                                                    </label>
+                                                    <label class="radio mb-2">
+                                                        <input type="radio" name="positions" value="toast-bottom-center" />Bottom Center
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <div class="control-group">
+                                            <div class="controls">
+
+                                                <div class="form-group">
+                                                    <label class="label" for="showEasing">Show
+                                                        Easing</label>
+                                                    <input id="showEasing" type="text" placeholder="swing, linear" class="input-mini" value="swing" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="label" for="hideEasing">Hide
+                                                        Easing</label>
+                                                    <input id="hideEasing" type="text" placeholder="swing, linear" class="input-mini" value="linear" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="label" for="showMethod">Show
+                                                        Method</label>
+
+
+                                                    <input id="showMethod" type="text" placeholder="show, fadeIn, slideDown" class="input-mini" value="fadeIn" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="label" for="hideMethod">Hide
+                                                        Method</label>
+                                                    <input id="hideMethod" type="text" placeholder="hide, fadeOut, slideUp" class="input-mini" value="fadeOut" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <div class="form-group">
+                                                    <label class="label" for="showDuration">Show
+                                                        Duration</label>
+                                                    <input id="showDuration" type="text" placeholder="ms" class="input-mini" value="300" />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="label" for="hideDuration">Hide
+                                                        Duration</label>
+                                                    <input id="hideDuration" type="text" placeholder="ms" class="input-mini" value="1000" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="label" for="timeOut">Time out</label>
+                                                    <input id="timeOut" type="text" placeholder="ms" class="input-mini" value="5000" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="label" for="extendedTimeOut">Extended time
+                                                        out</label>
+                                                    <input id="extendedTimeOut" type="text" placeholder="ms" class="input-mini" value="1000" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <pre id="toastrOptions" style="border:4px solid #efefef;padding:15px; margin:20px 0;">Output:</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-foot">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-brand" id="showtoast">Show
+                                            Toast</button>
+                                        <button type="button" class="btn btn-outline-brand" id="cleartoasts">Clear
+                                            Toasts</button>
+                                        <button type="button" class="btn btn-outline-brand" id="clearlasttoast">Clear
+                                            Last
+                                            Toast</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end:: Content -->
             </div>
-
-
-
-
-            <?php  include 'includes/footer.php';?>
         </div>
-        <script type="text/javascript">
+
+
+
+
+        <?php include 'includes/footer.php'; ?>
+    </div>
+    <script type="text/javascript">
         $(function() {
             var i = -1;
             var toastCount = 0;
@@ -475,8 +439,8 @@
                 toastr.clear();
             });
         })
-        </script>
+    </script>
 
-    </body>
+</body>
 
 </html>

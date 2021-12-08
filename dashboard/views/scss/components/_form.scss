@@ -250,7 +250,6 @@ $input-color: #474747;
     @include select;
 }
 
-.required,
 .spn_must_field {
     color: $danger-color;
     &:after {
