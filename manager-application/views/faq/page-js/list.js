@@ -2,7 +2,7 @@ addNewFaq = function(faqCatId) {
     fcom.resetEditorInstance();
     $(".selectAllJs, .selectItemJs").prop("checked", false)
     $.ykmodal(fcom.getLoader(), false, '');
-    fcom.ajax(fcom.makeUrl('Faq', 'form'), {faqCatId}, function (t) {
+    fcom.ajax(fcom.makeUrl(controllerName, 'form'), {faqCatId}, function (t) {
         $.ykmodal(t, false, '');
         fcom.removeLoader();
     });

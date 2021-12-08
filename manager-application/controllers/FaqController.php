@@ -73,8 +73,6 @@ class FaqController extends ListingBaseController
         
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-
-        
         $faqCategory = FaqCategory::getAttributesByLangId($this->siteLangId, $faqCatId, 'faqcat_name', true);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);   
         $pageTitle = $faqCategory ? Labels::getLabel('LBL_FAQ_CATEGORY', $this->siteLangId).' : '.$faqCategory : LibHelper::getControllerName(true);
@@ -313,7 +311,7 @@ class FaqController extends ListingBaseController
         } else {
             $langData = Faq::getAttributesByLangId($langId, $recordId, null,true);
         }
-        $faqCatId = isset($langData['faq_faqcat_id']) ? $langData['faq_faqcat_id'] : 0;
+        $faqCatId = Faq::getAttributesById($recordId, 'faq_faqcat_id');
         $langData['faq_id'] = $recordId;
         $langData['lang_id'] = $langId;
         $langData['faqcat_id'] = $faqCatId;
