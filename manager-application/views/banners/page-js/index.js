@@ -25,8 +25,36 @@ mediaForm = function (recordId, bannerLocationId, langId = 0, slide_screen = 1) 
         "",
         function (t) {
             fcom.removeLoader();
-            loadImages(recordId, "logo", slide_screen, langId);
+            loadImages(bannerLocationId, recordId, "logo", slide_screen, langId);
             $.ykmodal(t);
         }
     );
 };
+
+loadImages = function (bannerLocationId, recordId, imageType, slide_screen, langId) {
+    let slidescreen = $('[name="slide_screen"]').val();
+    data =  {bannerLocationId, recordId, imageType, langId, screen : slidescreen};
+    fcom.ajax(fcom.makeUrl(controllerName, 'images' ), data, function (t) {	
+        $('#imageListingJs').html(t);
+        reloadList();
+    });
+};
+$(document).on('change', '#imageLanguageJs', function() {
+    let langId = $(this).val();
+    let recordId = $(this).closest("form").find('input[name="banner_id"]').val();
+    let slideScreen = $(this).closest("form").find('[name="banner_screen"]').val();
+    let bannerLocationId = $(this).closest("form").find('[name="blocation_id"]').val();
+    loadImages(bannerLocationId, recordId, 'THUMB', slideScreen, langId);
+});
+
+
+deleteMedia = function (bannerLocationId, recordId, afileId ,fileType, langId, slideScreen) {
+    if (!confirm(langLbl.confirmDelete)) { return; }
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeMedia'), {recordId, afileId, fileType, langId, slideScreen}, function (t) {
+        loadImages(bannerLocationId, recordId, 'THUMB' , slideScreen, langId);
+        reloadList();
+        $('.resetModalFormJs').click();
+    });
+};    
+
+

@@ -150,6 +150,10 @@ Slugify = function (str, str_val_id, is_slugify) {
     }
 };
 
+abc = function (){
+    return {f:5};
+}
+
 /*
 expected response
 {
@@ -166,7 +170,7 @@ expected response
   "pageCount" : 3 
 }
 
-postdata object like {record:1}
+postdata object| callback function like {record:1}
 */
 select2 = function (
     elmId,
@@ -174,11 +178,13 @@ select2 = function (
     postdata = {},
     callbackOnSelect = "",
     callbackOnUnSelect = "",
-    processResultsCallback = ""
+    processResultsCallback = "",
+    data = [],
 ) {
     let ele = $("#" + elmId);
     ele.select2({
         closeOnSelect: true,
+        data : data,
         dir: layoutDirection,
         allowClear: true,
         placeholder: ele.attr("placeholder") || "",
@@ -187,23 +193,22 @@ select2 = function (
             dataType: "json",
             delay: 250,
             method: "post",
-            data: function (params) {
+            data: function (params) { 
                 return $.extend(
                     {
                         keyword: params.term, // search term
                         page: params.page,
                         fIsAjax: 1,
                     },
-                    postdata
+                    ("function" == typeof postdata ?  postdata(ele) : postdata )
                 );
             },
             processResults: function (data, params) {            
                 params.page = params.page || 1;
                 data.pageCount = data.pageCount || 1; 
                 if ("function" == typeof processResultsCallback) {
-                    return processResultsCallback(data, params,ele);
+                    return processResultsCallback(data, params, ele);
                 }
-
                 return {
                     results: data.results,
                     pagination: {
@@ -248,6 +253,10 @@ redirectToShop = function (id) {
     redirectfunc(fcom.makeUrl('Shops'), { shop_id: id }, 0, true);
 };
 
+redirectToProduct = function (id) {
+    redirectfunc(fcom.makeUrl('Products'), { product_id: id }, 0, true);
+};
+
 redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
     newTab = typeof newTab != "undefined" ? newTab : true;
     if (nid > 0) {
@@ -282,8 +291,11 @@ markRead = function (nid, url, id) {
 };
 
 markNavActive = function (ele) {
-    ele.parent("li.navItemJs").addClass("active");
-    ele.parents("li:not(.hasNestedChildJs)").find(".menuLinkJs").addClass("active");
+    ele.addClass("active");
+    var menuLink = ele.parents("li:not(.hasNestedChildJs)").find(".menuLinkJs");
+    menuLink.addClass("active");
+    var target = menuLink.data('target');
+    $(target).addClass('show');
     ele.parents("li.hasNestedChildJs").addClass("show").find(".collapseJs").addClass("show");
 };
 

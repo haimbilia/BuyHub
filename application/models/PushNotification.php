@@ -26,6 +26,7 @@ class PushNotification extends MyAppModel
     public function __construct(int $pushNotificationId = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $pushNotificationId);
+        $this->objMainTableRecord->setSensitiveFields([static::DB_TBL_PREFIX . 'id']);
     }
     
     /**
@@ -39,7 +40,7 @@ class PushNotification extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'pn');
 
         if (true === $joinNotificationUsers) {
-            $srch->joinTable(static::DB_TBL_NOTIFICATION_TO_USER, 'LEFT OUTER JOIN', 'pnu.pntu_pnotification_id = pn.' . static::DB_TBL_PREFIX . 'id', 'pnu');
+            $srch->joinTable(static::DB_TBL_NOTIFICATION_TO_USER, 'LEFT JOIN', 'pnu.pntu_pnotification_id = pn.' . static::DB_TBL_PREFIX . 'id', 'pnu');
         }
 
         return $srch;
@@ -321,5 +322,82 @@ class PushNotification extends MyAppModel
             // CommonHelper::printArray($response);
         }
         return true;
+    }
+
+    public static function getStatusHtml(int $langId, int $status): string
+    {
+        $arr = self::getStatusArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case PushNotification::STATUS_PENDING:
+                $status = HtmlHelper::INFO;
+                break;
+            case PushNotification::STATUS_PROCESSING:
+                $status = HtmlHelper::WARNING;
+                break;
+            case PushNotification::STATUS_COMPLETED:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
+
+    public static function getAuthTypeHtml(int $langId, int $type): string
+    {
+        $arr = User::getUserAuthTypeArr($langId);
+        $msg = $arr[$type];
+        switch ($type) {
+            case User::AUTH_TYPE_GUEST:
+                $status = 'info';
+                break;
+            case User::AUTH_TYPE_REGISTERED:
+                $status = 'success';
+                break;
+            
+            default:
+                $status = 'warning';
+                break;
+        }
+        return '<span class="font-' . $status . '">' . $msg . '</span>';
+    }
+
+    public static function getDeviceTypeHtml(int $langId, int $type): string
+    {
+        $arr = User::getDeviceTypeArr($langId);
+        $msg = $arr[$type];
+        switch ($type) {
+            case User::DEVICE_OS_ANDROID:
+                return '<i title="' . $msg . '" data-toggle="tooltip">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#android-icon">
+                                </use>
+                            </svg>
+                        </i>';
+                break;
+            case User::DEVICE_OS_IOS:
+                return '<i title="' . $msg . '" data-toggle="tooltip">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#apple-icon">
+                                </use>
+                            </svg>
+                        </i>';
+                break;
+            
+            default:
+                return '<i title="' . $msg . '" data-toggle="tooltip">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#utility-icons">
+                                </use>
+                            </svg>
+                        </i>';
+                break;
+        }
     }
 }

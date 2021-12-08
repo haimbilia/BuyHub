@@ -33,9 +33,9 @@ class SelProdReview extends MyAppModel
             trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
         }
         $arr = array(
-        static::STATUS_PENDING => Labels::getLabel('LBL_Pending', $langId),
-        static::STATUS_APPROVED => Labels::getLabel('LBL_Approved', $langId),
-        static::STATUS_CANCELLED => Labels::getLabel('LBL_Cancelled', $langId),
+        static::STATUS_PENDING => Labels::getLabel('LBL_PENDING', $langId),
+        static::STATUS_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
+        static::STATUS_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId),
         );
         return $arr;
     }
@@ -90,4 +90,36 @@ class SelProdReview extends MyAppModel
         /* $srch->addOrder('order_date_added'); */
         return (array) FatApp::getDb()->fetch($srch->getResultSet());
     }    
+
+
+    public static function getStatusClassArr()
+    {
+        return array(
+            static::STATUS_PENDING => applicationConstants::CLASS_INFO,
+            static::STATUS_APPROVED => applicationConstants::CLASS_SUCCESS,
+            static::STATUS_CANCELLED => applicationConstants::CLASS_DANGER,
+        );
+    }
+
+
+    public static function getStatusHtml(int $langId, int $status): string
+    {
+        $arr = self::getReviewStatusArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::STATUS_PENDING:
+                $status = HtmlHelper::INFO;
+                break;
+            case static::STATUS_APPROVED:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::STATUS_CANCELLED:
+                $status = HtmlHelper::DANGER;
+                break;
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, rtrim($msg));
+    }
 }

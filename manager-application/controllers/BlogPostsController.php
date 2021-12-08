@@ -320,10 +320,12 @@ class BlogPostsController extends ListingBaseController
         if (!BlogPost::getAttributesById($recordId)) {
             LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
-        $imagesFrm = $this->getImagesFrm($recordId);
+        $frm = $this->getImagesFrm($recordId);
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
-        $this->set('imagesFrm', $imagesFrm);
+        $this->set('frm', $frm);
+        $this->set('displayFooterButtons', false);
+        $this->set('activeGentab', false);
         $this->_template->render(false, false);
     }
 
