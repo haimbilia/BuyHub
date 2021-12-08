@@ -16,6 +16,7 @@ $fld->setFieldTagAttribute('id', "urlrewrite_custom");
 $fld->htmlAfterField = '<span class="form-text text-muted">' . UrlHelper::generateFullUrl('Brands', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '</span>';
 $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
 
+
 $otherButtons = [
     [
        'attr' => [

@@ -380,7 +380,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-        console.log($(frm).validate());
         if (!$(frm).validate()) {
             return;
         }
@@ -603,7 +602,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
         var frmName = formData.get("frmName");
         var frm = document.forms[frmName];
-        var langId = frm.lang_id.value;
+        var langId = 0;
+        if ('undefined' != typeof frm.lang_id) {
+            langId = frm.lang_id.value;
+        }
         var imageType = frm.file_type.value;
         var callback = "";
         if ("undefined" != typeof frm.dataset.callback) {

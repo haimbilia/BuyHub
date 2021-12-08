@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
@@ -58,7 +58,7 @@
                                     <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                         <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
                                         <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
                                         <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New Download</a>
@@ -92,7 +92,7 @@
                                             <button type="button" class="btn btn-default btn-icon-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Add Coloumn
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-right">
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                 <ul class="nav nav--block">
 
                                                     <li class="dropdown-item nav__item">
@@ -145,15 +145,15 @@
                                     <div class="col-lg-9 col-xl-8">
                                         <div class="row align-items-center">
                                             <div class="col-md-4 my-2 my-md-0">
-                                            <div class="input-icon input-icon--left">
-												<input type="text" class="form-control" placeholder="Search..." id="generalSearch">
-												<span class="input-icon__icon input-icon__icon--left">
-													<span><i class="la la-search"></i></span>
-												</span>
-											</div>
+                                                <div class="input-icon input-icon--left">
+                                                    <input type="text" class="form-control" placeholder="Search..." id="generalSearch">
+                                                    <span class="input-icon__icon input-icon__icon--left">
+                                                        <span><i class="la la-search"></i></span>
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div class="col-md-4 my-2 my-md-0">
-                                                <select class="form-control"  >
+                                                <select class="form-control">
                                                     <option value="">All</option>
                                                     <option value="1">Pending</option>
                                                     <option value="2">Delivered</option>
@@ -164,7 +164,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-4 my-2 my-md-0">
-                                                <select class="form-control"  >
+                                                <select class="form-control">
                                                     <option value="">All</option>
                                                     <option value="1">Pending</option>
                                                     <option value="2">Delivered</option>
@@ -212,7 +212,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>5/6/2017</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo1.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/client-logos/logo1.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Simonis, Rowe and Davis</a> <span class="user-card-v2__email">Angular, React</span> </div>
                                                     </div>
                                                 </span></td>
@@ -220,7 +220,7 @@
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-contract"></i> <span class="nav__link-text">Edit</span> </a> </li>
@@ -246,7 +246,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>3/31/2017</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo2.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/client-logos/logo2.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Haley, Schamberger and Durgan</a> <span class="user-card-v2__email">Vue, Kendo</span> </div>
                                                     </div>
                                                 </span></td>
@@ -254,7 +254,7 @@
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-contract"></i> <span class="nav__link-text">Edit</span> </a> </li>
@@ -269,7 +269,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_6.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_6.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Jerrome Colvie</a> <span class="user-card-v2__desc">Sales</span> </div>
                                                     </div>
                                                 </span></th>
@@ -278,7 +278,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>3/4/2016</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/client-logos/logo3.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Kreiger, Glover and Connelly</a> <span class="user-card-v2__email">.NET, Oracle, MySQL</span> </div>
                                                     </div>
                                                 </span></td>
@@ -286,7 +286,7 @@
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-contract"></i> <span class="nav__link-text">Edit</span> </a> </li>
@@ -301,7 +301,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_7.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Bryn Peascod</a> <span class="user-card-v2__desc">Sales</span> </div>
                                                     </div>
                                                 </span></th>
@@ -310,7 +310,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>5/22/2016</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/client-logos/logo4.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Larkin and Sons</a> <span class="user-card-v2__email">Node, SASS, Webpack</span> </div>
                                                     </div>
                                                 </span></td>
@@ -318,7 +318,7 @@
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-contract"></i> <span class="nav__link-text">Edit</span> </a> </li>
@@ -333,7 +333,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_8.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Freda Arnall</a> <span class="user-card-v2__desc">CEO</span> </div>
                                                     </div>
                                                 </span></th>
@@ -342,7 +342,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>7/22/2016</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo5.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/client-logos/logo5.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Dicki, Morar and Stiedemann</a> <span class="user-card-v2__email">MangoDB, Java</span> </div>
                                                     </div>
                                                 </span></td>
@@ -350,7 +350,7 @@
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-contract"></i> <span class="nav__link-text">Edit</span> </a> </li>
@@ -365,7 +365,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_9.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_9.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Chrissie Jeromson</a> <span class="user-card-v2__desc">CEO</span> </div>
                                                     </div>
                                                 </span></th>
@@ -374,7 +374,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>11/26/2017</span></td>
                                             <td class="datatable_cell-sorted datatable_cell " data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/client-logos/logo3.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Brakus-McCullough</a> <span class="user-card-v2__email">.NET, Oracle, MySQL</span> </div>
                                                     </div>
                                                 </span></td>
@@ -382,7 +382,7 @@
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-contract"></i> <span class="nav__link-text">Edit</span> </a> </li>
@@ -397,7 +397,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_10.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Nixie Sailor</a> <span class="user-card-v2__desc">CEO</span> </div>
                                                     </div>
                                                 </span></th>
@@ -406,7 +406,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>2/12/2018</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/client-logos/logo4.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Gleichner, Ziemann and Gutkowski</a> <span class="user-card-v2__email">Node, SASS, Webpack</span> </div>
                                                     </div>
                                                 </span></td>
@@ -414,7 +414,7 @@
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-contract"></i> <span class="nav__link-text">Edit</span> </a> </li>
@@ -429,7 +429,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_11.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_11.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Yardley Wetherell</a> <span class="user-card-v2__desc">CEO</span> </div>
                                                     </div>
                                                 </span></th>
@@ -438,7 +438,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>4/3/2017</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo5.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/client-logos/logo5.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Gerlach-Schultz</a> <span class="user-card-v2__email">MangoDB, Java</span> </div>
                                                     </div>
                                                 </span></td>
@@ -446,7 +446,7 @@
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-contract"></i> <span class="nav__link-text">Edit</span> </a> </li>
@@ -461,7 +461,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_12.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Sioux Kneath</a> <span class="user-card-v2__desc">Architect</span> </div>
                                                     </div>
                                                 </span></th>
@@ -470,7 +470,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>10/11/2017</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo3.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/client-logos/logo3.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Rice, Cole and Spinka</a> <span class="user-card-v2__email">.NET, Oracle, MySQL</span> </div>
                                                     </div>
                                                 </span></td>
@@ -478,7 +478,7 @@
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-contract"></i> <span class="nav__link-text">Edit</span> </a> </li>
@@ -493,7 +493,7 @@
 
                                             <th data-field="AgentName" class="datatable_cell  datatable_cell_left"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/users/100_10.jpg"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_10.jpg"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Michaelina Plenderleith</a> <span class="user-card-v2__desc">Architect</span> </div>
                                                     </div>
                                                 </span></th>
@@ -502,7 +502,7 @@
                                             <td data-field="ShipDate" class="datatable_cell"><span>2/21/2018</span></td>
                                             <td class="datatable_cell-sorted datatable_cell" data-field="ShipName" data-autohide-disabled="false"><span>
                                                     <div class="user-card-v2">
-                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL;?>images/client-logos/logo4.png"> </div>
+                                                        <div class="user-card-v2__pic"> <img alt="photo" src="<?php echo CONF_WEBROOT_URL; ?>images/client-logos/logo4.png"> </div>
                                                         <div class="user-card-v2__details"> <a class="user-card-v2__name" href="#">Legros-Gleichner</a> <span class="user-card-v2__email">Node, SASS, Webpack</span> </div>
                                                     </div>
                                                 </span></td>
@@ -510,7 +510,7 @@
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
                                                     <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-contract"></i> <span class="nav__link-text">Edit</span> </a> </li>

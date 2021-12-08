@@ -30,7 +30,7 @@
                                 </svg>
                             </span>
                         </a>
-                       
+
                     </div>
                     <div class="header-action__item">
                         <a class="header-action__trigger" href="javascript:void(0)" title="View Store">
@@ -61,7 +61,7 @@
                                 </svg>
                             </span>
                         </a>
-                        <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim">
+                        <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                             <div class="header-notification">
                                 <div class="header-notification__head">
                                     <h5>Notifications <span class="count">24 reports</span></h5>

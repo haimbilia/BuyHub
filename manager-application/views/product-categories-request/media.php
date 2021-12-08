@@ -42,6 +42,10 @@ $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
 $screenFld = $imageFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
 /* Image Form */
+$fld = $imageFrm->getField('lang_id');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
+$fld = $imageFrm->getField('slide_screen');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
 
 $otherButtons = [
     [

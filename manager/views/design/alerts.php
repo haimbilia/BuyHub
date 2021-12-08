@@ -7,25 +7,23 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="images/favicon.ico" />
 </head>
 
 
 
-<body
-    class="">
+<body class="">
     <div class="wrapper">
 
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body" id="body">
             <div class="content " id="content">
 
@@ -55,13 +53,11 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title=""
-                                    data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                         <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
                                         <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
                                         <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New
@@ -86,9 +82,7 @@
                                     provide uniquely looking Alert component that matches the FB-admin's design
                                     standards.
                                     <br>
-                                    For more info please visit the plugin's the component's <a class="link font-bold"
-                                        href="https://getbootstrap.com/docs/4.3/components/alerts/"
-                                        target="_blank">Documentation</a>.
+                                    For more info please visit the plugin's the component's <a class="link font-bold" href="https://getbootstrap.com/docs/4.3/components/alerts/" target="_blank">Documentation</a>.
                                 </div>
                             </div>
                         </div>
@@ -161,8 +155,7 @@
                                                 <div class="alert-text">A simple primary alert—check it out!</div>
                                             </div>
                                             <div class="alert alert-secondary" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple secondary alert—check it out!</div>
                                             </div>
                                             <div class="alert alert-success" role="alert">
@@ -170,8 +163,7 @@
                                                 <div class="alert-text">A simple success alert—check it out!</div>
                                             </div>
                                             <div class="alert alert-danger" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple danger alert—check it out!</div>
                                             </div>
                                             <div class="alert alert-warning" role="alert">
@@ -179,8 +171,7 @@
                                                 <div class="alert-text">A simple warning alert—check it out!</div>
                                             </div>
                                             <div class="alert alert-info" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple info alert—check it out!</div>
                                             </div>
                                             <div class="alert alert-light alert-elevate" role="alert">
@@ -188,8 +179,7 @@
                                                 <div class="alert-text">A simple light alert—check it out!</div>
                                             </div>
                                             <div class="alert alert-dark" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple dark alert—check it out!</div>
                                             </div>
                                         </div>
@@ -272,19 +262,16 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple primary alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
                                             </div>
                                             <div class="alert alert-secondary  fade show" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple secondary alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -293,19 +280,16 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple success alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
                                             </div>
                                             <div class="alert alert-danger fade show" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple danger alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -314,19 +298,16 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple warning alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
                                             </div>
                                             <div class="alert alert-info fade show" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple info alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -335,19 +316,16 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple light alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
                                             </div>
                                             <div class="alert alert-dark fade show" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple dark alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -365,19 +343,16 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple primary alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
                                             </div>
                                             <div class="alert alert-outline-brand fade show" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple secondary alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -386,19 +361,16 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple success alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
                                             </div>
                                             <div class="alert alert-outline-danger fade show" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple danger alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -407,30 +379,25 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple warning alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
                                             </div>
                                             <div class="alert alert-outline-info fade show" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple info alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
                                             </div>
                                             <div class="alert alert-outline-dark fade show" role="alert">
-                                                <div class="alert-icon"><i
-                                                        class="flaticon-questions-circular-button"></i></div>
+                                                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple dark alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -490,8 +457,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
     </div>
 
 </body>

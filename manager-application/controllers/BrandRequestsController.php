@@ -246,16 +246,15 @@ class BrandRequestsController extends ListingBaseController {
         $data['ratio_type'] = AttachedFile::RATIO_TYPE_SQUARE;
         if (0 < $recordId) {
             $brandLogo = current(AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false));
-            if (is_array($brandLogo) && count($brandLogo)) {
+            if (is_array($brandLogo) && count($brandLogo) && 0 < $brandLogo['afile_aspect_ratio']) {
                 $data['ratio_type'] = $brandLogo['afile_aspect_ratio'];
             }
         }
+        $data['ratio_type'] = ($data['ratio_type'] == 0) ? AttachedFile::RATIO_TYPE_SQUARE : $data['ratio_type'];
         $logoFrm->fill($data);
-
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
-
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);

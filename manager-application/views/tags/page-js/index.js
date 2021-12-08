@@ -15,7 +15,7 @@
         if (e.detail.data.product_id > 0 && tag_id > 0) {
             bindProductWithTag(e.detail.data.product_id, tag_id);
         } else if (tag_id == undefined) {
-            if (1 > canEdit) {              
+            if (1 > canEdit) {
                 e.detail.tag.remove();
                 return;
             }

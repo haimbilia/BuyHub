@@ -58,8 +58,7 @@ foreach ($arrListing as $sn => $row) {
                     true,
                     FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())
                 );
-                $htm = '<p class="date">' . $date . '</p>';
-                $td->appendElement('plaintext', $tdAttr, $htm, true);
+                $td->appendElement('plaintext', $tdAttr, $date, true);
                 break;
             case 'user_is_buyer':
                 $class = ($row['user_is_buyer']) ? 'is-check' : '';

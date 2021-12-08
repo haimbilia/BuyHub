@@ -253,7 +253,7 @@ class TaxCategoriesController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmTaxLang', array('id' => 'frmTaxLang'));
         $frm->addHiddenField('', 'taxcat_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId);
         $frm->addRequiredField(Labels::getLabel('FRM_TAX_CATEGORY_NAME', $langId), 'taxcat_name');
         return $frm;
     }

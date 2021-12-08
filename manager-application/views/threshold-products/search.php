@@ -37,7 +37,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
-                                                <use xlink:href="/admin/images/retina/sprite.yokart.svg#send-email">
+                                                <use xlink:href=""' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#send-email">
                                                 </use>
                                             </svg>
                                         </i>'

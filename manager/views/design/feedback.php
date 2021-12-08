@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
@@ -22,8 +22,8 @@
 <body class="">
     <div class="wrapper">
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body " id="YK_body">
             <div class="content " id="YK_content">
 
@@ -58,7 +58,7 @@
                                     <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                         <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
                                         <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
                                         <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New Download</a>
@@ -150,7 +150,7 @@
                         <div class="col-xl-6">
                             <div class="card">
                                 <div class="card-diagonal bg-primary-lite">
-                                <div class="d-flex align-items-center position-relative">
+                                    <div class="d-flex align-items-center position-relative">
                                         <div class="d-block">
                                             <h3 class="text-bold">Or Reach Us by Live Chat</h3>
                                             <p>Base FAQ Question</p>
@@ -158,14 +158,14 @@
                                         <div class="align-right ml-auto btn-top-show">
                                             <button type="button" class="btn btn-primary btn-lg">Submit a Request</button>
                                         </div>
-									</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-6">
                             <div class="card">
                                 <div class="card-diagonal bg-success-lite">
-                                <div class="d-flex align-items-center position-relative">
+                                    <div class="d-flex align-items-center position-relative">
                                         <div class="d-block">
                                             <h3 class="text-bold">Phone Call</h3>
                                             <p>Base FAQ Question</p>
@@ -173,7 +173,7 @@
                                         <div class="align-right ml-auto btn-top-show">
                                             <button type="button" class="btn btn-success btn-lg">Submit a Request</button>
                                         </div>
-									</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -186,8 +186,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
     </div>
 
 </body>

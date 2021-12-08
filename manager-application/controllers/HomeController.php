@@ -157,8 +157,8 @@ class HomeController extends ListingBaseController
         }
 
         //$saleStats = Stats::getTotalSalesStats();
-        /* $this->_template->addJs(array('js/chartist.min.js', 'js/jquery.counterup.js', 'js/slick.min.js', 'js/enscroll-0.6.2.min.js'));
-        $this->_template->addCss(array('css/chartist.css')); */
+        $this->_template->addJs(array('js/chartist.min.js'));
+        $this->_template->addCss(array('css/chartist.css'));
 
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'Trident/7.0; rv:11.0') !== false) {
             $this->_template->addCss('css/ie.css');

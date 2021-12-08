@@ -253,6 +253,10 @@ redirectToShop = function (id) {
     redirectfunc(fcom.makeUrl('Shops'), { shop_id: id }, 0, true);
 };
 
+redirectToProduct = function (id) {
+    redirectfunc(fcom.makeUrl('Products'), { product_id: id }, 0, true);
+};
+
 redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
     newTab = typeof newTab != "undefined" ? newTab : true;
     if (nid > 0) {
@@ -287,8 +291,11 @@ markRead = function (nid, url, id) {
 };
 
 markNavActive = function (ele) {
-    ele.parent("li.navItemJs").addClass("active");
-    ele.parents("li:not(.hasNestedChildJs)").find(".menuLinkJs").addClass("active");
+    ele.addClass("active");
+    var menuLink = ele.parents("li:not(.hasNestedChildJs)").find(".menuLinkJs");
+    menuLink.addClass("active");
+    var target = menuLink.data('target');
+    $(target).addClass('show');
     ele.parents("li.hasNestedChildJs").addClass("show").find(".collapseJs").addClass("show");
 };
 

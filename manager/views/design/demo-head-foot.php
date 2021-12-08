@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
@@ -22,8 +22,8 @@
 <body class="">
     <div class="wrapper">
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body " id="body">
             <div class="content " id="content">
 
@@ -43,7 +43,7 @@
                                     Project </a>
                                 <span class="subheader__breadcrumbs-separator"></span>
                                 <a href="" class="subheader__breadcrumbs-link">
-                                List Columns </a>
+                                    List Columns </a>
                             </div>
                         </div>
                         <div class="subheader__toolbar">
@@ -56,7 +56,7 @@
                                     <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                         <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
                                         <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
                                         <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New Download</a>
@@ -72,10 +72,10 @@
 
                 <!-- begin:: Content -->
                 <div class="container">
-                <div class="row">
-                <div class="col-xl-6">
-                </div>
-                </div>
+                    <div class="row">
+                        <div class="col-xl-6">
+                        </div>
+                    </div>
                     <!--begin::card-->
                     <!--end::card-->
 
@@ -92,8 +92,8 @@
                                 <div class="modal-body">
                                     <div class="scroll ps" data-scroll="true" data-height="200" style="height: 200px; overflow: hidden;">
                                         <ul id="apps_user_fetch_records_selected"></ul>
-                                        
-                                        
+
+
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -109,8 +109,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
     </div>
 
 </body>

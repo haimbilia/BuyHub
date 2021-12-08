@@ -92,10 +92,10 @@ if (!empty($columnButtons)) {
         true
     );
 
-    $li->appendElement('div', ['class' => 'dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y'], $columnButtons, true);
+    $li->appendElement('div', ['class' => 'dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-anim scroll scroll-y'], $columnButtons, true);
 }
 if (!empty($htmlContent) || !empty($statusButtons) || !empty($deleteButton) || !empty($otherButtons) || !empty($columnButtons)) {
     echo '<div class="card-toolbar">';
-        echo $ul->getHtml();
+    echo $ul->getHtml();
     echo '</div>';
 }
