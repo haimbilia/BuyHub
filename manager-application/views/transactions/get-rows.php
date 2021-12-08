@@ -11,7 +11,7 @@ foreach ($arrListing as $sn => $row) {
         if ($count != 1) {
             echo '</ul></div>';
         }
-        ?>
+?>
         <div class="rowJs" data-reference="<?php echo $row['utxn_date']; ?>">
             <div class="timeline-v4__item-date">
                 <span class="tag">
@@ -21,10 +21,10 @@ foreach ($arrListing as $sn => $row) {
             <ul class="timeline-v4__items">
             <?php } ?>
 
-            <li class="timeline-v4__item">
+            <li class="timeline-v4__item minus">
                 <span class="timeline-v4__item-time"><?php echo date('H:i', strtotime($row['utxn_date'])); ?></span>
                 <div class="timeline-v4__item-desc">
-                    <span class="timeline-v4__item-text">
+                    <span class="timeline-v4__item-text text-danger">
                         <span class="tag">
                             <?php
                             $credit = FatUtility::float($row['utxn_credit']);
@@ -34,18 +34,18 @@ foreach ($arrListing as $sn => $row) {
                             echo CommonHelper::displayMoneyFormat($amt, true);
                             ?> (<?php echo $amtType; ?>)</span>
                     </span>
-                    <span class="timeline-v4__item-text"> 
-                        <b><?php echo Labels::getLabel('LBL_Transaction_Id', $siteLangId); ?></b> : <?php echo CommonHelper::displayText($row['utxn_id']); ?>
-                    </span> 
-                    <span class="timeline-v4__item-text"> 
-                        <b><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?></b> : <?php echo CommonHelper::displayText(ucfirst($row['utxn_comments'])); ?>
-                    </span> 
+                    <span class="timeline-v4__item-text">
+                        <strong><?php echo Labels::getLabel('LBL_Transaction_Id', $siteLangId); ?></strong> : <?php echo CommonHelper::displayText($row['utxn_id']); ?>
+                    </span>
+                    <span class="timeline-v4__item-textarea">
+                        <strong><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?></strong> : <?php echo CommonHelper::displayText(ucfirst($row['utxn_comments'])); ?>
+                    </span>
                 </div>
-            </li> 
-            <?php
-            if (count($arrListing) == $count && $canAddHead) {
-                echo '</ul></div>';
-            }
-            $count++;
+            </li>
+        <?php
+        if (count($arrListing) == $count && $canAddHead) {
+            echo '</ul></div>';
         }
+        $count++;
+    }
         ?>

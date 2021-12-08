@@ -1,20 +1,21 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
 if (!empty($productsData)) {
-    echo '<div class="box--scroller mt-4"> <ul>';
+    echo '<div class="mt-4"> <ul class="upload__list">';
     foreach ($productsData as $product) {
-        ?>
-        <li class="d-flex align-items-center py-4 border-bottom">
-            <div class="col">
-                <img class="mr-2 product-profile-img" src="<?php echo UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'SMALL', 0, 0, 1)) ?>" alt="" width="50"> <span><?php echo $product['product_name'] ?></span>
+?>
+        <li class="upload__list-item">
+            <div class="media">
+                <img class="mr-2 product-profile-img" src="<?php echo UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'SMALL', 0, 0, 1)) ?>" alt="" width="50">
             </div>
+            <div class="title"><?php echo $product['product_name'] ?></div>
             <?php if (isset($profileData['shipprofile_default']) && $profileData['shipprofile_default'] != 1) { ?>
-                <div class="col-auto">
-                    <a href="javascript:void(0);" class="btn-clean btn-sm btn-icon btn-secondary" title="<?php echo Labels::getLabel('LBL_Remove_Product_from_profile', $siteLangId); ?>" onclick="removeProductFromProfile('<?php echo $product['product_id']; ?>')"><i class="fas fa-trash"></i></a>
+                <div class="action">
+                    <a href="javascript:void(0);" class="" title="<?php echo Labels::getLabel('LBL_Remove_Product_from_profile', $siteLangId); ?>" onclick="removeProductFromProfile('<?php echo $product['product_id']; ?>')"> </a>
                 </div>
             <?php } ?>
         </li>
-        <?php
+<?php
     }
     echo '</ul></div>';
 } else {

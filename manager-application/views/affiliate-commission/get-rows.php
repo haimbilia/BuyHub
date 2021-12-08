@@ -20,29 +20,33 @@ foreach ($arrListing as $sn => $row) {
             <ul class="timeline-v4__items">
             <?php } ?>
 
-                <li class="timeline-v4__item">
-                    <span class="timeline-v4__item-time"><?php echo date('H:i', strtotime($row['acsh_added_on'])); ?></span>
-                    <div class="timeline-v4__item-desc">
-                        <span class="timeline-v4__item-text">
-                            <span class="tag"><?php echo CommonHelper::numberFormat($row['acsh_afcommsetting_fees']); ?>%</span>
+            <li class="timeline-v4__item">
+                <span class="timeline-v4__item-time"><?php echo date('H:i', strtotime($row['acsh_added_on'])); ?></span>
+                <div class="timeline-v4__item-desc">
+                    <span class="timeline-v4__item-value badge badge-success">
+                        <span class="tag"><?php echo CommonHelper::numberFormat($row['acsh_afcommsetting_fees']); ?>%</span>
+                    </span>
+                    <?php if (!empty($row['prodcat_name'])) { ?>
+                        <span class="timeline-v4__item-textarea">
+                            <strong><?php echo Labels::getLabel('LBL_Category', $siteLangId); ?>:</strong>
+                            <?php echo  CommonHelper::displayText($row['prodcat_name']); ?>
                         </span>
-                        <?php if (!empty($row['prodcat_name'])) { ?>
-                            <span class="timeline-v4__item-text">
-                                <b><?php echo Labels::getLabel('LBL_Category', $siteLangId); ?>:</b> <?php echo  CommonHelper::displayText($row['prodcat_name']); ?>
-                            </span>
-                        <?php } ?>
-                        <?php if (!empty($row['vendor'])) { ?>
-                            <span class="timeline-v4__item-user-name" >
-                                <a data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_AFFILIATE_USER', $siteLangId); ?>" href="javascript:void(0);" onclick="redirectUser(<?php echo $row['vendor_id']; ?>)" class="link link--inline link--dark timeline-v4__item-link">
-                                    <?php echo CommonHelper::displayText($row['vendor']); ?>
-                                </a>
-                            </span>
-                        <?php } ?>
-                    </div>
-                </li>
+                    <?php } ?>
+                    <?php if (!empty($row['vendor'])) { ?>
+                        <span class="timeline-v4__item-user-name">
+                            <a data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_AFFILIATE_USER', $siteLangId); ?>" href="javascript:void(0);" onclick="redirectUser(<?php echo $row['vendor_id']; ?>)" class="timeline-v4__item-link user-profile user-profile-sm">
+                                <figure class="user-profile_photo">
+                                    <img src="/yokart/manager/images/users/100_1.jpg" alt="image">
+                                </figure>
+                                <div class="user-profile_data"><?php echo CommonHelper::displayText($row['vendor']); ?></div>
+                            </a>
+                        </span>
+                    <?php } ?>
+                </div>
+            </li>
 
-    <?php if (count($arrListing) == $count && $canAddHead) {
-        echo '</ul></div>';
+        <?php if (count($arrListing) == $count && $canAddHead) {
+            echo '</ul></div>';
+        }
+        $count++;
     }
-    $count++;
-}

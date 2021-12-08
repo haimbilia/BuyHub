@@ -16,7 +16,7 @@
             background-color: #ebedf2;
             position: absolute;
             display: block;
-            content: '';
+            content: "";
             width: 1px;
             height: 100%;
             top: 0;
@@ -38,7 +38,7 @@
                     background-color: $bg-white;
                     position: absolute;
                     display: block;
-                    content: '';
+                    content: "";
                     width: 1px;
                     height: 50%;
                     top: 0;
@@ -53,7 +53,7 @@
                     background-color: $bg-white;
                     position: absolute;
                     display: block;
-                    content: '';
+                    content: "";
                     width: 1px;
                     height: 50%;
                     top: 0;
@@ -74,7 +74,7 @@
                     background-color: #ebedf2;
                     position: absolute;
                     display: block;
-                    content: '';
+                    content: "";
                     width: 7px;
                     height: 7px;
                     #{$start-direction}: 0;
@@ -85,7 +85,7 @@
                 &--brand {
                     &:before {
                         // background-color: $brand-color;
-                        // color:  lighten($brand-color, 55%); 
+                        // color:  lighten($brand-color, 55%);
                         @include bg-brand();
                     }
                 }
@@ -193,7 +193,7 @@
         width: 100%;
         $self1: &;
         &:after {
-            content: '';
+            content: "";
             position: absolute;
             width: 5px;
             top: 0;
@@ -201,7 +201,7 @@
             bottom: 3rem;
             left: 50%;
             margin-#{$start-direction}: -2.5px;
-            background-color: #E6EAF5;
+            background-color: #e6eaf5;
         }
         &__marker {
             width: 20px;
@@ -210,7 +210,7 @@
             position: absolute;
             left: 50%;
             margin-#{$start-direction}: -10px;
-            background-color: #E6EAF5;
+            background-color: #e6eaf5;
         }
         &__items {
             padding-bottom: 6rem;
@@ -223,7 +223,7 @@
             min-height: 3rem;
             $self2: &;
             &-arrow {
-                color: #F7F8FC;
+                color: #f7f8fc;
             }
             &-circle {
                 background: white;
@@ -241,7 +241,7 @@
                 align-items: center;
                 z-index: 1;
                 position: absolute;
-                >div {
+                > div {
                     border-radius: 50%;
                     width: 6px;
                     height: 6px;
@@ -252,7 +252,7 @@
                 display: inline-block;
                 margin-top: -2.14rem;
                 font-weight: 700;
-                >span {
+                > span {
                     padding-#{$start-direction}: 5px;
                 }
             }
@@ -260,7 +260,7 @@
                 position: relative;
                 border-radius: 4px;
                 padding: 2.14rem;
-                background-color: #F7F8FC;
+                background-color: #f7f8fc;
                 &-title {
                     font-size: 1.2rem;
                     font-weight: 500;
@@ -288,13 +288,13 @@
                 }
                 &:after {
                     position: absolute;
-                    content: '';
+                    content: "";
                     width: 0;
                     height: 0;
                     top: 15px;
                     left: 100%;
                     margin-#{$start-direction}: -3rem;
-                    border-#{$start-direction}: solid 10px #F7F8FC;
+                    border-#{$start-direction}: solid 10px #f7f8fc;
                     border-bottom: solid 17px transparent;
                     border-#{$end-direction}: solid 17px transparent;
                     border-top: solid 17px transparent;
@@ -313,13 +313,13 @@
                 }
                 &:after {
                     position: absolute;
-                    content: '';
+                    content: "";
                     width: 0;
                     height: 0;
                     top: 15px;
                     right: 100%;
                     margin-#{$end-direction}: -3rem;
-                    border-#{$end-direction}: solid 10px #F7F8FC;
+                    border-#{$end-direction}: solid 10px #f7f8fc;
                     border-bottom: solid 17px transparent;
                     border-#{$start-direction}: solid 17px transparent;
                     border-top: solid 17px transparent;
@@ -362,13 +362,13 @@
                 $self: &;
                 &:after {
                     position: absolute;
-                    content: '';
+                    content: "";
                     width: 0;
                     height: 0;
                     top: 15px;
                     #{$start-direction}: 0;
                     margin-#{$start-direction}: 10px;
-                    border-#{$end-direction}: solid 10px #F7F8FC;
+                    border-#{$end-direction}: solid 10px #f7f8fc;
                     border-bottom: solid 17px transparent;
                     border-#{$start-direction}: solid 17px transparent;
                     border-top: solid 17px transparent;
@@ -395,7 +395,7 @@
         position: relative;
         $self: &;
         &:before {
-            content: '';
+            content: "";
             position: absolute;
             left: 4.85rem;
             width: 0.214rem;
@@ -430,7 +430,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                >i {
+                > i {
                     font-size: 1.78rem;
                 }
             }
@@ -440,7 +440,7 @@
                 font-size: 1rem;
                 padding: 0.35rem 0 0 5rem;
                 color: $txt-gray;
-                >span {
+                > span {
                     font-weight: 700;
                 }
                 &-text--bold {
@@ -507,9 +507,9 @@
             &--brand {
                 &:before {
                     // // background-color: $brand-color;
-                    // color:  lighten($brand-color, 55%); 
+                    // color:  lighten($brand-color, 55%);
                     @include bg-brand();
-                    // color:  lighten($brand-color, 55%); 
+                    // color:  lighten($brand-color, 55%);
                     @include bg-brand();
                 }
             }
@@ -551,6 +551,8 @@
         }
     }
     &-v4 {
+        color: $txt-gray;
+        font-size: 0.875rem;
         $self: &;
         &__item-date {
             padding: 1rem 0;
@@ -560,38 +562,47 @@
             background: $bg-white;
             .tag {
                 background: $bg-gray;
-                font-size: 0.875rem;
                 padding: 0.25rem 1rem;
-                border-radius: 0.25rem;
+                border-radius: 20px;
+            }
+        }
+        &__items {
+            position: relative;
+            padding-#{$start-direction}: 4rem;
+            &:before {
+                content: "";
+                border-#{$start-direction}: dotted 2px $border-color;
+                #{$start-direction}: 2rem;
+                top: 0;
+                bottom: 0;
+                position: absolute;
             }
         }
         &__item {
             display: flex;
+            flex-direction: column;
             margin-bottom: 1.5rem;
             position: relative;
             $self: &;
             &:before {
                 position: absolute;
                 display: block;
-                width: 0.28rem;
-                height: 25px;
-                #{$start-direction}: 100px;
-                top: 0px;
-                // content: "";
-                // // background-color: $brand-color;
-                // color:  lighten($brand-color, 55%); 
-                @include bg-brand();
-                // color:  lighten($brand-color, 55%); 
-                @include bg-brand();
+                height: 8px;
+                width: 8px;
+                #{$start-direction}: -33px;
+                top: 4px;
+                content: "";
+                border-radius: 50%;
+                background-color: $brand-color;
             }
             &-time {
                 display: flex;
-                flex: 0 0 100px;
-                max-width: 100px;
+
                 padding-#{$end-direction}: 1.5rem;
-                font-weight: 500;
-                font-size: 0.875rem;
-                color: $txt-gray;
+                font-size: 0.8rem;
+            }
+            &-value {
+                align-self: flex-start;
             }
             &-desc {
                 display: flex;
@@ -599,6 +610,7 @@
                 flex-direction: column;
                 width: 100%;
             }
+
             &-text {
                 font-size: 0.875rem;
                 font-weight: 400;
@@ -609,26 +621,41 @@
                     font-weight: 600;
                 }
                 .tag {
-                    padding: 0.15rem 1rem;
+                    padding: 0;
                     font-size: 0.875rem;
                     font-weight: 600;
                     // background-color: $brand-color;
-                    // color:  lighten($brand-color, 55%); 
-                    @include bg-brand();
+                    // color:  lighten($brand-color, 55%);
+                    // @include bg-brand();
                     border-radius: 0rem 1rem 1rem 0rem;
                     display: inline-flex;
                     margin-bottom: 0.5rem;
                 }
             }
+
+            &-textarea {
+                margin: 0.5rem 0;
+                word-break: break-word;
+                display: flex;
+                flex-direction: column;
+                background-color: $bg-gray;
+                padding: 1rem;
+            }
             &-link {
                 text-decoration: none;
             }
+            &-user-name {
+                margin-top: 0.5rem;
+                display: inline-flex;
+                a {
+                    color: currentColor;
+                }
+            }
             &--brand {
                 &:before {
-                    // // background-color: $brand-color;
-                    // color:  lighten($brand-color, 55%); 
-                    @include bg-brand();
-                    // color:  lighten($brand-color, 55%); 
+                    // background-color: $brand-color;
+                    // color:  lighten($brand-color, 55%);
+
                     @include bg-brand();
                 }
             }
@@ -853,9 +880,9 @@
         }
     }
     .other-detail {
-        >p {
+        > p {
             margin-bottom: 10px;
-            >span {
+            > span {
                 display: block;
             }
             &:last-child {

@@ -1907,14 +1907,14 @@ strong {
 
 .list-tags {
     display: inline-flex;
-    border: 1px solid #ebedf2;
-    border-radius: 4px;
     flex-wrap: wrap;
     li {
+        border: $border;
+        padding: 4px 8px;
+        border-radius: 30px;
         .option {
             .option__title {
                 border: none;
-                color: var(--secondary);
             }
             input {
                 &:checked {
@@ -2260,4 +2260,19 @@ strong {
 
 .palette {
     direction: ltr;
+}
+
+.shipping-zone {
+    border-bottom: $border;
+    padding: 3rem;
+    //margin-bottom: 3rem;
+    &:last-child {
+        border: none;
+        margin-bottom: 0;
+    }
+    &-item {
+        padding: 1rem;
+        background-color: $bg-gray;
+        border-radius: $radius-common;
+    }
 }
