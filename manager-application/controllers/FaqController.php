@@ -270,19 +270,18 @@ class FaqController extends ListingBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $newTabLangId = 0;
+        $newTabLangId = $this->siteLangId;
         if ($recordId > 0) {
             $faqId = $recordId;
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = Faq::getAttributesByLangId($langId, $faqId)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
         } else {
             $faqId = $record->getMainTableRecordId();
-            $newTabLangId = $this->siteLangId;
+        }
+        $languages = (array)Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        foreach ($languages as $langId => $langName) {
+            if (!$row = Faq::getAttributesByLangId($langId, $faqId)) {
+                $newTabLangId = $langId;
+                break;
+            }
         }
 
         $this->set('msg', Labels::getLabel('MSG_CATEGORY_SETUP_SUCCESSFUL', $this->siteLangId));
@@ -396,7 +395,7 @@ class FaqController extends ListingBaseController
         }
 
         $newTabLangId = 0;
-        $languages = Language::getAllNames();
+        $languages = (array)Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         foreach ($languages as $langId => $langName) {
             if (!Faq::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
