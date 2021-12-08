@@ -2,53 +2,110 @@
 
 class ProductReviewsController extends ListingBaseController
 {
-    private $canView;
-    private $canEdit;
+    
+    protected string $modelClass = 'SelProdReview';
+    protected $pageKey = 'MANAGE_SELLER_PRODUCT_REVIEWS';
 
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewProductReviews($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditProductReviews($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
+        $this->objPrivilege->canViewProductReviews();       
+    }
+    
+       /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditProductReviews($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditProductReviews();
+        }
+    }
+    
+    public function index()
+    {
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['deleteButton'] = true;
+        $actionItemsData['searchFrmTemplate'] = 'product-reviews/search-form.php';
+       
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('canEdit', $this->objPrivilege->canEditZones($this->admin_id, true));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT', $this->siteLangId));
+        $this->getListingData();
+        $this->_template->addJs(['js/select2.js','product-reviews/page-js/index.js']);
+        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function index($sellerId = 0)
+    protected function getSearchForm($fields = [])
     {
-        $sellerId = FatUtility::int($sellerId);
-        $this->objPrivilege->canViewProductReviews();
+        $frm = new Form('frmSearch');
+        $frm->addHiddenField('', 'seller_id', 0);
+        $frm->addHiddenField('', 'spreview_id', 0);
+        $frm->addHiddenField('', 'reviewed_for', 0);
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+       
+        $frm->addSelectBox(Labels::getLabel('FRM_REVIEW_FOR', $this->siteLangId), 'reviewed_for_id', []);
+        $statusArr = SelProdReview::getReviewStatusArr($this->siteLangId);
+        unset($statusArr[SelProdReview::STATUS_PENDING]);
+        $reqLbl = Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId);
+        $frm->addSelectBox($reqLbl, 'spreview_status', [ -1 => 'Does not Matter' ] + $statusArr, '',[], $reqLbl);
 
-        $srchFrm = $this->getSearchForm();
-        $data = FatApp::getPostedData();
-        if ($data) {
-            $data['spreview_id'] = $data['id'];
-            //$data['seller_id'] = $sellerId;
-            unset($data['id']);
-        } else {
-            $data = array('seller_id' => $sellerId);
-        }
-        $srchFrm->fill($data);
-
-        $this->set("includeEditor", true);
-
-        $this->set("frmSearch", $srchFrm);
-        $this->_template->render();
+        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addHiddenField('', 'page');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        return $frm;
     }
 
     public function search()
     {
-        $this->objPrivilege->canViewProductReviews();
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'product-reviews/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
-        $searchForm = $this->getSearchForm();
+    public function getListingData()
+    {
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
+        $searchForm = $this->getSearchForm(false, $fields);
         $post = $searchForm->getFormDataFromArray($data);
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
 
         $srch = new SelProdReviewSearch($this->siteLangId);
         $srch->joinUser();
@@ -57,7 +114,12 @@ class ProductReviewsController extends ListingBaseController
         $srch->joinProducts();
         $srch->joinSellerProducts($this->siteLangId);
         $srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
-        $srch->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'selprod_id', 'usc.credential_username as seller_username', 'uc.credential_username as reviewed_by', 'uc.credential_user_id', 'spreview_id', 'spreview_posted_on', 'spreview_status', 'sprating_rating', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name'));
+        $srch->addMultipleFields([
+            'IFNULL(product_name,product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 
+            'selprod_id', 'usc.credential_username as seller_username', 'uc.credential_username as reviewed_by', 'uc.credential_user_id', 'spreview_id', 
+            'spreview_posted_on', 'spreview_status', 'sprating_rating', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name',
+            'u.user_name AS buyer_name', 'us.user_name AS seller_name', 'selprod_product_id'
+        ]);
         $srch->addOrder('spreview_posted_on', 'DESC');
 
         if (!empty($post['product'])) {
@@ -91,22 +153,25 @@ class ProductReviewsController extends ListingBaseController
         if (!empty($date_to)) {
             $srch->addCondition('spreview_posted_on', '<=', $date_to . ' 23:59:59');
         }
-        $srch->addOrder('spreview_posted_on', 'DESC');
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->setPageSize($pageSize);
 
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs, 'spreview_id');
-
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id');
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->checkEditPrivilege(true);
         $this->set('reviewStatus', SelProdReview::getReviewStatusArr($this->siteLangId));
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
-        $this->_template->render(false, false);
+        $this->checkEditPrivilege(true);
     }
 
     public function view($spreview_id = 0)
@@ -203,24 +268,6 @@ class ProductReviewsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getSearchForm()
-    {
-        $frm = new Form('frmSearch');
-        $frm->addHiddenField('', 'reviewed_for_id');
-        $frm->addHiddenField('', 'seller_id', 0);
-        $frm->addHiddenField('', 'spreview_id', 0);
-        $frm->addTextBox(Labels::getLabel('LBL_Product', $this->siteLangId), 'product');
-        $frm->addTextBox(Labels::getLabel('LBL_Review_For', $this->siteLangId), 'reviewed_for');
-        $statusArr = SelProdReview::getReviewStatusArr($this->siteLangId);
-        unset($statusArr[SelProdReview::STATUS_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'spreview_status', array( -1 => 'Does not Matter' ) + $statusArr, '', array(), '');
-        $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender' ));
-        $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
 
     private function reviewRequestForm()
     {
@@ -232,5 +279,61 @@ class ProductReviewsController extends ListingBaseController
         $frm->addHiddenField('', 'spreview_id', 0);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    protected function getFormColumns(): array
+    {
+        $ContentPageTblHeadingCols = CacheHelper::get('ContentPageTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($ContentPageTblHeadingCols) {
+            return json_decode($ContentPageTblHeadingCols);
+        }
+
+        $arr = [
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'selprod_title' => Labels::getLabel('LBL_PRODUCT', $this->siteLangId),
+            'seller_username' => Labels::getLabel('LBL_REVIEW_FOR', $this->siteLangId),
+            'reviewed_by' => Labels::getLabel('LBL_REVIEWED_BY', $this->siteLangId),
+            // 'sprating_rating' => Labels::getLabel('LBL_RATING', $this->siteLangId),
+            'spreview_posted_on' => Labels::getLabel('LBL_DATE', $this->siteLangId),
+            'spreview_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId)
+        ];
+        CacheHelper::create('ContentPageTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'listSerial',
+            'selprod_title',
+            'seller_username',
+            'reviewed_by',
+            // 'sprating_rating',
+            'spreview_posted_on',
+            'spreview_status',
+            'action'
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $fields
+     * @return array
+     */
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, [], Common::excludeKeysForSort());
     }
 }

@@ -26,6 +26,8 @@ if (isset($order['totOrders']) && $order['totOrders'] > 1) {
 $date = isset($showDate) && $order['order_date_added']   ? FatDate::format($order['order_date_added']) : '';
 
 $includeInvoiceNo = $includeInvoiceNo ?? true;
+$includeBrandName = $includeBrandName ?? true;
+$includeProductLink = $includeProductLink ?? false;
 ?>
 
 <div class="product-profile">
@@ -39,7 +41,14 @@ $includeInvoiceNo = $includeInvoiceNo ?? true;
                 <?php echo $order['op_invoice_number']; ?>
             </div>
         <?php } ?>
-        <div class="title"><?php echo $productTitle; ?></div>
+        <div class="title">
+            <?php if(true == $includeProductLink) {
+                echo '<a href="'.UrlHelper::generateFullUrl('Products', 'View', array($order['op_selprod_id']), CONF_WEBROOT_FRONT_URL).'" target="_blank" title="'.$productName.'">'. CommonHelper::subStringByWords($productTitle, 35) .'</a>';
+            }else{
+                echo CommonHelper::subStringByWords($productTitle, 35);
+            }
+             ?>
+        </div>
 
         <?php if (true === $includeShopName) { ?>
             <div class="sold_by">
@@ -49,7 +58,7 @@ $includeInvoiceNo = $includeInvoiceNo ?? true;
                 </svg> <?php echo $shopName; ?>
             </div>
         <?php } ?>
-
+        <?php if(true == $includeBrandName) { ?>    
         <div class="brand">
             <ul class="list-options list-options--horizontal">
                 <li>
@@ -58,6 +67,7 @@ $includeInvoiceNo = $includeInvoiceNo ?? true;
                 </li>
             </ul>
         </div>
+        <?php } ?>
 
         <?php 
         if (!empty($options)) { ?>
