@@ -118,7 +118,7 @@ class TaxStructureController extends ListingBaseController {
         $componentFld = $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId), 'taxstr_component_name[]', '', ['class' => 'test']);
         $htmlFld = $frm->addHTML('', 'component_link', '');
         $componentFld->attachField($htmlFld);
-        $componentFld->fieldWrapper = ['<div class="component_link"><div class="row">', '</div></div>'];
+        $componentFld->fieldWrapper = ['<div class="component_link"><div class="component-row--js">', '</div></div>'];
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {

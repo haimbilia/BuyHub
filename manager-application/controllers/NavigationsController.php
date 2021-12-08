@@ -2,7 +2,7 @@
 class NavigationsController extends ListingBaseController
 {
     protected string $modelClass = 'Navigations';
-    protected $pageKey = 'MANAGE_NAVIGATIONS';
+    protected string $pageKey = 'MANAGE_NAVIGATIONS';
 
     public function __construct($action)
     {

@@ -4,7 +4,7 @@
         if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
-            
+            langForm();
         });
     };
 
@@ -271,9 +271,6 @@
     };
 
     optionValuesChanges = function (e){     
-        if(e.type =='remove'){
-           
-        }
         upcType();      
     }
   
@@ -303,12 +300,13 @@
             e.detail.tagify.loading(false).dropdown.show.call(tagify, keyword);
         });
     }
-    
+ 
     tagifyOptionValue = function(element) {          
         let index = $(element).data('index');
+        let value = $.parseJSON($(element).val());
         $(element).siblings(".tagify").remove();
         var tagify = new Tagify(document.querySelector(element), {
-            whitelist : [],
+            whitelist : value,
             delimiters : "#",
             dropdown: {
                 closeOnSelect: false,
@@ -318,42 +316,30 @@
             enforceWhitelist : true,
             skipInvalid:true,
             hooks: {
-                beforeRemoveTag: function (tags) {
-
-
-                    var  aa =  new Promise((resolve, reject) => {
-                        $.ajax({
-                          url: fcom.makeUrl('OptionValues', 'autoComplete'),
-                          type: 'POST',                          
-                          success: function (data) {
-                            resolve(data)
-                          },
-                          error: function (error) {
-                            reject(error)
-                          },
-                        })
-                      }).then((data) => {
-                        console.log(data);                     
-                      });
-
-                      console.log('ggg');
-                      
-
-
-                    // return new Promise((resolve, reject) => {
-                    //     let response = $.ajax({
-                    //         url: fcom.makeUrl('OptionValues', 'autoComplete'),
-                    //         type: 'POST',                           
-                    //     });
-
-                    //     console.log(response);        
-                    //     console.log('promise');             
-                    //     //removeItem(tags[0]);
-                    //     resolve();
-                    // })
+                beforeRemoveTag: function (tags) {           
+                    return new Promise((resolve, reject) => {
+                        let productId = getCurrentFrmProductId();
+                        if (0 < productId) {
+                            let optionId = $(element).closest('.rowJs').find('.optionsJs').val()
+                            let optionValueId = tags[0]['data']['id'];                
+                            fcom.ajax(fcom.makeUrl(controllerName, "canDeleteOpValue"), { productId, optionId, optionValueId }, function (t) {
+                                t = $.parseJSON(t);                            
+                                if (t.status == 0) {
+                                    fcom.displayErrorMessage(t.msg);
+                                    reject();
+                                }else{
+                                    resolve();
+                                }
+                            });
+                        }else{
+                            resolve();
+                        }                       
+                    })
                 }
             },
-        }).on('input', getOptionValues).on('focus', getOptionValues).on('remove', optionValuesChanges).on('dropdown:select', optionValuesChanges)
+        })
+        .on('input', getOptionValues).on('focus', getOptionValues)
+        .on('change', optionValuesChanges);
         tagifyObjs[index] = tagify;
     };    
 
@@ -363,29 +349,30 @@
         let productId = getCurrentFrmProductId();
         let langId = getCurrentFrmLangId();
         let productOptions = {};
-        if(type == 1){
-                $('#addProductfrm select.optionsJs').each(function(){                   
-                    let optionData = $(this).select2('data');
-                    if(1 < optionData.length){
-                        return;                    
-                    }
-                   
-                    optionData = optionData[0];
-                    let optionValueData = $(this).closest('.rowJs').find('input.optionValuesJs').val();
-                    if(optionValueData == ''){
-                        return; 
-                    }                 
-                    optionValueData = jQuery.parseJSON(optionValueData);
+        if (type == 1) {
+            $('#addProductfrm select.optionsJs').each(function () {
+                let optionData = $(this).select2('data');
+                if (1 < optionData.length) {
+                    return;
+                }
 
-                    productOptions[optionData.id] = {option_id: optionData.id,option_name: optionData.text, optionValues:{}};
-                    
-                    $.each(optionValueData, function( index, opval ) {
-                        productOptions[optionData.id]['optionValues'][opval.id] =  opval.value;
-                    });
+                optionData = optionData[0];
+                let optionValueData = $(this).closest('.rowJs').find('input.optionValuesJs').val();
+                console.log(optionValueData);
+                if (optionValueData == '') {
+                    return;
+                }
+                optionValueData = jQuery.parseJSON(optionValueData);
+
+                productOptions[optionData.id] = { option_id: optionData.id, option_name: optionData.text, optionValues: {} };
+
+                $.each(optionValueData, function (index, opval) {
+                    productOptions[optionData.id]['optionValues'][opval.id] = opval.value;
                 });
+            });
         }
 
-        fcom.ajax(fcom.makeUrl(controllerName, "upcListing"), {productId, langId, type ,productOptions}, function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, "upcListing"), { productId, langId, type, productOptions }, function (t) {
             $('#variantsListJs').html(t);
         });
     };
@@ -394,6 +381,7 @@
 
   /** on option select/deselect */
 async function resetOptionValuesTag(e){    
+    console.log(e);
     let productId = getCurrentFrmProductId();    
     if (productId ) {        
         let optionId = e.params.args.data.id;
@@ -422,7 +410,15 @@ async function resetOptionValuesTag(e){
             }else{
                 $(e.currentTarget).val(null).trigger("change");
             }
-       }        
+       }       
+       
+        let index = $(e.target.closest('.rowJs')).find('input.optionValuesJs').data('index'); 
+        if(index in tagifyObjs){
+            tagifyObjs[index].settings.whitelist = [];
+            tagifyObjs[index].removeAllTags();
+        }  
+        
+        
     }
 
     let index = $(e.target.closest('.rowJs')).find('input.optionValuesJs').data('index'); 
@@ -430,9 +426,14 @@ async function resetOptionValuesTag(e){
         tagifyObjs[index].settings.whitelist = [];
         tagifyObjs[index].removeAllTags();
     }
-    upcType();
- 
+
+    if('deleteRow' in  e.params.args.data){
+        $(e.currentTarget).closest('.rowJs').remove();
+    }
+    upcType(); 
 }
+
+
  /** on select2 option  */
 function processResultsCallback(data, params, ele) {
 
@@ -489,13 +490,24 @@ $(document).on('click', '.optionsAddJs', function () {
     );
 
     $('#'+newOptionId).data("select2").$container.addClass("w-100");
-    tagifyOptionValue("#"+newOptionValueId); 
-  
+    tagifyOptionValue("#"+newOptionValueId);   
 });
 
+
 $(document).on('click', '.optionsDeleteJs', function () {
-    $(this).closest('.rowJs').remove();
-    upcType();  
+
+    let el = $(this).closest('.rowJs').find('.optionsJs');
+    let optionId = el.val();
+    if (0 < optionId) {
+        el.trigger({
+            type: 'select2:unselecting',
+            params: {
+                args: { data: { id: optionId, deleteRow: 1 } },
+            }
+        });
+    } else {
+        $(this).closest('.rowJs').remove();
+    }
 });
 
 

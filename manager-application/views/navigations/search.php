@@ -37,7 +37,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- static -->
                         <?php $display = ($subRecordCount > 0) ? '' : 'display:none'; ?>
                         <span class="sortableListsOpener">
                             <i class="fas fa-caret-right clickable sort-icon openerJs" onclick="displaySubRows(this, 1)" data-record-id="<?php echo $row['nav_id']; ?>" style="<?php echo $display; ?>"></i>
@@ -48,6 +47,5 @@
         </ul>
     <?php } else {
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
-    }
-    ?>
+    } ?>
 </div>
