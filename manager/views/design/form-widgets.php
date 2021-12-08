@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
@@ -22,8 +22,8 @@
 <body class="">
     <div class="wrapper">
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body " id="body">
             <div class="content " id="content">
 
@@ -61,7 +61,7 @@
                                     <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                         <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
                                         <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
                                         <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New Download</a>
@@ -277,7 +277,8 @@
                                                 <pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: Poppins, Helvetica, sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre>
                                                 <div class="tt-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;">
                                                     <div class="tt-dataset tt-dataset-countries"></div>
-                                                </div></span>
+                                                </div>
+                                            </span>
                                         </div>
                                         <span class="form-text text-muted">Please select a state</span>
                                     </div>
@@ -322,8 +323,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
     </div>
 
 </body>

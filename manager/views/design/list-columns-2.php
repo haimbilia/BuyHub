@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
@@ -22,8 +22,8 @@
 <body class="">
     <div class="wrapper">
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body " id="body">
             <div class="content " id="content">
 
@@ -58,7 +58,7 @@
                                     <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                         <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
                                         <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
                                         <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New Download</a>
@@ -90,7 +90,7 @@
                                             <i class="flaticon-more-1"></i>
                                         </a>
 
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -131,7 +131,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                     JB
                                                 </div>
@@ -177,7 +177,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -218,7 +218,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
+                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--success font-success font-boldest hidden-">
                                                     MP
                                                 </div>
@@ -265,7 +265,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -306,7 +306,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_2.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_2.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                     JM
                                                 </div>
@@ -352,7 +352,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -393,7 +393,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_1.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_1.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                     AP
                                                 </div>
@@ -443,7 +443,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -484,7 +484,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
+                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden-">
                                                     SM
                                                 </div>
@@ -530,7 +530,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -571,7 +571,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_20.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_20.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                     TW
                                                 </div>
@@ -617,7 +617,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -658,7 +658,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_13.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_13.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                     LD
                                                 </div>
@@ -704,7 +704,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -745,7 +745,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
+                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--warning font-warning font-boldest hidden-">
                                                     GO
                                                 </div>
@@ -796,7 +796,7 @@
                                             <i class="flaticon-more-1"></i>
                                         </a>
 
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -837,7 +837,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_22.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_22.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                     CR
                                                 </div>
@@ -883,7 +883,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -924,7 +924,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
+                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--success font-success font-boldest hidden-">
                                                     MH
                                                 </div>
@@ -971,7 +971,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -1012,7 +1012,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_4.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_4.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                     LD
                                                 </div>
@@ -1058,7 +1058,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -1099,7 +1099,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_5.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_5.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                     CM
                                                 </div>
@@ -1149,7 +1149,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -1190,7 +1190,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
+                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden-">
                                                     AS
                                                 </div>
@@ -1236,7 +1236,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -1277,7 +1277,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_7.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_7.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                     CH
                                                 </div>
@@ -1323,7 +1323,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -1364,7 +1364,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_6.jpg" alt="image">
+                                                <img class="widget__img hidden-" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_6.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--danger font-danger font-boldest hidden">
                                                     BP
                                                 </div>
@@ -1410,7 +1410,7 @@
                                         <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                             <ul class="nav nav--block">
                                                 <li class="nav__item">
                                                     <a href="#" class="nav__link">
@@ -1451,7 +1451,7 @@
                                     <div class="widget widget--user-profile-4">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
+                                                <img class="widget__img hidden" src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="image">
                                                 <div class="widget__pic widget__pic--warning font-warning font-boldest hidden-">
                                                     AP
                                                 </div>
@@ -1562,8 +1562,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
     </div>
 
 </body>

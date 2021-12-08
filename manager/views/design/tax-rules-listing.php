@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="../images/favicon.ico" />
 </head>
 
@@ -22,8 +22,8 @@
     <div class="wrapper">
 
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body" id="body">
             <div class="content " id="content">
                 <!-- begin:: Subheader -->
@@ -97,21 +97,24 @@
 
 
                                                     <td class="datatable__cell">
-                                                        
+
                                                         <div class="row">
-                                                        <div class="col-lg-6"><span>GST- Himachal <br> Country</span></div>
-                                                        <div class="col-lg-6"><ol>
-                                                            <li><strong>CGST(9%)</strong> - <em>All States</em></li></ol></div>
+                                                            <div class="col-lg-6"><span>GST- Himachal <br> Country</span></div>
+                                                            <div class="col-lg-6">
+                                                                <ol>
+                                                                    <li><strong>CGST(9%)</strong> - <em>All States</em></li>
+                                                                </ol>
+                                                            </div>
                                                         </div>
-                                                        
-                                                        
-                                                        
-                                                    
-                                                    
+
+
+
+
+
                                                     </td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
                                                             <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="false"> <i class="la la-ellipsis-h"></i> </a>
-                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                                     <a href="#" class="dropdown-item">Duplicate</a>
                                                                     <a href="#" class="dropdown-item">Make Default</a>
                                                                     <a href="#" class="dropdown-item">View Logs</a>
@@ -190,8 +193,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
 
     </div>
 

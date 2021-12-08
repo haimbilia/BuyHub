@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="images/favicon.ico" />
 </head>
 
@@ -64,7 +64,7 @@
                                         <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="flaticon-more-1"></i>
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
 
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
@@ -89,7 +89,7 @@
                             </div>
                             <div class="card-body">
                                 <ul class="list__items drag1">
-                                <li class="list__item">
+                                    <li class="list__item">
                                         <h3>A/B Testing</h3>
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugit beatae dignissimos......</p>
                                     </li>
@@ -121,7 +121,7 @@
                                         <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="flaticon-more-1"></i>
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
 
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
@@ -146,7 +146,7 @@
                             </div>
                             <div class="card-body">
                                 <ul class="list__items drag2">
-                                <li class="list__item">
+                                    <li class="list__item">
                                         <h3>A/B Testing</h3>
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugit beatae dignissimos......</p>
                                     </li>
@@ -178,7 +178,7 @@
                                         <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="flaticon-more-1"></i>
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
 
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
@@ -203,7 +203,7 @@
                             </div>
                             <div class="card-body">
                                 <ul class="list__items drag3">
-                                <li class="list__item">
+                                    <li class="list__item">
                                         <h3>A/B Testing</h3>
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugit beatae dignissimos......</p>
                                     </li>
@@ -235,7 +235,7 @@
                                         <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="flaticon-more-1"></i>
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
 
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
@@ -325,6 +325,7 @@
         $(".add_item").on("click", function() {
             newTask();
         });
+
         function newTask(e) {
             let itemTitle = $('input[name="taskTitle"]').val();
             let itemDesc = $('#taskDesc').val();

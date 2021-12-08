@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
@@ -22,8 +22,8 @@
 <body class="">
     <div class="wrapper">
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body " id="body">
             <div class="content " id="content">
 
@@ -61,7 +61,7 @@
                                     <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                         <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
                                         <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
                                         <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New Download</a>
@@ -102,7 +102,7 @@
                                             <button type="button" class="btn btn-default btn-icon-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="la la-download"></i> Export
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-right">
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                 <ul class="nav">
                                                     <li class="nav__section nav__section--first">
                                                         <span class="nav__section-text">Choose an option</span>
@@ -228,7 +228,7 @@
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                 <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -236,7 +236,8 @@
                                                         </span>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                             <i class="la la-edit"></i>
-                                                        </a></td>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 <tr role="row" class="even">
                                                     <td class="sorting_1" tabindex="0">0093-5142</td>
@@ -262,7 +263,7 @@
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                 <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -270,7 +271,8 @@
                                                         </span>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                             <i class="la la-edit"></i>
-                                                        </a></td>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 <tr role="row" class="odd">
                                                     <td class="sorting_1" tabindex="0">0185-0130</td>
@@ -296,7 +298,7 @@
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                 <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -304,7 +306,8 @@
                                                         </span>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                             <i class="la la-edit"></i>
-                                                        </a></td>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 <tr role="row" class="even">
                                                     <td class="sorting_1" tabindex="0">0363-0724</td>
@@ -330,7 +333,7 @@
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                 <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -338,7 +341,8 @@
                                                         </span>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                             <i class="la la-edit"></i>
-                                                        </a></td>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 <tr role="row" class="odd">
                                                     <td tabindex="0" class="sorting_1">0404-0360</td>
@@ -364,7 +368,7 @@
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                 <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -372,7 +376,8 @@
                                                         </span>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                             <i class="la la-edit"></i>
-                                                        </a></td>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 <tr role="row" class="even">
                                                     <td class="sorting_1" tabindex="0">11673-479</td>
@@ -398,7 +403,7 @@
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                 <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -406,7 +411,8 @@
                                                         </span>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                             <i class="la la-edit"></i>
-                                                        </a></td>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 <tr role="row" class="odd">
                                                     <td class="sorting_1" tabindex="0">15127-874</td>
@@ -432,7 +438,7 @@
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                 <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -440,7 +446,8 @@
                                                         </span>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                             <i class="la la-edit"></i>
-                                                        </a></td>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 <tr role="row" class="even">
                                                     <td class="sorting_1" tabindex="0">17089-415</td>
@@ -466,7 +473,7 @@
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                 <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -474,7 +481,8 @@
                                                         </span>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                             <i class="la la-edit"></i>
-                                                        </a></td>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 <tr role="row" class="odd">
                                                     <td class="sorting_1" tabindex="0">21130-678</td>
@@ -500,7 +508,7 @@
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                 <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -508,7 +516,8 @@
                                                         </span>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                             <i class="la la-edit"></i>
-                                                        </a></td>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 <tr role="row" class="even">
                                                     <td class="sorting_1" tabindex="0">27495-006</td>
@@ -534,7 +543,7 @@
                                                             <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                 <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
                                                                 <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
@@ -542,7 +551,8 @@
                                                         </span>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                             <i class="la la-edit"></i>
-                                                        </a></td>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             </tbody>
 
@@ -599,8 +609,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
     </div>
 
 </body>
