@@ -440,7 +440,7 @@ class HtmlHelper
             case 'radio':
                 $fld->addOptionListTagAttribute('class', 'list-radio');
                 HtmlHelper::configureSwitchForRadio($fld);
-                break;
+                break;         
             case 'hidden':
                 return $fld->getHtml();
                 break;
