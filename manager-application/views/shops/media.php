@@ -37,6 +37,8 @@ $screenFld = $shopBannerFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
 /* Image Form */
 
+
+
 $otherButtons = [
     [
         'attr' => [
@@ -48,6 +50,10 @@ $otherButtons = [
         'isActive' => true
     ]
 ];
+$fld = $shopBannerFrm->getField('lang_id');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
+$fld = $shopBannerFrm->getField('slide_screen');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
 
 $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
 

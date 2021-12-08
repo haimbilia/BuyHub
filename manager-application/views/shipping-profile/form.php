@@ -59,7 +59,7 @@ $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
                             <div class="maintenance-mode">
                                 <a class="btn btn-clean btn-sm btn-icon" href="javascript:void(0);" onClick="zoneForm(<?php echo $profile_id; ?>, 0)" title="<?php echo Labels::getLabel("LBL_Edit", $siteLangId); ?>">
                                     <svg class="svg" width="18" height="18">
-                                    <use xlink:href="/admin//images/retina/sprite-actions.svg#add">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>'/images/retina/sprite-actions.svg#add">
                                     </use>
                                     </svg></a>
                             </div>

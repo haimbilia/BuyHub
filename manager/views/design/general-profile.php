@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark" dir="ltr">
 
- 
+
 <head>
     <meta charset="utf-8" />
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="../images/favicon.ico" />
 </head>
 
@@ -22,8 +22,8 @@
     <div class="wrapper">
 
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body" id="body">
             <div class="content " id="content">
                 <!-- begin:: Subheader -->
@@ -97,26 +97,27 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group mb-0">
-                                               
-                                               <div class="input-icon input-icon--left">
-												<input type="text" class="form-control" placeholder="Search..." id="generalSearch">
-												 
-												<span class="input-icon__icon input-icon__icon--left">
-													<span><i class="la la-search"></i></span>
-												</span>
-											</div>
-                                                
-                                             
+
+                                                <div class="input-icon input-icon--left">
+                                                    <input type="text" class="form-control" placeholder="Search..." id="generalSearch">
+
+                                                    <span class="input-icon__icon input-icon__icon--left">
+                                                        <span><i class="la la-search"></i></span>
+                                                    </span>
+                                                </div>
+
+
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="shape-bg-color-1 p-4 mt-4 rounded text-center">
-                                    <div class="h4">No products</div>
-                                    <span class="">Move products here from another profile to set up separate rates.</span></div>
-                                    
-                                    
-                                    
+                                        <div class="h4">No products</div>
+                                        <span class="">Move products here from another profile to set up separate rates.</span>
+                                    </div>
+
+
+
                                 </div>
                             </div>
                             <!--end::card-->
@@ -192,7 +193,7 @@
                                             <div class="dropdown">
                                                 <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                     <i class="la la-ellipsis-h"></i> </a>
-                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                     <a href="#" class="dropdown-item">Edit zone</a>
                                                     <a href="#" class="dropdown-item">Delete</a>
                                                 </div>
@@ -219,7 +220,7 @@
                                                     <div class="dropdown">
                                                         <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                             <i class="la la-ellipsis-h"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                             <a href="#" class="dropdown-item">Edit rate</a>
                                                             <a href="#" class="dropdown-item">Delete</a>
                                                         </div>
@@ -234,7 +235,7 @@
                                                     <div class="dropdown">
                                                         <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                             <i class="la la-ellipsis-h"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                             <a href="#" class="dropdown-item">Edit rate</a>
                                                             <a href="#" class="dropdown-item">Delete</a>
                                                         </div>
@@ -246,7 +247,8 @@
                                     </table>
                                     <div class="row">
                                         <div class="col">
-                                            <button class="btn btn-bold btn-label-brand" data-toggle="modal" data-target="#modal_add_rate"><i class="la la-plus"></i> Add rate</button></div>
+                                            <button class="btn btn-bold btn-label-brand" data-toggle="modal" data-target="#modal_add_rate"><i class="la la-plus"></i> Add rate</button>
+                                        </div>
                                     </div>
 
 
@@ -269,7 +271,7 @@
                                             <div class="dropdown">
                                                 <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                     <i class="la la-ellipsis-h"></i> </a>
-                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                     <a href="#" class="dropdown-item">Edit zone</a>
                                                     <a href="#" class="dropdown-item">Delete</a>
                                                 </div>
@@ -294,7 +296,7 @@
                                                     <div class="dropdown">
                                                         <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                             <i class="la la-ellipsis-h"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                             <a href="#" class="dropdown-item">Edit rate</a>
                                                             <a href="#" class="dropdown-item">Delete</a>
                                                         </div>
@@ -309,7 +311,7 @@
                                                     <div class="dropdown">
                                                         <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                             <i class="la la-ellipsis-h"></i> </a>
-                                                        <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                             <a href="#" class="dropdown-item">Edit rate</a>
                                                             <a href="#" class="dropdown-item">Delete</a>
                                                         </div>
@@ -321,7 +323,8 @@
                                     </table>
                                     <div class="row">
                                         <div class="col">
-                                            <button class="btn btn-bold btn-label-brand"><i class="la la-plus"></i> Add rate</button></div>
+                                            <button class="btn btn-bold btn-label-brand"><i class="la la-plus"></i> Add rate</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -337,8 +340,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
         <!--begin: Modal -->
         <div class="modal fade" id="modal_create_zone" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -396,7 +399,8 @@
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/af.svg" alt="">
                                                             </i>Afghanistan<span></span>
-                                                        </label></div>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </li>
 
@@ -407,7 +411,8 @@
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Bangladesh<span></span>
-                                                        </label></div>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </li>
                                             <li>
@@ -417,7 +422,8 @@
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Bhutan<span></span>
-                                                        </label></div>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </li>
                                             <li>
@@ -427,7 +433,8 @@
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>China<span></span>
-                                                        </label></div>
+                                                        </label>
+                                                    </div>
 
                                                     <div class="col-auto">
                                                         <a href="#">0 of 31 provinces <i class="flaticon2-down-arrow"></i></a>
@@ -470,7 +477,8 @@
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Cocos (Keeling) Islands<span></span>
-                                                        </label></div>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </li>
                                             <li>
@@ -480,7 +488,8 @@
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Cocos (Keeling) Islands<span></span>
-                                                        </label></div>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </li>
                                             <li>
@@ -490,7 +499,8 @@
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Cocos (Keeling) Islands<span></span>
-                                                        </label></div>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </li>
                                             <li>
@@ -500,7 +510,8 @@
                                                             <input type="checkbox"><i class="icn-flag">
                                                                 <img src="../media/flags/4x3/ci.svg" alt="">
                                                             </i>Cocos (Keeling) Islands<span></span>
-                                                        </label></div>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </li>
                                         </ul>

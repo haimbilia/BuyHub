@@ -57,10 +57,11 @@ if (isset($dropdownButtons) && is_array($dropdownButtons)) {
 
 
 if (isset($editButton) && is_array($editButton)) {
-    $onclick = isset($editButton['onclick']) ? $editButton['onclick'] : 'editRecord(' . $recordId . ')';
+    $onclick = isset($editButton['onclick']) && !empty($editButton['onclick']) ? $editButton['onclick'] : 'editRecord(' . $recordId . ')';
+    $cls = isset($editButton['class']) && !empty($editButton['class']) ? $editButton['class'] : '';
+    $title = isset($editButton['title']) && !empty($editButton['title']) ? $editButton['title'] :  Labels::getLabel('LBL_EDIT', $siteLangId);
 
-    $cls = isset($editButton['class']) ? $editButton['class'] : '';
-    $li = $ul->appendElement('li', ['title' => Labels::getLabel('LBL_EDIT', $siteLangId), 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
+    $li = $ul->appendElement('li', ['title' => $title, 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
     $li->appendElement('a', array('href' => 'javascript:void(0)', 'class' => $cls, "onclick" => $onclick), 
     '<svg class="svg" width="18" height="18">
         <use

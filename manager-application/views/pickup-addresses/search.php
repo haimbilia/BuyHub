@@ -20,12 +20,12 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'shipprofile_name':
-                $badge = '';
-                if ($row['shipprofile_default'] == 1) {
-                    $badge = ' <span class="badge badge-brand badge-inline badge-pill">' . Labels::getLabel('LBL_DEFAULT', $siteLangId) . '</span>';
+            case 'addr_phone':
+                $addrPhone = (strlen($row['addr_phone']) > 0) ? $row['addr_phone'] : '';
+                if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $row)) {
+                    $addrPhone = ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone;
                 }
-                $td->appendElement('plaintext', array(), $row[$key] . $badge, true);
+                $td->appendElement('plaintext', array(), $addrPhone, true);
                 break;
             case 'addr_id':
                 $addr2 = (strlen($row['addr_address2']) > 0) ? ', ' . $row['addr_address2'] . '<br>' : '';
@@ -33,16 +33,12 @@ foreach ($arrListing as $sn => $row) {
                 $addrState = (strlen($row['state_name']) > 0) ? $row['state_name'] . ', ' : '';
                 $addrCountry = (strlen($row['country_name']) > 0) ? $row['country_name'] . '<br>' : '';
                 $addrZip = (strlen($row['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $row['addr_zip'] : '';
-                $addrPhone = (strlen($row['addr_phone']) > 0) ? $row['addr_phone'] : '';
-                if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $row)) {
-                    $addrPhone = ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone;
-                }
-                $addrPhone = ', ' . Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone;
                 $address = "<address>
-                                <p>" . $row['addr_address1'] . ' ' . $addr2 . $addrCity . $addrState . $addrCountry . $addrZip . $addrPhone .
+                                <p>" . $row['addr_address1'] . ' ' . $addr2 . $addrCity . $addrState . $addrCountry . $addrZip .
                         "</address>";
                 $td->appendElement('plaintext', array(), $address, true);
                 break;
+
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
@@ -50,7 +46,7 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = [ 
+                    $data['editButton'] = [
                         'onclick' => 'editRecord(' . $row['addr_id'] . ',' . $row['addr_lang_id'] . ')'
                     ];
                     $data['deleteButton'] = [];

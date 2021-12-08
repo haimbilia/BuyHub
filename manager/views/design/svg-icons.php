@@ -58,7 +58,7 @@
 									<a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										Products
 									</a>
-									<div class="dropdown-menu dropdown-menu-right">
+									<div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
 										<a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
 										<a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
 										<a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New Download</a>

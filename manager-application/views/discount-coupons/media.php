@@ -36,8 +36,7 @@ $otherButtons = [
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         'isActive' => true
     ]
-]; 
-
+];
 require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
