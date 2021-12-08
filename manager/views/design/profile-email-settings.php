@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="images/favicon.ico" />
 
 </head>
@@ -22,8 +22,8 @@
 <body class="">
     <div class="wrapper">
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body " id="body">
             <div class="content " id="content">
 
@@ -34,7 +34,8 @@
                             <h3 class="subheader__title">
                                 <button class="subheader__mobile-toggle subheader__mobile-toggle--left" id="subheader_mobile_toggle"><span></span></button>
 
-                                Profile 1 </h3>
+                                Profile 1
+                            </h3>
 
                             <div class="subheader__breadcrumbs">
                                 <a href="#" class="subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
@@ -62,7 +63,7 @@
                                     <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                         <a class="dropdown-item" href="#"><i class="la la-plus"></i> New Product</a>
                                         <a class="dropdown-item" href="#"><i class="la la-user"></i> New Order</a>
                                         <a class="dropdown-item" href="#"><i class="la la-cloud-download"></i> New Download</a>
@@ -81,7 +82,7 @@
                     <!--Begin::App-->
                     <div class="grid grid--desktop grid--ver grid--ver-desktop app">
                         <!--Begin:: App Aside Mobile Toggle-->
-                        <button class="app__aside-close d-none"  id="user_profile_aside_close">
+                        <button class="app__aside-close d-none" id="user_profile_aside_close">
                             <i class="la la-close"></i>
                         </button>
                         <!--End:: App Aside Mobile Toggle-->
@@ -99,7 +100,7 @@
                                         <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-md">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
                                                 <li class="nav__head">
@@ -157,7 +158,7 @@
                                     <div class="widget widget--user-profile-1">
                                         <div class="widget__head">
                                             <div class="widget__media">
-                                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_13.jpg" alt="image">
+                                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_13.jpg" alt="image">
                                             </div>
                                             <div class="widget__content">
                                                 <div class="widget__section">
@@ -486,8 +487,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
     </div>
 
 </body>

@@ -34,8 +34,8 @@ class Banner extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-        static::TYPE_BANNER => Labels::getLabel('LBL_Banner', $langId),
-        static::TYPE_PPC => Labels::getLabel('LBL_Promotion', $langId),
+            static::TYPE_BANNER => Labels::getLabel('LBL_Banner', $langId),
+            static::TYPE_PPC => Labels::getLabel('LBL_Promotion', $langId),
         );
     }
     
@@ -82,11 +82,11 @@ class Banner extends MyAppModel
         unset($data['blocation_id']);
 
         $assignValues = array(
-        /* 'blocation_banner_width'=>$data['blocation_banner_width'],
-        'blocation_banner_height'=>$data['blocation_banner_height'], */
-        'blocation_active' => $data['blocation_active'],
-        'blocation_promotion_cost' => $data['blocation_promotion_cost'],
-        'blocation_identifier' => $data['blocation_identifier'],
+            /* 'blocation_banner_width'=>$data['blocation_banner_width'],
+            'blocation_banner_height'=>$data['blocation_banner_height'], */
+            'blocation_active' => $data['blocation_active'],
+            'blocation_promotion_cost' => $data['blocation_promotion_cost'],
+            'blocation_identifier' => $data['blocation_identifier'],
         );
         $where = array('smt' => 'blocation_id = ?', 'vals' => array($blocationId));
         if (!$db->updateFromArray(static::DB_TBL_LOCATIONS, $assignValues, $where)) {
