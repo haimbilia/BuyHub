@@ -6,13 +6,13 @@ $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 $delBtn = '<button type="button" data-id="0" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="Remove">
         <svg class="svg" width="18" height="18">
-            <use xlink:href="/admin/images/retina/sprite-actions.svg#delete">
+            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
             </use>
         </svg>
     </button>';
 $addBtn = '<button type="button" class="btn btn--secondary ripplelink add-combined-form--js ml-2" title="Add">
         <svg class="svg" width="18" height="18">
-            <use xlink:href="/admin//images/retina/sprite-actions.svg#add">
+            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
             </use>
         </svg>
     </button>';
