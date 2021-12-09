@@ -369,7 +369,7 @@ class BrandsController extends ListingBaseController
 
         $this->set('recordId', $brand_id);
         $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_File_Uploaded_Successfully', $this->siteLangId));
+        $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
