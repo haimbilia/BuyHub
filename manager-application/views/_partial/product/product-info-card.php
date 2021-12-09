@@ -11,7 +11,7 @@ $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $produc
 if (!isset($options)) {
     $options = SellerProduct::getSellerProductOptions($product['selprod_id'], true, $siteLangId);
 }
-?>
+?> 
 <a href="javascript:void(0)" class="product-profile" onclick="redirectToProduct(<?php echo $product['selprod_product_id']; ?>)">
     <div class="product-profile__thumbnail" data-ratio="1:1">
         <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>">
@@ -25,8 +25,10 @@ if (!isset($options)) {
                         <span class="label"><?php echo $option['option_name']; ?>:</span>
                         <span class="value"><?php echo $option['optionvalue_name']; ?></span>
                     </li>
-                <?php }
-                if (isset($sellerName)) {  ?>
+                    <?php
+                }
+                if (isset($sellerName)) {
+                    ?>
                     <li class="">
                         <span class="label"><?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>:</span>
                         <span class="value"><?php echo $sellerName; ?></span>
