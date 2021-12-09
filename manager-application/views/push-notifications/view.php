@@ -24,7 +24,7 @@
             <li>
                 <span class="lable"><?php echo Labels::getLabel('LBL_SCHEDULE_DATE', $siteLangId); ?>:</span>
                 <span class="value">
-                    <?php echo HtmlHelper::formatDateTime($data['pnotification_notified_on'], true, true); ?>
+                    <?php echo HtmlHelper::formatDateTime($data['pnotification_notified_on'], true, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())); ?>
                 </span>
             </li>
             <li>

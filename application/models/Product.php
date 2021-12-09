@@ -649,7 +649,7 @@ class Product extends MyAppModel
 
         $srch->joinTable(Option::DB_TBL, 'INNER JOIN', Option::DB_TBL_PREFIX . 'id = ' . static::DB_PRODUCT_TO_OPTION_PREFIX . 'option_id');
 
-        $attr = array('option_id', 'option_identifier','prodoption_optionvalue_ids');
+        $attr = array('option_id', 'option_identifier','prodoption_optionvalue_ids','option_is_separate_images');
         if (0 < $lang_id) {
             $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT JOIN', 'lang.optionlang_option_id = ' . Option::DB_TBL_PREFIX . 'id AND optionlang_lang_id = ' . $lang_id, 'lang');
             $attr[] = 'IFNULL(option_name, option_identifier) as option_name';

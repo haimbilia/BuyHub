@@ -36,10 +36,12 @@ $fld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . 
 $fld->value = '<span id="imageListingJs"></span>';
 
 $imageLangFld = $imageFrm->getField('lang_id');
+$imageLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
 $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
 
 
 $screenFld = $imageFrm->getField('slide_screen');
+$screenFld->developerTags['colWidthValues'] = [null, '6', null, null];
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
 
 $fld = $imageFrm->getField('lang_id');

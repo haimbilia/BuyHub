@@ -158,10 +158,9 @@
             <g id="Group_907" data-name="Group 907" transform="translate(88.318 -343.55)">
                 <path id="Path_278" data-name="Path 278" d="M-79.078,354.476l-2.228-2.228h8.849v-.666h-8.849l2.228-2.228-.47-.471-3.033,3.032,3.033,3.032Z" stroke="currentColor" stroke-width="0.75"/>
                 <g id="Group_367" data-name="Group 367">
-                  <path id="Path_279" data-name="Path 279" d="M-87.943,359.9v-15.98h8.323v.666h-7.657v14.648h7.657v.666Z" stroke="currentColor" stroke-width="0.75"/>
+                    <path id="Path_279" data-name="Path 279" d="M-87.943,359.9v-15.98h8.323v.666h-7.657v14.648h7.657v.666Z" stroke="currentColor" stroke-width="0.75"/>
                 </g>
-              </g>
+            </g>
         </symbol>
     </defs>
-
 </svg>
