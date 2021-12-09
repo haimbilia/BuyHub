@@ -37,20 +37,20 @@
                             <?php } ?>
                             <?php if (!empty($detail['slog_backtrace'])) { ?>
                                 <span class="timeline-v4__item-text">
-                                    <?php 
-                                        $backTrace = json_decode($detail['slog_backtrace']);
-                                        if(!empty($backTrace->file)){
-                                            echo '<br><a href="#" class="link link--dark timeline-v4__item-link"><b>' . Labels::getLabel('LBL_FILE', $siteLangId) . " :-</b> ".$backTrace->file."</a><br>";
-                                        }
-                                        if(!empty($backTrace->class)){
-                                            echo "<b>" . Labels::getLabel('LBL_CLASS', $siteLangId) . " :-</b> ".$backTrace->class."<br>";
-                                        }
-                                        if(!empty($backTrace->function)){
-                                            echo "<b>" . Labels::getLabel('LBL_FUNCTION', $siteLangId) . " :-</b> ".$backTrace->function."<br>";
-                                        }
-                                        if(!empty($backTrace->line)){
-                                            echo "<b>" . Labels::getLabel('LBL_LINE', $siteLangId) . " :-</b> ".$backTrace->line."<br>";
-                                        }
+                                    <?php
+                                    $backTrace = json_decode($detail['slog_backtrace']);
+                                    if (!empty($backTrace->file)) {
+                                        echo '<br><a href="#" class="link link--dark timeline-v4__item-link"><b>' . Labels::getLabel('LBL_FILE', $siteLangId) . " :-</b> " . $backTrace->file . "</a><br>";
+                                    }
+                                    if (!empty($backTrace->class)) {
+                                        echo "<b>" . Labels::getLabel('LBL_CLASS', $siteLangId) . " :-</b> " . $backTrace->class . "<br>";
+                                    }
+                                    if (!empty($backTrace->function)) {
+                                        echo "<b>" . Labels::getLabel('LBL_FUNCTION', $siteLangId) . " :-</b> " . $backTrace->function . "<br>";
+                                    }
+                                    if (!empty($backTrace->line)) {
+                                        echo "<b>" . Labels::getLabel('LBL_LINE', $siteLangId) . " :-</b> " . $backTrace->line . "<br>";
+                                    }
                                     ?>
                                 </span>
                             <?php } ?>

@@ -62,7 +62,12 @@ foreach ($arrListing as $sn => $row) {
                                 'onclick' => 'viewComment('.$row['ocrequest_id'].','.$siteLangId.')' ,
                                 'title' => Labels::getLabel('LBL_VIEW_COMMENT', $siteLangId),
                             ],
-                            'label' => "<i class='far fa-eye icon'></i>"
+                            'label' => '<i class="icn">
+                            <svg class="svg" width="18" height="18">
+                                <use xlink:href="/admin/images/retina/sprite.yokart.svg#comment">
+                                </use>
+                            </svg>
+                        </i>'
                         ]
                     ];	                    
                 }

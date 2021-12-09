@@ -10,9 +10,6 @@ if (isset($order['op_is_batch']) && $order['op_is_batch']) {
     }
     $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'], "SMALL", $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
 }
-$productName = $order['op_product_name'];
-$productTitle = $order['op_selprod_title'];
-$brandName = $order['op_brand_name'];
 
 $options = $order['op_selprod_options'] ?? '';
 $options = explode(SellerProduct::MULTIPLE_OPTION_SEPARATOR, $options);
@@ -23,14 +20,16 @@ if (isset($order['totOrders']) && $order['totOrders'] > 1) {
     $otherInfo = Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_number'] . "</a>";
 }
 
-$date = isset($showDate) && $order['order_date_added']   ? FatDate::format($order['order_date_added']) : '';
+$date = isset($showDate) && $order['order_date_added']   ? HtmlHelper::formatDateTime($order['order_date_added']) : '';
 
 $includeInvoiceNo = $includeInvoiceNo ?? true;
+$includeBrandName = $includeBrandName ?? true;
+$includeProductLink = $includeProductLink ?? false;
 ?>
 
 <div class="product-profile">
     <div class="product-profile__thumbnail" data-ratio="1:1">
-        <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>" title="<?php echo $productName; ?>" alt="<?php echo $productName; ?>">
+        <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>" title="<?php echo $order['op_product_name']; ?>" alt="<?php echo $order['op_product_name']; ?>">
     </div>
     <div class="product-profile__data">
         <?php if (true === $includeInvoiceNo) { ?>
@@ -39,7 +38,14 @@ $includeInvoiceNo = $includeInvoiceNo ?? true;
                 <?php echo $order['op_invoice_number']; ?>
             </div>
         <?php } ?>
-        <div class="title"><?php echo $productTitle; ?></div>
+        <div class="title">
+            <?php if (true == $includeProductLink) {
+                echo '<a href="' . UrlHelper::generateFullUrl('Products', 'View', array($order['op_selprod_id']), CONF_WEBROOT_FRONT_URL) . '" target="_blank" title="' . $order['op_product_name'] . '">' . CommonHelper::subStringByWords($order['op_selprod_title'], 35) . '</a>';
+            } else {
+                echo CommonHelper::subStringByWords($order['op_selprod_title'], 35);
+            }
+            ?>
+        </div>
 
         <?php if (true === $includeShopName) { ?>
             <div class="sold_by">
@@ -49,17 +55,18 @@ $includeInvoiceNo = $includeInvoiceNo ?? true;
                 </svg> <?php echo $shopName; ?>
             </div>
         <?php } ?>
+        <?php if (true == $includeBrandName) { ?>
+            <div class="brand">
+                <ul class="list-options list-options--horizontal">
+                    <li>
+                        <span class="label"><?php echo Labels::getLabel('LBL_BRAND', $siteLangId); ?>:</span>
+                        <span class="value"><?php echo $order['op_brand_name']; ?></span>
+                    </li>
+                </ul>
+            </div>
+        <?php } ?>
 
-        <div class="brand">
-            <ul class="list-options list-options--horizontal">
-                <li>
-                    <span class="label"><?php echo Labels::getLabel('LBL_BRAND', $siteLangId); ?>:</span>
-                    <span class="value"><?php echo $order['op_brand_name']; ?></span>
-                </li>
-            </ul>
-        </div>
-
-        <?php 
+        <?php
         if (!empty($options)) { ?>
             <ul class="list-options <?php echo isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical"'; ?>">
                 <?php foreach ($options as $option) {

@@ -10,9 +10,8 @@ class ShippingProfileProductsController extends ListingBaseController {
         $this->objPrivilege->canViewShippingManagement();
     }
 
-    public function index($profileId) {
-        $frm = $this->getForm($profileId);
-        $this->set("frm", $frm);
+    public function index($profileId) { 
+        $this->set("frm", $this->getForm($profileId));
         $this->_template->render(false, false);
     }
 
