@@ -2276,3 +2276,45 @@ strong {
         border-radius: $radius-common;
     }
 }
+
+//dashboard
+.commerce-card {
+    .h6 {
+        font-size: 0.9rem;
+    }
+    &-graph {
+        max-width: 140px;
+    }
+    .card-body {
+        padding-top: 0;
+    }
+}
+
+.admin-welcome {
+    font-size: 0.85rem;
+    .bg-welcome {
+        padding: 25px;
+        background-repeat: no-repeat;
+        background-position: bottom right;
+    }
+    .welcome-text {
+        margin-bottom: 2.5rem;
+    }
+    .welcome-list {
+        &-item {
+            list-style: none;
+            border-bottom: $border;
+            padding: 1rem 25px;
+            &:last-child {
+                border-bottom: none;
+            }
+            &.bg-warning {
+                background-color: lighten($warning-color, 40) !important;
+                color: $warning-color;
+            }
+            a {
+                color: currentColor;
+            }
+        }
+    }
+}

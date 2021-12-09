@@ -3,7 +3,7 @@
 if (!empty($productsData)) {
     echo '<div class="mt-4"> <ul class="upload__list">';
     foreach ($productsData as $product) {
-?>
+        ?>
         <li class="upload__list-item">
             <div class="media">
                 <img class="mr-2 product-profile-img" src="<?php echo UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], 'SMALL', 0, 0, 1)) ?>" alt="" width="50">
@@ -15,7 +15,7 @@ if (!empty($productsData)) {
                 </div>
             <?php } ?>
         </li>
-<?php
+        <?php
     }
     echo '</ul></div>';
 } else {

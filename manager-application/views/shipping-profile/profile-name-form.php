@@ -2,7 +2,7 @@
     echo $frm->getFormTag();
     ?>
  <div class="row">
-     <div class="col-md-6">
+     <div class="col-md-9">
          <div class="form-group">
              <div class="">
                  <?php
@@ -14,7 +14,7 @@
              </div>
          </div>
      </div>
-     <div class="col-md-6">
+     <div class="col-md-3">
          <div class="form-group">
              <div class="">
                  <?php
