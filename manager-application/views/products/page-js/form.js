@@ -244,20 +244,62 @@
         return $("#addProductfrm [name='product_id']").val();
     };
 
-    imagesForm = function (productId = 0) {
+    imageForm = function () {
         if (false === checkControllerName()) {
             return false;
         }
+        let productId = getCurrentFrmProductId();
+        let tempProductId = $("#addProductfrm [name='temp_product_id']").val();
+        if(1 > productId){
+            if(tempProductId == undefined){
+                console.warn('temp product id is manatory');
+                return;
+            }
+        }
         $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controllerName, "imagesForm", [productId]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, "imageForm", [productId,tempProductId]), '', function (t) {
             $.ykmodal(t);
+            loadImageOptions();
             productImages(productId);
             fcom.removeLoader();
         });
     };
+    loadImageOptions = function () {   
+        $('#addProductfrm .optionsJs').each(function(){
+            let data = $(this).select2('data');
+            if(data.length){
+                data = data[0]; 
+                if(data.option_is_separate_images == 1){
+                    let optionValueData = $.parseJSON($(this).closest('.rowJs').find('input.optionValuesJs').val());   
+                    let optionIdEl = $('#image_option_id');
+                    optionIdEl.html(`<option value="0">
+                    ${forAllOptionsLbl}
+                    </option>`);          
 
-    productImages = function (product_id, option_id = 0, lang_id = 0) {
-        fcom.ajax(fcom.makeUrl('Products', 'images', [product_id, option_id, lang_id]), '', function (t) {
+                    $.each(optionValueData, function (index, opval) {
+                            optionIdEl.append(`<option value="${opval.id}">
+                            ${opval.value}
+                            </option>`);
+
+                    });                    
+                    return false; 
+                }
+            }
+
+        })
+    };
+
+    productImagesCallback = function (t) {  
+        let temp_product_id = 0;
+        if(temp_product_id in t){
+            temp_product_id = t.temp_product_id;
+        }
+        console.log(t);
+      productImages(t.product_id,t.option_id,t.lang_id,t.temp_product_id)
+    };
+
+    productImages = function (product_id, option_id = 0, lang_id = 0, temp_product_id = 0) {
+        fcom.ajax(fcom.makeUrl('Products', 'images', [product_id, option_id, lang_id,temp_product_id]), '', function (t) {
             $('#imageupload_div').html(t);
         });
     };
@@ -336,45 +378,54 @@
     };
 
     upcType = function () {
-        let type = $('.upc_type:checked').val();
-        let productId = getCurrentFrmProductId();
-        let langId = getCurrentFrmLangId();
-        let productOptions = {};
-        if (type == 1) {
-            $('#addProductfrm select.optionsJs').each(function () {
-                let optionData = $(this).select2('data');
-                if (1 < optionData.length) {
-                    return;
-                }
-
-                optionData = optionData[0];
-                let optionValueData = $(this).closest('.rowJs').find('input.optionValuesJs').val();              
-                if (optionValueData == '') {
-                    return;
-                }
-                optionValueData = jQuery.parseJSON(optionValueData);
-
-                productOptions[optionData.id] = { option_id: optionData.id, option_name: optionData.text, optionValues: {} };
-
-                $.each(optionValueData, function (index, opval) {
-                    productOptions[optionData.id]['optionValues'][opval.id] = opval.value;
-                });
-            });
+        if (typeof upcTypeTriggerEvent != 'undefined') {
+            clearTimeout(upcTypeTriggerEvent);
         }
-        fcom.ajax(fcom.makeUrl(controllerName, "upcListing"), { productId, langId, type, productOptions }, function (t) {
-            $('#variantsListJs').html(t);
-        });
+        upcTypeTriggerEvent = setTimeout(function () {
+            let type = $('.upc_type:checked').val();
+            let productId = getCurrentFrmProductId();
+            let langId = getCurrentFrmLangId();
+            let productOptions = {};
+            if (type == 1) {
+                $('#addProductfrm select.optionsJs').each(function () {
+                    let optionData = $(this).select2('data');
+                    if (1 < optionData.length) {
+                        return;
+                    }
+
+                    optionData = optionData[0];
+                    let optionValueData = $(this).closest('.rowJs').find('input.optionValuesJs').val();              
+                    if (optionValueData == '') {
+                        return;
+                    }
+                    optionValueData = jQuery.parseJSON(optionValueData);
+
+                    productOptions[optionData.id] = { option_id: optionData.id, option_name: optionData.text, optionValues: {} };
+
+                    $.each(optionValueData, function (index, opval) {
+                        productOptions[optionData.id]['optionValues'][opval.id] = opval.value;
+                    });
+                });
+            }
+            fcom.ajax(fcom.makeUrl(controllerName, "upcListing"), { productId, langId, type, productOptions }, function (t) {
+                $('#variantsListJs').html(t);
+            });
+        }, 2500);
     };
 
 })();
 
 /** on option select/deselect */
 async function resetOptionValuesTag(e) {
+    console.log(e);
     let productId = getCurrentFrmProductId();
     if (productId) {
         let optionId = e.params.args.data.id;
-        if (e.type == 'select2:selecting') {
-            optionId = $(e.currentTarget).select2('data')[0].id || 0;
+        if (e.type == 'select2:selecting') {         
+            optionId = 0;
+            if($(e.currentTarget).select2('data').length){
+                optionId = $(e.currentTarget).select2('data')[0].id || 0;
+            }
         }
 
         if (0 < optionId) {
@@ -420,27 +471,23 @@ async function resetOptionValuesTag(e) {
 }
 
 /** on select2 option  */
-function processResultsCallback(data, params, ele) {
+function optionDataCallback(ele) {
     let selectedSiblingOption = [];
+    let hasSiblingWithImageOption = 0;
     ele.closest('.rowJs').siblings().find('.optionsJs')
         .each(function (i) {
-            if ($(this).val() != '') {
-                selectedSiblingOption.push(parseInt($(this).val()));
+            let data = $(this).select2('data');
+            if (data.length) {
+                data = data[0];
+                if(hasSiblingWithImageOption == 0 && data['option_is_separate_images'] == 1 ){
+                    hasSiblingWithImageOption = 1;
+                }
+                selectedSiblingOption.push(data['id']);
             }
         });
-
-    let results = data.results;
-    if (selectedSiblingOption.length) {
-        results = results.filter(function (val, i) {
-            return -1 < $.inArray(val.id, selectedSiblingOption) ? false : true;
-        });
-    }
-
     return {
-        results: results,
-        pagination: {
-            more: params.page < data.pageCount,
-        },
+        disAllowOptions: selectedSiblingOption,
+        doNotIncludeImageOption : hasSiblingWithImageOption       
     };
 }
 
@@ -452,7 +499,6 @@ $(document).on('click', '.warrantyTypeJs', function () {
 
 $(document).on('click', '.optionsAddJs', function () {
     let clonedRow = $('#variantCloneJs .rowJs').clone();
-    console.log(clonedRow);
     let index = clonedRow.find('.optionValuesJs').data('index');
     let newIndex = $('#variantsJs .rowJs').length + 1;
     let optionId = clonedRow.find('.optionsJs').attr('id').replace(index, "");
@@ -467,10 +513,9 @@ $(document).on('click', '.optionsAddJs', function () {
     clonedRow.find('.optionsAddJs').removeClass('hide');
     clonedRow.insertAfter('#variantsJs .rowJs:last');
 
-    select2(newOptionId, fcom.makeUrl('Options', 'autoComplete'), {},
+    select2(newOptionId, fcom.makeUrl('Options', 'autoComplete'), optionDataCallback,
         resetOptionValuesTag,
-        resetOptionValuesTag,
-        processResultsCallback
+        resetOptionValuesTag,       
     );
 
     $('#' + newOptionId).data("select2").$container.addClass("w-100");

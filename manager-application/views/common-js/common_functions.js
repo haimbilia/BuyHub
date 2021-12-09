@@ -150,10 +150,6 @@ Slugify = function (str, str_val_id, is_slugify) {
     }
 };
 
-abc = function (){
-    return {f:5};
-}
-
 /*
 expected response
 {

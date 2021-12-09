@@ -1420,3 +1420,6 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_c
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 ALTER TABLE `tbl_navigations` ADD UNIQUE(`nav_identifier`);
+
+ALTER TABLE tbl_attached_files_temp CHANGE afile_record_id afile_record_id BIGINT NOT NULL;
+ALTER TABLE tbl_attached_files_temp CHANGE afile_record_id afile_record_subid BIGINT NOT NULL;
