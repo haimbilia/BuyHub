@@ -123,6 +123,11 @@ trait SellerProducts
     public function sellerProductForm($product_id, $selprod_id = 0)
     {
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
+        
+        if(!Product::availableForAddToStore($product_id, $this->userParentId)){
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
+        }
+
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             Message::addErrorMessage(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
