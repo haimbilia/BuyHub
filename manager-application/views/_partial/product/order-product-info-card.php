@@ -23,7 +23,7 @@ if (isset($order['totOrders']) && $order['totOrders'] > 1) {
     $otherInfo = Labels::getLabel('LBL_Part_combined_order', $siteLangId) . ' <a title="' . Labels::getLabel('LBL_View_Order_Detail', $siteLangId) . '" href="' . UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'])) . '">' . $order['order_number'] . "</a>";
 }
 
-$date = isset($showDate) && $order['order_date_added']   ? FatDate::format($order['order_date_added']) : '';
+$date = isset($showDate) && $order['order_date_added']   ? HtmlHelper::formatDateTime($order['order_date_added']) : '';
 
 $includeInvoiceNo = $includeInvoiceNo ?? true;
 $includeBrandName = $includeBrandName ?? true;
