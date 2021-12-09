@@ -12,7 +12,7 @@ if (!isset($options)) {
     $options = SellerProduct::getSellerProductOptions($product['selprod_id'], true, $siteLangId);
 }
 ?>
-<a href="javascript:void(0)" class="product-profile">
+<div class="product-profile">
     <div class="product-profile__thumbnail" data-ratio="1:1">
         <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>">
     </div>
@@ -35,4 +35,4 @@ if (!isset($options)) {
             </ul>
         <?php } ?>
     </div>
-</a>
+</div>

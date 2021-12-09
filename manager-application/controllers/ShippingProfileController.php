@@ -184,7 +184,7 @@ class ShippingProfileController extends ListingBaseController {
 
         $shipprofileId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($shipprofileId < 1) {
-            LibHelper::exitWithError($this->str_invalid_request_id,true);   
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $shippingProfile = ShippingProfile::getAttributesById($shipprofileId);
