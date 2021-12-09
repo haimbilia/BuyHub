@@ -10,9 +10,6 @@ if (isset($order['op_is_batch']) && $order['op_is_batch']) {
     }
     $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'], "SMALL", $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
 }
-$productName = $order['op_product_name'];
-$productTitle = $order['op_selprod_title'];
-$brandName = $order['op_brand_name'];
 
 $options = $order['op_selprod_options'] ?? '';
 $options = explode(SellerProduct::MULTIPLE_OPTION_SEPARATOR, $options);
@@ -32,7 +29,7 @@ $includeProductLink = $includeProductLink ?? false;
 
 <div class="product-profile">
     <div class="product-profile__thumbnail" data-ratio="1:1">
-        <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>" title="<?php echo $productName; ?>" alt="<?php echo $productName; ?>">
+        <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>" title="<?php echo $order['op_product_name']; ?>" alt="<?php echo $order['op_product_name']; ?>">
     </div>
     <div class="product-profile__data">
         <?php if (true === $includeInvoiceNo) { ?>
@@ -42,12 +39,12 @@ $includeProductLink = $includeProductLink ?? false;
             </div>
         <?php } ?>
         <div class="title">
-            <?php if(true == $includeProductLink) {
-                echo '<a href="'.UrlHelper::generateFullUrl('Products', 'View', array($order['op_selprod_id']), CONF_WEBROOT_FRONT_URL).'" target="_blank" title="'.$productName.'">'. CommonHelper::subStringByWords($productTitle, 35) .'</a>';
-            }else{
-                echo CommonHelper::subStringByWords($productTitle, 35);
+            <?php if (true == $includeProductLink) {
+                echo '<a href="' . UrlHelper::generateFullUrl('Products', 'View', array($order['op_selprod_id']), CONF_WEBROOT_FRONT_URL) . '" target="_blank" title="' . $order['op_product_name'] . '">' . CommonHelper::subStringByWords($order['op_selprod_title'], 35) . '</a>';
+            } else {
+                echo CommonHelper::subStringByWords($order['op_selprod_title'], 35);
             }
-             ?>
+            ?>
         </div>
 
         <?php if (true === $includeShopName) { ?>
@@ -58,18 +55,18 @@ $includeProductLink = $includeProductLink ?? false;
                 </svg> <?php echo $shopName; ?>
             </div>
         <?php } ?>
-        <?php if(true == $includeBrandName) { ?>    
-        <div class="brand">
-            <ul class="list-options list-options--horizontal">
-                <li>
-                    <span class="label"><?php echo Labels::getLabel('LBL_BRAND', $siteLangId); ?>:</span>
-                    <span class="value"><?php echo $order['op_brand_name']; ?></span>
-                </li>
-            </ul>
-        </div>
+        <?php if (true == $includeBrandName) { ?>
+            <div class="brand">
+                <ul class="list-options list-options--horizontal">
+                    <li>
+                        <span class="label"><?php echo Labels::getLabel('LBL_BRAND', $siteLangId); ?>:</span>
+                        <span class="value"><?php echo $order['op_brand_name']; ?></span>
+                    </li>
+                </ul>
+            </div>
         <?php } ?>
 
-        <?php 
+        <?php
         if (!empty($options)) { ?>
             <ul class="list-options <?php echo isset($horizontalAlignOptions) && $horizontalAlignOptions ? 'list-options--horizontal' : 'list-options--vertical"'; ?>">
                 <?php foreach ($options as $option) {

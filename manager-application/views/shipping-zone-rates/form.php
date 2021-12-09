@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="generalForm"></div>
 <?php
+HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
 $frm->setFormTagAttribute('onsubmit', 'setupRate(this); return(false);');
 $frm->developerTags['colClassPrefix'] = 'col-md-';

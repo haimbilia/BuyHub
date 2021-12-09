@@ -1,8 +1,8 @@
-$card:'card';
+$card: "card";
 .#{$card} {
-    $selfHead: '';
-    $selfBody: '';
-    $selfFoot: '';
+    $selfHead: "";
+    $selfBody: "";
+    $selfFoot: "";
     display: flex;
     flex-grow: 1;
     flex-direction: column;
@@ -11,7 +11,7 @@ $card:'card';
     border-radius: $radius-common;
     border: none;
     margin-bottom: 20px;
-    +.#{$card} {
+    + .#{$card} {
         //margin-top: 20px;
     }
     &-head {
@@ -42,7 +42,7 @@ $card:'card';
             line-height: 1.5;
             margin: 0;
             padding: 0;
-            >i {
+            > i {
                 margin-#{$end-direction}: 0.5rem;
             }
         }
@@ -64,10 +64,10 @@ $card:'card';
             align-items: center;
             align-content: flex-end;
         }
-        .btn-add~.actions {
+        .btn-add ~ .actions {
             margin-#{$start-direction}: 2rem;
         }
-        >.actions {
+        > .actions {
             li {
                 margin: 0;
                 a {
@@ -107,8 +107,8 @@ $card:'card';
             padding: 0;
             margin: 0;
         }
-        >.datatable {
-            >.datatable__table {
+        > .datatable {
+            > .datatable__table {
                 border-radius: 4px;
             }
         }
@@ -353,7 +353,16 @@ $card:'card';
             padding-#{$end-direction}: 0;
         }
     }
-    &#{&}-head-noborder {
+    &#{&}-flush {
+        #{$selfHead} {
+            border-bottom: 0;
+        }
+        #{$selfFoot} {
+            border-top: 0;
+        }
+    }
+
+    &#{&}-head-no-border {
         #{$selfHead} {
             border-bottom: 0;
         }
@@ -422,9 +431,9 @@ $card:'card';
     }
     &#{&}-solid-brand {
         // // background-color: $brand-color;
-        // color:  lighten($brand-color, 55%); 
+        // color:  lighten($brand-color, 55%);
         @include bg-brand();
-        // color:  lighten($brand-color, 55%); 
+        // color:  lighten($brand-color, 55%);
         @include bg-brand();
         #{$selfHead} {
             color: #ffffff;
@@ -686,10 +695,10 @@ $card:'card';
         }
     }
     &#{&}-collapsed {
-        >.form {
+        > .form {
             display: none;
         }
-        >#{$selfBody} {
+        > #{$selfBody} {
             display: none;
         }
         #{$selfHead} {
@@ -780,7 +789,7 @@ $card:'card';
             margin-bottom: 20px;
             #{$selfHead} {
                 //padding: 0 15px;
-                //min-height: 50px; 
+                //min-height: 50px;
                 &#{$selfHead}-sm {
                     min-height: 40px;
                 }
