@@ -4,7 +4,9 @@
         modalClass = 'fixed-right ' + modalClassParm;
         var dialogClass = 'modal-dialog-vertical ' + dialogClassParm;
         var bodyClass = 'pd-0 ' + bodyClass;
-        displayInPopup = popupView;
+
+        /* !! is used to convert variable type in to bool. */
+        displayInPopup = !!popupView;
         if (true == popupView) {
             modalClass = modalClassParm;
             dialogClass = 'modal-dialog-centered ' + dialogClassParm;
@@ -62,7 +64,10 @@
         },
         remove: function () {
             $("." + $.ykmodal.element + ', .modal-backdrop').remove();
-        }
+        },
+        isSideBarView: function () {
+            return !!$(".fixed-right." + $.ykmodal.element).length;
+        },
     });
 
     function init(modalClass, dialogClass) {

@@ -181,7 +181,7 @@ class BadgesController extends ListingBaseController
         $frm = $this->getForm($approvalType);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
 
@@ -191,9 +191,9 @@ class BadgesController extends ListingBaseController
         if (!$record->save()) {
             $msg = $record->getError();
             if (false !== strpos(strtolower($msg), 'duplicate')) {
-                $msg = Labels::getLabel('MSG_DUPLICATE_RECORD_NAME', $this->siteLangId);
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
             }
-            FatUtility::dieJsonError($msg);
+            LibHelper::exitWithError($msg, true);
         }
         $recordId = $record->getMainTableRecordId();
 
@@ -241,16 +241,16 @@ class BadgesController extends ListingBaseController
         $frm = new Form('frm');
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'badge_type', Badge::TYPE_BADGE);
-        $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->siteLangId), 'badge_condition_type', Badge::getTriggerCondTypeArr($this->siteLangId), '', [], '');
+        $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_condition_type', Badge::getTriggerCondTypeArr($this->siteLangId), '', [], '');
 
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_NAME', $this->siteLangId), 'badge_name');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'badge_name');
 
         $requireApprovalArr = Badge::getApprovalStatusArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $requireApprovalArr);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $requireApprovalArr);
         $fld->requirement->setRequired(($conditionType == Badge::COND_MANUAL));
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'badge_active', $activeInactiveArr, '', array(), '');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'badge_active', $activeInactiveArr, '', array(), '');
         $fld->requirement->setRequired(true);
 
         $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
@@ -271,7 +271,7 @@ class BadgesController extends ListingBaseController
         $frm->addHiddenField('', 'badge_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 
-        $frm->addRequiredField(Labels::getLabel('LBL_NAME', $langId), 'badge_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'badge_name');
 
         return $frm;
     }
@@ -343,16 +343,15 @@ class BadgesController extends ListingBaseController
         $this->objPrivilege->canEditBadges();
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
-        $badge_type = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         $afileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
         if (!$file_type) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         Badge::deleteImagesWithOutBadgeId();
@@ -365,12 +364,12 @@ class BadgesController extends ListingBaseController
             0,
             $_FILES['cropped_image']['name'],
             -1,
-            false,
+            true,
             $lang_id,
             $_FILES['cropped_image']['type'],
             $slide_screen
         )) {
-            FatUtility::dieJsonError($fileHandlerObj->getError());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('MSG_IMAGE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
@@ -385,12 +384,12 @@ class BadgesController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
         if (!$afileId) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $fileType = AttachedFile::FILETYPE_BADGE;
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile($fileType, $recordId, $afileId, 0, $langId, $slide_screen)) {
-            FatUtility::dieJsonError($fileHandlerObj->getError());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('MSG_IMAGE_DELETED_SUCCESSFULLY', $this->siteLangId));
@@ -405,11 +404,11 @@ class BadgesController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
 
         if (1 > $recordId || 0 > $status) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (!Badge::getAttributesById($recordId, 'badge_active')) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $this->changeStatus($recordId, $status);
@@ -424,7 +423,7 @@ class BadgesController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('badge_ids'));
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         if (empty($recordIdsArr) || -1 == $status) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -436,26 +435,6 @@ class BadgesController extends ListingBaseController
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function autoComplete(int $badgeType = 0)
-    {
-        $pagesize = 20;
-        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-
-        $srch = new BadgeSearch($this->siteLangId, -1, applicationConstants::ACTIVE);
-        $srch->setPageSize($pagesize);
-        if (!empty($keyword)) {
-            $srch->addCondition(Badge::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');
-        }
-
-        if (0 < $badgeType) {
-            $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
-        }
-
-        $srch->addMultipleFields([Badge::DB_TBL_PREFIX . 'id as id', Badge::DB_TBL_PREFIX . 'name as text']);
-        $badges = FatApp::getDb()->fetchAll($srch->getResultSet());
-        die(json_encode(['results' => $badges]));
     }
 
     public function deleteRecord()
@@ -481,7 +460,7 @@ class BadgesController extends ListingBaseController
         $this->objPrivilege->canEditBadges();
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('badge_ids'));
         if (empty($recordIdsArr)) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -523,7 +502,7 @@ class BadgesController extends ListingBaseController
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_IMAGE', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
-            Badge::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $this->siteLangId),
+            Badge::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_TRIGGER_TYPE', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),

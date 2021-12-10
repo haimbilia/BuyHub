@@ -895,6 +895,11 @@ class ProductsController extends ListingBaseController
             $srch->addCondition('product_seller_id', '=', $sellerId);
         }
 
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('product_id', 'NOT IN', $excludeRecords);
+        }
+
         $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as text'));
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
