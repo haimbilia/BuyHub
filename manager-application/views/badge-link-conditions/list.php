@@ -6,7 +6,7 @@ if (null != $fld) {
 
 $fld = $frmSearch->getField('blinkcond_condition_type');
 if (null != $fld) {
-    $fld->setFieldTagAttribute('id', 'conditionTypeJs');
+    $fld->setFieldTagAttribute('id', 'searchFormConditionTypeJs');
     $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_SELECT_CONDITION_TYPE', $siteLangId));
 }
 require_once (CONF_THEME_PATH . '_partial/listing/index.php');

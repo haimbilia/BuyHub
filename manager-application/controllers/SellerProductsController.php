@@ -772,6 +772,11 @@ class SellerProductsController extends ListingBaseController
             $srch->addCondition('selprod_user_id', '=', $post['selprod_user_id']);
         }
 
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('selprod_id', 'NOT IN', $excludeRecords);
+        }
+
         $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
         $srch->addCondition(Product::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
