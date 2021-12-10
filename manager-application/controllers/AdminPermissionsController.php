@@ -236,7 +236,7 @@ class AdminPermissionsController extends ListingBaseController
 
         $recordId = FatUtility::int($post['admin_id']);
 
-        if (2 > $recordId) {
+        if (2 > $recordId || $recordId == $this->admin_id) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $data = array(

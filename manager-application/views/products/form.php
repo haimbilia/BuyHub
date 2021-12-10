@@ -193,6 +193,7 @@ $frm->setFormTagAttribute('class', 'form');
                             echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
                             echo $frm->getFieldHtml('product_id');
+                            echo $frm->getFieldHtml('temp_product_id',6,['id' => 'temp_product_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit', 6, ['id' => 'product_warranty_unit']);
                             ?>
                         </div>
@@ -247,7 +248,7 @@ $frm->setFormTagAttribute('class', 'form');
                     <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Media
-                                <a href="javascript:void(0)" onclick="imagesForm()" class="link">Advance Media</a>
+                                <a href="javascript:void(0)" onclick="imageForm()" class="link">Advance Media</a>
                             </h3>
                             <span class="text-muted">Attach media files for the product </span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
@@ -611,6 +612,7 @@ $frm->setFormTagAttribute('class', 'form');
         var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';
         var tagifyObjs = {};
         var productOptions = <?php echo json_encode($productOptions); ?>;
+        var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
 
         $(function() {
 
@@ -644,10 +646,10 @@ $frm->setFormTagAttribute('class', 'form');
                     }]
                 }
 
-                select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'),abc,
+                select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'),optionDataCallback,
                     resetOptionValuesTag,
                     resetOptionValuesTag,
-                    processResultsCallback,
+                    '',
                     selectedOptionData
                 );
                 $(this).data("select2").$container.addClass("w-100");

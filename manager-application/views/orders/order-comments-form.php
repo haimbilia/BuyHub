@@ -30,7 +30,7 @@ if (null != $manualFld) {
         if (null != $courierFld) {
             $fld->htmlAfterField = '<a href="javascript:void(0)" onclick="courierFld()">' . Labels::getLabel(
                 'LBL_OR_SELECT_COURIER_?',
-                $adminLangId
+                $siteLangId
             ) . '</a>';
         }
     }
@@ -41,7 +41,7 @@ if (null != $manualFld) {
         $courierFld->setFieldTagAttribute('class', 'courierFldJs');
         $courierFld->htmlAfterField = '<a href="javascript:void(0)" onclick="trackingUrlFld()">' . Labels::getLabel(
             'LBL_OR_TRACK_THROUGH_URL_?',
-            $adminLangId
+            $siteLangId
         ) . '</a>';
     }
 }

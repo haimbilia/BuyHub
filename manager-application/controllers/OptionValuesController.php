@@ -67,14 +67,11 @@ class OptionValuesController extends ListingBaseController
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
-        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
+        
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
-                'href' => "javascript:void(0)",
                 'onclick' => 'optionValueForm(' . $optionId . ')',
-                'title' => $btnTitle,
-            ],
-            'label' => $btnTitle,
+            ]
         ];
         $actionItemsData['bulkActionFormHiddenFields'] = ['option_id' => $optionId];
 

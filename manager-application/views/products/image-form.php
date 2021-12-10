@@ -2,19 +2,20 @@
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
-// $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
+$frm->setFormTagAttribute('data-callbackfn', 'productImagesCallback');
+//$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
-// $fld = $frm->getField('brand_name');
-// $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','brand_id');
-// getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
 
-// $fld = $frm->getField('brand_id');
-// $fld->setFieldTagAttribute('id', "brand_id");
+$fld = $frm->getField('prod_image');
+$fld->addFieldTagAttribute('onChange', "loadImageCropper(this)");
+$fld->addFieldTagAttribute('accept', "image/*");
+$fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_BACKGROUND_IMAGE", $siteLangId));
 
-// $fld = $frm->getField('urlrewrite_custom');
-// $fld->setFieldTagAttribute('id', "urlrewrite_custom");
-// $fld->htmlAfterField = '<span class="form-text text-muted">' . UrlHelper::generateFullUrl('Brands', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '</span>';
-// $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
+$fld = $frm->getField('option_id');
+$fld->addFieldTagAttribute('id', "image_option_id");
+
+$displayFooterButtons = false;
+$includeTabs = false;
 
 $formTitle = Labels::getLabel('LBL_MEDIA_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

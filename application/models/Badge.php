@@ -88,12 +88,12 @@ class Badge extends MyAppModel
     }
 
     /**
-     * getConditionTypeArr
+     * getTriggerCondTypeArr
      *
      * @param  int $langId
      * @return array
      */
-    public static function getConditionTypeArr(int $langId): array
+    public static function getTriggerCondTypeArr(int $langId): array
     {
         $arr = CacheHelper::get('getBadgeConditionTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
@@ -396,5 +396,46 @@ class Badge extends MyAppModel
             $shopAutoBadges = array_merge($shopAutoBadges, FatApp::getDb()->fetchAll($srch->getResultSet()));
         }
         return $shopAutoBadges;
+    }
+
+    public static function getTriggerCondTypeHtml(int $langId, int $type): string
+    {
+        $arr = self::getTriggerCondTypeArr($langId);
+        $msg = $arr[$type];
+        switch ($type) {
+            case self::COND_MANUAL:
+                $status = 'info';
+                break;
+            case self::COND_AUTO:
+                $status = 'success';
+                break;
+            
+            default:
+                $status = 'warning';
+                break;
+        }
+        return '<span class="font-' . $status . '">' . $msg . '</span>';
+    }
+
+    public static function getApprovalTypeHtml(int $langId, int $status, int $conditionType): string
+    {
+        $arr = self::getApprovalStatusArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case self::APPROVAL_OPEN:
+                $status = HtmlHelper::INFO;
+                break;
+            case self::APPROVAL_REQUIRED:
+                $status = HtmlHelper::DANGER;
+                break;
+
+            default:
+                $status = HtmlHelper::WARNING;
+                break;
+        }
+        $notAllowed = (Badge::COND_AUTO == $conditionType);
+        $msg = $notAllowed ? Labels::getLabel('LBL_NOT_ALLOWED') : $msg;
+        $status = $notAllowed ? HtmlHelper::WARNING : $status;
+        return HtmlHelper::getStatusHtml($status, $msg);
     }
 }

@@ -3,8 +3,21 @@ $(document).ready(function () {
 });
 (function () {
     bindUserSelect2 = function (element) {
-        select2(element, fcom.makeUrl('Users', 'autoComplete'), { user_is_buyer: 1, joinOrder: 1, order_type: 1 }, '', function () {
+        select2(element, fcom.makeUrl('Users', 'autoComplete'), { user_is_seller: 1, joinOrder: 1, order_type: 1 }, '', function () {
             clearSearch();
         });
     }
+    
+    displayImageInFacebox = function(href) {
+        loadCropperSkeleton();
+        $("#modalBoxJs .modal-body").html(`<image width='100%' src='${href}' />`);
+        
+    }
+
+    $(document).on('click', '.close.ykmodalJs', function(){
+        if (true === $.ykmodal.isAdded()) {
+            $.ykmodal.show();
+        }
+    })
+
 })();

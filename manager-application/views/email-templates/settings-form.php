@@ -34,19 +34,19 @@ if (!empty($logoImage)) {
 $fld->htmlAfterField = $htmlAfterField;
 ?>
 <div id="editor_default_content" style="display:none;">
-    <?php $this->includeTemplate('_partial/emails/email-footer.php', array('langId' => $adminLangId , 'defaultContent' => true )); ?>
+    <?php $this->includeTemplate('_partial/emails/email-footer.php', array('langId' => $siteLangId , 'defaultContent' => true )); ?>
 </div>
 <div id="cropperBox-js"></div>
 <section class="section" id="mediaForm-js">
     <div class="sectionhead">
-        <h4><?php echo Labels::getLabel('LBL_Email_Template_Setup', $adminLangId); ?></h4>
+        <h4><?php echo Labels::getLabel('LBL_Email_Template_Setup', $siteLangId); ?></h4>
     </div>
     <div class="sectionbody space">
         <div class="tabs_nav_container responsive flat">
             <ul class="tabs_nav">
                 <li>
                     <a class="active" href="javascript:void(0);">
-                        <?php echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+                        <?php echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
                     </a>
                 </li>
             </ul>
@@ -57,7 +57,7 @@ $fld->htmlAfterField = $htmlAfterField;
                         if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) { ?>
                 <div class="row justify-content-end">
                     <div class="col-auto mb-4">
-                        <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $adminLangId); ?>" onclick="editLangForm(<?php echo $lang_id; ?>, 1)">
+                        <input class="btn btn-brand" type="button" value="<?php echo Labels::getLabel('LBL_AUTOFILL_LANGUAGE_DATA', $siteLangId); ?>" onclick="editLangForm(<?php echo $lang_id; ?>, 1)">
                     </div>
                 </div>
                 <?php } ?>

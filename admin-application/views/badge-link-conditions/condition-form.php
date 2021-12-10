@@ -31,8 +31,8 @@ require_once(CONF_THEME_PATH . '_partial/index-page-common.php'); ?>
     var TYPE_BADGE = <?php echo Badge::TYPE_BADGE; ?>;
     var TYPE_RIBBON = <?php echo Badge::TYPE_RIBBON; ?>;
 	
-    var REC_COND_AUTO = <?php echo BadgeLinkCondition::REC_COND_AUTO; ?>;
-	var REC_COND_MANUAL = <?php echo BadgeLinkCondition::REC_COND_MANUAL; ?>;
+    var REC_COND_AUTO = <?php echo Badge::COND_AUTO; ?>;
+	var REC_COND_MANUAL = <?php echo Badge::COND_MANUAL; ?>;
 
 	var RECORD_TYPE_PRODUCT = <?php echo BadgeLinkCondition::RECORD_TYPE_PRODUCT; ?>;
 	var RECORD_TYPE_SELLER_PRODUCT = <?php echo BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT; ?>;

@@ -54,7 +54,7 @@
             allowClear: true,
             placeholder: element.attr('placeholder'),
             ajax: {
-                url: fcom.makeUrl('SellerProducts', 'autoCompleteProducts'),
+                url: fcom.makeUrl('SellerProducts', 'autoComplete'),
                 dataType: 'json',
                 delay: 250,
                 method: 'post',
@@ -83,7 +83,7 @@
                 processResults: function (data, params) {
                     params.page = params.page || 1;
                     return {
-                        results: data.products,
+                        results: data.results,
                         pagination: {
                             more: params.page < data.pageCount
                         }
@@ -91,13 +91,7 @@
                 },
                 cache: true
             },
-            minimumInputLength: 0,
-            templateResult: function (result) {
-                return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
-            },
-            templateSelection: function (result) {
-                return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
-            }
+            minimumInputLength: 0
         });
         setTimeout(() => {
             element.siblings('.select2').find('.select2-search__field').attr('name', element.attr('name') + '_search');

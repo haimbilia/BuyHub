@@ -302,6 +302,7 @@ Enhancements :
    => Withdrawal Requests
    => Order Cancellation Requests 
    => Manage Alert text
+   => Manage Product Reviews
 
 Admin UI/UX Enhancements pages:
     => Login / Register, Forgot Password

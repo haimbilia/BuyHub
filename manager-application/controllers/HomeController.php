@@ -283,12 +283,32 @@ class HomeController extends ListingBaseController
         $srch->addOrder('order_date_added', 'DESC');
         $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
         $srch->setPageSize($limit);
-        $srch->addMultipleFields(array('order_id', 'order_date_added', 'order_payment_status', 'buyer.user_name as buyer_user_name',  'order_net_amount'));
+        $srch->addMultipleFields(array('order_id', 'order_number', 'order_date_added', 'order_payment_status', 'buyer.user_name as buyer_user_name', 'buyer.user_updated_on as buyer_updated_on', 'buyer_cred.credential_username as buyer_credential_username', 'buyer_cred.credential_email as buyer_credential_email', 'order_user_id',  'order_net_amount'));
         $rs = $srch->getResultSet();
         $ordersList = FatApp::getDb()->fetchAll($rs);
         $dashboardInfo['recentOrders'] = $ordersList;
         $dashboardInfo['orderPaymentStatusArr'] = Orders::getOrderPaymentStatusArr($this->siteLangId);
         $this->set('dashboardInfo', $dashboardInfo);
+        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
+        $this->_template->render(false, false);
+    }
+
+    public function topSellingProducts($limit = 5)
+    {
+        $srch = new OrderProductSearch($this->siteLangId, true);
+        $srch->joinPaymentMethod();        
+        $srch->joinSellerProducts();
+        $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
+        $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
+        $cnd->attachCondition('plugin_code', '=', 'payatstore');
+        $srch->setPageSize($limit);
+        $srch->addOrder('SUM(op_qty - op_refund_qty)', 'DESC');
+        $srch->addMultipleFields(array('op_selprod_title','order_id', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'op_selprod_sku','op_shop_name','op_selprod_id'));
+        $srch->addHaving('totSoldQty', '>', 0);
+        $rs = $srch->getResultSet();      
+        $productsList = FatApp::getDb()->fetchAll($rs);
+      
+        $this->set('productsList', $productsList);
         $this->_template->render(false, false);
     }
 
