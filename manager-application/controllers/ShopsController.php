@@ -507,6 +507,10 @@ class ShopsController extends ListingBaseController
             $srch->addCondition('shop_user_id', '=', $post['shop_user_id']);
         }
 
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('shop_id', 'NOT IN', $excludeRecords);
+        }
         $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         $srch->addMultipleFields(array('shop_id', 'IFNULL(shop_name,shop_identifier) as shop_name'));
 

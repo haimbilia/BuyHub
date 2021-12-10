@@ -247,7 +247,7 @@
                     $objPrivilege->canViewProductReviews(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)
             ) {
-                ?> 
+                ?>
                 <li class="menu-item dropdownJs">
                     <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-toggle="collapse" data-target="#NAV_ORDERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
                         <span class="menu-icon">
@@ -311,7 +311,7 @@
                                         </span>
                                     </a>
                                 </li>
-                            <?php } ?> 
+                            <?php } ?>
                             <?php if ($objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('OrderStatus'); ?>">
@@ -482,7 +482,8 @@
                     $objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
                 <li class="menu-item dropdownJs">
@@ -635,6 +636,20 @@
                                         </span>
                                         <span class="nav_text">
                                             <?php echo Labels::getLabel('NAV_PUSH_NOTIFICATIONS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Badges'); ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-badge">
+                                            </use>
+                                            </svg>
+                                        </span>
+                                        <span class="nav_text">
+                                            <?php echo Labels::getLabel('NAV_BADGES', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
@@ -1216,7 +1231,7 @@
                                         <svg class="svg" width="24" height="24">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
                                         </use>
-                                        </svg>
+                                        </svg> 
                                     </span>
                                     <span class="nav_text"><?php echo Labels::getLabel('NAV_SHIPPING_PACKAGES', $siteLangId); ?></span>
                                 </a>
@@ -1391,7 +1406,7 @@
     <div class="sidebar-foot">
         <ul class="menu">
             <li class="menu-item dropdownJs">
-                <button class="sidebar-dropdown-menu menu-section" onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')">
+                <button class="menu-section menuLinkJs" onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')" type="button">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-system-settings">

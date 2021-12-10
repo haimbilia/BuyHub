@@ -326,6 +326,20 @@ class BadgeLinkCondition extends MyAppModel
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
+    /**
+     * isUniqueRecord
+     *
+     * @param  int $badgeType
+     * @param  int $recordType
+     * @param  int $record_id
+     * @param  int $position
+     * @return void
+     */
+    public static function isUniqueRecord(int $badgeType, int $recordType, int $record_id, int $position = 0): bool
+    {
+        return true; /* Require Discussion. */
+    }
+
     public static function getRecordTypeHtml(int $langId, int $type): string
     {
         $arr = self::getRecordTypeArr($langId);
