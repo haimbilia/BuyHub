@@ -1422,4 +1422,9 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 ALTER TABLE `tbl_navigations` ADD UNIQUE(`nav_identifier`);
 
 ALTER TABLE tbl_attached_files_temp CHANGE afile_record_id afile_record_id BIGINT NOT NULL;
-ALTER TABLE tbl_attached_files_temp CHANGE afile_record_id afile_record_subid BIGINT NOT NULL;
+ALTER TABLE tbl_attached_files_temp CHANGE afile_record_subid afile_record_subid BIGINT NOT NULL;
+
+ALTER TABLE tbl_attached_files CHANGE afile_record_id afile_record_id BIGINT NOT NULL;
+ALTER TABLE tbl_attached_files CHANGE afile_record_subid afile_record_subid BIGINT NOT NULL;
+ALTER TABLE `tbl_attached_files_temp` ADD `afile_attribute_title` VARCHAR(250) NOT NULL AFTER `afile_name`, ADD `afile_attribute_alt` VARCHAR(250) NOT NULL AFTER `afile_attribute_title`, ADD `afile_aspect_ratio` INT NOT NULL AFTER `afile_attribute_alt`;
+ALTER TABLE `tbl_attached_files_temp` ADD `afile_updated_at` DATETIME NOT NULL AFTER `afile_display_order`;

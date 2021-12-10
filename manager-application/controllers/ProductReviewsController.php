@@ -191,7 +191,7 @@ class ProductReviewsController extends ListingBaseController
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if(1 > $recordId){
-            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
         $frm = $this->getForm($recordId);
@@ -263,17 +263,17 @@ class ProductReviewsController extends ListingBaseController
         $recordId = FatApp::getPostedData('spreview_id', FatUtility::VAR_INT, 0);
         $status = FatApp::getPostedData('spreview_status', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request);
         }
         $data = SelProdReview::getAttributesById($recordId, ['spreview_id', 'spreview_status', 'spreview_lang_id']);
         if (false == $data) {
-            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request);
         }
         $assignValues = array('spreview_status' => $status);
         $record = new SelProdReview($recordId);
         $record->assignValues($assignValues);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), false, false, true);
+            LibHelper::exitWithError($record->getError());
         }
         $emailNotificationObj = new EmailHandler();
         $emailNotificationObj->sendBuyerReviewStatusUpdatedNotification($recordId, $data['spreview_lang_id']);
