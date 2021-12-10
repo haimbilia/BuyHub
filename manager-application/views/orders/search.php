@@ -57,32 +57,6 @@ foreach ($arrListing as $sn => $row) {
                 $statusHtm = Orders::getPaymentStatusHtml($siteLangId, $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
                 break;
-            case 'order_payment_status':
-                $cls = 'label-info';
-                switch ($row[$key]) {
-                    case Orders::ORDER_PAYMENT_PENDING:
-                        $cls = 'label-info';
-                        break;
-                    case Orders::ORDER_PAYMENT_PAID:
-                        $cls = 'label-success';
-                        break;
-                    case Orders::ORDER_PAYMENT_CANCELLED:
-                        $cls = 'label-danger';
-                        break;
-                }
-                if (Orders::ORDER_PAYMENT_CANCELLED == $row["order_payment_status"]) {
-                    $value = Labels::getLabel('LBL_CANCELLED', $siteLangId);
-                } else {
-                    $value = Orders::getOrderPaymentStatusArr($siteLangId)[$row[$key]];
-                }
-
-                if (in_array(strtolower($row['plugin_code']), ['cashondelivery', 'payatstore'])) {
-                    $value .= ' (' . $row['plugin_name'] . ' )';
-                }
-
-                $td->appendElement('span', array('class' => 'label ' . $cls), $value);
-                break;
-
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,

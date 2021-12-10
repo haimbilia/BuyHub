@@ -312,6 +312,18 @@ class OptionsController extends ListingBaseController
             $cnd = $srch->addCondition('option_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('option_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
+
+        $disAllowOptions = FatApp::getPostedData('disAllowOptions');
+
+        if(is_array($disAllowOptions)){
+            $srch->addCondition('option_id', 'NOT IN', $disAllowOptions);
+        }  
+        
+        $doNotIncludeImageOption = FatApp::getPostedData('doNotIncludeImageOption',FatUtility::VAR_INT, 0);
+        if(0 < $doNotIncludeImageOption){
+            $srch->addCondition('option_is_separate_images', '=', applicationConstants::NO);
+        }
+
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 

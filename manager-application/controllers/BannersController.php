@@ -256,9 +256,13 @@ class BannersController extends ListingBaseController
                 LibHelper::exitWithError($updateLangDataobj->getError(), false, false, true);
             }
         }
-
+        
         $newTabLangId = 0;
-        $languages = Language::getAllNames();
+        if ($recordId ==  0) {
+            $recordId = $bannerObj->getMainTableRecordId();
+            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
+        }
+        $languages = (array)Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         foreach ($languages as $langId => $langName) {
             if (!Banner::getAttributesByLangId($langId, $recordId)) {
                 $newTabLangId = $langId;
@@ -270,6 +274,7 @@ class BannersController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('bannerLocationId', $bannerLocationId);
         $this->set('langId', $newTabLangId);
+        $this->set('formLayout', Language::getLayoutDirection($newTabLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -346,10 +351,10 @@ class BannersController extends ListingBaseController
         }
 
         $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!BannerLocation::getAttributesByLangId($langId, $recordId)) {
-                $newTabLangId = $langId;
+        $languages = (array)Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        foreach ($languages as $lang_id => $langName) {
+            if (!Banner::getAttributesByLangId($langId, $recordId)) {
+                $newTabLangId = $lang_id;
                 break;
             }
         }
@@ -357,7 +362,26 @@ class BannersController extends ListingBaseController
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    
+    private Function getMediaForm($bannerLocationId, $recordId)
+    {
+        $frm = new Form('frmBannerMedia');
+        $frm->addHiddenField('', 'banner_id', $recordId);
+        $frm->addHiddenField('', 'blocation_id', $bannerLocationId);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(), $this->siteLangId, array(), '');
+        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        $displayFor = ($bannerLocationId == BannerLocation::HOME_PAGE_MOBILE_BANNER) ? applicationConstants::SCREEN_MOBILE : '';
+        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'slide_screen', $screenArr, $displayFor, array(), '');
+        $frm->addHTML('', Labels::getLabel('FRM_SLIDE_IMAGE', $this->siteLangId), Labels::getLabel('FRM_SLIDE_IMAGE', $this->siteLangId) );
+        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BANNER);
+        $frm->addHiddenField('', 'min_width', 1350);
+        $frm->addHiddenField('', 'min_height', 405);
+        $frm->addHTML('', 'banner_image', '');
+        return $frm;
     }
 
     // Media functionality
@@ -387,8 +411,7 @@ class BannersController extends ListingBaseController
 
         $this->set('bannerWidth', $bannerWidth);
         $this->set('bannerHeight', $bannerHeight);
-
-        $this->set('imageFrm', $imageFrm);
+        $this->set('frm', $imageFrm);
         $this->set('languages', Language::getAllNames());
         $this->set('bannerTypeArr', $this->bannerTypeArr());
         $this->set('screenTypeArr', $this->getDisplayScreenName());
@@ -401,23 +424,120 @@ class BannersController extends ListingBaseController
         $this->_template->render(false, false);
     }
 
-    private Function getMediaForm($recordId, $bannerLocationId)
+
+    public function images()
     {
-        $frm = new Form('frmBannerMedia');
-        $frm->addHiddenField('', 'banner_id', $recordId);
-        $frm->addHiddenField('', 'blocation_id', $bannerLocationId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(), $this->siteLangId, array(), '');
-        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        $displayFor = ($bannerLocationId == BannerLocation::HOME_PAGE_MOBILE_BANNER) ? applicationConstants::SCREEN_MOBILE : '';
-        $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'banner_screen', $screenArr, $displayFor, array(), '');
-        $frm->addHTML('', Labels::getLabel('FRM_SLIDE_IMAGE', $this->siteLangId), Labels::getLabel('FRM_SLIDE_IMAGE', $this->siteLangId) );
-        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_HOME_PAGE_BANNER);
-        $frm->addHiddenField('', 'min_width', 1350);
-        $frm->addHiddenField('', 'min_height', 405);
-        $frm->addHTML('', 'banner_image', '');
-        return $frm;
+        $bannerLocationId = FatApp::getPostedData('bannerLocationId', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        $langId = 0 == $langId ?$this->siteLangId : $langId;
+        $screen = FatApp::getPostedData('screen', FatUtility::VAR_INT, 0);
+        $imageType = FatApp::getPostedData('imageType', FatUtility::VAR_STRING, 'THUMB');
+        $bannerLocationId = FatUtility::int($bannerLocationId);
+
+        if (1 > $bannerLocationId || 1 > $recordId) {
+            FatUtility::dieWithError($this->str_invalid_request);
+        }
+
+        $bannerDetail = Banner::getAttributesById($recordId);
+        if (!false == $bannerDetail && ($bannerDetail['banner_active'] != applicationConstants::ACTIVE)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_INACTIVE_RECORD', $this->adminLangId), false, false, true);
+        }
+
+        if (!false == $bannerDetail) {
+            $bannerImgArr = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $recordId, 0, $langId, false, $screen);
+            $this->set('image', $bannerImgArr);
+        }
+
+        $this->set('languages', Language::getAllNames());
+        $this->set('screenTypeArr', $this->getDisplayScreenName());
+        $this->set('bannerLocationId', $bannerLocationId);
+        $this->set('recordId', $recordId);
+        $this->set('banner_id', $recordId);
+        $this->checkEditPrivilege(true);
+        $this->_template->render(false, false);
     }
 
+    public function uploadMedia()
+    {
+        $this->checkEditPrivilege();
+        $fileType = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('banner_id', FatUtility::VAR_INT, 0);
+        $bannerLocationId = FatApp::getPostedData('blocation_id', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+        $slideScreen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
+        if (!$fileType || !$recordId || !$bannerLocationId) {
+            LibHelper::exitWithError($this->str_invalid_request,false, false, true);
+        }
+    
+        $file = $_FILES['cropped_image'];
+        if (!is_uploaded_file($file['tmp_name'])) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
+        }
+
+        $fileHandlerObj = new AttachedFile();
+        if (!$fileHandlerObj->saveImage($file['tmp_name'], $fileType, $recordId, 0, $file['name'], -1, true, $langId, $file['type'], $slideScreen)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $universalImage = true;
+            $langId = FatUtility::int($langId);
+        } else {
+            $universalImage = false;
+            $langId = array_key_first($languages);
+        }
+
+        $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $langId, $universalImage, $slideScreen);
+        $this->set('image', $cbgImage);
+        $this->set('imageFunction', 'Slide');
+        $this->set('file', $file['name']);
+        $this->set('banner_id', $recordId);
+        $this->set('recordId', $recordId);
+        $this->set('bannerLocationId', $bannerLocationId);
+        $this->set('file_type', $fileType);
+        $this->set('slide_screen', $slideScreen);
+        $this->set('lang_id', $langId);
+        $this->set('msg', $file['name'] . ' ' . Labels::getLabel('MSG_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+
+    public function removeMedia() 
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $afileId = FatApp::getPostedData('afileId', FatUtility::VAR_INT, 0);
+        $fileType = FatApp::getPostedData('fileType', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        $slideScreen = FatApp::getPostedData('slideScreen', FatUtility::VAR_INT, 0);
+        
+        if (0 == $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $fileHandlerObj = new AttachedFile($afileId);
+        if($langId == $this->siteLangId){
+            $fileHandlerObj->deleteFile($fileType, $recordId, 0, 0, 0, $slideScreen);
+        }
+        if (!$fileHandlerObj->deleteFile($fileType, $recordId, $afileId, 0, $langId, $slideScreen)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
+        }
+
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $universalImage = true;
+            $langId = FatUtility::int($langId);
+        } else {
+            $universalImage = false;
+            $langId = array_key_first($languages);
+        }
+        
+        $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $langId, $universalImage, $slideScreen);
+        $this->set('image', $cbgImage);
+        $this->set('imageFunction', 'Slide');
+        $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
     
     private function getBannerLocationById($recordId)
     {

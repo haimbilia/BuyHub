@@ -380,7 +380,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-        console.log($(frm).validate());
         if (!$(frm).validate()) {
             return;
         }
@@ -602,22 +601,15 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
         var frmName = formData.get("frmName");
-        var frm = document.forms[frmName];
+        var frm = document.forms[frmName];    
         var langId = 0;
         if ('undefined' != typeof frm.lang_id) {
             langId = frm.lang_id.value;
         }
-        var imageType = frm.file_type.value;
-        var callback = "";
-        if ("undefined" != typeof frm.dataset.callback) {
-            var callback = frm.dataset.callback;
-        }
-
         var slideScreen = 0;
         if ("undefined" != typeof frm.slide_screen) {
             slideScreen = frm.slide_screen.value;
         }
-
         var other_data = $('form[name="' + frmName + '"]').serializeArray();
         $.each(other_data, function (key, input) {
             formData.append(input.name, input.value);
@@ -641,20 +633,22 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     return;
                 }
                 $.ykmsg.success(ans.msg);
-                if (true === $.ykmodal.isAdded()) {
+                if (true === $.ykmodal.isAdded()) {                   
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
-                    if ("" != callback) {
-                        eval(callback);
+                    if ("undefined" != typeof frm.dataset.callback) {
+                        eval(frm.dataset.callback);                     
+                    }else if ("undefined" != typeof frm.dataset.callbackfn) {                     
+                        window[frm.dataset.callbackfn](ans); /* callback function */                    
                     } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length) {
                         $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();
                     } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length) {
                         $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").change();
                     } else {
-                        mediaForm(ans.recordId, imageType, langId, slideScreen);
+                        mediaForm(ans.recordId, frm.file_type.value, langId, slideScreen);
                     }
                 } else {
-                    mediaForm(ans.recordId, imageType, langId, slideScreen);
+                    mediaForm(ans.recordId, frm.file_type.value, langId, slideScreen);
                     reloadList();
                 }
                 fcom.removeLoader();

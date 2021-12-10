@@ -1,8 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $frm->setFormTagAttribute('class', 'form');
-
 ?>
-<main class="main mainJs">
+<main class="main mainJs" dir="<?php echo $formLayout; ?>">
     <div class="container">
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false);
@@ -124,7 +123,7 @@ $frm->setFormTagAttribute('class', 'form');
                         if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
                             $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
                             $langFld->htmlAfterField = '<div class="input-group-append">
-                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(0,1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
                                                                     </use>
@@ -141,7 +140,7 @@ $frm->setFormTagAttribute('class', 'form');
                                 ?>
                             </div>
                         </div>
-                    <?php }else{
+                    <?php } else {
                         echo $langFld->getHtml();
                     } ?>
 
@@ -159,7 +158,6 @@ $frm->setFormTagAttribute('class', 'form');
                             <?php
                             echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_seller_id', 6, ['id' => 'product_seller_id', 'placeholder' => Labels::getLabel('FRM_SELECT_USER', $langId)]);
-
                             echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
                             echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
                             echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrand()', 'class' => 'link']]);
@@ -168,7 +166,6 @@ $frm->setFormTagAttribute('class', 'form');
                             echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);
                             $fld = $frm->getField('product_warranty');
                             if (null !== $fld) {
-
                             ?>
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -196,13 +193,11 @@ $frm->setFormTagAttribute('class', 'form');
                             echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
                             echo $frm->getFieldHtml('product_id');
+                            echo $frm->getFieldHtml('temp_product_id',6,['id' => 'temp_product_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit', 6, ['id' => 'product_warranty_unit']);
-
-
                             ?>
                         </div>
                     </div>
-
                 </div>
                 <div class="card" id="variants-options">
                     <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
@@ -221,14 +216,13 @@ $frm->setFormTagAttribute('class', 'form');
                             </div>
                         </div>
                         <table class="table table-variants" id="variantsJs">
-                            <tbody>                      
-                                <?php 
+                            <tbody>
+                                <?php
                                 $optionCount = count($productOptions);
-                                
-                                for($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1 ); $i++ ){                                   
-                                     echo getVariantUiTr($langId,$i, ($productOptions[$i] ?? []));                                                                       
-                                } 
-                                ?> 
+                                for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
+                                    echo getVariantUiTr($langId, $i, ($productOptions[$i] ?? []));
+                                }
+                                ?>
                             </tbody>
                         </table>
                         <div class="separator separator-dashed my-4"></div>
@@ -237,26 +231,24 @@ $frm->setFormTagAttribute('class', 'form');
                                 <label class="label">This product has same EAN/UPC code for all variants</label>
                             </div>
                             <div class="col-auto">
-                                <?php 
-                                $fld = $frm->getField('upc_type');                               
+                                <?php
+                                $fld = $frm->getField('upc_type');
                                 HtmlHelper::configureSwitchForRadio($fld);
-                                $fld->addOptionListTagAttribute('class', 'list-radio');   
-                                $fld->addFieldTagAttribute('onchange', 'upcType()'); 
+                                $fld->addOptionListTagAttribute('class', 'list-radio');
+                                $fld->addFieldTagAttribute('onchange', 'upcType()');
                                 $fld->addFieldTagAttribute('class', 'upc_type');
                                 echo $fld->getHtml();
-                                ?>  
+                                ?>
                             </div>
                         </div>
-
                         <div id="variantsListJs"></div>
-                                             
                     </div>
                 </div>
                 <div class="card" id="media">
                     <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Media
-                                <a href="javascript:void(0)" onclick="imagesForm()" class="link">Advance Media</a>
+                                <a href="javascript:void(0)" onclick="imageForm()" class="link">Advance Media</a>
                             </h3>
                             <span class="text-muted">Attach media files for the product </span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
@@ -273,11 +265,9 @@ $frm->setFormTagAttribute('class', 'form');
                             </div>
                             <input class="dropzone-input" type="file">
                         </div>
-
                         <span class="form-text text-muted  pt-2"> File type must be a .jpg, .gif or .png
                             smaller than 2MB and at least
                             800x800 in 1:1 aspect ratio</span>
-
                         <div class="mt-5">
                             <h6 class="h6 mb-3">Uploaded media</h6>
                             <ul class="uploaded-stocks">
@@ -440,11 +430,7 @@ $frm->setFormTagAttribute('class', 'form');
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="label">
-
-                                            <?php
-
-
-                                            echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
                                         </label>
                                         <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
                                         <span class="form-text text-muted">Lorem ipsum dolor sit,
@@ -500,10 +486,10 @@ $frm->setFormTagAttribute('class', 'form');
                             <?php
                             echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6, ['id' => 'ps_from_country_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6, ['id' => 'ps_from_country_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6, ['id' => 'shipping_profile']);
                             ?>
                         </div>
@@ -518,9 +504,20 @@ $frm->setFormTagAttribute('class', 'form');
                             <div class="mt-3">
                                 <?php
                                 $fld = $frm->getField('product_active');
-                                HtmlHelper::configureSwitchForCheckbox($fld);
                                 if (null !=  $fld) {
-                                    echo $fld->getHtml();
+                                    HtmlHelper::configureSwitchForCheckbox($fld);
+                                    echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
+                                }
+                                $fld = $frm->getField('product_approved');
+                                if (null !=  $fld) {
+                                    HtmlHelper::configureSwitchForCheckbox($fld);
+                                    echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
+                                }
+
+                                $fld = $frm->getField('auto_update_other_langs_data');
+                                if (null !=  $fld) {
+                                    HtmlHelper::configureSwitchForCheckbox($fld);
+                                    echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
                                 }
                                 ?>
                             </div>
@@ -606,93 +603,110 @@ $frm->setFormTagAttribute('class', 'form');
         </div>
         </form>
     </div>
-</main>
-<?php echo $frm->getExternalJS(); ?>
-<script>
-    var canEditTags = <?php echo $canEditTags ? 1 : 0; ?>;
-    var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';
-    var tagifyObjs = {};
-    $(function() {     
+    <table class="hide" id="variantCloneJs">
+        <?php echo getVariantUiTr($langId, -1);  ?>
+    </table>
+    <?php echo $frm->getExternalJS(); ?>
+    <script>
+        var canEditTags = <?php echo $canEditTags ? 1 : 0; ?>;
+        var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';
+        var tagifyObjs = {};
+        var productOptions = <?php echo json_encode($productOptions); ?>;
+        var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
 
-        prodSpecifications();
-        tagifyProducts();
-        
-        let langId = getCurrentFrmLangId();
-        select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
-            brand_active: 1,
-            langId :langId
-        });
-        select2('ptc_prodcat_id', fcom.makeUrl('ProductCategories', 'autoComplete'),{langId});
-        select2('ptt_taxcat_id', fcom.makeUrl('TaxCategories', 'autoComplete'),{langId});
-        select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'),{langId});
+        $(function() {
 
-        $('#addProductfrm .optionsJs').each(function(index){            
-            select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'),{},
-            resetOptionValuesTag,
-            resetOptionValuesTag,
-            processResultsCallback);
-           $(this).data("select2").$container.addClass("w-100");
-        });
+            prodSpecifications();
+            tagifyProducts();
 
-        $('#addProductfrm .optionValuesJs').each(function(index){  
-            tagifyOptionValue("#"+$(this).attr('id')); 
-        });
-
-        getShippingProfileOptions(<?php echo $frm->getField('product_seller_id')->value; ?>);
-
-        <?php if ($isProductAddedByAdmin  && !$isProductAddedBySeller) { ?>
-            select2('product_seller_id', fcom.makeUrl('Users', 'autoComplete'), {
-                joinShop: 1,
-                user_is_supplier: 1,
-                langId
-            }, function(e) {
-                getShippingProfileOptions(e.params.args.data.id)
+            let langId = getCurrentFrmLangId();
+            select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
+                brand_active: 1,
+                langId: langId
             });
-        <?php } else { ?>
-            $('select[name=\'product_seller_id\']').attr('disabled', true);
-        <?php } ?>
+            select2('ptc_prodcat_id', fcom.makeUrl('ProductCategories', 'autoComplete'), {
+                langId
+            });
+            select2('ptt_taxcat_id', fcom.makeUrl('TaxCategories', 'autoComplete'), {
+                langId
+            });
+            select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'), {
+                langId
+            });
 
-        $('#addProductfrm').find('input,select').each(function() {
-            if ($(this).data('fatreq') == undefined) {
-                $(this).data('fatreq', {
-                    "required": false
+            $('#addProductfrm .optionsJs').each(function(index) {
+
+                var selectedOptionData = [];
+                if (index in productOptions) {
+                    selectedOptionData = [{
+                        selected: true,
+                        id: productOptions[0]['option_id'],
+                        text: productOptions[0]['option_name'],
+                        option_is_separate_images: productOptions[0]['option_is_separate_images'],
+                    }]
+                }
+
+                select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'),optionDataCallback,
+                    resetOptionValuesTag,
+                    resetOptionValuesTag,
+                    '',
+                    selectedOptionData
+                );
+                $(this).data("select2").$container.addClass("w-100");
+
+            });
+
+            $('#addProductfrm .optionValuesJs').each(function(index) {
+                tagifyOptionValue("#" + $(this).attr('id'));
+            });
+
+            getShippingProfileOptions(<?php echo $frm->getField('product_seller_id')->value; ?>);
+
+            <?php if ($isProductAddedByAdmin  && !$isSelProdCreatedBySeller) { ?>
+                select2('product_seller_id', fcom.makeUrl('Users', 'autoComplete'), {
+                    joinShop: 1,
+                    user_is_supplier: 1,
+                    langId
+                }, function(e) {
+                    getShippingProfileOptions(e.params.args.data.id)
                 });
-            }
-            if ($(this).attr('name') == undefined) {
-                $(this).attr('name', '');
-            }
+            <?php } else { ?>
+                $('select[name=\'product_seller_id\']').attr('disabled', true);
+            <?php } ?>
+
+            $('#addProductfrm').find('input,select').each(function() {
+                if ($(this).data('fatreq') == undefined) {
+                    $(this).data('fatreq', {
+                        "required": false
+                    });
+                }
+                if ($(this).attr('name') == undefined) {
+                    $(this).attr('name', '');
+                }
+            });
+            upcType();
         });
-        upcType();
-    });
-</script>
+    </script>
 
-<?php 
-function getVariantUiTr($langId,$i, $productOption = []){
-   
-    $deleteClass = $i == 0 ? 'hide': '';
-    $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
-    $confWebUrl = CONF_WEBROOT_URL;
-    
-    $optionId = '';
-    $optionText = '';
-    $opSelected='';
-    $tagData = [];
-    if(!empty($productOption)){        
-        $optionId = $productOption['option_id'];
-        $optionText = $productOption['option_name'];
-        $opSelected = 'selected';        
-        foreach ($productOption['optionValues'] as $key => $name) {
-            $tagData[] = ['id'=> $key,'value' =>htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ];           
+    <?php
+    function getVariantUiTr($langId, $i, $productOption = [])
+    {
+        $deleteClass = $i == 0 ? 'hide' : '';
+        $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
+        $confWebUrl = CONF_WEBROOT_URL;    
+  
+        $tagData = [];
+        if (!empty($productOption)) {   
+            foreach ($productOption['optionValues'] as $key => $name) {
+                $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
+            }
         }
-    }
+        $tagData = json_encode($tagData);
 
-    $tagData = json_encode($tagData);
-   
-    return <<<HTML
+        return <<<HTML
     <tr class="rowJs">
         <td width="30%">
-            <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel">   
-            <option value="$optionId" $opSelected >$optionText</option> 
+            <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel"> 
             </select>
         </td>
         <td width="50%">
@@ -720,10 +734,6 @@ function getVariantUiTr($langId,$i, $productOption = []){
         </td> 
     </tr>
     HTML;
-}
-
-?>
-
-<table class="hide" id="variantCloneJs">   
-<?php echo getVariantUiTr($langId,-1);  ?>
-</table>
+    }
+    ?>
+</main>

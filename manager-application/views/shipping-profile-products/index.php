@@ -1,9 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
+HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'setupProfileProduct(this); return(false);');
-$frm->developerTags['fld_default_col'] = 9;
+$frm->setFormTagAttribute('onsubmit', 'setupProfileProduct(this); return(false);'); 
 $proFld = $frm->getField("product_name");
+$proFld->developerTags['colWidthValues'] = [null, '9', null, null]; 
 $proFld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_Product...', $siteLangId));
 $btn = $frm->getField('btn_submit'); 
 $btn->developerTags['colWidthValues'] = [null, '3', null, null]; 
