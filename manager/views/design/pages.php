@@ -28,9 +28,14 @@
         include 'includes/header.php';
         ?>
         <div class="body" id="body">
+
             <div class="demo">
                 <div class="demo__toggle">
-                    <a href="javascript:0;" class="btn btn-danger d-toggle-js">Show Bar</a>
+                    <button type="button" class="btn btn-danger d-toggle-js">
+                        <svg class="svg">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-restore">
+                            </use>
+                        </svg>Restore</button>
                 </div>
                 <div class="demo__content">
                     <div class="demo__content-restore">

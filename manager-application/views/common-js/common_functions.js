@@ -184,7 +184,7 @@ select2 = function (
 
     ele.select2({
         closeOnSelect: ele.data("closeOnSelect") || true,
-        data : data,
+        data: data,
         dir: layoutDirection,
         allowClear: true,
         placeholder: ele.attr("placeholder") || "",
@@ -193,14 +193,14 @@ select2 = function (
             dataType: "json",
             delay: 250,
             method: "post",
-            data: function (params) { 
+            data: function (params) {
                 return $.extend(
                     {
                         keyword: params.term, // search term
                         page: params.page,
                         fIsAjax: 1,
                     },
-                    ("function" == typeof postdata ?  postdata(ele) : postdata )
+                    ("function" == typeof postdata ? postdata(ele) : postdata)
                 );
             },
             processResults: function (data, params) {
@@ -311,6 +311,7 @@ markNavActive = function (ele) {
 $(document).ready(function () {
     /* Active Sidebar Link. */
     var uri = window.location.pathname.replace(/^\/|\/$/g, "");
+
     $(".sidebarMenuJs .navLinkJs").each(function () {
         var href = $(this).attr("href").replace(/^\/|\/$/g, "");
         if (uri == href) {
