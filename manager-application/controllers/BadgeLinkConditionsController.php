@@ -78,7 +78,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
 
 
-        $this->_template->addJs(['js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'badge-link-conditions/page-js/list.js']);
+        $this->_template->addJs(['js/select2.js', 'badge-link-conditions/page-js/list.js']);
         $this->_template->addCss(['css/select2.min.css']);
 
         $this->_template->render();
