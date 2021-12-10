@@ -924,12 +924,12 @@ class UserPrivilege
         return $this->checkPermission($sellerId, static::SECTION_SELLER_PLUGIN, static::PRIVILEGE_WRITE, $returnResult);
     }
 
-    public function canViewBadges($sellerId = 0, $returnResult = false)
+    public function canViewBadgesAndRibbons($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_BADGES, static::PRIVILEGE_READ, $returnResult);
     }
 
-    public function canEditBadges($sellerId = 0, $returnResult = false)
+    public function canEditBadgesAndRibbons($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_BADGES, static::PRIVILEGE_WRITE, $returnResult);
     }
