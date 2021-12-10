@@ -246,7 +246,7 @@ class BadgesController extends AdminBaseController
             $approvalArr = Badge::getApprovalStatusArr($this->adminLangId);
             $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $approvalArr);
             
-            $conditionTypeArr = Badge::getConditionTypeArr($this->adminLangId);
+            $conditionTypeArr = Badge::getTriggerCondTypeArr($this->adminLangId);
             $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', $conditionTypeArr);
         }
 
@@ -269,7 +269,7 @@ class BadgesController extends AdminBaseController
             $frm->addCheckBox(Labels::getLabel('LBL_DISPLAY_INSIDE', $this->adminLangId), 'badge_display_inside', 1, [], false, 0 );
             $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->adminLangId), 'badge_color', '', ['class' => 'jscolor']);
         } else {
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', Badge::getConditionTypeArr($this->adminLangId), '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', Badge::getTriggerCondTypeArr($this->adminLangId), '', [], '');
         }
 
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);

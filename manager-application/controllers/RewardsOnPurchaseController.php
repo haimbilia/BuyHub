@@ -18,15 +18,11 @@ class RewardsOnPurchaseController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
-                'href' => "javascript:void(0)",
                 'onclick' => "addNew(true)",
-                'title' => $btnTitle,
-            ],
-            'label' => $btnTitle,
+            ]
         ];
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['performBulkAction'] = true;

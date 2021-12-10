@@ -34,15 +34,11 @@ class BlogPostsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
-        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);        
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
-                'href' => "javascript:void(0)",
                 'onclick' => 'addNew(false, "modal-dialog-vertical-md")',
-                'title' => $btnTitle,
             ],
-            'label' => $btnTitle,
         ];
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';

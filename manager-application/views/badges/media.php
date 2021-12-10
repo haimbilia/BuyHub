@@ -4,12 +4,12 @@ HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('data-onclear', 'mediaForm(' . $recordId . ')');
 $frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
 
-$fld = $frm->getField('coupon_image');
+$fld = $frm->getField('badge_icon');
 $fld->value = HtmlHelper::getfileInputHtml(
     [
         'onChange' => 'loadImageCropper(this)',
         'accept' => 'image/*',
-        'data-name' => Labels::getLabel("FRM_DISCOUNT_COUPON_IMAGE", $siteLangId),
+        'data-name' => Labels::getLabel("FRM_BADGE_ICON", $siteLangId),
         'data-frm'=> $frm->getFormTagAttribute('name')
     ],
     $siteLangId,

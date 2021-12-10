@@ -1,16 +1,19 @@
 <?php
 
-class ShippingProfileController extends ListingBaseController {
+class ShippingProfileController extends ListingBaseController
+{
 
     protected $modelClass = 'ShippingProfile';
     protected $pageKey = 'MANAGE_SHIPPING_PROFILE';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewShippingManagement();
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
@@ -19,10 +22,10 @@ class ShippingProfileController extends ListingBaseController {
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
-            'newRecordBtnAttrs' => ['attr' => [
+            'newRecordBtnAttrs' => [
+                'attr' => [
                     'href' => UrlHelper::generateUrl('shippingProfile', 'form'),
                     'onclick' => '',
-                    'title' => Labels::getLabel('LBL_ADD_NEW', $this->siteLangId)
                 ]
             ]
         ]);
@@ -34,7 +37,8 @@ class ShippingProfileController extends ListingBaseController {
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'shipping-profile/search.php', true),
@@ -43,7 +47,8 @@ class ShippingProfileController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    private function getListingData()
+    {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -97,7 +102,8 @@ class ShippingProfileController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
     }
 
-    public function form($profileId = 0) {
+    public function form($profileId = 0)
+    {
         $this->objPrivilege->canEditShippingManagement();
         $profileId = FatUtility::int($profileId);
         $frm = $this->getForm($profileId);
@@ -142,7 +148,8 @@ class ShippingProfileController extends ListingBaseController {
         $this->_template->render();
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditShippingManagement();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -179,12 +186,13 @@ class ShippingProfileController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function deleteRecord() {
+    public function deleteRecord()
+    {
         $this->objPrivilege->canEditShippingManagement();
 
         $shipprofileId = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($shipprofileId < 1) {
-            LibHelper::exitWithError($this->str_invalid_request_id,true);   
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $shippingProfile = ShippingProfile::getAttributesById($shipprofileId);
@@ -236,7 +244,8 @@ class ShippingProfileController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($profileId = 0) {
+    private function getForm($profileId = 0)
+    {
         $profileId = FatUtility::int($profileId);
         $frm = new Form('frmShippingProfile');
         $frm->addHiddenField('', 'shipprofile_id', $profileId);
@@ -256,7 +265,8 @@ class ShippingProfileController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getSearchForm($fields = []) {
+    protected function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
@@ -268,7 +278,8 @@ class ShippingProfileController extends ListingBaseController {
         return $frm;
     }
 
-    protected function getFormColumns(): array {
+    protected function getFormColumns(): array
+    {
         $shippingProfileCols = CacheHelper::get('shippingProfileTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shippingProfileCols) {
             return json_decode($shippingProfileCols);
@@ -284,7 +295,8 @@ class ShippingProfileController extends ListingBaseController {
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             'listSerial',
             'shipprofile_name',
@@ -294,8 +306,8 @@ class ShippingProfileController extends ListingBaseController {
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array {
+    protected function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, ['shippack_units', 'rates'], Common::excludeKeysForSort());
     }
-
 }

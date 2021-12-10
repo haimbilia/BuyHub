@@ -33,7 +33,7 @@ if (Badge::COND_AUTO == $badgeConditionType) {
 
 $conditionTypeArr = BadgeLinkCondition::getConditionTypesArr($siteLangId);
 $recordTypeArr = BadgeLinkCondition::getRecordTypeArr($siteLangId);
-$recordConditionArr = BadgeLinkCondition::getRecordConditionArr($siteLangId);
+$recordConditionArr = Badge::getTriggerCondTypeArr($siteLangId);
 $nonPercElements =  [
     BadgeLinkCondition::COND_TYPE_COMPLETED_ORDERS
 ];

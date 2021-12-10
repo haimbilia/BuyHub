@@ -13,7 +13,6 @@ class AdminPermissions extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL);
-        return $srch;
+        return new SearchBase(static::DB_TBL);
     }
 }

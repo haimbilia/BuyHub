@@ -52,14 +52,10 @@ class SellerPackagePlansController extends ListingBaseController
         $actionItemsData['statusButtons'] = true;
         $actionItemsData['performBulkAction'] = true;
 
-        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
-                'href' => "javascript:void(0)",
                 'onclick' => 'addNewPlan(' . $spackageId . ')',
-                'title' => $btnTitle,
-            ],
-            'label' => $btnTitle,
+            ]
         ];
 
         $this->set('pageData', $pageData);

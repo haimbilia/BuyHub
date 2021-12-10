@@ -1,11 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$listingLabel = Labels::getLabel('LBL_RECORDS', $adminLangId);
+$listingLabel = Labels::getLabel('LBL_RECORDS', $siteLangId);
 
-$headingLabel = $badgeName . ' ' . Labels::getLabel('LBL_CONDITION', $adminLangId);
-$listingLabel = $badgeName . ' ' . Labels::getLabel('LBL_LINKED_RECORDS', $adminLangId);
+$headingLabel = $badgeName . ' ' . Labels::getLabel('LBL_CONDITION', $siteLangId);
+$listingLabel = $badgeName . ' ' . Labels::getLabel('LBL_LINKED_RECORDS', $siteLangId);
 
 $data = [
-    'adminLangId' => $adminLangId,
+    'adminLangId' => $siteLangId,
     'deleteButton' => false,
     'statusButtons' => false,
 ];

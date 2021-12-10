@@ -55,13 +55,14 @@ class ProfileController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        unset($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_name']);
-        $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_name'] = $post['admin_name'];
-
+                
         $this->_adminProfileObj->assignValues($post);
         if (!$this->_adminProfileObj->save()) {
             LibHelper::exitWithError($this->_adminProfileObj->getError(), true);
         }
+
+        unset($_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_name']);
+        $_SESSION[AdminAuthentication::SESSION_ELEMENT_NAME]['admin_name'] = $post['admin_name'];
 
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
@@ -70,7 +71,6 @@ class ProfileController extends ListingBaseController
     private function getProfileInfoForm()
     {
         $frm = new Form('frmProfileInfo');
-        $frm->addHiddenField('', 'admin_id', $this->admin_id);
         $frm->addFileUpload(Labels::getLabel('FRM_PROFILE_PICTURE', $this->siteLangId), 'user_profile_image');
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'admin_username');
         $fld->setUnique('tbl_admin', 'admin_username', 'admin_id', 'admin_id', 'admin_id');
@@ -181,7 +181,7 @@ class ProfileController extends ListingBaseController
         }
 
         /* Restrict to change password for admin on demo URL. */
-        if (CommonHelper::demoUrl() && 1 == $this->_adminId) {
+        if (CommonHelper::demoUrl() && 1 > $this->_adminId) {
             LibHelper::exitWithError(Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_CHANGE_PASSWORD_FOR_DEMO', $this->siteLangId), true);
         }
 

@@ -178,7 +178,7 @@ select2 = function (
 ) {
     let ele = $("#" + elmId);
     ele.select2({
-        closeOnSelect: true,
+        closeOnSelect: ele.data("closeOnSelect") || true,
         dir: layoutDirection,
         allowClear: true,
         placeholder: ele.attr("placeholder") || "",
@@ -197,11 +197,11 @@ select2 = function (
                     postdata
                 );
             },
-            processResults: function (data, params) {            
+            processResults: function (data, params) {
                 params.page = params.page || 1;
-                data.pageCount = data.pageCount || 1; 
+                data.pageCount = data.pageCount || 1;
                 if ("function" == typeof processResultsCallback) {
-                    return processResultsCallback(data, params,ele);
+                    return processResultsCallback(data, params, ele);
                 }
 
                 return {
@@ -243,7 +243,7 @@ select2 = function (
 redirectUser = function (id) {
     redirectfunc(fcom.makeUrl('Users'), { user_id: id }, 0, true);
 };
-    
+
 redirectToShop = function (id) {
     redirectfunc(fcom.makeUrl('Shops'), { shop_id: id }, 0, true);
 };
@@ -304,7 +304,7 @@ $(document).ready(function () {
         } else {
             var urlParts = uri.split('/');
             var hrefParts = href.split('/');
-            if ("undefined" != typeof(urlParts[1]) && "undefined" != typeof(hrefParts[1]) && urlParts[1] == hrefParts[1]) {
+            if ("undefined" != typeof (urlParts[1]) && "undefined" != typeof (hrefParts[1]) && urlParts[1] == hrefParts[1]) {
                 markNavActive($(this));
             }
         }

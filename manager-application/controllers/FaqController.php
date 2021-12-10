@@ -85,17 +85,13 @@ class FaqController extends ListingBaseController
         $this->getListingData();
         
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
-        $btnLabel = Labels::getLabel('LBL_NEW', $this->siteLangId);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = false;
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
-                'href' => 'javascript:void(0);',
                 'onclick' => 'addNewFaq('.$faqCatId.')',
-                'title' => $btnLabel,
-            ],
-            'label' => $btnLabel
+            ]
         ];
         $this->set('actionItemsData', $actionItemsData);
         $this->_template->addJs('faq/page-js/list.js');
