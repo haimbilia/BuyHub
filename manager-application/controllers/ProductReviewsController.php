@@ -118,7 +118,7 @@ class ProductReviewsController extends ListingBaseController
        
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC));
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $searchForm = $this->getSearchForm(false, $fields);
+        $searchForm = $this->getSearchForm($fields);
         $post = $searchForm->getFormDataFromArray($data,['reviewed_for_id']);
 
         $srch = new SelProdReviewSearch($this->siteLangId);
