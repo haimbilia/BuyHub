@@ -248,7 +248,7 @@ $frm->setFormTagAttribute('class', 'form');
                     <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Media
-                                <a href="javascript:void(0)" onclick="imageForm()" class="link">Advance Media</a>
+                                <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
                             </h3>
                             <span class="text-muted">Attach media files for the product </span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
@@ -263,11 +263,12 @@ $frm->setFormTagAttribute('class', 'form');
                                     <h3 class="dropzone-msg-title">click here to upload</h3>
                                 </div>
                             </div>
-                            <input class="dropzone-input" type="file">
+                            <input class="dropzone-input" type="file" onchange="">
                         </div>
                         <span class="form-text text-muted  pt-2"> File type must be a .jpg, .gif or .png
                             smaller than 2MB and at least
                             800x800 in 1:1 aspect ratio</span>
+                            <button onclick="$('#hiddenMediaFrmFileJs').click();">upload</button>
                         <div class="mt-5">
                             <h6 class="h6 mb-3">Uploaded media</h6>
                             <ul class="uploaded-stocks">
@@ -606,7 +607,18 @@ $frm->setFormTagAttribute('class', 'form');
     <table class="hide" id="variantCloneJs">
         <?php echo getVariantUiTr($langId, -1);  ?>
     </table>
-    <?php echo $frm->getExternalJS(); ?>
+    <?php echo $frm->getExternalJS();   
+        $imgFrm->setFormTagAttribute('class', 'hide');
+        $imgFrm->setFormTagAttribute('name', 'hiddenMediaFrm'); 
+        $imgFrm->setFormTagAttribute('id', 'hiddenMediaFrmJs');        
+        $fld = $imgFrm->getField('prod_image');
+        $fld->addFieldTagAttribute('onChange', "loadImageCropper(this)");
+        $fld->addFieldTagAttribute('id', "hiddenMediaFrmFileJs");
+        $fld->addFieldTagAttribute('accept', "image/*");
+        $fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_BACKGROUND_IMAGE", $siteLangId));
+        echo $imgFrm->getFormHtml(); 
+
+    ?>
     <script>
         var canEditTags = <?php echo $canEditTags ? 1 : 0; ?>;
         var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';

@@ -142,7 +142,7 @@ class Labels extends MyAppModel
         if ($cacheAvailable) {
             $cacheKey = static::getAPCUcacheKey($key, $langId);
             if (apcu_exists($cacheKey)) {
-                return strip_tags(trim(apcu_fetch($cacheKey)));
+                return nl2br(strip_tags(trim(apcu_fetch($cacheKey))));
             }
         }
 
@@ -155,7 +155,7 @@ class Labels extends MyAppModel
 
             $arr = explode(' ', str_replace('_', ' ', strtolower($keyOriginal)));
             array_shift($arr);
-            return $langArray[$key][$langId] = strip_tags(ucfirst(implode(' ', $arr)));
+            return $langArray[$key][$langId] = nl2br(strip_tags(ucfirst(implode(' ', $arr))));
         }
 
 
@@ -208,12 +208,12 @@ class Labels extends MyAppModel
 
         if ($cacheAvailable) {
             apcu_store($cacheKey, $str);
-            return strip_tags($str);
+            return nl2br(strip_tags($str));
         }
 
         global $langArray;
         $langArray[$key][$langId] = $str;
-        return strip_tags($str);
+        return nl2br(strip_tags($str));
     }
 
     public static function readDataFromFile($langId, $key, $type = Labels::TYPE_WEB, $returnVal = true)

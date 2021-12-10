@@ -14,8 +14,20 @@ $fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_BACKGROUND_IMAGE",
 $fld = $frm->getField('option_id');
 $fld->addFieldTagAttribute('id', "image_option_id");
 
+$fld = $frm->getField('file_type');
+$fld->addFieldTagAttribute('id', "image_file_type");
+
+$fld = $frm->getField('lang_id');
+$fld->addFieldTagAttribute('id', "image_lang_id");
+
+
+$fld = $frm->getField('product_id');
+$fld->addFieldTagAttribute('id', "image_product_id");
+
+$fld = $frm->getField('images');
+$fld->value= '<div class="upload__files"><ul class="upload__list" id="productImagesJs"></ul></div>';
+
 $displayFooterButtons = false;
 $includeTabs = false;
-
 $formTitle = Labels::getLabel('LBL_MEDIA_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

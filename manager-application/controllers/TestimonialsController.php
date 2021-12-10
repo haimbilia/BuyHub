@@ -196,11 +196,11 @@ class TestimonialsController extends ListingBaseController
         unset($post['testimonial_title'], $post['testimonial_text'] );
         $record->assignValues($post);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), false, false, true);
+            LibHelper::exitWithError($record->getError());
         }
 
         if (!$record->updateLangData($this->siteLangId, $LangdataArray)) {
-            LibHelper::exitWithError($record->getError(), false, false, true);
+            LibHelper::exitWithError($record->getError());
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
@@ -310,7 +310,7 @@ class TestimonialsController extends ListingBaseController
 
 
         if ($recordId == 0 || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id);
         }
 
         $frm = $this->getLangForm($recordId, $lang_id);
@@ -451,12 +451,12 @@ class TestimonialsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile($fileType, $recordId, $aFileId, 0, -1)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), false, false, true);
+            LibHelper::exitWithError($fileHandlerObj->getError());
         }
         $this->set('msg', Labels::getLabel('MSG_Deleted_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');

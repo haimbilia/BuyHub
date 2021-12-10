@@ -73,7 +73,7 @@ class BannerLocationController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
-        $searchForm = $this->getSearchForm(false, $fields);
+        $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 :  FatUtility::int($data['page']);
         $post = $searchForm->getFormDataFromArray($data);
         $srch = BannerLocation::getSearchObject($this->siteLangId, false);
@@ -147,7 +147,7 @@ class BannerLocationController extends ListingBaseController
         $data = FatApp::getDb()->fetch($srch->getResultSet());
         
         if (empty($data)) {
-            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request);
         }
         $frm->fill($data);
 
@@ -166,11 +166,11 @@ class BannerLocationController extends ListingBaseController
         $recordId = $data['blocation_id'];
         $frm = $this->getForm($recordId);
         if (false === $data) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), false, false, true);
+            LibHelper::exitWithError(current($frm->getValidationErrors()));
         }
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request);
         }
         $data = [
             'blocation_identifier' => $post['blocation_name'],
@@ -181,7 +181,7 @@ class BannerLocationController extends ListingBaseController
 
         $bannerObj = new Banner();
         if (!$bannerObj->updateLocationData($data)) {
-            LibHelper::exitWithError($bannerObj->getError(), false, false, true);
+            LibHelper::exitWithError($bannerObj->getError());
         }
 
         $langId = $this->siteLangId;
@@ -193,14 +193,14 @@ class BannerLocationController extends ListingBaseController
 
         $bannerObj = new BannerLocation($recordId);
         if (!$bannerObj->updateLangData($this->siteLangId, $langData)) {
-            LibHelper::exitWithError($bannerObj->getError(), false, false, true);
+            LibHelper::exitWithError($bannerObj->getError());
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(BannerLocation::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), false, false, true);
+                LibHelper::exitWithError($updateLangDataobj->getError());
             }
         }
 
@@ -226,7 +226,7 @@ class BannerLocationController extends ListingBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId || $langId == 0) {
-            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
         $langFrm = $this->getLangForm($recordId, $langId);
@@ -235,7 +235,7 @@ class BannerLocationController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(BannerLocation::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), false, false, true);
+                LibHelper::exitWithError($updateLangDataobj->getError());
             }
             $langData = current($translatedData);
         } else {
@@ -272,7 +272,7 @@ class BannerLocationController extends ListingBaseController
         $langId = $post['lang_id'];
 
         if ($langId == 0) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id);
         }
 
         $frm = $this->getLangForm($recordId, $langId);
@@ -285,7 +285,7 @@ class BannerLocationController extends ListingBaseController
 
         $bannerObj = new BannerLocation($recordId);
         if (!$bannerObj->updateLangData($langId, $data)) {
-            LibHelper::exitWithError($bannerObj->getError(), false, false, true);
+            LibHelper::exitWithError($bannerObj->getError());
         }
 
         $newTabLangId = 0;

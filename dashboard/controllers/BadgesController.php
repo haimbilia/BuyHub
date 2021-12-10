@@ -122,7 +122,7 @@ class BadgesController extends SellerBaseController
 
     public function deleteSelected()
     {
-        $this->objPrivilege->canEditBadges();
+        $this->objPrivilege->canEditBadgesAndRibbons();
         $badgeIdsArr = FatUtility::int(FatApp::getPostedData('badgeIds'));
         if (empty($badgeIdsArr)) {
             FatUtility::dieJsonError($this->str_invalid_request);

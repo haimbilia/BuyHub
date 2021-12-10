@@ -180,7 +180,7 @@ class TagsController extends ListingBaseController
         $searchForm = $this->getSearchFrm($fields, $langId);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
-        $srch = new ProductSearch($langId, null, null, false, false, true);        /*
+        $srch = new ProductSearch($langId, null, null);        /*
         $srch->addDirectCondition(
                 '((CASE
                     WHEN product_seller_id = 0 THEN product_active = 1

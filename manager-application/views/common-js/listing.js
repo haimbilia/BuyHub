@@ -293,13 +293,13 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
         fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
         data = "recordId=" + recordId + "&langId=" + langId;
         fcom.ajax(
             fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
             data,
             function (t) {
-                $.ykmodal(t);
+                $.ykmodal(t, !$.ykmodal.isSideBarView());
                 fcom.removeLoader();
             }
         );
@@ -351,7 +351,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
         if (!$(frm).validate()) { return; }
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
@@ -383,7 +383,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (!$(frm).validate()) {
             return;
         }
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
         fcom.ajax(fcom.makeUrl(controllerName, "langSetup"), data, function (res) {
@@ -512,7 +512,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
 
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
         fcom.ajax(
             fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]),
             "",
@@ -520,7 +520,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 fcom.removeLoader();
                 loadImages(recordId, "logo", slide_screen, langId);
                 loadImages(recordId, "image", slide_screen, langId);
-                $.ykmodal(t);
+                $.ykmodal(t, !$.ykmodal.isSideBarView());
             }
         );
     };
@@ -649,8 +649,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     }
                 } else {
                     mediaForm(ans.recordId, frm.file_type.value, langId, slideScreen);
-                    reloadList();
                 }
+                reloadList();
                 fcom.removeLoader();
             },
             error: function (xhr, ajaxOptions, thrownError) {

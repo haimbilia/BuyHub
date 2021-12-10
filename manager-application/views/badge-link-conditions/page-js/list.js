@@ -1,23 +1,61 @@
 $(document).ready(function () {
     if (0 < $('#searchFromSellerJs').length) {
-        bindUserSelect2("searchFromSellerJs", { user_is_supplier: 1, joinShop: 1, credential_active: 1, credential_verified: 1 });
+        bindSearchUserSelect2("searchFromSellerJs", { user_is_supplier: 1, joinShop: 1, credential_active: 1, credential_verified: 1 });
     }
 
-    if (0 < $('#conditionTypeJs').length) {
-        $('#conditionTypeJs').select2({
+    if (0 < $('#searchFormConditionTypeJs').length) {
+        $('#searchFormConditionTypeJs').select2({
             allowClear: true,
-            placeholder: $('#conditionTypeJs').attr("placeholder")
+            placeholder: $('#searchFormConditionTypeJs').attr("placeholder")
         }).on("select2:unselecting", function (e) {
             clearSearch();
         });
     }
 });
 
+$(document).on("change", "#recordTypeJs", function () {
+    recordType = $(this).val();
+    setRecordField();
+});
+
+$(document).on('change', '#conditionTypeJs', function () {
+    if ("" == $(this).val()) {
+        $(this).val(COND_TYPE_AVG_RATING_SHOP).trigger('change');
+        return;
+    }
+
+    var ratePercElements = [COND_TYPE_RETURN_ACCEPTANCE, COND_TYPE_ORDER_CANCELLED];
+
+    var toSelector = $('#conditionToJs');
+    $('#conditionToSectionJs').show();
+
+    toSelector.attr('data-fatreq', JSON.stringify({ required: true }));
+    if (1 > $('#conditionToSectionJs label .spn_must_field').length) {
+        $('#conditionToSectionJs label').append('<span class="spn_must_field">*</span>');
+    }
+
+    var htm = '<label class="label">' + langLbl.from + '<span class="spn_must_field">*</span></label>';
+    $('#conditionFromSectionJs label').replaceWith(htm);
+
+    $('#conditionFromSectionJs').removeClass("col-md-12");
+
+    if (-1 < jQuery.inArray(parseInt($(this).val()), ratePercElements)) {
+        $('#conditionFromSectionJs').addClass("col-md-12");
+        $('#conditionToSectionJs').hide();
+        toSelector.attr('data-fatreq', JSON.stringify({ required: false }));
+        var htm = '<label class="label">' + langLbl.rate + '<span class="spn_must_field">*</span></label>';
+        $('#conditionFromSectionJs label').replaceWith(htm);
+    }
+});
+
+
 (function () {
-    editConditionRecord = function (badgeId, recordId = 0, displayInPopup = false) {
+    editConditionRecord = function (badgeId, recordId = 0, displayInPopup = 0) {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
-
+        
+        /* !! is used to convert variable type in to bool. */
+        var displayInPopup = !!displayInPopup;
         $.ykmodal(fcom.getLoader(), displayInPopup);
         var data = (0 < recordId) ? ("recordId=" + recordId) : '';
 
@@ -27,24 +65,66 @@ $(document).ready(function () {
         });
     };
 
+    bindSearchUserSelect2 = function (element, postedData) {
+        select2(element, fcom.makeUrl('Users', 'autoComplete'), postedData, '', clearSearch);
+    }
+
     bindUserSelect2 = function (element, postedData) {
         select2(element, fcom.makeUrl('Users', 'autoComplete'), postedData, function (resp) {
             sellerId = resp.params.args.data.id
             recordType = $('#recordTypeJs').val();
-            bindLinkToSelect2();
-        }, clearSearch);
-    };
-    
-    bindLinkToSelect2 = function (e) {
-        select2('recordIdJs', getRecordTypeURL(), {}, '', function () {});
+            setRecordField();
+        }, clearSellerId);
     };
 
+    clearSellerId = function () {
+        sellerId = 0;
+        setRecordField();
+    }
+
+    setRecordField = function () {
+        $('#recordIdJs').val(null).trigger('change');
+        if (RECORD_TYPE_SHOP == recordType) {
+            $("#recordIdJs").prop('disabled', true);
+            $("#recordIdSectionJs").hide();
+        } else {
+            bindRecordsSelect2();
+        }
+    }
+
+    bindRecordsSelect2 = function (e) {
+        $("#recordIdJs").removeAttr('disabled');
+        $("#recordIdSectionJs").fadeIn();
+        select2('recordIdJs', getRecordTypeURL(), function (obj) {
+            var postedData = getRecordTypeSellerId();
+            postedData['excludeRecords'] = obj.val();
+            return postedData
+        });
+    };
+
+    getRecordTypeSellerId = function () {
+        if ("" == sellerId || 1 > sellerId) {
+            console.error(langLbl.invalidRequest);
+            return {};
+        }
+
+        if (RECORD_TYPE_PRODUCT == recordType) {
+            return { product_seller_id: sellerId };
+        } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
+            return { selprod_user_id: sellerId };
+        } else if (RECORD_TYPE_SHOP == recordType) {
+            return { shop_user_id: sellerId };
+        } else {
+            console.error(langLbl.invalidRequest);
+            return {};
+        }
+    }
+
     getRecordTypeURL = function () {
-        if ("" == sellerId || 1 > sellerId || '' == recordType || 1 > recordType) {
+        if ("" == sellerId || 1 > sellerId) {
             console.error(langLbl.invalidRequest);
             return false;
         }
-
         if (RECORD_TYPE_PRODUCT == recordType) {
             return fcom.makeUrl('Products', 'autoComplete');
         } else if (RECORD_TYPE_SELLER_PRODUCT == recordType) {
@@ -52,7 +132,8 @@ $(document).ready(function () {
         } else if (RECORD_TYPE_SHOP == recordType) {
             return fcom.makeUrl('Shops', 'autoComplete');
         } else {
-            $.ykmsg.error(langLbl.invalidRequest, 'alert--danger');
+            alert(recordType);
+            console.error(langLbl.invalidRequest);
             return false;
         }
     }
