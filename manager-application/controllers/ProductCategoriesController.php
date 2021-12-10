@@ -537,7 +537,7 @@ class ProductCategoriesController extends ListingBaseController
     public function requests()
     {
         $this->objPrivilege->canViewProductCategories();
-        $search = $this->getSearchForm(true);
+        $search = $this->getRequestSearchForm(true);
         $data = FatApp::getPostedData();
         if ($data) {
             $data['prodcat_id'] = isset($data['id']) ? $data['id'] : 0;
@@ -551,7 +551,7 @@ class ProductCategoriesController extends ListingBaseController
         $this->_template->render();
     }
 
-    public function getSearchForm($request = false)
+    public function getRequestSearchForm($request = false)
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $f1 = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
@@ -571,7 +571,7 @@ class ProductCategoriesController extends ListingBaseController
         $canEdit = $this->objPrivilege->canEditProductCategories(0, true);
 
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm(true);
+        $searchForm = $this->getRequestSearchForm(true);
         $data = FatApp::getPostedData();
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);

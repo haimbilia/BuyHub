@@ -2,14 +2,13 @@
 
 $fld = $frm->getField('badge_condition_type');
 $fld->addFieldTagAttribute('onChange', 'conditionType(this)');
-$fld->addFieldTagAttribute('id', 'badgeConditionTypeJs');
+// $fld->addFieldTagAttribute('class', 'badgeConditionTypeJs');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('badge_name');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('badge_required_approval');
-$fld->addFieldTagAttribute('id', 'badgeRequiredApprovalJs');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('badge_active');
@@ -27,11 +26,4 @@ $otherButtons = [
     ]
 ];
 
-require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
-
-<script>
-    var condAuto =  <?php echo Badge::COND_AUTO; ?>;
-    $(document).ready(function(){
-        $("#badgeConditionTypeJs").trigger('change')
-    });
-</script>
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');

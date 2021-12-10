@@ -483,7 +483,7 @@
                     $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewBadgesAndRibbons(AdminAuthentication::getLoggedAdminId(), true)
             ) {
                 ?>
                 <li class="menu-item dropdownJs">
@@ -639,7 +639,7 @@
                                     </a>
                                 </li>
                             <?php } ?>
-                            <?php if ($objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php if ($objPrivilege->canViewBadgesAndRibbons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Badges'); ?>">
                                         <span class="nav_icon">
