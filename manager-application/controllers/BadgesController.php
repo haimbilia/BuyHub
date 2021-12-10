@@ -2,62 +2,112 @@
 
 class BadgesController extends ListingBaseController
 {
+    protected string $modelClass = 'Badge';
+    protected string $pageKey = 'MANAGE_BADGES';
+
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-
-        $this->objPrivilege->canViewBadges($this->admin_id);
+        $this->objPrivilege->canViewBadgesAndRibbons();
     }
 
-    public function getBreadcrumbNodes($action)
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
     {
-        parent::getBreadcrumbNodes($action);
-
-        switch ($action) {
-            case 'list':
-            case 'form':
-                $title = Labels::getLabel('LBL_BADGES', $this->siteLangId);
-                if ('badges/list/' . Badge::TYPE_RIBBON == current($_GET)) {
-                    $title = Labels::getLabel('LBL_RIBBONS', $this->siteLangId);
-                }
-                $this->nodes = [
-                    ['title' => $title]
-                ];
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditBadgesAndRibbons($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditBadgesAndRibbons();
         }
-        return $this->nodes;
     }
 
-    public function list(int $badgeType)
+    /**
+     * setLangTemplateData - This function is use to automate load langform and save it. 
+     *
+     * @param  array $constructorArgs
+     * @return void
+     */
+    protected function setLangTemplateData(array $constructorArgs = []): void
     {
-        $frmSearch = $this->getSearchForm($badgeType);
-        $frmSearch->fill(['badge_type' => $badgeType]);
+        $this->checkEditPrivilege();
+        $this->setModel($constructorArgs);
+        $this->formLangFields = [
+            $this->modelObj::tblFld('name')
+        ];
+        $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
+    }
 
-        $this->set("canEdit", $this->objPrivilege->canEditBadges($this->admin_id, true));
+    public function index()
+    {
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['statusButtons'] = true;
+        $actionItemsData['deleteButton'] = true;
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
-        $this->set("badgeType", $badgeType);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_BADGE_NAME', $this->siteLangId));
+        $this->getListingData();
 
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jscolor.js'));
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'badges/page-js/index.js']);
         $this->_template->addCss(['css/cropper.css']);
-        $this->_template->render();
+
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
     {
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $badgeType = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
-        $searchForm = $this->getSearchForm($badgeType);
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 0);
-        $page = ($page <= 0) ? 1 : $page;
-        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'badges/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
 
-        if (false === $post) {
-            FatUtility::dieJsonError(current($searchForm->getValidationErrors()));
+    private function getListingData()
+    {
+        $this->checkEditPrivilege(true);
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
         }
 
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
+
+        $srchFrm = $this->getSearchForm($fields);
+
+        $postedData = FatApp::getPostedData();
+        $post = $srchFrm->getFormDataFromArray($postedData);
+
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
         $srch = new BadgeSearch($this->siteLangId);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', Badge::TYPE_BADGE);
 
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
@@ -65,388 +115,243 @@ class BadgesController extends ListingBaseController
             $cnd->attachCondition('badge_identifier', 'like', '%' . $keyword . '%');
         }
 
-        $badgeType = $post['badge_type'];
-        if (!empty($badgeType)) {
-            $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
-        }
-
         $approval = FatApp::getPostedData('badge_required_approval');
         if ('' != $approval) {
-            $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
             $srch->addCondition('badge_required_approval', '=', $approval);
         }
 
         $conditionType = FatApp::getPostedData('badge_condition_type');
         if ('' != $conditionType) {
-            $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
             $srch->addCondition('badge_condition_type', '=', $conditionType);
         }
 
-        $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
+        $srch->addOrder($sortBy, $sortOrder);
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
-        
-        $this->set("badgeType", $badgeType);
-        $this->set("approvalStatusArr", $approvalStatusArr);
-        $this->set("canEdit", $this->objPrivilege->canEditBadges($this->admin_id, true));
+
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('pageSize', $pageSize);
+
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
+
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+
+        $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
+        $this->set("approvalStatusArr", $approvalStatusArr);
     }
 
-    public function form(int $type, int $badgeId = 0)
+    public function form()
     {
-        $this->objPrivilege->canEditBadges();
-        $frm = $this->getForm($type);
+        $this->objPrivilege->canEditBadgesAndRibbons();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $frm = $this->getForm();
 
         $dataToFill = [];
-        if ($badgeId > 0) {
-            $langData = Badge::getLangDataArr($badgeId, array_merge(Badge::ATTR, Badge::LANG_ATTR), true);
-            if (empty($langData)) {
-                FatUtility::dieWithError($this->str_invalid_request);
-            }
-            foreach ($langData as $langId => $data) {
-                foreach ($data as $key => $value) {
-                    if (in_array($key, Badge::ATTR) && !array_key_exists($key, $dataToFill)) {
-                        $dataToFill[$key] = $value;
-                    } else if (in_array($key, Badge::LANG_ATTR)) {
-                        if (Badge::DB_TBL_PREFIX . 'name' == $key) {
-                            continue;
-                        }
-
-                        $dataToFill[Badge::DB_TBL_PREFIX . 'name'][$value] = $data[Badge::DB_TBL_PREFIX . 'name'];
-                    }
-                }
-            }
+        if ($recordId > 0) {
+            $dataToFill = Badge::getAttributesByLangId($this->siteLangId, $recordId, null, true);
         }
 
-        if (Badge::TYPE_BADGE == $type) {
-            $dataToFill['logo_min_width'] = Badge::ICON_MIN_WIDTH;
-            $dataToFill['logo_min_height'] = Badge::ICON_MIN_HEIGHT;
-        }
+        $dataToFill['logo_min_width'] = Badge::ICON_MIN_WIDTH;
+        $dataToFill['logo_min_height'] = Badge::ICON_MIN_HEIGHT;
         $frm->fill($dataToFill);
 
         $this->set('frm', $frm);
-        $this->set('badge_id', $badgeId);
-        $this->set('type', $type);
-
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $langData = Language::getAllNames();
-        unset($langData[$siteDefaultLangId]);
-        $this->set('otherLangData', $langData);
-        $this->set('siteDefaultLangId', $siteDefaultLangId);
+        $this->set('recordId', $recordId);
+        $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
 
         $this->_template->render(false, false);
     }
 
     public function setup()
     {
-        $this->objPrivilege->canEditBadges();
-
-        $color = FatApp::getPostedData('badge_color', FatUtility::VAR_STRING, '');
-        $badgeType = empty($color) ? Badge::TYPE_BADGE : Badge::TYPE_RIBBON;
-        $badgeType = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, $badgeType);
+        $this->objPrivilege->canEditBadgesAndRibbons();
         $approvalType = FatApp::getPostedData('badge_required_approval', FatUtility::VAR_INT, 0);
 
-        $frm = $this->getForm($badgeType, $approvalType);
+        $frm = $this->getForm($approvalType);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
-        $attachments = FatApp::getPostedData('attachment_ids', FatUtility::VAR_STRING, '');
+        $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
 
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        if (is_array($post[Badge::DB_TBL_PREFIX . 'name']) && array_key_exists($siteDefaultLangId, $post[Badge::DB_TBL_PREFIX . 'name'])) {
-            $identifier = $post[Badge::DB_TBL_PREFIX . 'name'][$siteDefaultLangId];
-        } else {
-            $identifier = $post[Badge::DB_TBL_PREFIX . 'name'];
-        }
-
-        $record = new Badge($badgeId);
-        $record->setFldValue(Badge::DB_TBL_PREFIX . 'identifier', $identifier);
+        $record = new Badge($recordId);
+        $record->setFldValue(Badge::DB_TBL_PREFIX . 'identifier', $post['badge_name']);
         $record->assignValues($post);
         if (!$record->save()) {
             $msg = $record->getError();
             if (false !== strpos(strtolower($msg), 'duplicate')) {
-                $msg = Labels::getLabel('MSG_DUPLICATE_RECORD_NAME', $this->siteLangId);
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
             }
-            FatUtility::dieJsonError($msg);
+            LibHelper::exitWithError($msg, true);
         }
-        $badgeId = $record->getMainTableRecordId();
+        $recordId = $record->getMainTableRecordId();
 
-        if (array_key_exists(Badge::DB_TBL_PREFIX . 'name', $post) && is_array($post[Badge::DB_TBL_PREFIX . 'name'])) {
-            $langNames = Language::getAllNames();
-            foreach ($post[Badge::DB_TBL_PREFIX . 'name'] as $langId => $name) {
-                $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-                $tranlateToOtherLang = array_key_exists('auto_update_other_langs_data', $post) ? $post['auto_update_other_langs_data'] : 0;
-                if (empty($name) && !empty($translatorSubscriptionKey) && 0 < $tranlateToOtherLang) {
-                    $updateLangDataobj = new TranslateLangData(Badge::DB_TBL_LANG);
-                    $translatedText = $updateLangDataobj->directTranslate([Badge::DB_TBL_PREFIX . 'name' => $identifier]);
-                    if (false === $translatedText) {
-                        continue;
-                    }
-                    $name = current($translatedText)[Badge::DB_TBL_PREFIX . 'name'];
-                }
+        $this->setLangData($record, [
+            $record::tblFld('name') => $post[$record::tblFld('name')],
+        ]);
 
-                if (!empty($name) && Badge::TYPE_RIBBON == $post[Badge::DB_TBL_PREFIX . 'type']) {
-                    if (Badge::RIBB_TEXT_MIN_LEN > strlen($name)) {
-                        $error = Labels::getLabel('LBL_INVALID_LENGTH_OF_{LANG}_NAME', $langId);
-                        $error = CommonHelper::replaceStringData($error, ['{LANG}' => $langNames[$langId]]);
-                        FatUtility::dieJsonError($error);
-                    }
-
-                    if (Badge::RIBB_TEXT_MAX_LEN < strlen($name)) {
-                        $name = substr($name, 0, (Badge::RIBB_TEXT_MAX_LEN - 1));
-                    }
-                }
-
-                $recordLangData = [
-                    Badge::DB_TBL_LANG_PREFIX . 'badge_id' => $badgeId,
-                    Badge::DB_TBL_LANG_PREFIX . 'lang_id' => $langId,
-                    Badge::DB_TBL_PREFIX . 'name' => $name
-                ];
-
-                $badgeObj = new Badge($badgeId);
-                if (!$badgeObj->updateLangData($langId, $recordLangData)) {
-                    FatUtility::dieJsonError($badgeObj->getError());
-                }
-            }
-        }
-
-        if (!empty($attachments)) {
-            $attachmentIdsArr = json_decode($attachments, true);
-            if (!empty($attachmentIdsArr)) {
-                foreach ($attachmentIdsArr as $langId => $aFileId) {
-                    $badgeRecord = ['afile_record_id' => $badgeId];
-                    $where = array('smt' => 'afile_id = ? AND afile_lang_id = ?', 'vals' => [$aFileId, $langId]);
-                    FatApp::getDb()->updateFromArray(AttachedFile::DB_TBL, $badgeRecord, $where);
-                }
-            }
-        }
-
-        $this->set('badge_id', $badgeId);
-        $this->set('badge_type', $badgeType);
-        $this->set('msg', Labels::getLabel('MGS_ADDED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('badge_id', $recordId);
+        $this->set('msg', Labels::getLabel('MGS_SETUP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getSearchForm(int $badgeType)
+    protected function isMediaUploaded($recordId)
     {
-        $frm = new Form('frmSearch');
-        $frm->addHiddenField('', 'badge_type');
-        $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword', '');
-
-        if (Badge::TYPE_BADGE == $badgeType) {
-            $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr);
-            
-            $conditionTypeArr = Badge::getConditionTypeArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->siteLangId), 'badge_condition_type', $conditionTypeArr);
+        $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $recordId, 0);
+        if (false !== $attachment && 0 < $attachment['afile_id']) {
+            return true;
         }
+        return false;
+    }
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
+    protected function getSearchForm($fields = [])
+    {
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'badge_name');
+        }
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
+        $fld->overrideFldType('search');
+
+        $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr);
+
+        $conditionTypeArr = Badge::getTriggerCondTypeArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId), 'badge_condition_type', $conditionTypeArr);
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
-    private function getForm(int $type, int $conditionType = Badge::COND_MANUAL)
+    private function getForm(int $conditionType = Badge::COND_MANUAL)
     {
         $frm = new Form('frm');
         $frm->addHiddenField('', 'badge_id');
-        $frm->addHiddenField('', 'badge_type', $type);
+        $frm->addHiddenField('', 'badge_type', Badge::TYPE_BADGE);
+        $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_condition_type', Badge::getTriggerCondTypeArr($this->siteLangId), '', [], '');
 
-        if (Badge::TYPE_RIBBON == $type) {
-            $badgeShapeTypes = Badge::getShapeTypesArr($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_SHAPE', $this->siteLangId), 'badge_shape_type', $badgeShapeTypes);
-            $fld->requirement->setRequired(true);
-            $frm->addCheckBox(Labels::getLabel('LBL_DISPLAY_INSIDE', $this->siteLangId), 'badge_display_inside', 1, [], false, 0 );
-            $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->siteLangId), 'badge_color', '', ['class' => 'jscolor']);
-        } else {
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->siteLangId), 'badge_condition_type', Badge::getConditionTypeArr($this->siteLangId), '', [], '');
-        }
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'badge_name');
 
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $langData = Language::getAllNames();
-        foreach ($langData as $langId => $data) {
-            $fld = $frm->addTextBox(Labels::getLabel('LBL_NAME', $this->siteLangId), 'badge_name[' . $langId . ']');
-            if ($siteDefaultLangId == $langId) {
-                $fld->requirement->setRequired(true);
-            }
-            if (Badge::TYPE_RIBBON == $type) {
-                $fld->htmlAfterField = '<small>' . CommonHelper::replaceStringData(Labels::getLabel('LBL_MIN_LENGTH_{MINLEN}_CHARACTERS_AND_MAX_LENGTH_{MAXLEN}_CHARACTERS.', $this->siteLangId), ['{MINLEN}' => Badge::RIBB_TEXT_MIN_LEN, '{MAXLEN}' => Badge::RIBB_TEXT_MAX_LEN]) . '</small>';
-            }
-        }
-        
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        unset($langData[$siteDefaultLangId]);
-        if (!empty($translatorSubscriptionKey) && count($langData) > 0) {
-            $frm->addCheckBox(Labels::getLabel('LBL_TRANSLATE_TO_OTHER_LANGUAGES', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
-        if (Badge::TYPE_BADGE == $type) {
-            $requireApprovalArr = Badge::getApprovalStatusArr($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->siteLangId), 'badge_required_approval', $requireApprovalArr);
-            $fld->requirement->setRequired(($conditionType == Badge::COND_MANUAL));
-        }
+        $requireApprovalArr = Badge::getApprovalStatusArr($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $requireApprovalArr);
+        $fld->requirement->setRequired(($conditionType == Badge::COND_MANUAL));
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'badge_active', $activeInactiveArr, '', array(), '');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'badge_active', $activeInactiveArr, '', array(), '');
         $fld->requirement->setRequired(true);
 
-        if (Badge::TYPE_BADGE == $type) {
-            $mediaLanguages = applicationConstants::getAllLanguages();
-            $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
-            $frm->addHiddenField('', 'icon_file_type', AttachedFile::FILETYPE_BADGE);
-            $frm->addHiddenField('', 'logo_min_width');
-            $frm->addHiddenField('', 'logo_min_height');
-            $frm->addFileUpload(Labels::getLabel('LBL_UPLOAD', $this->siteLangId), 'badge_icon', array('accept' => 'image/*', 'data-frm' => 'frmCategoryIcon'));
-            $frm->addHiddenField('', 'attachment_ids');
+        $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && 0 < count($languageArr)) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
         return $frm;
     }
 
-    public function changeStatus()
+    protected function getLangForm($recordId = 0, $langId = 0)
     {
-        $this->objPrivilege->canEditBadges();
-        $badge_id = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
-        $status = FatApp::getPostedData('badge_active', FatUtility::VAR_INT, -1);
-        if (1 > $badge_id || 0 > $status) {
-            FatUtility::dieJsonError($this->str_invalid_request);
-        }
+        $recordId = FatUtility::int($recordId);
+        $langId = FatUtility::int($langId);
+        $langId = 1 > $langId ? $this->siteLangId : $langId;
 
-        if (!Badge::getAttributesById($badge_id, ['badge_active'])) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
-        }
+        $frm = new Form('frmBadgeLang');
+        $frm->addHiddenField('', 'badge_id', $recordId);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 
-        $this->updateStatus($badge_id, $status);
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
+        $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'badge_name');
+
+        return $frm;
     }
 
-    public function toggleBulkStatuses()
+    public function media($recordId)
     {
-        $this->objPrivilege->canEditBadges();
+        $recordId = FatUtility::int($recordId);
+        $recordId = Badge::getAttributesById($recordId, 'badge_id');
 
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        $badgeIdsArr = FatUtility::int(FatApp::getPostedData('badgeIds'));
-        if (empty($badgeIdsArr) || -1 == $status) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+        if (false == $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
-
-        foreach ($badgeIdsArr as $badge_id) {
-            if (1 > $badge_id) {
-                continue;
-            }
-
-            $this->updateStatus($badge_id, $status);
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
+        $frm = $this->getMediaForm($recordId);
+        $this->set('recordId', $recordId);
+        $this->set('frm', $frm);
+        $this->set('displayFooterButtons', false);
+        $this->set('activeGentab', false);
+        $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
+        $this->_template->render(false, false);
     }
 
-    private function updateStatus(int $badge_id, int $status)
+    public function images($recordId, $langId = 0)
     {
-        if (1 > $badge_id || -1 == $status) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+        $this->checkEditPrivilege(true);
+        $languages = Language::getAllNames();
+        if (count($languages) <= 1) {
+            $langId =  array_key_first($languages);
         }
 
-        $brandObj = new Badge($badge_id);
-        if (!$brandObj->changeStatus($status)) {
-            FatUtility::dieJsonError($brandObj->getError());
+        $recordId = FatUtility::int($recordId);
+        if (!$recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
         }
+
+        if (!$row = Badge::getAttributesById($recordId, 'badge_id')) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+        }
+
+        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BADGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
+        $this->set('languages', Language::getAllNames());
+        $this->set('images', $images);
+        $this->set('recordId', $recordId);
+        $this->_template->render(false, false);
     }
 
-    public function translate()
+    private function getMediaForm($recordId = 0)
     {
-        $badge_name = FatApp::getPostedData('badge_name', FatUtility::VAR_STRING, '');
-        $toLangId = FatApp::getPostedData('toLangId', FatUtility::VAR_INT, 0);
-        $data['badge_name'] = $badge_name;
+        $recordId = FatUtility::int($recordId);
+        $frm = new Form('frmBadgeMedia');
+        $frm->addHiddenField('', 'badge_id', $recordId);
+        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BADGE);
+        $frm->addHiddenField('', 'min_width');
+        $frm->addHiddenField('', 'min_height');
 
-        $translateLangobj = new TranslateLangData(Badge::DB_TBL_LANG);
-        $translatedData = $translateLangobj->directTranslate($data, $toLangId);
-        if (false === $translatedData) {
-            FatUtility::dieJsonError($translateLangobj->getError());
+        $languagesArr = applicationConstants::getAllLanguages();
+        if (count($languagesArr) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languagesArr, '', array(), '');
+        } else {
+            $lang_id = array_key_first($languagesArr);
+            $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        $this->set('badge_name', $translatedData[$toLangId]['badge_name']);
-        $this->_template->render(false, false, 'json-success.php');
+        $frm->addHtml('', 'badge_icon', '');
+        return $frm;
     }
 
-    public function autoComplete(int $badgeType = 0)
+    public function uploadMedia()
     {
-        $pagesize = 20;
-        $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-
-        $srch = new BadgeSearch($this->siteLangId, -1, applicationConstants::ACTIVE);
-        $srch->setPageSize($pagesize);
-        if (!empty($keyword)) {
-            $srch->addCondition(Badge::DB_TBL_PREFIX . 'name', 'LIKE', '%' . $keyword . '%');
-        }
-
-        if (0 < $badgeType) {
-            $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);
-        }
-
-        $srch->addMultipleFields([Badge::DB_TBL_PREFIX . 'id as id', Badge::DB_TBL_PREFIX . 'name as name']);
-        $badges = FatApp::getDb()->fetchAll($srch->getResultSet());
-        die(json_encode(['badges' => $badges]));
-    }
-
-    public function deleteSelected()
-    {
-        $this->objPrivilege->canEditBadges();
-        $badgeIdsArr = FatUtility::int(FatApp::getPostedData('badgeIds'));
-        if (empty($badgeIdsArr)) {
-            FatUtility::dieJsonError($this->str_invalid_request);
-        }
-
-        foreach ($badgeIdsArr as $badge_id) {
-            if (1 > $badge_id) {
-                continue;
-            }
-
-            $obj = new Badge($badge_id);
-            if (!$obj->deleteRecord(true)) {
-                continue;
-            }
-
-            if (!FatApp::getDb()->deleteRecords(BadgeLinkCondition::DB_TBL_PREFIX, array('smt' => 'blinkcond_badge_id = ?', 'vals' => array($badge_id)))) {
-                continue;
-            }
-        }
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function setUpImages()
-    {
-        $this->objPrivilege->canEditBadges();
+        $this->objPrivilege->canEditBadgesAndRibbons();
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
-        $badge_id = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
-        $badge_type = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
-
-        if (Badge::TYPE_RIBBON == $badge_type) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_BADGE_TYPE', $this->siteLangId));
-        }
-
+        $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         $afileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
         if (!$file_type) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Please_Select_A_File', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         Badge::deleteImagesWithOutBadgeId();
@@ -455,55 +360,173 @@ class BadgesController extends ListingBaseController
         if (!$res = $fileHandlerObj->saveImage(
             $_FILES['cropped_image']['tmp_name'],
             $file_type,
-            $badge_id,
+            $recordId,
             0,
             $_FILES['cropped_image']['name'],
             -1,
-            false,
+            true,
             $lang_id,
             $_FILES['cropped_image']['type'],
             $slide_screen
         )) {
-            FatUtility::dieJsonError($fileHandlerObj->getError());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('attachFileId', $fileHandlerObj->getMainTableRecordId());
-        $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('badge_id', $badge_id);
-        $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_IMAGE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function removeImage($afileId, $badgeId, $imageType = '', $langId = 0, $slide_screen = 0)
+    public function deleteImage($recordId, $afileId, $langId = 0, $slide_screen = 0)
     {
-        $this->objPrivilege->canEditBadges();
+        $this->objPrivilege->canEditBadgesAndRibbons();
         $afileId = FatUtility::int($afileId);
-        $badgeId = FatUtility::int($badgeId);
+        $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
         if (!$afileId) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $fileType = AttachedFile::FILETYPE_BADGE;
         $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile($fileType, $badgeId, $afileId, 0, $langId, $slide_screen)) {
-            FatUtility::dieJsonError($fileHandlerObj->getError());
+        if (!$fileHandlerObj->deleteFile($fileType, $recordId, $afileId, 0, $langId, $slide_screen)) {
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('imageType', $imageType);
         $this->set('msg', Labels::getLabel('MSG_IMAGE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function images($badge_id, $imageType = '', $lang_id = 0, $slide_screen = 0)
+    public function updateStatus()
     {
-        $canEdit = $this->objPrivilege->canEditBadges(0, true);
-        $badge_id = FatUtility::int($badge_id);
-        $lang_id = FatUtility::int($lang_id);
-        $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badge_id, 0, $lang_id);
-        $this->set('icon', $icon);
-        $this->set('imageType', $imageType);
-        $this->set('languages', Language::getAllNames());
-        $this->set('canEdit', $canEdit);
-        $this->_template->render(false, false);
+        $this->checkEditPrivilege();
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+
+        if (1 > $recordId || 0 > $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if (!Badge::getAttributesById($recordId, 'badge_active')) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $this->changeStatus($recordId, $status);
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function toggleBulkStatuses()
+    {
+        $this->objPrivilege->canEditBadgesAndRibbons();
+
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('badge_ids'));
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        if (empty($recordIdsArr) || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
+                continue;
+            }
+
+            $this->changeStatus($recordId, $status);
+        }
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function deleteRecord()
+    {
+        $this->objPrivilege->canEditAbusiveWords();
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        if (false === Badge::getAttributesById($recordId, 'badge_id')) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $this->markAsDeleted($recordId);
+
+        FatUtility::dieJsonSuccess($this->str_delete_record);
+    }
+
+    public function deleteSelected()
+    {
+        $this->objPrivilege->canEditBadgesAndRibbons();
+        $recordIdsArr = FatUtility::int(FatApp::getPostedData('badge_ids'));
+        if (empty($recordIdsArr)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        foreach ($recordIdsArr as $recordId) {
+            if (1 > $recordId) {
+                continue;
+            }
+            $this->markAsDeleted($recordId);
+        }
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    protected function markAsDeleted($recordId)
+    {
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+        $obj = new Badge($recordId);
+        if (!$obj->deleteRecord(true)) {
+            LibHelper::exitWithError($obj->getError(), true);
+        }
+
+        $db = FatApp::getDb();
+        if (!$db->deleteRecords(BadgeLinkCondition::DB_TBL, array('smt' => 'blinkcond_badge_id = ?', 'vals' => array($recordId)))) {
+            LibHelper::exitWithError($db->getError(), true);
+        }
+    }
+
+    protected function getFormColumns(): array
+    {
+        $tblHeadingCols = CacheHelper::get('badgesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_IMAGE', $this->siteLangId),
+            Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
+            Badge::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_TRIGGER_TYPE', $this->siteLangId),
+            Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $this->siteLangId),
+            Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('badgesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            Badge::DB_TBL_PREFIX . 'shape_type',
+            Badge::DB_TBL_PREFIX . 'name',
+            Badge::DB_TBL_PREFIX . 'condition_type',
+            Badge::DB_TBL_PREFIX . 'required_approval',
+            Badge::DB_TBL_PREFIX . 'active',
+            'action',
+        ];
+    }
+
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, [Badge::DB_TBL_PREFIX . 'shape_type'], Common::excludeKeysForSort());
     }
 }

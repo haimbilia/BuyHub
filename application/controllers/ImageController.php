@@ -1423,28 +1423,28 @@ class ImageController extends FatController
 
     public function badgeIcon($badgeId, $langId = 0, $sizeType = '')
     {
+        $default_image = 'product_default_image.jpg';
         $badgeId = FatUtility::int($badgeId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badgeId, 0, $langId);
-        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+        $image_name = AttachedFile::setNamePrefix($file_row['afile_physical_path'], $sizeType);
         $filePath = AttachedFile::FILETYPE_BADGE_IMAGE_PATH;
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 60;
                 $h = 60;
-                AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
+                AttachedFile::displayImage($image_name, $w, $h, $default_image, $filePath);
                 break;
             case 'MINI':
                 $w = 35;
                 $h = 35;
-                AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
+                AttachedFile::displayImage($image_name, $w, $h, $default_image, $filePath);
                 break;
             default:
                 if (is_numeric($sizeType)) {
-                    AttachedFile::displayImage($image_name, $sizeType, $sizeType, '', $filePath);
+                    AttachedFile::displayImage($image_name, $sizeType, $sizeType, $default_image, $filePath);
                 } else {
-                    AttachedFile::displayOriginalImage($image_name, '', $filePath);
+                    AttachedFile::displayOriginalImage($image_name, $default_image, $filePath);
                 }
                 break;
         }

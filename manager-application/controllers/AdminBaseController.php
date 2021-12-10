@@ -163,7 +163,6 @@ class AdminBaseController extends FatController
                 'unlinkRecords' => Labels::getLabel('LBL_FIRST_UNLINK_ALL_RECORDS', $this->siteLangId),
                 'remove' => Labels::getLabel('LBL_REMOVE', $this->siteLangId),
                 'alreadySelected' => Labels::getLabel('MSG_ALREADY_SELECTED', $this->siteLangId),
-                'invalidSeller' => Labels::getLabel('MSG_PLEASE_SELECT_THE_SELLER_FIRST', $this->siteLangId),
                 'controllerNameRequired' => Labels::getLabel('MSG_CONTROLLER_NAME_MUST_BE_DECLARED', $this->siteLangId),
                 'selectFont' => Labels::getLabel('MSG_PLEASE_SELECT_FONT_FAMILY', $this->siteLangId),
                 'dropFilesToUpload' => Labels::getLabel('MSG_DROP_FILES_HERE_TO_UPLOAD', $this->siteLangId),

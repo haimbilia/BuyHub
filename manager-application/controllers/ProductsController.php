@@ -1,7 +1,4 @@
 <?php
-
-use PhpParser\Node;
-
 class ProductsController extends ListingBaseController
 {
     protected string $modelClass = 'Product';
@@ -366,7 +363,6 @@ class ProductsController extends ListingBaseController
         $this->set('isProductAddedByAdmin', $isProductAddedByAdmin);
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-
         if (FatUtility::isAjaxCall()) {
             $this->_template->render(false, false);
             return;
@@ -900,6 +896,11 @@ class ProductsController extends ListingBaseController
         $sellerId = FatApp::getPostedData('product_seller_id', FatUtility::VAR_STRING, '');
         if (!empty($sellerId)) {
             $srch->addCondition('product_seller_id', '=', $sellerId);
+        }
+
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('product_id', 'NOT IN', $excludeRecords);
         }
 
         $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as text'));

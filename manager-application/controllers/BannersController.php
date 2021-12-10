@@ -74,16 +74,13 @@ class BannersController extends ListingBaseController
         $bannerLocation = BannerLocation::getAttributesByLangId($this->siteLangId, $bannerLocationId, 'blocation_name', true);
         $pageTitle = $bannerLocation ? Labels::getLabel('LBL_BANNERS_LOCATION', $this->siteLangId).' : '.$bannerLocation : LibHelper::getControllerName(true);
         $this->setModel();
-        $btnLabel = Labels::getLabel('LBL_NEW', $this->siteLangId);
+        
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
-                'href' => 'javascript:void(0);',
                 'onclick' => 'addNewBanner('.$bannerLocationId.')',
-                'title' => $btnLabel,
             ],
-            'label' => $btnLabel
         ];
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -115,7 +112,7 @@ class BannersController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
-        $searchForm = $this->getSearchForm(false, $fields);
+        $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 :  FatUtility::int($data['page']);
         $post = $searchForm->getFormDataFromArray($data);
         $srch = new BannerSearch($this->siteLangId, false);

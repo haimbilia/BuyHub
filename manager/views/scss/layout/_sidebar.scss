@@ -7,7 +7,6 @@ $space: 25px;
     // color:  lighten($brand-color, 55%);
     @include bg-brand();
     position: fixed;
-
     top: 0;
     bottom: 0;
     #{$start-direction}: 0;
@@ -63,6 +62,9 @@ $space: 25px;
     }
     &-foot {
         flex: none;
+        width: $side-bar-size;
+        overflow: hidden;
+        overflow-y: auto;
     }
     &--on & {
         transform: translateX(0 * $transform-direction);

@@ -20,9 +20,6 @@ class BadgeLinkCondition extends MyAppModel
     public const COND_TYPE_RETURN_ACCEPTANCE = 6; // Refund/Return Acceptance
     public const COND_TYPE_ORDER_CANCELLED = 7; // Cancelled By Seller
     
-    public const REC_COND_MANUAL = 1;
-    public const REC_COND_AUTO = 2;
-
     public const ATTR = [
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'badge_id',
@@ -112,25 +109,32 @@ class BadgeLinkCondition extends MyAppModel
         return json_decode($arr, true);
     }
 
-    /**
-     * getRecordConditionArr
-     *
-     * @param  int $langId
-     * @return array
-     */
-    public static function getRecordConditionArr(int $langId): array
+    public static function getConditionTypeHtml(int $langId, int $type): string
     {
-        $arr = CacheHelper::get('getBadgeLinkRecordConditionArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
-        if (!$arr) {
-            $arr = [
-                self::REC_COND_MANUAL => Labels::getLabel('LBL_MANUAL', $langId),
-                self::REC_COND_AUTO => Labels::getLabel('LBL_AUTOMATIC', $langId),
-            ];
-            CacheHelper::create('getBadgeLinkRecordConditionArr' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
-            return $arr;
+        $arr = self::getConditionTypesArr($langId);
+        $msg = $arr[$type];
+        switch ($type) {
+            case self::COND_TYPE_AVG_RATING_SHOP:
+                $status = 'warning';
+                break;
+            case self::COND_TYPE_ORDER_COMPLETION_RATE:
+                $status = 'info';
+                break;
+            case self::COND_TYPE_COMPLETED_ORDERS:
+                $status = 'success';
+                break;
+            case self::COND_TYPE_RETURN_ACCEPTANCE:
+                $status = 'success';
+                break;
+            case self::COND_TYPE_ORDER_CANCELLED:
+                $status = 'danger';
+                break;
+            
+            default:
+                $status = 'warning';
+                break;
         }
-
-        return json_decode($arr, true);
+        return '<span class="font-' . $status . '">' . $msg . '</span>';
     }
     
     /**
@@ -320,5 +324,41 @@ class BadgeLinkCondition extends MyAppModel
 
         $srch->addMultipleFields(array_merge(self::ATTR, [$badgeNameField]));
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
+
+    /**
+     * isUniqueRecord
+     *
+     * @param  int $badgeType
+     * @param  int $recordType
+     * @param  int $record_id
+     * @param  int $position
+     * @return void
+     */
+    public static function isUniqueRecord(int $badgeType, int $recordType, int $record_id, int $position = 0): bool
+    {
+        return true; /* Require Discussion. */
+    }
+
+    public static function getRecordTypeHtml(int $langId, int $type): string
+    {
+        $arr = self::getRecordTypeArr($langId);
+        $msg = $arr[$type];
+        switch ($type) {
+            case self::RECORD_TYPE_SELLER_PRODUCT:
+                $status = 'info';
+                break;
+            case self::RECORD_TYPE_PRODUCT:
+                $status = 'warning';
+                break;
+            case self::RECORD_TYPE_SHOP:
+                $status = 'success';
+                break;
+            
+            default:
+                $status = 'danger';
+                break;
+        }
+        return '<span class="font-' . $status . '">' . $msg . '</span>';
     }
 }

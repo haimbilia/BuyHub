@@ -214,7 +214,7 @@ var fcom = {
         }
 
         return obj;
-    },
+    }
 };
 
 $.fn.selectRange = function (start, end) {

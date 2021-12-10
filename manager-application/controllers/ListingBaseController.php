@@ -37,7 +37,7 @@ class ListingBaseController extends AdminBaseController
         if ($langData) {
             $langFrm->fill($langData);
         }
-
+        
         if (true === $this->isPlugin) {
             $pluginDetail = Plugin::getAttributesById($this->mainTableRecordId, ['plugin_type', 'plugin_identifier']);
             if (!in_array($pluginDetail['plugin_type'], Plugin::HAVING_DESCRIPTION)) {
@@ -128,7 +128,7 @@ class ListingBaseController extends AdminBaseController
         $this->set('msg', $this->str_setup_successful);
     }
 
-    protected function getSearchForm($fields = [])
+    protected function getSearchForm(array $fields = [])
     {
         $fields = $this->getFormColumns();
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
@@ -175,7 +175,7 @@ class ListingBaseController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function changeStatus($recordId, $status)
+    protected function changeStatus(int $recordId, int $status)
     {
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
@@ -205,11 +205,6 @@ class ListingBaseController extends AdminBaseController
             }
             $this->changeStatus($recordId, $status);
         }
-        /*
-        if ($this->modelObj->bulkStatusUpdate($recordsArr, $status) == false) {
-            LibHelper::exitWithError(Labels::getLabel($this->modelObj->getError(), $this->siteLangId), true);
-        }
-        */
         Product::updateMinPrices();
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -248,7 +243,7 @@ class ListingBaseController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function markAsDeleted($recordId)
+    protected function markAsDeleted(int $recordId)
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {

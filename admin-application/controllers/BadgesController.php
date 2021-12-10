@@ -7,7 +7,7 @@ class BadgesController extends AdminBaseController
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
 
-        $this->objPrivilege->canViewBadges($this->admin_id);
+        $this->objPrivilege->canViewBadgesAndRibbons($this->admin_id);
     }
 
     public function getBreadcrumbNodes($action)
@@ -33,7 +33,7 @@ class BadgesController extends AdminBaseController
         $frmSearch = $this->getSearchForm($badgeType);
         $frmSearch->fill(['badge_type' => $badgeType]);
 
-        $this->set("canEdit", $this->objPrivilege->canEditBadges($this->admin_id, true));
+        $this->set("canEdit", $this->objPrivilege->canEditBadgesAndRibbons($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $this->set("badgeType", $badgeType);
 
@@ -89,7 +89,7 @@ class BadgesController extends AdminBaseController
         
         $this->set("badgeType", $badgeType);
         $this->set("approvalStatusArr", $approvalStatusArr);
-        $this->set("canEdit", $this->objPrivilege->canEditBadges($this->admin_id, true));
+        $this->set("canEdit", $this->objPrivilege->canEditBadgesAndRibbons($this->admin_id, true));
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -101,7 +101,7 @@ class BadgesController extends AdminBaseController
 
     public function form(int $type, int $badgeId = 0)
     {
-        $this->objPrivilege->canEditBadges();
+        $this->objPrivilege->canEditBadgesAndRibbons();
         $frm = $this->getForm($type);
 
         $dataToFill = [];
@@ -146,7 +146,7 @@ class BadgesController extends AdminBaseController
 
     public function setup()
     {
-        $this->objPrivilege->canEditBadges();
+        $this->objPrivilege->canEditBadgesAndRibbons();
 
         $color = FatApp::getPostedData('badge_color', FatUtility::VAR_STRING, '');
         $badgeType = empty($color) ? Badge::TYPE_BADGE : Badge::TYPE_RIBBON;
@@ -246,7 +246,7 @@ class BadgesController extends AdminBaseController
             $approvalArr = Badge::getApprovalStatusArr($this->adminLangId);
             $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $approvalArr);
             
-            $conditionTypeArr = Badge::getConditionTypeArr($this->adminLangId);
+            $conditionTypeArr = Badge::getTriggerCondTypeArr($this->adminLangId);
             $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', $conditionTypeArr);
         }
 
@@ -269,7 +269,7 @@ class BadgesController extends AdminBaseController
             $frm->addCheckBox(Labels::getLabel('LBL_DISPLAY_INSIDE', $this->adminLangId), 'badge_display_inside', 1, [], false, 0 );
             $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->adminLangId), 'badge_color', '', ['class' => 'jscolor']);
         } else {
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', Badge::getConditionTypeArr($this->adminLangId), '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', Badge::getTriggerCondTypeArr($this->adminLangId), '', [], '');
         }
 
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
@@ -316,7 +316,7 @@ class BadgesController extends AdminBaseController
 
     public function changeStatus()
     {
-        $this->objPrivilege->canEditBadges();
+        $this->objPrivilege->canEditBadgesAndRibbons();
         $badge_id = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
         $status = FatApp::getPostedData('badge_active', FatUtility::VAR_INT, -1);
         if (1 > $badge_id || 0 > $status) {
@@ -334,7 +334,7 @@ class BadgesController extends AdminBaseController
 
     public function toggleBulkStatuses()
     {
-        $this->objPrivilege->canEditBadges();
+        $this->objPrivilege->canEditBadgesAndRibbons();
 
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $badgeIdsArr = FatUtility::int(FatApp::getPostedData('badgeIds'));
@@ -403,7 +403,7 @@ class BadgesController extends AdminBaseController
 
     public function deleteSelected()
     {
-        $this->objPrivilege->canEditBadges();
+        $this->objPrivilege->canEditBadgesAndRibbons();
         $badgeIdsArr = FatUtility::int(FatApp::getPostedData('badgeIds'));
         if (empty($badgeIdsArr)) {
             FatUtility::dieJsonError($this->str_invalid_request);
@@ -429,7 +429,7 @@ class BadgesController extends AdminBaseController
 
     public function setUpImages()
     {
-        $this->objPrivilege->canEditBadges();
+        $this->objPrivilege->canEditBadgesAndRibbons();
         $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
         $badge_id = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
         $badge_type = FatApp::getPostedData('badge_type', FatUtility::VAR_INT, 0);
@@ -476,7 +476,7 @@ class BadgesController extends AdminBaseController
 
     public function removeImage($afileId, $badgeId, $imageType = '', $langId = 0, $slide_screen = 0)
     {
-        $this->objPrivilege->canEditBadges();
+        $this->objPrivilege->canEditBadgesAndRibbons();
         $afileId = FatUtility::int($afileId);
         $badgeId = FatUtility::int($badgeId);
         $langId = FatUtility::int($langId);
@@ -496,7 +496,7 @@ class BadgesController extends AdminBaseController
 
     public function images($badge_id, $imageType = '', $lang_id = 0, $slide_screen = 0)
     {
-        $canEdit = $this->objPrivilege->canEditBadges(0, true);
+        $canEdit = $this->objPrivilege->canEditBadgesAndRibbons(0, true);
         $badge_id = FatUtility::int($badge_id);
         $lang_id = FatUtility::int($lang_id);
         $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $badge_id, 0, $lang_id);

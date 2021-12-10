@@ -178,9 +178,13 @@ select2 = function (
     data = [],
 ) {
     let ele = $("#" + elmId);
+    if (1 > ele.length) {
+        return false;
+    }
+
     ele.select2({
-        closeOnSelect: true,
-        data : data,
+        closeOnSelect: ele.data("closeOnSelect") || true,
+        data: data,
         dir: layoutDirection,
         allowClear: true,
         placeholder: ele.attr("placeholder") || "",
@@ -189,19 +193,19 @@ select2 = function (
             dataType: "json",
             delay: 250,
             method: "post",
-            data: function (params) { 
+            data: function (params) {
                 return $.extend(
                     {
                         keyword: params.term, // search term
                         page: params.page,
                         fIsAjax: 1,
                     },
-                    ("function" == typeof postdata ?  postdata(ele) : postdata )
+                    ("function" == typeof postdata ? postdata(ele) : postdata)
                 );
             },
-            processResults: function (data, params) {            
+            processResults: function (data, params) {
                 params.page = params.page || 1;
-                data.pageCount = data.pageCount || 1; 
+                data.pageCount = data.pageCount || 1;
                 if ("function" == typeof processResultsCallback) {
                     return processResultsCallback(data, params, ele);
                 }
@@ -227,13 +231,22 @@ select2 = function (
                 callbackOnUnSelect(e);
             }
         });
-
+    
+    var select2Selector = ele.data("select2");
+    var elementName = ele.attr('name').replace('[]', '');
+    if ('undefined' != typeof(select2Selector.dropdown)) {
+        $(select2Selector.dropdown.$search).attr('name', elementName + '-select2');
+    }
+    
+    if ('undefined' != typeof(select2Selector.selection)) {
+        $(select2Selector.selection.$search).attr('name', elementName + '-select2');
+    }
     if (0 < ele.closest(".advancedSearchJs").length) {
-        ele.data("select2").$container.addClass("w-100");
+        select2Selector.$container.addClass("w-100");
     }
 
     if (0 < ele.closest(".form-group").length) {
-        ele.data("select2").$container.addClass("w-100");
+        select2Selector.$container.addClass("w-100");
     }
 
     $("." + $.ykmodal.element).removeAttr("tabindex");
@@ -244,7 +257,7 @@ select2 = function (
 redirectUser = function (id) {
     redirectfunc(fcom.makeUrl('Users'), { user_id: id }, 0, true);
 };
-    
+
 redirectToShop = function (id) {
     redirectfunc(fcom.makeUrl('Shops'), { shop_id: id }, 0, true);
 };
@@ -298,6 +311,7 @@ markNavActive = function (ele) {
 $(document).ready(function () {
     /* Active Sidebar Link. */
     var uri = window.location.pathname.replace(/^\/|\/$/g, "");
+
     $(".sidebarMenuJs .navLinkJs").each(function () {
         var href = $(this).attr("href").replace(/^\/|\/$/g, "");
         if (uri == href) {
@@ -305,7 +319,7 @@ $(document).ready(function () {
         } else {
             var urlParts = uri.split('/');
             var hrefParts = href.split('/');
-            if ("undefined" != typeof(urlParts[1]) && "undefined" != typeof(hrefParts[1]) && urlParts[1] == hrefParts[1]) {
+            if ("undefined" != typeof (urlParts[1]) && "undefined" != typeof (hrefParts[1]) && urlParts[1] == hrefParts[1]) {
                 markNavActive($(this));
             }
         }

@@ -11,7 +11,6 @@ foreach ($arrListing as $sn => $row) {
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['coupon_id']]);
     foreach ($fields as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
-
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':

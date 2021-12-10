@@ -1623,12 +1623,12 @@ class AdminPrivilege
         return $this->checkPermission($adminId, static::SECTION_RATING_TYPES, static::PRIVILEGE_WRITE, $returnResult);
     }
 
-    public function canViewBadges($adminId = 0, $returnResult = false)
+    public function canViewBadgesAndRibbons($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_BADGES, static::PRIVILEGE_READ, $returnResult);
     }
 
-    public function canEditBadges($adminId = 0, $returnResult = false)
+    public function canEditBadgesAndRibbons($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_BADGES, static::PRIVILEGE_WRITE, $returnResult);
     }

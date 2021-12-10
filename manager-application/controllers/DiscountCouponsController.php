@@ -67,7 +67,7 @@ class DiscountCouponsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_COUPON_TITLE_OR_COUPON_TITLE', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js','js/tagify.min.js', 'js/tagify.polyfills.min.js', 'discount-coupons/page-js/index.js']);
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'discount-coupons/page-js/index.js']);
         $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css']);
 
         $this->_template->render(true, true, '_partial/listing/index.php');
@@ -95,11 +95,11 @@ class DiscountCouponsController extends ListingBaseController
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = 'coupon_active';
         }
-        
+
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
-        
+
         $postedData = FatApp::getPostedData();
         $post = $srchFrm->getFormDataFromArray($postedData);
 
@@ -376,7 +376,7 @@ class DiscountCouponsController extends ListingBaseController
             CommonHelper::redirectUserReferer();
         }
         $this->checkEditPrivilege(true);
-        
+
         $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], true);
         if (empty($couponData)) {
             LibHelper::exitWithError($this->str_invalid_request_id, false, true);
@@ -387,7 +387,7 @@ class DiscountCouponsController extends ListingBaseController
             'linkType' => Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId),
             'items' => Labels::getLabel('LBL_ITEMS', $this->siteLangId),
         ];
-        
+
         $linksTypeArr = [
             'products' => Labels::getLabel('LBL_PRODUCTS', $this->siteLangId),
             'categories' => Labels::getLabel('LBL_CATEGORIES', $this->siteLangId),
@@ -417,7 +417,7 @@ class DiscountCouponsController extends ListingBaseController
         $this->_template->addCss(['css/tagify.min.css']);
         $this->_template->render();
     }
-    
+
     /* Coupon Type Subscription Purchase. */
     public function linkPlanForm()
     {
@@ -444,7 +444,7 @@ class DiscountCouponsController extends ListingBaseController
             $frm->fill(['plan_name' => json_encode($tagifyData)]);
         }
         $this->checkEditPrivilege(true);
-        
+
         $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], true);
         if (empty($couponData)) {
             LibHelper::exitWithError($this->str_invalid_request_id);
@@ -511,7 +511,7 @@ class DiscountCouponsController extends ListingBaseController
                     LibHelper::exitWithError($obj->getError(), true);
                 }
                 break;
-            
+
             default:
                 LibHelper::exitWithError($this->str_invalid_request, true);
                 break;
@@ -649,6 +649,8 @@ class DiscountCouponsController extends ListingBaseController
         $frm = $this->getMediaForm($recordId);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
+        $this->set('displayFooterButtons', false);
+        $this->set('activeGentab', false);
         $this->set('formTitle', Labels::getLabel('LBL_DISCOUNT_COUPON_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
