@@ -14,34 +14,15 @@ foreach ($arrListing as $sn => $row) {
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="record_ids[]" value=' . $row['admin_id'] . '><i class="input-helper"></i></label>', true);
+                $disabled = ($row['admin_id'] > 1) ? '' : 'disabled';
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs  ' . $disabled . '" type="checkbox" ' . $disabled . ' name="record_ids[]" value=' . $row['admin_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'admin_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['admin_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
-                $statusClass = ($canEdit) ? '' : 'disabled';
-                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
-
-                $htm = '<span class="switch switch-sm switch-icon">
-                                    <label>
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['admin_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                                        <span class="input-helper"></span>
-                                    </label>
-                                </span>';
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['admin_id'], $row[$key], (1 == $row['admin_id']));
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
-                break;
-            case 'action1':
-                if ($canEdit) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "editAdminUserForm(" . $row['admin_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
-
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Change_Password', $siteLangId), "onclick" => "changePasswordForm(" . $row['admin_id'] . ")"), "<i class='ion-locked icon'></i>", true);
-
-                    if ($row['admin_id'] > 1 && $row['admin_id'] != $adminLoggedInId) {
-                        $td->appendElement('a', array('href' => UrlHelper::generateUrl('AdminUsers', 'permissions', array($row['admin_id'])), 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Permissions', $siteLangId)), '<i class="fas fa-gavel"></i>', true);
-                    }
-                }
                 break;
             case 'action':
                 $data = [

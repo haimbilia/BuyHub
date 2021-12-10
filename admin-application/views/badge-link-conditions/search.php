@@ -34,7 +34,7 @@ if (Badge::COND_AUTO == $badgeConditionType) {
 
 $conditionTypeArr = BadgeLinkCondition::getConditionTypesArr($adminLangId);
 $recordTypeArr = BadgeLinkCondition::getRecordTypeArr($adminLangId);
-$recordConditionArr = BadgeLinkCondition::getRecordConditionArr($adminLangId);
+$recordConditionArr = Badge::getTriggerCondTypeArr($adminLangId);
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
 
@@ -73,7 +73,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', [], $txt, true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
-                $conditionAuto = (BadgeLinkCondition::REC_COND_AUTO == $recordCondition);
+                $conditionAuto = (Badge::COND_AUTO == $recordCondition);
                 $conditionType = ($conditionAuto ? $conditionTypeArr[$row[$key]] : Labels::getLabel('LBL_N/A', $adminLangId));
                 $td->appendElement('plaintext', [], $conditionType, true);
                 break;

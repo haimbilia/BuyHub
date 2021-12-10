@@ -734,7 +734,7 @@ class SellerProductsController extends ListingBaseController
         return $frm;
     }
 
-    public function autoCompleteProducts()
+    public function autoComplete()
     {
         $pagesize = 20;
         $post = FatApp::getPostedData();
@@ -798,13 +798,13 @@ class SellerProductsController extends ListingBaseController
             $userName = isset($option["credential_username"]) ? " | " . $option["credential_username"] : '';
             $json[] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($option['product_name'], ENT_QUOTES, 'UTF-8')) . $variantsStr . $userName,
+                'text' => strip_tags(html_entity_decode($option['product_name'], ENT_QUOTES, 'UTF-8')) . $variantsStr . $userName,
                 'product_identifier' => strip_tags(html_entity_decode($option['product_identifier'], ENT_QUOTES, 'UTF-8')),
                 'price' => $option['selprod_price'],
                 'stock' => $option['selprod_stock']
             );
         }
-        die(json_encode(['pageCount' => $pageCount, 'products' => $json]));
+        die(json_encode(['pageCount' => $pageCount, 'results' => $json]));
     }
 
     public function setupSellerProductLinks()
@@ -1378,35 +1378,6 @@ class SellerProductsController extends ListingBaseController
             $nodes[] = array('title' => $action);
         }
         return $nodes;
-    }
-
-    public function autoComplete()
-    {
-        $this->objPrivilege->canViewSellerProducts();
-
-        $srch = SellerProduct::getSearchObject($this->siteLangId);
-        $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
-        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
-        $post = FatApp::getPostedData();
-        if (!empty($post['keyword'])) {
-            $condition = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $condition->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%');
-        }
-
-        $srch->setPageSize(FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
-        $srch->addMultipleFields(array('selprod_id', 'IF(selprod_title is NULL or selprod_title = "" ,product_name, selprod_title) as product_name'));
-
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $products = $db->fetchAll($rs, 'selprod_id');
-        $json = array();
-        foreach ($products as $key => $product) {
-            $json[] = array(
-                'id' => $key,
-                'name' => strip_tags(html_entity_decode($product['product_name'], ENT_QUOTES, 'UTF-8'))
-            );
-        }
-        die(json_encode($json));
     }
 
     public function linkPoliciesForm($product_id, $selprod_id, $ppoint_type)

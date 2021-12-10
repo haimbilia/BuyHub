@@ -120,5 +120,5 @@ if (!empty($zones)) {
 <?php
     }
 } else {
-    $this->includeTemplate('_partial/no-record-found.php', array('adminLangId' => $siteLangId));
+    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
 }

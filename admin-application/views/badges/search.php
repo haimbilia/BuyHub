@@ -18,7 +18,7 @@ if (Badge::TYPE_RIBBON == $badgeType) {
     unset($arr_flds[Badge::DB_TBL_PREFIX . 'required_approval'], $arr_flds[Badge::DB_TBL_PREFIX . 'condition_type']);
 }
 
-$conditionTypeArr = Badge::getConditionTypeArr($adminLangId);
+$conditionTypeArr = Badge::getTriggerCondTypeArr($adminLangId);
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table--hovered table-responsive'));
 

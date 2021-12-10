@@ -33,11 +33,10 @@
     }
 
     $newRecordBtn = $newRecordBtn ?? false;
-    $newRecordParent = $newRecordParent ?? '';
     $newRecordBtnAttrs = $newRecordBtnAttrs ?? [];
     if (isset($newRecordBtn) && true === $newRecordBtn && $canEdit) {
         $href = "javascript:void(0)";
-        $onclick = "addNew(" . $newRecordParent . ")";
+        $onclick = "addNew()";
         $title = Labels::getLabel('BTN_NEW_RECORD', $siteLangId);
         $label = Labels::getLabel('BTN_NEW', $siteLangId);
         if (isset($newRecordBtnAttrs) && 0 < count($newRecordBtnAttrs)) {

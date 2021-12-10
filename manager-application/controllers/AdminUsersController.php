@@ -210,6 +210,8 @@ class AdminUsersController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($postedData);
 
         $srch = AdminUsers::getSearchObject(false);
+        $srch->addCondition('admin_id', '!=', $this->admin_id);
+        $srch->addCondition('admin_id', '!=', 1);
 
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
@@ -272,6 +274,9 @@ class AdminUsersController extends ListingBaseController
         $post = FatApp::getPostedData();
 
         $recordId = FatUtility::int($post['admin_id']);
+        if (2 > $recordId || $recordId == $this->admin_id) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
 
         $frm = $this->getForm($recordId);
         $post = $frm->getFormDataFromArray($post);
@@ -309,7 +314,7 @@ class AdminUsersController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
         $frm = $this->getChangePasswordForm($recordId);
 
-        if (0 >= $recordId) {
+        if (2 > $recordId || $recordId == $this->admin_id) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $data = AdminUsers::getAttributesById($recordId);
@@ -329,7 +334,7 @@ class AdminUsersController extends ListingBaseController
         $recordId = FatUtility::int($post['admin_id']);
         unset($post['admin_id']);
 
-        if (0 >= $recordId) {
+        if (2 > $recordId || $recordId == $this->admin_id) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
@@ -404,6 +409,50 @@ class AdminUsersController extends ListingBaseController
         $fld->requirements()->setRequired();
         $fld->requirements()->setCompareWith('password', 'eq', '');
         return $frm;
+    }
+
+    public function updateStatus()
+    {
+        $this->checkEditPrivilege();
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        $this->changeStatus($recordId, $status);
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    protected function changeStatus(int $recordId, int $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 >= $recordId || -1 == $status || !in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $this->setModel([$recordId]);
+        if (!$this->modelObj->changeStatus($status)) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
+    }
+
+    public function toggleBulkStatuses()
+    {
+        $this->checkEditPrivilege();
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        $recordsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
+        if (empty($recordsArr)) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $this->setModel([0]);
+
+        foreach ($recordsArr as $recordId) {
+            if (2 > $recordId || $recordId == $this->admin_id) {
+                continue;
+            }
+            $this->changeStatus($recordId, $status);
+        }
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     protected function getFormColumns(): array

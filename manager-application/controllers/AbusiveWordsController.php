@@ -22,14 +22,10 @@ class AbusiveWordsController extends ListingBaseController
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
-        $btnTitle = Labels::getLabel('BTN_NEW', $this->siteLangId);
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
-                'href' => "javascript:void(0)",
-                'onclick' => "addNew(true)",
-                'title' => $btnTitle,
+                'onclick' => "addNew(true)"
             ],
-            'label' => $btnTitle,
         ];
 
         $this->set('pageData', $pageData);

@@ -179,7 +179,7 @@ select2 = function (
 ) {
     let ele = $("#" + elmId);
     ele.select2({
-        closeOnSelect: true,
+        closeOnSelect: ele.data("closeOnSelect") || true,
         data: data,
         dir: layoutDirection,
         allowClear: true,
