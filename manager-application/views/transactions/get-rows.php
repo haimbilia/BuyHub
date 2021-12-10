@@ -11,7 +11,7 @@ foreach ($arrListing as $sn => $row) {
         if ($count != 1) {
             echo '</ul></div>';
         }
-?>
+        ?>
         <div class="rowJs" data-reference="<?php echo $row['utxn_date']; ?>">
             <div class="timeline-v4__item-date">
                 <span class="tag">
@@ -24,28 +24,30 @@ foreach ($arrListing as $sn => $row) {
             <li class="timeline-v4__item minus">
                 <span class="timeline-v4__item-time"><?php echo date('H:i', strtotime($row['utxn_date'])); ?></span>
                 <div class="timeline-v4__item-desc">
-                    <span class="timeline-v4__item-text text-danger">
+                    <?php
+                    $credit = FatUtility::float($row['utxn_credit']);
+                    $debit = FatUtility::float($row['utxn_debit']);
+                    $amt = ((!empty($credit) && $credit > 0) ? $credit : $debit);
+                    $amtClass = ((!empty($credit) && $credit > 0) ? 'text-success' : 'text-danger');
+                    $amtType = ((!empty($row['utxn_credit']) && $row['utxn_credit'] > 0) ? Labels::getLabel('LBL_CREDIT', $siteLangId) : Labels::getLabel('LBL_DEBIT', $siteLangId));
+                    ?>
+                    <span class="timeline-v4__item-text <?php echo $amtClass; ?>">
                         <span class="tag">
                             <?php
-                            $credit = FatUtility::float($row['utxn_credit']);
-                            $debit = FatUtility::float($row['utxn_debit']);
-                            $amt = ((!empty($credit) && $credit > 0) ? $credit : $debit);
-                            $amtType = ((!empty($row['utxn_credit']) && $row['utxn_credit'] > 0) ? Labels::getLabel('LBL_CREDIT', $siteLangId) : Labels::getLabel('LBL_DEBIT', $siteLangId));
                             echo CommonHelper::displayMoneyFormat($amt, true);
-                            ?> (<?php echo $amtType; ?>)</span>
+                            ?></span>
                     </span>
-                    <span class="timeline-v4__item-text">
-                        <strong><?php echo Labels::getLabel('LBL_Transaction_Id', $siteLangId); ?></strong> : <?php echo CommonHelper::displayText($row['utxn_id']); ?>
-                    </span>
-                    <span class="timeline-v4__item-textarea">
-                        <strong><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?></strong> : <?php echo CommonHelper::displayText(ucfirst($row['utxn_comments'])); ?>
-                    </span>
+                    <ul class="list-text">
+                        <li class=""><span class="lable"><?php echo Labels::getLabel('LBL_Transaction_Id', $siteLangId); ?></span> <span class="value"><?php echo CommonHelper::displayText($row['utxn_id']); ?></span></li>
+                        <li class=""><span class="lable"><?php echo Labels::getLabel('LBL_Transaction_TYPE', $siteLangId); ?></span> <span class="value"><?php echo $amtType; ?></span></li>
+                        <li class=""><span class="lable"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?></span> <span class="value"><?php echo CommonHelper::displayText(ucfirst($row['utxn_comments'])); ?></span></li>
+                    </ul> 
                 </div>
             </li>
-        <?php
-        if (count($arrListing) == $count && $canAddHead) {
-            echo '</ul></div>';
+            <?php
+            if (count($arrListing) == $count && $canAddHead) {
+                echo '</ul></div>';
+            }
+            $count++;
         }
-        $count++;
-    }
         ?>
