@@ -170,6 +170,7 @@ class AdminBaseController extends FatController
                 'clickToCopy' => Labels::getLabel('LBL_CLICK_TO_COPY', $this->siteLangId),
                 'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                 'confirmSellerAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MAKE_SELLER_AS_BUYER', $this->siteLangId),
+                'maxLengthValidator' => Labels::getLabel('FRM_USED_%charsTyped%_of_%charsTotal%_CHARS_JS.', $this->siteLangId), /* Used By Maxlength bootstrap validator. */
             );
             foreach ($languages as $val) {
                 if (empty($val)) {
