@@ -197,7 +197,7 @@ class OrderStatusController extends ListingBaseController
         $frm = new Form('frmorderstatus');
         $frm->addHiddenField('', 'orderstatus_id', $recordId);
         /*$frm->addRequiredField(Labels::getLabel('LBL_Order_Status_Identifier', $this->siteLangId), 'orderstatus_identifier');*/
-        $frm->addRequiredField(Labels::getLabel('LBL_orderstatus_Name', $this->siteLangId), 'orderstatus_name');
+        $frm->addRequiredField(Labels::getLabel('LBL_Order_Status_Name', $this->siteLangId), 'orderstatus_name');
         /* $frm->addRequiredField(Labels::getLabel('LBL_ORDER_STATUS_COLOR_CLASS', $this->siteLangId), 'orderstatus_color_class'); */
 
         /* Please retain actual css class as option text. As that class used in JS to fill color of that option. */

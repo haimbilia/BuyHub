@@ -54,6 +54,11 @@ class RibbonsController extends ListingBaseController
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
         $actionItemsData['deleteButton'] = true;
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'onclick' => 'addNew(true)'
+            ]
+        ];
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -88,11 +93,10 @@ class RibbonsController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'badge_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'badge_id';
         }
-
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
@@ -140,6 +144,23 @@ class RibbonsController extends ListingBaseController
         $this->set("approvalStatusArr", $approvalStatusArr);
     }
 
+    protected function getSearchForm(array $fields = [])
+    {
+        $fields = $this->getFormColumns();
+
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'badge_id', applicationConstants::SORT_DESC);
+        }
+
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
+    }
+
     public function form()
     {
         $this->objPrivilege->canEditBadgesAndRibbons();
@@ -170,7 +191,20 @@ class RibbonsController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+
+        $ribbName = strlen($post['badge_name']);
+        if (Badge::RIBB_TEXT_MIN_LEN > $ribbName || Badge::RIBB_TEXT_MAX_LEN < $ribbName) {
+            $str = Labels::getLabel('ERR_RIBBON_NAME_LENGTH_SHOULD_BETWEEN_{MIN-LENGTH}_TO_{MAX-LENGTH}_CHARS', $this->siteLangId);
+            LibHelper::exitWithError(CommonHelper::replaceStringData($str, [
+                '{MIN-LENGTH}' => Badge::RIBB_TEXT_MIN_LEN,
+                '{MAX-LENGTH}' => Badge::RIBB_TEXT_MAX_LEN,
+            ]), true);
+        }
+
         $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+
+        $post['badge_shape_type'] = Badge::SHAPE_RECTANGLE;
+        $post['badge_display_inside'] = applicationConstants::YES;
 
         $record = new Badge($recordId);
         $record->setFldValue(Badge::DB_TBL_PREFIX . 'identifier', $post['badge_name']);
@@ -193,19 +227,14 @@ class RibbonsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm(int $conditionType = Badge::COND_MANUAL)
+    private function getForm()
     {
         $frm = new Form('frm');
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'badge_type', Badge::TYPE_RIBBON);
 
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'badge_name');
-
-        $badgeShapeTypes = Badge::getShapeTypesArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_SHAPE', $this->adminLangId), 'badge_shape_type', $badgeShapeTypes);
-        $fld->requirement->setRequired(true);
-        $frm->addCheckBox(Labels::getLabel('LBL_DISPLAY_INSIDE', $this->adminLangId), 'badge_display_inside', 1, [], false, 0 );
-        $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->adminLangId), 'badge_color', '', ['class' => 'jscolor']);
+        $frm->addRequiredField(Labels::getLabel('FRM_COLOR', $this->siteLangId), 'badge_color', '', ['class' => 'jscolor']);
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'badge_active', $activeInactiveArr, '', array(), '');
@@ -245,7 +274,7 @@ class RibbonsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if (!Badge::getAttributesById($recordId, 'badge_active')) {
+        if (!Badge::getAttributesById($recordId, 'badge_id')) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 

@@ -82,13 +82,13 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <ul class="list-stats list-stats-double">
-                                                    <li>
+                                                    <li class="list-stats-item">
                                                         <span class="label">Today's visit</span>
                                                         <span class="value">
                                                             <i class="icn fas fa-arrow-up font-success"></i>
                                                             14,209</span>
                                                     </li>
-                                                    <li>
+                                                    <li class="list-stats-item">
                                                         <span class="label">Today’s total sales
 
                                                         </span>
@@ -302,26 +302,26 @@
                                         <div class="card-body">
                                             <ul class="list-stats list-stats-double">
 
-                                                <li>
+                                                <li class="list-stats-item">
                                                     <span class="label">Added to cart</span>
                                                     <span class="value">
                                                         <i class="icn fas fa-arrow-up font-success"></i>
                                                         100%</span>
                                                 </li>
-                                                <li>
+                                                <li class="list-stats-item">
                                                     <span class="label">Reached checkout</span>
                                                     <span class="value">
                                                         <i class="icn fas fa-arrow-down font-danger"></i>
                                                         -66.67% </span>
                                                 </li>
-                                                <li>
+                                                <li class="list-stats-item">
                                                     <span class="label">Purchased</span>
                                                     <span class="value">
                                                         <i class="icn fas fa-arrow-up font-success"></i>
                                                         33.33%</span>
 
                                                 </li>
-                                                <li>
+                                                <li class="list-stats-item">
                                                     <span class="label">Cancelled</span>
                                                     <span class="value">
                                                         <i class="icn fas fa-arrow-up font-success"></i>
@@ -817,207 +817,207 @@
 
                             </div>
 
+                            <div class=" ">
+                                <table class="table-zebra">
+                                    <thead>
+                                        <tr>
+                                            <th>Best Selling Products</th>
+                                            <th>Orders(269)</th>
+                                            <th>Order(%)</th>
+                                            <th>Revenue</th>
+                                            <th class="text-right">Revenue (%)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="">
+                                            <td>
+                                                <div class="product-profile product-profile-sm">
+                                                    <div class="product-profile__thumbnail" data-ratio="1:1">
+                                                        <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product1.jpg">
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Apple iPhone 12</div>
+                                                        <div class="categories">Phone</div>
 
-                            <div class="card h-lg-100 overflow-hidden">
+                                                    </div>
+                                                </div>
+
+
+                                            </td>
+                                            <td>26</td>
+                                            <td>31%</td>
+                                            <td>$1311</td>
+                                            <td class="text-right">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                        <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 41%;" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    <div class="fw-semi-bold ml-2">41%</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="">
+                                            <td>
+                                                <div class="product-profile product-profile-sm">
+                                                    <div class="product-profile__thumbnail" data-ratio="1:1">
+                                                        <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product2.jpg">
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Apple iPhone 12</div>
+                                                        <div class="categories">Phone</div>
+
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                            <td>18</td>
+                                            <td>29%</td>
+                                            <td>$1311</td>
+                                            <td class="text-right">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                        <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 41%;" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    <div class="fw-semi-bold ml-2">41%</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="">
+                                            <td>
+                                                <div class="product-profile product-profile-sm">
+                                                    <div class="product-profile__thumbnail" data-ratio="1:1">
+                                                        <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product3.jpg">
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Apple iPhone 12</div>
+                                                        <div class="categories">Phone</div>
+
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                            <td>16</td>
+                                            <td>27%</td>
+                                            <td>$539</td>
+                                            <td class="text-right">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                        <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 27%;" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    <div class="fw-semi-bold ml-2">27%</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="">
+                                            <td>
+                                                <div class="product-profile product-profile-sm">
+                                                    <div class="product-profile__thumbnail" data-ratio="1:1">
+                                                        <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product4.jpg">
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Apple iPhone 12</div>
+                                                        <div class="categories">Phone</div>
+
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                            <td>11</td>
+                                            <td>21%</td>
+                                            <td>$245</td>
+                                            <td class="text-right">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                        <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 17%;" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    <div class="fw-semi-bold ml-2">17%</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="">
+                                            <td>
+                                                <div class="product-profile product-profile-sm">
+                                                    <div class="product-profile__thumbnail" data-ratio="1:1">
+                                                        <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product5.jpg">
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Apple iPhone 12</div>
+                                                        <div class="categories">Phone</div>
+
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                            <td>10</td>
+                                            <td>19%</td>
+                                            <td>$234</td>
+                                            <td class="text-right">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                        <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    <div class="fw-semi-bold ml-2">7%</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="">
+                                            <td>
+                                                <div class="product-profile product-profile-sm">
+                                                    <div class="product-profile__thumbnail" data-ratio="1:1">
+                                                        <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product6.jpg">
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Apple iPhone 12</div>
+                                                        <div class="categories">Phone</div>
+
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                            <td>10</td>
+                                            <td>19%</td>
+                                            <td>$234</td>
+                                            <td class="text-right">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                        <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    <div class="fw-semi-bold ml-2">7%</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="product-profile product-profile-sm">
+                                                    <div class="product-profile__thumbnail" data-ratio="1:1">
+                                                        <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product7.jpg">
+                                                    </div>
+                                                    <div class="product-profile__data">
+                                                        <div class="title">Apple iPhone 12</div>
+                                                        <div class="categories">Phone</div>
+
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                            <td>10</td>
+                                            <td>19%</td>
+                                            <td>$234</td>
+                                            <td class="text-right">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                        <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    <div class="fw-semi-bold ml-2">7%</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- <div class="card h-lg-100 overflow-hidden">
                                 <div class="card-body">
-                                    <div class="table-responsive scrollbar">
-                                        <table class="table table-dashboard mb-0 table-borderless fs--1 border-200">
-                                            <thead class="bg-light">
-                                                <tr class="text-900">
-                                                    <th>Best Selling Products</th>
-                                                    <th class="text-center">Orders(269)</th>
-                                                    <th class="text-center">Order(%)</th>
-                                                    <th class="text-right">Revenue</th>
-                                                    <th class="pe-card text-right" style="width: 8rem">Revenue (%)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class="border-bottom border-200">
-                                                    <td>
-                                                        <div class="product-profile">
-                                                            <div class="product-profile__thumbnail" data-ratio="1:1">
-                                                                <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product1.jpg">
-                                                            </div>
-                                                            <div class="product-profile__data">
-                                                                <div class="title">Apple iPhone 12</div>
-                                                                <div class="categories">Phone</div>
 
-                                                            </div>
-                                                        </div>
-
-
-                                                    </td>
-                                                    <td class="align-middle text-center fw-semi-bold">26</td>
-                                                    <td class="align-middle text-center fw-semi-bold">31%</td>
-                                                    <td class="align-middle text-right fw-semi-bold">$1311</td>
-                                                    <td class="align-middle pe-card">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
-                                                                <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 41%;" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                            <div class="fw-semi-bold ml-2">41%</div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-bottom border-200">
-                                                    <td>
-                                                        <div class="product-profile">
-                                                            <div class="product-profile__thumbnail" data-ratio="1:1">
-                                                                <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product2.jpg">
-                                                            </div>
-                                                            <div class="product-profile__data">
-                                                                <div class="title">Apple iPhone 12</div>
-                                                                <div class="categories">Phone</div>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </td>
-                                                    <td class="align-middle text-center fw-semi-bold">18</td>
-                                                    <td class="align-middle text-center fw-semi-bold">29%</td>
-                                                    <td class="align-middle text-right fw-semi-bold">$1311</td>
-                                                    <td class="align-middle pe-card">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
-                                                                <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 41%;" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                            <div class="fw-semi-bold ml-2">41%</div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-bottom border-200">
-                                                    <td>
-                                                        <div class="product-profile">
-                                                            <div class="product-profile__thumbnail" data-ratio="1:1">
-                                                                <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product3.jpg">
-                                                            </div>
-                                                            <div class="product-profile__data">
-                                                                <div class="title">Apple iPhone 12</div>
-                                                                <div class="categories">Phone</div>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </td>
-                                                    <td class="align-middle text-center fw-semi-bold">16</td>
-                                                    <td class="align-middle text-center fw-semi-bold">27%</td>
-                                                    <td class="align-middle text-right fw-semi-bold">$539</td>
-                                                    <td class="align-middle pe-card">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
-                                                                <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 27%;" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                            <div class="fw-semi-bold ml-2">27%</div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-bottom border-200">
-                                                    <td>
-                                                        <div class="product-profile">
-                                                            <div class="product-profile__thumbnail" data-ratio="1:1">
-                                                                <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product4.jpg">
-                                                            </div>
-                                                            <div class="product-profile__data">
-                                                                <div class="title">Apple iPhone 12</div>
-                                                                <div class="categories">Phone</div>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </td>
-                                                    <td class="align-middle text-center fw-semi-bold">11</td>
-                                                    <td class="align-middle text-center fw-semi-bold">21%</td>
-                                                    <td class="align-middle text-right fw-semi-bold">$245</td>
-                                                    <td class="align-middle pe-card">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
-                                                                <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 17%;" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                            <div class="fw-semi-bold ml-2">17%</div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-bottom border-200">
-                                                    <td>
-                                                        <div class="product-profile">
-                                                            <div class="product-profile__thumbnail" data-ratio="1:1">
-                                                                <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product5.jpg">
-                                                            </div>
-                                                            <div class="product-profile__data">
-                                                                <div class="title">Apple iPhone 12</div>
-                                                                <div class="categories">Phone</div>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </td>
-                                                    <td class="align-middle text-center fw-semi-bold">10</td>
-                                                    <td class="align-middle text-center fw-semi-bold">19%</td>
-                                                    <td class="align-middle text-right fw-semi-bold">$234</td>
-                                                    <td class="align-middle pe-card">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
-                                                                <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                            <div class="fw-semi-bold ml-2">7%</div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-bottom border-200">
-                                                    <td>
-                                                        <div class="product-profile">
-                                                            <div class="product-profile__thumbnail" data-ratio="1:1">
-                                                                <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product6.jpg">
-                                                            </div>
-                                                            <div class="product-profile__data">
-                                                                <div class="title">Apple iPhone 12</div>
-                                                                <div class="categories">Phone</div>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </td>
-                                                    <td class="align-middle text-center fw-semi-bold">10</td>
-                                                    <td class="align-middle text-center fw-semi-bold">19%</td>
-                                                    <td class="align-middle text-right fw-semi-bold">$234</td>
-                                                    <td class="align-middle pe-card">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
-                                                                <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                            <div class="fw-semi-bold ml-2">7%</div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="product-profile">
-                                                            <div class="product-profile__thumbnail" data-ratio="1:1">
-                                                                <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>/images/products/product7.jpg">
-                                                            </div>
-                                                            <div class="product-profile__data">
-                                                                <div class="title">Apple iPhone 12</div>
-                                                                <div class="categories">Phone</div>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </td>
-                                                    <td class="align-middle text-center fw-semi-bold">10</td>
-                                                    <td class="align-middle text-center fw-semi-bold">19%</td>
-                                                    <td class="align-middle text-right fw-semi-bold">$234</td>
-                                                    <td class="align-middle pe-card">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
-                                                                <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                            <div class="fw-semi-bold ml-2">7%</div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
                                 <div class="card-foot">
                                     <div class="row justify-content-between">
@@ -1029,7 +1029,7 @@
                                         <div class="col-auto"><a class="btn btn-outline-brand btn-sm" href="#!">View All</a></div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="col-lg-4">
                             <div class="card card-flush commerce-card">
@@ -1136,7 +1136,7 @@
                                     <div class="js-total-sale"></div>
                                     <ul class="list-stats list-stats-inline">
 
-                                        <li>
+                                        <li class="list-stats-item">
                                             <span class="label">
                                                 <i class="dot" style="background-color:#d70206;"></i>
                                                 Direct</span>
@@ -1144,7 +1144,7 @@
                                                 <i class="icn fas fa-arrow-up font-success"></i>
                                                 36%</span>
                                         </li>
-                                        <li>
+                                        <li class="list-stats-item">
                                             <span class="label">
                                                 <i class="dot" style="background-color: #f05b4f;"></i>
                                                 Affilliate</span>
@@ -1153,14 +1153,14 @@
                                                 29%
                                             </span>
                                         </li>
-                                        <li>
+                                        <li class="list-stats-item">
                                             <span class="label"> <i class="dot" style="background-color:#f4c63d;"></i>Sponsored</span>
                                             <span class="value">
                                                 <i class="icn fas fa-arrow-up font-success"></i>
                                                 29%</span>
 
                                         </li>
-                                        <li>
+                                        <li class="list-stats-item">
                                             <span class="label"> <i class="dot" style="background-color:#d17905;"></i>
                                                 E-mail</span>
                                             <span class="value">
@@ -1189,26 +1189,26 @@
                                     <div id="vmap" style="height: 224px;"></div>
                                     <ul class="list-stats list-stats-double">
 
-                                        <li>
+                                        <li class="list-stats-item">
                                             <span class="label">United States</span>
                                             <span class="value">
                                                 <i class="icn fas fa-arrow-up font-success"></i>
                                                 100%</span>
                                         </li>
-                                        <li>
+                                        <li class="list-stats-item">
                                             <span class="label">Iran </span>
                                             <span class="value">
                                                 <i class="icn fas fa-arrow-down font-danger"></i>
                                                 -66.67% </span>
                                         </li>
-                                        <li>
+                                        <li class="list-stats-item">
                                             <span class="label">India</span>
                                             <span class="value">
                                                 <i class="icn fas fa-arrow-up font-success"></i>
                                                 33.33%</span>
 
                                         </li>
-                                        <li>
+                                        <li class="list-stats-item">
                                             <span class="label">Malaysia</span>
                                             <span class="value">
                                                 <i class="icn fas fa-arrow-up font-success"></i>
