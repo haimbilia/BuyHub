@@ -1,5 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$fld = $frm->getField('badge_name');
+$fld->addFieldTagAttribute('maxlength', Badge::RIBB_TEXT_MAX_LEN);
+
 $fld = $frm->getField('badge_trigger_type');
 $fld->addFieldTagAttribute('onChange', 'conditionType(this)');
 $fld->addFieldTagAttribute('id', 'badgeConditionTypeJs');

@@ -183,6 +183,15 @@ class BadgesController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+        $badgeName = strlen($post['badge_name']);
+        if (Badge::RIBB_TEXT_MIN_LEN > $badgeName || Badge::RIBB_TEXT_MAX_LEN < $badgeName) {
+            $str = Labels::getLabel('ERR_BADGE_NAME_LENGTH_SHOULD_BETWEEN_{MIN-LENGTH}_TO_{MAX-LENGTH}_CHARS', $this->siteLangId);
+            LibHelper::exitWithError(CommonHelper::replaceStringData($str, [
+                '{MIN-LENGTH}' => Badge::RIBB_TEXT_MIN_LEN,
+                '{MAX-LENGTH}' => Badge::RIBB_TEXT_MAX_LEN,
+            ]), true);
+        }
+
         $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
 
         $record = new Badge($recordId);
@@ -407,7 +416,7 @@ class BadgesController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if (!Badge::getAttributesById($recordId, 'badge_active')) {
+        if (!Badge::getAttributesById($recordId, 'badge_id')) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 

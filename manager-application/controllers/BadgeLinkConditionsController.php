@@ -147,10 +147,6 @@ class BadgeLinkConditionsController extends ListingBaseController
             );
         }
 
-        if (Badge::TYPE_BADGE == $this->objectType) {
-            unset($fields[BadgeLinkCondition::DB_TBL_PREFIX . 'position']);
-        }
-
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
@@ -333,11 +329,6 @@ class BadgeLinkConditionsController extends ListingBaseController
         $frm->addHiddenField('', 'blinkcond_badge_id');
         $frm->addHiddenField('', 'badge_trigger_type');
 
-        if (Badge::TYPE_RIBBON == $this->objectType) {
-            $positionArr = Badge::getRibbonPostionArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('FRM_POSITION', $this->siteLangId), 'blinkcond_position', $positionArr, '', [], '');
-        }
-
         if (Badge::COND_MANUAL == $triggerType) {
             $frm->addDateField(Labels::getLabel('FRM_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly']);
             $frm->addDateField(Labels::getLabel('FRM_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly']);
@@ -479,6 +470,10 @@ class BadgeLinkConditionsController extends ListingBaseController
         $newRecord = (1 > $blinkCondId);
         if ($newRecord) {
             $post['blinkcond_user_id'] = $sellerId;
+        }
+        
+        if (Badge::TYPE_RIBBON == $badgeType) {
+            $post['blinkcond_position'] = Badge::RIBB_POS_TRIGHT;
         }
 
         $record = new BadgeLinkCondition($blinkCondId);
@@ -659,7 +654,6 @@ class BadgeLinkConditionsController extends ListingBaseController
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'cond_seller_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_RECORD_TYPE', $this->siteLangId),
-            BadgeLinkCondition::DB_TBL_PREFIX . 'position' => Labels::getLabel('LBL_POSITION', $this->siteLangId),
             BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $this->siteLangId),
             BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from' => Labels::getLabel('LBL_CONDITION_FROM', $this->siteLangId),
             BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to' => Labels::getLabel('LBL_CONDITION_TO', $this->siteLangId),
@@ -678,7 +672,6 @@ class BadgeLinkConditionsController extends ListingBaseController
             'listSerial',
             'cond_seller_name',
             BadgeLinkCondition::DB_TBL_PREFIX . 'record_type',
-            BadgeLinkCondition::DB_TBL_PREFIX . 'position',
             BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type',
             BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from',
             BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to',
@@ -698,13 +691,13 @@ class BadgeLinkConditionsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $params = FatApp::getParameters();
         $this->validateBadge(current($params));
-        $this->set('ribbRow', $this->badgeData);
-        $ribbon = $this->_template->render(false, false, '_partial/ribbon-ui.php', true);
+        /* $this->set('ribbRow', $this->badgeData);
+        $ribbon = $this->_template->render(false, false, '_partial/ribbon-ui.php', true); */
 
         $str = Labels::getLabel('LBL_{OBJECT-TYPE}_-_{OBJECT-NAME}', $this->siteLangId);
         $pageTitle = CommonHelper::replaceStringData($str, [
             '{OBJECT-TYPE}' => $this->objectTypeName,
-            '{OBJECT-NAME}' => $ribbon,
+            '{OBJECT-NAME}' => $this->badgeData['badge_name'],
         ]);
 
         $pageTitle = $pageData['plang_title'] ?? $pageTitle;
