@@ -376,6 +376,12 @@ Admin UI/UX Enhancements pages:
 
     => Settings
 
+Bugs : 
+    => 060304 - The homepage logo is not clearly visible.
+    => 060346 - Admin UI: Nothing(hint text) is showing while hovering on the "Notification icon" on the top header section. 
+	=> 060494 - Admin UI: Spacing issue between in the title of "Order status Name".
+    => 060517 - Admin UI: Correct "order status type" is not showing while editing the order's status in case of subscription.
+
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
