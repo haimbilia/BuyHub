@@ -63,7 +63,12 @@ class TaxStructureController extends ListingBaseController
 
         $srch = TaxStructure::getSearchObject($this->siteLangId);
         $srch->addCondition('taxstr_parent', '=', 0);
-        $srch->addMultipleFields(array('ts.*', 'ts_l.*'));
+        $srch->addMultipleFields([
+            'ts.taxstr_id',
+            'ts.taxstr_identifier',
+            'ts.taxstr_is_combined',
+            'ts_l.taxstr_name'
+        ]);
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('taxstr_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('taxstr_name', 'like', '%' . $post['keyword'] . '%', 'OR');
