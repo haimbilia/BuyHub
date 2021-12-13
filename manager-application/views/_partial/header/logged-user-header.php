@@ -54,7 +54,7 @@
                                 </a>
                             </div>
                             <div class="header-action__item dropdown">
-                                <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void();">
+                                <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void();" title="<?php echo Labels::getLabel('LBL_Message', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
