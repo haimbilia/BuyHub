@@ -3,7 +3,7 @@ $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
     Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_IMAGE', $siteLangId),
     Badge::DB_TBL_PREFIX . 'name' => (Badge::TYPE_RIBBON == $badgeType) ? Labels::getLabel('LBL_RIBBON_NAME', $siteLangId) : Labels::getLabel('LBL_BADGE_NAME', $siteLangId),
-    Badge::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION_TYPE', $siteLangId),
+    Badge::DB_TBL_PREFIX . 'trigger_type' => Labels::getLabel('LBL_CONDITION_TYPE', $siteLangId),
     Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $siteLangId),
     'action' => '',
 );
@@ -13,7 +13,7 @@ if (!$canEdit) {
 }
 
 if (Badge::TYPE_RIBBON == $badgeType) {
-    unset($arr_flds[Badge::DB_TBL_PREFIX . 'required_approval'], $arr_flds[Badge::DB_TBL_PREFIX . 'condition_type']);
+    unset($arr_flds[Badge::DB_TBL_PREFIX . 'required_approval'], $arr_flds[Badge::DB_TBL_PREFIX . 'trigger_type']);
 }
 
 $conditionTypeArr = Badge::getTriggerCondTypeArr($siteLangId);
@@ -46,7 +46,7 @@ foreach ($arrListing as $sn => $row) {
                 $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $siteLangId) : $recordTypeArr[$row[$key]];
                 $td->appendElement('plaintext', [], $txt, true);
                 break;
-            case Badge::DB_TBL_PREFIX . 'condition_type':
+            case Badge::DB_TBL_PREFIX . 'trigger_type':
                 $class = Badge::COND_AUTO == $row[$key] ? 'label-success' : 'label-info';
                 $html = '<span class="label label-inline ' . $class . ' rounded-pill">' . $conditionTypeArr[$row[$key]] . '</span>';
                 $td->appendElement('plaintext', [], $html, true);
@@ -66,16 +66,16 @@ foreach ($arrListing as $sn => $row) {
                 $class = (applicationConstants::YES == $row[$key] ? 'label-warning' : 'label-success');
                 $htm = ' <span class="label label-inline label-success rounded-pill">' . Labels::getLabel('LBL_NOT_REQUIRED', $siteLangId) . '</span>';;
                 if (Badge::TYPE_BADGE == $row[Badge::DB_TBL_PREFIX . 'type']) {
-                    $class = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? 'label-danger' : $class;
+                    $class = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'trigger_type']) ? 'label-danger' : $class;
                     
-                    if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED && 0 < $row[BadgeRequest::DB_TBL_PREFIX . 'id']) {
+                    if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'trigger_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED && 0 < $row[BadgeRequest::DB_TBL_PREFIX . 'id']) {
                         $lbl = Labels::getLabel('LBL_APPROVED', $siteLangId);
                         $class = 'label-success';
-                    } else if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
+                    } else if (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'trigger_type'] && 0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
                         $lbl = Labels::getLabel('LBL_REQUESTED', $siteLangId);
                         $class = 'label-info';
                     } else {
-                        $lbl = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'condition_type']) ? Labels::getLabel('LBL_NOT_ALLOWED', $siteLangId) : $approvalStatusArr[$row[$key]];
+                        $lbl = (Badge::COND_AUTO == $row[Badge::DB_TBL_PREFIX . 'trigger_type']) ? Labels::getLabel('LBL_NOT_ALLOWED', $siteLangId) : $approvalStatusArr[$row[$key]];
                     }
                     $htm = ' <span class="label label-inline ' . $class . ' rounded-pill">' . $lbl . '</span>';
                 }
@@ -84,9 +84,9 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'action':
                 $ul = $td->appendElement("ul", array("class"=>"actions"));           
-                if ($canEdit && (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'])) {
+                if ($canEdit && (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'trigger_type'])) {
                     if (0 < (int) $row['canAccess']) {
-                        $condManualReq = (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'condition_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED);
+                        $condManualReq = (Badge::COND_MANUAL == $row[Badge::DB_TBL_PREFIX . 'trigger_type'] && 0 < (int) $row['canAccess'] && $row[Badge::DB_TBL_PREFIX . 'required_approval'] == Badge::APPROVAL_REQUIRED);
 
                         $icon = $condManualReq ? "<i class='fas fa-eye icon'></i>" : "<i class='fas fa-link icon'></i>";
                         $title = $condManualReq ? Labels::getLabel('LBL_VIEW', $siteLangId) : Labels::getLabel('LBL_BIND_CONDITION', $siteLangId);

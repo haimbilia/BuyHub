@@ -76,10 +76,10 @@ class BadgesController extends AdminBaseController
             $srch->addCondition('badge_required_approval', '=', $approval);
         }
 
-        $conditionType = FatApp::getPostedData('badge_condition_type');
+        $conditionType = FatApp::getPostedData('badge_trigger_type');
         if ('' != $conditionType) {
             $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
-            $srch->addCondition('badge_condition_type', '=', $conditionType);
+            $srch->addCondition('badge_trigger_type', '=', $conditionType);
         }
 
         $srch->addOrder(Badge::DB_TBL_PREFIX . 'id', 'DESC');
@@ -247,7 +247,7 @@ class BadgesController extends AdminBaseController
             $frm->addSelectBox(Labels::getLabel('LBL_APPROVAL', $this->adminLangId), 'badge_required_approval', $approvalArr);
             
             $conditionTypeArr = Badge::getTriggerCondTypeArr($this->adminLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', $conditionTypeArr);
+            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_trigger_type', $conditionTypeArr);
         }
 
         $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->adminLangId));
@@ -269,7 +269,7 @@ class BadgesController extends AdminBaseController
             $frm->addCheckBox(Labels::getLabel('LBL_DISPLAY_INSIDE', $this->adminLangId), 'badge_display_inside', 1, [], false, 0 );
             $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->adminLangId), 'badge_color', '', ['class' => 'jscolor']);
         } else {
-            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_condition_type', Badge::getTriggerCondTypeArr($this->adminLangId), '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_CONDITION_TYPE', $this->adminLangId), 'badge_trigger_type', Badge::getTriggerCondTypeArr($this->adminLangId), '', [], '');
         }
 
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
