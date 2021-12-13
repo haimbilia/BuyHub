@@ -58,7 +58,12 @@ class TaxStructureController extends ListingBaseController {
 
         $srch = TaxStructure::getSearchObject($this->siteLangId);
         $srch->addCondition('taxstr_parent', '=', 0);
-        $srch->addMultipleFields(array('ts.*', 'ts_l.*'));
+        $srch->addMultipleFields([
+            'ts.taxstr_id',
+            'ts.taxstr_identifier',
+            'ts.taxstr_is_combined',
+            'ts_l.taxstr_name'
+        ]);
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('taxstr_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('taxstr_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -204,7 +209,7 @@ class TaxStructureController extends ListingBaseController {
         } else {
             $post['taxstr_component_name'] = [];
         }
-        
+
         if (!$record->addUpdateCombinedData($post, $record->getMainTableRecordId())) {
             LibHelper::exitWithError($record->getError(), true);
         }
@@ -297,7 +302,7 @@ class TaxStructureController extends ListingBaseController {
         $frm->addHiddenField('', 'taxstr_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $lang_id), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $lang_id), 'taxstr_name');
-        
+
         if ($isCombined) {
             $htmlFld = $frm->addHTML('', 'component_link', Labels::getLabel('FRM_TAX_COMPONENT_NAME', $lang_id));
             $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);

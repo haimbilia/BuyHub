@@ -197,7 +197,7 @@ class TransactionsController extends ListingBaseController {
 
         /* send email to user[ */
         $emailNotificationObj = new EmailHandler();
-        //$emailNotificationObj->sendTxnNotification($tObj->getMainTableRecordId(), $this->siteLangId);
+        $emailNotificationObj->sendTxnNotification($tObj->getMainTableRecordId(), $this->siteLangId);
         /* ] */
 
         $this->set('userId', $userId);
