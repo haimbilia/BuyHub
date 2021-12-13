@@ -367,24 +367,31 @@ class Product extends MyAppModel
         }
     }
 
-    public function deleteProductImage($product_id, $image_id)
+    public function deleteProductImage($productId, $imageId, $fileType)
     {
-        $product_id = FatUtility::int($product_id);
-        $image_id = FatUtility::int($image_id);
-        if ($product_id < 1 || $image_id < 1) {
+        $productId = FatUtility::int($productId);
+        $imageId = FatUtility::int($imageId);
+        $fileType = FatUtility::int($fileType);
+        if (1 > $productId || 1 > $imageId || 1 >  $fileType) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
 
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product_id, $image_id)) {
+        if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {
+            $fileHandlerObj = new AttachedFileTemp();
+        } else {
+            $fileHandlerObj = new AttachedFile();
+            $fileType = AttachedFile::FILETYPE_PRODUCT_IMAGE;
+        }
+       
+        if (!$fileHandlerObj->deleteFile($fileType, $productId, $imageId)) {
             $this->error = $fileHandlerObj->getError();
             return false;
         }
         return true;
     }
 
-    public function updateProdImagesOrder($product_id, $order)
+    public function updateProdImagesOrder($product_id, $fileType, $order)
     {
         $product_id = FatUtility::int($product_id);
         if (is_array($order) && sizeof($order) > 0) {
@@ -392,7 +399,11 @@ class Product extends MyAppModel
                 if (FatUtility::int($id) < 1) {
                     continue;
                 }
-                FatApp::getDb()->updateFromArray('tbl_attached_files', array('afile_display_order' => $i), array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id = ?', 'vals' => array(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product_id, $id)));
+                if($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP){
+                    FatApp::getDb()->updateFromArray('tbl_attached_files_temp', array('afile_display_order' => $i), array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id = ?', 'vals' => array($fileType, $product_id, $id)));
+                }else{
+                    FatApp::getDb()->updateFromArray('tbl_attached_files', array('afile_display_order' => $i), array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id = ?', 'vals' => array(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product_id, $id)));
+                }                
             }
             return true;
         }
@@ -2122,6 +2133,69 @@ END,   special_price_found ) as special_price_found'
                 break;
         }
         return HtmlHelper::getStatusHtml($status, $msg);
+    }
+
+    /**
+     * move images from temp to main table
+     */
+    public function moveTempFiles(int $fileType, int $tempRecordId)
+    {
+        if (!$this->mainTableRecordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+
+        $db = FatApp::getDb();
+        $sql = "INSERT INTO tbl_attached_files(
+            afile_type,
+            afile_record_id,
+            afile_record_subid,
+            afile_lang_id,
+            afile_screen,
+            afile_physical_path,
+            afile_name,
+            afile_attribute_title,
+            afile_attribute_alt,
+            afile_aspect_ratio,
+            afile_display_order,
+            afile_updated_at
+        )
+        SELECT
+            ".AttachedFile::FILETYPE_PRODUCT_IMAGE.",
+            $this->mainTableRecordId,
+            afile_record_subid,
+            afile_lang_id,
+            afile_screen,
+            afile_physical_path,
+            afile_name,
+            afile_attribute_title,
+            afile_attribute_alt,
+            afile_aspect_ratio,
+            afile_display_order,
+            afile_updated_at
+        FROM
+            tbl_attached_files_temp
+        WHERE
+            afile_type = $fileType AND afile_record_id = $tempRecordId";
+
+
+        if (!$db->query($sql)) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        $sql = "delete from tbl_attached_files_temp where afile_type = $fileType AND afile_record_id = $tempRecordId";
+        if (!$db->query($sql)) {
+            $this->error = $db->getError();
+            return false;
+        }
+
+        $db->updateFromArray('tbl_products', array('product_image_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($this->mainTableRecordId)));
+        if (!$db->query($sql)) {
+            $this->error = $db->getError();
+            return false;
+        }
+        return true;
     }
 
 }

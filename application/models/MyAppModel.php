@@ -233,7 +233,7 @@ class MyAppModel extends FatModel {
         $db = FatApp::getDb();
         $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
         if (true === $includePrimaryTable) {
-            $srch->joinTable(static::DB_TBL, 'RIGHT JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id');
+            $srch->joinTable(static::DB_TBL, 'RIGHT JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id and ln.' . $prefix . 'lang_lang_id='. $langId);
         }
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -253,10 +253,8 @@ class MyAppModel extends FatModel {
 
         } else {
             $srch->addCondition('ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', $recordId);
-            $srch->addCondition('ln.' . $prefix . 'lang_lang_id', '=', FatUtility::int($langId));
-        }
-
-        
+            $srch->addCondition('ln.' . $prefix . 'lang_lang_id', '=', $langId);
+        }        
 
         if (null != $attr) {
             if (is_array($attr)) {

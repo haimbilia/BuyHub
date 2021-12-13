@@ -106,7 +106,7 @@ trait BadgeRequestSetup
      */
     public function setupBadgeReq()
     {
-        $this->userPrivilege->canEditBadges();
+        $this->userPrivilege->canEditBadgesAndRibbons();
 
         $badgeReqId = FatApp::getPostedData('breq_id', FatUtility::VAR_INT, 0);
         $badgeId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
@@ -209,7 +209,7 @@ trait BadgeRequestSetup
      */
     public function badgeReqForm($badgeReqId = 0, $badgeId = 0)
     {
-        $this->userPrivilege->canEditBadges();
+        $this->userPrivilege->canEditBadgesAndRibbons();
         $frm = $this->getBadgeForm($badgeReqId, $badgeId);
         $badgeId = 0;
         if (0 < $badgeReqId) {

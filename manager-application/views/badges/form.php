@@ -1,14 +1,18 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$fld = $frm->getField('badge_condition_type');
+$fld = $frm->getField('badge_name');
+$fld->addFieldTagAttribute('maxlength', Badge::RIBB_TEXT_MAX_LEN);
+
+$fld = $frm->getField('badge_trigger_type');
 $fld->addFieldTagAttribute('onChange', 'conditionType(this)');
-// $fld->addFieldTagAttribute('class', 'badgeConditionTypeJs');
+$fld->addFieldTagAttribute('id', 'badgeConditionTypeJs');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('badge_name');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('badge_required_approval');
+$fld->addFieldTagAttribute('id', 'badgeRequiredApprovalJs');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('badge_active');
@@ -26,4 +30,11 @@ $otherButtons = [
     ]
 ];
 
-require_once(CONF_THEME_PATH . '_partial/listing/form.php');
+require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
+
+<script>
+    var condAuto =  <?php echo Badge::COND_AUTO; ?>;
+    $(document).ready(function(){
+        $("#badgeConditionTypeJs").trigger('change')
+    });
+</script>

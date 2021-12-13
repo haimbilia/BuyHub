@@ -1,4 +1,7 @@
+$product-profile: "product-profile";
+
 .product-profile {
+    $self: &;
     display: flex;
     flex-wrap: wrap;
     flex: 1;
@@ -120,6 +123,12 @@
         li {
             list-style: none;
             color: $txt-gray;
+        }
+    }
+    &-sm {
+        #{ $self }__thumbnail {
+            width: 40px;
+            height: 40px;
         }
     }
 }

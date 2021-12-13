@@ -417,34 +417,36 @@ class ConfigurationsController extends ListingBaseController
                 break;
 
             case Configurations::FORM_SEO:
-                $fld = $frm->addCheckBox(Labels::getLabel('FRM_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING', $langId), 'CONF_LANG_SPECIFIC_URL', 1, array(), false, 0);
+                $fld = $frm->addCheckBox(Labels::getLabel('FRM_ENABLE_LANGUAGE_SPECIFIC_URLS', $langId), 'CONF_LANG_SPECIFIC_URL', 1, array(), false, 0);
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_LANGUAGE_CODE_TO_SITE_URLS_EXAMPLES", $langId));
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ENABLE_LANGUAGE_SPECIFIC_URLS_MSG", $langId));
 
 
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_TWITTER_USERNAME', $langId), 'CONF_TWITTER_USERNAME');
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_THIS_IS_REQUIRED_FOR_TWITTER_CARD_CODE_SEO_UPDATE", $langId) . '</span>';
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_TWITTER_USERNAME_MSG", $langId) . '</span>';
 
                 $fld2 = $frm->addTextarea(Labels::getLabel('FRM_SITE_TRACKER_CODE', $langId), 'CONF_SITE_TRACKER_CODE');
                 $fld2->developerTags['colWidthValues'] = [null, '12', null, null];
-                $fld2->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_THIS_IS_THE_SITE_TRACKER_SCRIPT,_used_to_track_and_analyze_data_about_how_people_are_getting_to_your_website._e.g.,_Google_Analytics.", $langId) . ' http://www.google.com/analytics/</span>';
+                $fld2->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_SITE_TRACKER_CODE_MSG", $langId) . ' http://www.google.com/analytics/</span>';
 
                 $robotsFld = $frm->addTextarea(Labels::getLabel('FRM_ROBOTS_TXT', $langId), 'CONF_SITE_ROBOTS_TXT');
                 $robotsFld->developerTags['colWidthValues'] = [null, '12', null, null];
-                $robotsFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_THIS_WILL_UPDATE_YOUR_ROBOTS.txt_file._This_is_to_help_search_engines_index_your_site_more_appropriately.", $langId) . '</span>';
+                $robotsFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_ROBOTS_TXT_MSG", $langId) . '</span>';
 
                 $fld = $frm->addHtml('', 'seperatorGoogleTag', '<div class="separator separator-dashed my-2"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addHtml('', 'googleTagManager', '<h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_TAG_MANAGER", $langId) . '</h3>');
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_GOOGLE_TAG_MANAGER_MSG", $langId) . '</span>';
+
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_HEAD_SCRIPT", $langId), 'CONF_GOOGLE_TAG_MANAGER_HEAD_SCRIPT');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_CODE_PROVIDED_BY_GOOGLE_TAG_MANAGER_FOR_INTEGRATION.", $langId) . "</span>";
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_GOOGLE_TAG_HEAD_SCRIPT_MSG", $langId) . "</span>";
 
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_BODY_SCRIPT", $langId), 'CONF_GOOGLE_TAG_MANAGER_BODY_SCRIPT');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_CODE_PROVIDED_BY_GOOGLE_TAG_MANAGER_FOR_INTEGRATION.", $langId) . "</span>";
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_GOOGLE_TAG_BODY_SCRIPT_MSG", $langId) . "</span>";
                 $fld = $frm->addHtml('', 'googlewebmaster', '<div class="separator separator-dashed my-2"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addHtml('', 'googleFileVerification', '<h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_WEBMASTER", $langId) . '</h3>');
@@ -452,7 +454,7 @@ class ConfigurationsController extends ListingBaseController
                 if (file_exists(CONF_UPLOADS_PATH . '/google-site-verification.html')) {
                     $htmlAfterField .= $fld->htmlAfterField = '<a href="' . UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'google-site-verification.html" target="_blank" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("FRM_VIEW_FILE", $langId) . '"><i class="fas fa-eye icon"></i></a><a href="javascript:void();" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("FRM_DELETE_FILE", $langId) . '" onclick="deleteVerificationFile(\'google\')"><i class="fa fa-trash  icon"></i></a>';
                 }
-                $htmlAfterField .= "<span class='form-text text-muted'>" . Labels::getLabel("FRM_UPLOAD_HTML_FILE_PROVIDED_BY_GOOGLE_WEBMASTER_TOOL.", $langId) . "</span>";
+                $htmlAfterField .= "<span class='form-text text-muted'>" . Labels::getLabel("FRM_GOOGLE_WEBMASTER_MSG", $langId) . "</span>";
                 $fld->htmlAfterField = $htmlAfterField;
 
                 $fld = $frm->addHtml('', 'bingFileVerification', '<h3 class="form-section-head">' . Labels::getLabel("FRM_BING_WEBMASTER", $langId) . '</h3>');
@@ -460,24 +462,27 @@ class ConfigurationsController extends ListingBaseController
                 if (file_exists(CONF_UPLOADS_PATH . '/BingSiteAuth.xml')) {
                     $htmlAfterField .= $fld->htmlAfterField = '<a href="' . UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONT_URL) . 'BingSiteAuth.xml' . '" target="_blank" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("FRM_VIEW_FILE", $langId) . '"><i class="fas fa-eye icon"></i></a><a href="javascript:void();" class="btn btn-clean btn-sm btn-icon" title="' . Labels::getLabel("FRM_DELETE_FILE", $langId) . '" onclick="deleteVerificationFile(\'bing\')"><i class="fa fa-trash  icon"></i></a>';
                 }
-                $htmlAfterField .= "<span class='form-text text-muted'>" . Labels::getLabel("FRM_UPLOAD_BINDSITEAUTHXML_FILE_PROVIDED_BY_BING_WEBMASTER_TOOL.", $langId) . "</span>";
+                $htmlAfterField .= "<span class='form-text text-muted'>" . Labels::getLabel("FRM_BING_WEBMASTER_MSG", $langId) . "</span>";
                 $fld->htmlAfterField = $htmlAfterField;
+                
+                $fld = $frm->addFileUpload(Labels::getLabel('FRM_HTML_FILE_VERIFICATION', $langId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_HTML_FILE_VERIFICATION_MSG", $langId) . '</span>';
 
-                $frm->addFileUpload(Labels::getLabel('FRM_HTML_FILE_VERIFICATION', $langId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
-                $frm->addFileUpload(Labels::getLabel('FRM_XML_FILE_AUTHENTICATION', $langId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
+                $fld =$frm->addFileUpload(Labels::getLabel('FRM_XML_FILE_AUTHENTICATION', $langId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_XML_FILE_VERIFICATION_MSG", $langId) . '</span>';
 
                 $fld = $frm->addHtml('', 'hotjar', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_HOTJAR", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_HEAD_SCRIPT", $langId), 'CONF_HOTJAR_HEAD_SCRIPT');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_CODE_PROVIDED_BY_HOTJAR_FOR_INTEGRATION.", $langId) . "</span>";
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_HOTJAR_MSG", $langId) . "</span>";
 
                 $fld = $frm->addHtml('', 'schemacode', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_SCHEMA_CODES", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_DEFAULT_SCHEMA", $langId), 'CONF_DEFAULT_SCHEMA_CODES_SCRIPT');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_UPDATE_SCHEMA_CODE_RELATED_INFORMATION.", $langId) . "</span>";
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_DEFAULT_SCHEMA_MSG", $langId) . "</span>";
 
                 break;
 

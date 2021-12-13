@@ -17,11 +17,13 @@ if (null != $fld) {
 
 $fld = $frm->getField('blinkcond_from_date');
 if (null != $fld) {
+    $fld->addFieldTagAttribute('class', 'field--calender');
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('blinkcond_to_date');
 if (null != $fld) {
+    $fld->addFieldTagAttribute('class', 'field--calender');
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 

@@ -111,7 +111,7 @@ class WithdrawalRequestsController extends ListingBaseController
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
-        $searchForm = $this->getSearchForm(false, $fields);
+        $searchForm = $this->getSearchForm($fields);
         $post = $searchForm->getFormDataFromArray($data);
 
         $srch = new WithdrawalRequestsSearch();

@@ -4,11 +4,11 @@
         if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
-            langForm(res.langId,0,res.productId);            
+            langForm(res.langId, 0, res.productId);
         });
     };
 
-    langForm = function (langId = 0, autoFillLangData = 0 , productId = 0 ) {  
+    langForm = function (langId = 0, autoFillLangData = 0, productId = 0) {
         productId = productId || $("#addProductfrm input[name='product_id']").val();
         langId = langId || $("#addProductfrm [name='lang_id']").val();
         $('.mainJs').prepend(fcom.getLoader());
@@ -152,7 +152,8 @@
         $('#sp_label').val('');
         $('#sp_value').val('');
         $('#sp_group').val('');
-        $('#sp_id').val(0);
+        $('#sp_id').val(0);   
+        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));     
 
     };
     validateSpeficationForm = function () {
@@ -205,6 +206,7 @@
         $('#sp_value').val(value);
         $('#sp_group').val(group);
         $('#sp_id').val(prodSpecId);
+        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('updatelbl')); 
     };
     deleteProdSpec = function (el) {
         let prodSpecId = $(el).closest('tr').data('id');
@@ -244,63 +246,83 @@
         return $("#addProductfrm [name='product_id']").val();
     };
 
+    getCurrentFrmTempProductId = function () {
+        return $("#addProductfrm [name='temp_product_id']").val();
+    };
+
     imageForm = function () {
-        if (false === checkControllerName()) {
-            return false;
-        }
         let productId = getCurrentFrmProductId();
-        let tempProductId = $("#addProductfrm [name='temp_product_id']").val();
-        if(1 > productId){
-            if(tempProductId == undefined){
+        let tempProductId = getCurrentFrmTempProductId();
+        if (1 > productId) {
+            if (tempProductId == undefined) {
                 console.warn('temp product id is manatory');
                 return;
             }
         }
         $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controllerName, "imageForm", [productId,tempProductId]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Products', "imageForm", [productId, tempProductId]), '', function (t) {
             $.ykmodal(t);
             loadImageOptions();
-            productImages(productId);
+            var fileType = $('#image_file_type').val();
+            var productId = $('#image_product_id').val();
+            productImages(productId, fileType);
             fcom.removeLoader();
         });
     };
-    loadImageOptions = function () {   
-        $('#addProductfrm .optionsJs').each(function(){
+    loadImageOptions = function () {
+        $('#addProductfrm .optionsJs').each(function () {
             let data = $(this).select2('data');
-            if(data.length){
-                data = data[0]; 
-                if(data.option_is_separate_images == 1){
-                    let optionValueData = $.parseJSON($(this).closest('.rowJs').find('input.optionValuesJs').val());   
+            if (data.length) {
+                data = data[0];
+                if (data.option_is_separate_images == 1) {
+                    let optionValueData = $.parseJSON($(this).closest('.rowJs').find('input.optionValuesJs').val());
                     let optionIdEl = $('#image_option_id');
                     optionIdEl.html(`<option value="0">
                     ${forAllOptionsLbl}
-                    </option>`);          
+                    </option>`);
 
                     $.each(optionValueData, function (index, opval) {
-                            optionIdEl.append(`<option value="${opval.id}">
+                        optionIdEl.append(`<option value="${opval.id}">
                             ${opval.value}
                             </option>`);
 
-                    });                    
-                    return false; 
+                    });
+                    return false;
                 }
             }
 
         })
     };
 
-    productImagesCallback = function (t) {  
-        let temp_product_id = 0;
-        if(temp_product_id in t){
-            temp_product_id = t.temp_product_id;
+    productImagesCallback = function (t) {
+        productImages(t.product_id, t.file_type, t.option_id, t.lang_id)
+        if (t.isDefaultLayout) {
+            productDefaultImages();
         }
-        console.log(t);
-      productImages(t.product_id,t.option_id,t.lang_id,t.temp_product_id)
+
     };
 
-    productImages = function (product_id, option_id = 0, lang_id = 0, temp_product_id = 0) {
-        fcom.ajax(fcom.makeUrl('Products', 'images', [product_id, option_id, lang_id,temp_product_id]), '', function (t) {
-            $('#imageupload_div').html(t);
+    productImages = function (product_id, file_type, option_id = 0, lang_id = 0) {
+        fcom.ajax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
+            $('#productImagesJs').html(t);
+        });
+    };
+
+    deleteImage = function (product_id, image_id, file_type) {
+        var agree = confirm(langLbl.confirmDelete);
+        if (!agree) { return false; }
+        fcom.ajax(fcom.makeUrl('Products', 'deleteImage', [product_id, image_id, file_type]), '', function (t) {
+            var ans = $.parseJSON(t);
+            if (ans.status == 0) {
+                fcom.displayErrorMessage(ans.msg);
+                return;
+            } else {
+                fcom.displaySuccessMessage(ans.msg);
+            }
+            productImages(product_id, file_type, ans.optionId, ans.langId);
+            if (ans.isDefaultLayout) {
+                productDefaultImages();
+            }
         });
     };
 
@@ -356,7 +378,7 @@
                         if (0 < productId) {
                             let optionId = $(element).closest('.rowJs').find('.optionsJs').val()
                             let optionValueId = tags[0]['data']['id'];
-                            fcom.ajax(fcom.makeUrl(controllerName, "canDeleteOpValue"), { productId, optionId, optionValueId }, function (t) {
+                            fcom.ajax(fcom.makeUrl('Products', "canDeleteOpValue"), { productId, optionId, optionValueId }, function (t) {
                                 t = $.parseJSON(t);
                                 if (t.status == 0) {
                                     fcom.displayErrorMessage(t.msg);
@@ -394,7 +416,7 @@
                     }
 
                     optionData = optionData[0];
-                    let optionValueData = $(this).closest('.rowJs').find('input.optionValuesJs').val();              
+                    let optionValueData = $(this).closest('.rowJs').find('input.optionValuesJs').val();
                     if (optionValueData == '') {
                         return;
                     }
@@ -407,23 +429,112 @@
                     });
                 });
             }
-            fcom.ajax(fcom.makeUrl(controllerName, "upcListing"), { productId, langId, type, productOptions }, function (t) {
+            fcom.ajax(fcom.makeUrl('Products', "upcListing"), { productId, langId, type, productOptions }, function (t) {
                 $('#variantsListJs').html(t);
             });
         }, 2500);
+    };
+    loadCropper = function (inputBtn) {
+        if (inputBtn.files && inputBtn.files[0]) {
+            loadCropperSkeleton(false);
+            $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
+            fcom.ajax(fcom.makeUrl('Products', "imgCropper"), "", function (t) {
+                t = $.parseJSON(t);
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
+                var file = inputBtn.files[0];
+
+                var frmName = $(inputBtn).closest('form').attr('name');
+                var minWidth = document[frmName].min_width.value;
+                var minHeight = document[frmName].min_height.value;
+
+                if (minWidth == minHeight) {
+                    var aspectRatio = 1 / 1;
+                } else {
+                    var aspectRatio = 16 / 9;
+                }
+                var options = {
+                    aspectRatio: aspectRatio,
+                    data: {
+                        width: minWidth,
+                        height: minHeight,
+                    },
+                    minCropBoxWidth: minWidth,
+                    minCropBoxHeight: minHeight,
+                    toggleDragModeOnDblclick: false,
+                    imageSmoothingQuality: "high",
+                    imageSmoothingEnabled: true,
+                };
+                $(inputBtn).val("");
+                setTimeout(function () { cropImage(file, options, "mediaUpload", inputBtn) }, 100);
+                return;
+            });
+        }
+    };
+
+    mediaUpload = function (formData) {
+        var frmName = formData.get("frmName");
+        var frm = document.forms[frmName];
+        var other_data = $('form[name="' + frmName + '"]').serializeArray();
+        $.each(other_data, function (key, input) {
+            formData.append(input.name, input.value);
+        });
+
+        $.ajax({
+            url: fcom.makeUrl('Products', "uploadMedia"),
+            type: "post",
+            dataType: "json",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (ans) {
+                fcom.removeLoader();
+                if (ans.status == 0) {
+                    $.ykmsg.error(ans.msg);
+                    return;
+                }
+                autoOpenSideBar = false;
+                $("#modalBoxJs").modal("hide");
+                $.ykmsg.success(ans.msg);
+                productDefaultImages();
+
+                if (ans.isDefaultLayout) {
+                    productDefaultImages();
+                }
+                fcom.removeLoader();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $.ykmsg.error(
+                    thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
+                );
+            },
+        });
+    };
+
+    productDefaultImages = function () {
+        let productId = getCurrentFrmProductId();
+        fileType = 0;
+        if (1 > productId) {
+            productId = getCurrentFrmTempProductId();
+            fileType = tempImageType;
+        }
+        fcom.ajax(fcom.makeUrl('Products', 'images', [productId, 0, 0, 0]), { isDefaultLayout: 1 }, function (t) {            
+            $('#productDefaultImagesJs li').not(":first").remove();
+            $('#productDefaultImagesJs').append(t);
+        });
     };
 
 })();
 
 /** on option select/deselect */
 async function resetOptionValuesTag(e) {
-    console.log(e);
     let productId = getCurrentFrmProductId();
-    if (productId) {
+    if (0 < productId) {
         let optionId = e.params.args.data.id;
-        if (e.type == 'select2:selecting') {         
+        if (e.type == 'select2:selecting') {
             optionId = 0;
-            if($(e.currentTarget).select2('data').length){
+            if ($(e.currentTarget).select2('data').length) {
                 optionId = $(e.currentTarget).select2('data')[0].id || 0;
             }
         }
@@ -433,7 +544,7 @@ async function resetOptionValuesTag(e) {
             let response = await $.ajax({
                 url: fcom.makeUrl('Products', 'removeProductOption'),
                 type: 'POST',
-                data: { productId, optionId }
+                data: { productId, optionId, fIsAjax: 1 }
             });
 
             response = $.parseJSON(response)
@@ -479,7 +590,7 @@ function optionDataCallback(ele) {
             let data = $(this).select2('data');
             if (data.length) {
                 data = data[0];
-                if(hasSiblingWithImageOption == 0 && data['option_is_separate_images'] == 1 ){
+                if (hasSiblingWithImageOption == 0 && data['option_is_separate_images'] == 1) {
                     hasSiblingWithImageOption = 1;
                 }
                 selectedSiblingOption.push(data['id']);
@@ -487,7 +598,7 @@ function optionDataCallback(ele) {
         });
     return {
         disAllowOptions: selectedSiblingOption,
-        doNotIncludeImageOption : hasSiblingWithImageOption       
+        doNotIncludeImageOption: hasSiblingWithImageOption
     };
 }
 
@@ -515,7 +626,7 @@ $(document).on('click', '.optionsAddJs', function () {
 
     select2(newOptionId, fcom.makeUrl('Options', 'autoComplete'), optionDataCallback,
         resetOptionValuesTag,
-        resetOptionValuesTag,       
+        resetOptionValuesTag,
     );
 
     $('#' + newOptionId).data("select2").$container.addClass("w-100");
@@ -536,6 +647,22 @@ $(document).on('click', '.optionsDeleteJs', function () {
     } else {
         $(this).closest('.rowJs').remove();
     }
+});
+
+$(document).on('change', '#image_option_id', function () {
+    let optionId = $(this).val();
+    let fileType = $('#image_file_type').val();
+    let productId = $('#image_product_id').val();
+    let langId = $('#image_lang_id').val();
+    productImages(productId, fileType, optionId, langId);
+});
+
+$(document).on('change', '#image_lang_id', function () {
+    let langId = $(this).val();
+    let fileType = $('#image_file_type').val();
+    let productId = $('#image_product_id').val();
+    let optionId = $('#image_option_id').val();
+    productImages(productId, fileType, optionId, langId);
 });
 
 

@@ -30,7 +30,7 @@ class LibHelper extends FatUtility
         FatUtility::dieWithError($message);
     }
 
-    public static function exitWithError($message, $json = false, $redirect = false, $isHtml = false)
+    public static function exitWithError($message, $json = false, $redirect = false)
     {
         if (true === MOBILE_APP_API_CALL) {
             if (is_array($message)) {
@@ -43,17 +43,16 @@ class LibHelper extends FatUtility
             FatUtility::dieJsonError($message);
         }
 
-        if ((true === $json || FatUtility::isAjaxCall()) && false === $isHtml) {
+        if ((true === $json || FatUtility::isAjaxCall())) {
             FatUtility::dieJsonError($message);
         }
 
         if (true === $redirect) {
             Message::addErrorMessage($message);
+            return;
         }
 
-        if (true === $isHtml) {
-            FatUtility::dieWithError(HtmlHelper::getErrorMessageHtml($message));
-        }
+        FatUtility::dieWithError(HtmlHelper::getErrorMessageHtml($message));
     }
 
     public static function exitWithSuccess($message, $json = false, $redirect = false)

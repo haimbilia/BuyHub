@@ -2,7 +2,6 @@
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
 $fld = $frm->getField('brand_name');
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','brand_id');

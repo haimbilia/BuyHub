@@ -155,12 +155,12 @@ class PushNotificationsController extends ListingBaseController
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id);
         }
 
         $data = PushNotification::getAttributesById($recordId);
         if (empty($data)) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id);
         }
 
         $this->set('formTitle', Labels::getLabel('LBL_PUSH_NOTIFICATION_DETAIL', $this->siteLangId));
@@ -204,14 +204,14 @@ class PushNotificationsController extends ListingBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
 
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), false, false, true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
         
         $data = PushNotification::getAttributesById($recordId);
         unset($data['pnotification_id'], $data['pnotification_status'], $data['pnotification_uauth_last_access']);
         $db = FatApp::getDb();
         if (!$db->insertFromArray(PushNotification::DB_TBL, $data, true, array(), $data)) {
-            LibHelper::exitWithError($db->getError(), false, false, true);
+            LibHelper::exitWithError($db->getError());
         }
 
         $recordId = $db->getInsertId();
@@ -337,11 +337,11 @@ class PushNotificationsController extends ListingBaseController
 
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id);
         }
 
         if (!$row = DiscountCoupons::getAttributesById($recordId, 'coupon_id')) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id);
         }
 
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE, $recordId);
@@ -429,11 +429,11 @@ class PushNotificationsController extends ListingBaseController
         $this->objPrivilege->canEditPushNotification();
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId), false, false, true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId));
         }
         $data = PushNotification::getAttributesById($recordId, ['pnotification_status', 'pnotification_user_auth_type', 'pnotification_lang_id']);
         if (User::AUTH_TYPE_GUEST == $data['pnotification_user_auth_type']) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_ALLOWED_TO_ADD_USERS_FOR_GUESTS", $this->siteLangId), false, false, true);
+            LibHelper::exitWithError(Labels::getLabel("ERR_NOT_ALLOWED_TO_ADD_USERS_FOR_GUESTS", $this->siteLangId));
         }
 
         $frm = $this->selectedUsersform($data['pnotification_status']);

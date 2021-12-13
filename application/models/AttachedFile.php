@@ -391,7 +391,7 @@ class AttachedFile extends MyAppModel
         return $this->updateFileToDb($fileType, $recordId, $recordSubid, $fileLoc, $name, $langId, $screen, $displayOrder, $uniqueRecord);
     }
 
-    private function updateFileToDb($fileType, $recordId, $recordSubid, $fileLoc, $name, $langId, $screen, $displayOrder, $uniqueRecord, $aspectRatio = 0)
+    protected function updateFileToDb($fileType, $recordId, $recordSubid, $fileLoc, $name, $langId, $screen, $displayOrder, $uniqueRecord, $aspectRatio = 0)
     {
         $defaultLangIdForErrors = ($langId == 0) ? $this->commonLangId : $langId;
         $this->assignValues(
@@ -454,6 +454,7 @@ class AttachedFile extends MyAppModel
                 $path .= self::FILETYPE_PRODCAT_IMAGE_PATH;
                 break;
             case self::FILETYPE_PRODUCT_IMAGE:
+                case self::FILETYPE_PRODUCT_IMAGE_TEMP:    
             case self::FILETYPE_CUSTOM_PRODUCT_IMAGE:
                 $path .= self::FILETYPE_PRODUCT_IMAGE_PATH;
                 break;
@@ -1143,10 +1144,10 @@ class AttachedFile extends MyAppModel
         if (0 < $fileId) {
             /* delete single file */
             $deleteStatementArr = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id=?', 'vals' => array($fileType, $recordId, $fileId));
-        }
+        }         
 
-        $db = FatApp::getDb();
-        if (!$db->deleteRecords('tbl_attached_files', $deleteStatementArr)) {
+        $db = FatApp::getDb();        
+        if (!$db->deleteRecords(static::DB_TBL, $deleteStatementArr)) {
             $this->error = $db->getError();
             return false;
         }

@@ -116,7 +116,7 @@
                         <div class="js-total-sale"></div>
                         <ul class="list-stats list-stats-inline">
 
-                            <li>
+                            <li class="list-stats-item">
                                 <span class="label">
                                     <i class="dot" style="background-color:#d70206;"></i>
                                     Direct</span>
@@ -124,7 +124,7 @@
                                     <i class="icn fas fa-arrow-up font-success"></i>
                                     36%</span>
                             </li>
-                            <li>
+                            <li class="list-stats-item">
                                 <span class="label">
                                     <i class="dot" style="background-color: #f05b4f;"></i>
                                     Affilliate</span>
@@ -133,14 +133,14 @@
                                     29%
                                 </span>
                             </li>
-                            <li>
+                            <li class="list-stats-item">
                                 <span class="label"> <i class="dot" style="background-color:#f4c63d;"></i>Sponsored</span>
                                 <span class="value">
                                     <i class="icn fas fa-arrow-up font-success"></i>
                                     29%</span>
 
                             </li>
-                            <li>
+                            <li class="list-stats-item">
                                 <span class="label"> <i class="dot" style="background-color:#d17905;"></i>
                                     E-mail</span>
                                 <span class="value">
@@ -187,26 +187,26 @@
                     <div class="card-body">
                         <ul class="list-stats list-stats-double">
 
-                            <li>
+                            <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_ADDED_TO_CART', $siteLangId); ?></span>
                                 <span class="value">
                                     <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['added_to_cart']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
                                     <?php echo $dashboardInfo['conversionStats']['added_to_cart']['%age']; ?>%</span>
                             </li>
-                            <li>
+                            <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_REACHED_CHECKOUT', $siteLangId); ?></span>
                                 <span class="value">
                                     <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['reached_checkout']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
                                     <?php echo $dashboardInfo['conversionStats']['reached_checkout']['%age']; ?>% </span>
                             </li>
-                            <li>
+                            <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_PURCHASED', $siteLangId); ?></span>
                                 <span class="value">
                                     <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['added_to_cart']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
                                     <?php echo $dashboardInfo['conversionStats']['purchased']['%age']; ?>%</span>purchased
 
                             </li>
-                            <li>
+                            <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_CANCELLED', $siteLangId); ?></span>
                                 <span class="value">
                                     <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['cancelled']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>

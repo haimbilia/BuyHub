@@ -440,7 +440,7 @@ class HtmlHelper
             case 'radio':
                 $fld->addOptionListTagAttribute('class', 'list-radio');
                 HtmlHelper::configureSwitchForRadio($fld);
-                break;         
+                break;
             case 'hidden':
                 return $fld->getHtml();
                 break;
@@ -514,18 +514,18 @@ class HtmlHelper
 
     public static function getModalStructure(string $id, string $title, string $body)
     {
-        return '<div class="modal fade" id="' . $id .'" tabindex="-1" role="dialog" aria-hidden="true">
+        return '<div class="modal fade" id="' . $id . '" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">' . $title .'</h5>
+                                <h5 class="modal-title">' . $title . '</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
                                 <div class="cms">
-                                    <p>' . $body .'</p>
+                                    <p>' . $body . '</p>
                                 </div>
                             </div>
                         </div>
@@ -561,7 +561,7 @@ class HtmlHelper
         $timezone = FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get());
         $timeFormat = FatApp::getConfig('CONF_DATE_FORMAT_TIME', FatUtility::VAR_STRING, 'H:i');
         $formattedDT = FatDate::format($dateTime, $showTime, $usetimezone, $timezone);
-        
+
         if (false === $showTime) {
             return '<p class="date">' . $formattedDT . '</p>';
         }

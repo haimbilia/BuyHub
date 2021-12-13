@@ -49,7 +49,7 @@ class BadgeLinkConditionsController extends AdminBaseController
 
     public function list(int $badgeId, int $badgeType)
     {
-        $conditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $conditionType = Badge::getAttributesById($badgeId, 'badge_trigger_type');
         $frmSearch = $this->getSearchForm($badgeType, $conditionType);
         $frmSearch->fill(['blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
@@ -140,7 +140,7 @@ class BadgeLinkConditionsController extends AdminBaseController
             $msg = (Badge::TYPE_BADGE == $badgeType) ? Labels::getLabel('MSG_INVALID_BADGE', $this->adminLangId) : Labels::getLabel('MSG_INVALID_RIBBON', $this->adminLangId);
             FatUtility::dieJsonError($msg);
         }
-        $badgeConditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $badgeConditionType = Badge::getAttributesById($badgeId, 'badge_trigger_type');
 
         $searchForm = $this->getSearchForm($badgeType, $badgeConditionType);
 
@@ -182,7 +182,7 @@ class BadgeLinkConditionsController extends AdminBaseController
 
         $trigger = FatApp::getPostedData('record_condition'); //Trigger
         if (!empty($trigger)) {
-            $srch->addCondition('badge_condition_type', '=', $trigger);
+            $srch->addCondition('badge_trigger_type', '=', $trigger);
         }
 
         $conditionType = FatApp::getPostedData('blinkcond_condition_type');
@@ -196,7 +196,7 @@ class BadgeLinkConditionsController extends AdminBaseController
         echo $srch->getError();die; */
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         
-        $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $recordCondition = Badge::getAttributesById($badgeId, 'badge_trigger_type');
         $this->set('recordCondition', $recordCondition);
         $this->set('badgeConditionType', $badgeConditionType);
         $this->set("canEdit", $this->objPrivilege->canEditBadgeLinks($this->admin_id, true));
@@ -283,7 +283,7 @@ class BadgeLinkConditionsController extends AdminBaseController
             $sellerId = $dataToFill['blinkcond_user_id'];
         }
 
-        $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $recordCondition = Badge::getAttributesById($badgeId, 'badge_trigger_type');
 
         if (Badge::TYPE_BADGE == $badgeType) {
             $frm = $this->getBadgeForm($recordCondition);

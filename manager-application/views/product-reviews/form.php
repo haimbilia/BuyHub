@@ -96,7 +96,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php');
                         if ($findKeywordStr == '') {
                             echo nl2br($data['spreview_description']);
                         } else {
-                            echo  preg_replace('/' . $findKeywordStr . '/i', '<span class="highlight">$0</span>', nl2br($data['spreview_description']));
+                            $spreviewDescription = preg_replace('/' . $findKeywordStr . '/i', '<span class="highlight">$0</span>', $data['spreview_description']);
+                            echo nl2br($spreviewDescription);
                         }
                     ?>
                 </div>

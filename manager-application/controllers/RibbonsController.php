@@ -1,9 +1,9 @@
 <?php
 
-class BadgesController extends ListingBaseController
+class RibbonsController extends ListingBaseController
 {
     protected string $modelClass = 'Badge';
-    protected string $pageKey = 'MANAGE_BADGES';
+    protected string $pageKey = 'MANAGE_RIBBONS';
 
     public function __construct($action)
     {
@@ -39,7 +39,7 @@ class BadgesController extends ListingBaseController
         $this->formLangFields = [
             $this->modelObj::tblFld('name')
         ];
-        $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_RIBBON_SETUP', $this->siteLangId));
     }
 
     public function index()
@@ -54,17 +54,21 @@ class BadgesController extends ListingBaseController
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
         $actionItemsData['deleteButton'] = true;
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'onclick' => 'addNew(true)'
+            ]
+        ];
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_BADGE_NAME', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_RIBBON_NAME', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'badges/page-js/index.js']);
-        $this->_template->addCss(['css/cropper.css']);
+        $this->_template->addJs(['js/jscolor.js']);
 
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -73,7 +77,7 @@ class BadgesController extends ListingBaseController
     {
         $this->getListingData();
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'badges/search.php', true),
+            'listingHtml' => $this->_template->render(false, false, 'ribbons/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
         LibHelper::exitWithSuccess($jsonData, true);
@@ -89,11 +93,10 @@ class BadgesController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'badge_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'badge_id';
         }
-
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
@@ -107,22 +110,12 @@ class BadgesController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = new BadgeSearch($this->siteLangId);
-        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', Badge::TYPE_BADGE);
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', Badge::TYPE_RIBBON);
 
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('badge_name', 'like', '%' . $keyword . '%');
             $cnd->attachCondition('badge_identifier', 'like', '%' . $keyword . '%');
-        }
-
-        $approval = FatApp::getPostedData('badge_required_approval');
-        if ('' != $approval) {
-            $srch->addCondition('badge_required_approval', '=', $approval);
-        }
-
-        $conditionType = FatApp::getPostedData('badge_trigger_type');
-        if ('' != $conditionType) {
-            $srch->addCondition('badge_trigger_type', '=', $conditionType);
         }
 
         $srch->addOrder($sortBy, $sortOrder);
@@ -151,6 +144,23 @@ class BadgesController extends ListingBaseController
         $this->set("approvalStatusArr", $approvalStatusArr);
     }
 
+    protected function getSearchForm(array $fields = [])
+    {
+        $fields = $this->getFormColumns();
+
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'badge_id', applicationConstants::SORT_DESC);
+        }
+
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
+    }
+
     public function form()
     {
         $this->objPrivilege->canEditBadgesAndRibbons();
@@ -162,13 +172,11 @@ class BadgesController extends ListingBaseController
             $dataToFill = Badge::getAttributesByLangId($this->siteLangId, $recordId, null, true);
         }
 
-        $dataToFill['logo_min_width'] = Badge::ICON_MIN_WIDTH;
-        $dataToFill['logo_min_height'] = Badge::ICON_MIN_HEIGHT;
         $frm->fill($dataToFill);
 
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
-        $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_RIBBON_SETUP', $this->siteLangId));
 
         $this->_template->render(false, false);
     }
@@ -183,9 +191,10 @@ class BadgesController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        $badgeName = strlen($post['badge_name']);
-        if (Badge::RIBB_TEXT_MIN_LEN > $badgeName || Badge::RIBB_TEXT_MAX_LEN < $badgeName) {
-            $str = Labels::getLabel('ERR_BADGE_NAME_LENGTH_SHOULD_BETWEEN_{MIN-LENGTH}_TO_{MAX-LENGTH}_CHARS', $this->siteLangId);
+
+        $ribbName = strlen($post['badge_name']);
+        if (Badge::RIBB_TEXT_MIN_LEN > $ribbName || Badge::RIBB_TEXT_MAX_LEN < $ribbName) {
+            $str = Labels::getLabel('ERR_RIBBON_NAME_LENGTH_SHOULD_BETWEEN_{MIN-LENGTH}_TO_{MAX-LENGTH}_CHARS', $this->siteLangId);
             LibHelper::exitWithError(CommonHelper::replaceStringData($str, [
                 '{MIN-LENGTH}' => Badge::RIBB_TEXT_MIN_LEN,
                 '{MAX-LENGTH}' => Badge::RIBB_TEXT_MAX_LEN,
@@ -193,6 +202,9 @@ class BadgesController extends ListingBaseController
         }
 
         $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+
+        $post['badge_shape_type'] = Badge::SHAPE_RECTANGLE;
+        $post['badge_display_inside'] = applicationConstants::YES;
 
         $record = new Badge($recordId);
         $record->setFldValue(Badge::DB_TBL_PREFIX . 'identifier', $post['badge_name']);
@@ -215,48 +227,14 @@ class BadgesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function isMediaUploaded($recordId)
-    {
-        $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $recordId, 0);
-        if (false !== $attachment && 0 < $attachment['afile_id']) {
-            return true;
-        }
-        return false;
-    }
-
-    protected function getSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'page');
-        if (!empty($fields)) {
-            $this->addSortingElements($frm, 'badge_name');
-        }
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
-        $fld->overrideFldType('search');
-
-        $approvalArr = Badge::getApprovalStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr);
-
-        $conditionTypeArr = Badge::getTriggerCondTypeArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr);
-
-        HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
-        return $frm;
-    }
-
-    private function getForm(int $conditionType = Badge::COND_MANUAL)
+    private function getForm()
     {
         $frm = new Form('frm');
         $frm->addHiddenField('', 'badge_id');
-        $frm->addHiddenField('', 'badge_type', Badge::TYPE_BADGE);
-        $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', Badge::getTriggerCondTypeArr($this->siteLangId), '', [], '');
+        $frm->addHiddenField('', 'badge_type', Badge::TYPE_RIBBON);
 
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'badge_name');
-
-        $requireApprovalArr = Badge::getApprovalStatusArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $requireApprovalArr);
-        $fld->requirement->setRequired(($conditionType == Badge::COND_MANUAL));
+        $frm->addRequiredField(Labels::getLabel('FRM_COLOR', $this->siteLangId), 'badge_color', '', ['class' => 'jscolor']);
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'badge_active', $activeInactiveArr, '', array(), '');
@@ -283,126 +261,6 @@ class BadgesController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'badge_name');
 
         return $frm;
-    }
-
-    public function media($recordId)
-    {
-        $recordId = FatUtility::int($recordId);
-        $recordId = Badge::getAttributesById($recordId, 'badge_id');
-
-        if (false == $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
-        }
-        $frm = $this->getMediaForm($recordId);
-        $this->set('recordId', $recordId);
-        $this->set('frm', $frm);
-        $this->set('displayFooterButtons', false);
-        $this->set('activeGentab', false);
-        $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
-    }
-
-    public function images($recordId, $langId = 0)
-    {
-        $this->checkEditPrivilege(true);
-        $languages = Language::getAllNames();
-        if (count($languages) <= 1) {
-            $langId =  array_key_first($languages);
-        }
-
-        $recordId = FatUtility::int($recordId);
-        if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
-        }
-
-        if (!$row = Badge::getAttributesById($recordId, 'badge_id')) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
-        }
-
-        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BADGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
-        $this->set('languages', Language::getAllNames());
-        $this->set('images', $images);
-        $this->set('recordId', $recordId);
-        $this->_template->render(false, false);
-    }
-
-    private function getMediaForm($recordId = 0)
-    {
-        $recordId = FatUtility::int($recordId);
-        $frm = new Form('frmBadgeMedia');
-        $frm->addHiddenField('', 'badge_id', $recordId);
-        $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BADGE);
-        $frm->addHiddenField('', 'min_width');
-        $frm->addHiddenField('', 'min_height');
-
-        $languagesArr = applicationConstants::getAllLanguages();
-        if (count($languagesArr) > 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languagesArr, '', array(), '');
-        } else {
-            $lang_id = array_key_first($languagesArr);
-            $frm->addHiddenField('', 'lang_id', $lang_id);
-        }
-
-        $frm->addHtml('', 'badge_icon', '');
-        return $frm;
-    }
-
-    public function uploadMedia()
-    {
-        $this->objPrivilege->canEditBadgesAndRibbons();
-        $file_type = FatApp::getPostedData('file_type', FatUtility::VAR_INT, 0);
-        $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
-        $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        $slide_screen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
-        $afileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
-        if (!$file_type) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
-        }
-
-        Badge::deleteImagesWithOutBadgeId();
-
-        $fileHandlerObj = new AttachedFile($afileId);
-        if (!$res = $fileHandlerObj->saveImage(
-            $_FILES['cropped_image']['tmp_name'],
-            $file_type,
-            $recordId,
-            0,
-            $_FILES['cropped_image']['name'],
-            -1,
-            true,
-            $lang_id,
-            $_FILES['cropped_image']['type'],
-            $slide_screen
-        )) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_IMAGE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
-        $this->set('recordId', $recordId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function deleteImage($recordId, $afileId, $langId = 0, $slide_screen = 0)
-    {
-        $this->objPrivilege->canEditBadgesAndRibbons();
-        $afileId = FatUtility::int($afileId);
-        $recordId = FatUtility::int($recordId);
-        $langId = FatUtility::int($langId);
-        if (!$afileId) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-        $fileType = AttachedFile::FILETYPE_BADGE;
-        $fileHandlerObj = new AttachedFile();
-        if (!$fileHandlerObj->deleteFile($fileType, $recordId, $afileId, 0, $langId, $slide_screen)) {
-            LibHelper::exitWithError($fileHandlerObj->getError(), true);
-        }
-
-        $this->set('msg', Labels::getLabel('MSG_IMAGE_DELETED_SUCCESSFULLY', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
     }
 
     public function updateStatus()
@@ -511,8 +369,6 @@ class BadgesController extends ListingBaseController
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_IMAGE', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
-            Badge::DB_TBL_PREFIX . 'trigger_type' => Labels::getLabel('LBL_TRIGGER_TYPE', $this->siteLangId),
-            Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -527,8 +383,6 @@ class BadgesController extends ListingBaseController
             'listSerial',
             Badge::DB_TBL_PREFIX . 'shape_type',
             Badge::DB_TBL_PREFIX . 'name',
-            Badge::DB_TBL_PREFIX . 'trigger_type',
-            Badge::DB_TBL_PREFIX . 'required_approval',
             Badge::DB_TBL_PREFIX . 'active',
             'action',
         ];
