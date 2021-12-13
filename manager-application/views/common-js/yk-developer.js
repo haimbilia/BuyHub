@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
     if (/ip(hone|od)|ipad/i.test(navigator.userAgent)) {
         $("body").css("cursor", "pointer");
     }
@@ -7,6 +7,9 @@ $(document).ready(function () {
         $("body").attr("data-sidebar-minimize", "on");
         $('.sidebarOpenerBtnJs').removeClass("active");
     }
+
+    /* Bind Max Length validator. */
+    bindMaxLengthValidator();
 });
 
 (function () {
@@ -316,6 +319,17 @@ $(document).ready(function () {
         }
     };
 
+    bindMaxLengthValidator = function () {
+        $('[maxlength]').maxlength({
+            alwaysShow: true,
+            threshold: 10,
+            warningClass: "badge badge-info",
+            limitReachedClass: "badge badge-warning",
+            placement: 'top',
+            message: langLbl.maxLengthValidator
+        });
+    }
+
     $(document).ajaxComplete(function () {
         /* Bind bootstrap tooltip with ajax elements. */
         $('[data-toggle="tooltip"]').tooltip();
@@ -325,6 +339,9 @@ $(document).ready(function () {
 
         /* Bind colors with all color fields. */
         installJsColor();
+
+        /* Bind Max Length validator. */
+        bindMaxLengthValidator();
     });
 })();
 

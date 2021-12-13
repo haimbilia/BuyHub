@@ -1456,3 +1456,6 @@ ALTER TABLE tbl_attached_files CHANGE afile_record_id afile_record_id BIGINT NOT
 ALTER TABLE tbl_attached_files CHANGE afile_record_subid afile_record_subid BIGINT NOT NULL;
 
 ALTER TABLE `tbl_badges` CHANGE `badge_condition_type` `badge_trigger_type` TINYINT NOT NULL DEFAULT '1';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_USED_%charsTyped%_of_%charsTotal%_CHARS_JS.', '1', 'used %charsTyped% of %charsTotal% chars.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

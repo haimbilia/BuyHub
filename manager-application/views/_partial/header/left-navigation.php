@@ -652,6 +652,18 @@
                                             <?php echo Labels::getLabel('NAV_BADGES', $siteLangId); ?></span>
                                     </a>
                                 </li>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Ribbons'); ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-ribbon">
+                                            </use>
+                                            </svg>
+                                        </span>
+                                        <span class="nav_text">
+                                            <?php echo Labels::getLabel('NAV_RIBBONS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
                             <?php } ?>
                         </ul>
                     </div>

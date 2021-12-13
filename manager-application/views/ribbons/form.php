@@ -1,4 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ', true)');
 
 $fld = $frm->getField('badge_name');
 $fld->addFieldTagAttribute('maxlength', Badge::RIBB_TEXT_MAX_LEN);
