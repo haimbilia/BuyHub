@@ -22,18 +22,10 @@ foreach ($arrListing as $sn => $row) {
             case Badge::DB_TBL_PREFIX . 'name':
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
-            case Badge::DB_TBL_PREFIX . 'trigger_type':
-                $statusHtm = Badge::getTriggerCondTypeHtml($siteLangId, $row[$key]);
-                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
-                break;
             case Badge::DB_TBL_PREFIX . 'shape_type':
-                $icon = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE, $row[Badge::DB_TBL_PREFIX . 'id'], 0, $siteLangId);
-                $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']);
-                $td->appendElement('img', ['src' => UrlHelper::getCachedUrl(UrlHelper::generateUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'), 'title' => $row[Badge::DB_TBL_PREFIX . 'name'], 'alt' => $row[Badge::DB_TBL_PREFIX . 'name']], '', true);
-                break;
-            case Badge::DB_TBL_PREFIX . 'required_approval':
-                $statusHtm = Badge::getApprovalTypeHtml($siteLangId, $row[$key], $row[Badge::DB_TBL_PREFIX . 'trigger_type']);
-                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
+                $ribbon = $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $row], false, true);
+                $html = '<div class="badge-wrap">' . $ribbon . '</div>';
+                $td->appendElement('plaintext', [], $html, true);
                 break;
 
             case Badge::DB_TBL_PREFIX . 'active':

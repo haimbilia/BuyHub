@@ -15,8 +15,8 @@ class BadgeLinkConditionsController extends SellerBaseController
     public function list(int $badgeId, int $badgeType)
     {
         $userId = UserAuthentication::getLoggedUserId();
-        $row = Badge::getAttributesById($badgeId, ['badge_condition_type', 'badge_required_approval']);
-        $conditionType = $row['badge_condition_type'];
+        $row = Badge::getAttributesById($badgeId, ['badge_trigger_type', 'badge_required_approval']);
+        $conditionType = $row['badge_trigger_type'];
         $frmSearch = $this->getSearchForm($badgeType, $conditionType);
         $frmSearch->fill(['blinkcond_badge_id' => $badgeId, 'badge_type' => $badgeType]);
         $this->set("canEdit", $this->userPrivilege->canEditBadgeLinks($userId, true));
@@ -89,7 +89,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
         
         $badgeDetail = !empty($result) ? current($result) : [];
-        $this->set('canEditRecords', (!empty($badgeDetail) && Badge::COND_MANUAL == $badgeDetail['badge_condition_type'] && $badgeDetail['badge_required_approval'] == Badge::APPROVAL_OPEN));
+        $this->set('canEditRecords', (!empty($badgeDetail) && Badge::COND_MANUAL == $badgeDetail['badge_trigger_type'] && $badgeDetail['badge_required_approval'] == Badge::APPROVAL_OPEN));
         $this->set('badgeLinkCondId', $badgeLinkCondId);
         $this->set('recordType', $recordType);
         $this->set('records', $records);
@@ -172,7 +172,7 @@ class BadgeLinkConditionsController extends SellerBaseController
             $msg = (Badge::TYPE_BADGE == $badgeType) ? Labels::getLabel('MSG_INVALID_BADGE', $this->siteLangId) : Labels::getLabel('MSG_INVALID_RIBBON', $this->siteLangId);
             FatUtility::dieJsonError($msg);
         }
-        $badgeConditionType = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $badgeConditionType = Badge::getAttributesById($badgeId, 'badge_trigger_type');
         
         $badgeLinkConditionType = FatApp::getPostedData('blinkcond_condition_type', FatUtility::VAR_INT, 0);
 
@@ -203,7 +203,7 @@ class BadgeLinkConditionsController extends SellerBaseController
         }
 
         $cnd = $srch->addCondition(BadgeLinkCondition::DB_TBL_PREFIX . 'user_id', '=', UserAuthentication::getLoggedUserId());
-        $cnd->attachCondition(Badge::DB_TBL_PREFIX . 'condition_type', '=', Badge::COND_AUTO);
+        $cnd->attachCondition(Badge::DB_TBL_PREFIX . 'trigger_type', '=', Badge::COND_AUTO);
 
         $recordType = FatApp::getPostedData('blinkcond_record_type'); //Link Type
         if (!empty($recordType)) {
@@ -217,7 +217,7 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $trigger = FatApp::getPostedData('record_condition'); //Trigger
         if (!empty($trigger)) {
-            $srch->addCondition('badge_condition_type', '=', $trigger);
+            $srch->addCondition('badge_trigger_type', '=', $trigger);
         }
 
         $srch->addDirectCondition("(
@@ -229,7 +229,7 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         $srch->addOrder(BadgeLinkCondition::DB_TBL_PREFIX . 'id', 'DESC');
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $recordCondition = Badge::getAttributesById($badgeId, 'badge_trigger_type');
         $shopId = Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), 'shop_id');
 
         /* Automatically satisfied badges. */
@@ -327,7 +327,7 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         }
 
-        $recordCondition = Badge::getAttributesById($badgeId, 'badge_condition_type');
+        $recordCondition = Badge::getAttributesById($badgeId, 'badge_trigger_type');
 
         if (Badge::TYPE_BADGE == $badgeType) {
             $frm = $this->getBadgeForm($recordCondition);

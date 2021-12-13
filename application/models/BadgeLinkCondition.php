@@ -199,7 +199,7 @@ class BadgeLinkCondition extends MyAppModel
                 'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
                 'blnku.user_name as cond_seller_name',
                 Badge::DB_TBL_PREFIX . 'type',
-                Badge::DB_TBL_PREFIX . 'condition_type',
+                Badge::DB_TBL_PREFIX . 'trigger_type',
                 Badge::DB_TBL_PREFIX . 'display_inside',
                 Badge::DB_TBL_PREFIX . 'shape_type',
                 Badge::DB_TBL_PREFIX . 'color',
@@ -235,7 +235,7 @@ class BadgeLinkCondition extends MyAppModel
         $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_badge_id = badge_id');
         $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
         $srch->addCondition('badge_id', '=', $badgeId);
-        $srch->addCondition('badge_condition_type', '=', Badge::COND_MANUAL);
+        $srch->addCondition('badge_trigger_type', '=', Badge::COND_MANUAL);
         $srch->addCondition('blinkcond_user_id', '=', $userId);
         $srch->addCondition('blinkcond_record_type', '=', $recordType);
         $srch->addCondition('blinkcond_position', '=', $position);
@@ -268,7 +268,7 @@ class BadgeLinkCondition extends MyAppModel
         $srch->joinTable(BadgeLinkCondition::DB_TBL, 'LEFT JOIN', 'blinkcond_badge_id = badge_id');
         $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
         $srch->addCondition('badge_id', '=', $badgeId);
-        $srch->addCondition('badge_condition_type', '=', Badge::COND_AUTO);
+        $srch->addCondition('badge_trigger_type', '=', Badge::COND_AUTO);
         $srch->addCondition('blinkcond_condition_type', '=', $blinkcondConditionType);
         if (0 < $badgeLinkCondId) {
             $srch->addCondition('blinkcond_id', '!=', $badgeLinkCondId);
@@ -293,7 +293,7 @@ class BadgeLinkCondition extends MyAppModel
         $srch->joinTable(self::DB_TBL, 'LEFT JOIN', 'blc.blinkcond_badge_id =  bdg.badge_id', 'blc');
         $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'breq_blinkcond_id = blinkcond_id');
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', Badge::TYPE_BADGE);
-        $srch->addCondition(Badge::DB_TBL_PREFIX . 'condition_type', '=', Badge::COND_MANUAL);
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'trigger_type', '=', Badge::COND_MANUAL);
         $srch->addCondition(Badge::DB_TBL_PREFIX . 'required_approval', '=', applicationConstants::YES);
       
         $srch->addDirectCondition('(

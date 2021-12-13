@@ -1421,9 +1421,6 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 ALTER TABLE `tbl_navigations` ADD UNIQUE(`nav_identifier`);
 
-ALTER TABLE tbl_attached_files_temp CHANGE afile_record_id afile_record_id BIGINT NOT NULL;
-ALTER TABLE tbl_attached_files_temp CHANGE afile_record_id afile_record_subid BIGINT NOT NULL;
-
 DELETE FROM tbl_language_labels WHERE label_key = "FRM_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING";
 DELETE FROM tbl_language_labels WHERE label_key = "FRM_LANGUAGE_CODE_TO_SITE_URLS_EXAMPLES";
 DELETE FROM tbl_language_labels WHERE label_key = "FRM_THIS_IS_REQUIRED_FOR_TWITTER_CARD_CODE_SEO_UPDATE";
@@ -1448,3 +1445,14 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_GOOGLE_WEBMASTER_MSG', '1', 'It help you track your store\'s search traffic and performance on Google\r\n Add your store to Google Search Console.', '1') ON DUPLICATE KEY UPDATE label_caption = 'It help you track your store\'s search traffic and performance on Google\r\n Add your store to Google Search Console.';
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_HTML_FILE_VERIFICATION_MSG', '1', '1. After you added your store to Google Search Console, you should see an option to download an HTML verification file in the Recommended verification method tab\r\n2. Now upload the downloaded HTML file here', '1') ON DUPLICATE KEY UPDATE label_caption = '1. After you added your store to Google Search Console, you should see an option to download an HTML verification file in the Recommended verification method tab\r\n2. Now upload the downloaded HTML file here';
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_XML_FILE_VERIFICATION_MSG', '1', '1. After you added your store to Bing Webmaster Tool, you should see an option to download an XML verification file\r\n2. Now upload the downloaded XML file here\r\n', '1') ON DUPLICATE KEY UPDATE label_caption = '1. After you added your store to Bing Webmaster Tool, you should see an option to download an XML verification file\r\n2. Now upload the downloaded XML file here\r\n';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_XML_FILE_VERIFICATION_MSG', '1', '1. After you added your store to Bing Webmaster Tool, you should see an option to download an XML verification file\r\n2. Now upload the downloaded XML file here\r\n2. Now upload the downloaded HTML file here', '1') ON DUPLICATE KEY UPDATE label_caption = '1. After you added your store to Bing Webmaster Tool, you should see an option to download an XML verification file\r\n2. Now upload the downloaded XML file here\r\n2. Now upload the downloaded HTML file here';
+
+ALTER TABLE tbl_attached_files_temp CHANGE afile_record_id afile_record_id BIGINT NOT NULL;
+ALTER TABLE tbl_attached_files_temp CHANGE afile_record_subid afile_record_subid BIGINT NOT NULL;
+ALTER TABLE `tbl_attached_files_temp` ADD `afile_attribute_title` VARCHAR(250) NOT NULL AFTER `afile_name`, ADD `afile_attribute_alt` VARCHAR(250) NOT NULL AFTER `afile_attribute_title`, ADD `afile_aspect_ratio` INT NOT NULL AFTER `afile_attribute_alt`;
+ALTER TABLE `tbl_attached_files_temp` ADD `afile_updated_at` DATETIME NOT NULL AFTER `afile_display_order`;
+
+ALTER TABLE tbl_attached_files CHANGE afile_record_id afile_record_id BIGINT NOT NULL;
+ALTER TABLE tbl_attached_files CHANGE afile_record_subid afile_record_subid BIGINT NOT NULL;
+
+ALTER TABLE `tbl_badges` CHANGE `badge_condition_type` `badge_trigger_type` TINYINT NOT NULL DEFAULT '1';

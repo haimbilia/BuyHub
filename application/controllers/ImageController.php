@@ -119,7 +119,7 @@ class ImageController extends FatController
     ARG3-> $selprod_id -> selprod_id, optional, if passed, will show option value specific image if uploaded, caluclated by itself,
     ARG4-> $afile_id -> optional, if passed, will fetch direct file, but care, recordId and sizeType needs to passed, and pass selprod_id = 0
     */
-    public function product($recordId, $sizeType, $selprod_id = 0, $afile_id = 0, $lang_id = 0)
+    public function product($recordId, $sizeType, $selprod_id = 0, $afile_id = 0, $lang_id = 0, $fileType = 0)
     {
         $default_image = 'product_default_image.jpg';
         $recordId = FatUtility::int($recordId);
@@ -156,75 +156,83 @@ class ImageController extends FatController
             /* CommonHelper::printArray($row); die(); */
         }
         /* ] */
+        $objectName = 'AttachedFile';
+        if($fileType == $objectName::FILETYPE_PRODUCT_IMAGE_TEMP){
+            $objectName = 'AttachedFileTemp';
+        }else{
+            $fileType =  $objectName::FILETYPE_PRODUCT_IMAGE;
+        }
 
         if ($selprod_id && $row) {
-            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $row['afile_record_id'], $row['afile_record_subid'], $lang_id);
+            $file_row = $objectName::getAttachment($fileType, $row['afile_record_id'], $row['afile_record_subid'], $lang_id);
         } elseif ($afile_id > 0) {
-            $res = AttachedFile::getAttributesById($afile_id);
-            if (!false == $res && $res['afile_type'] == AttachedFile::FILETYPE_PRODUCT_IMAGE) {
+            $res = $objectName::getAttributesById($afile_id);
+            if (!false == $res && $res['afile_type'] == $fileType) {
                 $file_row = $res;
             }
         }
 
         if ($file_row == false) {
             //echo 'sds'; die("here");
-            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_PRODUCT_IMAGE, $recordId, -1, $lang_id);
+            $file_row = $objectName::getAttachment($fileType, $recordId, -1, $lang_id);
         }
 
-        $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? AttachedFile::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
-        /* CommonHelper::printArray($image_name); die();  */
-        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+        $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? $objectName::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
+        /* CommonHelper::printArray($image_name); die();  */      
+       
+        $image_name = $objectName::setNamePrefix($image_name, $sizeType);
+
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 100;
                 $h = 100;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image);
+                $objectName::displayImage($image_name, $w, $h, $default_image);
                 break;
             case 'MINI':
                 $w = 50;
                 $h = 50;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false);
+                $objectName::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false);
                 break;
             case 'EXTRA-SMALL':
                 $w = 60;
                 $h = 60;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false);
+                $objectName::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false);
                 break;
             case 'SMALL':
                 // image size required in product listing
                 $w = 230;
                 $h = 230;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
+                $objectName::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
                 break;
             case 'MEDIUM':
                 $w = 500;
                 $h = 500;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
+                $objectName::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
                 break;
             case 'CLAYOUT3':
                 $w = 230;
                 $h = 230;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
+                $objectName::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
                 break;
             case 'CLAYOUT2':
                 $w = 398;
                 $h = 398;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
+                $objectName::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
                 break;
             case 'ORIGINAL':
                 $w = 1500;
                 $h = 1500;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
+                $objectName::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
                 break;
             case 'FB_RECOMMEND':
                 $w = 1200;
                 $h = 630;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
+                $objectName::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
                 break;
             default:
                 $h = 400;
                 $w = 400;
-                AttachedFile::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
+                $objectName::displayImage($image_name, $w, $h, $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, true);
                 break;
         }
     }

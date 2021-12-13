@@ -178,7 +178,7 @@
                     $objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewBadgesAndRibbons(AdminAuthentication::getLoggedAdminId(), true)
                 ) {
                 ?>
                   <li class="haschild">
@@ -226,7 +226,7 @@
                       <li><a href="<?php echo UrlHelper::generateUrl('ProductBrowsingHistory'); ?>">Products Browsing
                               History</a></li> <?php */ ?>
                           <?php } ?>
-                          <?php if ($objPrivilege->canViewBadges(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                          <?php if ($objPrivilege->canViewBadgesAndRibbons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                               <li><a href="<?php echo UrlHelper::generateUrl('Badges', 'list', [Badge::TYPE_BADGE]); ?>"><?php echo Labels::getLabel('LBL_BADGES', $adminLangId); ?></a></li>
                               <li><a href="<?php echo UrlHelper::generateUrl('Badges', 'list', [Badge::TYPE_RIBBON]); ?>"><?php echo Labels::getLabel('LBL_RIBBONS', $adminLangId); ?></a></li>
                           <?php } ?>

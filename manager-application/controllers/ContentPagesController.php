@@ -97,7 +97,7 @@ class ContentPagesController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
-        $searchForm = $this->getSearchForm(false, $fields);
+        $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = ContentPage::getSearchObject($this->siteLangId);
