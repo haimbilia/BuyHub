@@ -381,6 +381,7 @@ Bugs :
     => 060346 - Admin UI: Nothing(hint text) is showing while hovering on the "Notification icon" on the top header section. 
 	=> 060494 - Admin UI: Spacing issue between in the title of "Order status Name".
     => 060517 - Admin UI: Correct "order status type" is not showing while editing the order's status in case of subscription.
+    => 060524 - Admin UI: "Subscription's status" moves to the "product's status listing" after inactivating the status by editing it.
 
     
 Known Issues and Problems :
