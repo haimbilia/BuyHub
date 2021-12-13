@@ -39,7 +39,9 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = [];
+                    $data['editButton'] = [
+                        'onclick' => 'editRecord(' . $row[Badge::DB_TBL_PREFIX . 'id'] . ', true)'
+                    ];
                     $data['deleteButton'] = [];
                     $data['otherButtons'] = [
                         [
