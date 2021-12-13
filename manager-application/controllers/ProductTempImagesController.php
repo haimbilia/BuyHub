@@ -47,6 +47,8 @@ class ProductTempImagesController extends ListingBaseController
             $srch->addCondition('af.afile_downloaded', '=', $post['is_downloaded']);
         }
 
+        $srch->addCondition('afile_type', '!=', AttachedFileTemp::FILETYPE_PRODUCT_IMAGE_TEMP);
+
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $keyword . '%');

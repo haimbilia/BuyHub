@@ -407,27 +407,33 @@ $header-height: 65px;
 }
 
 .list-stats {
+    word-break: break-all;
     font-size: 0.85rem;
-    li {
+    &-item {
         padding: 0.8rem 0;
         display: flex;
         flex-direction: column;
         .label {
             color: $txt-gray;
             padding: 0;
-            font-weight: 500;
+
             margin-bottom: 0.5rem;
         }
         .value {
             font-weight: 500;
             color: $txt-body;
-            font-size: 1rem;
+            //font-size: 1rem;
         }
         &:first-child {
             padding-top: 0;
         }
         &:last-child {
             padding-bottom: 0;
+        }
+
+        &-full {
+            flex: 1 !important;
+            max-width: inherit !important;
         }
     }
     .icn {

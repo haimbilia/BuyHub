@@ -182,7 +182,7 @@ class SlidesController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), false, false, true);
+            LibHelper::exitWithError(current($frm->getValidationErrors()));
         }
 
         $recordId = $post['slide_id'];
@@ -216,7 +216,7 @@ class SlidesController extends ListingBaseController
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Slides::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), false, false, true);
+                LibHelper::exitWithError($updateLangDataobj->getError());
             }
         }
 
@@ -248,7 +248,7 @@ class SlidesController extends ListingBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId || 1 > $langId) {
-            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request);
         }
         $langFrm = $this->getLangForm($langId);
         if (0 < $autoFillLangData) {

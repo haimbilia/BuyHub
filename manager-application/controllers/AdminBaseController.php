@@ -24,11 +24,7 @@ class AdminBaseController extends FatController
 
         if (!AdminAuthentication::isAdminLogged()) {
             CommonHelper::initCommonVariables(true);
-            if (FatUtility::isAjaxCall()) {
-                if (FatUtility::isAjaxCall()) {
-                    LibHelper::exitWithError(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, false, true);
-                }
-            }
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()));
             FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
         }
 

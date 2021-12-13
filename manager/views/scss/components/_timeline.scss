@@ -560,10 +560,14 @@
             top: 0;
             z-index: 2;
             background: $bg-white;
+
             .tag {
+                text-transform: uppercase;
                 background: $bg-gray;
                 padding: 0.25rem 1rem;
                 border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 500;
             }
         }
         &__items {
@@ -573,7 +577,7 @@
                 content: "";
                 border-#{$start-direction}: dotted 2px $border-color;
                 #{$start-direction}: 2rem;
-                top: 0;
+                top: 4px;
                 bottom: 0;
                 position: absolute;
             }
@@ -595,10 +599,21 @@
                 border-radius: 50%;
                 background-color: $brand-color;
             }
+
+            &.minus {
+                &:before {
+                    background-color: $danger-color;
+                }
+            }
+            &.plus {
+                &:before {
+                    background-color: $success-color;
+                }
+            }
+
             &-time {
                 display: flex;
-
-                padding-#{$end-direction}: 1.5rem;
+                //padding-#{$end-direction}: 1.5rem;
                 font-size: 0.8rem;
             }
             &-value {
@@ -650,6 +665,11 @@
                 a {
                     color: currentColor;
                 }
+            }
+            .list-stats {
+                background-color: $bg-gray;
+                padding: 1rem;
+                border-radius: $radius-common;
             }
             &--brand {
                 &:before {
