@@ -266,11 +266,11 @@ class ProductsController extends ListingBaseController
                 }
             }
 
-            $productCategories = $this->modelObj->getProductCategories($productId);
-            if (!empty($productCategories)) {
-                $selectedCat = array_keys($productCategories);
-                $productData['ptc_prodcat_id'] = $selectedCat[0];
-                $catData = ProductCategory::getAttributesByLangId($langId, $productData['ptc_prodcat_id'], [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
+            $productCategories = $this->modelObj->getProductCategories($productId);          
+            if (!empty($productCategories)) {                    
+                $selectedCat = current($productCategories)['prodcat_id'];              
+                $productData['ptc_prodcat_id'] = $selectedCat;
+                $catData = ProductCategory::getAttributesByLangId($langId, $selectedCat, [ProductCategory::tblFld('name'), ProductCategory::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);                              
                 if (false != $catData) {
                     $fld = $frm->getField('ptc_prodcat_id');
                     $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
@@ -333,8 +333,7 @@ class ProductsController extends ListingBaseController
             $tempProductId = time() . $this->admin_id;
             $frm->fill(['temp_product_id' => $tempProductId]);
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, 'product_id' => $tempProductId]);
-        }      
-
+        }
 
         // $attachDownloadsWithInv = 0;
         // $productType = Product::PRODUCT_TYPE_PHYSICAL;
@@ -380,6 +379,8 @@ class ProductsController extends ListingBaseController
         $frm = new Form('frmProduct');
         $productTypeArr = Product::getProductTypes($langId);
 
+        $productType = $productType == 0 ? array_key_first($productTypeArr) : $productType;
+
         if (0 < $productId) {
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, [], '');
         } else {
@@ -387,7 +388,7 @@ class ProductsController extends ListingBaseController
             $fld->requirements()->setRequired();
         }
 
-        $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $langId), 'product_type', $productTypeArr, array_key_first($productTypeArr,));
+        $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $langId), 'product_type', $productTypeArr, $productType);
         $fld->requirements()->setRequired();
 
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $langId), 'product_seller_id', [], '', [], Labels::getLabel('FRM_ADMIN', $langId));
@@ -477,7 +478,7 @@ class ProductsController extends ListingBaseController
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
+        if (!empty($translatorSubscriptionKey) && $langId == CommonHelper::getDefaultFormLangId() && 1 < count($languageArr)) {       
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
@@ -531,6 +532,7 @@ class ProductsController extends ListingBaseController
 
         /* sendApprovalStatusUpdate to seller */
         $sendApprovalStatusUpdate = false;
+        $isNewProduct = false;
         if (0 < $productId && isset($post['product_approved'])) {
             $oldProductData = Product::getAttributesById($productId, ['product_approved', 'product_seller_id']);
             if (0 < $oldProductData['product_seller_id'] && $oldProductData['product_approved'] != $post['product_approved']) {
@@ -538,6 +540,7 @@ class ProductsController extends ListingBaseController
             }
         }
         if (1 > $productId) {
+            $isNewProduct = true;
             $post['product_approved'] = applicationConstants::YES;
         }
 
@@ -668,6 +671,9 @@ class ProductsController extends ListingBaseController
         }
         Tag::updateProductTagString($productId);
         Product::updateMinPrices($productId);
+        if ($isNewProduct) {
+            $prodObj->moveTempFiles(AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, $post['temp_product_id']);
+        }
         $db->commitTransaction();
         $this->set('productId', $productId);
         $this->set('msg', $this->str_setup_successful);
@@ -678,6 +684,12 @@ class ProductsController extends ListingBaseController
     {
         $langId = $post['lang_id'];
         $productId = $post['product_id'];
+        if (1 > $productId) {
+            if (!isset($post['temp_product_id']) || 1 > $post['temp_product_id']) {
+                LibHelper::exitWithError($this->str_invalid_request ."111");
+            }
+        }
+
         if (isset($post['options'])) {
             $post['options'] = is_array($post['options']) ? array_filter($post['options']) : [];
             if (count($post['options'])) {
@@ -803,12 +815,12 @@ class ProductsController extends ListingBaseController
     {
         $this->objPrivilege->canEditProducts();
 
-        $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT, 0);       
+        $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT, 0);
         $optionId = FatApp::getPostedData('optionId', FatUtility::VAR_INT, 0);
 
         if (1 > $productId || 1 > $optionId) {
             LibHelper::exitWithError(Labels::getLabel($this->str_invalid_request, $this->siteLangId));
-        }  
+        }
 
         if (SellerProduct::isOptionLinked($optionId, $productId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_OPTION_IS_LINKED_WITH_SELLER_INVENTORY', $this->siteLangId), true);
@@ -1406,12 +1418,12 @@ class ProductsController extends ListingBaseController
         return $frm;
     }
 
-    public function images($productId, $fileType, $option_id = 0, $langId = 0)
+    public function images($productId, $fileType = 0, $optionId = 0, $langId = 0)
     {
         $productId = FatUtility::int($productId);
         $fileType = FatUtility::int($fileType);
-        if (1  > $productId ||  1  > $fileType) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        if (1  > $productId) {
+            LibHelper::exitWithError($this->str_invalid_request_id);
         }
 
         $languages = Language::getAllNames();
@@ -1420,16 +1432,18 @@ class ProductsController extends ListingBaseController
         }
 
         if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {
-            $images = AttachedFileTemp::getMultipleAttachments($fileType, $productId, $option_id, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
+            $images = AttachedFileTemp::getMultipleAttachments($fileType, $productId, $optionId, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
         } else {
+            $fileType = AttachedFile::FILETYPE_PRODUCT_IMAGE;
             if (!Product::getAttributesById($productId, 'product_id')) {
-                LibHelper::exitWithError($this->str_invalid_request_id, true);
+                LibHelper::exitWithError($this->str_invalid_request_id);
             }
-            $images = AttachedFile::getMultipleAttachments($fileType, $productId, $option_id, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
+            $images = AttachedFile::getMultipleAttachments($fileType, $productId, $optionId, $langId, (count($languages) <= 1) ? true : false, 0, 0, true);
         }
 
         $this->set('images', $images);
         $this->set('product_id', $productId);
+        $this->set('isDefaultLayout', FatApp::getPostedData('isDefaultLayout', FatUtility::VAR_INT, 0));
         $this->set('canEdit', $this->objPrivilege->canEditProducts(0, true));
         $this->_template->render(false, false);
     }
@@ -1500,6 +1514,12 @@ class ProductsController extends ListingBaseController
             FatApp::getDb()->updateFromArray('tbl_products', array('product_image_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($productId)));
         }
 
+        if (count($languages) > 1) {
+            $this->set("isDefaultLayout", $langId == 0 &&  $optionId == 0);
+        } else {
+            $this->set("isDefaultLayout", $langId == CommonHelper::getDefaultFormLangId() &&  $optionId == 0);
+        }
+
         $this->set("lang_id", $langId);
         $this->set("option_id", $optionId);
         $this->set("product_id", $productId);
@@ -1519,38 +1539,34 @@ class ProductsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
+        if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {
+            $fileHandlerObj = new AttachedFileTemp();
+        } else {
+            $fileHandlerObj = new AttachedFile();
+        }
+
+        $data = $fileHandlerObj::getAttributesById($imageId, ['afile_lang_id', 'afile_record_subid']);
+        if (false == $data) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
         $productObj = new Product();
         if (!$productObj->deleteProductImage($productId, $imageId, $fileType)) {
             LibHelper::exitWithError($productObj->getError(), true);
         }
 
         FatApp::getDb()->updateFromArray('tbl_products', array('product_image_updated_on' => date('Y-m-d H:i:s')), array('smt' => 'product_id = ?', 'vals' => array($productId)));
-
+        $languages = Language::getAllNames();
+        if (count($languages) > 1) {
+            $this->set("isDefaultLayout", $data['afile_lang_id'] == 0 &&  $data['afile_record_subid'] == 0);
+        } else {
+            $this->set("isDefaultLayout", $data['afile_lang_id'] == CommonHelper::getDefaultFormLangId() &&  $data['afile_record_subid'] == 0);
+        }
+        $this->set("optionId", $data['afile_record_subid']);
+        $this->set("langId", $data['afile_lang_id']);
         $this->set("msg", $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
-
-    // public function form($productId = 0, $prodCatId = 0)
-    // {
-    //     $this->objPrivilege->canEditProducts();
-    //     $productId = FatUtility::int($productId);
-    //     $attachDownloadsWithInv = 0;
-    //     $productType = Product::PRODUCT_TYPE_PHYSICAL;
-    //     if (0 < $productId) {
-    //         $prodData = Product::getAttributesById($productId, ['product_type', 'product_attachements_with_inventory']);
-    //         $productType = $prodData['product_type'] ?? 0;
-    //         $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'] ?? 0;
-    //     }
-
-    //     $this->set('productId', $productId);
-    //     $this->set('prodCatId', $prodCatId);
-    //     $this->set('productType', $productType);
-    //     $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
-    //     $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
-    //     $this->_template->addCss(array('css/cropper.css', 'css/tagify.css'));
-    //     $this->set("includeEditor", true);
-    //     $this->_template->render();
-    // }
 
     public function productInitialSetUpFrm($productId, $prodCatId = 0)
     {
@@ -1692,8 +1708,6 @@ class ProductsController extends ListingBaseController
         if (!empty($translatorSubscriptionKey) && count($languages) > 0) {
             $frm->addCheckBox(Labels::getLabel('LBL_Translate_To_Other_Languages', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-
-
 
         $fldMinSelPrice = $frm->addFloatField(Labels::getLabel('LBL_Minimum_Selling_Price', $this->siteLangId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'product_min_selling_price', '');
         $fldMinSelPrice->requirements()->setPositive();

@@ -2161,7 +2161,7 @@ END,   special_price_found ) as special_price_found'
             afile_updated_at
         )
         SELECT
-            afile_type,
+            ".AttachedFile::FILETYPE_PRODUCT_IMAGE.",
             $this->mainTableRecordId,
             afile_record_subid,
             afile_lang_id,

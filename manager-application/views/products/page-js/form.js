@@ -152,7 +152,8 @@
         $('#sp_label').val('');
         $('#sp_value').val('');
         $('#sp_group').val('');
-        $('#sp_id').val(0);
+        $('#sp_id').val(0);   
+        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));     
 
     };
     validateSpeficationForm = function () {
@@ -205,6 +206,7 @@
         $('#sp_value').val(value);
         $('#sp_group').val(group);
         $('#sp_id').val(prodSpecId);
+        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('updatelbl')); 
     };
     deleteProdSpec = function (el) {
         let prodSpecId = $(el).closest('tr').data('id');
@@ -244,12 +246,13 @@
         return $("#addProductfrm [name='product_id']").val();
     };
 
+    getCurrentFrmTempProductId = function () {
+        return $("#addProductfrm [name='temp_product_id']").val();
+    };
+
     imageForm = function () {
-        if (false === checkControllerName()) {
-            return false;
-        }
         let productId = getCurrentFrmProductId();
-        let tempProductId = $("#addProductfrm [name='temp_product_id']").val();
+        let tempProductId = getCurrentFrmTempProductId();
         if (1 > productId) {
             if (tempProductId == undefined) {
                 console.warn('temp product id is manatory');
@@ -257,7 +260,7 @@
             }
         }
         $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controllerName, "imageForm", [productId, tempProductId]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Products', "imageForm", [productId, tempProductId]), '', function (t) {
             $.ykmodal(t);
             loadImageOptions();
             var fileType = $('#image_file_type').val();
@@ -293,6 +296,10 @@
 
     productImagesCallback = function (t) {
         productImages(t.product_id, t.file_type, t.option_id, t.lang_id)
+        if (t.isDefaultLayout) {
+            productDefaultImages();
+        }
+
     };
 
     productImages = function (product_id, file_type, option_id = 0, lang_id = 0) {
@@ -312,13 +319,12 @@
             } else {
                 fcom.displaySuccessMessage(ans.msg);
             }
-            let optionId = $('#image_option_id').val() || 0;
-            let langId = $('#image_lang_id').val();
-
-            productImages(product_id, file_type, optionId, langId);
+            productImages(product_id, file_type, ans.optionId, ans.langId);
+            if (ans.isDefaultLayout) {
+                productDefaultImages();
+            }
         });
     };
-
 
     optionValuesChanges = function (e) {
         upcType();
@@ -372,7 +378,7 @@
                         if (0 < productId) {
                             let optionId = $(element).closest('.rowJs').find('.optionsJs').val()
                             let optionValueId = tags[0]['data']['id'];
-                            fcom.ajax(fcom.makeUrl(controllerName, "canDeleteOpValue"), { productId, optionId, optionValueId }, function (t) {
+                            fcom.ajax(fcom.makeUrl('Products', "canDeleteOpValue"), { productId, optionId, optionValueId }, function (t) {
                                 t = $.parseJSON(t);
                                 if (t.status == 0) {
                                     fcom.displayErrorMessage(t.msg);
@@ -423,17 +429,106 @@
                     });
                 });
             }
-            fcom.ajax(fcom.makeUrl(controllerName, "upcListing"), { productId, langId, type, productOptions }, function (t) {
+            fcom.ajax(fcom.makeUrl('Products', "upcListing"), { productId, langId, type, productOptions }, function (t) {
                 $('#variantsListJs').html(t);
             });
         }, 2500);
+    };
+    loadCropper = function (inputBtn) {
+        if (inputBtn.files && inputBtn.files[0]) {
+            loadCropperSkeleton(false);
+            $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
+            fcom.ajax(fcom.makeUrl('Products', "imgCropper"), "", function (t) {
+                t = $.parseJSON(t);
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
+                var file = inputBtn.files[0];
+
+                var frmName = $(inputBtn).closest('form').attr('name');
+                var minWidth = document[frmName].min_width.value;
+                var minHeight = document[frmName].min_height.value;
+
+                if (minWidth == minHeight) {
+                    var aspectRatio = 1 / 1;
+                } else {
+                    var aspectRatio = 16 / 9;
+                }
+                var options = {
+                    aspectRatio: aspectRatio,
+                    data: {
+                        width: minWidth,
+                        height: minHeight,
+                    },
+                    minCropBoxWidth: minWidth,
+                    minCropBoxHeight: minHeight,
+                    toggleDragModeOnDblclick: false,
+                    imageSmoothingQuality: "high",
+                    imageSmoothingEnabled: true,
+                };
+                $(inputBtn).val("");
+                setTimeout(function () { cropImage(file, options, "mediaUpload", inputBtn) }, 100);
+                return;
+            });
+        }
+    };
+
+    mediaUpload = function (formData) {
+        var frmName = formData.get("frmName");
+        var frm = document.forms[frmName];
+        var other_data = $('form[name="' + frmName + '"]').serializeArray();
+        $.each(other_data, function (key, input) {
+            formData.append(input.name, input.value);
+        });
+
+        $.ajax({
+            url: fcom.makeUrl('Products', "uploadMedia"),
+            type: "post",
+            dataType: "json",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (ans) {
+                fcom.removeLoader();
+                if (ans.status == 0) {
+                    $.ykmsg.error(ans.msg);
+                    return;
+                }
+                autoOpenSideBar = false;
+                $("#modalBoxJs").modal("hide");
+                $.ykmsg.success(ans.msg);
+                productDefaultImages();
+
+                if (ans.isDefaultLayout) {
+                    productDefaultImages();
+                }
+                fcom.removeLoader();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $.ykmsg.error(
+                    thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
+                );
+            },
+        });
+    };
+
+    productDefaultImages = function () {
+        let productId = getCurrentFrmProductId();
+        fileType = 0;
+        if (1 > productId) {
+            productId = getCurrentFrmTempProductId();
+            fileType = tempImageType;
+        }
+        fcom.ajax(fcom.makeUrl('Products', 'images', [productId, 0, 0, 0]), { isDefaultLayout: 1 }, function (t) {            
+            $('#productDefaultImagesJs li').not(":first").remove();
+            $('#productDefaultImagesJs').append(t);
+        });
     };
 
 })();
 
 /** on option select/deselect */
 async function resetOptionValuesTag(e) {
-    console.log(e);
     let productId = getCurrentFrmProductId();
     if (0 < productId) {
         let optionId = e.params.args.data.id;
@@ -449,7 +544,7 @@ async function resetOptionValuesTag(e) {
             let response = await $.ajax({
                 url: fcom.makeUrl('Products', 'removeProductOption'),
                 type: 'POST',
-                data: { productId, optionId, fIsAjax:1 }
+                data: { productId, optionId, fIsAjax: 1 }
             });
 
             response = $.parseJSON(response)
