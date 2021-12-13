@@ -120,9 +120,9 @@ class BadgesController extends ListingBaseController
             $srch->addCondition('badge_required_approval', '=', $approval);
         }
 
-        $conditionType = FatApp::getPostedData('badge_condition_type');
+        $conditionType = FatApp::getPostedData('badge_trigger_type');
         if ('' != $conditionType) {
-            $srch->addCondition('badge_condition_type', '=', $conditionType);
+            $srch->addCondition('badge_trigger_type', '=', $conditionType);
         }
 
         $srch->addOrder($sortBy, $sortOrder);
@@ -229,7 +229,7 @@ class BadgesController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr);
 
         $conditionTypeArr = Badge::getTriggerCondTypeArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId), 'badge_condition_type', $conditionTypeArr);
+        $frm->addSelectBox(Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr);
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
@@ -241,7 +241,7 @@ class BadgesController extends ListingBaseController
         $frm = new Form('frm');
         $frm->addHiddenField('', 'badge_id');
         $frm->addHiddenField('', 'badge_type', Badge::TYPE_BADGE);
-        $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_condition_type', Badge::getTriggerCondTypeArr($this->siteLangId), '', [], '');
+        $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', Badge::getTriggerCondTypeArr($this->siteLangId), '', [], '');
 
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'badge_name');
 
@@ -502,7 +502,7 @@ class BadgesController extends ListingBaseController
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'shape_type' => Labels::getLabel('LBL_IMAGE', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
-            Badge::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_TRIGGER_TYPE', $this->siteLangId),
+            Badge::DB_TBL_PREFIX . 'trigger_type' => Labels::getLabel('LBL_TRIGGER_TYPE', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $this->siteLangId),
             Badge::DB_TBL_PREFIX . 'active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -518,7 +518,7 @@ class BadgesController extends ListingBaseController
             'listSerial',
             Badge::DB_TBL_PREFIX . 'shape_type',
             Badge::DB_TBL_PREFIX . 'name',
-            Badge::DB_TBL_PREFIX . 'condition_type',
+            Badge::DB_TBL_PREFIX . 'trigger_type',
             Badge::DB_TBL_PREFIX . 'required_approval',
             Badge::DB_TBL_PREFIX . 'active',
             'action',

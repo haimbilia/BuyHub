@@ -27,7 +27,7 @@ if (null != $iconFld) {
 	$iconFld->htmlAfterField = '<small class="text--small">' . sprintf(Labels::getLabel('LBL_This_will_be_displayed_in_%s_on_your_store', $adminLangId), '60*60') . '</small>';
 }
 
-$conditionType = $frm->getField('badge_condition_type');
+$conditionType = $frm->getField('badge_trigger_type');
 if (null != $conditionType) {
 	$conditionType->addFieldTagAttribute('onChange', 'conditionType(this)');
 	$conditionType->addFieldTagAttribute('class', 'badgeConditionTypeJs');
@@ -115,7 +115,7 @@ if (null != $conditionType) {
 								<div class="caption-wraper">
 									<label class="field_label">
 										<?php
-										$fld = $frm->getField('badge_condition_type');
+										$fld = $frm->getField('badge_trigger_type');
 										echo $fld->getCaption();
 										?>
 										<span class="spn_must_field">*</span>
@@ -123,7 +123,7 @@ if (null != $conditionType) {
 								</div>
 								<div class="field-wraper">
 									<div class="field_cover">
-										<?php echo $frm->getFieldHtml('badge_condition_type'); ?>
+										<?php echo $frm->getFieldHtml('badge_trigger_type'); ?>
 									</div>
 								</div>
 							</div>

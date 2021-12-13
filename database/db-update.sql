@@ -1453,3 +1453,5 @@ ALTER TABLE `tbl_attached_files_temp` ADD `afile_updated_at` DATETIME NOT NULL A
 
 ALTER TABLE tbl_attached_files CHANGE afile_record_id afile_record_id BIGINT NOT NULL;
 ALTER TABLE tbl_attached_files CHANGE afile_record_subid afile_record_subid BIGINT NOT NULL;
+
+ALTER TABLE `tbl_badges` CHANGE `badge_condition_type` `badge_trigger_type` TINYINT NOT NULL DEFAULT '1';

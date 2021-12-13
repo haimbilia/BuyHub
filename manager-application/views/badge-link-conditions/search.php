@@ -57,7 +57,7 @@ foreach ($arrListing as $sn => $row) {
 
                 if ($canEdit) {
                     $recordType = $row['blinkcond_record_type'];
-                    $triggerType = $row['badge_condition_type'];
+                    $triggerType = $row['badge_trigger_type'];
                     $displayInPoup = (int) (Badge::COND_AUTO == $triggerType || BadgeLinkCondition::RECORD_TYPE_SHOP == $recordType);
                     $data['editButton'] = [
                         'onclick' => 'editConditionRecord(' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'badge_id'] . ', ' . $row[BadgeLinkCondition::DB_TBL_PREFIX . 'id'] . ', ' . $displayInPoup . ')'

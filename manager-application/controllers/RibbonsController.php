@@ -88,11 +88,10 @@ class RibbonsController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'badge_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'badge_id';
         }
-
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
@@ -138,6 +137,23 @@ class RibbonsController extends ListingBaseController
 
         $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
         $this->set("approvalStatusArr", $approvalStatusArr);
+    }
+
+    protected function getSearchForm(array $fields = [])
+    {
+        $fields = $this->getFormColumns();
+
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'badge_id', applicationConstants::SORT_DESC);
+        }
+
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
     }
 
     public function form()
@@ -193,7 +209,7 @@ class RibbonsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm(int $conditionType = Badge::COND_MANUAL)
+    private function getForm()
     {
         $frm = new Form('frm');
         $frm->addHiddenField('', 'badge_id');
@@ -201,11 +217,11 @@ class RibbonsController extends ListingBaseController
 
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'badge_name');
 
-        $badgeShapeTypes = Badge::getShapeTypesArr($this->adminLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_SHAPE', $this->adminLangId), 'badge_shape_type', $badgeShapeTypes);
+        $badgeShapeTypes = Badge::getShapeTypesArr($this->siteLangId);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_SHAPE', $this->siteLangId), 'badge_shape_type', $badgeShapeTypes);
         $fld->requirement->setRequired(true);
-        $frm->addCheckBox(Labels::getLabel('LBL_DISPLAY_INSIDE', $this->adminLangId), 'badge_display_inside', 1, [], false, 0 );
-        $frm->addRequiredField(Labels::getLabel('LBL_COLOR', $this->adminLangId), 'badge_color', '', ['class' => 'jscolor']);
+        $frm->addCheckBox(Labels::getLabel('FRM_DISPLAY_INSIDE', $this->siteLangId), 'badge_display_inside', 1, [], false, 0 );
+        $frm->addRequiredField(Labels::getLabel('FRM_COLOR', $this->siteLangId), 'badge_color', '', ['class' => 'jscolor']);
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'badge_active', $activeInactiveArr, '', array(), '');
