@@ -238,7 +238,7 @@ class BadgesController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL', $this->siteLangId), 'badge_required_approval', $approvalArr);
 
         $conditionTypeArr = Badge::getTriggerCondTypeArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr);
+        $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr);
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
