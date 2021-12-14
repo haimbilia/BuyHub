@@ -137,7 +137,6 @@
                     }
                 );
             },
-        });
-        $("#pageList > tbody").disableSelection();
+        }).disableSelection();
     }
 </script>

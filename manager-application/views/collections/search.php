@@ -6,11 +6,9 @@ if (!isset($tbody)) {
 }
 
 foreach ($arrListing as $sn => $row) {
-    $serialNo = $sn + 1;
+    $serialNo = ($sn + 1);
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
-    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
-    $tr->setAttribute("id", $row['currency_id']);
-
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['collection_id']]);
     foreach ($fields as $key => $val) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
@@ -23,38 +21,30 @@ foreach ($arrListing as $sn => $row) {
                                                         </svg>', true);
                 break;
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="currency_ids[]" value=' . $row['currency_id'] . '><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="collection_ids[]" value='.$row['collection_id'].'><i class="input-helper"></i></label>', true);
                 break;
-            case 'currency_symbol_left':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);
-                break;
-            case 'currency_symbol_right':
-                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);
-                break;
-            case 'currency_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['currency_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
-                $statusClass = ($canEdit) ? '' : 'disabled';
-                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
-
-                $htm = '<span class="switch switch-sm switch-icon">
-                                    <label>
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['currency_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                                        <span class="input-helper"></span>
-                                    </label>
-                                </span>';
-                $td->appendElement('plaintext', $tdAttr, $htm, true);
-                break;
-            case 'currency_code':
+            case 'collection_name':
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
+                break;
+            case 'collection_type':
+                $td->appendElement('plaintext', $tdAttr, Collections::getTypeArr($siteLangId)[$row[$key]]);
+                break;
+            case 'collection_layout_type':
+                $td->appendElement('plaintext', $tdAttr, Collections::getLayoutTypeArr($siteLangId)[$row[$key]]);
+                break;
+
+            case 'collection_active':
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['collection_id'], $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
-                    'recordId' => $row['currency_id']
+                    'recordId' => $row['collection_id']
                 ];
-
                 if ($canEdit) {
                     $data['editButton'] = [];
+                    $data['deleteButton'] = [];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
@@ -64,7 +54,6 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $serialNo++;
 }
 
 if (count($arrListing) == 0) {
@@ -77,7 +66,6 @@ if (count($arrListing) == 0) {
         Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
-
 
 if ($printData) {
     echo $tbody->getHtml();

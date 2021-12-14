@@ -82,8 +82,6 @@ class CurrencyManagementController extends ListingBaseController
 
     private function getListingData()
     {
-        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-
         $data = FatApp::getPostedData();
 
         $fields = $this->getFormColumns();
@@ -93,8 +91,8 @@ class CurrencyManagementController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'currency_display_order');
-        if (!array_key_exists($sortBy, $fields) && 'currency_display_order' != $sortBy) {
-            $sortBy = current($allowedKeysForSorting);
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = 'currency_display_order';
         }
 
         $sortBy = 'currency_code' == $sortBy ? 'currency_name' : $sortBy;
@@ -103,7 +101,6 @@ class CurrencyManagementController extends ListingBaseController
 
         $searchForm = $this->getSearchForm($fields);
 
-        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
 
         $srch = Currency::getSearchObject($this->siteLangId, false);
@@ -115,9 +112,6 @@ class CurrencyManagementController extends ListingBaseController
         }
 
         $srch->addMultipleFields(['curr.*', 'curr_l.*']);
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
 
         $rs = $srch->getResultSet();
@@ -127,16 +121,12 @@ class CurrencyManagementController extends ListingBaseController
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("defaultCurrencyId", $defaultCurrencyId);
         $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('doNotLimitRecords', true);
         $this->set('canEdit', $this->objPrivilege->canEditCurrencyManagement($this->admin_id, true));
     }
 
@@ -320,7 +310,7 @@ class CurrencyManagementController extends ListingBaseController
         $arr = [
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'currency_display_order' => Labels::getLabel('LBL_DISPLAY_ORDER', $this->siteLangId),
             'currency_name' => Labels::getLabel('LBL_CURRENCY_NAME', $this->siteLangId),
             'currency_code' => Labels::getLabel('LBL_CURRENCY_CODE', $this->siteLangId),
             'currency_symbol_left' => Labels::getLabel('LBL_Symbol_Left', $this->siteLangId),
@@ -338,7 +328,7 @@ class CurrencyManagementController extends ListingBaseController
         return [
             'dragdrop',
             'select_all',
-            'listSerial',
+            'currency_display_order',
             'currency_name',
             'currency_code',
             'currency_symbol_left',

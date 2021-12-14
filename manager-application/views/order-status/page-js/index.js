@@ -47,8 +47,7 @@ $(document).ajaxComplete(function () {
                     }
                 );
             },
-        });
-        $("#orderStatuses > tbody").disableSelection();
+        }).disableSelection();
     }
 
 })();

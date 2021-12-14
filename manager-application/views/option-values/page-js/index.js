@@ -48,8 +48,7 @@ $(document).ajaxComplete(function () {
                     }
                 );
             },
-        });
-        $("#orderStatuses > tbody").disableSelection();
+        }).disableSelection();
     };
 
     optionValueForm = function (optionId, id = 0) {
