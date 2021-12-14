@@ -2,35 +2,48 @@
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
+$frm->setFormTagAttribute('id', 'digitalDownloadFrm');
+$frm->setFormTagAttribute('enctype', 'multipart/form-data');
 
-$fld = $frm->getField('option_id');
+$frm->setFormTagAttribute('onsubmit', "setupDigitalDownload($('#digitalDownloadFrm'))");
+
+
+$fld = $frm->getField('option_comb_id');
 if($fld){
-    $fld->addFieldTagAttribute('id', "image_option_id");
+    //$fld->addFieldTagAttribute('id', "image_option_id");
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
-$fld = $frm->getField('option_id');
+$fld = $frm->getField('attach_with_existing_orders');
 if($fld){
-    $fld->addFieldTagAttribute('id', "image_option_id");
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
-$fld = $frm->getField('option_id');
+$fld = $frm->getField('lang_id');
 if($fld){
-    $fld->addFieldTagAttribute('id', "image_option_id");
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
-$fld = $frm->getField('option_id');
+$fld = $frm->getField('downloadable_file');
 if($fld){
-    $fld->addFieldTagAttribute('id', "image_option_id");
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
-$fld = $frm->getField('option_id');
+$fld = $frm->getField('preview_file');
 if($fld){
-    $fld->addFieldTagAttribute('id', "image_option_id");
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
+$fld = $frm->getField('product_downloadable_link');
+if($fld){
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 
+$fld = $frm->getField('product_preview_link');
+if($fld){
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 
-$displayFooterButtons = false;
 $includeTabs = false;
 $formTitle = $type == applicationConstants::DIGITAL_DOWNLOAD_FILE ? Labels::getLabel('LBL_DIGITAL_FILES', $siteLangId) :Labels::getLabel('LBL_DIGITAL_LINKS', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

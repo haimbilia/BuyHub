@@ -41,7 +41,7 @@ class DigitalDownload extends MyAppModel
         $recordId = FatUtility::int($recordId);
 
         if ($recordId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
 
@@ -60,15 +60,15 @@ class DigitalDownload extends MyAppModel
         return true;
     }
 
-    public function saveLink($refId, $langId, $downloadLink, $previewLink = '', $ddLinkid = 0)
+    public function saveLink( $langId, $downloadLink, $previewLink = '', $ddLinkid = 0)
     {
-        if ($refId < 1) {
+        if (1 > $this->getMainTableRecordId()) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
             return false;
         }
 
         $dataToSave = array(
-            static::DB_TBL_LINKS_PREFIX . 'record_id' => $refId,
+            static::DB_TBL_LINKS_PREFIX . 'record_id' => $this->getMainTableRecordId(),
             static::DB_TBL_LINKS_PREFIX . 'lang_id' => $langId,
             static::DB_TBL_LINKS_PREFIX . 'download_link' => $downloadLink,
             static::DB_TBL_LINKS_PREFIX . 'preview_link' => $previewLink,
@@ -176,12 +176,12 @@ class DigitalDownload extends MyAppModel
         return 0;
     }
 
-    public static function getDownloadForm($langId , $type)
+    public static function getDownloadForm($langId,$type,$recordId)
     {
         $frm = new Form('frmDownload'); 
 
         $frm->addSelectBox(Labels::getLabel('FRM_OPTION', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '')->requirements()->setRequired();        
-        $frm->addSelectBox(Labels::getLabel('FRM_ATTACH_WITH_EXISTING_ORDERS', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');        
+       
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', array(0 => Labels::getLabel('FRM_ALL_LANGUAGES', $langId)) + Language::getDropDownList(), '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
 
         if($type == applicationConstants::DIGITAL_DOWNLOAD_FILE){
@@ -191,16 +191,21 @@ class DigitalDownload extends MyAppModel
             $frm->addTextBox(Labels::getLabel('FRM_DOWNLOADABLE_LINK', $langId), 'product_downloadable_link');
             $frm->addTextBox(Labels::getLabel('FRM_PREVIEW_LINK', $langId), 'product_preview_link');
         }
+        $frm->addSelectBox(Labels::getLabel('FRM_ATTACH_WITH_EXISTING_ORDERS', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');        
         // $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('FRM_UPLOAD', $langId)); 
         // $frm->addButton('', 'attachment_link_btn', Labels::getLabel('FRM_ADD', $langId));
 
-        $frm->addHiddenField('', 'product_id');
-        $frm->addHiddenField('', 'selprod_id');
+        // $frm->addHiddenField('', 'product_id');
+        // $frm->addHiddenField('', 'selprod_id');
+
+        $frm->addHiddenField('', 'record_id',$recordId);
+
         $frm->addHiddenField('', 'preq_id');
         $frm->addHiddenField('', 'dd_link_id');
         $frm->addHiddenField('', 'is_preview', 0);
         $frm->addHiddenField('', 'dd_link_ref_id');
         $frm->addHiddenField('', 'ref_file_id', 0);
+        echo $type;
         $frm->addHiddenField('', 'download_type', $type);
         return $frm;
     }
@@ -280,7 +285,7 @@ class DigitalDownload extends MyAppModel
         return true;
     }
 
-    public function attachLinkWithOrderedProducts($downloadLink, $recordId, $requestType, $langId, $option)
+    public function attachLinkWithOrderedProducts($downloadLink, $recordId, $requestType, $option)
     {
         if (!in_array($requestType, [Product::CATALOG_TYPE_INVENTORY, Product::CATALOG_TYPE_PRIMARY])
             || '' == $downloadLink

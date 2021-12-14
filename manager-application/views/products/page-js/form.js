@@ -152,8 +152,8 @@
         $('#sp_label').val('');
         $('#sp_value').val('');
         $('#sp_group').val('');
-        $('#sp_id').val(0);   
-        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));     
+        $('#sp_id').val(0);
+        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));
 
     };
     validateSpeficationForm = function () {
@@ -206,7 +206,7 @@
         $('#sp_value').val(value);
         $('#sp_group').val(group);
         $('#sp_id').val(prodSpecId);
-        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('updatelbl')); 
+        $('#btnAddSpecJs').text($('#btnAddSpecJs').data('updatelbl'));
     };
     deleteProdSpec = function (el) {
         let prodSpecId = $(el).closest('tr').data('id');
@@ -496,7 +496,7 @@
                 }
                 autoOpenSideBar = false;
                 $("#modalBoxJs").modal("hide");
-                $.ykmsg.success(ans.msg); 
+                $.ykmsg.success(ans.msg);
                 if (ans.isDefaultLayout) {
                     productDefaultImages();
                 }
@@ -517,20 +517,83 @@
             productId = getCurrentFrmTempProductId();
             fileType = tempImageType;
         }
-        fcom.ajax(fcom.makeUrl('Products', 'images', [productId, 0, 0, 0]), { isDefaultLayout: 1 }, function (t) {            
+        fcom.ajax(fcom.makeUrl('Products', 'images', [productId, 0, 0, 0]), { isDefaultLayout: 1 }, function (t) {
             $('#productDefaultImagesJs li').not(":first").remove();
             $('#productDefaultImagesJs').append(t);
         });
     };
 
-    digitalDownloadsForm = function(type){ 
+    digitalDownloadsForm = function (type) {
+        console.log(type);
         $.ykmodal(fcom.getLoader());
         let productId = getCurrentFrmProductId();
-        fcom.ajax(fcom.makeUrl('Products', "digitalDownloadForm",[productId,type]), "", function (t) {
+        fcom.ajax(fcom.makeUrl('Products', "digitalDownloadForm", [productId, type]), "", function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
         });
     };
+
+    setupDigitalDownload = function (frm) {
+        if (!frm.validate()) { return; }
+        var data = new FormData();
+        data.append('fIsAjax', 1);
+        frm.find('select,input[type=hidden],input[type=text]').each(function () {
+            data.append(this.name, $(this).val());
+        });
+
+        frm.find('input[type=file]').each(function (i, v) {
+            data.append(v.name, v.files[0]);
+        });
+
+        $.ykmodal(fcom.getLoader());
+        $.ajax({
+            url: fcom.makeUrl('Products', 'setupDigitalDownload'),
+            type: "POST",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (t) {
+                fcom.removeLoader();
+                var ans = $.parseJSON(t);
+                if (ans.status == 0) {
+                    fcom.displayErrorMessage(ans.msg);
+                    return;
+                }
+                fcom.displaySuccessMessage(ans.msg);
+
+                //downloadsForm(productId, 0, true);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error Occurred.");
+            }
+        });
+    };
+
+    getDigitalDownloads = function () {
+        var productId = $('#digitalDownloadFrm input[name=record_id]').val();
+        var downloadType = $("#digitalDownloadFrm select[name='download_type']").val();
+        var langId = $("#digitalDownloadFrm select[name='lang_id']").val();
+        var optionCombi = "";
+        if (0 < $("#digitalDownloadFrm select[name='option_comb_id']").length) {
+            optionCombi = $("#digitalDownloadFrm select[name='option_comb_id']").val();
+        }
+
+        if (optionCombi == '') {
+            optionCombi = '0';
+        }
+        var data = '&product_id=' + productId + '&download_type=' + downloadType;
+        data = data + '&option_comb=' + optionCombi + '&langId=' + langId;
+
+        if (downloadType == 1) {
+            fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
+                $("#digital_download_list").html(res);
+            });
+        } else {
+            fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {
+                $("#digital_download_list").html(res);
+            });
+        }
+    }
 
 })();
 

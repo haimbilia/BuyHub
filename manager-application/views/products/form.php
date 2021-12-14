@@ -390,7 +390,7 @@ $frm->setFormTagAttribute('class', 'form');
                             <span class="text-muted">Digital Files are added in this
 
                                 <span class="input-helper"></span>section</span>
-                                <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE;?>)">File</button>
+                                <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>)">File</button>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
                     <div class="card-body show" id="digital-files-block">                      
