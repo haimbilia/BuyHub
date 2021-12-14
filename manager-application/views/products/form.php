@@ -99,6 +99,37 @@ $frm->setFormTagAttribute('class', 'form');
                                             </div>
                                         </a>
                                     </li>
+                                    <li class="stock-nav-item">
+                                        <a class="stock-nav-link" href="#digital-files">
+                                            <i class="stock-nav-icn">
+                                                <svg class="svg" width="20" height="20">
+                                                    <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                    </use>
+                                                </svg>
+                                            </i>
+                                            <div class="">
+                                                <h6 class="stock-nav-title">
+                                                Digital files</h6>
+                                                <span class="stock-nav-desc"> Add Digital files
+                                                    </span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="stock-nav-item">
+                                        <a class="stock-nav-link" href="#digital-links">
+                                            <i class="stock-nav-icn">
+                                                <svg class="svg" width="20" height="20">
+                                                    <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                    </use>
+                                                </svg>
+                                            </i>
+                                            <div class="">
+                                                <h6 class="stock-nav-title">
+                                                Digital links</h6>
+                                                <span class="stock-nav-desc"> Add Digital links </span>
+                                            </div>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -192,8 +223,8 @@ $frm->setFormTagAttribute('class', 'form');
                             echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
-                            echo $frm->getFieldHtml('product_id');
-                            echo $frm->getFieldHtml('temp_product_id',6,['id' => 'temp_product_id']);
+                            echo HtmlHelper::getFieldHtml($frm,'product_id',6);                   
+                            echo HtmlHelper::getFieldHtml($frm,'temp_product_id',6,['id' => 'temp_product_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit', 6, ['id' => 'product_warranty_unit']);
                             ?>
                         </div>
@@ -247,165 +278,20 @@ $frm->setFormTagAttribute('class', 'form');
                 <div class="card" id="media">
                     <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
-                            <h3 class="card-head-title">Media
-                                <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
+                            <h3 class="card-head-title">Media                                
                             </h3>
+                            <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
                             <span class="text-muted">Attach media files for the product </span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="stock-block2">
-                        <div class="dropzone dropzone-custom">
-                            <div class="dropzone-upload">
-                                <div class="file-upload">
-                                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/upload/upload_img.png">
-                                </div>
-                                <div class="needsclick">
-                                    <h3 class="dropzone-msg-title">click here to upload</h3>
-                                </div>
-                            </div>
-                            <input class="dropzone-input" type="file" onchange="">
-                        </div>
+                    <div class="card-body show" id="stock-block2">                     
                         <span class="form-text text-muted  pt-2"> File type must be a .jpg, .gif or .png
                             smaller than 2MB and at least
-                            800x800 in 1:1 aspect ratio</span>
-                            <button onclick="$('#hiddenMediaFrmFileJs').click();">upload</button>
+                            800x800 in 1:1 aspect ratio</span>                           
                         <div class="mt-5">
                             <h6 class="h6 mb-3">Uploaded media</h6>
-                            <ul class="uploaded-stocks">
-                                <li>
-                                    <div class="uploaded-stocks-item" data-ratio="1:1">
-                                        <img data-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg">
-                                        <div class="uploaded-stocks-actions">
-                                            <ul class="actions">
-                                                <li>
-                                                    <a href="#" title="Edit">
-
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" class="">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="uploaded-stocks-item" data-ratio="1:1">
-                                        <img data-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg">
-                                        <div class="uploaded-stocks-actions">
-                                            <ul class="actions">
-                                                <li>
-                                                    <a href="#" title="Edit">
-
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" class="">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="uploaded-stocks-item" data-ratio="1:1">
-                                        <img data-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product5.jpg">
-                                        <div class="uploaded-stocks-actions">
-                                            <ul class="actions">
-                                                <li>
-                                                    <a href="#" title="Edit">
-
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" class="">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="uploaded-stocks-item" data-ratio="1:1">
-                                        <img data-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg">
-                                        <div class="uploaded-stocks-actions">
-                                            <ul class="actions">
-                                                <li>
-                                                    <a href="#" title="Edit">
-
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" class="">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="uploaded-stocks-item" data-ratio="1:1">
-                                        <img data-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg">
-                                        <div class="uploaded-stocks-actions">
-                                            <ul class="actions">
-                                                <li>
-                                                    <a href="#" title="Edit">
-
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0)" class="">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                                            </use>
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
+                            <ul class="uploaded-stocks" id="productDefaultImagesJs">
+                              <li><button type="button" onclick="$('#hiddenMediaFrmFileJs').click();">upload</button></li>                                          
                             </ul>
                             <span class="form-text text-muted pt-2">Pay attention to the quality of
                                 pictures
@@ -460,7 +346,7 @@ $frm->setFormTagAttribute('class', 'form');
                                     <div class="form-group">
                                         <label class="label"></label>
                                         <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
-                                        <button type="button" class="btn btn-brand btn-wide" onclick="addSpecification()">
+                                        <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
                                             <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
                                         </button>
                                     </div>
@@ -496,6 +382,122 @@ $frm->setFormTagAttribute('class', 'form');
                         </div>
                     </div>
                 </div>
+                <div class="card" id="digital-files">
+                    <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#digital-files-block" aria-expanded="false" aria-controls="digital-files-block">
+                        <div class="card-head-label">
+                            <h3 class="card-head-title">Specifications
+                            </h3>
+                            <span class="text-muted">Product Specifications are added in this
+
+                                <span class="input-helper"></span>section</span>
+                        </div> <i class="dropdown-toggle-custom-arrow"></i>
+                    </div>
+                    <div class="card-body show" id="digital-files-block">
+                        <div id="specificationsFormJs">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
+                                        </label>
+                                        <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
+                                        <span class="form-text text-muted">Lorem ipsum dolor sit,
+                                            amet consectetur adipisicing elit. </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $langId); ?>
+                                        </label>
+                                        <input type="text" name="sp_value" id="sp_value" value="" data-required="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $langId); ?>
+                                        </label>
+                                        <input type="text" name="sp_group" id="sp_group" value="" data-required="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label"></label>
+                                        <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
+                                        <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
+                                            <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-4"></div>
+                        <div id="digitalFilesListJs">
+                        </div>
+                    </div>
+                </div>
+                <div class="card" id="digital-links">
+                    <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#digital-links-block" aria-expanded="false" aria-controls="digital-links-block">
+                        <div class="card-head-label">
+                            <h3 class="card-head-title">Digital Links
+                            </h3>
+                            <span class="text-muted">Product Digital Links are added in this
+
+                                <span class="input-helper"></span>section</span>
+                        </div> <i class="dropdown-toggle-custom-arrow"></i>
+                    </div>
+                    <div class="card-body show" id="digital-links-block">
+                        <div id="digitalLinksFormJs">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
+                                        </label>
+                                        <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
+                                        <span class="form-text text-muted">Lorem ipsum dolor sit,
+                                            amet consectetur adipisicing elit. </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $langId); ?>
+                                        </label>
+                                        <input type="text" name="sp_value" id="sp_value" value="" data-required="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label">
+                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $langId); ?>
+                                        </label>
+                                        <input type="text" name="sp_group" id="sp_group" value="" data-required="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="label"></label>
+                                        <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
+                                        <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
+                                            <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="separator separator-dashed my-4"></div>
+                        <div id="digitalLinksListJs">
+                        </div>
+                    </div>
+                </div>
+                
+               
             </div>
             <div class="add-stock-column column-actions">
                 <div class="sticky-top">
@@ -612,10 +614,10 @@ $frm->setFormTagAttribute('class', 'form');
         $imgFrm->setFormTagAttribute('name', 'hiddenMediaFrm'); 
         $imgFrm->setFormTagAttribute('id', 'hiddenMediaFrmJs');        
         $fld = $imgFrm->getField('prod_image');
-        $fld->addFieldTagAttribute('onChange', "loadImageCropper(this)");
+        $fld->addFieldTagAttribute('onChange', "loadCropper(this)");
         $fld->addFieldTagAttribute('id', "hiddenMediaFrmFileJs");
         $fld->addFieldTagAttribute('accept', "image/*");
-        $fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_BACKGROUND_IMAGE", $siteLangId));
+        $fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_PRODUCT_IMAGE", $siteLangId));
         echo $imgFrm->getFormHtml(); 
 
     ?>
@@ -625,13 +627,15 @@ $frm->setFormTagAttribute('class', 'form');
         var tagifyObjs = {};
         var productOptions = <?php echo json_encode($productOptions); ?>;
         var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
-
+        var  tempImageType = '<?php echo AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP; ?>';
         $(function() {
 
             prodSpecifications();
             tagifyProducts();
-
-            let langId = getCurrentFrmLangId();
+            if(0 < getCurrentFrmProductId()){
+                productDefaultImages();
+            }            
+            var langId = getCurrentFrmLangId();
             select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
                 brand_active: 1,
                 langId: langId
@@ -647,7 +651,6 @@ $frm->setFormTagAttribute('class', 'form');
             });
 
             $('#addProductfrm .optionsJs').each(function(index) {
-
                 var selectedOptionData = [];
                 if (index in productOptions) {
                     selectedOptionData = [{

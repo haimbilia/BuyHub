@@ -13,6 +13,7 @@ $frmSearch->setFormTagAttribute('class', 'form form-search');
 $keyWordFld = $frmSearch->getField('keyword');
 if (null != $keyWordFld) {
     $keyWordFld->addFieldtagAttribute('class', 'form-control');
+    $keyWordFld->addFieldTagAttribute('autocomplete', 'off');
     $keyWordFld->setFieldTagAttribute('placeholder', $keywordPlaceholder);
 }
 

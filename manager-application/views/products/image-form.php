@@ -3,13 +3,11 @@
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 $frm->setFormTagAttribute('data-callbackfn', 'productImagesCallback');
-//$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
-
 
 $fld = $frm->getField('prod_image');
 $fld->addFieldTagAttribute('onChange', "loadImageCropper(this)");
 $fld->addFieldTagAttribute('accept', "image/*");
-$fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_BACKGROUND_IMAGE", $siteLangId));
+$fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_PRODUCT_IMAGE", $siteLangId));
 
 $fld = $frm->getField('option_id');
 $fld->addFieldTagAttribute('id', "image_option_id");
