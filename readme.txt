@@ -383,6 +383,7 @@ Bugs :
     => 060517 - Admin UI: Correct "order status type" is not showing while editing the order's status in case of subscription.
     => 060524 - Admin UI: "Subscription's status" moves to the "product's status listing" after inactivating the status by editing it.
     => 060615 - Admin UI: Price's search is not working and the shop's listing is also not showing under the sales reports section.
+    => 060482 - Admin UI: Search icon is not showing while selecting the option from the "suggested text" on the whole system.
 
     
 Known Issues and Problems :
