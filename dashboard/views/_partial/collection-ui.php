@@ -19,7 +19,7 @@ if ($showAddToFavorite) {
             $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
         }
     }
-    ?>
+?>
 
     <?php if (true ==  $showActionBtns) { ?>
 
@@ -50,7 +50,7 @@ if ($showAddToFavorite) {
 
         <?php
     }
-    
+
     if (isset($productView) && true == $productView) {
         if (false ==  $showActionBtns) {
             if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
@@ -70,7 +70,7 @@ if ($showAddToFavorite) {
         <?php }
         } ?>
         <div class="dropdown">
-            <a class="no-after share-icon" data-display="static" href="javascript:void(0)" data-toggle="dropdown">
+            <a class="no-after share-icon" data-display="static" href="javascript:void(0)" data-bs-toggle="dropdown">
                 <i class="icn">
                     <svg class="svg">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">

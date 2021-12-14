@@ -13,6 +13,7 @@ $frmSearch->setFormTagAttribute('class', 'form form-search');
 $keyWordFld = $frmSearch->getField('keyword');
 if (null != $keyWordFld) {
     $keyWordFld->addFieldtagAttribute('class', 'form-control');
+    $keyWordFld->addFieldTagAttribute('autocomplete', 'off');
     $keyWordFld->setFieldTagAttribute('placeholder', $keywordPlaceholder);
 }
 
@@ -76,7 +77,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                                 echo $frmSearch->getFieldHtml('keyword');
                             } else {
                                 $fld = $frmSearch->getField($firstElement['name']);
-                                
+
                                 $class = (string) $fld->getFieldtagAttribute('class');
                                 $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
                                 $class = ltrim($class, ' ');
@@ -99,7 +100,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             echo $frmSearch->getFieldHtml('keyword');
                         } else {
                             $fld = $frmSearch->getField($firstElement['name']);
-                                
+
                             $class = (string) $fld->getFieldtagAttribute('class');
                             $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
                             $class = ltrim($class, ' ');
@@ -150,7 +151,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             }
                             ?>
                             <?php if ($haveExtraFlds && $extraFldCount > 1) { ?>
-                                <a class="btn advanced-trigger ml-2 collapsed" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                                <a class="btn advanced-trigger ml-2 collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                                     <svg class="svg" width="22" height="22">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
                                         </use>
@@ -173,14 +174,14 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
             <?php
             foreach ($frmFields['advSrchFlds'] as $itr => $fldsGroup) { ?>
                 <div class="row">
-                    <?php foreach ($fldsGroup as $frmFld) { 
+                    <?php foreach ($fldsGroup as $frmFld) {
                         $fld = $frmSearch->getField($frmFld['name']);
                         $class = (string) $fld->getFieldtagAttribute('class');
                         $class .= (false === strpos($class, 'form-control') ? ' form-control' : '');
                         $class = ltrim($class, ' ');
 
                         $fld->setFieldtagAttribute('class', $class);
-                        ?>
+                    ?>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="label"><?php echo $frmFld['caption']; ?></label>

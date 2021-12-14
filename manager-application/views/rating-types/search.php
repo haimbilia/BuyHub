@@ -44,7 +44,7 @@ foreach ($arrListing as $sn => $row) {
                         break;
                 }
                 if (!empty($infoLabel)) {
-                    $name .= ' <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="' . $infoLabel . '"></i>';
+                    $name .= ' <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="top" title="' . $infoLabel . '"></i>';
                 }
                 $td->appendElement('plaintext', array(), $name, true);
                 break;
@@ -83,12 +83,12 @@ foreach ($arrListing as $sn => $row) {
 
 if (count($arrListing) == 0) {
     $tbody->appendElement('tr')->appendElement(
-            'td',
-            array(
-                'colspan' => count($fields),
-                'class' => 'noRecordFoundJs'
-            ),
-            Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
+        'td',
+        array(
+            'colspan' => count($fields),
+            'class' => 'noRecordFoundJs'
+        ),
+        Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
     );
 }
 

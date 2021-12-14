@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -230,11 +230,11 @@
                                     <!--begin::Widget -->
                                     <div class="widget33">
                                         <div class="widget33__head">
-                                            <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                            <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                 <i class="fa fa-long-arrow-alt-left"></i>
                                             </a>
                                             <a href="#" class="widget33__title">Shopping Cart</a>
-                                            <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                            <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                 <i class="fa fa-trash-restore"></i>
                                             </a>
                                         </div>
@@ -381,7 +381,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                             <i class="flaticon-more-1 font-light"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -470,15 +470,15 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-label-brand btn-sm  btn-bold dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-sm  btn-bold dropdown-toggle" data-bs-toggle="dropdown">
                                             Latest
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md">
                                             <!--begin::Nav-->
                                             <ul class="nav">
                                                 <li class="nav__head">
                                                     Export Options
-                                                    <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                    <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                 <rect x="0" y="0" width="24" height="24"></rect>
@@ -520,7 +520,7 @@
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade
                                                         plan</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
                                             <!--end::Nav-->
@@ -587,7 +587,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                             <i class="flaticon-more-1 font-light"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -671,7 +671,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-label-brand btn-sm  btn-bold dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-sm  btn-bold dropdown-toggle" data-bs-toggle="dropdown">
                                             Export
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -787,7 +787,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-outline-light btn-sm btn-bold dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-outline-light btn-sm btn-bold dropdown-toggle" data-bs-toggle="dropdown">
                                             March, 2019
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -841,16 +841,16 @@
                                         <div class="widget27__container card__space-x">
                                             <ul class="nav nav-pills nav-fill" role="tablist">
                                                 <li class="nav-item">
-                                                    <a class="nav-link active" data-toggle="pill" href="#personal_income_quater_1">Quater 1</a>
+                                                    <a class="nav-link active" data-bs-toggle="pill" href="#personal_income_quater_1">Quater 1</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-toggle="pill" href="#personal_income_quater_2">Quater 2</a>
+                                                    <a class="nav-link" data-bs-toggle="pill" href="#personal_income_quater_2">Quater 2</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-toggle="pill" href="#personal_income_quater_3">Quater 3</a>
+                                                    <a class="nav-link" data-bs-toggle="pill" href="#personal_income_quater_3">Quater 3</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-toggle="pill" href="#personal_income_quater_4">Quater 4</a>
+                                                    <a class="nav-link" data-bs-toggle="pill" href="#personal_income_quater_4">Quater 4</a>
                                                 </li>
                                             </ul>
                                             <div class="tab-content">
@@ -1054,7 +1054,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-outline-light btn-sm btn-bold dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-outline-light btn-sm btn-bold dropdown-toggle" data-bs-toggle="dropdown">
                                             Revenue
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1106,15 +1106,15 @@
                                             <!-- begin::Nav pills -->
                                             <ul class="nav nav-pills nav-fill card__space-x" role="tablist">
                                                 <li class="nav-item">
-                                                    <a class="nav-link active" data-toggle="pill" href="#menu11"><span><i class="fa flaticon-pie-chart"></i></span><span>GMI
+                                                    <a class="nav-link active" data-bs-toggle="pill" href="#menu11"><span><i class="fa flaticon-pie-chart"></i></span><span>GMI
                                                             Taxes</span></a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-toggle="pill" href="#menu21"><span><i class="fa flaticon-file-1"></i></span><span>IMT
+                                                    <a class="nav-link" data-bs-toggle="pill" href="#menu21"><span><i class="fa flaticon-file-1"></i></span><span>IMT
                                                             Invoice</span></a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-toggle="pill" href="#menu31"><span><i class="fa flaticon-clipboard"></i></span><span>Main
+                                                    <a class="nav-link" data-bs-toggle="pill" href="#menu31"><span><i class="fa flaticon-clipboard"></i></span><span>Main
                                                             Notes</span></a>
                                                 </li>
                                             </ul>
@@ -1200,7 +1200,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-outline-light btn-sm btn-hover-light btn-bold dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-outline-light btn-sm btn-hover-light btn-bold dropdown-toggle" data-bs-toggle="dropdown">
                                             2019
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1319,15 +1319,15 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md">
                                             <!--begin::Nav-->
                                             <ul class="nav">
                                                 <li class="nav__head">
                                                     Export Options
-                                                    <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                    <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                 <rect x="0" y="0" width="24" height="24"></rect>
@@ -1369,7 +1369,7 @@
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade
                                                         plan</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
                                             <!--end::Nav-->
@@ -1493,7 +1493,7 @@
                                                         </span>
                                                     </span>
                                                 </a>
-                                                <a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
+                                                <a href="#" class="widget__item" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                                     <span class="widget__section">
                                                         <span class="widget__icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
@@ -1508,7 +1508,7 @@
                                                         </span>
                                                     </span>
                                                 </a>
-                                                <a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
+                                                <a href="#" class="widget__item" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                                     <span class="widget__section">
                                                         <span class="widget__icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
@@ -1523,7 +1523,7 @@
                                                     </span>
                                                     <span class="badge badge-unified-brand badge-inline badge-bolder">new</span>
                                                 </a>
-                                                <a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
+                                                <a href="#" class="widget__item" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                                     <span class="widget__section">
                                                         <span class="widget__icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
@@ -1623,7 +1623,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1736,32 +1736,32 @@
                                     <!--begin::Navigation -->
                                     <ul class="nav nav--bold nav--md-space margin-t-20 margin-b-20 hidden" role="tablist">
                                         <li class="nav__item nav__item--active">
-                                            <a class="nav__link active" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                            <a class="nav__link active" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                 <span class="nav__link-icon"><i class="flaticon2-calendar-3"></i></span>
                                                 <span class="nav__link-text">Personal Information</span>
                                             </a>
                                         </li>
                                         <li class="nav__item">
-                                            <a class="nav__link" data-toggle="tab" href="#profile_tab_account_information" role="tab">
+                                            <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_account_information" role="tab">
                                                 <span class="nav__link-icon"><i class="flaticon2-protected"></i></span>
                                                 <span class="nav__link-text">Acccount Information</span>
                                             </a>
                                         </li>
                                         <li class="nav__item">
-                                            <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                            <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                 <span class="nav__link-icon"><i class="flaticon2-hourglass-1"></i></span>
                                                 <span class="nav__link-text">Payments</span>
                                             </a>
                                         </li>
                                         <li class="nav__separator"></li>
                                         <li class="nav__item">
-                                            <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                            <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                 <span class="nav__link-icon"><i class="flaticon2-bell-2"></i></span>
                                                 <span class="nav__link-text">Statements</span>
                                             </a>
                                         </li>
                                         <li class="nav__item">
-                                            <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                            <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                 <span class="nav__link-icon"><i class="flaticon2-medical-records-1"></i></span>
                                                 <span class="nav__link-text">Audit Log</span>
                                             </a>
@@ -1888,22 +1888,22 @@
                                                 <div class="widget__details">
                                                     <div class="section__content section__content--solid">
                                                         <div class="media-group">
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_10.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_11.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                                 <span>+3</span>
                                                             </a>
                                                         </div>
@@ -1933,7 +1933,7 @@
                                     </div>
                                     <div class="card-head-toolbar">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -2049,7 +2049,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -2145,22 +2145,22 @@
                                                     <span class="widget__subtitle">Members</span>
 
                                                     <div class="media-group">
-                                                        <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                        <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                             <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
                                                         </a>
-                                                        <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
+                                                        <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
                                                             <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_10.jpg" alt="image">
                                                         </a>
-                                                        <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
+                                                        <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
                                                             <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_11.jpg" alt="image">
                                                         </a>
-                                                        <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
+                                                        <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
                                                             <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg" alt="image">
                                                         </a>
-                                                        <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                                        <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                             <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_3.jpg" alt="image">
                                                         </a>
-                                                        <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                                        <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                             <span>+3</span>
                                                         </a>
                                                     </div>

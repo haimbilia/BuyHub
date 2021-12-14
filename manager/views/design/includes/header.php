@@ -5,8 +5,7 @@
         <!-- begin:: Brand -->
         <div class="header__brand" id="header_brand">
             <a class="header__brand-logo" href="index.php">
-                <img alt="Logo" src="<?php echo CONF_WEBROOT_URL;?>images/logos/full-logo.png"
-                    class="header__brand-logo-default" />
+                <img alt="Logo" src="<?php echo CONF_WEBROOT_URL; ?>images/logos/full-logo.png" class="header__brand-logo-default" />
             </a>
         </div>
         <!-- end:: Brand -->
@@ -457,18 +456,13 @@
         <div class="header__topbar">
             <!--begin: Search -->
             <div class="header__topbar-item header__topbar-item--search dropdown" id="quick_search_toggle">
-                <div class="header__topbar-wrapper" data-toggle="dropdown">
+                <div class="header__topbar-wrapper" data-bs-toggle="dropdown">
                     <span class="header__topbar-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                            height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <rect id="bound" x="0" y="0" width="24" height="24" />
-                                <path
-                                    d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z"
-                                    id="Path-2" fill="#000000" fill-rule="nonzero" />
-                                <path
-                                    d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z"
-                                    id="Path" fill="#000000" fill-rule="nonzero" />
+                                <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" id="Path-2" fill="#000000" fill-rule="nonzero" />
+                                <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" id="Path" fill="#000000" fill-rule="nonzero" />
                             </g>
                         </svg>
 
@@ -478,8 +472,7 @@
                     <div class="quick-search">
                         <form method="get" class="quick-search__form">
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text"><i
-                                            class="flaticon2-search-1"></i></span></div>
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="flaticon2-search-1"></i></span></div>
                                 <input type="text" class="form-control quick-search__input" placeholder="Search...">
 
                             </div>
@@ -493,7 +486,7 @@
                                 <div class="section-scroll">
                                     <div class="d-flex mb-4">
                                         <div class="symbol-document">
-                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/icons/doc.svg">
+                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/icons/doc.svg">
                                         </div>
                                         <div class="search-list-text">
                                             <a href="#" class="font-weight-bold text-dark">AirPlus Requirements</a>
@@ -502,7 +495,7 @@
                                     </div>
                                     <div class="d-flex mb-4">
                                         <div class="symbol-document">
-                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/icons/pdf.svg">
+                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/icons/pdf.svg">
                                         </div>
                                         <div class="search-list-text">
                                             <a href="#" class="font-weight-bold text-dark">TechNav Documentation</a>
@@ -511,7 +504,7 @@
                                     </div>
                                     <div class="d-flex mb-4">
                                         <div class="symbol-document">
-                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/icons/doc.svg">
+                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/icons/doc.svg">
                                         </div>
                                         <div class="search-list-text">
                                             <a href="#" class="font-weight-bold text-dark">All Framework Docs</a>
@@ -520,7 +513,7 @@
                                     </div>
                                     <div class="d-flex mb-4">
                                         <div class="symbol-document">
-                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/icons/xml.svg">
+                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/icons/xml.svg">
                                         </div>
                                         <div class="search-list-text">
                                             <a href="#" class="font-weight-bold text-dark">TechNav Documentation</a>
@@ -529,7 +522,7 @@
                                     </div>
                                     <div class="d-flex mb-4">
                                         <div class="symbol-document">
-                                            <img src="<?php echo CONF_WEBROOT_URL;?>images/icons/pdf.svg">
+                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/icons/pdf.svg">
                                         </div>
                                         <div class="search-list-text">
                                             <a href="#" class="font-weight-bold text-dark">All Framework Docs</a>
@@ -549,9 +542,7 @@
             <div class="header__topbar-item ">
                 <div class="header__topbar-wrapper">
                     <span class="header__topbar-icon pulse pulse--light" data-trigger="aside">
-                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            x="0px" y="0px" width="418.879px" height="418.879px" viewBox="0 0 418.879 418.879"
-                            style="enable-background:new 0 0 418.879 418.879;" xml:space="preserve">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="418.879px" height="418.879px" viewBox="0 0 418.879 418.879" style="enable-background:new 0 0 418.879 418.879;" xml:space="preserve">
                             <g>
                                 <g>
                                     <path opacity="0.9" fill="#ffffff" d="M188.634,234.066c8.462-5.287,16.126-11.735,22.767-19.127l23.942,13.826l21.8-37.76l-23.894-13.796
@@ -593,46 +584,20 @@
                 <div class="header__topbar-wrapper theme-switch">
                     <span class="header__topbar-icon ">
                         <svg id="dark" viewBox="0 0 64 64">
-                            <path fill="#ffffff"
-                                d="m28.830078 5.2226562a1.50015 1.50015 0 0 0 -.11328124.0097656c-13.516009 1.6562371-23.700039 13.148528-23.716797 26.765625a1.50015 1.50015 0 0 0 0 .00195312c0 14.893921 12.106079 27 27 27a1.50015 1.50015 0 0 0 .001953 0c13.622414-.01180228 25.120589-10.199168 26.775391-23.720703a1.50015 1.50015 0 0 0 -2.3164062-1.4335938c-3.1031886 2.052778-6.7402594 3.1500791-10.460938 3.1542969-10.511177 0-19-8.4888228-19-19 .0049146-3.7172244 1.1005876-7.3521086 3.1503906-10.453125a1.50015 1.50015 0 0 0 -1.3203125-2.3242188zm-2.5546875 3.5976562c-1.34796 2.8912692-2.2714692 5.9619028-2.2753906 9.1777344a1.50015 1.50015 0 0 0 0 .00195312c0 12.132498 9.8675025 22 22 22a1.50015 1.50015 0 0 0 .001953 0c3.2191299-.003319 6.2936436-.92729248 9.1875-2.2773438-2.605074 10.591259-12.034872 18.266776-23.189453 18.277344-13.271938 0-23.998929-10.726363-24-23.998047v-.00195312c.01462536-11.150429 7.6880418-20.574659 18.275391-23.179688z"
-                                font-feature-settings="normal" font-variant-alternates="normal"
-                                font-variant-caps="normal" font-variant-ligatures="normal" font-variant-numeric="normal"
-                                font-variant-position="normal" isolation="auto" mix-blend-mode="normal"
-                                paint-order="fill markers stroke" shape-padding="0" solid-color="rgb(0,0,0)"
-                                text-decoration-color="rgb(0,0,0)" text-decoration-line="none"
-                                text-decoration-style="solid" text-indent="0" text-orientation="mixed"
-                                text-transform="none" white-space="normal"></path>
+                            <path fill="#ffffff" d="m28.830078 5.2226562a1.50015 1.50015 0 0 0 -.11328124.0097656c-13.516009 1.6562371-23.700039 13.148528-23.716797 26.765625a1.50015 1.50015 0 0 0 0 .00195312c0 14.893921 12.106079 27 27 27a1.50015 1.50015 0 0 0 .001953 0c13.622414-.01180228 25.120589-10.199168 26.775391-23.720703a1.50015 1.50015 0 0 0 -2.3164062-1.4335938c-3.1031886 2.052778-6.7402594 3.1500791-10.460938 3.1542969-10.511177 0-19-8.4888228-19-19 .0049146-3.7172244 1.1005876-7.3521086 3.1503906-10.453125a1.50015 1.50015 0 0 0 -1.3203125-2.3242188zm-2.5546875 3.5976562c-1.34796 2.8912692-2.2714692 5.9619028-2.2753906 9.1777344a1.50015 1.50015 0 0 0 0 .00195312c0 12.132498 9.8675025 22 22 22a1.50015 1.50015 0 0 0 .001953 0c3.2191299-.003319 6.2936436-.92729248 9.1875-2.2773438-2.605074 10.591259-12.034872 18.266776-23.189453 18.277344-13.271938 0-23.998929-10.726363-24-23.998047v-.00195312c.01462536-11.150429 7.6880418-20.574659 18.275391-23.179688z" font-feature-settings="normal" font-variant-alternates="normal" font-variant-caps="normal" font-variant-ligatures="normal" font-variant-numeric="normal" font-variant-position="normal" isolation="auto" mix-blend-mode="normal" paint-order="fill markers stroke" shape-padding="0" solid-color="rgb(0,0,0)" text-decoration-color="rgb(0,0,0)" text-decoration-line="none" text-decoration-style="solid" text-indent="0" text-orientation="mixed" text-transform="none" white-space="normal"></path>
                         </svg>
                         <svg id="light" viewBox="0 0 24 24" style="display:none;">
                             <g transform="translate(-741 -4767)">
                                 <g transform="translate(742 4768)">
-                                    <path fill="#ffffff"
-                                        d="M241.65,3.39a.65.65,0,0,0,.65-.65V.65a.65.65,0,0,0-1.3,0V2.739A.65.65,0,0,0,241.65,3.39Z"
-                                        transform="translate(-230.65)"></path>
-                                    <path fill="#ffffff"
-                                        d="M241.65,433.8a.65.65,0,0,0-.65.65v2.089a.65.65,0,1,0,1.3,0V434.45A.65.65,0,0,0,241.65,433.8Z"
-                                        transform="translate(-230.65 -415.19)"></path>
-                                    <path fill="#ffffff"
-                                        d="M436.539,241H434.45a.65.65,0,0,0,0,1.3h2.089a.65.65,0,1,0,0-1.3Z"
-                                        transform="translate(-415.19 -230.65)"></path>
-                                    <path fill="#ffffff"
-                                        d="M3.39,241.65a.65.65,0,0,0-.65-.65H.65a.65.65,0,0,0,0,1.3H2.739A.65.65,0,0,0,3.39,241.65Z"
-                                        transform="translate(0 -230.65)"></path>
-                                    <path fill="#ffffff"
-                                        d="M378.443,73.175,379.92,71.7a.65.65,0,0,0-.919-.919l-1.477,1.477a.65.65,0,1,0,.919.919Z"
-                                        transform="translate(-361.171 -67.529)"></path>
-                                    <path fill="#ffffff"
-                                        d="M72.257,377.524,70.78,379a.65.65,0,0,0,.919.919l1.477-1.477a.65.65,0,1,0-.919-.919Z"
-                                        transform="translate(-67.53 -361.171)"></path>
-                                    <path fill="#ffffff"
-                                        d="M378.443,377.525a.65.65,0,1,0-.919.919L379,379.921a.65.65,0,0,0,.919-.919Z"
-                                        transform="translate(-361.171 -361.172)"></path>
-                                    <path fill="#ffffff"
-                                        d="M72.256,73.175a.65.65,0,0,0,.919-.919L71.7,70.779a.65.65,0,0,0-.919.919Z"
-                                        transform="translate(-67.529 -67.529)"></path>
-                                    <path fill="#ffffff"
-                                        d="M137.885,132.533a5.352,5.352,0,1,0,5.352,5.352A5.358,5.358,0,0,0,137.885,132.533Zm0,9.75a4.4,4.4,0,1,1,4.4-4.4A4.4,4.4,0,0,1,137.885,142.283Z"
-                                        transform="translate(-126.885 -126.885)"></path>
+                                    <path fill="#ffffff" d="M241.65,3.39a.65.65,0,0,0,.65-.65V.65a.65.65,0,0,0-1.3,0V2.739A.65.65,0,0,0,241.65,3.39Z" transform="translate(-230.65)"></path>
+                                    <path fill="#ffffff" d="M241.65,433.8a.65.65,0,0,0-.65.65v2.089a.65.65,0,1,0,1.3,0V434.45A.65.65,0,0,0,241.65,433.8Z" transform="translate(-230.65 -415.19)"></path>
+                                    <path fill="#ffffff" d="M436.539,241H434.45a.65.65,0,0,0,0,1.3h2.089a.65.65,0,1,0,0-1.3Z" transform="translate(-415.19 -230.65)"></path>
+                                    <path fill="#ffffff" d="M3.39,241.65a.65.65,0,0,0-.65-.65H.65a.65.65,0,0,0,0,1.3H2.739A.65.65,0,0,0,3.39,241.65Z" transform="translate(0 -230.65)"></path>
+                                    <path fill="#ffffff" d="M378.443,73.175,379.92,71.7a.65.65,0,0,0-.919-.919l-1.477,1.477a.65.65,0,1,0,.919.919Z" transform="translate(-361.171 -67.529)"></path>
+                                    <path fill="#ffffff" d="M72.257,377.524,70.78,379a.65.65,0,0,0,.919.919l1.477-1.477a.65.65,0,1,0-.919-.919Z" transform="translate(-67.53 -361.171)"></path>
+                                    <path fill="#ffffff" d="M378.443,377.525a.65.65,0,1,0-.919.919L379,379.921a.65.65,0,0,0,.919-.919Z" transform="translate(-361.171 -361.172)"></path>
+                                    <path fill="#ffffff" d="M72.256,73.175a.65.65,0,0,0,.919-.919L71.7,70.779a.65.65,0,0,0-.919.919Z" transform="translate(-67.529 -67.529)"></path>
+                                    <path fill="#ffffff" d="M137.885,132.533a5.352,5.352,0,1,0,5.352,5.352A5.358,5.358,0,0,0,137.885,132.533Zm0,9.75a4.4,4.4,0,1,1,4.4-4.4A4.4,4.4,0,0,1,137.885,142.283Z" transform="translate(-126.885 -126.885)"></path>
                                 </g>
                             </g>
                         </svg>
@@ -641,18 +606,14 @@
                 </div>
             </div>
             <!--begin: Quick panel toggler -->
-            <div class="header__topbar-item header__topbar-item--quick-panel" data-toggle="tooltip" title="Quick panel"
-                data-placement="right">
-                <div class="header__topbar-wrapper" data-toggle="dropdown" data-trigger="quick-panel">
+            <div class="header__topbar-item header__topbar-item--quick-panel" data-bs-toggle="tooltip" title="Quick panel" data-placement="right">
+                <div class="header__topbar-wrapper" data-bs-toggle="dropdown" data-trigger="quick-panel">
                     <span class="header__topbar-icon" id="quick_panel_toggler_btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                            height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <rect id="bound" x="0" y="0" width="24" height="24" />
                                 <rect id="Rectangle-7" fill="#000000" x="4" y="4" width="7" height="7" rx="1.5" />
-                                <path
-                                    d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z"
-                                    id="Combined-Shape" fill="#000000" opacity="0.3" />
+                                <path d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z" id="Combined-Shape" fill="#000000" opacity="0.3" />
                             </g>
                         </svg> </span>
                 </div>
@@ -662,32 +623,28 @@
 
             <!--begin: Language bar -->
             <div class="header__topbar-item header__topbar-item--langs">
-                <div class="header__topbar-wrapper" data-toggle="dropdown">
+                <div class="header__topbar-wrapper" data-bs-toggle="dropdown">
                     <span class="header__topbar-icon">
-                        <img class="" src="<?php echo CONF_WEBROOT_URL;?>images/flags/020-flag.svg" alt="" />
+                        <img class="" src="<?php echo CONF_WEBROOT_URL; ?>images/flags/020-flag.svg" alt="" />
                     </span>
                 </div>
                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                     <ul class="nav nav--block margin-t-10 margin-b-10">
                         <li class="nav__item nav__item--active">
                             <a href="#" class="nav__link">
-                                <span class="nav__link-icon"><img
-                                        src="<?php echo CONF_WEBROOT_URL;?>images/flags/020-flag.svg" alt="" /></span>
+                                <span class="nav__link-icon"><img src="<?php echo CONF_WEBROOT_URL; ?>images/flags/020-flag.svg" alt="" /></span>
                                 <span class="nav__link-text">English</span>
                             </a>
                         </li>
                         <li class="nav__item">
                             <a href="#" class="nav__link">
-                                <span class="nav__link-icon"><img
-                                        src="<?php echo CONF_WEBROOT_URL;?>images/flags/016-spain.svg" alt="" /></span>
+                                <span class="nav__link-icon"><img src="<?php echo CONF_WEBROOT_URL; ?>images/flags/016-spain.svg" alt="" /></span>
                                 <span class="nav__link-text">Spanish</span>
                             </a>
                         </li>
                         <li class="nav__item">
                             <a href="#" class="nav__link">
-                                <span class="nav__link-icon"><img
-                                        src="<?php echo CONF_WEBROOT_URL;?>images/flags/017-germany.svg"
-                                        alt="" /></span>
+                                <span class="nav__link-icon"><img src="<?php echo CONF_WEBROOT_URL; ?>images/flags/017-germany.svg" alt="" /></span>
                                 <span class="nav__link-text">German</span>
                             </a>
                         </li>
@@ -699,19 +656,18 @@
 
             <!--begin: User bar -->
             <div class="header__topbar-item header__topbar-item--user">
-                <div class="header__topbar-wrapper" data-toggle="dropdown">
+                <div class="header__topbar-wrapper" data-bs-toggle="dropdown">
                     <span class="header__topbar-welcome">Hi,</span>
                     <span class="header__topbar-username">Sean</span>
                     <span class="header__topbar-icon"><b>S</b></span>
-                    <img alt="Pic" src="<?php echo CONF_WEBROOT_URL;?>images/300_21.jpg" class="hidden" />
+                    <img alt="Pic" src="<?php echo CONF_WEBROOT_URL; ?>images/300_21.jpg" class="hidden" />
                 </div>
                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
 
                     <!--begin: Head -->
-                    <div class="user-card user-card--skin-dark notification-item-padding-x"
-                        style="background-image: url(./media/bg/bg-page-section.png)">
+                    <div class="user-card user-card--skin-dark notification-item-padding-x" style="background-image: url(./media/bg/bg-page-section.png)">
                         <div class="user-card__avatar">
-                            <img class="hidden" alt="Pic" src="<?php echo CONF_WEBROOT_URL;?>images/300_25.jpg" />
+                            <img class="hidden" alt="Pic" src="<?php echo CONF_WEBROOT_URL; ?>images/300_25.jpg" />
 
                             <!--use below badge element instead the user avatar to display username's first letter(remove hidden class to display it) -->
                             <span class="badge badge-lg badge-rounded badge-bold font-success">S</span>
@@ -789,17 +745,14 @@
                                     Billing
                                 </div>
                                 <div class="notification__item-time">
-                                    billing & statements <span
-                                        class="badge badge-danger badge-inline badge-pill badge-rounded">2
+                                    billing & statements <span class="badge badge-danger badge-inline badge-pill badge-rounded">2
                                         pending</span>
                                 </div>
                             </div>
                         </a>
                         <div class="notification__custom space-between">
-                            <a href="demo4/custom/user/login-v2.html" target="_blank"
-                                class="btn btn-label btn-label-brand btn-sm btn-bold">Sign Out</a>
-                            <a href="demo4/custom/user/login-v2.html" target="_blank"
-                                class="btn btn-clean btn-sm btn-bold">Upgrade Plan</a>
+                            <a href="demo4/custom/user/login-v2.html" target="_blank" class="btn btn-label btn-label-brand btn-sm btn-bold">Sign Out</a>
+                            <a href="demo4/custom/user/login-v2.html" target="_blank" class="btn btn-clean btn-sm btn-bold">Upgrade Plan</a>
                         </div>
                     </div>
                     <!--end: Navigation -->
@@ -813,21 +766,19 @@
 <!-- end:: Header -->
 <!-- begin::Quick Panel -->
 <div id="quick-panel" class="quick-panel" data-close-on-click-outside="quick-panel">
-    <button class="btn btn-outline-brand btn-elevate btn-icon btn-sm  quick-panel__close " id=""
-        data-target-close="quick-panel"><i class="la la-remove"></i></button>
+    <button class="btn btn-outline-brand btn-elevate btn-icon btn-sm  quick-panel__close " id="" data-bs-target-close="quick-panel"><i class="la la-remove"></i></button>
     <div class="quick-panel__nav">
-        <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand notification-item-padding-x"
-            role="tablist">
+        <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand notification-item-padding-x" role="tablist">
             <li class="nav-item active">
-                <a class="nav-link active" data-toggle="tab" href="#quick_panel_tab_todo-section" role="tab">To Do
+                <a class="nav-link active" data-bs-toggle="tab" href="#quick_panel_tab_todo-section" role="tab">To Do
                     List</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#quick_panel_tab_notifications" role="tab">Notifications</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#quick_panel_tab_notifications" role="tab">Notifications</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#quick_panel_tab_chat" role="tab">Chat</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#quick_panel_tab_chat" role="tab">Chat</a>
             </li>
 
 
@@ -840,8 +791,7 @@
                     <form class="form w-100">
                         <div class="form-group d-flex">
                             <input type="text" class="form-control todo-list-input mr-2" placeholder="Add To-do">
-                            <button type="submit" class="btn btn-primary btn-wide todo-list-add-btn"
-                                id="add-task">Add</button>
+                            <button type="submit" class="btn btn-primary btn-wide todo-list-add-btn" id="add-task">Add</button>
                         </div>
                     </form>
                 </div>
@@ -1061,17 +1011,11 @@
             <div class="tab-pane fade pl-3 pr-3" id="quick_panel_tab_chat">
                 <div class="searchbar">
                     <div class="input-group">
-                        <div class="input-group-prepend"><span class="input-group-text" id="basic-addon1"><svg
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
+                        <div class="input-group-prepend"><span class="input-group-text" id="basic-addon1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                         <rect x="0" y="0" width="24" height="24"></rect>
-                                        <path
-                                            d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z"
-                                            fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                        <path
-                                            d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z"
-                                            fill="#000000" fill-rule="nonzero"></path>
+                                        <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                        <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero"></path>
                                     </g>
                                 </svg></span></div>
                         <input type="text" class="form-control" placeholder="Search" aria-describedby="basic-addon1">
@@ -1082,7 +1026,7 @@
                     <div class="widget__items">
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_9.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_9.jpg" alt="image">
                             </span>
                             <div class="widget__info">
                                 <div class="widget__section">
@@ -1102,7 +1046,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_7.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1124,7 +1068,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_12.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1145,7 +1089,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1165,7 +1109,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_8.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1185,7 +1129,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_10.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_10.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1205,7 +1149,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_13.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_13.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1225,7 +1169,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1245,7 +1189,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_9.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_9.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1267,7 +1211,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_7.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_7.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1289,7 +1233,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_12.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_12.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1310,7 +1254,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_4.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1330,7 +1274,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/100_8.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_8.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1350,7 +1294,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_10.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_10.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1370,7 +1314,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_13.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_13.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1390,7 +1334,7 @@
 
                         <div class="widget__item">
                             <span class="media media--circle">
-                                <img src="<?php echo CONF_WEBROOT_URL;?>images/users/300_21.jpg" alt="image">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_21.jpg" alt="image">
                             </span>
 
                             <div class="widget__info">
@@ -1417,10 +1361,8 @@
 </div>
 <!-- end::Quick Panel -->
 <!-- begin:: Aside  -->
-<div class="aside aside--fixed grid__item grid grid--desktop grid--hor-desktop aside--on" id="aside"
-    data-close-on-click-outside="aside">
-    <button class="btn btn-outline-brand btn-elevate btn-icon btn-sm aside-close" data-target-close="aside"><i
-            class="la la-remove"></i></button>
+<div class="aside aside--fixed grid__item grid grid--desktop grid--hor-desktop aside--on" id="aside" data-close-on-click-outside="aside">
+    <button class="btn btn-outline-brand btn-elevate btn-icon btn-sm aside-close" data-bs-target-close="aside"><i class="la la-remove"></i></button>
     <!-- begin:: Aside Menu -->
     <div class="aside-menu-wrapper grid__item grid__item--fluid" id="aside_menu_wrapper">
         <div id="aside_menu" class="aside-menu">
@@ -1429,30 +1371,17 @@
                     <h4 class="menu__section-text">Settings</h4>
                 </li>
                 <li class="menu__item">
-                    <a class="menu__link collapsed" data-toggle="collapse" data-parent="#accordionMenu"
-                        href="#collapseOne" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span
-                            class="menu__link-text">Localization</span><i
-                            class="menu__ver-arrow la la-angle-right"></i></a>
+                    <a class="menu__link collapsed" data-bs-toggle="collapse" data-parent="#accordionMenu" href="#collapseOne" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span class="menu__link-text">Localization</span><i class="menu__ver-arrow la la-angle-right"></i></a>
 
                     <div id="collapseOne" class="menu__submenu panel-collapse collapse">
                         <ul class="menu__subnav">
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">General</span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Local </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Currency Management
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">General</span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Local </span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Currency Management
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Countries Management
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Countries Management
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">States Management
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">States Management
                                     </span></a></li>
 
                         </ul>
@@ -1460,140 +1389,74 @@
                 </li>
 
                 <li class="menu__item">
-                    <a class="menu__link collapsed" data-toggle="collapse" data-parent="#accordionMenu"
-                        href="#collapseTwo" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span
-                            class="menu__link-text">System Settings </span><i
-                            class="menu__ver-arrow la la-angle-right"></i></a>
+                    <a class="menu__link collapsed" data-bs-toggle="collapse" data-parent="#accordionMenu" href="#collapseTwo" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span class="menu__link-text">System Settings </span><i class="menu__ver-arrow la la-angle-right"></i></a>
 
                     <div id="collapseTwo" class="menu__submenu panel-collapse collapse">
                         <ul class="menu__subnav">
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Payment Methods</span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Sales Tax
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Payment Methods</span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Sales Tax
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Account </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Product </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Cart/Wishlist
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Account </span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Product </span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Cart/Wishlist
                                     </span></a></li>
-                            <li class="menu__item"><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Checkout </span></a></li>
-                            <li class="menu__item "><a class="menu__link " data-toggle="collapse" href="#collapseTwo-1"
-                                    aria-expanded="true"><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Commission </span> <i
-                                        class="menu__ver-arrow la la-angle-right"></i></a>
+                            <li class="menu__item"><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Checkout </span></a></li>
+                            <li class="menu__item "><a class="menu__link " data-bs-toggle="collapse" href="#collapseTwo-1" aria-expanded="true"><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Commission </span> <i class="menu__ver-arrow la la-angle-right"></i></a>
                                 <div id="collapseTwo-1" class="menu__submenu panel-collapse collapse">
                                     <ul>
-                                        <li class="menu__item"><a href="" class="menu__link "><i
-                                                    class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                                    class="menu__link-text">Commission Settings </span></a></li>
-                                        <li class="menu__item"><a href="" class="menu__link "><i
-                                                    class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                                    class="menu__link-text">Affiliate Commission Settings</span></a>
+                                        <li class="menu__item"><a href="" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Commission Settings </span></a></li>
+                                        <li class="menu__item"><a href="" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Affiliate Commission Settings</span></a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
 
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Affiliate </span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Affiliate </span></a></li>
 
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Referral </span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Referral </span></a></li>
                         </ul>
                     </div>
 
                 </li>
                 <li class="menu__item">
-                    <a class="menu__link collapsed" data-toggle="collapse" data-parent="#accordionMenu"
-                        href="#collapseThree" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span
-                            class="menu__link-text">System Content Settings</span><i
-                            class="menu__ver-arrow la la-angle-right"></i></a>
+                    <a class="menu__link collapsed" data-bs-toggle="collapse" data-parent="#accordionMenu" href="#collapseThree" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span class="menu__link-text">System Content Settings</span><i class="menu__ver-arrow la la-angle-right"></i></a>
                     <div id="collapseThree" class="menu__submenu panel-collapse collapse">
                         <ul class="menu__subnav">
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Policies Management</span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Social Platforms
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Policies Management</span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Social Platforms
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Empty Cart Management
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Empty Cart Management
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Shop Report reasons management </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Order Cancel Reasons Management
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Shop Report reasons management </span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Order Cancel Reasons Management
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Order return reasons Management</span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Order return reasons Management</span></a></li>
 
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Order Order status management</span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Order Reviews</span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Order Order status management</span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Order Reviews</span></a></li>
 
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Order Seller Approval Forms</span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Order Seller Approval Forms</span></a></li>
                         </ul>
                     </div>
 
                 </li>
                 <li class="menu__item">
-                    <a class="menu__link collapsed" data-toggle="collapse" data-parent="#accordionMenu"
-                        href="#collapseFour" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span
-                            class="menu__link-text">General Settings
+                    <a class="menu__link collapsed" data-bs-toggle="collapse" data-parent="#accordionMenu" href="#collapseFour" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span class="menu__link-text">General Settings
                         </span><i class="menu__ver-arrow la la-angle-right"></i></a>
                     <div id="collapseFour" class="menu__submenu panel-collapse collapse">
                         <ul class="menu__subnav">
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Email </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Media </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Live Chat
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Email </span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Media </span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Live Chat
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Server</span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">System </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Theme Settings
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Server</span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">System </span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Theme Settings
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Third Party API’s
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Third Party API’s
 
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Sharing
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Sharing
 
                                     </span></a></li>
                         </ul>
@@ -1602,51 +1465,30 @@
                 </li>
 
                 <li class="menu__item">
-                    <a class="menu__link collapsed" data-toggle="collapse" data-parent="#accordionMenu"
-                        href="#collapseFive" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span
-                            class="menu__link-text">Shipping </span><i
-                            class="menu__ver-arrow la la-angle-right"></i></a>
+                    <a class="menu__link collapsed" data-bs-toggle="collapse" data-parent="#accordionMenu" href="#collapseFive" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span class="menu__link-text">Shipping </span><i class="menu__ver-arrow la la-angle-right"></i></a>
                     <div id="collapseFive" class="menu__submenu panel-collapse collapse">
                         <ul class="menu__subnav">
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Methods</span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Duration Labels
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Methods</span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Duration Labels
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Companies </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Users</span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Companies </span></a></li>
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Users</span></a></li>
                         </ul>
                     </div>
 
                 </li>
                 <li class="menu__item">
-                    <a class="menu__link collapsed" data-toggle="collapse" data-parent="#accordionMenu"
-                        href="#collapseSix" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span
-                            class="menu__link-text">Import/Export
+                    <a class="menu__link collapsed" data-bs-toggle="collapse" data-parent="#accordionMenu" href="#collapseSix" aria-expanded="true"><i class="menu__link-icon fa fa-database"></i><span class="menu__link-text">Import/Export
                         </span><i class="menu__ver-arrow la la-angle-right"></i></a>
                     <div id="collapseSix" class="menu__submenu panel-collapse collapse">
                         <ul class="menu__subnav">
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Product Temp Images
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Product Temp Images
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Bulk Images
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Bulk Images
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Import Instructions
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Import Instructions
                                     </span></a></li>
-                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i
-                                        class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span
-                                        class="menu__link-text">Import Export Settings
+                            <li class="menu__item "><a href="javascript:void(0);" class="menu__link "><i class="menu__link-bullet menu__link-bullet--dot"><span></span></i><span class="menu__link-text">Import Export Settings
                                     </span></a></li>
 
                         </ul>

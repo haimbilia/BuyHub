@@ -28,71 +28,71 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <?php echo Labels::getLabel('LBL_PICKUP_ADDRESSES_SETUP'); ?> 
+        <?php echo Labels::getLabel('LBL_PICKUP_ADDRESSES_SETUP'); ?>
     </h5>
 </div>
 <div class="form-edit-body loaderContainerJs sectionbody space">
     <div class="row">
-        <div class="col-md-12"> 
+        <div class="col-md-12">
             <?php echo $frm->getFormTag(); ?>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group"> 
+                    <div class="form-group">
                         <label class="label"> <?php
-                            echo $frm->getFieldHtml('addr_id');
-                            $fld = $frm->getField('lang_id');
-                            echo $fld->getCaption();
-                            ?> </label> 
-                        <div class="">  <?php echo $frm->getFieldHtml('lang_id'); ?> </div> 
+                                                echo $frm->getFieldHtml('addr_id');
+                                                $fld = $frm->getField('lang_id');
+                                                echo $fld->getCaption();
+                                                ?> </label>
+                        <div class=""> <?php echo $frm->getFieldHtml('lang_id'); ?> </div>
                     </div>
                 </div>
-                <div class="col-md-6"> 
-                    <div class="form-group"> 
+                <div class="col-md-6">
+                    <div class="form-group">
                         <label class="label"><?php
-                            $fld = $frm->getField('addr_title');
-                            echo $fld->getCaption();
-                            ?>
-                        </label>  
+                                                $fld = $frm->getField('addr_title');
+                                                echo $fld->getCaption();
+                                                ?>
+                        </label>
                         <div class="">
                             <?php echo $frm->getFieldHtml('addr_title'); ?>
                         </div>
-                    </div> 
-                </div> 
-                <div class="col-md-6">
-                    <div class="form-group"> 
-                        <label class="label"><?php
-                            $fld = $frm->getField('addr_name');
-                            echo $fld->getCaption();
-                            ?>
-                            <span class="spn_must_field">*</span> 
-                        </label> 
-                        <div class="">
-                            <?php echo $frm->getFieldHtml('addr_name'); ?>
-                        </div> 
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group"> 
+                    <div class="form-group">
                         <label class="label"><?php
-                            $fld = $frm->getField('addr_address1');
-                            echo $fld->getCaption();
-                            ?> 
-                            <span class="spn_must_field">*</span>  
+                                                $fld = $frm->getField('addr_name');
+                                                echo $fld->getCaption();
+                                                ?>
+                            <span class="spn_must_field">*</span>
+                        </label>
+                        <div class="">
+                            <?php echo $frm->getFieldHtml('addr_name'); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="label"><?php
+                                                $fld = $frm->getField('addr_address1');
+                                                echo $fld->getCaption();
+                                                ?>
+                            <span class="spn_must_field">*</span>
                         </label>
                         <div class="">
                             <?php echo $frm->getFieldHtml('addr_address1'); ?>
                         </div>
                     </div>
-                </div> 
+                </div>
 
                 <div class="col-md-6">
-                    <div class="form-group"> 
+                    <div class="form-group">
                         <label class="label">
                             <?php
                             $fld = $frm->getField('addr_address2');
                             echo $fld->getCaption();
                             ?>
-                        </label> 
+                        </label>
 
                         <div class=" ">
                             <?php echo $frm->getFieldHtml('addr_address2'); ?>
@@ -100,69 +100,69 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group"> 
-                        <label class="label"> 
+                    <div class="form-group">
+                        <label class="label">
                             <?php
                             $fld = $frm->getField('addr_country_id');
                             echo $fld->getCaption();
                             ?>
                             <span class="spn_must_field">*</span>
-                        </label> 
+                        </label>
                         <div class="field_cover">
                             <?php echo $frm->getFieldHtml('addr_country_id'); ?>
-                        </div> 
-                    </div> 
-                </div>  
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-6">
-                    <div class="form-group"> 
+                    <div class="form-group">
                         <label class="label">
                             <?php
                             $fld = $frm->getField('addr_state_id');
                             echo $fld->getCaption();
                             ?>
                             <span class="spn_must_field">*</span>
-                        </label> 
+                        </label>
                         <div class=" ">
                             <?php echo $frm->getFieldHtml('addr_state_id'); ?>
-                        </div> 
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group"> 
+                    <div class="form-group">
                         <label class="label">
                             <?php
                             $fld = $frm->getField('addr_city');
                             echo $fld->getCaption();
                             ?>
                             <span class="spn_must_field">*</span>
-                        </label> 
+                        </label>
                         <div class=" ">
                             <?php echo $frm->getFieldHtml('addr_city'); ?>
-                        </div> 
+                        </div>
                     </div>
-                </div> 
+                </div>
 
                 <div class="col-md-6">
-                    <div class="form-group"> 
+                    <div class="form-group">
                         <label class="label">
                             <?php
                             $fld = $frm->getField('addr_zip');
                             echo $fld->getCaption();
                             ?>
                             <span class="spn_must_field">*</span>
-                        </label> 
+                        </label>
                         <div class=" ">
                             <?php echo $frm->getFieldHtml('addr_zip'); ?>
-                        </div> 
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group"> 
+                    <div class="form-group">
                         <label class="label">
                             <?php
                             $fld = $frm->getField('addr_phone');
                             echo $fld->getCaption();
-                            ?> 
+                            ?>
                             <span class="spn_must_field">*</span>
                         </label>
 
@@ -171,23 +171,279 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                             echo $frm->getFieldHtml('addr_phone');
                             echo $frm->getFieldHtml('addr_phone_dcode');
                             ?>
-                        </div> 
+                        </div>
                     </div>
-                </div> 
+                </div>
 
                 <div class="col-md-12">
-                    <div class="form-group"> 
+                    <div class="form-group">
                         <label class="label">
                             <?php
                             $fld = $frm->getField('tslot_availability');
                             echo $fld->getCaption();
                             ?>
-                        </label>  
+                        </label>
                         <div class=" ">
                             <?php echo $frm->getFieldHtml('tslot_availability'); ?>
-                        </div> 
+                        </div>
                     </div>
-                </div> 
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive table-scrollable js-scrollable">
+                        <table class="table table-slots">
+                            <thead>
+                                <tr>
+                                    <th>Days</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th class="align-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label class="checkbox"><input type="checkbox">
+                                            <span class="input-helper"></span>
+                                            Sunday</label>
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+
+                                    <td class="align-right">
+                                        <ul class="actions">
+
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                        </use>
+                                                    </svg></a></li>
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                        </use>
+                                                    </svg></a></li>
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="checkbox"><input type="checkbox">
+                                            <span class="input-helper"></span>
+                                            Sunday</label>
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+
+                                    <td class="align-right">
+                                        <ul class="actions">
+
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                        </use>
+                                                    </svg></a></li>
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                        </use>
+                                                    </svg></a></li>
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+
+                                    <td class="align-right">
+                                        <ul class="actions">
+
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                        </use>
+                                                    </svg></a></li>
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                        </use>
+                                                    </svg></a></li>
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+
+                                    <td class="align-right">
+                                        <ul class="actions">
+
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                        </use>
+                                                    </svg></a></li>
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                        </use>
+                                                    </svg></a></li>
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+
+                                    <td class="align-right">
+                                        <ul class="actions">
+
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                        </use>
+                                                    </svg></a></li>
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                        </use>
+                                                    </svg></a></li>
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+
+                                    <td class="align-right">
+                                        <ul class="actions">
+
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                        </use>
+                                                    </svg></a></li>
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                        </use>
+                                                    </svg></a></li>
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="checkbox"><input type="checkbox">
+                                            <span class="input-helper"></span>
+                                            Sunday</label>
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="">
+                                            <option value="00:00">00:00</option>
+                                            <option value="00:30">00:30</option>
+                                        </select>
+                                    </td>
+
+                                    <td class="align-right">
+                                        <ul class="actions">
+
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                                        </use>
+                                                    </svg></a></li>
+                                            <li><a href="javascript:void(0)" class=""><svg class="svg" width="18" height="18">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                                        </use>
+                                                    </svg></a></li>
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
                 <div class="col-md-12">
                     <div class="js-slot-individual">
                         <?php
@@ -222,11 +478,11 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                     $toFld->setFieldTagAttribute('data-row', $row);
                                     $toFld->setFieldTagAttribute('onChange', 'displayAddRowField(' . $i . ', this)');
                                     $toFld->value = $toTime;
-                                    ?>
+                        ?>
                                     <div class="row jsDay-<?php echo $i; ?> row-<?php
-                                    echo $row;
-                                    echo ($key > 0) ? ' js-added-rows-' . $i : ''
-                                    ?>">
+                                                                                echo $row;
+                                                                                echo ($key > 0) ? ' js-added-rows-' . $i : ''
+                                                                                ?>">
                                         <div class="col-md-2 jsWeekDay">
                                             <div class="field-set">
                                                 <div class="caption-wraper">
@@ -287,7 +543,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                                     <div class="field_cover">
                                                         <?php if ($key != 0) { ?>
                                                             <input type='button' name='btn_remove_row' value='x' data-day="<?php echo $i; ?>">
-                                                            <?php
+                                                        <?php
                                                         }
                                                         if (count($slotData['tslot_from_time'][$i]) - 1 == $key) {
                                                             echo $frm->getFieldHtml('btn_add_row[' . $i . ']');
@@ -298,7 +554,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                             </div>
                                         </div>
                                     </div>
-                                    <?php
+                                <?php
                                     $row++;
                                 }
                             } else {
@@ -374,19 +630,19 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                                 <div class="field_cover">
                                                     <?php
                                                     echo $frm->getFieldHtml('btn_add_row[' . $i . ']');
-                                                    ?> 
+                                                    ?>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <?php
+                        <?php
                                 $row++;
                             }
                         }
                         ?>
-                    </div>                       
-                </div>  
+                    </div>
+                </div>
                 <div>&nbsp;</div>
                 </form>
                 <?php echo $frm->getExternalJS(); ?>
@@ -396,24 +652,26 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
 
     </div>
 
-    <div class="form-edit-foot">
-        <div class="row">
-            <div class="col">
-                <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_RESET', $siteLangId), 'button', 'btn_reset_form', 'btn btn-outline-brand resetModalFormJs'); ?>
-            </div>
-            <div class="col-auto">
-                <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_SAVE', $siteLangId), 'button', 'btn_save', 'btn btn-brand gb-btn gb-btn-primary submitBtnJs'); ?>
-            </div>
+
+</div>
+<div class="form-edit-foot">
+    <div class="row">
+        <div class="col">
+            <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_RESET', $siteLangId), 'button', 'btn_reset_form', 'btn btn-outline-brand resetModalFormJs'); ?>
+        </div>
+        <div class="col-auto">
+            <?php echo HtmlHelper::addButtonHtml(Labels::getLabel('LBL_SAVE', $siteLangId), 'button', 'btn_save', 'btn btn-brand gb-btn gb-btn-primary submitBtnJs'); ?>
         </div>
     </div>
+</div>
 
-    <script language="javascript">
-        var DAY_SUNDAY = <?php echo TimeSlot::DAY_SUNDAY; ?>;
-<?php if ($addressId > 0) { ?>
-            $(document).ready(function () {
-                $('.availabilityType-js:checked').trigger('change');
-                getCountryStates($("#addr_country_id").val(), <?php echo ($stateId) ? $stateId : 0; ?>, '#shop_state', <?php echo $langId; ?>);
+<script language="javascript">
+    var DAY_SUNDAY = <?php echo TimeSlot::DAY_SUNDAY; ?>;
+    <?php if ($addressId > 0) { ?>
+        $(document).ready(function() {
+            $('.availabilityType-js:checked').trigger('change');
+            getCountryStates($("#addr_country_id").val(), <?php echo ($stateId) ? $stateId : 0; ?>, '#shop_state', <?php echo $langId; ?>);
 
-            });
-<?php } ?>
-    </script>
+        });
+    <?php } ?>
+</script>

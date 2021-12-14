@@ -29,7 +29,7 @@ foreach ($messagesList as $sn => $row) {
         switch ($key) {
             case 'user':
                 $img = '<img width="40" height="40" title="' . $row['msg_user_name'] . '" src = "' . UrlHelper::generateFileUrl('Image', 'User', array($row['orrmsg_from_user_id'], 'THUMB', 1), CONF_WEBROOT_FRONT_URL) . '" alt = "' . $row['msg_user_name'] . '" >';
-                
+
                 $name = '<a class="user-profile_title" href="javascript:void(0)" onclick="redirectUser(' . $row['orrmsg_from_user_id'] . ')">' . $row['msg_user_name'] . ' (' . $row['msg_username'] . ')</a>';
                 $email = $row['msg_user_email'];
 
@@ -45,7 +45,7 @@ foreach ($messagesList as $sn => $row) {
                             </figure>
                             <div class="user-profile_data">
                                 ' . $name . '
-                                <span class="text-muted fw-bold">' .$email . '</span>
+                                <span class="text-muted fw-bold">' . $email . '</span>
                             </div>
                         </div>';
                 $td->appendElement('plaintext', [], $html, true);
@@ -62,8 +62,8 @@ foreach ($messagesList as $sn => $row) {
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'title' => Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId),
-                                'data-toggle' => 'modal',
-                                'data-target' => '#modal' . $row['orrmsg_id']
+                                'data-bs-toggle' => 'modal',
+                                'data-bs-target' => '#modal' . $row['orrmsg_id']
                             ],
                             'label' => '<svg class="svg" width="18" height="18">
                                             <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#comment">

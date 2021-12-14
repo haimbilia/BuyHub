@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -118,7 +118,7 @@
                                     <div class="card-head-toolbar">
                                         <div class="card-head-actions">
                                             <div class="dropdown dropdown-inline">
-                                                <a href="#" class="btn btn-default btn-pill btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <a href="#" class="btn btn-default btn-pill btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="flaticon2-add-1"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -157,7 +157,7 @@
                                                 </div>
                                             </div>&nbsp;
                                             <div class="dropdown dropdown-inline">
-                                                <a href="#" class="btn btn-default btn-pill btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <a href="#" class="btn btn-default btn-pill btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="flaticon2-soft-icons"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -288,7 +288,7 @@
                                             <button type="button" class="btn btn-secondary"><i class="la la-floppy-o"></i></button>
                                             <button type="button" class="btn btn-secondary"><i class="la la-header"></i></button>
                                             <div class="btn-group" role="group">
-                                                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Dropdown
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">

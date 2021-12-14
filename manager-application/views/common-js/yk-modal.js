@@ -36,7 +36,7 @@
 
             $(contentBody).html(data);
             var headerHtm = '<div class="modal-header">';
-            var closeBtnHtm = '<button type="button" class="close ykmodalJs" data-dismiss="modal" aria-label="' + langLbl.close + '"><span aria-hidden="true">×</span></button>';
+            var closeBtnHtm = '<button type="button" class="btn-close ykmodalJs" data-bs-dismiss="modal" aria-label="' + langLbl.close + '"></button>';
 
             if (1 > $(contentBody).find(".modal-header").length) {
                 $(contentBody).prepend(headerHtm + closeBtnHtm + "</div>")

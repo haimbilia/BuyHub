@@ -22,7 +22,7 @@
                         </a>
                     </div>
                     <div class="header-action__item">
-                        <a class="header-action__trigger" href="javascript:void(0);" data-toggle="modal" data-target="#search-main">
+                        <a class="header-action__trigger" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#search-main">
                             <span class="icon">
                                 <svg class="svg" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-search">
@@ -53,7 +53,7 @@
                         </a>
                     </div>
                     <div class="header-action__item dropdown">
-                        <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
+                        <a class="header-action__trigger dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
                             <span class="icon">
                                 <svg class="svg" width="20" height="20">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
@@ -331,7 +331,7 @@
                         </div>
                     </div>
                     <div class="header-action__item dropdown header-account">
-                        <a class="dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
+                        <a class="dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
                             <span class="header-account__img">
                                 <img aria-expanded="false" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="">
                             </span>
@@ -356,7 +356,7 @@
                             </nav>
                             <div class="separator m-0"></div>
                             <nav class="nav nav--header-account">
-                                <a class="language-selector" data-toggle="collapse" href="#languages" role="button" aria-expanded="false" aria-controls="languages">
+                                <a class="language-selector" data-bs-toggle="collapse" href="#languages" role="button" aria-expanded="false" aria-controls="languages">
                                     Language
                                     <span class="selected-language">
                                         English
@@ -383,7 +383,7 @@
         <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="alert-text">A simple warning alert—check it out!</div>
         <div class="alert-close">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true"><i class="la la-close"></i></span>
             </button>
         </div>
@@ -392,7 +392,7 @@
         <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="alert-text">A simple warning alert—check it out!</div>
         <div class="alert-close">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true"><i class="la la-close"></i></span>
             </button>
         </div>

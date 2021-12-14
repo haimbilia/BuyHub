@@ -61,10 +61,10 @@
                                 </div>
                                 <div class="card-head-toolbar">
                                     <div class="dropdown dropdown-inline">
-                                        <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="flaticon-more-1"></i>
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
 
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
@@ -106,7 +106,7 @@
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugit beatae dignissimos......</p>
                                     </li>
                                 </ul>
-                                <div class="add_more_item mt-5 text-center"><a href="javascript:void(0);" class="link add__item" data-toggle="modal" data-target="#modal_1">+ Add new task</a></div>
+                                <div class="add_more_item mt-5 text-center"><a href="javascript:void(0);" class="link add__item" data-bs-toggle="modal" data-bs-target="#modal_1">+ Add new task</a></div>
                             </div>
                         </div>
                         <div class="card">
@@ -118,10 +118,10 @@
                                 </div>
                                 <div class="card-head-toolbar">
                                     <div class="dropdown dropdown-inline">
-                                        <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="flaticon-more-1"></i>
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
 
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
@@ -163,7 +163,7 @@
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugit beatae dignissimos......</p>
                                     </li>
                                 </ul>
-                                <div class="add_more_item mt-5 text-center"><a href="javascript:void(0);" class="link add__item" data-toggle="modal" data-target="#modal_1">+ Add new task</a></div>
+                                <div class="add_more_item mt-5 text-center"><a href="javascript:void(0);" class="link add__item" data-bs-toggle="modal" data-bs-target="#modal_1">+ Add new task</a></div>
                             </div>
                         </div>
                         <div class="card">
@@ -175,10 +175,10 @@
                                 </div>
                                 <div class="card-head-toolbar">
                                     <div class="dropdown dropdown-inline">
-                                        <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="flaticon-more-1"></i>
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
 
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
@@ -220,7 +220,7 @@
                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugit beatae dignissimos......</p>
                                     </li>
                                 </ul>
-                                <div class="add_more_item mt-5 text-center"><a href="javascript:void(0);" class="link add__item" data-toggle="modal" data-target="#modal_1">+ Add new task</a></div>
+                                <div class="add_more_item mt-5 text-center"><a href="javascript:void(0);" class="link add__item" data-bs-toggle="modal" data-bs-target="#modal_1">+ Add new task</a></div>
                             </div>
                         </div>
                         <div class="card">
@@ -232,10 +232,10 @@
                                 </div>
                                 <div class="card-head-toolbar">
                                     <div class="dropdown dropdown-inline">
-                                        <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="flaticon-more-1"></i>
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md" x-placement="bottom-end" style="position: absolute; transform: translate3d(-227px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
 
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
@@ -285,7 +285,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Add New Task</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -301,7 +301,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-primary add_item">Add</button>
                                 </div>
                             </div>

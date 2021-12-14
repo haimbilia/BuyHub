@@ -24,27 +24,27 @@
                         <div class="card-head-toolbar">
                             <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand navTabsJs" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#tabs_1" data-tab="tabs_1" data-chart="true" role="tab">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#tabs_1" data-tab="tabs_1" data-chart="true" role="tab">
                                         <?php echo Labels::getLabel('NAV_SALES', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs_2" data-tab="tabs_2" data-chart="true" role="tab">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tabs_2" data-tab="tabs_2" data-chart="true" role="tab">
                                         <?php echo Labels::getLabel('NAV_SALES_EARNINGS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs_3" data-tab="tabs_3" data-chart="true" role="tab">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tabs_3" data-tab="tabs_3" data-chart="true" role="tab">
                                         <?php echo Labels::getLabel('NAV_BUYER/Seller_Signups', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs_4" data-tab="tabs_4" data-chart="true" role="tab">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tabs_4" data-tab="tabs_4" data-chart="true" role="tab">
                                         <?php echo Labels::getLabel('NAV_AFFILIATE_SIGNUPS', $siteLangId); ?>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs_5" data-tab="tabs_5" data-chart="true" role="tab">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tabs_5" data-tab="tabs_5" data-chart="true" role="tab">
                                         <?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?>
                                     </a>
                                 </li>

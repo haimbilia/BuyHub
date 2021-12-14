@@ -34,7 +34,7 @@
                     </div>
                     <?php require_once(CONF_THEME_PATH . 'orders/item-summary.php'); ?>
                 </div>
-                <?php 
+                <?php
                 $paymentFormCond = (!$order["order_payment_status"] && $canEdit && 'CashOnDelivery' != $order['plugin_code']);
                 $paymentHistory = (!empty($order['payments']));
                 if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory)) { ?>
@@ -87,11 +87,11 @@
                         </div>
                     </div>
                 <?php } ?>
-                <?php 
+                <?php
                 $address = $order['shippingAddress'];
                 if (!empty($address)) { ?>
                     <div class="card">
-                        <div class="card-head dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block1" aria-expanded="false" aria-controls="order-block1">
+                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block1" aria-expanded="false" aria-controls="order-block1">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><i class="fas fa-address-card"></i>
                                     <?php echo Labels::getLabel('LBL_SHIPPING_ADDRESS', $siteLangId); ?>
@@ -105,7 +105,7 @@
                     </div>
                 <?php } ?>
                 <div class="card">
-                    <div class="card-head dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block2" aria-expanded="false" aria-controls="order-block2">
+                    <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block2" aria-expanded="false" aria-controls="order-block2">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><i class="fas fa-address-card"></i>
                                 <?php echo Labels::getLabel('LBL_BILLING_ADDRESS', $siteLangId); ?>

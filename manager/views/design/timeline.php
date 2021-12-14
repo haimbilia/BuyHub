@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -509,7 +509,7 @@
                                     </div>
                                     <div class="card-head-toolbar">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -648,12 +648,12 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-pills nav-pills--brand nav-pills-btn-pill nav-pills-btn-sm" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#widget2_tab1_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#widget2_tab1_content" role="tab">
                                                     Today
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#widget2_tab2_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#widget2_tab2_content" role="tab">
                                                     Month
                                                 </a>
                                             </li>

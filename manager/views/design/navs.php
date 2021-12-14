@@ -51,8 +51,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -129,7 +129,7 @@
 
                                     <!--begin::Dropdown-->
                                     <div class="dropdown">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Dropdown example
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-sm" aria-labelledby="dropdownMenuButton">
@@ -248,7 +248,7 @@
 
                                     <!--begin::Dropdown-->
                                     <div class="dropdown">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Dropdown example
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-sm dropdown-menu-fit-bottom">
@@ -356,7 +356,7 @@
 
                                     <!--begin::Dropdown-->
                                     <div class="dropdown">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Dropdown example
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-sm">
@@ -585,7 +585,7 @@
                                                             </a>
                                                         </li>
                                                         <li class="nav__item nav__item--active">
-                                                            <a class="nav__link" role="tab" id="nav_link_1" data-toggle="collapse" href="#nav_sub_1" aria-expanded=" false">
+                                                            <a class="nav__link" role="tab" id="nav_link_1" data-bs-toggle="collapse" href="#nav_sub_1" aria-expanded=" false">
                                                                 <i class="nav__link-icon flaticon2-graphic"></i>
                                                                 <span class="nav__link-text">Messages</span>
                                                                 <span class="nav__link-badge">
@@ -615,7 +615,7 @@
                                                             </a>
                                                         </li>
                                                         <li class="nav__item nav__item--active">
-                                                            <a class="nav__link  collapsed" role="tab" id="nav_link_2" data-toggle="collapse" href="#nav_sub_2" aria-expanded="  false">
+                                                            <a class="nav__link  collapsed" role="tab" id="nav_link_2" data-bs-toggle="collapse" href="#nav_sub_2" aria-expanded="  false">
                                                                 <i class="nav__link-icon flaticon2-new-email"></i>
                                                                 <span class="nav__link-text">Reports</span>
                                                                 <span class="nav__link-badge">
@@ -680,7 +680,7 @@
                                             <ul class="nav nav--block">
                                                 <li class="nav__head">
                                                     Navigation Title
-                                                    <i class="flaticon2-warning-1" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                                    <i class="flaticon2-warning-1" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                                                 </li>
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__item">
@@ -718,7 +718,7 @@
 
                                     <!--begin::Dropdown-->
                                     <div class="dropdown">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Dropdown example
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit-top dropdown-menu-lg" aria-labelledby="dropdownMenuButton">
@@ -726,7 +726,7 @@
                                             <ul class="nav nav--block">
                                                 <li class="nav__head">
                                                     Navigation Title
-                                                    <i class="flaticon2-warning-1" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                                    <i class="flaticon2-warning-1" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                                                 </li>
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__item">
@@ -782,7 +782,7 @@
                                             <ul class="nav nav--block">
                                                 <li class="nav__head">
                                                     Navigation Title
-                                                    <i class="flaticon2-warning-1" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                                    <i class="flaticon2-warning-1" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                                                 </li>
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__item">
@@ -815,7 +815,7 @@
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
                                             <!--end::Nav-->
@@ -825,7 +825,7 @@
 
                                     <!--begin::Dropdown-->
                                     <div class="dropdown">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Dropdown example
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-lg " aria-labelledby="dropdownMenuButton">
@@ -833,7 +833,7 @@
                                             <ul class="nav nav--block">
                                                 <li class="nav__head">
                                                     Navigation Title
-                                                    <i class="flaticon2-warning-1" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                                    <i class="flaticon2-warning-1" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                                                 </li>
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__item">
@@ -866,7 +866,7 @@
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
                                             <!--end::Nav-->
@@ -923,7 +923,7 @@
 
                                     <!--begin::Dropdown-->
                                     <div class="dropdown">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Dropdown example
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-sm">
@@ -1039,7 +1039,7 @@
 
                                     <!--begin::Dropdown-->
                                     <div class="dropdown">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Dropdown example
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-xl">
@@ -1121,7 +1121,7 @@
                                         <div class="section__content section__content--border section__content--fit">
                                             <ul class="nav nav--block nav--bold nav--md-space nav--v3" role="tablist">
                                                 <li class="nav__item active">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1134,7 +1134,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_account_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_account_information" role="tab">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1147,7 +1147,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                                    <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1160,7 +1160,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                                    <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1175,7 +1175,7 @@
                                                 </li>
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                                    <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--danger">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1187,7 +1187,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                                    <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--success">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1204,13 +1204,13 @@
                                     <!--end::Section-->
                                     <!--begin::Dropdown-->
                                     <div class="dropdown">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Dropdown example
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-xl">
                                             <ul class="nav  nav--block nav--bold nav--md-space nav--v3" role="tablist">
                                                 <li class="nav__item active">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1223,7 +1223,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_account_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_account_information" role="tab">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1236,7 +1236,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                                    <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1249,7 +1249,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                                    <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1264,7 +1264,7 @@
                                                 </li>
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                                    <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--danger">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1276,7 +1276,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                                    <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                         <span class="nav__link-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--success">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -1311,27 +1311,27 @@
                                         <div class="section__content section__content--border section__content--fit">
                                             <ul class="nav nav--block nav--bold nav--md-space nav--v4" role="tablist">
                                                 <li class="nav__item">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-text">Buying</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav__item active">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-text">Product Support</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-text">Account Management</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-text">Product Licenses</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-text">Downloads</span>
                                                     </a>
                                                 </li>
@@ -1342,33 +1342,33 @@
                                     <!--end::Section-->
                                     <!--begin::Dropdown-->
                                     <div class="dropdown">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Dropdown example
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-xl">
                                             <ul class="nav nav--block nav--bold nav--md-space nav--v4" role="tablist">
                                                 <li class="nav__item">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-text">Buying</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav__item active">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-text">Product Support</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-text">Account Management</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-text">Product Licenses</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav__item">
-                                                    <a class="nav__link" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                                    <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                         <span class="nav__link-text">Downloads</span>
                                                     </a>
                                                 </li>

@@ -364,7 +364,7 @@ $calendar = extension_loaded('calendar');
         </header>
         <?php if (isset($error_warning) && $error_warning != '') { ?>
             <div class="alert alert--danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?>
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert">&times;</button>
             </div>
         <?php } ?>
         <div class="row">

@@ -53,8 +53,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -262,7 +262,7 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple primary alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -271,7 +271,7 @@
                                                 <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple secondary alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -280,7 +280,7 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple success alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -289,7 +289,7 @@
                                                 <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple danger alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -298,7 +298,7 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple warning alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -307,7 +307,7 @@
                                                 <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple info alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -316,7 +316,7 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple light alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -325,7 +325,7 @@
                                                 <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple dark alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -343,7 +343,7 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple primary alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -352,7 +352,7 @@
                                                 <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple secondary alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -361,7 +361,7 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple success alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -370,7 +370,7 @@
                                                 <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple danger alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -379,7 +379,7 @@
                                                 <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                                 <div class="alert-text">A simple warning alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -388,7 +388,7 @@
                                                 <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple info alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -397,7 +397,7 @@
                                                 <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
                                                 <div class="alert-text">A simple dark alert—check it out!</div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>

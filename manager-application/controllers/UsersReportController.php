@@ -210,7 +210,8 @@ class UsersReportController extends ListingBaseController
         $frm->addHiddenField('', 'user_type', $userType);
         $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addTextBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));
+        $fld->overrideFldType('search');
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);

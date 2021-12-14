@@ -57,8 +57,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -609,7 +609,7 @@
                                             <label>Left Button Dropdown</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Action
                                                     </button>
                                                     <div class="dropdown-menu">
@@ -629,7 +629,7 @@
                                             <div class="input-group">
                                                 <input type="text" class="form-control" aria-label="Text input with dropdown button">
                                                 <div class="input-group-append">
-                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Action
                                                     </button>
                                                     <div class="dropdown-menu">
@@ -647,7 +647,7 @@
                                             <label>Left &amp; Right Button Dropdown</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Action
                                                     </button>
                                                     <div class="dropdown-menu">
@@ -660,7 +660,7 @@
                                                 </div>
                                                 <input type="text" class="form-control" aria-label="Text input with dropdown button">
                                                 <div class="input-group-append">
-                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Action
                                                     </button>
                                                     <div class="dropdown-menu">

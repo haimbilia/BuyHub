@@ -59,8 +59,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -82,7 +82,7 @@
                     <!--Begin::App-->
                     <div class="grid grid--desktop grid--ver grid--ver-desktop app">
                         <!--Begin:: App Aside Mobile Toggle-->
-                        <button class="app__aside-close d-none" id="user_profile_aside_close" data-target-close="user_profile_aside">
+                        <button class="app__aside-close d-none" id="user_profile_aside_close" data-bs-target-close="user_profile_aside">
                             <i class="la la-close"></i>
                         </button>
                         <!--End:: App Aside Mobile Toggle-->
@@ -97,15 +97,15 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md">
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
                                                 <li class="nav__head">
                                                     Export Options
-                                                    <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                    <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                 <rect x="0" y="0" width="24" height="24"></rect>
@@ -146,7 +146,7 @@
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
                                             <!--end::Nav-->
@@ -271,7 +271,7 @@
                                                         </span>
                                                     </span>
                                                 </a>
-                                                <a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
+                                                <a href="#" class="widget__item" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                                     <span class="widget__section">
                                                         <span class="widget__icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
@@ -286,7 +286,7 @@
                                                         </span>
                                                     </span>
                                                 </a>
-                                                <a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
+                                                <a href="#" class="widget__item" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                                     <span class="widget__section">
                                                         <span class="widget__icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
@@ -301,7 +301,7 @@
                                                     </span>
                                                     <span class="badge badge-unified-brand badge-inline badge-bolder">new</span>
                                                 </a>
-                                                <a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
+                                                <a href="#" class="widget__item" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                                     <span class="widget__section">
                                                         <span class="widget__icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
@@ -340,7 +340,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                                     Export
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -348,7 +348,7 @@
                                                     <ul class="nav nav--block">
                                                         <li class="nav__head">
                                                             Export Options
-                                                            <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                            <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                         <rect x="0" y="0" width="24" height="24"></rect>
@@ -389,7 +389,7 @@
                                                         <li class="nav__separator"></li>
                                                         <li class="nav__foot">
                                                             <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                            <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                            <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                         </li>
                                                     </ul>
                                                     <!--end::Nav-->
@@ -456,17 +456,17 @@
                                             <div class="card-head-toolbar">
                                                 <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand" role="tablist">
                                                     <li class="nav-item">
-                                                        <a class="nav-link active" data-toggle="tab" href="#widget2_tab1_content" role="tab">
+                                                        <a class="nav-link active" data-bs-toggle="tab" href="#widget2_tab1_content" role="tab">
                                                             Today
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" data-toggle="tab" href="#widget2_tab2_content" role="tab">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#widget2_tab2_content" role="tab">
                                                             Week
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" data-toggle="tab" href="#widget2_tab3_content" role="tab">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#widget2_tab3_content" role="tab">
                                                             Month
                                                         </a>
                                                     </li>
@@ -493,7 +493,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -551,7 +551,7 @@
                                                             </div>
 
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -609,7 +609,7 @@
                                                             </div>
 
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -666,7 +666,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -725,7 +725,7 @@
                                                             </div>
 
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -783,7 +783,7 @@
                                                             </div>
 
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -844,7 +844,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -902,7 +902,7 @@
                                                             </div>
 
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -961,7 +961,7 @@
                                                             </div>
 
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1019,7 +1019,7 @@
                                                             </div>
 
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1075,7 +1075,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1131,7 +1131,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1192,7 +1192,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1248,7 +1248,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1304,7 +1304,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1360,7 +1360,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1416,7 +1416,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1472,7 +1472,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="widget2__actions">
-                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -1531,7 +1531,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                                     Today
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
@@ -1539,7 +1539,7 @@
                                                     <ul class="nav nav--block">
                                                         <li class="nav__head">
                                                             Export Options
-                                                            <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                            <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                         <rect x="0" y="0" width="24" height="24"></rect>
@@ -1580,7 +1580,7 @@
                                                         <li class="nav__separator"></li>
                                                         <li class="nav__foot">
                                                             <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                            <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                            <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                         </li>
                                                     </ul>
                                                     <!--end::Nav-->
@@ -1677,17 +1677,17 @@
                                             <div class="card-head-toolbar">
                                                 <ul class="nav nav-pills nav-pills-sm nav-pills-label nav-pills-bold" role="tablist">
                                                     <li class="nav-item">
-                                                        <a class="nav-link active" data-toggle="tab" href="#widget6_tab1_content" role="tab">
+                                                        <a class="nav-link active" data-bs-toggle="tab" href="#widget6_tab1_content" role="tab">
                                                             Latest
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" data-toggle="tab" href="#widget6_tab2_content" role="tab">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#widget6_tab2_content" role="tab">
                                                             Week
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" data-toggle="tab" href="#widget6_tab3_content" role="tab">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#widget6_tab3_content" role="tab">
                                                             Month
                                                         </a>
                                                     </li>

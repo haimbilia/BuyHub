@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-<button class="help-btn btn btn-light" data-toggle="modal" data-target="#help">
+<button class="help-btn btn btn-light" data-bs-toggle="modal" data-bs-target="#help">
     <span class="help_label"><?php echo Labels::getLabel('LBL_HELP', $siteLangId); ?></span>
 </button>
 
@@ -11,8 +11,8 @@
                 <h5 class="modal-title">
                     <?php echo $record[HelpCenter::DB_TBL_PREFIX . 'title']; ?>
                 </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                 </button>
             </div>
             <div class="modal-body">
@@ -20,7 +20,7 @@
                     <div class="card-body">
                         <div class="empty-stats">
                             <img src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
-                              <div class="data data--cms">
+                            <div class="data data--cms">
                                 <?php echo $record[HelpCenter::DB_TBL_PREFIX . 'description']; ?>
                             </div>
                         </div>

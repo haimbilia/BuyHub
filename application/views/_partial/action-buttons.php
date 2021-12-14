@@ -27,7 +27,7 @@ if (isset($otherButtons) && is_array($otherButtons)) {
 echo $div->getHtml();
 ?>
 <script>
-$('.dropdown-menu').on('click', function(e) {
-    e.stopPropagation();
-});
+    $('.dropdown-menu').on('click', function(e) {
+        e.stopPropagation();
+    });
 </script>

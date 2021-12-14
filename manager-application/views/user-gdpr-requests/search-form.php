@@ -21,29 +21,29 @@ HtmlHelper::renderHiddenFields($frmSearch);
 ?>
 <div class="card">
     <div class="card-body">
-        <div class="row">  
-            <div class="col-md-6"> 
-                <?php echo $frmSearch->getFieldHtml('keyword'); ?>  
-            </div>  
+        <div class="row">
             <div class="col-md-6">
-                <a class="btn advanced-trigger ml-2 collapsed" data-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                <?php echo $frmSearch->getFieldHtml('keyword'); ?>
+            </div>
+            <div class="col-md-6">
+                <a class="btn advanced-trigger ml-2 collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                     <svg class="svg" width="22" height="22">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
-                    </use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
+                        </use>
                     </svg>
                 </a>
                 <?php echo $frmSearch->getFieldHtml('btn_submit'); ?>
-            </div>  
+            </div>
         </div>
     </div>
     <div class="advanced-search collapse advancedSearchJs" id="collapseKeyword">
-        <div class="row"> 
+        <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="label"><?php echo Labels::getLabel('LBL_Status', $siteLangId); ?></label>
                     <?php echo $frmSearch->getFieldHtml('status'); ?>
                 </div>
-            </div> 
+            </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="label"><?php echo Labels::getLabel('LBL_Date_From', $siteLangId); ?></label>

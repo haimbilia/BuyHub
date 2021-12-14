@@ -11,7 +11,7 @@ if (!empty($order['payments'])) { ?>
                     <th><?php echo Labels::getLabel('LBL_AMOUNT', $siteLangId); ?></th>
                     <th>
                         <?php echo Labels::getLabel('LBL_RESPONSE', $siteLangId); ?>
-                        <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_GATEWAY_RESPONSE', $siteLangId); ?>"></i>
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_GATEWAY_RESPONSE', $siteLangId); ?>"></i>
                     </th>
                     <th><?php echo Labels::getLabel('LBL_STATUS', $siteLangId); ?></th>
                     <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId); ?></th>
@@ -61,8 +61,8 @@ if (!empty($order['payments'])) { ?>
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLongTitle"><?php echo Labels::getLabel('LBL_COMMENT', $siteLangId); ?></h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                                             </button>
                                         </div>
                                         <div class="modal-body">
@@ -76,8 +76,8 @@ if (!empty($order['payments'])) { ?>
                                 </div>
                             </div>
                             <ul class="actions">
-                                <li data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId); ?>">
-                                    <a href="javascript:void(0)" data-toggle="modal" data-target="#modal<?php echo $key; ?>">
+                                <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId); ?>">
+                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modal<?php echo $key; ?>">
                                         <svg class="svg" width="18" height="18">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#comment">
                                             </use>
@@ -85,7 +85,7 @@ if (!empty($order['payments'])) { ?>
                                     </a>
                                 </li>
                                 <?php if (0 == FatUtility::int($row['opayment_txn_status'])) { ?>
-                                    <li title='<?php echo Labels::getLabel("LBL_APPROVE", $siteLangId); ?>' data-toggle="tooltip" data-placement="top">
+                                    <li title='<?php echo Labels::getLabel("LBL_APPROVE", $siteLangId); ?>' data-bs-toggle="tooltip" data-placement="top">
                                         <a href="javascript:void(0)" onclick="approve('<?php echo $row['opayment_id']; ?>')">
                                             <svg class="svg" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#tick">
@@ -93,7 +93,7 @@ if (!empty($order['payments'])) { ?>
                                             </svg>
                                         </a>
                                     </li>
-                                    <li title='<?php echo Labels::getLabel("LBL_REJECT", $siteLangId); ?>' data-toggle="tooltip" data-placement="top">
+                                    <li title='<?php echo Labels::getLabel("LBL_REJECT", $siteLangId); ?>' data-bs-toggle="tooltip" data-placement="top">
                                         <a href="javascript:void(0)" onclick="reject('<?php echo $row['opayment_id']; ?>')">
                                             <svg class="svg" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#not-allowed">

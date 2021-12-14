@@ -2,7 +2,7 @@
 $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
             'headingLabel' => Labels::getLabel('LBL_Requests', $siteLangId),
             'siteLangId' => $siteLangId,
@@ -10,43 +10,43 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
         if ($canEdit && !$noRecordFound) {
             $otherBtnHtml = '<div class="dropdown dashboard-user">
-                                <button class="btn btn-outline-brand dropdown-toggle btn-sm" type="button" id="dashboardDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-outline-brand dropdown-toggle btn-sm" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     ' . Labels::getLabel('LBL_New_Request', $siteLangId) . '
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dashboardDropdown">
                                     <ul class="nav nav-block">';
-                                        if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
-                                            $otherBtnHtml .= '<li class="nav__item">
+            if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
+                $otherBtnHtml .= '<li class="nav__item">
                                                 <a class="dropdown-item nav__link" href="' . UrlHelper::generateUrl('Seller', 'customCatalogProductForm') . '">
                                                     ' . Labels::getLabel('LBL_Marketplace_Product', $siteLangId) . '
                                                 </a>
                                             </li>';
-                                        }
+            }
 
-                                        if (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) {
-                                            $otherBtnHtml .= '<li class="nav__item">
+            if (FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) {
+                $otherBtnHtml .= '<li class="nav__item">
                                                 <a class="dropdown-item nav__link" href="javascript:void(0);" onClick="addBrandReqForm(0)">
                                                     ' . Labels::getLabel('LBL_Brand', $siteLangId) . '
                                                 </a>
                                             </li>';
-                                        }
+            }
 
-                                        if (FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) {
-                                            $otherBtnHtml .= '<li class="nav__item">
+            if (FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) {
+                $otherBtnHtml .= '<li class="nav__item">
                                                 <a class="dropdown-item nav__link" href="javascript:void(0);" onClick="addCategoryReqForm(0)">
                                                     ' . Labels::getLabel('LBL_Category', $siteLangId) . '
                                                 </a>
                                             </li>';
-                                        }
+            }
 
-                                        if ($canRequestBadge) {
-                                            $otherBtnHtml .= '<li class="nav__item">
+            if ($canRequestBadge) {
+                $otherBtnHtml .= '<li class="nav__item">
                                                 <a class="dropdown-item nav__link" href="javascript:void(0);" onClick="addBadgeReqForm(0)">
                                                     ' . Labels::getLabel('LBL_BADGE_REQUEST', $siteLangId) . '
                                                 </a>
                                             </li>';
-                                        }
-                    $otherBtnHtml .= '</ul>
+            }
+            $otherBtnHtml .= '</ul>
                                 </div>
                             </div>';
 
@@ -57,14 +57,14 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
         $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
 
         <div class="content-body">
-            
+
             <?php
             if (!$noRecordFound) {
                 $variables = array('siteLangId' => $siteLangId, 'action' => $action, 'canRequestBadge' => $canRequestBadge);
                 $this->includeTemplate('seller-requests/_partial/requests-navigation.php', $variables, false);
             }
             ?>
-           
+
             <div class="card">
                 <div class="card-body">
                     <div class="pagebody--js">
@@ -137,13 +137,13 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     </div>
                                 <?php } ?>
                             </div>
-                        <?php } else { ?>                                   
+                        <?php } else { ?>
                             <div id="listing"> <?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
                         <?php } ?>
                     </div>
                     <span class="editRecord--js"></span>
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
 </main>

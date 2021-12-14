@@ -21,7 +21,7 @@
             <?php
             include 'includes/new-header.php';
             ?>
-            <button class="help-btn btn btn-light" data-toggle="modal" data-target="#help">
+            <button class="help-btn btn btn-light" data-bs-toggle="modal" data-bs-target="#help">
                 <span class="help_label">Help</span>
             </button>
             <div class="modal fixed-right fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
@@ -29,8 +29,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                             </button>
                         </div>
                         <div class="modal-body">
@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <img  src="<?php echo CONF_WEBROOT_URL; ?>images/navigation-management.png " alt="">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/navigation-management.png " alt="">
                             </div>
                         </div>
                     </div>
@@ -99,8 +99,8 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="">Card title goes here</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                                     </button>
                                 </div>
                                 <form class="modal-body form form-edit">
@@ -119,7 +119,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="label required">Language </label>
-                                                    <select onchange="" data-field-caption="Language"  name="lang_id">
+                                                    <select onchange="" data-field-caption="Language" name="lang_id">
                                                         <option value="1" selected="selected">English
                                                         </option>
                                                         <option value="2">Arabic</option>
@@ -132,9 +132,9 @@
                                                 <div class="form-group">
                                                     <label class="label">
                                                         <span class="required">Shop Name</span>
-                                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-toggle="tooltip" title="" data-original-title="Specify a target priorty" aria-label="Specify a target priorty" aria-describedby="tooltip849482"></i>
+                                                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="" data-original-title="Specify a target priorty" aria-label="Specify a target priorty" aria-describedby="tooltip849482"></i>
                                                     </label>
-                                                    <input data-field-caption="Shop Name"  type="text" name="shop_name" value="Jason's Store">
+                                                    <input data-field-caption="Shop Name" type="text" name="shop_name" value="Jason's Store">
                                                 </div>
                                             </div>
                                         </div>
@@ -143,7 +143,7 @@
                                                 <div class="form-group">
                                                     <label class="label">Shop City</label>
 
-                                                    <input data-field-caption="Shop City"  type="text" name="shop_city" value="phoenix">
+                                                    <input data-field-caption="Shop City" type="text" name="shop_city" value="phoenix">
                                                 </div>
                                             </div>
                                         </div>
@@ -151,7 +151,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="label">Contact Person</label>
-                                                    <input data-field-caption="Contact Person"  type="text" name="shop_contact_person" value="Jason">
+                                                    <input data-field-caption="Contact Person" type="text" name="shop_contact_person" value="Jason">
                                                 </div>
                                             </div>
                                         </div>
@@ -160,7 +160,7 @@
                                                 <div class="form-group">
                                                     <label class="label">Description</label>
 
-                                                    <textarea data-field-caption="Description"  name="shop_description">Best range of products in the United States</textarea>
+                                                    <textarea data-field-caption="Description" name="shop_description">Best range of products in the United States</textarea>
 
                                                 </div>
                                             </div>

@@ -78,7 +78,7 @@ if ($showAddToFavorite) {
                     </li>
                 <?php } ?>
                 <li>
-                    <a class="" href="javascript:void(0)" data-toggle="modal" data-target="#shareIcon">
+                    <a class="" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#shareIcon">
                         <i class="icn">
                             <svg class="svg" width="16px" height="16px">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
@@ -92,8 +92,8 @@ if ($showAddToFavorite) {
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
 
-                    <div class="modal-body"> <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                    <div class="modal-body"> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                         </button>
                         <div class="share-wrap">
                             <h6><?php echo Labels::getLabel('Lbl_Share_this_via', $siteLangId); ?></h6>
@@ -135,8 +135,8 @@ if ($showAddToFavorite) {
                             <div class="gap"></div>
                             <h6><?php echo Labels::getLabel('MSG_OR_COPY_LINK', $siteLangId); ?></h6>
                             <div class="clipboard">
-                                <span class="clipboard_url clipboardTextJs"><?php echo UrlHelper::generateFullUrl('products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONT_URL)?></span>
-                                <a class="clipboard_btn  clipboardTextJs" href="javascript:void(0);" onclick="copyText($(this))" data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>"><i class="far fa-copy"></i></a>
+                                <span class="clipboard_url clipboardTextJs"><?php echo UrlHelper::generateFullUrl('products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONT_URL) ?></span>
+                                <a class="clipboard_btn  clipboardTextJs" href="javascript:void(0);" onclick="copyText($(this))" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>"><i class="far fa-copy"></i></a>
                             </div>
                         </div>
                     </div>
