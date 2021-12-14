@@ -162,18 +162,6 @@ class ProductsReportController extends ListingBaseController
             $srch->addCategoryCondition($category_id);
         }
 
-        $price_from = FatApp::getPostedData('price_from', null, '');
-        if (!empty($price_from)) {
-            $min_price_range_default_currency = CommonHelper::getDefaultCurrencyValue($price_from, false, false);
-            $srch->addCondition('selprod_price', '>=', $min_price_range_default_currency);
-        }
-
-        $price_to = FatApp::getPostedData('price_to', null, '');
-        if (!empty($price_to)) {
-            $max_price_range_default_currency = CommonHelper::getDefaultCurrencyValue($price_to, false, false);
-            $srch->addCondition('selprod_price', '<=', $max_price_range_default_currency);
-        }
-
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -280,9 +268,6 @@ class ProductsReportController extends ListingBaseController
         $prodCatObj = new ProductCategory();
         $categoriesAssocArr = $prodCatObj->getProdCatTreeStructure(0, $this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'category_id', $categoriesAssocArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
-
-        $frm->addTextBox(Labels::getLabel('FRM_PRICE_FROM', $this->siteLangId), 'price_from');
-        $frm->addTextBox(Labels::getLabel('FRM_PRICE_TO', $this->siteLangId), 'price_to');
 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
