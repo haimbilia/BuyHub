@@ -373,7 +373,6 @@ class ProductsController extends ListingBaseController
         $this->_template->render();
     }
 
-
     private function getForm($langId, $productType = 0, $productId = 0)
     {
         $frm = new Form('frmProduct');
@@ -1501,11 +1500,9 @@ class ProductsController extends ListingBaseController
         if ($fileType == AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP) {
             $fileHandlerObj = new AttachedFileTemp();
             $fileHandlerObj->setDownloadedAttr(true);
-        } else {
+        } else {         
             $fileHandlerObj = new AttachedFile();
         }
-
-        $fileHandlerObj = new AttachedFileTemp();
         if (!$fileHandlerObj->saveImage($_FILES['cropped_image']['tmp_name'], $fileType, $productId, $optionId, $_FILES['cropped_image']['name'], -1, false, $langId)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
@@ -2190,22 +2187,25 @@ class ProductsController extends ListingBaseController
         die(json_encode($json));
     }
 
-    public function downloadsForm($productId, $linkId = 0)
+    public function digitalDownloadForm($productId, $type)
     {
+
         $this->objPrivilege->canEditProducts();
 
         $productId = FatUtility::int($productId);
+        if (1 > $productId) {            
+            LibHelper::exitWithError($this->str_invalid_request_id);
+        }
 
-        if (1 > $productId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+        if (!array_key_exists($type, applicationConstants::digitalDownloadTypeArr($this->siteLangId))) {            
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
 
-        $canDo = $ddpObj->canEdit($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, false, true);
+        //$canDo = $ddpObj->canEdit($productId, Product::CATALOG_TYPE_PRIMARY, 0, $this->siteLangId, false, true);
 
-
-        $frm = DigitalDownload::getDownloadForm($this->siteLangId);
+        $frm = DigitalDownload::getDownloadForm($this->siteLangId, $type);
 
         $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
@@ -2221,8 +2221,7 @@ class ProductsController extends ListingBaseController
         $showFldAttachWithExistingOrders = true;
 
         $fld = $frm->getField('attach_with_existing_orders');
-
-        // $product = Product::getAttributesById($productId, ['product_attachements_with_inventory']);
+   
         $product = $ddpObj->getProduct($productId);
 
         if (!is_array($product) || 1 > count($product)) {
@@ -2235,34 +2234,34 @@ class ProductsController extends ListingBaseController
         $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
 
         $msg = '';
-        $frmData = [
-            'product_id' => $productId
-        ];
+        // $frmData = [
+        //     'product_id' => $productId
+        // ];
 
-        if (1 <= $linkId) {
-            $linkDetail = DigitalDownloadSearch::getLinkDetail($linkId);
+        // if (1 <= $linkId) {
+        //     $linkDetail = DigitalDownloadSearch::getLinkDetail($linkId);
 
-            $frmData['download_type'] = applicationConstants::DIGITAL_DOWNLOAD_LINK;
-            if (!empty($linkDetail)) {
-                $frmData['dd_link_id'] = $linkId;
-                $frmData['dd_link_ref_id'] = $linkDetail['pddr_id'];
-                $frmData['option_comb_id'] = $linkDetail['pddr_options_code'];
-                $frmData['lang_id'] = $linkDetail['pdl_lang_id'];
-                $frmData['product_downloadable_link'] = $linkDetail['pdl_download_link'];
-                $frmData['product_preview_link'] = $linkDetail['pdl_preview_link'];
-                $fld = $frm->getField('attachment_link_btn');
-                $fld->value = Labels::getLabel('LBL_Update', $this->siteLangId);
-            } else {
-                $msg = 'Invalid Link. Please refresh to get latest list!!!';
-            }
-        }
-        $frm->fill($frmData);
+        //     $frmData['download_type'] = applicationConstants::DIGITAL_DOWNLOAD_LINK;
+        //     if (!empty($linkDetail)) {
+        //         $frmData['dd_link_id'] = $linkId;
+        //         $frmData['dd_link_ref_id'] = $linkDetail['pddr_id'];
+        //         $frmData['option_comb_id'] = $linkDetail['pddr_options_code'];
+        //         $frmData['lang_id'] = $linkDetail['pdl_lang_id'];
+        //         $frmData['product_downloadable_link'] = $linkDetail['pdl_download_link'];
+        //         $frmData['product_preview_link'] = $linkDetail['pdl_preview_link'];
+        //         $fld = $frm->getField('attachment_link_btn');
+        //         $fld->value = Labels::getLabel('LBL_Update', $this->siteLangId);
+        //     } else {
+        //         $msg = 'Invalid Link. Please refresh to get latest list!!!';
+        //     }
+        // }
+        // $frm->fill($frmData);
 
-        $this->set('downloadFrm', $frm);
-        $this->set('canDo', $canDo);
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('msg', $msg);
-        $this->_template->render(false, false, 'products/download-setup-frm.php');
+        $this->set('frm', $frm);
+        $this->set('type', $type);       
+        //$this->set('canDo', $canDo);
+        //$this->_template->render(false, false, 'products/download-setup-frm.php');
+        $this->_template->render(false, false);
     }
 
     public function setupDigitalDownloads()
@@ -2309,9 +2308,8 @@ class ProductsController extends ListingBaseController
     }
 
     private function setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)
-    {
+    {        
         $this->objPrivilege->canEditProducts();
-
         if ((!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name']))
             && (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name']))
         ) {

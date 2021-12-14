@@ -176,34 +176,24 @@ class DigitalDownload extends MyAppModel
         return 0;
     }
 
-    public static function getDownloadForm($langId)
+    public static function getDownloadForm($langId , $type)
     {
-        $frm = new Form('frmDownload');
-        $bannerTypeArr = applicationConstants::bannerTypeArr($langId);
-        $digitalDownloadTypeArr = applicationConstants::digitalDownloadTypeArr($langId);
+        $frm = new Form('frmDownload'); 
 
-        $frm->addSelectBox(Labels::getLabel('FRM_OPTION', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '')->requirements()->setRequired();
-        
-        $frm->addSelectBox(Labels::getLabel('FRM_DIGITAL_DOWNLOAD_TYPE', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_OPTION', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '')->requirements()->setRequired();        
+        $frm->addSelectBox(Labels::getLabel('FRM_ATTACH_WITH_EXISTING_ORDERS', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');        
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', array(0 => Labels::getLabel('FRM_ALL_LANGUAGES', $langId)) + Language::getDropDownList(), '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
 
-        $frm->addSelectBox(Labels::getLabel('FRM_ATTACH_WITH_EXISTING_ORDERS', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');
-        
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_DOWNLOADABLE_LINK', $langId), 'product_downloadable_link');
-        /* $fld->requirements()->setRequired(); */
+        if($type == applicationConstants::DIGITAL_DOWNLOAD_FILE){
+            $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_FILE', $langId), 'downloadable_file');
+            $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_PREVIEW', $langId), 'preview_file');
+        }else{
+            $frm->addTextBox(Labels::getLabel('FRM_DOWNLOADABLE_LINK', $langId), 'product_downloadable_link');
+            $frm->addTextBox(Labels::getLabel('FRM_PREVIEW_LINK', $langId), 'product_preview_link');
+        }
+        // $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('FRM_UPLOAD', $langId)); 
+        // $frm->addButton('', 'attachment_link_btn', Labels::getLabel('FRM_ADD', $langId));
 
-        $frm->addTextBox(Labels::getLabel('FRM_PREVIEW_LINK', $langId), 'product_preview_link');
-        
-        $frm->addButton('', 'attachment_link_btn', Labels::getLabel('FRM_ADD', $langId));
-
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
-
-        $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_FILE', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
-        
-        $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_PREVIEW', $langId), 'preview_file', array('id' => 'preview_file'));
-
-        $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('FRM_UPLOAD', $langId));
-        $frm->addButton('', 'reset', Labels::getLabel('FRM_RESET', $langId));
-        
         $frm->addHiddenField('', 'product_id');
         $frm->addHiddenField('', 'selprod_id');
         $frm->addHiddenField('', 'preq_id');
@@ -211,6 +201,7 @@ class DigitalDownload extends MyAppModel
         $frm->addHiddenField('', 'is_preview', 0);
         $frm->addHiddenField('', 'dd_link_ref_id');
         $frm->addHiddenField('', 'ref_file_id', 0);
+        $frm->addHiddenField('', 'download_type', $type);
         return $frm;
     }
 

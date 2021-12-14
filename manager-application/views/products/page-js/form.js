@@ -496,9 +496,7 @@
                 }
                 autoOpenSideBar = false;
                 $("#modalBoxJs").modal("hide");
-                $.ykmsg.success(ans.msg);
-                productDefaultImages();
-
+                $.ykmsg.success(ans.msg); 
                 if (ans.isDefaultLayout) {
                     productDefaultImages();
                 }
@@ -522,6 +520,15 @@
         fcom.ajax(fcom.makeUrl('Products', 'images', [productId, 0, 0, 0]), { isDefaultLayout: 1 }, function (t) {            
             $('#productDefaultImagesJs li').not(":first").remove();
             $('#productDefaultImagesJs').append(t);
+        });
+    };
+
+    digitalDownloadsForm = function(type){ 
+        $.ykmodal(fcom.getLoader());
+        let productId = getCurrentFrmProductId();
+        fcom.ajax(fcom.makeUrl('Products', "digitalDownloadForm",[productId,type]), "", function (t) {
+            $.ykmodal(t);
+            fcom.removeLoader();
         });
     };
 
