@@ -42,7 +42,7 @@ foreach ($arrListing as $sn => $row) {
                                 <li class="full">
                                     <span class="lable">' . Labels::getLabel('LBL_Name_&_Address', $siteLangId) . ':</span>
                                     <span class="value">' . 
-                                        $row['addr_name'] . ' ' . 
+                                        $row['addr_name'] . '<br/>' . 
                                         $address1 . ' ' . 
                                         $address2 . ' ' .
                                         '</span>
