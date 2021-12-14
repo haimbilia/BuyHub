@@ -42,6 +42,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         bindUserSelect2('userIdJs');
         <?php if (0 < $stateId) { ?>
             getCountryStates($("#addrCountryIdJs").val(), <?php echo $stateId; ?>, '#addrStateIdJs');
+        <?php }else{?>
+            getCountryStates($("#addrCountryIdJs").val(), 0, '#addrStateIdJs');
         <?php } ?>
 
         setTimeout(() => {
