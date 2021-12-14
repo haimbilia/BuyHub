@@ -46,8 +46,7 @@ $(document).ajaxComplete(function() {
                     }
                 );
             },
-        });
-        $("#orderStatuses > tbody").disableSelection();
+        }).disableSelection();
     }
 
     redirectToList = function (faqCatId) {

@@ -128,7 +128,6 @@ function bindSortable() {
                 }
             );
         },
-    });
-    $("#plugin > tbody").disableSelection();
+    }).disableSelection();
 }
 </script>

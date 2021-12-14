@@ -44,8 +44,7 @@ bindSortable = function() {
                 }
             );
         },
-    });
-    $("#orderStatuses > tbody").disableSelection();
+    }).disableSelection();
 }
 
 
