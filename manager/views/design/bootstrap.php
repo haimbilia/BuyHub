@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -101,23 +101,23 @@
                                 <div class="card-body">
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#" data-target="#tabs_1_1">Active</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#" data-bs-target="#tabs_1_1">Active</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_1_3">Link</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_1_3">Link</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link disabled" data-toggle="tab" href="#tabs_1_4">Disabled</a>
+                                            <a class="nav-link disabled" data-bs-toggle="tab" href="#tabs_1_4">Disabled</a>
                                         </li>
                                     </ul>
 
@@ -151,34 +151,34 @@
                                 <div class="card-body">
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_1_1">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_1_1">
                                                 <i class="la la-exclamation-triangle"></i> Active
                                             </a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                                 <i class="la la-exclamation-circle font-success"></i> Dropdown
                                             </a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_1_3">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_1_3">
                                                 <i class="la la-cloud-download"></i> Link 1
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_1_3">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_1_3">
                                                 <i class="la la-puzzle-piece font-danger"></i> Link 2
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link disabled" data-toggle="tab" href="#tabs_1_4">
+                                            <a class="nav-link disabled" data-bs-toggle="tab" href="#tabs_1_4">
                                                 <i class="la la-comment"></i> Disabled
                                             </a>
                                         </li>
@@ -203,34 +203,34 @@
 
                                     <ul class="nav nav-tabs" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_1_1">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_1_1">
                                                 <i class="flaticon-interface-5"></i> <span class="-visible-desktop-inline-block">Active1</span>
                                             </a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-time-2 font-success"></i> <span class="-visible-desktop-inline-block">Dropdown</span>
                                             </a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_1_3">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_1_3">
                                                 <i class="flaticon-placeholder-2"></i> <span class="-visible-desktop-inline-block">Link 1</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_1_3">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_1_3">
                                                 <i class="flaticon-lock font-danger"></i> <span class="-visible-desktop-inline-block">Link 2</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link disabled" data-toggle="tab" href="#tabs_1_4">
+                                            <a class="nav-link disabled" data-bs-toggle="tab" href="#tabs_1_4">
                                                 <i class="flaticon-share"></i> <span class="-visible-desktop-inline-block">Disabled</span>
                                             </a>
                                         </li>
@@ -266,16 +266,16 @@
                                 <div class="card-body">
                                     <ul class="nav nav-tabs nav-fill" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_2_1">Active</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_2_1">Active</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_2_2">Link</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_2_2">Link</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_2_3">Link</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_2_3">Link</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link disabled" data-toggle="tab" href="#tabs_2_4">Disabled</a>
+                                            <a class="nav-link disabled" data-bs-toggle="tab" href="#tabs_2_4">Disabled</a>
                                         </li>
                                     </ul>
 
@@ -310,23 +310,23 @@
                                 <div class="card-body">
                                     <ul class="nav nav-pills" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_3_1">Active</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_3_1">Active</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_3_3">Link</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_3_3">Link</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link disabled" data-toggle="tab" href="#tabs_3_4">Disabled</a>
+                                            <a class="nav-link disabled" data-bs-toggle="tab" href="#tabs_3_4">Disabled</a>
                                         </li>
                                     </ul>
 
@@ -360,25 +360,25 @@
                                 <div class="card-body">
                                     <ul class="nav nav-pills" role="tablist">
                                         <li class="nav-item ">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_3_1"><i class="la la-gear"></i>Active</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_3_1"><i class="la la-gear"></i>Active</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                                 <i class="la la-gift"></i> Dropdown
                                             </a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_3_3"><i class="la la-map-marker"></i>Link</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_3_3"><i class="la la-map-marker"></i>Link</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link disabled" data-toggle="tab" href="#tabs_3_4"><i class="la la-question-circle"></i>Disabled</a>
+                                            <a class="nav-link disabled" data-bs-toggle="tab" href="#tabs_3_4"><i class="la la-question-circle"></i>Disabled</a>
                                         </li>
                                     </ul>
 
@@ -412,16 +412,16 @@
                                 <div class="card-body">
                                     <ul class="nav nav-pills nav-fill" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_5_1">Active</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_5_1">Active</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_5_2">Link</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_5_2">Link</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_5_3">Link</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_5_3">Link</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link disabled" data-toggle="tab" href="#tabs_5_4">Disabled</a>
+                                            <a class="nav-link disabled" data-bs-toggle="tab" href="#tabs_5_4">Disabled</a>
                                         </li>
                                     </ul>
 

@@ -9,7 +9,7 @@ if (isset($htmlContent) && !empty($htmlContent)) {
 
 $msg = isset($msg) ? $msg : '';
 if (isset($statusButtons) && true === $statusButtons && $canEdit) {
-    $li = $ul->appendElement('li', ['title' => Labels::getLabel('BTN_MARK_AS_ACTIVE', $siteLangId), 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
+    $li = $ul->appendElement('li', ['title' => Labels::getLabel('BTN_MARK_AS_ACTIVE', $siteLangId), 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
 
     $li->appendElement(
         'a',
@@ -26,7 +26,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
         true
     );
 
-    $li = $ul->appendElement('li', ['title' => Labels::getLabel('BTN_MARK_AS_IN-ACTIVE', $siteLangId), 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
+    $li = $ul->appendElement('li', ['title' => Labels::getLabel('BTN_MARK_AS_IN-ACTIVE', $siteLangId), 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
     $li->appendElement(
         'a',
         [
@@ -44,7 +44,7 @@ if (isset($statusButtons) && true === $statusButtons && $canEdit) {
 }
 
 if (isset($deleteButton) && true === $deleteButton && $canEdit) {
-    $li = $ul->appendElement('li', ['title' => Labels::getLabel('BTN_DELETE_RECORDS', $siteLangId), 'data-toggle' => 'tooltip', 'data-placement' => 'top']);
+    $li = $ul->appendElement('li', ['title' => Labels::getLabel('BTN_DELETE_RECORDS', $siteLangId), 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
     $li->appendElement(
         'a',
         [
@@ -65,7 +65,7 @@ if (isset($otherButtons) && is_array($otherButtons)) {
     foreach ($otherButtons as $attr) {
         $liAttr = [];
         if (isset($attr['attr']['title'])) {
-            $liAttr = ['title' => $attr['attr']['title'], 'data-toggle' => 'tooltip', 'data-placement' => 'top'];
+            $liAttr = ['title' => $attr['attr']['title'], 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top'];
             unset($attr['attr']['title']);
         }
         $li = $ul->appendElement('li', $liAttr);
@@ -74,14 +74,14 @@ if (isset($otherButtons) && is_array($otherButtons)) {
 }
 
 if (!empty($columnButtons)) {
-    $li = $ul->appendElement('li', ['class' => 'custom-drag-drop']);
+    $li = $ul->appendElement('li', ['class' => 'dropdown custom-drag-drop']);
     $li->appendElement(
         'a',
         [
             'href' => 'javascript:void(0)',
             'class' => 'btn btn-icon btn-link',
             'title' => Labels::getLabel('LBL_COLUMNS', $siteLangId),
-            'data-toggle' => 'dropdown',
+            'data-bs-toggle' => 'dropdown',
             'aria-expanded' => false
         ],
         '<svg class="svg" width="18" height="18">
@@ -92,7 +92,7 @@ if (!empty($columnButtons)) {
         true
     );
 
-    $li->appendElement('div', ['class' => 'dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-anim scroll scroll-y'], $columnButtons, true);
+    $li->appendElement('div', ['class' => 'dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-anim scroll scroll-y'], $columnButtons, true);
 }
 if (!empty($htmlContent) || !empty($statusButtons) || !empty($deleteButton) || !empty($otherButtons) || !empty($columnButtons)) {
     echo '<div class="card-toolbar">';

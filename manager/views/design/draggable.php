@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -220,17 +220,17 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-tabs nav-tabs-line  nav-tabs-line-right" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#card_base_demo_1_tab_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#card_base_demo_1_tab_content" role="tab">
                                                     Logs
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#card_base_demo_2_tab_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#card_base_demo_2_tab_content" role="tab">
                                                     Messages
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#card_base_demo_3_tab_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#card_base_demo_3_tab_content" role="tab">
                                                     Settings
                                                 </a>
                                             </li>
@@ -305,20 +305,20 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand nav-tabs-line-danger" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#card_base_demo_1_1_tab_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#card_base_demo_1_1_tab_content" role="tab">
                                                     <i class="la la-comments-o"></i>
                                                     Logs
                                                 </a>
                                             </li>
                                             <li class="nav-item dropdown">
-                                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true"><i class="la la-map-marker"></i> Settings</a>
+                                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true"><i class="la la-map-marker"></i> Settings</a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
-                                                    <a class="dropdown-item" data-toggle="tab" href="#card_base_demo_1_1_tab_content">Action</a>
-                                                    <a class="dropdown-item" data-toggle="tab" href="#card_base_demo_1_3_tab_content">Another action</a>
-                                                    <a class="dropdown-item" data-toggle="tab" href="#card_base_demo_1_2_tab_content">Something else
+                                                    <a class="dropdown-item" data-bs-toggle="tab" href="#card_base_demo_1_1_tab_content">Action</a>
+                                                    <a class="dropdown-item" data-bs-toggle="tab" href="#card_base_demo_1_3_tab_content">Another action</a>
+                                                    <a class="dropdown-item" data-bs-toggle="tab" href="#card_base_demo_1_2_tab_content">Something else
                                                         here</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" data-toggle="tab" href="#card_base_demo_1_3_tab_content">Separated link</a>
+                                                    <a class="dropdown-item" data-bs-toggle="tab" href="#card_base_demo_1_3_tab_content">Separated link</a>
                                                 </div>
                                             </li>
                                         </ul>
@@ -360,17 +360,17 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-primary" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#card_base_demo_2_1_tab_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#card_base_demo_2_1_tab_content" role="tab">
                                                     <i class="la la-cog"></i> Messages
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#card_base_demo_2_2_tab_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#card_base_demo_2_2_tab_content" role="tab">
                                                     <i class="la la-briefcase"></i> Settings
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#card_base_demo_2_3_tab_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#card_base_demo_2_3_tab_content" role="tab">
                                                     <i class="la la-bell-o"></i>Logs
                                                 </a>
                                             </li>

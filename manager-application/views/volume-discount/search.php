@@ -17,7 +17,7 @@ foreach ($arrListing as $sn => $row) {
 
     $editListingFrm = new Form('editListingFrm-' . $volDiscountId, array('id' => 'editListingFrm-' . $volDiscountId));
     foreach ($fields as $key => $val) {
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];   
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
@@ -37,7 +37,7 @@ foreach ($arrListing as $sn => $row) {
             case 'voldiscount_min_qty':
             case 'voldiscount_percentage':
                 $input = '<input type="text" data-id="' . $volDiscountId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" class="volDiscountColJs hide vd-input" data-oldval="' . $row[$key] . '"/>';
-                $td->appendElement('div', array("class" => 'editColJs contenteditable', "data-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $row[$key], true);
+                $td->appendElement('div', array("class" => 'editColJs contenteditable', "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $row[$key], true);
                 $td->appendElement('plaintext', array(), $input, true);
                 break;
             case 'action':

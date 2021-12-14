@@ -48,8 +48,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -99,11 +99,11 @@
                                         <div class="avatar avatar-outline">
                                             <div class="avatar__holder" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg)">
                                             </div>
-                                            <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                            <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="Change avatar">
                                                 <i class="fa fa-pen"></i>
                                                 <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                                             </label>
-                                            <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                            <span class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="Cancel avatar">
                                                 <i class="fa fa-times"></i>
                                             </span>
                                         </div>
@@ -118,11 +118,11 @@
                                         <div class="avatar" id="user_avatar_2">
                                             <div class="avatar__holder" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg)">
                                             </div>
-                                            <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                            <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="Change avatar">
                                                 <i class="fa fa-pen"></i>
                                                 <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                                             </label>
-                                            <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                            <span class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="Cancel avatar">
                                                 <i class="fa fa-times"></i>
                                             </span>
                                         </div>
@@ -137,11 +137,11 @@
                                         <div class="avatar avatar-outline avatar-circle" id="user_avatar_3">
                                             <div class="avatar__holder" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>images/users/100_3.jpg)">
                                             </div>
-                                            <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                            <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="Change avatar">
                                                 <i class="fa fa-pen"></i>
                                                 <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                                             </label>
-                                            <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                            <span class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="Cancel avatar">
                                                 <i class="fa fa-times"></i>
                                             </span>
                                         </div>
@@ -156,11 +156,11 @@
                                         <div class="avatar avatar-outline avatar-danger" id="user_avatar_4">
                                             <div class="avatar__holder" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>images/users/100_7.jpg)">
                                             </div>
-                                            <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                            <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="Change avatar">
                                                 <i class="fa fa-pen"></i>
                                                 <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                                             </label>
-                                            <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                            <span class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="Cancel avatar">
                                                 <i class="fa fa-times"></i>
                                             </span>
                                         </div>

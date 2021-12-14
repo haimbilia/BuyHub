@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -106,7 +106,7 @@
                                                             <span class="badge badge-brand badge-inline">important</span>
                                                         </div>
                                                         <div class="notes__dropdown">
-                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                 <i class="flaticon-more-1 font-brand"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -167,7 +167,7 @@
                                                             </span>
                                                         </div>
                                                         <div class="notes__dropdown">
-                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                 <i class="flaticon-more-1 font-brand"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -229,7 +229,7 @@
                                                             <span class="badge badge-success badge-inline">pending</span>
                                                         </div>
                                                         <div class="notes__dropdown">
-                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                 <i class="flaticon-more-1 font-brand"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -290,7 +290,7 @@
                                                             </span>
                                                         </div>
                                                         <div class="notes__dropdown">
-                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                 <i class="flaticon-more-1 font-brand"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -395,7 +395,7 @@
                                                             <span class="badge badge-success badge-inline">new</span>
                                                         </div>
                                                         <div class="notes__dropdown">
-                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                 <i class="flaticon-more-1 font-brand"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -456,7 +456,7 @@
                                                             </span>
                                                         </div>
                                                         <div class="notes__dropdown">
-                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                 <i class="flaticon2-rectangular font-brand"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -517,7 +517,7 @@
                                                             </span>
                                                         </div>
                                                         <div class="notes__dropdown">
-                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                            <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                 <i class="flaticon2-note font-brand"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">

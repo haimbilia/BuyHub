@@ -11,7 +11,7 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('pnotification_user_auth_type');
 if (true === $isUsersSelected) {
     $fld->addFieldTagAttribute('disabled', 'disabled');
-    $fld->setWrapperAttribute('data-toggle', 'tooltip');
+    $fld->setWrapperAttribute('data-bs-toggle', 'tooltip');
     $fld->setWrapperAttribute('data-placement', 'top');
     $fld->setWrapperAttribute('title', Labels::getLabel('LBL_PLEASE_UNBIND_NOTIFY_USERS_TO_CHANGE_AUTH_TYPE', $siteLangId));
 }

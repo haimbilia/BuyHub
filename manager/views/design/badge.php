@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -484,19 +484,19 @@
                                         </span>
                                         <div class="section__content section__content--solid">
                                             <div class="badge badge__pics">
-                                                <a href="#" class="badge__pic" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                <a href="#" class="badge__pic" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
                                                 </a>
-                                                <a href="#" class="badge__pic" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
+                                                <a href="#" class="badge__pic" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
                                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_10.jpg" alt="image">
                                                 </a>
-                                                <a href="#" class="badge__pic" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
+                                                <a href="#" class="badge__pic" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
                                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_11.jpg" alt="image">
                                                 </a>
-                                                <a href="#" class="badge__pic" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
+                                                <a href="#" class="badge__pic" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
                                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg" alt="image">
                                                 </a>
-                                                <a href="#" class="badge__pic" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                                <a href="#" class="badge__pic" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_3.jpg" alt="image">
                                                 </a>
                                                 <a href="#" class="badge__pic  badge__pic--last">

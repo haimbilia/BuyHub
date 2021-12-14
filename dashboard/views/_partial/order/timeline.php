@@ -36,7 +36,7 @@
                                 <h6><?php echo Labels::getLabel('MSG_TRACKING_NUMBER', $siteLangId); ?></h6>
                                 <div class="clipboard mb-4">
                                     <p class="clipboard_url" id="trackingNumberJs"><?php echo $trackingNumber; ?></p>
-                                    <a class="clipboard_btn" onclick="copyContent(this)" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
+                                    <a class="clipboard_btn" onclick="copyContent(this)" href="javascript:void(0);" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
                                         <i class="far fa-copy"></i>
                                     </a>
                                 </div>
@@ -78,9 +78,9 @@
                         </div>
                     </div>
                 <?php }
-            } else { 
+            } else {
                 if ($orderCancelled) {
-                    $statusLabel = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier']; 
+                    $statusLabel = isset($childOrderDetail['orderstatus_name']) ? $childOrderDetail['orderstatus_name'] : $childOrderDetail['orderstatus_identifier'];
                 }
                 ?>
                 <div class="timeline_data">
@@ -103,9 +103,9 @@
                         <p><?php echo Labels::getLabel('LBL_THE_ORDER_HAS_BEEN_CANCELLED_DUE_TO_CERTAIN_REASON.', $siteLangId); ?></p>
                     <?php } ?>
                 </div>
-            <?php 
+            <?php
                 if ($orderCancelled) {
-                    break;   
+                    break;
                 }
             } ?>
         </li>

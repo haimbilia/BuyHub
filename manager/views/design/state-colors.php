@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -413,7 +413,7 @@
                                             </div>
 
                                             <div class="alert alert-outline-brand alert-dismissible fade show" role="alert">
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                 </button>
                                                 <strong>Well done!</strong> You successfully read this important alert message.
                                             </div>
@@ -423,7 +423,7 @@
                                             </div>
 
                                             <div class="alert alert-outline-danger alert-dismissible fade show" role="alert">
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                 </button>
                                                 <strong>Well done!</strong> You successfully read this important alert message.
                                             </div>

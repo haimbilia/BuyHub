@@ -1,28 +1,28 @@
 <?php $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php');
 $htmlContent = '';
 if (!empty($fields)) {
-    $htmlContent = '<div class="custom-drag-drop">
-                        <button class="btn btn-brand btn-sm dropdown-toggle no-after" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    $htmlContent = '<div class="dropdown custom-drag-drop">
+                        <button class="btn btn-brand btn-sm dropdown-toggle no-after" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-columns"></i>
                         </button>
                         <div class="dropdown-menu  dropdown-menu-right dropdown-menu-fit dropdown-menu-anim scroll scroll-y" aria-labelledby="dropdownMenuButton">
                             <div class="">
                                 <ul class="list-drag-drop" id="sortable">';
-                                    foreach ($fields as $key => $label) {
-                                        
-                                        $isDef = (in_array($key, $defaultColumns));
-                                        $disabled = ($isDef) ? 'disabled' : '';
-                                        $checked = ($isDef) ? 'checked="checked"' : '';
+    foreach ($fields as $key => $label) {
 
-                                        $htmlContent .= '<li class="">
+        $isDef = (in_array($key, $defaultColumns));
+        $disabled = ($isDef) ? 'disabled' : '';
+        $checked = ($isDef) ? 'checked="checked"' : '';
+
+        $htmlContent .= '<li class="">
                                                             <label class="checkbox ' . $disabled . '">
                                                                 <input class="filterColumn-js" type="checkbox" name="reportColumns" value="' . $key . '" ' . $checked . $disabled . ' onClick=reloadList(false)>
                                                                 ' . $label . '
                                                             </label>
                                                             <i class="icn fas fa-grip-lines"></i>
                                                         </li>';
-                                    }
-                $htmlContent .= '</ul>
+    }
+    $htmlContent .= '</ul>
                             </div>
                         </div>
                     </div>';
@@ -30,9 +30,9 @@ if (!empty($fields)) {
 ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $otherButton = isset($actionButtons['otherButtons']) ? $actionButtons['otherButtons'] : [];
-        
+
         $data = [
             'headingLabel' => $pageTitle,
             'siteLangId' => $siteLangId,

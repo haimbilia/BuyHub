@@ -26,10 +26,7 @@
                         $preferences = $_COOKIE['quickSearchCtrlJs'] ?? 0;
                         $str = Labels::getLabel('LBL_PRESS_{KEY}_KEY_FOR_BROWSER_SEARCH', $siteLangId);
                         echo CommonHelper::replaceStringData($str, ['{KEY}' => '<kbd>Ctrl-F</kbd>']); ?>
-                        <input type="checkbox" id="quickSearchCtrlJs"
-                            <?php echo (0 < $preferences ? 'checked="checked"' : ''); ?> data-toggle="tooltip"
-                            data-placement="top"
-                            title="<?php echo Labels::getLabel('MSG_MARK_AS_CHECKED_TO_USE_THE_ONLY_NATIVE_BROWSER_SEARCH', $siteLangId); ?>">
+                        <input type="checkbox" id="quickSearchCtrlJs" <?php echo (0 < $preferences ? 'checked="checked"' : ''); ?> data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_MARK_AS_CHECKED_TO_USE_THE_ONLY_NATIVE_BROWSER_SEARCH', $siteLangId); ?>">
                     </label>
                 </div>
             </div>
@@ -80,7 +77,7 @@
         </a>
     </div>
     <div class="footer-action__item dropdown">
-        <a class="footer-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
+        <a class="footer-action__trigger dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
             <span class="icon">
                 <svg class="svg" width="20" height="20">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
@@ -91,7 +88,7 @@
 
     </div>
     <div class="footer-action__item dropdown header-account">
-        <a class=" dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
+        <a class=" dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
             <span class="header-account__img">
                 <img aria-expanded="false" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="">
             </span>

@@ -57,8 +57,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -394,7 +394,7 @@
                                 <div class="form-group row">
                                     <label class="col-form-label col-lg-3 col-sm-12">Modal Demos</label>
                                     <div class="col-lg-4 col-md-9 col-sm-12">
-                                        <a href="#" class="btn btn-label-brand" data-toggle="modal" data-target="#datepicker_modal">Launch modal datepickers</a>
+                                        <a href="#" class="btn btn-label-brand" data-bs-toggle="modal" data-bs-target="#datepicker_modal">Launch modal datepickers</a>
                                     </div>
                                 </div>
                             </div>
@@ -419,7 +419,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Bootstrap Date Picker Examples</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true" class="la la-remove"></span>
                                     </button>
                                 </div>
@@ -460,7 +460,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-brand" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-brand" data-bs-dismiss="modal">Close</button>
                                         <button type="button" class="btn btn-secondary">Submit</button>
                                     </div>
                                 </form>

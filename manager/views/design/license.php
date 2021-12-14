@@ -49,8 +49,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -76,7 +76,7 @@
                                 <div class="col-xl-3">
                                     <ul class="nav nav--block" id="nav" role="tablist">
                                         <li class="nav__item  nav__item--active">
-                                            <a class="nav__link" role="tab" id="nav_link_1" data-toggle="collapse" href="#nav_sub_1" aria-expanded="false">
+                                            <a class="nav__link" role="tab" id="nav_link_1" data-bs-toggle="collapse" href="#nav_sub_1" aria-expanded="false">
                                                 <span class="nav__link-text">Standard</span>
                                             </a>
                                         </li>

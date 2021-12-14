@@ -56,8 +56,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -102,20 +102,20 @@
                                 <div class="card-body">
                                     <ul class="nav nav-tabs  nav-tabs-line" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_1_1" role="tab">Messages</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_1_1" role="tab">Messages</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_1_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_1_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_1_3" role="tab">Logs</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_1_3" role="tab">Logs</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -145,20 +145,20 @@
                                 <div class="card-body">
                                     <ul class="nav nav-tabs  nav-tabs-line nav-tabs-line-success" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_2_1" role="tab">Messages</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_2_1" role="tab">Messages</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_2_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_2_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_2_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_2_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_2_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_2_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_2_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_2_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_2_3" role="tab">Logs</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_2_3" role="tab">Logs</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -177,20 +177,20 @@
 
                                     <ul class="nav nav-tabs  nav-tabs-line nav-tabs-line-primary" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_3_1" role="tab">Messages</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_3_1" role="tab">Messages</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_3_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_3_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_3_3" role="tab">Logs</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_3_3" role="tab">Logs</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -209,20 +209,20 @@
 
                                     <ul class="nav nav-tabs  nav-tabs-line nav-tabs-line-danger" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_46_1" role="tab">Messages</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_46_1" role="tab">Messages</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_4_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_4_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_4_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_4_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_4_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_4_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_4_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_4_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_4_3" role="tab">Logs</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_4_3" role="tab">Logs</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -241,20 +241,20 @@
 
                                     <ul class="nav nav-tabs  nav-tabs-line nav-tabs-line-warning" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_5_1" role="tab">Messages</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_5_1" role="tab">Messages</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_5_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_5_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_5_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_5_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_5_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_5_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_5_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_5_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_5_3" role="tab">Logs</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_5_3" role="tab">Logs</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -284,20 +284,20 @@
                                 <div class="card-body">
                                     <ul class="nav nav-tabs  nav-tabs-line nav-tabs-line-2x nav-tabs-line-success" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_6_1" role="tab">Messages</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_6_1" role="tab">Messages</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_6_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_6_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_6_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_6_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_6_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_6_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_6_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_6_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_6_3" role="tab">Logs</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_6_3" role="tab">Logs</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -316,20 +316,20 @@
 
                                     <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-success" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_6_1" role="tab">Messages</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_6_1" role="tab">Messages</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Settings</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_6_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_6_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_6_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_6_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_6_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_6_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_6_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_6_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_6_3" role="tab">Logs</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_6_3" role="tab">Logs</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -360,20 +360,20 @@
                                 <div class="card-body">
                                     <ul class="nav nav-tabs  nav-tabs-line nav-tabs-line-success" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_7_1" role="tab"><i class="la la-cloud-upload"></i> Messages</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_7_1" role="tab"><i class="la la-cloud-upload"></i> Messages</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="la la-cog"></i> Settings</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="la la-cog"></i> Settings</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_7_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_7_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_7_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_7_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_7_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_7_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_7_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_7_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_7_3" role="tab"><i class="la la-puzzle-piece"></i> Logs</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_7_3" role="tab"><i class="la la-puzzle-piece"></i> Logs</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -392,20 +392,20 @@
 
                                     <ul class="nav nav-tabs  nav-tabs-line nav-tabs-line-primary" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_8_1" role="tab"><i class="fa fa-cloud-upload"></i> Messages</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_8_1" role="tab"><i class="fa fa-cloud-upload"></i> Messages</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> Settings</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> Settings</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_8_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_8_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_8_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_8_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_8_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_8_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_8_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_8_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_8_3" role="tab"><i class="fa fa-puzzle-piece"></i> Logs</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_8_3" role="tab"><i class="fa fa-puzzle-piece"></i> Logs</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -424,20 +424,20 @@
 
                                     <ul class="nav nav-tabs  nav-tabs-line nav-tabs-line-brand" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#tabs_9_1" role="tab"><i class="flaticon-time-2"></i> Messages</a>
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#tabs_9_1" role="tab"><i class="flaticon-time-2"></i> Messages</a>
                                         </li>
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="flaticon-placeholder-2"></i> Settings</a>
+                                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="flaticon-placeholder-2"></i> Settings</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_9_2">Action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_9_2">Another action</a>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_9_2">Something else here</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_9_2">Action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_9_2">Another action</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_9_2">Something else here</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" data-toggle="tab" href="#tabs_9_2">Separated link</a>
+                                                <a class="dropdown-item" data-bs-toggle="tab" href="#tabs_9_2">Separated link</a>
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabs_9_3" role="tab"><i class="flaticon-multimedia"></i> Logs</a>
+                                            <a class="nav-link" data-bs-toggle="tab" href="#tabs_9_3" role="tab"><i class="flaticon-multimedia"></i> Logs</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -466,17 +466,17 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-right" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#card_base_demo_1_tab_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#card_base_demo_1_tab_content" role="tab">
                                                     <i class="flaticon-multimedia"></i> Messages
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#card_base_demo_2_tab_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#card_base_demo_2_tab_content" role="tab">
                                                     <i class="flaticon-cogwheel-2"></i> Settings
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#card_base_demo_3_tab_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#card_base_demo_3_tab_content" role="tab">
                                                     <i class="flaticon-lifebuoy"></i> Logs
                                                 </a>
                                             </li>
@@ -505,17 +505,17 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-success nav-tabs-line-2x" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#card_base_demo_1_1_tab_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#card_base_demo_1_1_tab_content" role="tab">
                                                     <i class="la la-cog"></i> Messages
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#card_base_demo_1_2_tab_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#card_base_demo_1_2_tab_content" role="tab">
                                                     <i class="la la-briefcase"></i> Settings
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#card_base_demo_1_3_tab_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#card_base_demo_1_3_tab_content" role="tab">
                                                     <i class="la la-bell-o"></i>Logs
                                                 </a>
                                             </li>
@@ -544,17 +544,17 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x nav-tabs-line-right" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#card_base_demo_2_3_tab_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#card_base_demo_2_3_tab_content" role="tab">
                                                     <i class="fa fa-calendar-check-o" aria-hidden="true"></i>Messages
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#card_base_demo_2_2_tab_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#card_base_demo_2_2_tab_content" role="tab">
                                                     <i class="fa fa-bar-chart" aria-hidden="true"></i>Settings
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#card_base_demo_2_3_tab_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#card_base_demo_2_3_tab_content" role="tab">
                                                     <i class="fa fa-tags" aria-hidden="true"></i>Logs
                                                 </a>
                                             </li>

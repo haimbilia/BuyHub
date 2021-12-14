@@ -49,20 +49,20 @@ foreach ($arrListing as $sn => $row) {
                     $name .= ' <span class="badge badge-brand badge-inline badge-pill">' . Labels::getLabel('LBL_DEFAULT', $adminLangId) . '</span>';
                 }
                 $infoLabel = '';
-                switch($row['ratingtype_id']){
+                switch ($row['ratingtype_id']) {
                     case RatingType::TYPE_PRODUCT:
-                        $infoLabel = Labels::getLabel('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', $adminLangId); 
-                    break;
+                        $infoLabel = Labels::getLabel('LBL_PRODUCT_RATING_TYPE_TOOLTIP_INFO', $adminLangId);
+                        break;
                     case RatingType::TYPE_SHOP:
-                        $infoLabel = Labels::getLabel('LBL_SHOP_RATING_TYPE_TOOLTIP_INFO', $adminLangId); 
-                    break;
+                        $infoLabel = Labels::getLabel('LBL_SHOP_RATING_TYPE_TOOLTIP_INFO', $adminLangId);
+                        break;
                     case RatingType::TYPE_DELIVERY:
                         $infoLabel = Labels::getLabel('LBL_DELIVERY_RATING_TYPE_TOOLTIP_INFO', $adminLangId);
-                    break;
+                        break;
                 }
-                if(!empty($infoLabel)){
-                    $name .=' <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="'.$infoLabel.'"></i>';
-                } 
+                if (!empty($infoLabel)) {
+                    $name .= ' <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="top" title="' . $infoLabel . '"></i>';
+                }
 
                 $td->appendElement('plaintext', array(), $name, true);
                 break;
@@ -72,7 +72,7 @@ foreach ($arrListing as $sn => $row) {
                     if (applicationConstants::ACTIVE == $row['ratingtype_active']) {
                         $active = 'checked';
                     }
-                    
+
                     $statusClass = ($canEdit === false) ? 'disabled' : '';
                     $str = '<label class="statustab -txt-uppercase">
                             <input ' . $active . ' type="checkbox" id="switch' . $row['ratingtype_id'] . '" value="' . $row['ratingtype_id'] . '" onclick="toggleStatus(event,this,' . (int) !(applicationConstants::ACTIVE == $row['ratingtype_active']) . ')" class="switch-labels"/>

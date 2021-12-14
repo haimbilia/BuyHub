@@ -53,8 +53,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -135,7 +135,7 @@
                                             <td style="display: none;"><span class="m-badge m-badge-primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
-                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-bs-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -170,7 +170,7 @@
                                             <td style="display: none;"><span class="m-badge m-badge-primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
-                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-bs-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -205,7 +205,7 @@
                                             <td style="display: none;"><span class="m-badge m-badge-primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
-                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-bs-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -240,7 +240,7 @@
                                             <td style="display: none;"><span class="m-badge m-badge-danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
-                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-bs-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -275,7 +275,7 @@
                                             <td style="display: none;"><span class="m-badge m-badge-primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
-                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-bs-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -310,7 +310,7 @@
                                             <td style="display: none;"><span class="m-badge m-badge--accent m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-accent">Direct</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
-                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-bs-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -345,7 +345,7 @@
                                             <td style="display: none;"><span class="m-badge m-badge-danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
-                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-bs-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -380,7 +380,7 @@
                                             <td style="display: none;"><span class="m-badge m-badge-danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
-                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-bs-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -415,7 +415,7 @@
                                             <td style="display: none;"><span class="m-badge m-badge-primary m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-primary">Retail</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
-                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-bs-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -450,7 +450,7 @@
                                             <td style="display: none;"><span class="m-badge m-badge-danger m-badge--dot"></span>&nbsp;<span class="m--font-bold m--font-danger">Online</span></td>
                                             <td nowrap="" style="display: none;">
                                                 <span class="dropdown">
-                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown" aria-expanded="true">
+                                                    <a href="#" class="btn m-btn m-btn--hover-brand m-btn--icon m-btn--icon-only m-btn--pill" data-bs-toggle="dropdown" aria-expanded="true">
                                                         <i class="la la-ellipsis-h"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">

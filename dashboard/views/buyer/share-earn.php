@@ -14,10 +14,10 @@ $email->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_EMAIL_ADDRESS'
 $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
-            'headingLabel' => Labels::getLabel('LBL_Share_and_Earn',$siteLangId),
-            'siteLangId' => $siteLangId,         
+            'headingLabel' => Labels::getLabel('LBL_Share_and_Earn', $siteLangId),
+            'siteLangId' => $siteLangId,
         ];
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
         <div class="content-body">
@@ -36,7 +36,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         <div class="invite-by-email">
                             <?php echo $sharingFrm->getFormTag(); ?>
                             <div class="form-group">
-                                <?php echo $sharingFrm->getFieldHTML('email'); ?> 
+                                <?php echo $sharingFrm->getFieldHTML('email'); ?>
                                 <button type="submit" disabled="disabled" class="btn-fly submitBtnJs">
                                     <svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#submitfly">
@@ -49,7 +49,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         </div>
                         <ul class="social-invites ">
                             <li>
-                                <a href="javascript:void(0);" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>" onclick="copy($(this))" data-url="<?php echo $referralTrackingUrl; ?>" data-toggle="tooltip" data-placement="top"  class="btn">
+                                <a href="javascript:void(0);" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>" onclick="copy($(this))" data-url="<?php echo $referralTrackingUrl; ?>" data-bs-toggle="tooltip" data-placement="top" class="btn">
                                     <span class="icon">
                                         <i class="svg--icon">
                                             <svg class="svg">
@@ -61,7 +61,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"  title="<?php echo Labels::getLabel('MSG_SHARE_ON_FACEBOOK', $siteLangId); ?>" class="share-network-facebook st-custom-button" data-network="facebook" data-url="<?php echo $referralTrackingUrl; ?>">
+                                <a href="javascript:void(0)" title="<?php echo Labels::getLabel('MSG_SHARE_ON_FACEBOOK', $siteLangId); ?>" class="share-network-facebook st-custom-button" data-network="facebook" data-url="<?php echo $referralTrackingUrl; ?>">
                                     <span class="icon">
                                         <i class="svg--icon">
                                             <svg class="svg">
@@ -73,7 +73,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"  title="<?php echo Labels::getLabel('MSG_SHARE_ON_LINKEDIN', $siteLangId); ?>" class="share-network-linkedin st-custom-button" data-network="linkedin" data-url="<?php echo $referralTrackingUrl; ?>">
+                                <a href="javascript:void(0)" title="<?php echo Labels::getLabel('MSG_SHARE_ON_LINKEDIN', $siteLangId); ?>" class="share-network-linkedin st-custom-button" data-network="linkedin" data-url="<?php echo $referralTrackingUrl; ?>">
                                     <span class="icon">
                                         <i class="svg--icon">
                                             <svg class="svg">
@@ -85,7 +85,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"  title="<?php echo Labels::getLabel('MSG_SHARE_ON_REDDIT', $siteLangId); ?>" class="share-network-reddit st-custom-button" data-network="reddit" data-url="<?php echo $referralTrackingUrl; ?>">
+                                <a href="javascript:void(0)" title="<?php echo Labels::getLabel('MSG_SHARE_ON_REDDIT', $siteLangId); ?>" class="share-network-reddit st-custom-button" data-network="reddit" data-url="<?php echo $referralTrackingUrl; ?>">
                                     <span class="icon">
                                         <i class="svg--icon">
                                             <svg class="svg">
@@ -97,7 +97,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"  title="<?php echo Labels::getLabel('MSG_SHARE_ON_SKYPE', $siteLangId); ?>" class="share-network-skype st-custom-button" data-network="skype" data-url="<?php echo $referralTrackingUrl; ?>">
+                                <a href="javascript:void(0)" title="<?php echo Labels::getLabel('MSG_SHARE_ON_SKYPE', $siteLangId); ?>" class="share-network-skype st-custom-button" data-network="skype" data-url="<?php echo $referralTrackingUrl; ?>">
                                     <span class="icon">
                                         <i class="svg--icon">
                                             <svg class="svg">
@@ -109,7 +109,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"  title="<?php echo Labels::getLabel('MSG_SHARE_ON_TELEGRAM', $siteLangId); ?>" class="share-network-telegram st-custom-button" data-network="telegram" data-url="<?php echo $referralTrackingUrl; ?>">
+                                <a href="javascript:void(0)" title="<?php echo Labels::getLabel('MSG_SHARE_ON_TELEGRAM', $siteLangId); ?>" class="share-network-telegram st-custom-button" data-network="telegram" data-url="<?php echo $referralTrackingUrl; ?>">
                                     <span class="icon">
                                         <i class="svg--icon">
                                             <svg class="svg">
@@ -121,7 +121,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"  title="<?php echo Labels::getLabel('MSG_SHARE_ON_TWITTER', $siteLangId); ?>" class="share-network-twitter st-custom-button" data-network="twitter" data-url="<?php echo $referralTrackingUrl; ?>">
+                                <a href="javascript:void(0)" title="<?php echo Labels::getLabel('MSG_SHARE_ON_TWITTER', $siteLangId); ?>" class="share-network-twitter st-custom-button" data-network="twitter" data-url="<?php echo $referralTrackingUrl; ?>">
                                     <span class="icon">
                                         <i class="svg--icon">
                                             <svg class="svg">
@@ -133,7 +133,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"  title="<?php echo Labels::getLabel('MSG_SHARE_ON_WHATSAPP', $siteLangId); ?>" class="share-network-whatsapp st-custom-button" data-network="whatsapp" data-url="<?php echo $referralTrackingUrl; ?>">
+                                <a href="javascript:void(0)" title="<?php echo Labels::getLabel('MSG_SHARE_ON_WHATSAPP', $siteLangId); ?>" class="share-network-whatsapp st-custom-button" data-network="whatsapp" data-url="<?php echo $referralTrackingUrl; ?>">
                                     <span class="icon">
                                         <i class="svg--icon">
                                             <svg class="svg">

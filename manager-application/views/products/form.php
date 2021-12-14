@@ -109,9 +109,9 @@ $frm->setFormTagAttribute('class', 'form');
                                             </i>
                                             <div class="">
                                                 <h6 class="stock-nav-title">
-                                                Digital files</h6>
+                                                    Digital files</h6>
                                                 <span class="stock-nav-desc"> Add Digital files
-                                                    </span>
+                                                </span>
                                             </div>
                                         </a>
                                     </li>
@@ -125,7 +125,7 @@ $frm->setFormTagAttribute('class', 'form');
                                             </i>
                                             <div class="">
                                                 <h6 class="stock-nav-title">
-                                                Digital links</h6>
+                                                    Digital links</h6>
                                                 <span class="stock-nav-desc"> Add Digital links </span>
                                             </div>
                                         </a>
@@ -207,7 +207,7 @@ $frm->setFormTagAttribute('class', 'form');
                                         <div class="input-group">
                                             <?php echo $fld->getHtml(); ?>
                                             <div class="input-group-append">
-                                                <button type="button" class="btn btn-outline-gray dropdown-toggle warrantyTypeButtonJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <button type="button" class="btn btn-outline-gray dropdown-toggle warrantyTypeButtonJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                     <?php echo $warrantTypes[$frm->getField('product_warranty_unit')->value] ?? current($warrantTypes); ?>
                                                 </button>
                                                 <div class="dropdown-menu">
@@ -223,15 +223,15 @@ $frm->setFormTagAttribute('class', 'form');
                             echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
-                            echo HtmlHelper::getFieldHtml($frm,'product_id',6);                   
-                            echo HtmlHelper::getFieldHtml($frm,'temp_product_id',6,['id' => 'temp_product_id']);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_id', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'temp_product_id', 6, ['id' => 'temp_product_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit', 6, ['id' => 'product_warranty_unit']);
                             ?>
                         </div>
                     </div>
                 </div>
                 <div class="card" id="variants-options">
-                    <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
+                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Variants and options
                             </h3>
@@ -276,22 +276,22 @@ $frm->setFormTagAttribute('class', 'form');
                     </div>
                 </div>
                 <div class="card" id="media">
-                    <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
+                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
-                            <h3 class="card-head-title">Media                                
+                            <h3 class="card-head-title">Media
                             </h3>
                             <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
                             <span class="text-muted">Attach media files for the product </span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="stock-block2">                     
+                    <div class="card-body show" id="stock-block2">
                         <span class="form-text text-muted  pt-2"> File type must be a .jpg, .gif or .png
                             smaller than 2MB and at least
-                            800x800 in 1:1 aspect ratio</span>                           
+                            800x800 in 1:1 aspect ratio</span>
                         <div class="mt-5">
                             <h6 class="h6 mb-3">Uploaded media</h6>
                             <ul class="uploaded-stocks" id="productDefaultImagesJs">
-                              <li><button type="button" onclick="$('#hiddenMediaFrmFileJs').click();">upload</button></li>                                          
+                                <li><button type="button" onclick="$('#hiddenMediaFrmFileJs').click();">upload</button></li>
                             </ul>
                             <span class="form-text text-muted pt-2">Pay attention to the quality of
                                 pictures
@@ -302,7 +302,7 @@ $frm->setFormTagAttribute('class', 'form');
                     </div>
                 </div>
                 <div class="card" id="specifications">
-                    <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
+                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Specifications
                             </h3>
@@ -359,7 +359,7 @@ $frm->setFormTagAttribute('class', 'form');
                     </div>
                 </div>
                 <div class="card" id="tax-shipping">
-                    <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
+                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Tax and Shipping
                             </h3>
@@ -383,7 +383,7 @@ $frm->setFormTagAttribute('class', 'form');
                     </div>
                 </div>
                 <div class="card" id="digital-files">
-                    <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#digital-files-block" aria-expanded="false" aria-controls="digital-files-block">
+                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="digital-files-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Specifications
                             </h3>
@@ -440,7 +440,7 @@ $frm->setFormTagAttribute('class', 'form');
                     </div>
                 </div>
                 <div class="card" id="digital-links">
-                    <div class="card-head dropdown-toggle-custom show" data-toggle="collapse" data-target="#digital-links-block" aria-expanded="false" aria-controls="digital-links-block">
+                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="digital-links-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Digital Links
                             </h3>
@@ -496,8 +496,8 @@ $frm->setFormTagAttribute('class', 'form');
                         </div>
                     </div>
                 </div>
-                
-               
+
+
             </div>
             <div class="add-stock-column column-actions">
                 <div class="sticky-top">
@@ -609,16 +609,16 @@ $frm->setFormTagAttribute('class', 'form');
     <table class="hide" id="variantCloneJs">
         <?php echo getVariantUiTr($langId, -1);  ?>
     </table>
-    <?php echo $frm->getExternalJS();   
-        $imgFrm->setFormTagAttribute('class', 'hide');
-        $imgFrm->setFormTagAttribute('name', 'hiddenMediaFrm'); 
-        $imgFrm->setFormTagAttribute('id', 'hiddenMediaFrmJs');        
-        $fld = $imgFrm->getField('prod_image');
-        $fld->addFieldTagAttribute('onChange', "loadCropper(this)");
-        $fld->addFieldTagAttribute('id', "hiddenMediaFrmFileJs");
-        $fld->addFieldTagAttribute('accept', "image/*");
-        $fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_PRODUCT_IMAGE", $siteLangId));
-        echo $imgFrm->getFormHtml(); 
+    <?php echo $frm->getExternalJS();
+    $imgFrm->setFormTagAttribute('class', 'hide');
+    $imgFrm->setFormTagAttribute('name', 'hiddenMediaFrm');
+    $imgFrm->setFormTagAttribute('id', 'hiddenMediaFrmJs');
+    $fld = $imgFrm->getField('prod_image');
+    $fld->addFieldTagAttribute('onChange', "loadCropper(this)");
+    $fld->addFieldTagAttribute('id', "hiddenMediaFrmFileJs");
+    $fld->addFieldTagAttribute('accept', "image/*");
+    $fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_PRODUCT_IMAGE", $siteLangId));
+    echo $imgFrm->getFormHtml();
 
     ?>
     <script>
@@ -627,14 +627,14 @@ $frm->setFormTagAttribute('class', 'form');
         var tagifyObjs = {};
         var productOptions = <?php echo json_encode($productOptions); ?>;
         var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
-        var  tempImageType = '<?php echo AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP; ?>';
+        var tempImageType = '<?php echo AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP; ?>';
         $(function() {
 
             prodSpecifications();
             tagifyProducts();
-            if(0 < getCurrentFrmProductId()){
+            if (0 < getCurrentFrmProductId()) {
                 productDefaultImages();
-            }            
+            }
             var langId = getCurrentFrmLangId();
             select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
                 brand_active: 1,
@@ -661,7 +661,7 @@ $frm->setFormTagAttribute('class', 'form');
                     }]
                 }
 
-                select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'),optionDataCallback,
+                select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'), optionDataCallback,
                     resetOptionValuesTag,
                     resetOptionValuesTag,
                     '',
@@ -708,10 +708,10 @@ $frm->setFormTagAttribute('class', 'form');
     {
         $deleteClass = $i == 0 ? 'hide' : '';
         $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
-        $confWebUrl = CONF_WEBROOT_URL;    
-  
+        $confWebUrl = CONF_WEBROOT_URL;
+
         $tagData = [];
-        if (!empty($productOption)) {   
+        if (!empty($productOption)) {
             foreach ($productOption['optionValues'] as $key => $name) {
                 $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
             }

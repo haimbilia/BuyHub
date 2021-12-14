@@ -11,7 +11,7 @@
             color: $txt-body;
             font-weight: 600;
             //text-transform: uppercase;
-            border-bottom: solid 1px lighten($border-color, 05);
+            border-bottom: solid 1px lighten($border-color, 05) !important;
             &:first-child {
                 padding-#{$start-direction}: 0;
             }

@@ -76,7 +76,7 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                             if (!empty($languages) && count($languages) > 1) {
                             ?>
                                 <div class="accordion my-4" id="specification-accordion">
-                                    <h6 class="dropdown-toggle" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                                    <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
                                         <span>
                                             <?php
                                             echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>

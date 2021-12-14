@@ -16,7 +16,7 @@ $codFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
 $codFld->developerTags['cbHtmlAfterCheckbox'] = ''; */
 
 $btnBackFld = $productFrm->getField('btn_back');
-$btnBackFld->setFieldTagAttribute('onClick', 'customCatalogProductForm('.$preqId.');');
+$btnBackFld->setFieldTagAttribute('onClick', 'customCatalogProductForm(' . $preqId . ');');
 $btnBackFld->setFieldTagAttribute('class', "btn btn-outline-brand");
 $btnBackFld->value = Labels::getLabel('LBL_Back', $siteLangId);
 
@@ -45,7 +45,7 @@ $warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_I
                     </div>
                     <div class="field-wraper">
                         <div class="field_cover">
-                        <?php echo $productFrm->getFieldHtml('product_model'); ?>
+                            <?php echo $productFrm->getFieldHtml('product_model'); ?>
                         </div>
                     </div>
                 </div>
@@ -54,17 +54,17 @@ $warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_I
                 <div class="field-set">
                     <div class="caption-wraper">
                         <label class="field_label">
-                            <?php                           
+                            <?php
                             echo $warrantyFld->getCaption();
                             ?>
                         </label>
-                        <?php if($fld->requirements()->isRequired()){ ?>
-                            <span class="spn_must_field">*</span> 
-                        <?php } ?>             
+                        <?php if ($fld->requirements()->isRequired()) { ?>
+                            <span class="spn_must_field">*</span>
+                        <?php } ?>
                     </div>
                     <div class="field-wraper">
                         <div class="field_cover">
-                        <?php echo $productFrm->getFieldHtml('product_warranty'); ?>
+                            <?php echo $productFrm->getFieldHtml('product_warranty'); ?>
                         </div>
                     </div>
                 </div>
@@ -76,12 +76,12 @@ $warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_I
                     <div class="caption-wraper"></div>
                     <div class="field-wraper">
                         <div class="field_cover">
-                        <?php echo $productFrm->getFieldHtml('product_featured'); ?>
+                            <?php echo $productFrm->getFieldHtml('product_featured'); ?>
                         </div>
                     </div>
                 </div>
             </div>
-                <?php /* if ($productType == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+            <?php /* if ($productType == Product::PRODUCT_TYPE_PHYSICAL) { ?>
                 <?php  
                 <div class="col-md-4">
                     <div class="field-set">
@@ -111,23 +111,23 @@ $warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_I
         <?php
         if (!empty($otherLanguages)) {
             foreach ($otherLanguages as $langId => $data) {
-                ?>
+        ?>
                 <div class="accordion my-4" id="specification-accordion-<?php echo $langId; ?>">
-                   
-                            <h6 class="dropdown-toggle" data-toggle="collapse" data-target="#collapse-<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapse-<?php echo $langId; ?>">
-                                <span onClick="displayOtherLangProdSpec(this,<?php echo $langId; ?>)">
-        <?php echo $data . " ";
-        echo Labels::getLabel('LBL_Language_Specification', $siteLangId); ?>
-                                </span>
-                            </h6>
-                            <div id="collapse-<?php echo $langId; ?>" class="collapse collapse-js-<?php echo $langId; ?>" aria-labelledby="headingOne" data-parent="#specification-accordion-<?php echo $langId; ?>">
-                                <div class="specifications-form-<?php echo $langId; ?>"></div>
-                                <div class="specifications-list-<?php echo $langId; ?>"></div>
-                            </div>
-                        
+
+                    <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapse-<?php echo $langId; ?>">
+                        <span onClick="displayOtherLangProdSpec(this,<?php echo $langId; ?>)">
+                            <?php echo $data . " ";
+                            echo Labels::getLabel('LBL_Language_Specification', $siteLangId); ?>
+                        </span>
+                    </h6>
+                    <div id="collapse-<?php echo $langId; ?>" class="collapse collapse-js-<?php echo $langId; ?>" aria-labelledby="headingOne" data-parent="#specification-accordion-<?php echo $langId; ?>">
+                        <div class="specifications-form-<?php echo $langId; ?>"></div>
+                        <div class="specifications-list-<?php echo $langId; ?>"></div>
+                    </div>
+
 
                 </div>
-            <?php
+        <?php
             }
         }
         ?>
@@ -138,7 +138,7 @@ $warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_I
                     <div class="caption-wraper"><label class="field_label"></label></div>
                     <div class="field-wraper">
                         <div class="field_cover">
-                        <?php  echo $productFrm->getFieldHtml('btn_back');?>
+                            <?php echo $productFrm->getFieldHtml('btn_back'); ?>
                         </div>
                     </div>
                 </div>
@@ -148,10 +148,10 @@ $warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_I
                     <div class="caption-wraper"><label class="field_label"></label></div>
                     <div class="field-wraper">
                         <div class="field_cover">
-                        <?php
-                        echo $productFrm->getFieldHtml('preq_id');
-                        echo $productFrm->getFieldHtml('btn_submit');
-                        ?>
+                            <?php
+                            echo $productFrm->getFieldHtml('preq_id');
+                            echo $productFrm->getFieldHtml('btn_submit');
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -163,6 +163,6 @@ $warrantyFld->htmlAfterField = '<br/><small>' . Labels::getLabel('LBL_WARRANTY_I
 </div>
 
 <script type="text/javascript">
-   prodSpecificationSection(<?php echo $siteDefaultLangId; ?>)
-   prodSpecificationsByLangId(<?php echo $siteDefaultLangId; ?>)   
+    prodSpecificationSection(<?php echo $siteDefaultLangId; ?>)
+    prodSpecificationsByLangId(<?php echo $siteDefaultLangId; ?>)
 </script>

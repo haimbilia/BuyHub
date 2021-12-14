@@ -51,8 +51,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -78,7 +78,7 @@
                             <div class="wizard-v4__nav-items">
                                 <!--doc: Replace A tag with SPAN tag to disable the step link click -->
                                 <div class="wizard-v4__nav-item" data-FATbitwizard-type="step" data-FATbitwizard-state="current">
-                                    <div class="wizard-v4__nav-body" data-toggle="tab" href="#form-step-1">
+                                    <div class="wizard-v4__nav-body" data-bs-toggle="tab" href="#form-step-1">
                                         <div class="wizard-v4__nav-number">
                                             1
                                         </div>
@@ -93,7 +93,7 @@
                                     </div>
                                 </div>
                                 <div class="wizard-v4__nav-item" data-FATbitwizard-type="step" data-FATbitwizard-state="pending">
-                                    <div class="wizard-v4__nav-body" data-toggle="tab" href="#form-step-2">
+                                    <div class="wizard-v4__nav-body" data-bs-toggle="tab" href="#form-step-2">
                                         <div class="wizard-v4__nav-number">
                                             2
                                         </div>
@@ -108,7 +108,7 @@
                                     </div>
                                 </div>
                                 <div class="wizard-v4__nav-item" data-FATbitwizard-type="step" data-FATbitwizard-state="pending">
-                                    <div class="wizard-v4__nav-body" data-toggle="tab" href="#form-step-3">
+                                    <div class="wizard-v4__nav-body" data-bs-toggle="tab" href="#form-step-3">
                                         <div class="wizard-v4__nav-number">
                                             3
                                         </div>
@@ -123,7 +123,7 @@
                                     </div>
                                 </div>
                                 <div class="wizard-v4__nav-item" data-FATbitwizard-type="step" data-FATbitwizard-state="pending">
-                                    <div class="wizard-v4__nav-body" data-toggle="tab" href="#form-step-4">
+                                    <div class="wizard-v4__nav-body" data-bs-toggle="tab" href="#form-step-4">
                                         <div class="wizard-v4__nav-number">
                                             4
                                         </div>

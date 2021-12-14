@@ -66,7 +66,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                         <div class="form-group">
                                             <label class="form-label required">
                                                 Product name
-                                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-toggle="tooltip" title="" data-original-title="Lorem ipsum dolor sit amet consectetur adipisicing elit" aria-label="Lorem ipsum dolor sit amet consectetur adipisicing elit"></i>
+                                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="" data-original-title="Lorem ipsum dolor sit amet consectetur adipisicing elit" aria-label="Lorem ipsum dolor sit amet consectetur adipisicing elit"></i>
                                             </label>
                                             <input type="text" placeholder="">
                                         </div>
@@ -114,7 +114,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                             <div class="input-group">
                                                 <input type="text" placeholder="">
                                                 <div class="input-group-append ">
-                                                    <button type="button" class="btn btn-outline-gray dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <button type="button" class="btn btn-outline-gray dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                         Days
                                                     </button>
                                                     <div class="dropdown-menu">
@@ -142,7 +142,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
                     </div>
                     <div class="card" id="variants-options">
-                        <div class="card-header dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
+                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
                             <div class="card-header-label">
                                 <h3 class="card-header-title">Variants and options
                                 </h3>
@@ -396,7 +396,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
 
                     </div>
                     <div class="card" id="media">
-                        <div class="card-header dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
+                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-header-label">
                                 <h3 class="card-header-title">Media
                                 </h3>
@@ -425,7 +425,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                 <ul class="uploaded-stocks">
                                     <li>
                                         <div class="uploaded-stocks-item" data-ratio="1:1">
-                                            <img data-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg">
+                                            <img data-bs-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg">
                                             <div class="uploaded-stocks-actions">
                                                 <ul class="actions">
                                                     <li>
@@ -452,7 +452,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     </li>
                                     <li>
                                         <div class="uploaded-stocks-item" data-ratio="1:1">
-                                            <img data-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg">
+                                            <img data-bs-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg">
                                             <div class="uploaded-stocks-actions">
                                                 <ul class="actions">
                                                     <li>
@@ -479,7 +479,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     </li>
                                     <li>
                                         <div class="uploaded-stocks-item" data-ratio="1:1">
-                                            <img data-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product5.jpg">
+                                            <img data-bs-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product5.jpg">
                                             <div class="uploaded-stocks-actions">
                                                 <ul class="actions">
                                                     <li>
@@ -506,7 +506,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     </li>
                                     <li>
                                         <div class="uploaded-stocks-item" data-ratio="1:1">
-                                            <img data-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg">
+                                            <img data-bs-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg">
                                             <div class="uploaded-stocks-actions">
                                                 <ul class="actions">
                                                     <li>
@@ -533,7 +533,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                                     </li>
                                     <li>
                                         <div class="uploaded-stocks-item" data-ratio="1:1">
-                                            <img data-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg">
+                                            <img data-bs-toggle="tooltip" data-placement="top" title="product-1.jpg" class="uploaded-stocks-img" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg">
                                             <div class="uploaded-stocks-actions">
                                                 <ul class="actions">
                                                     <li>
@@ -567,7 +567,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card" id="specifications">
-                        <div class="card-header dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block3" aria-expanded="false" aria-controls="stock-block3">
+                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block3" aria-expanded="false" aria-controls="stock-block3">
                             <div class="card-header-label">
                                 <h3 class="card-header-title">Specifications
                                 </h3>
@@ -634,7 +634,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                         </div>
                     </div>
                     <div class="card" id="tax-shipping">
-                        <div class="card-header dropdown-toggle-custom show" data-toggle="collapse" data-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
+                        <div class="card-header dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
                             <div class="card-header-label">
                                 <h3 class="card-header-title">Tax and Shipping
                                 </h3>

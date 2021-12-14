@@ -56,8 +56,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -234,7 +234,7 @@
                                                 <option class="-bg-success font-inverse-success">Mustard</option>
                                                 <option class="-bg-warning font-inverse-warning">Ketchup</option>
                                                 <option class="-bg-brand font-inverse-brand">Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard">
+                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Mustard">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Mustard</div>
@@ -257,7 +257,7 @@
                                                 <option>Mustard</option>
                                                 <option>Ketchup</option>
                                                 <option>Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-light" data-toggle="dropdown" role="button" title="Auto">
+                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="button" title="Auto">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Auto</div>
@@ -277,7 +277,7 @@
                                                 <option>Mustard</option>
                                                 <option>Ketchup</option>
                                                 <option>Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-light" data-toggle="dropdown" role="button" title="Fixed: 200px">
+                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="button" title="Fixed: 200px">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Fixed: 200px</div>
@@ -297,7 +297,7 @@
                                                 <option>Mustard</option>
                                                 <option>Ketchup</option>
                                                 <option>Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-light" data-toggle="dropdown" role="button" title="Fixed: 75%">
+                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="button" title="Fixed: 75%">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Fixed: 75%</div>
@@ -319,7 +319,7 @@
                                                 <option data-icon="la la-bullhorn">Mustard</option>
                                                 <option data-icon="la la-bookmark">Ketchup</option>
                                                 <option data-icon="la la-calendar-check-o">Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard">
+                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Mustard">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner"><i class=" la la-bullhorn"></i> Mustard</div>
@@ -346,7 +346,7 @@
                                                     Relish</option>
                                                 <option data-content="<span class='badge badge-danger badge-inline badge-rounded'>Chili</span>">
                                                     Chili</option>
-                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Relish">
+                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Relish">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner"><span class="badge badge-success badge-inline badge-rounded">Relish</span>
@@ -369,7 +369,7 @@
                                                 <option data-subtext="French's">Mustard</option>
                                                 <option data-subtext="Heinz">Ketchup</option>
                                                 <option data-subtext="Sweet">Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard">
+                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Mustard">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Mustard</div>
@@ -413,7 +413,7 @@
                                                 <option>Salad Dressing</option>
                                                 <option>Tabasco</option>
                                                 <option>Salsa</option>
-                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-light" data-toggle="dropdown" role="button" title="Nothing selected">
+                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="button" title="Nothing selected">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Nothing selected
@@ -442,7 +442,7 @@
                                                 <option data-subtext="Heinz">Ketchup</option>
                                                 <option data-divider="true"></option>
                                                 <option data-subtext="Sweet">Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard">
+                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Mustard">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Mustard</div>
@@ -464,7 +464,7 @@
                                                 <option data-subtext="French's">Mustard</option>
                                                 <option data-subtext="Heinz">Ketchup</option>
                                                 <option data-subtext="Sweet">Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard">
+                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Mustard">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Mustard</div>
@@ -472,7 +472,7 @@
                                                 </div>
                                             </button>
                                             <div class="dropdown-menu " role="combobox">
-                                                <div class="popover-header"><button type="button" class="close" aria-hidden="true">×</button>Select an option</div>
+                                                <div class="popover-header"><button type="button" class="btn-close" aria-hidden="true">×</button>Select an option</div>
                                                 <div class="inner show" role="listbox" aria-expanded="false" tabindex="-1">
                                                     <ul class="dropdown-menu inner show"></ul>
                                                 </div>
@@ -487,7 +487,7 @@
                                                 <option data-subtext="French's">Mustard</option>
                                                 <option data-subtext="Heinz">Ketchup</option>
                                                 <option data-subtext="Sweet">Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle disabled btn-light" data-toggle="dropdown" role="button" tabindex="-1" aria-disabled="true" title="Mustard">
+                                            </select><button type="button" class="btn dropdown-toggle disabled btn-light" data-bs-toggle="dropdown" role="button" tabindex="-1" aria-disabled="true" title="Mustard">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Mustard</div>
@@ -509,7 +509,7 @@
                                                 <option data-subtext="French's">Mustard</option>
                                                 <option data-subtext="Heinz" disabled="">Ketchup</option>
                                                 <option data-subtext="Sweet">Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard">
+                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Mustard">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Mustard</div>
@@ -532,7 +532,7 @@
                                                 <option>Mustard</option>
                                                 <option>Ketchup</option>
                                                 <option>Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-success" data-toggle="dropdown" role="button" title="Success" aria-expanded="false">
+                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-success" data-bs-toggle="dropdown" role="button" title="Success" aria-expanded="false">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Success</div>
@@ -555,7 +555,7 @@
                                                 <option>Mustard</option>
                                                 <option>Ketchup</option>
                                                 <option>Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-warning" data-toggle="dropdown" role="button" title="Warning">
+                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-warning" data-bs-toggle="dropdown" role="button" title="Warning">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Warning</div>
@@ -574,7 +574,7 @@
                                                 <option>Mustard</option>
                                                 <option>Ketchup</option>
                                                 <option>Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-danger" data-toggle="dropdown" role="button" title="Danger">
+                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-danger" data-bs-toggle="dropdown" role="button" title="Danger">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Danger</div>
@@ -593,7 +593,7 @@
                                                 <option>Mustard</option>
                                                 <option>Ketchup</option>
                                                 <option>Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-brand" data-toggle="dropdown" role="button" title="Brand">
+                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-brand" data-bs-toggle="dropdown" role="button" title="Brand">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Brand</div>
@@ -612,7 +612,7 @@
                                                 <option>Mustard</option>
                                                 <option>Ketchup</option>
                                                 <option>Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-primary" data-toggle="dropdown" role="button" title="Primary">
+                                            </select><button type="button" class="btn dropdown-toggle bs-placeholder btn-primary" data-bs-toggle="dropdown" role="button" title="Primary">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Primary</div>
@@ -630,7 +630,7 @@
                                 <div class="form-group row">
                                     <label class="col-form-label col-lg-3 col-sm-12">Modal Demos</label>
                                     <div class="col-lg-4 col-md-9 col-sm-12">
-                                        <a href="" class="btn btn-success btn btn--pill" data-toggle="modal" data-target="#select_modal">Launch modal examples</a>
+                                        <a href="" class="btn btn-success btn btn--pill" data-bs-toggle="modal" data-bs-target="#select_modal">Launch modal examples</a>
                                     </div>
                                 </div>
                             </div>
@@ -654,7 +654,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="">Bootstrap Touchspin Examples</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true" class="la la-remove"></span>
                                     </button>
                                 </div>
@@ -673,7 +673,7 @@
                                                         <option>Mustard</option>
                                                         <option>Ketchup</option>
                                                         <option>Relish</option>
-                                                    </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard">
+                                                    </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Mustard">
                                                         <div class="filter-option">
                                                             <div class="filter-option-inner">
                                                                 <div class="filter-option-inner-inner">Mustard</div>
@@ -703,7 +703,7 @@
                                                             <option>Flashlight</option>
                                                             <option>Toilet Paper</option>
                                                         </optgroup>
-                                                    </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard">
+                                                    </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Mustard">
                                                         <div class="filter-option">
                                                             <div class="filter-option-inner">
                                                                 <div class="filter-option-inner-inner">Mustard</div>
@@ -733,7 +733,7 @@
                                                         <option>Hot Dog, Fries and a Soda</option>
                                                         <option>Burger, Shake and a Smile</option>
                                                         <option>Sugar, Spice and all things nice</option>
-                                                    </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Hot Dog, Fries and a Soda">
+                                                    </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Hot Dog, Fries and a Soda">
                                                         <div class="filter-option">
                                                             <div class="filter-option-inner">
                                                                 <div class="filter-option-inner-inner">Hot Dog,
@@ -754,7 +754,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-brand btn" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-brand btn" data-bs-dismiss="modal">Close</button>
                                         <button type="button" class="btn btn-secondary btn">Submit</button>
                                     </div>
                                 </form>
@@ -781,7 +781,7 @@
                                                 <option>Mustard</option>
                                                 <option>Ketchup</option>
                                                 <option>Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard">
+                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Mustard">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Mustard</div>
@@ -806,7 +806,7 @@
                                                 <option>Mustard</option>
                                                 <option>Ketchup</option>
                                                 <option>Relish</option>
-                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="button" title="Mustard">
+                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="button" title="Mustard">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">Mustard</div>

@@ -2,7 +2,7 @@
 $prm_budget_dur_arr = Promotion::getPromotionBudgetDurationArr($siteLangId); ?>
 <?php if ($error_warning) { ?>
     <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo CommonHelper::renderHtml($error_warning); ?>
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert">&times;</button>
     </div>
 <?php } ?>
 <div class="js-scrollable table-wrap scroll scroll-x">

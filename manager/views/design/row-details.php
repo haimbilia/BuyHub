@@ -57,8 +57,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -109,7 +109,7 @@
                                     </a>
                                     &nbsp;
                                     <div class="dropdown dropdown-inline">
-                                        <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn btn-brand btn-icon-sm" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="flaticon2-plus"></i> Add New
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -196,7 +196,7 @@
                                                                 <option value="4">Success</option>
                                                                 <option value="5">Info</option>
                                                                 <option value="6">Danger</option>
-                                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="combobox" aria-owns="bs-select-1" aria-haspopup="listbox" aria-expanded="false" data-id="form_status" title="All">
+                                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-1" aria-haspopup="listbox" aria-expanded="false" data-id="form_status" title="All">
                                                                 <div class="filter-option">
                                                                     <div class="filter-option-inner">
                                                                         <div class="filter-option-inner-inner">All
@@ -224,7 +224,7 @@
                                                                 <option value="1">Online</option>
                                                                 <option value="2">Retail</option>
                                                                 <option value="3">Direct</option>
-                                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="combobox" aria-owns="bs-select-2" aria-haspopup="listbox" aria-expanded="false" data-id="form_type" title="All">
+                                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-2" aria-haspopup="listbox" aria-expanded="false" data-id="form_type" title="All">
                                                                 <div class="filter-option">
                                                                     <div class="filter-option-inner">
                                                                         <div class="filter-option-inner-inner">All
@@ -308,7 +308,7 @@
                                                 <span style="width: 110px;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span>
                                             </td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim "> <a href="#" class="dropdown-item"><i class="la la-edit"></i>
                                                                 Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i>
                                                                 Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i>
@@ -338,7 +338,7 @@
                                                 <span style="width: 110px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span>
                                             </td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim "> <a href="#" class="dropdown-item"><i class="la la-edit"></i>
                                                                 Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i>
                                                                 Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i>
@@ -367,7 +367,7 @@
                                                 <span style="width: 110px;"><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span>
                                             </td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim "> <a href="#" class="dropdown-item"><i class="la la-edit"></i>
                                                                 Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i>
                                                                 Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i>
@@ -396,7 +396,7 @@
                                                 <span style="width: 110px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span>
                                             </td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim "> <a href="#" class="dropdown-item"><i class="la la-edit"></i>
                                                                 Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i>
                                                                 Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i>
@@ -426,7 +426,7 @@
                                                 <span style="width: 110px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span>
                                             </td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim "> <a href="#" class="dropdown-item"><i class="la la-edit"></i>
                                                                 Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i>
                                                                 Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i>
@@ -456,7 +456,7 @@
                                                 <span style="width: 110px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span>
                                             </td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim "> <a href="#" class="dropdown-item"><i class="la la-edit"></i>
                                                                 Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i>
                                                                 Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i>
@@ -486,7 +486,7 @@
                                                 <span style="width: 110px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span>
                                             </td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim "> <a href="#" class="dropdown-item"><i class="la la-edit"></i>
                                                                 Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i>
                                                                 Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i>
@@ -515,7 +515,7 @@
                                                 <span style="width: 110px;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span>
                                             </td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim "> <a href="#" class="dropdown-item"><i class="la la-edit"></i>
                                                                 Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i>
                                                                 Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i>
@@ -544,7 +544,7 @@
                                                 <span style="width: 110px;"><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span>
                                             </td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim "> <a href="#" class="dropdown-item"><i class="la la-edit"></i>
                                                                 Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i>
                                                                 Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i>
@@ -573,7 +573,7 @@
                                                 <span style="width: 110px;"><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span>
                                             </td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim "> <a href="#" class="dropdown-item"><i class="la la-edit"></i>
                                                                 Edit Details</a> <a href="#" class="dropdown-item"><i class="la la-leaf"></i>
                                                                 Update Status</a> <a href="#" class="dropdown-item"><i class="la la-print"></i>
@@ -608,7 +608,7 @@
                                                 <option value="30">30</option>
                                                 <option value="50">50</option>
                                                 <option value="100">100</option>
-                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-toggle="dropdown" role="combobox" aria-owns="bs-select-3" aria-haspopup="listbox" aria-expanded="false" title="Select page size">
+                                            </select><button type="button" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-3" aria-haspopup="listbox" aria-expanded="false" title="Select page size">
                                                 <div class="filter-option">
                                                     <div class="filter-option-inner">
                                                         <div class="filter-option-inner-inner">10</div>

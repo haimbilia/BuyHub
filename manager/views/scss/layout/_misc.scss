@@ -105,6 +105,7 @@ $header-height: 65px;
     background-color: $bg-gray;
     border: solid 1px transparent;
     color: $txt-gray;
+    margin-#{$start-direction}: 10px;
     &:not(.collapsed) {
         border-color: $brand-color;
         color: $brand-color;
@@ -563,7 +564,7 @@ $header-height: 65px;
 }
 
 .card-aside {
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(lg) {
         position: fixed;
         top: 0;
         bottom: 0;

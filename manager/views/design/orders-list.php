@@ -22,7 +22,7 @@
             include 'includes/new-header.php';
             ?>
 
-            <button class="help-btn btn btn-light" data-toggle="modal" data-target="#help">
+            <button class="help-btn btn btn-light" data-bs-toggle="modal" data-bs-target="#help">
                 <span class="help_label">Help</span>
             </button>
 
@@ -31,8 +31,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                             </button>
                         </div>
                         <div class="modal-body">
@@ -95,8 +95,8 @@
                                                     <span class="txt">Export orders</span>
                                                 </a>
                                             </li>
-                                            <li class="custom-drag-drop">
-                                                <a class="btn btn-icon btn-link" href="#" data-toggle="dropdown" aria-expanded="false">
+                                            <li class="dropdown custom-drag-drop">
+                                                <a class="btn btn-icon btn-link" href="#" data-bs-toggle="dropdown" aria-expanded="false">
 
                                                     <svg class="svg" width="18" height="18">
                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#columns">
@@ -106,7 +106,7 @@
 
                                                 </a>
 
-                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-anim scroll scroll-y">
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-anim scroll scroll-y">
                                                     <ul class="list-checkbox list-drag-drop ui-sortable">
                                                         <li>
                                                             <svg class="svg" width="18" height="18">
@@ -194,7 +194,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <a class="btn btn-link" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Advanced
+                                                <a class="btn btn-link" data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Advanced
                                                     Search</a>
                                             </div>
                                         </div>
@@ -744,8 +744,8 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="">Card title goes here</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                                         </button>
                                     </div>
                                     <form class="modal-body form form-edit">
@@ -777,7 +777,7 @@
                                                     <div class="form-group">
                                                         <label class="label">
                                                             <span class="required">Shop Name</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-toggle="tooltip" title="" data-original-title="Specify a target priorty" aria-label="Specify a target priorty" aria-describedby="tooltip849482"></i>
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="" data-original-title="Specify a target priorty" aria-label="Specify a target priorty" aria-describedby="tooltip849482"></i>
                                                         </label>
                                                         <input data-field-caption="Shop Name" type="text" name="shop_name" value="Jason's Store">
                                                     </div>

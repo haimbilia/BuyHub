@@ -2,7 +2,7 @@
     <?php
     if (!empty($product['product_warranty'])) { ?>
         <?php $lbl = Labels::getLabel('LBL_{DAYS}_DAYS_WARRANTY', $siteLangId); ?>
-        <li data-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>">
+        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $product['product_warranty']]); ?>">
             <i class="icn">
                 <svg class="svg">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#yearswarranty" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#yearswarranty">
@@ -17,7 +17,7 @@
         $returnAge = !empty($product['selprod_return_age']) ? $product['selprod_return_age'] : $product['shop_return_age'];
         $returnAge = !empty($returnAge) ? $returnAge : 0;
         ?>
-        <li data-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>">
+        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $returnAge]); ?>">
             <i class="icn">
                 <svg class="svg">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
@@ -32,7 +32,7 @@
         $cancellationAge = !empty($product['selprod_cancellation_age']) ? $product['selprod_cancellation_age'] : $product['shop_cancellation_age'];
         $cancellationAge = !empty($cancellationAge) ? $cancellationAge : 0;
         ?>
-        <li data-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]); ?>">
+        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]); ?>">
             <i class="icn">
                 <svg class="svg">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
@@ -43,7 +43,7 @@
     <?php } ?>
     <?php if ($codEnabled && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
         <?php $lbl = Labels::getLabel('LBL_Cash_on_delivery_is_available', $siteLangId); ?>
-        <li data-toggle="tooltip" data-placement="top" title="<?php echo $lbl; ?>">
+        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo $lbl; ?>">
             <i class="icn">
                 <svg class="svg">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments">
@@ -66,7 +66,7 @@
                 break;
         }
         ?>
-        <li data-toggle="tooltip" data-placement="top" title="<?php echo $lbl; ?>">
+        <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo $lbl; ?>">
             <?php $icon = $fulfillmentType == Shipping::FULFILMENT_PICKUP ? 'item_pickup' : 'freeshipping'; ?>
             <i class="icn">
                 <svg class="svg">

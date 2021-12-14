@@ -46,7 +46,7 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     $td->appendElement('plaintext', array(), $sr_no, true);
                     break;
                 case 'name':
-                    $str = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row ,'siteLangId'=> $siteLangId], false, true);
+                    $str = $this->includeTemplate('_partial/product/product-info-html.php', ['product' => $row, 'siteLangId' => $siteLangId], false, true);
                     $td->appendElement('plaintext', array(), $str, true);
                     break;
                 case 'selprod_price':
@@ -55,7 +55,7 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                 case 'selprod_stock':
                     $td->appendElement('plaintext', array(), $row[$key], true);
                     if ($row['selprod_track_inventory'] && ($row['selprod_stock']  <= $row['selprod_threshold_stock_level'])) {
-                        $td->appendElement('plaintext', array(), " <i  class='fa fa-info-circle spn_must_field' data-toggle='tooltip' data-placement='top' title='" . Labels::getLabel('MSG_Product_stock_qty_below_or_equal_to_threshold_level', $siteLangId) . "'></i>", true);
+                        $td->appendElement('plaintext', array(), " <i  class='fa fa-info-circle spn_must_field' data-bs-toggle='tooltip' data-placement='top' title='" . Labels::getLabel('MSG_Product_stock_qty_below_or_equal_to_threshold_level', $siteLangId) . "'></i>", true);
                     }
                     break;
                 case 'selprod_available_from':

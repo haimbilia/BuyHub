@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -79,7 +79,7 @@
                             <div class="card-head-toolbar">
                                 <ul class="nav nav-tabs nav-tabs-space-xl nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" data-toggle="tab" href="#user_edit_tab_1" role="tab">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#user_edit_tab_1" role="tab">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                     <polygon points="0 0 24 0 24 24 0 24"></polygon>
@@ -90,7 +90,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#user_edit_tab_2" role="tab">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#user_edit_tab_2" role="tab">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                     <polygon points="0 0 24 0 24 24 0 24"></polygon>
@@ -101,7 +101,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#user_edit_tab_3" role="tab">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#user_edit_tab_3" role="tab">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24" height="24"></rect>
@@ -113,7 +113,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#user_edit_tab_4" role="tab">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#user_edit_tab_4" role="tab">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24" height="24"></rect>
@@ -145,11 +145,11 @@
                                                             <div class="col-lg-9 col-xl-6">
                                                                 <div class="avatar avatar--outline avatar--circle-" id="user_edit_avatar">
                                                                     <div class="avatar__holder" style="background-image: url('media/users/300_20.jpg');"></div>
-                                                                    <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                                    <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="Change avatar">
                                                                         <i class="fa fa-pen"></i>
                                                                         <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                                                                     </label>
-                                                                    <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                                    <span class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="Cancel avatar">
                                                                         <i class="fa fa-times"></i>
                                                                     </span>
                                                                 </div>
@@ -521,7 +521,7 @@
                                                             <div class="alert-icon"><i class="fa fa-exclamation-triangle"></i></div>
                                                             <div class="alert-text">Configure user passwords to expire periodically. <br>Users will need warning that their passwords are going to expire, or they might inadvertently get locked out of the system!</div>
                                                             <div class="alert-close">
-                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                                     <span aria-hidden="true"><i class="la la-close"></i></span>
                                                                 </button>
                                                             </div>
