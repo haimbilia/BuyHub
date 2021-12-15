@@ -8,12 +8,19 @@ class HomeController extends ListingBaseController
         $this->objPrivilege->canViewAdminDashboard($this->admin_id);
     }
 
+    public function totalSales(){
+        $statsObj = new Statistics();
+        $statsObj->getStats('total_sales');
+        
+    }
+
     public function index()
     {
         SystemLog::clearOldLog();
         $accountId = false;
         $this->set('configuredAnalytics', false);
         $this->set('objPrivilege', $this->objPrivilege);
+        $this->set('intervalsArr', Statistics::getIntervals($this->siteLangId));
 
         $analyticArr = array(
             'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID", FatUtility::VAR_STRING, ''),
@@ -296,18 +303,18 @@ class HomeController extends ListingBaseController
     public function topSellingProducts($limit = 5)
     {
         $srch = new OrderProductSearch($this->siteLangId, true);
-        $srch->joinPaymentMethod();        
+        $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
         $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore');
         $srch->setPageSize($limit);
         $srch->addOrder('SUM(op_qty - op_refund_qty)', 'DESC');
-        $srch->addMultipleFields(array('op_selprod_title','order_id', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'op_selprod_sku','op_shop_name','op_selprod_id'));
+        $srch->addMultipleFields(array('op_selprod_title', 'order_id', 'op_product_name as product_name', 'op_selprod_options', 'op_brand_name', 'SUM(op_qty - op_refund_qty) as totSoldQty', 'op.op_selprod_id', 'op_selprod_sku', 'op_shop_name', 'op_selprod_id'));
         $srch->addHaving('totSoldQty', '>', 0);
-        $rs = $srch->getResultSet();      
+        $rs = $srch->getResultSet();
         $productsList = FatApp::getDb()->fetchAll($rs);
-      
+
         $this->set('productsList', $productsList);
         $this->_template->render(false, false);
     }
