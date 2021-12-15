@@ -394,7 +394,7 @@ class BannersController extends ListingBaseController
 
         $bannerDetail = Banner::getAttributesById($recordId);
         if (!false == $bannerDetail && ($bannerDetail['banner_active'] != applicationConstants::ACTIVE)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_INACTIVE_RECORD', $this->adminLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_INACTIVE_RECORD', $this->siteLangId));
         }
 
         $imageFrm = $this->getMediaForm($bannerLocationId, $recordId);
@@ -441,7 +441,7 @@ class BannersController extends ListingBaseController
 
         $bannerDetail = Banner::getAttributesById($recordId);
         if (!false == $bannerDetail && ($bannerDetail['banner_active'] != applicationConstants::ACTIVE)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_INACTIVE_RECORD', $this->adminLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_INACTIVE_RECORD', $this->siteLangId));
         }
 
         if (!false == $bannerDetail) {

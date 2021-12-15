@@ -4,10 +4,6 @@ $collectionMediaFrm->setFormTagAttribute('class', 'web_form');
 $collectionMediaFrm->developerTags['colClassPrefix'] = 'col-sm-';
 $collectionMediaFrm->developerTags['fld_default_col'] = 6;
 
-/*$collectionImageHeadingFld = $collectionMediaFrm->getField('collection_image_heading');
-$collectionImageHeadingFld->developerTags['col'] = 12;
-$collectionImageHeadingFld->value = '<h2>'.Labels::getLabel('LBL_Collection_Image_Management',$adminLangId).'</h2>';*/
-
 $collectionImageDisplayDiv = $collectionMediaFrm->getField('collection_image_display_div');
 $collectionImageDisplayDiv->developerTags['col'] = 12;
 
@@ -24,27 +20,12 @@ if (0 < $displayMediaOnly) {
 $fld = $collectionMediaFrm->getField('collection_image');
 $fld->setFieldTagAttribute('data-collection_id', $collection_id);
 $fld->addFieldTagAttribute('onChange', 'popupImage(this)');
-$preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $adminLangId), '640*480').'</small>';
+$preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '640*480').'</small>';
 $fld->htmlAfterField = $preferredDimensionsStr;
 
 $headingArea = $collectionMediaFrm->getField('collection_image_heading');
-$str = '<small class="text--small">'.Labels::getLabel('LBL_Used_For_Mobile_Applications', $adminLangId).'</small>';
+$str = '<small class="text--small">'.Labels::getLabel('LBL_Used_For_Mobile_Applications', $siteLangId).'</small>';
 $headingArea->value = $str;
-
-/*$collectionBgImageHeadingFld = $collectionMediaFrm->getField('collection_bg_image_heading');
-$collectionBgImageHeadingFld->developerTags['col'] = 12;
-$collectionBgImageHeadingFld->value = '<br/><br/><h2>'.Labels::getLabel('LBL_Collection_Background_Image_Management(If_any)', $adminLangId).'</h2>';
-
-$collectionBgImageDisplayDiv = $collectionMediaFrm->getField('collection_bg_image_display_div');
-$collectionBgImageDisplayDiv->developerTags['col'] = 12;
-
-$languageFld = $collectionMediaFrm->getField('bg_image_lang_id');
-$languageFld->setFieldTagAttribute('class', 'bgLanguage-js');
-
-$bgFld = $collectionMediaFrm->getField('collection_bg_image');
-$bgFld->htmlAfterField = $preferredDimensionsStr;*/
-
-/*$fileTypeArr = [AttachedFile::FILETYPE_COLLECTION_IMAGE, AttachedFile::FILETYPE_COLLECTION_BG_IMAGE];*/
 
 $fileTypeArr = [AttachedFile::FILETYPE_COLLECTION_IMAGE];
 
@@ -70,7 +51,7 @@ foreach ($fileTypeArr as $fileType) {
     }
 
     $imagesHtml .= '</div>
-                <small><strong> '.Labels::getLabel('LBL_Language', $adminLangId).':</strong> '.Labels::getLabel('LBL_All_Languages', $adminLangId).'</small>
+                <small><strong> '.Labels::getLabel('LBL_Language', $siteLangId).':</strong> '.Labels::getLabel('LBL_All_Languages', $siteLangId).'</small>
             </div>
         </li>';
     foreach ($languages as $langId => $langName) {
@@ -85,7 +66,7 @@ foreach ($fileTypeArr as $fileType) {
         }
 
                     $imagesHtml .= '</div>
-                                <small><strong> '.Labels::getLabel('LBL_Language', $adminLangId).':</strong> '.$langName.'</small>
+                                <small><strong> '.Labels::getLabel('LBL_Language', $siteLangId).':</strong> '.$langName.'</small>
                             </div>
                         </li>';
     }
@@ -109,15 +90,15 @@ $collectionMediaFrm->developerTags['fld_default_col'] = 12;
         <div class="row">    <div class="col-sm-12">
     <div class="tabs_nav_container responsive flat">
         <ul class="tabs_nav">
-            <li><a href="javascript:void(0)" onclick="collectionForm(<?php echo $collection_type ?>, <?php echo $collection_layout_type ?>, <?php echo $collection_id ?>);"><?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a></li>
+            <li><a href="javascript:void(0)" onclick="collectionForm(<?php echo $collection_type ?>, <?php echo $collection_layout_type ?>, <?php echo $collection_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
             <?php if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) { ?>
             <li><a class=""
                     href="javascript:void(0)"
                     onclick="recordForm(<?php echo $collection_id ?>, <?php echo $collection_type ?>);">
-                    <?php echo Labels::getLabel('LBL_Link_Records', $adminLangId);?></a>
+                    <?php echo Labels::getLabel('LBL_Link_Records', $siteLangId);?></a>
             </li>
             <?php } ?>
-            <li><a class="active" href="javascript:void(0)" onclick="collectionMediaForm(<?php echo $collection_id ?>);"><?php echo Labels::getLabel('LBL_Media', $adminLangId); ?></a></li>
+            <li><a class="active" href="javascript:void(0)" onclick="collectionMediaForm(<?php echo $collection_id ?>);"><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
         </ul>
         <div class="tabs_panel_wrap">
             <div class="tabs_panel">

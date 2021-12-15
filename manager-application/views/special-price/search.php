@@ -55,7 +55,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'splprice_price':
                 $input = '<input type="text" data-price="' . $row['selprod_price'] . '" data-id="' . $splPriceId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" data-oldval="' . $row[$key] . '" data-displayoldval="' . CommonHelper::displayMoneyFormat($row[$key], true, true) . '" class="splPriceColJs hide sp-input"/>';
-                $td->appendElement('div', array("class" => 'editColJs contenteditable', "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
+                $td->appendElement('div', array("class" => 'editColJs contenteditable', "contenteditable" => "true", "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
                 $td->appendElement('plaintext', $tdAttr, $input, true);
                 if ($row['selprod_price'] > $row[$key]) {
                     $discountPrice = $row['selprod_price'] - $row[$key];

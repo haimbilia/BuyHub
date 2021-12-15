@@ -470,12 +470,12 @@ class ProductCategory extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         $srch = static::getSearchObject(false, $langId, $active, $status);
-        $srch->addFld('m.prodcat_id,COALESCE(prodcat_name,m.prodcat_identifier) as prodcat_identifier,m.prodcat_parent');
+        $srch->addFld('m.prodcat_id, COALESCE(prodcat_name,m.prodcat_identifier) as prodcat_identifier, m.prodcat_parent');
         $srch->addCondition('m.prodcat_deleted', '=', applicationConstants::NO);
         $srch->addCondition('m.prodCat_id', '=', FatUtility::int($prodCat_id));
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
-        $name = '';
+        $name = $name_suffix;
         $seprator = '';
         if ($level > 0) {
             $seprator = ' &nbsp;&nbsp;&raquo;&raquo;&nbsp;&nbsp;';
@@ -507,19 +507,18 @@ class ProductCategory extends MyAppModel
         return false;
     }
 
-    public function getProdCatAutoSuggest($keywords = '', $limit = 10, $langId = 0, $collectionId = 0)
+    public function getProdCatAutoSuggest($keywords = '', $limit = 20, $langId = 0, $excludeRecords = [])
     {
         $srch = static::getSearchObject(false, $langId);
-        $srch->addFld('m.prodcat_id,m.prodcat_identifier,m.prodcat_parent');
+        $srch->addFld('m.prodcat_id, m.prodcat_identifier, m.prodcat_parent');
         $srch->addCondition('m.prodcat_deleted', '=', applicationConstants::NO);
         $srch->addCondition('m.prodcat_active', '=', applicationConstants::ACTIVE);
         if (!empty($keywords)) {
             $srch->addCondition('m.prodcat_identifier', 'like', '%' . $keywords . '%');
         }
 
-        $alreadyAdded = Collections::getRecords($collectionId);
-        if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
-            $srch->addCondition('prodcat_id', 'NOT IN', array_keys($alreadyAdded));
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('prodcat_id', 'NOT IN', $excludeRecords);
         }
 
         $srch->addOrder('m.prodcat_parent', 'asc');
@@ -1191,13 +1190,13 @@ class ProductCategory extends MyAppModel
                 $this->saveLangData($langId, $catName);
             }
         }
-   
-        if(isset($post['rating_type']) && !empty($post['rating_type'])){
-            $ratingTypeArr = json_decode($post['rating_type'],true);
-            foreach($ratingTypeArr as $rating){
-                if(!isset($rating['id'])){
+
+        if (isset($post['rating_type']) && !empty($post['rating_type'])) {
+            $ratingTypeArr = json_decode($post['rating_type'], true);
+            foreach ($ratingTypeArr as $rating) {
+                if (!isset($rating['id'])) {
                     $ratingObj = new RatingType();
-                    $ratingObj->assignValues(['ratingtype_active' => 1 ,'ratingtype_identifier'=> $rating['value']]);
+                    $ratingObj->assignValues(['ratingtype_active' => 1, 'ratingtype_identifier' => $rating['value']]);
                     if (!$ratingObj->save()) {
                         LibHelper::exitWithError($ratingObj->getError(), true);
                     }
@@ -1205,14 +1204,13 @@ class ProductCategory extends MyAppModel
                         FatUtility::dieJsonError($ratingObj->getError());
                     }
                     $ratingId = $ratingObj->getMainTableRecordId();
-                }else{
+                } else {
                     $ratingId = $rating['id'];
                 }
 
                 if (!$this->addUpdateRatingType($ratingId)) {
                     LibHelper::exitWithError($this->getError(), true);
-                }                                
-                
+                }
             }
         }
 

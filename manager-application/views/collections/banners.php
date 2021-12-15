@@ -6,12 +6,12 @@
                     <ul class="tabs_nav">
                         <li><a href="javascript:void(0)"
                                 onclick="collectionForm(<?php echo $collection_type ?>, <?php echo $collection_layout_type ?>, <?php echo $collection_id ?>, 0);">
-                                <?php echo Labels::getLabel('LBL_General', $adminLangId);?></a>
+                                <?php echo Labels::getLabel('LBL_General', $siteLangId);?></a>
                         </li>
 						<li><a class="active"
                                 href="javascript:void(0)"
                                 <?php if($collection_id > 0){?> onclick="banners(<?php echo $collection_id ?>);" <?php } ?>>
-                                <?php echo Labels::getLabel('LBL_Banners', $adminLangId);?></a>
+                                <?php echo Labels::getLabel('LBL_Banners', $siteLangId);?></a>
                         </li>
                     </ul>
                     <div class="tabs_panel_wrap" id="banners_list-js"></div>

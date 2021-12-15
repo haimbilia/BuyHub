@@ -9,7 +9,8 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
 <main class="main">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4"> <button class="float-btn" type="button" data-trigger="card-aside">
+            <div class="col-lg-4"> 
+                <button class="float-btn" type="button" data-trigger="card-aside">
                     <svg class="svg" width="20" height="20">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
                         </use>

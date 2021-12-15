@@ -552,7 +552,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     };
 
     loadCropperSkeleton = function (reopenSideBarOnClose = true) {
-
         autoOpenSideBar = reopenSideBarOnClose;
         $("#modalBoxJs").remove();
         $("body").append(fcom.getModalBody());
