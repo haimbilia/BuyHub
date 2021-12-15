@@ -78,6 +78,12 @@
                         <div class="card-head-label">
                             <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_LATEST_ORDERS', $siteLangId); ?></h3>
                         </div>
+                        <div class="card-head-toolbar">
+                            <?php if ($objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <a class="" target='_new' href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
+                                    <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
+                            <?php } ?>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive" id="latestOrdersJs"></div>
@@ -102,50 +108,51 @@
                         <div class="card-head-label">
                             <h3 class="card-head-title">Total Sales </h3>
                         </div>
+                        <?php /*?>
                         <div class="card-head-toolbar">
                             <select class="form-select form-select-sm">
-                                <option value="week" selected="selected">Last 7 days</option>
-                                <option value="month">Last month</option>
-                                <option value="year">Last Year</option>
+                                <?php foreach ($intervalsArr as $key => $val) { ?>
+                                    <option value="<?php echo $key;?>"><?php echo $val;?></option>
+                                <?php } ?>
                             </select>
                         </div>
+                        <?php */ ?>
 
                     </div>
                     <div class="card-body">
 
                         <div class="js-total-sale"></div>
                         <ul class="list-stats list-stats-inline">
-
                             <li class="list-stats-item">
                                 <span class="label">
                                     <i class="dot" style="background-color:#d70206;"></i>
-                                    Direct</span>
+                                    <?php echo Labels::getLabel('LBL_Order_Sales', $siteLangId); ?></span>
                                 <span class="value">
                                     <i class="icn fas fa-arrow-up font-success"></i>
-                                    36%</span>
+                                    <?php echo $dashboardInfo["stats"]["totalSales"][4]["totalsales"]; ?></span>
                             </li>
                             <li class="list-stats-item">
                                 <span class="label">
                                     <i class="dot" style="background-color: #f05b4f;"></i>
-                                    Affilliate</span>
+                                    <?php echo Labels::getLabel('LBL_Sales_Earnings', $siteLangId); ?></span>
                                 <span class="value">
-                                    <i class="icn fas fa-arrow-down font-danger"></i>
-                                    29%
+                                    <i class="icn fas fa-arrow-up font-success"></i>
+                                    <?php echo $dashboardInfo["stats"]["totalSales"][4]["totalcommission"]; ?>
                                 </span>
                             </li>
                             <li class="list-stats-item">
-                                <span class="label"> <i class="dot" style="background-color:#f4c63d;"></i>Sponsored</span>
+                                <span class="label"> <i class="dot" style="background-color:#f4c63d;"></i><?php echo Labels::getLabel('LBL_New_Users', $siteLangId); ?></span>
                                 <span class="value">
                                     <i class="icn fas fa-arrow-up font-success"></i>
-                                    29%</span>
+                                    <?php echo $dashboardInfo["stats"]["totalUsers"]['-1']; ?></span>
 
                             </li>
                             <li class="list-stats-item">
                                 <span class="label"> <i class="dot" style="background-color:#d17905;"></i>
-                                    E-mail</span>
+                                    <?php echo Labels::getLabel('LBL_New_Shops', $siteLangId); ?></span>
                                 <span class="value">
                                     <i class="icn fas fa-arrow-up font-success"></i>
-                                    14%
+                                    <?php echo $dashboardInfo["stats"]["totalShops"]['-1']; ?>
                                 </span>
 
                             </li>
@@ -161,16 +168,15 @@
                         </div>
                         <div class="card-head-toolbar">
                             <select class="form-select form-select-sm" onClick="topCountries(this.value)">
-                                <option value="today" selected="selected"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
+                                <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
                                 <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
                                 <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
-                                <option value="Yearly"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
+                                <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
                             </select>
                         </div>
 
                     </div>
                     <div class="card-body">
-                        <div id="vmap" style="height: 224px;"></div>
                         <ul class="list-stats list-stats-double topCountriesJs"></ul>
                     </div>
 
@@ -223,114 +229,7 @@
                     </div>
 
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="widget26">
-                                    <div class="widget26__content">
-                                        <div class="row align-items-center justify-content-between">
-                                            <div class="col"><span class="widget26__number">$9581</span>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="widget26__cents font-success"><i class="la la-arrow-up"></i> 2.6%</span>
-                                            </div>
-                                        </div>
 
-                                        <div class="row align-items-center justify-content-between">
-                                            <div class="col"><span class="widget26__desc">Total
-                                                    Sales <i class="fa fa-question-circle"></i></span>
-                                            </div>
-                                            <div class="col-auto"><a class="link" href="#">View
-                                                    Report</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="widget__chart">
-                                        <div class="sales js-sales">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="widget15 mt-4">
-                                    <div class="widget15__items">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="widget15__item">
-                                                    <span class="widget15__stats">
-                                                        63%
-                                                    </span>
-                                                    <span class="widget15__text">
-                                                        Online Store
-                                                    </span>
-                                                    <div class="space-10"></div>
-                                                    <div class="progress widget15__chart-progress--sm">
-                                                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%;"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="widget15__item">
-                                                    <span class="widget15__stats">
-                                                        54%
-                                                    </span>
-                                                    <span class="widget15__text">
-                                                        Facebook
-                                                    </span>
-                                                    <div class="space-10"></div>
-                                                    <div class="progress progress--sm">
-                                                        <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 65%;"></div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="widget15__item">
-                                                    <span class="widget15__stats">
-                                                        41%
-                                                    </span>
-                                                    <span class="widget15__text">
-                                                        Profit Grow
-                                                    </span>
-                                                    <div class="space-10"></div>
-                                                    <div class="progress progress--sm">
-                                                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 45%;"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="widget15__item">
-                                                    <span class="widget15__stats">
-                                                        79%
-                                                    </span>
-                                                    <span class="widget15__text">
-                                                        Member Grow
-                                                    </span>
-                                                    <div class="space-10"></div>
-                                                    <div class="progress progress--sm">
-                                                        <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 85%;"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="widget15__desc">
-                                                    * lorem ipsum dolor sit amet consectetuer sediat
-                                                    elit
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

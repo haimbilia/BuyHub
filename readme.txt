@@ -310,7 +310,7 @@ Admin UI/UX Enhancements pages:
     => Product Catalog
         - Brands
         - Shops
-        - Categories
+        - Categories        
 
     => Requests
         - Brand request
@@ -325,13 +325,11 @@ Admin UI/UX Enhancements pages:
         - Order Statuses
 
     => Users
-        - Special Price
-        - Volume Discount
-        - Related Products
-        - Promotions
-        - Rewards on purchase
-        - manage weightages
-        - Recommended tag products weightages
+        - Users
+        - Rewards
+        - Transactions
+        - Deleted Users
+        - Users addresses
 
     => Promotions
         - Special Price
@@ -375,6 +373,46 @@ Admin UI/UX Enhancements pages:
         - Meta Tags Management
 
     => Settings
+
+=========================TV-9.4.0.20211130======================
+=> Product Catalog
+    - Oprions
+
+=> Requests    
+    - Order return requests
+    - Order cancellation requests
+    - Withdrawal requests
+
+=> Orders
+    - Orders
+    - Subscription Orders
+    - Product Reviews
+
+=> Users
+    - Admin Users
+    - GDPR requests
+
+=> Promotions
+    - Discount Coupons
+    - Push notifications
+    - Badges
+    - Ribbons
+
+=> CMS
+    - Home page slidees
+    - Banners
+    - Navigations
+
+=> Reports
+   - Buyers report
+   - Discount coupons
+
+=> Shipping/Pickup
+    - Shipping compnay users
+    - Shipping packages
+    - Shipping profiles
+    - Pickup addresses
+    - Shipped addresses
 
 Bugs : 
     => 060304 - The homepage logo is not clearly visible.

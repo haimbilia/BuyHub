@@ -4,8 +4,8 @@ $href = $href ?? "javascript:void(0)";
 $onclick = !empty($onclick) ? "onclick = " . $onclick : "";
 
 $uploadedTime = AttachedFile::setTimeParam($user['user_updated_on']);
-$userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($user['user_id'], $siteLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-$username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['credential_username'] . ')' : $user['credential_username'];
+$userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($user['user_id'],'MINITHUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+$username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['credential_username'] . ')' : $user['credential_username']; 
 ?>
 <div class="user-profile">
     <figure class="user-profile_photo">
