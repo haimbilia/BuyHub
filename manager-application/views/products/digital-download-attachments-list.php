@@ -1,28 +1,31 @@
 <?php
+if(1 > count($attachments)){
+    return;
+}
 $arr_flds = array(
-    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
-    'mainfile' => Labels::getLabel('LBL_DD_File', $adminLangId),
-    'preview' => Labels::getLabel('LBL_DD_Preview', $adminLangId),
-    'pddr_options_code' => Labels::getLabel('LBL_DD_Option', $adminLangId),
-    'afile_lang_id' => Labels::getLabel('LBL_DD_Language', $adminLangId),
+    // 'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
+    'mainfile' => Labels::getLabel('LBL_DD_FILE', $siteLangId),
+    'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),
+    'pddr_options_code' => Labels::getLabel('LBL_DD_OPTION', $siteLangId),
+    'afile_lang_id' => Labels::getLabel('LBL_DD_LANGUAGE', $siteLangId),
 );
 
 if (0 == $product['product_seller_id']) {
-    $arr_flds['action'] = Labels::getLabel('LBL_Action', $adminLangId);
+    $arr_flds['action'] = Labels::getLabel('LBL_ACTION', $siteLangId);
 }
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
-foreach ($arr_flds as $val) {
-    $e = $th->appendElement('th', array(), $val);
+foreach ($arr_flds as $key => $val) {
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+    $e = $th->appendElement('th', $tdAttr, $val);
 }
 
 $serialNo = 0;
-foreach ($attachments as $sn => $row) {
+foreach ($attachments as $sn => $row) {    
     $serialNo++;
     $tr = $tbl->appendElement('tr');
-
-    foreach ($fields as $key => $val) {
+    foreach ($arr_flds as $key => $val) {      
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':
@@ -30,14 +33,14 @@ foreach ($attachments as $sn => $row) {
                 break;
             case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
-                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                $dvElem = $td->appendElement('div', array('class' => 'text-break'), $row[$key], true);
                 if (0 < $row['afile_id']) {
                     if (0 == $product['product_seller_id']) {
                         $dvElem->appendElement(
                             "a",
                             array(
                                 'class' => 'btn btn-light btn-sm',
-                                'title' => Labels::getLabel('LBL_download', $adminLangId),
+                                'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
                                 'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
                                 'target' => '_blank'
                             ),
@@ -48,7 +51,7 @@ foreach ($attachments as $sn => $row) {
                             "a",
                             array(
                                 'class' => 'btn btn-light btn-sm',
-                                'title' => Labels::getLabel('LBL_Delete', $adminLangId),
+                                'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
                                 'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
                             ),
                             '<i class="fa fa-trash  icon"></i>',
@@ -56,7 +59,7 @@ foreach ($attachments as $sn => $row) {
                         );
                     }
                 } else {
-                    $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $adminLangId), true);
+                    $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 break;
             case 'preview':
@@ -67,7 +70,7 @@ foreach ($attachments as $sn => $row) {
                         "a",
                         array(
                             'class' => 'btn btn-light btn-sm',
-                            'title' => Labels::getLabel('LBL_download', $adminLangId),
+                            'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
                             'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $downloadrefType, 1, $row['preview'])),
                             'target' => '_blank'
                         ),
@@ -79,7 +82,7 @@ foreach ($attachments as $sn => $row) {
                             "a",
                             array(
                                 'class' => 'btn btn-light btn-sm',
-                                'title' => Labels::getLabel('LBL_Delete', $adminLangId),
+                                'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
                                 'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)',
                                 'href' => 'javascript:void(0);'
                             ),
@@ -88,12 +91,12 @@ foreach ($attachments as $sn => $row) {
                         );
                     }
                 } else {
-                    $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $adminLangId), true);
+                    $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                     $dvElem->appendElement(
                         "a",
                         array(
                             'class' => 'btn btn-light btn-sm',
-                            'title' => Labels::getLabel('LBL_Add', $adminLangId),
+                            'title' => Labels::getLabel('LBL_ADD', $siteLangId),
                             'href' => 'javascript:void(0);',
                             'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;',
                             'href' => 'javascript:void(0);'
@@ -112,7 +115,7 @@ foreach ($attachments as $sn => $row) {
                 $td->appendElement('plaintext', array(), $val, true);
                 break;
             case 'afile_lang_id':
-                $lang_name = Labels::getLabel('LBL_All', $adminLangId);
+                $lang_name = Labels::getLabel('LBL_ALL', $siteLangId);
                 if ($row['afile_lang_id'] > 0) {
                     $lang_name = $languages[$row['afile_lang_id']];
                 }
@@ -130,8 +133,8 @@ foreach ($attachments as $sn => $row) {
                     $td->appendElement(
                         "a",
                         array(
-                            'class' => 'btn btn-clean btn-sm btn-icon',
-                            'title' => Labels::getLabel('LBL_Delete', $adminLangId),
+                            'class' => 'btn btn-clean btn-sm btn-icon align-right',
+                            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
                             'onclick' => 'deleteDigitalFile(' . $fileId . ', ' . $row['afile_record_id'] . ', ' . $isPreview . ', 1)',
                             'href' => 'javascript:void(0);'
                         ),
@@ -149,7 +152,7 @@ foreach ($attachments as $sn => $row) {
 
 if (empty($attachments)) {
     $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($arr_flds)]);
-    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_No_Records', $adminLangId), true);
+    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_NO_RECORDS', $siteLangId), true);
 }
 ?>
 <div class="col-md-12">
