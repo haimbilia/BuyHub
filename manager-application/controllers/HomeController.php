@@ -2,6 +2,8 @@
 
 class HomeController extends ListingBaseController
 {
+    protected $pageKey = 'DASHBOARD';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -11,13 +13,18 @@ class HomeController extends ListingBaseController
     public function totalSales(){
         $statsObj = new Statistics();
         $statsObj->getStats('total_sales');
-        
+
     }
 
     public function index()
     {
         SystemLog::clearOldLog();
         $accountId = false;
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('configuredAnalytics', false);
         $this->set('objPrivilege', $this->objPrivilege);
         $this->set('intervalsArr', Statistics::getIntervals($this->siteLangId));
