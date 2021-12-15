@@ -389,6 +389,7 @@ Bugs :
     => 060572 - Admin UI: "Spacing" and "text size" issue for the Combined Tax option under the tax structure section.
     => 060531 - Admin UI: Nothing is showing while clicking on the User's name on the whole system.
     => 060513 - Admin UI: Order Status's sorting and re-arrange functionality is not working properly if trying to use it simultaneously.
+    => 060776 - Recommended tag products section error is coming.
 
     
 Known Issues and Problems :
