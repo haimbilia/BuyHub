@@ -203,7 +203,7 @@ class ContentBlockController extends ListingBaseController
         $frm->addHiddenField('', 'epage_id', $recordId);
         $frm->addHiddenField('', 'lang_id', $this->siteLangId );
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $this->siteLangId), 'epage_label');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
+        //$fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         // $fld->requirements()->setRequired();
 
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'epage_active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', [], '');
@@ -354,7 +354,7 @@ class ContentBlockController extends ListingBaseController
         }
 
         $record = new Extrapage($recordId); 
-        $urlrewrite_custom = $post['urlrewrite_custom'];
+       /*$urlrewrite_custom = $post['urlrewrite_custom'];*/
         $post['epage_identifier'] = $post['epage_label'];
 
         $languageId =  $post['lang_id'] ? $post['lang_id'] : $this->siteLangId;
@@ -364,8 +364,9 @@ class ContentBlockController extends ListingBaseController
             'epage_label' => $post['epage_label'],
             'epage_content' => $post['epage_content'],
         );
-        unset($post['lang_id'], $post['epage_content'], $post['epage_label'], $post['urlrewrite_custom'], $post['auto_update_other_langs_data']);
-
+       // unset($post['lang_id'], $post['epage_content'], $post['epage_label'], $post['urlrewrite_custom'], $post['auto_update_other_langs_data']);
+        unset($post['lang_id'], $post['epage_content'], $post['epage_label'], $post['auto_update_other_langs_data']);
+        
         if (!$record->updatePageContent($post)) {
             LibHelper::exitWithError($record->getError(), true);
         }
@@ -383,12 +384,14 @@ class ContentBlockController extends ListingBaseController
         }
 
         /* url data[ */
+        /*
         $originalUrl = Extrapage::REWRITE_URL_PREFIX . $recordId;
         if ($urlrewrite_custom == '') {
             UrlRewrite::remove($originalUrl);
         } else {
             $record->rewriteUrl($urlrewrite_custom);
         }
+        */
         /* ] */
 
         

@@ -39,6 +39,10 @@ require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
             credential_verified: 1
         });
 
-        $("#prodcatIdJs").select2({allowClear: true,placeholder: $("#prodcatIdJs").attr('placeholder')}).data("select2").$container.addClass("w-100");;
+        $("#prodcatIdJs").select2({
+            dropdownParent: $("#prodcatIdJs").parent(),
+            allowClear: true,
+            placeholder: $("#prodcatIdJs").attr('placeholder')
+        }).data("select2").$container.addClass("w-100");;
     });
 </script>

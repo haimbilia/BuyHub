@@ -177,6 +177,7 @@ class AdminBaseController extends FatController
                     continue;
                 }
                 $jsVariables['language' . $val['language_id']] = $val['language_layout_direction'];
+                $jsVariables['defaultFormLangId'] = commonHelper::getDefaultFormLangId();
             }
             $jsVariables['languages'] = $languages;
             FatCache::set('jsAdminVariablesCache' . $this->siteLangId, serialize($jsVariables), '.txt');

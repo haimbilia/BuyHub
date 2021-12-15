@@ -5,6 +5,7 @@ $(document).ready(function () {
 
     if (0 < $('#searchFormConditionTypeJs').length) {
         $('#searchFormConditionTypeJs').select2({
+            dropdownParent: $('#searchFormConditionTypeJs').parent(),
             allowClear: true,
             placeholder: $('#searchFormConditionTypeJs').attr("placeholder")
         }).on("select2:unselecting", function (e) {
