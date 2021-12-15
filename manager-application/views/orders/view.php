@@ -69,16 +69,16 @@
 
                         </div>
                         <div class="card-body">
-                            <ul class="list-text">
+                            <ul class="list-stats">
                                 <?php if (!empty($order['buyer_user_name'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['buyer_user_name']; ?></span>
                                     </li>
                                 <?php } ?>
 
                                 <?php if (!empty($order['buyer_email'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['buyer_email']; ?></span>
                                     </li>

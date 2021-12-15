@@ -22,7 +22,7 @@
                         <div class="user-profile">
                             <div class="user-profile_data">
                                 <a class="user-profile_title" href="javascript:void(0)"><?php echo $product['product_name']; ?></a>
-                                <span class="text-muted fw-bold"><?php echo $product['op_selprod_title']; ?></span>
+                                <span class="text-muted"><?php echo $product['op_selprod_title']; ?></span>
                             </div>
                         </div>
                     </td>
