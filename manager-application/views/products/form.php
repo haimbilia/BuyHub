@@ -1,5 +1,11 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $frm->setFormTagAttribute('class', 'form');
+$displayDigitalDwnBtn = false;
+if(0 < $productId){
+    $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && 1 > $productData['product_seller_id'];
+    $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
+}
+
 ?>
 <main class="main mainJs" dir="<?php echo $formLayout; ?>">
     <div class="container">
@@ -99,6 +105,7 @@ $frm->setFormTagAttribute('class', 'form');
                                             </div>
                                         </a>
                                     </li>
+                                    <?php if($displayDigitalDownloadList){ ?>
                                     <li class="stock-nav-item">
                                         <a class="stock-nav-link" href="#digital-files">
                                             <i class="stock-nav-icn">
@@ -130,6 +137,7 @@ $frm->setFormTagAttribute('class', 'form');
                                             </div>
                                         </a>
                                     </li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                         </div>
@@ -382,6 +390,7 @@ $frm->setFormTagAttribute('class', 'form');
                         </div>
                     </div>
                 </div>
+                <?php if($displayDigitalDownloadList){ ?>
                 <div class="card" id="digital-files">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="digital-files-block">
                         <div class="card-head-label">
@@ -390,7 +399,10 @@ $frm->setFormTagAttribute('class', 'form');
                             <span class="text-muted">Digital Files are added in this
 
                                 <span class="input-helper"></span>section</span>
-                                <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>)">File</button>
+                                <?php if($displayDigitalDownloadAddBtn){ ?>
+                                    <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>)">File</button>
+                                <?php  } ?>
+                               
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
                     <div class="card-body show" id="digital-files-block">                      
@@ -406,7 +418,9 @@ $frm->setFormTagAttribute('class', 'form');
                             <span class="text-muted">Product Digital Links are added in this
 
                                 <span class="input-helper"></span>section</span>
-                                <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK;?>)">LINK</button>
+                                <?php if($displayDigitalDownloadAddBtn){ ?>
+                                    <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK;?>)">LINK</button>
+                                <?php  } ?>                                
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
                     <div class="card-body show" id="digital-links-block">                     
@@ -414,6 +428,7 @@ $frm->setFormTagAttribute('class', 'form');
                         </div>
                     </div>
                 </div>
+                <?php } ?>
             </div>
             <div class="add-stock-column column-actions">
                 <div class="sticky-top">
@@ -544,6 +559,9 @@ $frm->setFormTagAttribute('class', 'form');
         var productOptions = <?php echo json_encode($productOptions); ?>;
         var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
         var tempImageType = '<?php echo AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP; ?>';
+        var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
+        var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';        
+     
         $(function() {
 
             prodSpecifications();
@@ -616,6 +634,10 @@ $frm->setFormTagAttribute('class', 'form');
                 }
             });
             upcType();
+            <?php if (0 < $productId && $displayDigitalDownloadList){ ?>
+            getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE;?>,<?php echo $productId;?>);
+            getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK;?>,<?php echo $productId;?>);
+        <?php } ?>
         });
     </script>
 
