@@ -11,19 +11,28 @@
             foreach ($typeLayouts as $type => $layouts) {
                 foreach ($layouts as $layoutType => $layout) { ?>
                     <li class="nav__item">
-                        <a href="#" class="nav__link">
+                        <span class="nav__link">
                             <span class="nav__link-text"><?php echo $layout; ?></span>
-                        </a>
-                        <div class="actions">
-                            <a href="javascript:void(0)" onclick="collectionForm(<?php echo $type; ?>, <?php echo $layoutType; ?>, 0)" title="<?php echo Labels::getLabel('LBL_ADD_COLLECTION', $siteLangId); ?>" class="btn-clean btn-sm btn-icon btn-secondary ">
-                                <i class="fas fa-plus">
-                                    <!-- <svg class="svg" width="16px" height="16px">
-                                        <use xlink:href="<//?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                        </use>
-                                    </svg> -->
-                                </i></a>
-                            <a rel="facebox" onClick="displayImageInFacebox('<?php echo CONF_WEBROOT_URL; ?>images/collection_layouts/<?php echo Collections::getLayoutImagesArr()[$layoutType]; ?>');" href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_LAYOUT_INSTRUCTION', $siteLangId); ?>" class="btn-clean btn-sm btn-icon btn-secondary "><i class="fas fa-file-image"></i></a>
-                        </div>
+                            <ul class="actions">
+                                <li title="<?php echo Labels::getLabel('LBL_LAYOUT_INSTRUCTION', $siteLangId); ?>" data-toggle="tooltip" data-placement="top">
+                                    <?php 
+                                        $url = CONF_WEBROOT_URL . 'images/collection_layouts/' . Collections::getLayoutImagesArr()[$layoutType];
+                                    ?>
+                                    <a href="javascript:void(0)" onclick="displayImageInFacebox('<?php echo $layout; ?>', '<?php echo $url ?>')">
+                                        <svg class="svg" width="18" height="18">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#view"></use>    
+                                        </svg>
+                                    </a>
+                                </li>
+                                <li title="<?php echo Labels::getLabel('LBL_ADD_COLLECTION', $siteLangId); ?>" data-toggle="tooltip" data-placement="top">
+                                    <a href="javascript:void(0)" onclick="collectionForm(<?php echo $type; ?>, <?php echo $layoutType; ?>)">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add"></use>
+                                        </svg>
+                                    </a>
+                                </li>
+                            </ul>
+                        </span>
                     </li>
                 <?php } ?>
             <?php } ?>

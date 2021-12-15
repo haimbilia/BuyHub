@@ -572,4 +572,12 @@ class HtmlHelper
                     <time>' . $time . '</time>
                 </p>';
     }
+
+    public static function configureCheckboxLabel(&$frm, $fldName)
+    {
+        $fld = $frm->getField($fldName);
+        $fld->developerTags['noCaptionTag'] = true;   
+        $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
+        $fld->developerTags['cbHtmlAfterCheckbox'] = '<span class="input-helper"></span>';
+    }
 }

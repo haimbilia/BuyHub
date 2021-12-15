@@ -13,14 +13,14 @@
                     <?php } ?>
                 </div>
                 <?php if (isset($imgTypesArr) && !empty($imgTypesArr[$images['afile_record_subid']])) {
-                    echo '<small class=""><strong>' . Labels::getLabel('LBL_Type', $adminLangId) . ': </strong> ' . $imgTypesArr[$images['afile_record_subid']] . '</small><br/>';
+                    echo '<small class=""><strong>' . Labels::getLabel('LBL_Type', $siteLangId) . ': </strong> ' . $imgTypesArr[$images['afile_record_subid']] . '</small><br/>';
                 }
 
-                $lang_name = Labels::getLabel('LBL_All', $adminLangId);
+                $lang_name = Labels::getLabel('LBL_All', $siteLangId);
                 if ($images['afile_lang_id'] > 0) {
                     $lang_name = $languages[$images['afile_lang_id']]; ?>
                 <?php } ?>
-                <small class="text--small"><?php echo Labels::getLabel('LBL_Language', $adminLangId); ?>: <?php echo $lang_name; ?></small>
+                <small class="text--small"><?php echo Labels::getLabel('LBL_Language', $siteLangId); ?>: <?php echo $lang_name; ?></small>
             </div>
         </li>
     </ul>

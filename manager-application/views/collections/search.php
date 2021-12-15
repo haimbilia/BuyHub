@@ -43,7 +43,9 @@ foreach ($arrListing as $sn => $row) {
                     'recordId' => $row['collection_id']
                 ];
                 if ($canEdit) {
-                    $data['editButton'] = [];
+                    $data['editButton'] = [
+                        'onclick' => 'collectionForm(' . $row['collection_type'] . ', ' . $row['collection_layout_type'] . ', ' . $row['collection_id'] . ');'
+                    ];
                     $data['deleteButton'] = [];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

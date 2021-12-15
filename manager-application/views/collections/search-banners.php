@@ -1,18 +1,18 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="sectionhead" style=" padding-bottom:20px">
-    <h4><?php echo Labels::getLabel('LBL_Banners_Listing', $adminLangId); ?>
+    <h4><?php echo Labels::getLabel('LBL_Banners_Listing', $siteLangId); ?>
     </h4>
     <a href="javascript:void(0)" class="themebtn btn-default btn-sm" onClick="bannerForm(<?php echo $collection_id; ?>, 0)" ;>
-        <?php echo Labels::getLabel('LBL_ADD_NEW', $adminLangId); ?>
+        <?php echo Labels::getLabel('LBL_ADD_NEW', $siteLangId); ?>
     </a>
 </div>
 <?php
 $arr_flds = array(
-    'listSerial' => Labels::getLabel('LBL_#', $adminLangId),
-    'banner_title' => Labels::getLabel('LBL_Title', $adminLangId),
-    'banner_img' => Labels::getLabel('LBL_Image', $adminLangId),
-    'banner_target' => Labels::getLabel('LBL_Target', $adminLangId),
-    'banner_active' => Labels::getLabel('LBL_Status', $adminLangId),
+    'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
+    'banner_title' => Labels::getLabel('LBL_Title', $siteLangId),
+    'banner_img' => Labels::getLabel('LBL_Image', $siteLangId),
+    'banner_target' => Labels::getLabel('LBL_Target', $siteLangId),
+    'banner_active' => Labels::getLabel('LBL_Status', $siteLangId),
     'action' => '',
 );
 if (!$canEdit) {
@@ -59,33 +59,33 @@ foreach ($arrListing as $sn => $row) {
                 $desktop_url = '';
                 $tablet_url = '';
                 $mobile_url = '';
-                if (!AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $row['banner_id'], 0, $adminLangId)) {
+                if (!AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $row['banner_id'], 0, $siteLangId)) {
                     continue 2;
                 } else {
-                    $slideArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $row['banner_id'], 0, $adminLangId);
+                    $slideArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $row['banner_id'], 0, $siteLangId);
                     foreach ($slideArr as $slideScreen) {
                         $uploadedTime = AttachedFile::setTimeParam($slideScreen['afile_updated_at']);
                         switch ($slideScreen['afile_screen']) {
                             case applicationConstants::SCREEN_MOBILE:
-                                $mobile_url = '<480:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $adminLangId, applicationConstants::SCREEN_MOBILE)) . $uploadedTime . ",";
+                                $mobile_url = '<480:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE)) . $uploadedTime . ",";
                                 break;
                             case applicationConstants::SCREEN_IPAD:
-                                $tablet_url = ' <768:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $adminLangId, applicationConstants::SCREEN_IPAD)) . $uploadedTime . ',' . '  <1024:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $adminLangId, applicationConstants::SCREEN_IPAD)) . $uploadedTime . ",";
+                                $tablet_url = ' <768:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD)) . $uploadedTime . ',' . '  <1024:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD)) . $uploadedTime . ",";
                                 break;
                             case applicationConstants::SCREEN_DESKTOP:
-                                $desktop_url = ' >1024:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $adminLangId, applicationConstants::SCREEN_DESKTOP)) . $uploadedTime . ",";
+                                $desktop_url = ' >1024:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP)) . $uploadedTime . ",";
                                 break;
                         }
                     }
                 }
 
                 $uploadedTime = AttachedFile::setTimeParam($row['banner_updated_on']);
-                $img = '<img src="' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $adminLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" />';
+                $img = '<img src="' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" />';
                 $td->appendElement('plaintext', array(), $img, true);
                 break;
             case 'action':
                 if ($canEdit) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $adminLangId), "onclick" => "bannerForm(" . $collection_id . "," . $row['banner_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'class' => 'btn btn-clean btn-sm btn-icon', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "onclick" => "bannerForm(" . $collection_id . "," . $row['banner_id'] . ")"), "<i class='far fa-edit icon'></i>", true);
                     /* $li = $ul->appendElement("li");
                     $li->appendElement('a', array('href'=>"javascript:void(0)", 'class'=>'button small green', 'title'=>'Delete',"onclick"=>"deleteBanner(".$row['banner_id'].")"),'<i class="fa fa-trash  icon"></i>', true); */
                 }
@@ -97,7 +97,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $adminLangId));
+    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
 }
 echo $tbl->getHtml();
 /* $postedData['page']=$page;
@@ -105,6 +105,6 @@ $postedData['collection_id']=$collection_id;
 echo FatUtility::createHiddenFormFromData($postedData, array(
         'name' => 'frmListingSearchPaging'
 ));
-$pagingArr=array('pageCount'=>$pageCount,'page'=>$page,'pageSize'=>$pageSize,'recordCount'=>$recordCount,'callBackJsFunc'=>'goToBannerSearchPage','adminLangId'=>$adminLangId);
+$pagingArr=array('pageCount'=>$pageCount,'page'=>$page,'pageSize'=>$pageSize,'recordCount'=>$recordCount,'callBackJsFunc'=>'goToBannerSearchPage','siteLangId'=>$siteLangId);
 $this->includeTemplate('_partial/pagination.php', $pagingArr, false); */
 ?>

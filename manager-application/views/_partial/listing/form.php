@@ -23,4 +23,4 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <?php if (true === $displayFooterButtons) {
         require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php');
     } ?>
-</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->
+</div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->'
