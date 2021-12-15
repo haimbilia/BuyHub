@@ -183,6 +183,7 @@ select2 = function (
     }
     
     ele.select2({
+        dropdownParent: ele.parent(),
         closeOnSelect: ele.data("closeOnSelect") || true,
         data: data,
         dir: layoutDirection,

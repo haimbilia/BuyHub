@@ -146,6 +146,14 @@
 		});
 	};
 
+	totalSales = function () {
+		$('#totalSalesJs').html(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('home', 'totalSales'), '', function (t) {
+			$('#totalSalesJs').html(t);
+			fcom.removeLoader();
+		});
+	};
+
 	topSellingProducts = function () {
 		$('#topSellingProductsJs').html(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('home', 'topSellingProducts'), '', function (t) {
@@ -218,6 +226,7 @@ $(".navTabsJs li a").click(function () {
 
 $(window).on('load', function () {
 	callChart('monthlysalesJs', $SalesChartKey, $SalesChartVal, $position);
+	totalSales('yearly');
 	topCountries('yearly');
 	latestOrders();
 	topSellingProducts();

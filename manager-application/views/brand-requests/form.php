@@ -16,6 +16,12 @@ $fld->setFieldTagAttribute('id', "urlrewrite_custom");
 $fld->htmlAfterField = '<span class="form-text text-muted">' . UrlHelper::generateFullUrl('Brands', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '</span>';
 $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
 
+$fld = $frm->getField('brand_active');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$fld = $frm->getField('brand_status');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
 
 $otherButtons = [
     [

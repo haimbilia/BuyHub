@@ -536,9 +536,6 @@
                                             <?php echo Labels::getLabel('NAV_RELATED_PRODUCTS', $siteLangId); ?></span>
                                     </a>
                                 </li>
-                            <?php } ?>
-
-                            <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('BuyTogetherProducts'); ?>">
                                         <span class="nav_icon">
@@ -1206,7 +1203,7 @@
                 $objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewTrackingRelationCode()
+                $objPrivilege->canViewTrackingRelationCode(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
             <?php } ?>
@@ -1263,19 +1260,6 @@
                                 </a>
                             </li>
                         <?php } ?>
-                        <?php if (false && $objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                            <li class="nav_item navItemJs">
-                                <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
-                                    <span class="nav_icon">
-                                        <svg class="svg" width="24" height="24">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
-                                            </use>
-                                        </svg>
-                                    </span>
-                                    <span class="nav_text"><?php echo Labels::getLabel('NAV_GENERATE_SITEMAP', $siteLangId); ?></span>
-                                </a>
-                            </li>
-                        <?php } ?>
 
                         <?php if ($objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
@@ -1301,7 +1285,7 @@
                                 </a>
                             </li>
                         <?php } ?>
-                        <?php if (false && $objPrivilege->canViewTrackingRelationCode(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                        <?php if ($objPrivilege->canViewTrackingRelationCode(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
                                 <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('TrackingCodeRelation'); ?>">
                                     <span class="nav_icon">

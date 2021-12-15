@@ -463,7 +463,7 @@ class BrandsController extends ListingBaseController
         $this->_template->render(false, false);
     }
 
-    public function removeBrandMedia($brand_id, $imageType = '', $afileId = 0)
+    public function removeMedia($brand_id, $imageType = '', $afileId = 0)
     {
         $brand_id = FatUtility::int($brand_id);
         if (!$brand_id) {

@@ -115,7 +115,7 @@ if ($printData) {
             e.detail.tagify.loading(false).dropdown.show.call(tagify, keyword);
         });
     }
-    let isDeletedConfirmed = false;
+    var isDeletedConfirmed = false;
     bindTagify = function() {
         var input = document.querySelectorAll('.tagifyJs');
         input.forEach(function(element) {

@@ -310,7 +310,7 @@ Admin UI/UX Enhancements pages:
     => Product Catalog
         - Brands
         - Shops
-        - Categories
+        - Categories        
 
     => Requests
         - Brand request
@@ -325,13 +325,11 @@ Admin UI/UX Enhancements pages:
         - Order Statuses
 
     => Users
-        - Special Price
-        - Volume Discount
-        - Related Products
-        - Promotions
-        - Rewards on purchase
-        - manage weightages
-        - Recommended tag products weightages
+        - Users
+        - Rewards
+        - Transactions
+        - Deleted Users
+        - Users addresses
 
     => Promotions
         - Special Price
@@ -376,6 +374,46 @@ Admin UI/UX Enhancements pages:
 
     => Settings
 
+=========================TV-9.4.0.20211130======================
+=> Product Catalog
+    - Oprions
+
+=> Requests    
+    - Order return requests
+    - Order cancellation requests
+    - Withdrawal requests
+
+=> Orders
+    - Orders
+    - Subscription Orders
+    - Product Reviews
+
+=> Users
+    - Admin Users
+    - GDPR requests
+
+=> Promotions
+    - Discount Coupons
+    - Push notifications
+    - Badges
+    - Ribbons
+
+=> CMS
+    - Home page slidees
+    - Banners
+    - Navigations
+
+=> Reports
+   - Buyers report
+   - Discount coupons
+
+=> Shipping/Pickup
+    - Shipping compnay users
+    - Shipping packages
+    - Shipping profiles
+    - Pickup addresses
+    - Shipped addresses
+
 Bugs : 
     => 060304 - The homepage logo is not clearly visible.
     => 060346 - Admin UI: Nothing(hint text) is showing while hovering on the "Notification icon" on the top header section. 
@@ -390,6 +428,7 @@ Bugs :
     => 060531 - Admin UI: Nothing is showing while clicking on the User's name on the whole system.
     => 060513 - Admin UI: Order Status's sorting and re-arrange functionality is not working properly if trying to use it simultaneously.
     => 060776 - Recommended tag products section error is coming.
+    => 060480 - Admin UI: Every-time page is refreshing while admin clicking(multiple times) on the "save" button while adding the new records.
 
     
 Known Issues and Problems :
