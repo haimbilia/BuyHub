@@ -51,8 +51,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -85,7 +85,7 @@
                                 <div class="col-xl-3">
                                     <ul class="nav nav--block" id="nav" role="tablist">
                                         <li class="nav__item  nav__item--active">
-                                            <a class="nav__link" role="tab" id="nav_link_1" data-toggle="collapse" href="#nav_sub_1" aria-expanded="false">
+                                            <a class="nav__link" role="tab" id="nav_link_1" data-bs-toggle="collapse" href="#nav_sub_1" aria-expanded="false">
                                                 <span class="nav__link-text">eCommerce Orders</span>
                                                 <span class="nav__link-arrow"></span>
                                             </a>
@@ -146,7 +146,7 @@
                                     <div class="accordion accordion-solid accordion-toggle-plus" id="accordionExample1">
                                         <div class="card">
                                             <div class="card-header" id="headingOne">
-                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne1" aria-expanded="false" aria-controls="collapseOne1">
+                                                <div class="card-title" data-bs-toggle="collapse" data-bs-target="#collapseOne1" aria-expanded="false" aria-controls="collapseOne1">
                                                     Updates and bug fixes are included in the cost of ALL items.
                                                 </div>
                                             </div>
@@ -169,7 +169,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingTwo">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo1" aria-expanded="false" aria-controls="collapseTwo1">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo1" aria-expanded="false" aria-controls="collapseTwo1">
                                                     Impact on buyers who bought before the new item support policy.
                                                 </div>
                                             </div>
@@ -192,7 +192,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingThree1">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree1" aria-expanded="false" aria-controls="collapseThree1">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree1" aria-expanded="false" aria-controls="collapseThree1">
                                                     Extending and Renewing Item Support.
                                                 </div>
                                             </div>

@@ -46,8 +46,8 @@
                             <a href="#" class="btn subheader__btn-secondary">
                                 Reports
                             </a>
-                            <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions" data-placement="top">
-                                <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="Quick actions" data-placement="top">
+                                <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Products
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -145,7 +145,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Export
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -154,7 +154,7 @@
                                             <ul class="nav nav--block">
                                                 <li class="nav__head">
                                                     Export Options
-                                                    <i class="flaticon2-information" data-toggle="tooltip" data-placement="right" title="Click to learn more..."></i>
+                                                    <i class="flaticon2-information" data-bs-toggle="tooltip" data-placement="right" title="Click to learn more..."></i>
                                                 </li>
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__item">
@@ -188,7 +188,7 @@
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade
                                                         plan</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
                                             <!--end::Nav-->
@@ -252,12 +252,12 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#widget11_tab1_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#widget11_tab1_content" role="tab">
                                                     Last Month
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#widget11_tab2_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#widget11_tab2_content" role="tab">
                                                     All Time
                                                 </a>
                                             </li>
@@ -488,16 +488,16 @@
                                     </div>
                                     <div class="card-head-toolbar">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md">
 
                                                 <!--begin::Nav-->
                                                 <ul class="nav nav--block">
                                                     <li class="nav__head">
                                                         Export Options
-                                                        <i class="flaticon2-information" data-toggle="tooltip" data-placement="right" title="Click to learn more..."></i>
+                                                        <i class="flaticon2-information" data-bs-toggle="tooltip" data-placement="right" title="Click to learn more..."></i>
                                                     </li>
                                                     <li class="nav__separator"></li>
                                                     <li class="nav__item">
@@ -530,7 +530,7 @@
                                                     <li class="nav__separator"></li>
                                                     <li class="nav__foot">
                                                         <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                        <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="Click to learn more...">Learn more</a>
+                                                        <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="Click to learn more...">Learn more</a>
                                                     </li>
                                                 </ul>
 
@@ -657,7 +657,7 @@
                                     </div>
                                     <div class="card-head-toolbar">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -799,7 +799,7 @@
                                     </div>
                                     <div class="card-head-toolbar">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -946,7 +946,7 @@
                                     </div>
                                     <div class="card-head-toolbar">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1061,7 +1061,7 @@
                                     </div>
                                     <div class="card-head-toolbar">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-md dropdown-menu-fit">
@@ -1069,7 +1069,7 @@
                                                 <ul class="nav nav--block">
                                                     <li class="nav__head">
                                                         Export Options
-                                                        <i class="flaticon2-information" data-toggle="tooltip" data-placement="right" title="Click to learn more..."></i>
+                                                        <i class="flaticon2-information" data-bs-toggle="tooltip" data-placement="right" title="Click to learn more..."></i>
                                                     </li>
                                                     <li class="nav__separator"></li>
                                                     <li class="nav__item">
@@ -1102,7 +1102,7 @@
                                                     <li class="nav__separator"></li>
                                                     <li class="nav__foot">
                                                         <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                        <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="Click to learn more...">Learn more</a>
+                                                        <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="Click to learn more...">Learn more</a>
                                                     </li>
                                                 </ul>
 
@@ -1162,7 +1162,7 @@
                                                             </div>
                                                         </span></td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span>
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                                     <i class="flaticon-more-1"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                     <ul class="nav nav--block">
@@ -1208,7 +1208,7 @@
                                                             </div>
                                                         </span></td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span>
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                                     <i class="flaticon-more-1"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                     <ul class="nav nav--block">
@@ -1252,7 +1252,7 @@
                                                             </div>
                                                         </span></td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span>
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                                     <i class="flaticon-more-1"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                     <ul class="nav nav--block">
@@ -1294,7 +1294,7 @@
                                                             </div>
                                                         </span></td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span>
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                                     <i class="flaticon-more-1"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                     <ul class="nav nav--block">
@@ -1337,7 +1337,7 @@
                                                             </div>
                                                         </span></td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span>
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                                     <i class="flaticon-more-1"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                     <ul class="nav nav--block">
@@ -1381,7 +1381,7 @@
                                                             </div>
                                                         </span></td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span>
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                                     <i class="flaticon-more-1"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                     <ul class="nav nav--block">
@@ -1423,7 +1423,7 @@
                                                             </div>
                                                         </span></td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span>
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                                     <i class="flaticon-more-1"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                     <ul class="nav nav--block">
@@ -1467,7 +1467,7 @@
                                                             </div>
                                                         </span></td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span>
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                                     <i class="flaticon-more-1"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                     <ul class="nav ">
@@ -1511,7 +1511,7 @@
                                                             </div>
                                                         </span></td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span>
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                                     <i class="flaticon-more-1"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                     <ul class="nav nav--block">
@@ -1555,7 +1555,7 @@
                                                             </div>
                                                         </span></td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span>
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                                     <i class="flaticon-more-1"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                                     <ul class="nav nav--block">
@@ -1652,12 +1652,12 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-pills nav-pills-sm nav-pills-label nav-pills-bold" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#widget11_tab1_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#widget11_tab1_content" role="tab">
                                                     Last Month
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#widget11_tab2_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#widget11_tab2_content" role="tab">
                                                     All Time
                                                 </a>
                                             </li>
@@ -1900,16 +1900,16 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Today
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md">
 
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
                                                 <li class="nav__head">
                                                     Export Options
-                                                    <i class="flaticon2-information" data-toggle="tooltip" data-placement="right" title="Click to learn more..."></i>
+                                                    <i class="flaticon2-information" data-bs-toggle="tooltip" data-placement="right" title="Click to learn more..."></i>
                                                 </li>
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__item">
@@ -1943,7 +1943,7 @@
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade
                                                         plan</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
 

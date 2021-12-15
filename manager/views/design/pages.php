@@ -28,126 +28,117 @@
         include 'includes/header.php';
         ?>
         <div class="body" id="body">
-            <button class="restore-btn" data-toggle="modal" data-target="#restore">
+
+
+            <button class="restore-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                 <span class="restore-btn-icon"></span>
                 <span class="restore-btn-label">Restore</span>
             </button>
 
-            <div class="modal modal-restore fixed-right    fade" id="restore" tabindex="-1" role="dialog" aria-labelledby="restore" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-vertical" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header bg-shape">
-                            <h5 class="modal-title" id="exampleModalLabel">Title goes here</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="demo">
-
-                                <div class="demo-restore">
-                                    <div class="restore">
-                                        <h3 class="restore-title">
-                                            Database Restores in</h3>
-                                        <h2 class="restore-counter">03:11:12</h2>
-                                    </div>
-                                </div>
-                                <div class="demo-switch">
-                                    <ul class="list-items list-items--icon">
-                                        <li class="list-item">
-                                            <a href="javascript:0;">
-                                                <span class="icon">
-                                                    <svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-about">
-                                                        </use>
-                                                    </svg>
-                                                </span>
-                                                <span class="label">
-                                                    Learn About v9.3.1
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="list-item">
-                                            <a href="javascript:0;">
-                                                <span class="icon">
-                                                    <svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-mobile">
-                                                        </use>
-                                                    </svg>
-                                                </span>
-                                                <span class="label">
-                                                    Mobile View
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="list-item">
-                                            <a href="javascript:0;">
-                                                <span class="icon">
-                                                    <svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-desktop">
-                                                        </use>
-                                                    </svg>
-                                                </span>
-                                                <span class="label">
-                                                    Desktop View
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="list-item">
-                                            <a href="javascript:0;">
-                                                <span class="icon">
-                                                    <svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-admin">
-                                                        </use>
-                                                    </svg>
-                                                </span>
-                                                <span class="label">
-                                                    Administration
-                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="demo-action">
-                                    <ul class="list-items list-items--icon">
-                                        <li class="list-item">
-                                            <a href="javascript:0;">
-                                                <span class="icon">
-                                                    <svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-marketplace">
-                                                        </use>
-                                                    </svg>
-                                                </span>
-                                                <span class="label">
-                                                    Start Your Marketplace
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li class="list-item">
-                                            <a href="javascript:0;">
-                                                <span class="icon">
-                                                    <svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-request">
-                                                        </use>
-                                                    </svg>
-                                                </span>
-                                                <span class="label">
-                                                    Request a Demo
-                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header bg-shape">
+                    <h5 id="offcanvasRightLabel">Title goes here</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <div class="demo">
+                        <div class="demo-restore">
+                            <div class="restore">
+                                <h3 class="restore-title">
+                                    Database Restores in</h3>
+                                <h2 class="restore-counter">03:11:12</h2>
                             </div>
+                        </div>
+                        <div class="demo-switch">
+                            <ul class="list-items list-items--icon">
+                                <li class="list-item">
+                                    <a href="javascript:0;">
+                                        <span class="icon">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-about">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="label">
+                                            Learn About v9.3.1
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="list-item">
+                                    <a href="javascript:0;">
+                                        <span class="icon">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-mobile">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="label">
+                                            Mobile View
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="list-item">
+                                    <a href="javascript:0;">
+                                        <span class="icon">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-desktop">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="label">
+                                            Desktop View
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="list-item">
+                                    <a href="javascript:0;">
+                                        <span class="icon">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-admin">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="label">
+                                            Administration
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="demo-action">
+                            <ul class="list-items list-items--icon">
+                                <li class="list-item">
+                                    <a href="javascript:0;">
+                                        <span class="icon">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-marketplace">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="label">
+                                            Start Your Marketplace
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="list-item">
+                                    <a href="javascript:0;">
+                                        <span class="icon">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#d-request">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="label">
+                                            Request a Demo
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
 
                     </div>
                 </div>
             </div>
-
-
-
             <div class="content " id="content">
                 <!-- begin:: Subheader -->
                 <div id="subheader" class="subheader">
@@ -174,8 +165,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -266,7 +257,7 @@
                         <div class="col-xl-12">
                             <!--begin::card-->
                             <div class="card">
-                                <div class="card-head" data-toggle="collapse" href="#components" role="button" aria-expanded="false" aria-controls="components">
+                                <div class="card-head" data-bs-toggle="collapse" href="#components" role="button" aria-expanded="false" aria-controls="components">
                                     <div class="card-head-label">
                                         <h3 class="card-head-title"> UI Components </h3>
                                     </div>

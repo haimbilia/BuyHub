@@ -1846,7 +1846,7 @@ $(document).ready(function () {
             }
         });
     $("body")
-        .find("*[data-target-close]")
+        .find("*[data-bs-target-close]")
         .click(function () {
             var targetElmId = $(this).data("target-close");
             $("body").toggleClass(targetElmId + "--on");
@@ -2042,9 +2042,9 @@ $.extend(fcom, {
 });
 
 copyText = function (obj) {
-    var copyText =  $(obj).siblings('.clipboardTextJs').text();
+    var copyText = $(obj).siblings('.clipboardTextJs').text();
 
-    document.addEventListener('copy', function(e) {
+    document.addEventListener('copy', function (e) {
         e.clipboardData.setData('text/plain', copyText);
         e.preventDefault();
     }, true);

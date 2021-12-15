@@ -37,14 +37,14 @@ $profileImg  = UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAu
                     </div>
 
                     <?php if (!$isNewImage) { ?>
-                        <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>" onclick="popupImage()">
+                        <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>" onclick="popupImage()">
                             <i class="fa fa-pen"></i>
                         </label>
-                        <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
+                        <span class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_REMOVE_IMAGE', $siteLangId); ?>" onclick="removeProfileImage();">
                             <i class="fa fa-times"></i>
                         </span>
                     <?php } else { ?>
-                        <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>">
+                        <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="<?php echo Labels::getLabel('LBL_EDIT_IMAGE', $siteLangId); ?>">
                             <i class="fa fa-pen"></i>
                             <?php echo $imageFld->getHTML(); ?>
                         </label>

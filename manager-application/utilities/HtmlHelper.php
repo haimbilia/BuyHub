@@ -320,7 +320,7 @@ class HtmlHelper
             if (!empty($editFn)) {
                 $str .= '
                                     <li>
-                                        <a href="javascript:void(0)"  onclick="' . $editFn . '" data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $langId) . '">
+                                        <a href="javascript:void(0)"  onclick="' . $editFn . '" data-bs-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $langId) . '">
                                             <svg class="svg" width="18" height="18">
                                                 <use
                                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
@@ -330,7 +330,7 @@ class HtmlHelper
                                     </li>';
             }
             $str .= '<li>
-                                            <a href="javascript:void(0)"  onclick="' . $removeFn . '" data-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_REMOVE', $langId) . '">
+                                            <a href="javascript:void(0)"  onclick="' . $removeFn . '" data-bs-toggle="tooltip" data-placement="top" title="' . Labels::getLabel('FRM_CLICK_HERE_TO_REMOVE', $langId) . '">
                                                 <svg class="svg" width="18" height="18">
                                                     <use
                                                         xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
@@ -369,7 +369,7 @@ class HtmlHelper
             if ($count > 2) {
                 $str .= ' 
                 <a href="javascript:void(0)" class="media media-sm media-circle"
-                    data-toggle="tooltip" data-skin="brand"
+                    data-bs-toggle="tooltip" data-skin="brand"
                     data-placement="top" title="">
                     <span>3+</span>
                 </a>';
@@ -381,7 +381,7 @@ class HtmlHelper
             }
             $str .= '
                 <a href="javascript:void(0)" class="media media-sm media-circle"
-                    data-toggle="tooltip" data-skin="brand"
+                    data-bs-toggle="tooltip" data-skin="brand"
                     data-placement="top" title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '"
                     data-original-title="' . (!empty($image['afile_attribute_title']) ? $image['afile_attribute_title'] : $defaultImageName) . '">
                     <img data-aspect-ratio="1:1"
@@ -393,7 +393,7 @@ class HtmlHelper
         if (!count($images)) {
             $str .= '
             <a href="javascript:void(0)" class="media media-sm media-circle"
-                data-toggle="tooltip" data-skin="brand"
+                data-bs-toggle="tooltip" data-skin="brand"
                 data-placement="top" 
                 data-original-title="' . $defaultImageName . '">
                 <img data-aspect-ratio="1:1"
@@ -490,7 +490,7 @@ class HtmlHelper
         if (!empty($labelInfoText)) {
             $label->appendElement('i', [
                 'class' => 'fas fa-exclamation-circle',
-                'data-toggle' => 'tooltip',
+                'data-bs-toggle' => 'tooltip',
                 'data-original-title' => $labelInfoText,
             ]);
         }
@@ -519,8 +519,8 @@ class HtmlHelper
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">' . $title . '</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    
                                 </button>
                             </div>
                             <div class="modal-body">
@@ -539,7 +539,7 @@ class HtmlHelper
         $statusClass = ($canEdit) ? '' : 'disabled';
         $disabled = ($disabled) ? 'disabled' : '';
         $checked = applicationConstants::ACTIVE == $status ? 'checked' : '';
-        return '<span class="switch switch-sm switch-icon" title="' . $title . '" data-toggle="tooltip" data-placement="top">
+        return '<span class="switch switch-sm switch-icon" title="' . $title . '" data-bs-toggle="tooltip" data-placement="top">
                     <label>
                         <input type="checkbox" data-old-status="' . $status . '" value="' . $recordId . '" ' . $checked . ' ' . $disabled . ' onclick="' . $statusAct . '" ' . $statusClass . '>
                         <span class="input-helper"></span>
@@ -571,5 +571,13 @@ class HtmlHelper
         return '<p class="date">' . $date . '
                     <time>' . $time . '</time>
                 </p>';
+    }
+
+    public static function configureCheckboxLabel(&$frm, $fldName)
+    {
+        $fld = $frm->getField($fldName);
+        $fld->developerTags['noCaptionTag'] = true;   
+        $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
+        $fld->developerTags['cbHtmlAfterCheckbox'] = '<span class="input-helper"></span>';
     }
 }

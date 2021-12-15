@@ -13,7 +13,7 @@
                 <tr>
                     <td>
                         <div class="media-group">
-                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="<?php echo $product['op_selprod_title']; ?>">
+                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="<?php echo $product['op_selprod_title']; ?>">
                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                             </a>
                         </div>

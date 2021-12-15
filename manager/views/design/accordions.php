@@ -52,8 +52,8 @@
                                 <a href="#" class="btn subheader__btn-secondary">
                                     Reports
                                 </a>
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -102,7 +102,7 @@
                                     <div class="accordion" id="accordionExample1">
                                         <div class="card">
                                             <div class="card-header" id="headingOne">
-                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne1" aria-expanded="true" aria-controls="collapseOne1">
+                                                <div class="card-title" data-bs-toggle="collapse" data-bs-target="#collapseOne1" aria-expanded="true" aria-controls="collapseOne1">
                                                     Latest Orders
                                                 </div>
                                             </div>
@@ -123,7 +123,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingTwo">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo1" aria-expanded="false" aria-controls="collapseTwo1">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo1" aria-expanded="false" aria-controls="collapseTwo1">
                                                     Product Updates
                                                 </div>
                                             </div>
@@ -144,7 +144,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingThree1">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree1" aria-expanded="false" aria-controls="collapseThree1">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree1" aria-expanded="false" aria-controls="collapseThree1">
                                                     Pending Items
                                                 </div>
                                             </div>
@@ -183,7 +183,7 @@
                                     <div class="accordion accordion-light  accordion-toggle-arrow" id="accordionExample2">
                                         <div class="card">
                                             <div class="card-header" id="headingOne2">
-                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne2" aria-expanded="true" aria-controls="collapseOne2">
+                                                <div class="card-title" data-bs-toggle="collapse" data-bs-target="#collapseOne2" aria-expanded="true" aria-controls="collapseOne2">
                                                     Recent Reports
                                                 </div>
                                             </div>
@@ -204,7 +204,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingTwo2">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo2" aria-expanded="false" aria-controls="collapseTwo2">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo2" aria-expanded="false" aria-controls="collapseTwo2">
                                                     Accounting Updates
                                                 </div>
                                             </div>
@@ -225,7 +225,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingThree2">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree2" aria-expanded="false" aria-controls="collapseThree2">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree2" aria-expanded="false" aria-controls="collapseThree2">
                                                     Latest Payroll
                                                 </div>
                                             </div>
@@ -264,7 +264,7 @@
                                     <div class="accordion accordion-light accordion-toggle-plus" id="accordionExample3">
                                         <div class="card">
                                             <div class="card-header" id="headingOne3">
-                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne3" aria-expanded="true" aria-controls="collapseOne3">
+                                                <div class="card-title" data-bs-toggle="collapse" data-bs-target="#collapseOne3" aria-expanded="true" aria-controls="collapseOne3">
                                                     Recent Reports
                                                 </div>
                                             </div>
@@ -285,7 +285,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingTwo3">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo3" aria-expanded="false" aria-controls="collapseTwo3">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo3" aria-expanded="false" aria-controls="collapseTwo3">
                                                     Accounting Updates
                                                 </div>
                                             </div>
@@ -306,7 +306,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingThree3">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree3" aria-expanded="false" aria-controls="collapseThree3">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree3" aria-expanded="false" aria-controls="collapseThree3">
                                                     Latest Payroll
                                                 </div>
                                             </div>
@@ -345,7 +345,7 @@
                                     <div class="accordion accordion-light  accordion-svg-icon" id="accordionExample7">
                                         <div class="card">
                                             <div class="card-header" id="headingOne7">
-                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne7" aria-expanded="true" aria-controls="collapseOne7">
+                                                <div class="card-title" data-bs-toggle="collapse" data-bs-target="#collapseOne7" aria-expanded="true" aria-controls="collapseOne7">
                                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                             <polygon id="Shape" points="0 0 24 0 24 24 0 24">
@@ -375,7 +375,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingTwo7">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo7" aria-expanded="false" aria-controls="collapseTwo7">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo7" aria-expanded="false" aria-controls="collapseTwo7">
                                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                             <polygon id="Shape" points="0 0 24 0 24 24 0 24">
@@ -405,7 +405,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingThree7">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree7" aria-expanded="false" aria-controls="collapseThree7">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree7" aria-expanded="false" aria-controls="collapseThree7">
                                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                             <polygon id="Shape" points="0 0 24 0 24 24 0 24">
@@ -454,7 +454,7 @@
                                     <div class="accordion  accordion-toggle-arrow" id="accordionExample4">
                                         <div class="card">
                                             <div class="card-header" id="headingOne4">
-                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne4" aria-expanded="true" aria-controls="collapseOne4">
+                                                <div class="card-title" data-bs-toggle="collapse" data-bs-target="#collapseOne4" aria-expanded="true" aria-controls="collapseOne4">
                                                     <i class="flaticon2-layers-1"></i> User Permissions
                                                 </div>
                                             </div>
@@ -475,7 +475,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingTwo4">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo4" aria-expanded="false" aria-controls="collapseTwo4">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo4" aria-expanded="false" aria-controls="collapseTwo4">
                                                     <i class="flaticon2-copy"></i> Account Settings
                                                 </div>
                                             </div>
@@ -496,7 +496,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingThree4">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree4" aria-expanded="false" aria-controls="collapseThree4">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree4" aria-expanded="false" aria-controls="collapseThree4">
                                                     <i class="flaticon2-bell-alarm-symbol"></i> Application Options
                                                 </div>
                                             </div>
@@ -535,7 +535,7 @@
                                     <div class="accordion accordion-light  accordion-toggle-arrow" id="accordionExample5">
                                         <div class="card">
                                             <div class="card-header" id="headingOne5">
-                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne5" aria-expanded="true" aria-controls="collapseOne5">
+                                                <div class="card-title" data-bs-toggle="collapse" data-bs-target="#collapseOne5" aria-expanded="true" aria-controls="collapseOne5">
                                                     <i class="flaticon-pie-chart-1"></i> Product Inventory
                                                 </div>
                                             </div>
@@ -556,7 +556,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingTwo5">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo5" aria-expanded="false" aria-controls="collapseTwo5">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo5" aria-expanded="false" aria-controls="collapseTwo5">
                                                     <i class="flaticon2-notification"></i> Order Statistics
                                                 </div>
                                             </div>
@@ -577,7 +577,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingThree5">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree5" aria-expanded="false" aria-controls="collapseThree5">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree5" aria-expanded="false" aria-controls="collapseThree5">
                                                     <i class="flaticon2-chart"></i> eCommerce Reports
                                                 </div>
                                             </div>
@@ -616,7 +616,7 @@
                                     <div class="accordion accordion-solid accordion-toggle-plus" id="accordionExample6">
                                         <div class="card">
                                             <div class="card-header" id="headingOne6">
-                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne6" aria-expanded="true" aria-controls="collapseOne6">
+                                                <div class="card-title" data-bs-toggle="collapse" data-bs-target="#collapseOne6" aria-expanded="true" aria-controls="collapseOne6">
                                                     <i class="flaticon-pie-chart-1"></i> Product Inventory
                                                 </div>
                                             </div>
@@ -637,7 +637,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingTwo6">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo6" aria-expanded="false" aria-controls="collapseTwo6">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo6" aria-expanded="false" aria-controls="collapseTwo6">
                                                     <i class="flaticon2-notification"></i> Order Statistics
                                                 </div>
                                             </div>
@@ -658,7 +658,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingThree6">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree6" aria-expanded="false" aria-controls="collapseThree6">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree6" aria-expanded="false" aria-controls="collapseThree6">
                                                     <i class="flaticon2-chart"></i> eCommerce Reports
                                                 </div>
                                             </div>
@@ -697,7 +697,7 @@
                                     <div class="accordion accordion-solid accordion-toggle-svg" id="accordionExample8">
                                         <div class="card">
                                             <div class="card-header" id="headingOne8">
-                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne8" aria-expanded="true" aria-controls="collapseOne8">
+                                                <div class="card-title" data-bs-toggle="collapse" data-bs-target="#collapseOne8" aria-expanded="true" aria-controls="collapseOne8">
                                                     Product Inventory <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                             <polygon id="Shape" points="0 0 24 0 24 24 0 24">
@@ -726,7 +726,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingTwo8">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo8" aria-expanded="false" aria-controls="collapseTwo8">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo8" aria-expanded="false" aria-controls="collapseTwo8">
                                                     Order Statistics <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                             <polygon id="Shape" points="0 0 24 0 24 24 0 24">
@@ -755,7 +755,7 @@
                                         </div>
                                         <div class="card">
                                             <div class="card-header" id="headingThree8">
-                                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree8" aria-expanded="false" aria-controls="collapseThree8">
+                                                <div class="card-title collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree8" aria-expanded="false" aria-controls="collapseThree8">
                                                     eCommerce Reports <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                             <polygon id="Shape" points="0 0 24 0 24 24 0 24">

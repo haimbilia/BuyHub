@@ -20,42 +20,42 @@ foreach ($arrListing as $sn => $row) {
             <ul class="timeline-v4__items">
             <?php } ?>
 
-                <li class="timeline-v4__item">
-                    <span class="timeline-v4__item-time"><?php echo date('H:i', strtotime($row['oshistory_date_added'])); ?></span>
-                    <div class="timeline-v4__item-desc">
+            <li class="timeline-v4__item">
+                <span class="timeline-v4__item-time"><?php echo date('H:i', strtotime($row['oshistory_date_added'])); ?></span>
+                <div class="timeline-v4__item-desc">
+                    <span class="timeline-v4__item-text">
+                        <span class="tag"><?php echo $row['orderstatus_name']; ?></span>
+                    </span>
+                    <?php if (!empty($row['oshistory_tracking_number'])) { ?>
                         <span class="timeline-v4__item-text">
-                            <span class="tag"><?php echo $row['orderstatus_name']; ?></span>
+                            <b><?php echo Labels::getLabel('LBL_TRACKING_NUMBER', $siteLangId); ?>:</b>
+                            <a href="javascript:void(0);" onclick="copyText(this);" class="link link--dark timeline-v4__item-link" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_COPY', $siteLangId); ?>">
+                                <?php echo  CommonHelper::displayText($row['oshistory_tracking_number']); ?>
+                            </a>
                         </span>
-                        <?php if (!empty($row['oshistory_tracking_number'])) { ?>
-                            <span class="timeline-v4__item-text">
-                                <b><?php echo Labels::getLabel('LBL_TRACKING_NUMBER', $siteLangId); ?>:</b> 
-                                <a href="javascript:void(0);" onclick="copyText(this);" class="link link--dark timeline-v4__item-link" data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_COPY', $siteLangId); ?>">
-                                    <?php echo  CommonHelper::displayText($row['oshistory_tracking_number']); ?>
-                                </a>
-                            </span>
-                        <?php } ?>
-                        <?php if (!empty($row['oshistory_courier'])) { ?>
-                            <span class="timeline-v4__item-text">
-                                <b><?php echo Labels::getLabel('LBL_COURIER', $siteLangId); ?>:</b> <?php echo  CommonHelper::displayText($row['oshistory_courier']); ?>
-                            </span>
-                        <?php } ?>
-                        <?php if (!empty($row['oshistory_tracking_url'])) { ?>
-                            <span class="timeline-v4__item-user-name">
-                                <a href="<?php echo $row['oshistory_tracking_url'];?>" target="_blank" class="link link--dark timeline-v4__item-link">
-                                    <?php echo Labels::getLabel('LBL_CLICK_HERE_TO_TRACK', $siteLangId); ?>
-                                </a>
-                            </span>
-                        <?php } ?>
-                        <?php if (!empty($row['oshistory_comments'])) { ?>
-                            <span class="timeline-v4__item-text">
-                                <b><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?>:</b> <?php echo  CommonHelper::displayText($row['oshistory_comments']); ?>
-                            </span>
-                        <?php } ?>
-                    </div>
-                </li>
+                    <?php } ?>
+                    <?php if (!empty($row['oshistory_courier'])) { ?>
+                        <span class="timeline-v4__item-text">
+                            <b><?php echo Labels::getLabel('LBL_COURIER', $siteLangId); ?>:</b> <?php echo  CommonHelper::displayText($row['oshistory_courier']); ?>
+                        </span>
+                    <?php } ?>
+                    <?php if (!empty($row['oshistory_tracking_url'])) { ?>
+                        <span class="timeline-v4__item-user-name">
+                            <a href="<?php echo $row['oshistory_tracking_url']; ?>" target="_blank" class="link link--dark timeline-v4__item-link">
+                                <?php echo Labels::getLabel('LBL_CLICK_HERE_TO_TRACK', $siteLangId); ?>
+                            </a>
+                        </span>
+                    <?php } ?>
+                    <?php if (!empty($row['oshistory_comments'])) { ?>
+                        <span class="timeline-v4__item-text">
+                            <b><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?>:</b> <?php echo  CommonHelper::displayText($row['oshistory_comments']); ?>
+                        </span>
+                    <?php } ?>
+                </div>
+            </li>
 
-    <?php if (count($arrListing) == $count && $canAddHead) {
-        echo '</ul></div>';
+        <?php if (count($arrListing) == $count && $canAddHead) {
+            echo '</ul></div>';
+        }
+        $count++;
     }
-    $count++;
-}

@@ -36,7 +36,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                     </div>
                 </div>
             </div>
-            <div class="<?php echo ($productType == Product::PRODUCT_TYPE_PHYSICAL ? 'col-md-6' : 'col-md-3');?>" id="prod-type-js">
+            <div class="<?php echo ($productType == Product::PRODUCT_TYPE_PHYSICAL ? 'col-md-6' : 'col-md-3'); ?>" id="prod-type-js">
                 <div class="field-set">
                     <div class="caption-wraper">
                         <label class="field_label">
@@ -52,13 +52,13 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                     </div>
                 </div>
             </div>
-            <div <?php echo ($productType == Product::PRODUCT_TYPE_PHYSICAL ? 'style="display:none;"' : '');?> class="col-md-3 download-attachements-js">
+            <div <?php echo ($productType == Product::PRODUCT_TYPE_PHYSICAL ? 'style="display:none;"' : ''); ?> class="col-md-3 download-attachements-js">
                 <div class="field-set">
                     <div class="caption-wraper">
                         <label class="field_label">
-                        <?php $fld = $productFrm->getField('product_attachements_with_inventory');
+                            <?php $fld = $productFrm->getField('product_attachements_with_inventory');
                             echo $fld->getCaption();
-                        ?>
+                            ?>
                         </label>
                     </div>
                     <div class="field-wraper">
@@ -247,7 +247,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
             foreach ($otherLanguages as $langId => $data) {
                 $layout = Language::getLayoutDirection($langId); ?>
                 <div class="accordion my-4" id="specification-accordion-<?php echo $langId; ?>">
-                    <h6 class="dropdown-toggle" data-toggle="collapse" data-target="#collapse-<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapse-<?php echo $langId; ?>"><span onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
+                    <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapse-<?php echo $langId; ?>"><span onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
                             <?php
                             echo $data . " ";
                             echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
@@ -351,7 +351,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
             },
             'source': function(request, response) {
                 $.ajax({
-                    url: fcom.makeUrl('brands', 'autoComplete',[], siteConstants.webrootfront),
+                    url: fcom.makeUrl('brands', 'autoComplete', [], siteConstants.webrootfront),
                     data: {
                         keyword: request['term'],
                         fIsAjax: 1,
@@ -390,7 +390,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
             },
             'source': function(request, response) {
                 $.ajax({
-                    url: fcom.makeUrl('products', 'linksAutocomplete',[], siteConstants.webrootfront),
+                    url: fcom.makeUrl('products', 'linksAutocomplete', [], siteConstants.webrootfront),
                     data: {
                         keyword: request['term'],
                         fIsAjax: 1
@@ -428,7 +428,7 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
             },
             'source': function(request, response) {
                 $.ajax({
-                    url: fcom.makeUrl('products', 'autoCompleteTaxCategories',[],siteConstants.webrootfront),
+                    url: fcom.makeUrl('products', 'autoCompleteTaxCategories', [], siteConstants.webrootfront),
                     data: {
                         keyword: request['term'],
                         fIsAjax: 1
@@ -453,8 +453,8 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
             $('input[name=\'taxcat_name\']').autocomplete('search');
         });
 
-        var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv;?>';
-        var product_type =  '<?php echo $productType; ?>';
+        var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv; ?>';
+        var product_type = '<?php echo $productType; ?>';
         var PRODUCT_TYPE_DIGITAL = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
         var PRODUCT_TYPE_PHYSICAL = '<?php echo Product::PRODUCT_TYPE_PHYSICAL; ?>';
 
@@ -465,14 +465,14 @@ $btnDiscardFld->setFieldTagAttribute('class', "btn btn-outline-brand");
                 $(".download-attachements-js").show();
             } else {
                 $("#prod-type-js").removeClass('col-md-3');
-                if(!$("#prod-type-js").hasClass('col-md-6')) {
+                if (!$("#prod-type-js").hasClass('col-md-6')) {
                     $("#prod-type-js").addClass('col-md-6');
                 }
                 $(".download-attachements-js").hide();
             }
         });
-        
-        if(product_type == PRODUCT_TYPE_DIGITAL){
+
+        if (product_type == PRODUCT_TYPE_DIGITAL) {
             hideShippingTab();
             if (0 == attachDownloadsWithInv) {
                 showDownloadTab();

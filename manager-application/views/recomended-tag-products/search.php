@@ -25,7 +25,7 @@ foreach ($arrListing as $sn => $row) {
             case 'tpr_custom_weightage':
                 $editable = $canEdit ? 'contentEditable="true"' : '';
                 $onblur = 'onblur="saveData(' . $row['tpr_tag_id'] . ', ' . $row['tpr_product_id'] . ', \'' . "tpr_custom_weightage" . '\', this.textContent)"';
-                $element = "<div " . $editable . " data-toggle='tooltip' data-placement='top' title='" . Labels::getLabel('LBL_CLICK_HERE_TO_EDIT', $siteLangId) . "' " . $onblur . ">" . $row[$key] . "</div>";
+                $element = "<div " . $editable . " data-bs-toggle='tooltip' data-placement='top' title='" . Labels::getLabel('LBL_CLICK_HERE_TO_EDIT', $siteLangId) . "' " . $onblur . ">" . $row[$key] . "</div>";
 
                 $td->appendElement('plaintext', $tdAttr, $element, true);
                 break;

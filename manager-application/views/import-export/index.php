@@ -18,10 +18,9 @@
                             </h3>
                         </div>
                         <div class="card-toolbar">
-                            <button class="btn btn-gray card-aside-close" data-target-close="card-aside">
+                            <button class="btn btn-close card-aside-close" data-bs-target-close="card-aside">
                                 <svg class="svg" width="24" height="24">
-                                    <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
                                     </use>
                                 </svg>
                             </button>

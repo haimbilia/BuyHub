@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -80,7 +80,7 @@
                             <div class="wizard-v4__nav-items nav">
                                 <!--doc: Replace A tag with SPAN tag to disable the step link click -->
                                 <div class="wizard-v4__nav-item nav-item">
-                                    <div class="wizard-v4__nav-body" data-toggle="tab" href="#form-step-1">
+                                    <div class="wizard-v4__nav-body" data-bs-toggle="tab" href="#form-step-1">
                                         <div class="wizard-v4__nav-number">
                                             1
                                         </div>
@@ -95,7 +95,7 @@
                                     </div>
                                 </div>
                                 <div class="wizard-v4__nav-item nav-item">
-                                    <div class="wizard-v4__nav-body" data-toggle="tab" href="#form-step-2">
+                                    <div class="wizard-v4__nav-body" data-bs-toggle="tab" href="#form-step-2">
                                         <div class="wizard-v4__nav-number">
                                             2
                                         </div>
@@ -110,7 +110,7 @@
                                     </div>
                                 </div>
                                 <div class="wizard-v4__nav-item nav-item">
-                                    <div class="wizard-v4__nav-body" data-toggle="tab" href="#form-step-3">
+                                    <div class="wizard-v4__nav-body" data-bs-toggle="tab" href="#form-step-3">
                                         <div class="wizard-v4__nav-number">
                                             3
                                         </div>
@@ -125,7 +125,7 @@
                                     </div>
                                 </div>
                                 <div class="wizard-v4__nav-item nav-item">
-                                    <div class="wizard-v4__nav-body" data-toggle="tab" href="#form-step-4">
+                                    <div class="wizard-v4__nav-body" data-bs-toggle="tab" href="#form-step-4">
                                         <div class="wizard-v4__nav-number">
                                             4
                                         </div>
@@ -166,11 +166,11 @@
                                                                                 <div class="col-lg-9 col-xl-6">
                                                                                     <div class="avatar avatar--outline" id="user_add_avatar">
                                                                                         <div class="avatar__holder" style="background-image: url(media/users/300_10.jpg)"></div>
-                                                                                        <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                                                        <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="Change avatar">
                                                                                             <i class="fa fa-pen"></i>
                                                                                             <input type="file" name="user_add_user_avatar">
                                                                                         </label>
-                                                                                        <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                                                        <span class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="Cancel avatar">
                                                                                             <i class="fa fa-times"></i>
                                                                                         </span>
                                                                                     </div>

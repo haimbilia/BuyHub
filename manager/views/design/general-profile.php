@@ -174,7 +174,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-auto"><a href="#" data-toggle="modal" data-target="#modal_create_zone" title="" class="link font-bolder">Create shipping zone</a></div>
+                                        <div class="col-auto"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_create_zone" title="" class="link font-bolder">Create shipping zone</a></div>
                                     </div>
                                     <div class="row justify-content-between mb-4">
                                         <div class="col">
@@ -191,7 +191,7 @@
                                         </div>
                                         <div class="col-auto">
                                             <div class="dropdown">
-                                                <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
+                                                <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                     <i class="la la-ellipsis-h"></i> </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                     <a href="#" class="dropdown-item">Edit zone</a>
@@ -218,7 +218,7 @@
                                                 <td>Free</td>
                                                 <td>
                                                     <div class="dropdown">
-                                                        <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
+                                                        <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                             <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                             <a href="#" class="dropdown-item">Edit rate</a>
@@ -233,7 +233,7 @@
                                                 <td>$100</td>
                                                 <td>
                                                     <div class="dropdown">
-                                                        <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
+                                                        <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                             <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                             <a href="#" class="dropdown-item">Edit rate</a>
@@ -247,7 +247,7 @@
                                     </table>
                                     <div class="row">
                                         <div class="col">
-                                            <button class="btn btn-bold btn-label-brand" data-toggle="modal" data-target="#modal_add_rate"><i class="la la-plus"></i> Add rate</button>
+                                            <button class="btn btn-bold btn-label-brand" data-bs-toggle="modal" data-bs-target="#modal_add_rate"><i class="la la-plus"></i> Add rate</button>
                                         </div>
                                     </div>
 
@@ -269,7 +269,7 @@
                                         </div>
                                         <div class="col-auto">
                                             <div class="dropdown">
-                                                <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
+                                                <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                     <i class="la la-ellipsis-h"></i> </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                     <a href="#" class="dropdown-item">Edit zone</a>
@@ -294,7 +294,7 @@
                                                 <td>Free</td>
                                                 <td>
                                                     <div class="dropdown">
-                                                        <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
+                                                        <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                             <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                             <a href="#" class="dropdown-item">Edit rate</a>
@@ -309,7 +309,7 @@
                                                 <td>$100</td>
                                                 <td>
                                                     <div class="dropdown">
-                                                        <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
+                                                        <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="">
                                                             <i class="la la-ellipsis-h"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                             <a href="#" class="dropdown-item">Edit rate</a>
@@ -348,7 +348,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">Create zone</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
                     <div class="modal-body ">
@@ -529,7 +529,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary">Done</button>
                     </div>
                 </div>
@@ -544,7 +544,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">Add rate</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
                     <div class="modal-body">
@@ -589,7 +589,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary">Done</button>
                     </div>
                 </div>

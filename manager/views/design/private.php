@@ -51,8 +51,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -80,7 +80,7 @@
                             <div class="card card--last">
                                 <div class="card-body">
                                     <!--Begin:: App Aside Mobile Toggle-->
-                                    <button class="btn btn-outline-brand btn-elevate btn-icon btn-sm app__aside-close d-flex d-lg-none mb-3" id="chat_aside_close" data-target-close="chat_aside">
+                                    <button class="btn btn-outline-brand btn-elevate btn-icon btn-sm app__aside-close d-flex d-lg-none mb-3" id="chat_aside_close" data-bs-target-close="chat_aside">
                                         <i class="la la-remove"></i>
                                     </button>
                                     <!--End:: App Aside Mobile Toggle-->
@@ -448,7 +448,7 @@
                                             </button>
                                             <!--end:: Aside Mobile Toggle-->
                                             <div class="dropdown dropdown-inline">
-                                                <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="flaticon-more-1"></i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-left dropdown-menu-md">
@@ -515,16 +515,16 @@
                                             </div>
 
                                             <div class="chat__pic hidden">
-                                                <span class="media media--sm media--circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="Jason Muller">
+                                                <span class="media media--sm media--circle" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Jason Muller">
                                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_12.jpg" alt="image">
                                                 </span>
-                                                <span class="media media--sm media--circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="Nick Bold">
+                                                <span class="media media--sm media--circle" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Nick Bold">
                                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_11.jpg" alt="image">
                                                 </span>
-                                                <span class="media media--sm media--circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="Milano Esco">
+                                                <span class="media media--sm media--circle" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Milano Esco">
                                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_14.jpg" alt="image">
                                                 </span>
-                                                <span class="media media--sm media--circle" data-toggle="tooltip" data-placement="right" title="" data-original-title="Teresa Fox">
+                                                <span class="media media--sm media--circle" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Teresa Fox">
                                                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="image">
                                                 </span>
                                             </div>
@@ -532,7 +532,7 @@
 
                                         <div class="chat__right">
                                             <div class="dropdown dropdown-inline">
-                                                <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="flaticon2-add-1"></i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-md" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 33px, 0px);">
@@ -540,7 +540,7 @@
                                                     <ul class="nav nav--block">
                                                         <li class="nav__head">
                                                             Messaging
-                                                            <i class="flaticon2-information" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                                            <i class="flaticon2-information" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                                                         </li>
                                                         <li class="nav__separator"></li>
                                                         <li class="nav__item">
@@ -579,7 +579,7 @@
                                                         <li class="nav__separator"></li>
                                                         <li class="nav__foot">
                                                             <a class="btn btn-label-brand btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                            <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn
+                                                            <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn
                                                                 more</a>
                                                         </li>
                                                     </ul>

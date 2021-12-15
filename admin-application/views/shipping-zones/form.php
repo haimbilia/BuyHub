@@ -74,9 +74,9 @@ if (!empty($excludeLocations)) {
                                     <div class="field_cover">
                                         <label>
                                             <span class="checkbox zone--js" data-zoneid="<?php echo $zone['zone_id']; ?>">
-												<input type="checkbox" name="shiploc_zone_ids[]" value="<?php echo $zone['zone_id']; ?>" class="countries-js checkbox_zone_<?php echo $zone['zone_id']; ?>" <?php echo ($countCounties == $totalCountries && $countCounties != 0) ? 'checked' : ''; ?>>
-												<i class="input-helper"></i>
-											</span><?php echo $zone['zone_name']; ?>
+                                                <input type="checkbox" name="shiploc_zone_ids[]" value="<?php echo $zone['zone_id']; ?>" class="countries-js checkbox_zone_<?php echo $zone['zone_id']; ?>" <?php echo ($countCounties == $totalCountries && $countCounties != 0) ? 'checked' : ''; ?>>
+                                                <i class="input-helper"></i>
+                                            </span><?php echo $zone['zone_name']; ?>
                                         </label>
                                     </div>
                                 </div>
@@ -96,10 +96,10 @@ if (!empty($excludeLocations)) {
                                             if (!empty($countryStates) && in_array('-1', $countryStates)) {
                                                 $checked = 'checked';
                                             }
-                                            if (!empty($excludeCountryStates) && isset($excludeCountryStates[$countryId])) {                                          
+                                            if (!empty($excludeCountryStates) && isset($excludeCountryStates[$countryId])) {
                                                 $disabled = 'disabled';
                                             }
-                                           ?>
+                                        ?>
                                             <li>
                                                 <div class="row no-gutters">
                                                     <div class="col">
@@ -117,7 +117,7 @@ if (!empty($excludeLocations)) {
 
                                                     <div class="col-auto mr-3">
                                                         <?php if ($statesCount > 0) { ?>
-                                                            <a class="link font-bolder link_<?php echo $countryId; ?> containChild-js" data-toggle="collapse" href="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1" >
+                                                            <a class="link font-bolder link_<?php echo $countryId; ?> containChild-js" data-bs-toggle="collapse" href="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1">
                                                                 <span class="statecount--js selectedStateCount--js_<?php echo $countryId; ?> " data-totalcount="<?php echo $statesCount; ?>">0</span>
                                                                 <?php echo Labels::getLabel("LBL_of", $adminLangId); ?>
                                                                 <span class="totalStates "><?php echo $statesCount; ?></span>
@@ -125,12 +125,12 @@ if (!empty($excludeLocations)) {
                                                         <?php } ?>
                                                     </div>
                                                 </div>
-                                                <div class="collapse" id="state_list_<?php echo $countryId; ?>">                                                    
+                                                <div class="collapse" id="state_list_<?php echo $countryId; ?>">
                                                     <?php if (!empty($country['states'])) { ?>
                                                         <ul class="child-checkbox-ul country_<?php echo $countryId; ?>">
                                                             <?php
                                                             foreach ($country['states'] as $state) {
-                                                                $stateChecked = '';                                                           
+                                                                $stateChecked = '';
                                                                 $countryStates = [];
                                                                 $exCountryStates = [];
 
@@ -140,11 +140,11 @@ if (!empty($excludeLocations)) {
                                                                 if ((!empty($countryStates) && (in_array('-1', $countryStates) || in_array($state['state_id'], $countryStates)))) {
                                                                     $stateChecked = 'checked';
                                                                 }
-                                                                $stateDisabled ='';                                                                
-                                                                if (isset($excludeCountryStates[$countryId]) && in_array($state['state_id'],$excludeCountryStates[$countryId])) {                                          
+                                                                $stateDisabled = '';
+                                                                if (isset($excludeCountryStates[$countryId]) && in_array($state['state_id'], $excludeCountryStates[$countryId])) {
                                                                     $stateDisabled = ' disabled';
                                                                 }
-                                                                ?>	
+                                                            ?>
                                                                 <li>
                                                                     <div class="field-wraper">
                                                                         <div class="field_cover">
@@ -152,11 +152,11 @@ if (!empty($excludeLocations)) {
                                                                         </div>
                                                                     </div>
                                                                 </li>
-                                                        <?php } ?>
+                                                            <?php } ?>
                                                         </ul>
                                                     <?php } ?>
                                                 </div>
-                                             </li>
+                                            </li>
                                         <?php
                                         } ?>
                                     </ul>
@@ -172,8 +172,8 @@ if (!empty($excludeLocations)) {
         <div class="portlet__foot">
             <div class="row">
                 <div class="col-md-12">
-                    <?php 
-                        $lbl = (0 < $zone_id ? Labels::getLabel("LBL_UPDATE_ZONE", $adminLangId) : Labels::getLabel("LBL_ADD_ZONE", $adminLangId));
+                    <?php
+                    $lbl = (0 < $zone_id ? Labels::getLabel("LBL_UPDATE_ZONE", $adminLangId) : Labels::getLabel("LBL_ADD_ZONE", $adminLangId));
                     ?>
                     <input type="submit" name="btn_submit" value="<?php echo $lbl; ?>">
                     <!--<input type="button" name="cancel" onClick="searchProductsSection(<?php echo $profile_id; ?>);" value="<?php echo Labels::getLabel("LBL_Cancel", $adminLangId); ?>">-->
@@ -184,27 +184,26 @@ if (!empty($excludeLocations)) {
 </div>
 <?php if (0 < $zone_id) { ?>
     <script>
-            setTimeout(function(){                
-                $('.country--js input[type="checkbox"]').each(function(){
-                    var countryId = $(this).closest('.country--js').data('countryid');               
-                    var stateCount = $('.country_'+countryId+' .state--js:checked').length;                
-                    if(!$(this).prop("checked")){
-                        if(0 < stateCount){
-                            $('.link_'+countryId).click();
-                        }
-                    }                
-                    $('.selectedStateCount--js_'+countryId).text(stateCount);
-                    
-                });   
-                $('.zone--js').each(function(){
-                    var zoneId = $(this).data('zoneid');
-                    var stateCount  = $('.zone_'+zoneId+' .state--js:checked').length;
-                    if(0 < stateCount && !$(this).prop("checked")){
-                       $('.containCountries-js-'+zoneId).click();
+        setTimeout(function() {
+            $('.country--js input[type="checkbox"]').each(function() {
+                var countryId = $(this).closest('.country--js').data('countryid');
+                var stateCount = $('.country_' + countryId + ' .state--js:checked').length;
+                if (!$(this).prop("checked")) {
+                    if (0 < stateCount) {
+                        $('.link_' + countryId).click();
                     }
-                })                
-                
-            }, 150);      
+                }
+                $('.selectedStateCount--js_' + countryId).text(stateCount);
 
+            });
+            $('.zone--js').each(function() {
+                var zoneId = $(this).data('zoneid');
+                var stateCount = $('.zone_' + zoneId + ' .state--js:checked').length;
+                if (0 < stateCount && !$(this).prop("checked")) {
+                    $('.containCountries-js-' + zoneId).click();
+                }
+            })
+
+        }, 150);
     </script>
 <?php } ?>

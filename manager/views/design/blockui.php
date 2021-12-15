@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -138,11 +138,11 @@
                                             Click below buttons to block modal content:
                                         </span>
                                         <div class="section__content">
-                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#blockui_4_1_modal">Default</button>
-                                            <button type="button" class="btn btn-brand" data-toggle="modal" data-target="#blockui_4_2_modal">Overlay color</button>
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#blockui_4_3_modal">Custom spinner</button>
-                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#blockui_4_4_modal">Custom text 1</button>
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#blockui_4_5_modal">Custom text 2</button>
+                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#blockui_4_1_modal">Default</button>
+                                            <button type="button" class="btn btn-brand" data-bs-toggle="modal" data-bs-target="#blockui_4_2_modal">Overlay color</button>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#blockui_4_3_modal">Custom spinner</button>
+                                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#blockui_4_4_modal">Custom text 1</button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#blockui_4_5_modal">Custom text 2</button>
                                         </div>
                                     </div>
                                     <!--end::Section-->
@@ -219,7 +219,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
@@ -236,7 +236,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-primary" id="blockui_4_1">Block modal</button>
                                 </div>
                             </div>
@@ -250,7 +250,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
@@ -267,7 +267,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-primary" id="blockui_4_2">Block modal</button>
                                 </div>
                             </div>
@@ -281,7 +281,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
@@ -298,7 +298,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-primary" id="blockui_4_3">Block modal</button>
                                 </div>
                             </div>
@@ -312,7 +312,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
@@ -329,7 +329,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-primary" id="blockui_4_4">Block modal</button>
                                 </div>
                             </div>
@@ -343,7 +343,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
@@ -360,7 +360,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-primary" id="blockui_4_5">Block modal</button>
                                 </div>
                             </div>

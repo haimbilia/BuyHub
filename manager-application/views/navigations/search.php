@@ -13,7 +13,7 @@
                                 <span class="clickable">
                                     <?php echo $row['nav_name']; ?>
                                 </span>
-                                <span class="count badge badge-success clickable subRecordsCountJs-<?php echo $row['nav_id']; ?>" title="<?php echo  Labels::getLabel('LBL_NAV_LINKS_COUNT', $siteLangId); ?>" data-toggle="tooltip" data-placement="top">
+                                <span class="count badge badge-success clickable subRecordsCountJs-<?php echo $row['nav_id']; ?>" title="<?php echo  Labels::getLabel('LBL_NAV_LINKS_COUNT', $siteLangId); ?>" data-bs-toggle="tooltip" data-placement="top">
                                     <?php echo CommonHelper::displayBadgeCount($subRecordCount); ?>
                                 </span>
                             </div>
@@ -21,13 +21,13 @@
                                 <div class="sorting-actions">
                                     <?php echo HtmlHelper::addStatusBtnHtml($canEdit, $row['nav_id'], $row['nav_active']); ?>
                                     <?php if ($canEdit) { ?>
-                                        <button onclick="editRecord('<?php echo $row['nav_id']; ?>')" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-toggle="tooltip" data-placement="top">
+                                        <button onclick="editRecord('<?php echo $row['nav_id']; ?>')" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-bs-toggle="tooltip" data-placement="top">
                                             <svg class="svg clickable" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
                                                 </use>
                                             </svg>
                                         </button>
-                                        <button onclick="addNewLinkForm(<?php echo $row['nav_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_ADD_NEW_LINK', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-toggle="tooltip" data-placement="top">
+                                        <button onclick="addNewLinkForm(<?php echo $row['nav_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_ADD_NEW_LINK', $siteLangId); ?>" class="btn btn-clean btn-sm clickable" data-bs-toggle="tooltip" data-placement="top">
                                             <svg class="svg clickable" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                                 </use>

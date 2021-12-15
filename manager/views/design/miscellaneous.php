@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -176,25 +176,25 @@
 
                                         <div class="section__info">linkable user pics:</div>
                                         <div class="section__content d-flex flex-wrap section__content--solid--">
-                                            <a href="#" class="media margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
+                                            <a href="#" class="media margin-r-5 margin-t-5" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg" alt="image">
                                             </a>
-                                            <a href="#" class="media media--circle margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
+                                            <a href="#" class="media media--circle margin-r-5 margin-t-5" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_5.jpg" alt="image">
                                             </a>
-                                            <a href="#" class="media margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
+                                            <a href="#" class="media margin-r-5 margin-t-5" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_11.jpg" alt="image">
                                             </a>
-                                            <a href="#" class="media media--circle margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
+                                            <a href="#" class="media media--circle margin-r-5 margin-t-5" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_8.jpg" alt="image">
                                             </a>
-                                            <a href="#" class="media margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
+                                            <a href="#" class="media margin-r-5 margin-t-5" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_7.jpg" alt="image">
                                             </a>
-                                            <a href="#" class="media media--circle margin-r-5 margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
+                                            <a href="#" class="media media--circle margin-r-5 margin-t-5" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_24.jpg" alt="image">
                                             </a>
-                                            <a href="#" class="media margin-t-5" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
+                                            <a href="#" class="media margin-t-5" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click here for more info">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/300_20.jpg" alt="image">
                                             </a>
                                         </div>

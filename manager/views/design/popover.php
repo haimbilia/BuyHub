@@ -53,8 +53,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -106,7 +106,7 @@
                                             Click below button to toggle popover:
                                         </span>
                                         <div class="section__content">
-                                            <button type="button" class="btn btn-danger" data-toggle="popover" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="Popover title">Click me</button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="popover" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="Popover title">Click me</button>
                                         </div>
                                     </div>
                                     <!--end::Section-->
@@ -122,20 +122,20 @@
                                             Four direction options are available: top, right, bottom, and left aligned:
                                         </span>
                                         <div class="section__content demo-buttons">
-                                            <button type="button" class="btn btn-brand" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
+                                            <button type="button" class="btn btn-brand" data-container="body" data-bs-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
                                                 Popover on top
                                             </button>
 
-                                            <button type="button" class="btn btn-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
+                                            <button type="button" class="btn btn-primary" data-container="body" data-bs-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
                                                 Popover on right
                                             </button>
 
-                                            <button type="button" class="btn btn-warning" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Vivamus
+                                            <button type="button" class="btn btn-warning" data-container="body" data-bs-toggle="popover" data-placement="bottom" data-content="Vivamus
                         sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
                                                 Popover on bottom
                                             </button>
 
-                                            <button type="button" class="btn btn-success" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
+                                            <button type="button" class="btn btn-success" data-container="body" data-bs-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
                                                 Popover on left
                                             </button>
                                         </div>
@@ -153,7 +153,7 @@
                                             Use the focus trigger to dismiss popovers on the next click that the user makes.
                                         </span>
                                         <div class="section__content">
-                                            <a tabindex="0" class="btn btn-success" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="Dismissible popover">Dismissible popover</a>
+                                            <a tabindex="0" class="btn btn-success" role="button" data-bs-toggle="popover" data-trigger="focus" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="Dismissible popover">Dismissible popover</a>
                                         </div>
                                     </div>
                                     <!--end::Section-->
@@ -181,7 +181,7 @@
                                             Insert HTML into the popover:
                                         </span>
                                         <div class="section__content">
-                                            <button type="button" class="btn btn-primary" data-toggle="popover" data-trigger="focus" title="" data-html="true" data-content="And here's some amazing <b>HTML</b> content. It's very <code>engaging</code>. Right?" data-original-title="Popover title">Click me</button>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="popover" data-trigger="focus" title="" data-html="true" data-content="And here's some amazing <b>HTML</b> content. It's very <code>engaging</code>. Right?" data-original-title="Popover title">Click me</button>
                                         </div>
                                     </div>
                                     <!--end::Section-->
@@ -197,13 +197,13 @@
                                             Offset of the popover relative to its target. For more information refer to <a class="link" href="http://tether.io/#offset" target="_blank">Tether's offset docs.</a>
                                         </span>
                                         <div class="section__content">
-                                            <button type="button" class="btn btn-brand" data-container="body" data-trigger="focus" data-offset="20px 20px" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
+                                            <button type="button" class="btn btn-brand" data-container="body" data-trigger="focus" data-offset="20px 20px" data-bs-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
                                                 Example 1
                                             </button>
-                                            <button type="button" class="btn btn-success" data-container="body" data-trigger="focus" data-offset="-20px -20px" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
+                                            <button type="button" class="btn btn-success" data-container="body" data-trigger="focus" data-offset="-20px -20px" data-bs-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
                                                 Example 2
                                             </button>
-                                            <button type="button" class="btn btn-danger" data-container="body" data-trigger="focus" data-offset="60px 0px" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
+                                            <button type="button" class="btn btn-danger" data-container="body" data-trigger="focus" data-offset="60px 0px" data-bs-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">
                                                 Example 3
                                             </button>
                                         </div>

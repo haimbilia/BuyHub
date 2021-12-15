@@ -124,7 +124,7 @@ trait SellerProducts
     {
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
         
-        if(!Product::availableForAddToStore($product_id, $this->userParentId)){
+        if(0 == $selprod_id && !Product::availableForAddToStore($product_id, $this->userParentId)){
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
         }
 

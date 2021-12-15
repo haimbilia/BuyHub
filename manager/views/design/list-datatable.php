@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -89,7 +89,7 @@
                                 <div class="card-head-wrapper">
                                     <div class="card-head-actions">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-default btn-icon-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-default btn-icon-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Add Coloumn
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -219,7 +219,7 @@
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-brand">Pending</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
@@ -253,7 +253,7 @@
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Processing</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
@@ -285,7 +285,7 @@
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">Success</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
@@ -317,7 +317,7 @@
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Done</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
@@ -349,7 +349,7 @@
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">Success</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
@@ -381,7 +381,7 @@
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Processing</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell  datatable_cell_right"><span>
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
@@ -413,7 +413,7 @@
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">Success</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
@@ -445,7 +445,7 @@
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-danger">Processing</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
@@ -477,7 +477,7 @@
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-success">Delivered</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>
@@ -509,7 +509,7 @@
                                             <td data-field="Status" class="datatable_cell"><span><span class="btn btn-bold btn-sm btn-font-sm  btn-label-brand">Pending</span></span></td>
                                             <td data-field="Type" data-autohide-disabled="false" class="datatable_cell"><span><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></span></td>
                                             <td data-field="Actions" data-autohide-disabled="false" class="datatable_cell datatable_cell_right"><span>
-                                                    <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
+                                                    <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md"> <i class="flaticon-more-1"></i> </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                                             <ul class="nav">
                                                                 <li class="nav__item"> <a class="nav__link" href="#"> <i class="nav__link-icon flaticon2-expand"></i> <span class="nav__link-text">View</span> </a> </li>

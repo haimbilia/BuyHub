@@ -67,7 +67,7 @@
             </li>
 
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Requests">
+                <div class="menu-section menuLinkJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Requests">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#icon-requests">
@@ -148,7 +148,7 @@
             </li>
 
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Orders">
+                <div class="menu-section menuLinkJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Orders">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#icon-orders">
@@ -228,7 +228,7 @@
             </li>
 
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Users">
+                <div class="menu-section menuLinkJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Users">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#icon-users">
@@ -323,7 +323,7 @@
             </li>
 
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Promotions">
+                <div class="menu-section menuLinkJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Promotions">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#icon-promotions">
@@ -426,7 +426,7 @@
             </li>
 
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Blog">
+                <div class="menu-section menuLinkJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Blog">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#icon-blog">
@@ -482,7 +482,7 @@
             </li>
 
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Tax">
+                <div class="menu-section menuLinkJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Tax">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#icon-sales-tax">
@@ -529,7 +529,7 @@
             </li>
 
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Cms">
+                <div class="menu-section menuLinkJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Cms">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#icon-CMS">
@@ -611,7 +611,7 @@
                 <div class="sidebar-dropdown-menu">
                     <ul class="nav" id="reportsNav">
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-toggle="collapse" data-parent="#reportsNav" href="#salesReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-bs-toggle="collapse" data-parent="#reportsNav" href="#salesReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#test">
@@ -651,7 +651,7 @@
                             </div>
                         </li>
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-toggle="collapse" data-parent="#financialReportNav" href="#financialReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-bs-toggle="collapse" data-parent="#financialReportNav" href="#financialReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#test">
@@ -692,7 +692,7 @@
                             </div>
                         </li>
                         <li class="nav_item hasNestedChildJs">
-                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-toggle="collapse" data-parent="#subscriptionReportNav" href="#subscriptionReportNav" aria-expanded="true">
+                            <a class="nav_link navLinkJs dropdown-toggle-custom" data-bs-toggle="collapse" data-parent="#subscriptionReportNav" href="#subscriptionReportNav" aria-expanded="true">
                                 <span class="nav_icon">
                                     <svg class="svg" width="24" height="24">
                                         <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#test">
@@ -720,7 +720,7 @@
                 </div>
             </li>
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Import Export">
+                <div class="menu-section menuLinkJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Import Export">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#icon-import-export">
@@ -747,7 +747,7 @@
             </li>
 
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Shipping/pickup">
+                <div class="menu-section menuLinkJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Shipping/pickup">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#icon-shipping-pickup">
@@ -775,7 +775,7 @@
                 </div>
             </li>
             <li class="menu-item dropdownJs">
-                <div class="menu-section menuLinkJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Seo">
+                <div class="menu-section menuLinkJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Seo">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="/yokart/admin/images/retina/sprite-aside-menu.svg#icon-SEO">

@@ -37,14 +37,14 @@
                         </div>
                         <div class="subheader__toolbar">
                             <div class="subheader__wrapper">
-                                <a href="#" class="btn subheader__btn-daterange" id="dashboard_daterangepicker" data-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
+                                <a href="#" class="btn subheader__btn-daterange" id="dashboard_daterangepicker" data-bs-toggle="tooltip" title="" data-placement="left" data-original-title="Select dashboard daterange">
                                     <span class="subheader__btn-daterange-title" id="dashboard_daterangepicker_title">Today:</span>&nbsp;
                                     <span class="subheader__btn-daterange-date" id="dashboard_daterangepicker_date">Oct 3</span>
                                     <i class="flaticon2-calendar-1"></i>
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions" data-placement="top">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="Quick actions" data-placement="top">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -724,12 +724,12 @@
                                         <div class="card-head-toolbar">
                                             <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand" role="tablist">
                                                 <li class="nav-item">
-                                                    <a class="nav-link active" data-toggle="tab" href="#widget11_tab1_content" role="tab">
+                                                    <a class="nav-link active" data-bs-toggle="tab" href="#widget11_tab1_content" role="tab">
                                                         Last Month
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-toggle="tab" href="#widget11_tab2_content" role="tab">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#widget11_tab2_content" role="tab">
                                                         All Time
                                                     </a>
                                                 </li>

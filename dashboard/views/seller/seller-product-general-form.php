@@ -72,30 +72,30 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
                 </div>
             </div>
             <?php if (false === Plugin::isActive('EasyEcom')) { ?>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="field-set d-flex align-items-center">
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_subtract_stock'); ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="field-set d-flex align-items-center">
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_subtract_stock'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field-set d-flex align-items-center">
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_track_inventory'); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="field-set d-flex align-items-center">
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_track_inventory'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <?php } ?>
             <div class="row">
                 <div class="selprod_threshold_stock_level_fld col-md-6">
                     <div class="field-set">
                         <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_threshold_stock_level')->getCaption(); ?>
-                                <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Alert_stock_level_hint_info', $siteLangId); ?>"></i></label>
+                                <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Alert_stock_level_hint_info', $siteLangId); ?>"></i></label>
                         </div>
                         <div class="field-wraper">
                             <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_threshold_stock_level'); ?>
@@ -243,12 +243,12 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
                                     $selPriceTitle .= ' ' . Labels::getLabel('LBL_Min_Selling_price', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
                                     ?>
                                     <th><?php echo Labels::getLabel('LBL_Selling_Price', $siteLangId); ?>
-                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo $selPriceTitle; ?>"></i>
+                                        <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo $selPriceTitle; ?>"></i>
                                     </th>
                                     <th><?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
                                     </th>
                                     <th><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
-                                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
+                                        <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
                                     </th>
                                     <th></th>
                                 </tr>
@@ -340,7 +340,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
                         <?php foreach ($languages as $langId => $langName) {
                             $layout = Language::getLayoutDirection($langId); ?>
                             <div class="accordion mt-4" id="specification-accordion">
-                                <h6 class="dropdown-toggle" data-toggle="collapse" data-target="#collapseOne<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>"><span onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
+                                <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>"><span onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
                                         <?php echo Labels::getLabel('LBL_Inventory_Data_for', $siteLangId) ?>
                                         <?php echo $langName; ?>
                                     </span>
@@ -410,7 +410,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-brand js-cancel-in
 </div>
 <?php echo FatUtility::createHiddenFormFromData(array('product_id' => $product_id), array('name' => 'frmSearchSellerProducts')); ?>
 <script type="text/javascript">
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-bs-toggle="tooltip"]').tooltip();
     var PERCENTAGE = <?php echo applicationConstants::PERCENTAGE; ?>;
     var FLAT = <?php echo applicationConstants::FLAT; ?>;
     var

@@ -1208,7 +1208,7 @@ $(document).ready(function () {
             }
         });
     $("body")
-        .find("*[data-target-close]")
+        .find("*[data-bs-target-close]")
         .click(function () {
             var targetElmId = $(this).data("target-close");
             $("body").toggleClass(targetElmId + "--on");
@@ -1349,9 +1349,9 @@ function loadMoreImages(obj) {
     $(obj).nextAll().removeClass("d-none");
 }
 
-function getImageTemplate(fileName, src) {     
+function getImageTemplate(fileName, src) {
 
-    return  `<li class="uploaded" id="${src.substring(src.lastIndexOf('/') + 1)}">
+    return `<li class="uploaded" id="${src.substring(src.lastIndexOf('/') + 1)}">
                 <i class="uploaded-file">
                     <img class="" src="${src}">
                 </i>

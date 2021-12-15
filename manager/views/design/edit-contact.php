@@ -42,8 +42,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -84,41 +84,41 @@
 
                                                 <span class="badge badge-bolder badge badge-inline badge-unified-success">Customer</span>
 
-                                                <div class="dropdown dropdown-inline margin-l-5" data-toggle="tooltip-" title="Change label" data-placement="right">
-                                                    <a href="#" class="btn btn-clean btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <div class="dropdown dropdown-inline margin-l-5" data-bs-toggle="tooltip-" title="Change label" data-placement="right">
+                                                    <a href="#" class="btn btn-clean btn-sm btn-icon" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="fa fa-caret-down"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-fit dropdown-menu-right">
                                                         <ul class="nav">
                                                             <li class="nav__head">
                                                                 Choose label:
-                                                                <i class="flaticon2-information" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                                                <i class="flaticon2-information" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                                                             </li>
                                                             <li class="nav__separator">
                                                             </li>
                                                             <li class="nav__item">
-                                                                <a href="#" class="nav__link" data-toggle="status-change" data-status="1">
+                                                                <a href="#" class="nav__link" data-bs-toggle="status-change" data-status="1">
                                                                     <span class="nav__link-text"><span class="badge badge-unified-success badge-inline badge-lg badge-bold">Customer</span></span>
                                                                 </a>
                                                             </li>
                                                             <li class="nav__item">
-                                                                <a href="#" class="nav__link" data-toggle="status-change" data-status="2">
+                                                                <a href="#" class="nav__link" data-bs-toggle="status-change" data-status="2">
                                                                     <span class="nav__link-text"><span class="badge badge-unified-danger badge-inline badge-lg badge-bold">Partner</span></span>
                                                                 </a>
                                                             </li>
                                                             <li class="nav__item">
-                                                                <a href="#" class="nav__link" data-toggle="status-change" data-status="3">
+                                                                <a href="#" class="nav__link" data-bs-toggle="status-change" data-status="3">
                                                                     <span class="nav__link-text"><span class="badge badge-unified-warning badge-inline badge-lg badge-bold">Supplier</span></span>
                                                                 </a>
                                                             </li>
                                                             <li class="nav__item">
-                                                                <a href="#" class="nav__link" data-toggle="status-change" data-status="4">
+                                                                <a href="#" class="nav__link" data-bs-toggle="status-change" data-status="4">
                                                                     <span class="nav__link-text"><span class="badge badge-unified-info badge-inline badge-lg badge-bold">On
                                                                             Hold</span></span>
                                                                 </a>
                                                             </li>
                                                             <li class="nav__item">
-                                                                <a href="#" class="nav__link" data-toggle="status-change" data-status="4">
+                                                                <a href="#" class="nav__link" data-bs-toggle="status-change" data-status="4">
                                                                     <span class="nav__link-text"><span class="badge badge-unified-brand badge-inline badge-lg badge-bold">Staff</span></span>
                                                                 </a>
                                                             </li>
@@ -127,7 +127,7 @@
                                                             <li class="nav__foot">
                                                                 <a class="btn btn-clean btn-bold btn-sm" href="#"><i class="flaticon2-add-1 icon-sm"></i> Add
                                                                     new</a>
-                                                                <a class="btn btn-clean btn-bold btn-sm hidden" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn
+                                                                <a class="btn btn-clean btn-bold btn-sm hidden" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn
                                                                     more</a>
                                                             </li>
                                                         </ul>
@@ -139,7 +139,7 @@
                                                 <a href="#" class="btn btn-label-brand btn-sm btn-upper">Contact</a>
 
                                                 <div class="dropdown dropdown-inline">
-                                                    <a href="#" class="btn btn-brand btn-sm btn-upper dropdown-toggle" data-toggle="dropdown">
+                                                    <a href="#" class="btn btn-brand btn-sm btn-upper dropdown-toggle" data-bs-toggle="dropdown">
                                                         Export
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
@@ -147,7 +147,7 @@
                                                         <ul class="nav">
                                                             <li class="nav__head">
                                                                 Export Options
-                                                                <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                                <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                             <rect x="0" y="0" width="24" height="24"></rect>
@@ -188,7 +188,7 @@
                                                             <li class="nav__separator"></li>
                                                             <li class="nav__foot">
                                                                 <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                                <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn
+                                                                <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn
                                                                     more</a>
                                                             </li>
                                                         </ul>
@@ -236,22 +236,22 @@
                             <div class="card-head-toolbar">
                                 <ul class="nav nav-tabs nav-tabs-space-lg nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-brand" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" data-toggle="tab" href="#YK_contacts_view_tab_1" role="tab">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#YK_contacts_view_tab_1" role="tab">
                                             <i class="flaticon2-calendar-3"></i> Personal
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link " data-toggle="tab" href="#YK_contacts_view_tab_2" role="tab">
+                                        <a class="nav-link " data-bs-toggle="tab" href="#YK_contacts_view_tab_2" role="tab">
                                             <i class="flaticon2-user-outline-symbol"></i> Account
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#YK_contacts_view_tab_3" role="tab">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#YK_contacts_view_tab_3" role="tab">
                                             <i class="flaticon2-gear"></i> Settings
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link " data-toggle="tab" href="#YK_contacts_view_tab_4" role="tab">
+                                        <a class="nav-link " data-bs-toggle="tab" href="#YK_contacts_view_tab_4" role="tab">
                                             <i class="flaticon2-note"></i> Notes
                                         </a>
                                     </li>
@@ -280,11 +280,11 @@
                                                             <div class="avatar avatar--outline" id="YK_contacts_edit_avatar">
                                                                 <div class="avatar__holder" style="background-image: url('media/users/100_12.jpg');">
                                                                 </div>
-                                                                <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                                <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="Change avatar">
                                                                     <i class="fa fa-pen"></i>
                                                                     <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                                                                 </label>
-                                                                <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                                <span class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="Cancel avatar">
                                                                     <i class="fa fa-times"></i>
                                                                 </span>
                                                             </div>
@@ -390,7 +390,7 @@
                                                     system!
                                                 </div>
                                                 <div class="alert-close">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                         <span aria-hidden="true"><i class="la la-close"></i></span>
                                                     </button>
                                                 </div>
@@ -1086,7 +1086,7 @@
                                                                 <span class="badge badge-success badge-inline">new</span>
                                                             </div>
                                                             <div class="notes__dropdown">
-                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                     <i class="flaticon-more-1 font-brand"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1150,7 +1150,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notes__dropdown">
-                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                     <i class="flaticon2-rectangular font-brand"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1213,7 +1213,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notes__dropdown">
-                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                     <i class="flaticon2-note font-brand"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1277,7 +1277,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notes__dropdown">
-                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                     <i class="flaticon2-gear font-brand"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1340,7 +1340,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notes__dropdown">
-                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                     <i class="flaticon2-sort font-brand"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1403,7 +1403,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="notes__dropdown">
-                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown">
+                                                                <a href="#" class="btn btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown">
                                                                     <i class="flaticon2-rectangular font-brand"></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">

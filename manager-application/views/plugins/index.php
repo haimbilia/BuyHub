@@ -23,8 +23,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                             <h3 class="card-head-title">
                                 <a class="back" href="<?php echo UrlHelper::generateUrl('Settings'); ?>">
                                     <svg class="svg" width="24" height="24">
-                                        <use
-                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                                         </use>
                                     </svg>
                                 </a>
@@ -32,10 +31,9 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                             </h3>
                         </div>
                         <div class="card-toolbar">
-                            <button class="btn btn-gray card-aside-close" data-target-close="card-aside">
+                            <button class="btn btn-close card-aside-close" data-bs-target-close="card-aside">
                                 <svg class="svg" width="24" height="24">
-                                    <use
-                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
                                     </use>
                                 </svg>
                             </button>
@@ -46,25 +44,22 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                             <ul class="pluginTypesJs">
                                 <?php foreach ($pluginTypes as $formType => $tabName) {
                                     $tabsId = 'tabJs-' . $formType; ?>
-                                <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>"
-                                    data-listType="<?php echo $formType; ?>">
-                                    <a class="settings-inner-link" href="javascript:void(0)"
-                                        onclick="searchRecords(<?php echo $formType; ?>);">
-                                        <i class="settings-inner-icn">
-                                            <svg class="svg" width="20" height="20">
-                                                <use
-                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-extension'; ?>">
-                                                </use>
-                                            </svg>
-                                        </i>
-                                        <div>
-                                            <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
-                                            <span class="settings-inner-desc">Lorem ipsum dolor sit amet
-                                                consectetur adipisicing
-                                                elit. Suscipit est quos </span>
-                                        </div>
-                                    </a>
-                                </li>
+                                    <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $formType) ? 'is-active' : '' ?>" data-listType="<?php echo $formType; ?>">
+                                        <a class="settings-inner-link" href="javascript:void(0)" onclick="searchRecords(<?php echo $formType; ?>);">
+                                            <i class="settings-inner-icn">
+                                                <svg class="svg" width="20" height="20">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#<?php echo isset($svgIconNames[$formType]) ? $svgIconNames[$formType] : 'icon-extension'; ?>">
+                                                    </use>
+                                                </svg>
+                                            </i>
+                                            <div>
+                                                <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
+                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
+                                                    consectetur adipisicing
+                                                    elit. Suscipit est quos </span>
+                                            </div>
+                                        </a>
+                                    </li>
                                 <?php } ?>
                             </ul>
                         </div>
@@ -82,46 +77,57 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
 </main>
 
 <script>
-$(document).ready(function() {
-    bindSortable();
-});
-$(document).ajaxComplete(function() {
-    bindSortable();
-});
+    $(document).ready(function() {
+        bindSortable();
+    });
+    $(document).ajaxComplete(function() {
+        bindSortable();
+    });
 
-function bindSortable() {
-    if (1 > $('[data-field="dragdrop"]').length) {
-        return;
-    }
+    function bindSortable() {
+        if (1 > $('[data-field="dragdrop"]').length) {
+            return;
+        }
 
-    $("#pluginsJs > tbody").sortable({
-        update: function(event, ui) {
-            fcom.displayProcessing();
-            $('.listingTableJs').prepend(fcom.getLoader());
+        $("#pluginsJs > tbody").sortable({
+                update: function(event, ui) {
+                    fcom.displayProcessing();
+                    $('.listingTableJs').prepend(fcom.getLoader());
 
-            var order = $(this).sortable('toArray');
-            var data = '';
-            const bindData = new Promise((resolve, reject) => {
-                for (let i = 0; i < order.length; i++) {
-                    data += 'plugin[]=' + order[i];
-                    if (i + 1 < order.length) {
-                        data += '&';
-                    }
-                }
-                resolve(data);
-            });
-            bindData.then(
-                function(value) {
-                    fcom.ajax(fcom.makeUrl('plugins', 'updateOrder'), value, function(res) {
-                        fcom.removeLoader();
-                        $.ykmsg.close();
-                        var ans = $.parseJSON(res);
-                        if (ans.status == 1) {
-                            $.ykmsg.success(ans.msg);
-                            return;
+                    var order = $(this).sortable('toArray');
+                    var data = '';
+                    const bindData = new Promise((resolve, reject) => {
+                        for (let i = 0; i < order.length; i++) {
+                            data += 'plugin[]=' + order[i];
+                            if (i + 1 < order.length) {
+                                data += '&';
+                            }
                         }
-                        $.ykmsg.error(ans.msg);
+                        resolve(data);
                     });
+                    bindData.then(
+                        function(value) {
+                            fcom.ajax(fcom.makeUrl('plugins', 'updateOrder'), value, function(res) {
+                                fcom.removeLoader();
+                                $.ykmsg.close();
+                                var ans = $.parseJSON(res);
+                                if (ans.status == 1) {
+                                    $.ykmsg.success(ans.msg);
+                                    return;
+                                }
+                                $.ykmsg.error(ans.msg);
+                            });
+                        },
+                        function(error) {
+                            fcom.removeLoader();
+                            $.ykmsg.close();
+                            var ans = $.parseJSON(res);
+                            if (ans.status == 1) {
+                                $.ykmsg.success(ans.msg);
+                                return;
+                            }
+                            $.ykmsg.error(ans.msg);
+                        });
                 },
                 function(error) {
                     fcom.removeLoader();
@@ -130,5 +136,5 @@ function bindSortable() {
             );
         },
     }).disableSelection();
-}
+    }
 </script>

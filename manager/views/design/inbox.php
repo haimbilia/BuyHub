@@ -52,8 +52,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -82,7 +82,7 @@
 
                         <!--Begin:: Inbox Aside-->
                         <div class="grid__item   card  inbox__aside" id="inbox_aside">
-                            <button type="button" class="btn btn-brand  btn-upper btn-bold  inbox__compose" data-toggle="modal" data-target="#inbox_compose">new message</button>
+                            <button type="button" class="btn btn-brand  btn-upper btn-bold  inbox__compose" data-bs-toggle="modal" data-bs-target="#inbox_compose">new message</button>
 
                             <div class="inbox__nav">
                                 <ul class="nav">
@@ -189,7 +189,7 @@
                                             </label>
 
                                             <div class="btn-group">
-                                                <button type="button" class="inbox__icon inbox__icon--sm inbox__icon--light" data-toggle="dropdown">
+                                                <button type="button" class="inbox__icon inbox__icon--sm inbox__icon--light" data-bs-toggle="dropdown">
                                                     <i class="flaticon2-down-arrow"></i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-left dropdown-menu-fit dropdown-menu-xs">
@@ -223,13 +223,13 @@
                                                 </div>
                                             </div>
 
-                                            <button type="button" class="inbox__icon inbox__icon--light" data-toggle="tooltip" title="" data-original-title="Reload list">
+                                            <button type="button" class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" title="" data-original-title="Reload list">
                                                 <i class="flaticon2-refresh-arrow"></i>
                                             </button>
                                         </div>
 
                                         <div class="inbox__panel">
-                                            <button class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Archive">
+                                            <button class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Archive">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                         <rect x="0" y="0" width="24" height="24"></rect>
@@ -237,7 +237,7 @@
                                                         <path d="M3.79274528,6.57253826 L12,12.5 L20.2072547,6.57253826 C20.4311176,6.4108595 20.7436609,6.46126971 20.9053396,6.68513259 C20.9668779,6.77033951 21,6.87277228 21,6.97787787 L21,17 C21,18.1045695 20.1045695,19 19,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,6.97787787 C3,6.70173549 3.22385763,6.47787787 3.5,6.47787787 C3.60510559,6.47787787 3.70753836,6.51099993 3.79274528,6.57253826 Z" fill="#000000"></path>
                                                     </g>
                                                 </svg> </button>
-                                            <button class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Spam">
+                                            <button class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Spam">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                         <rect x="0" y="0" width="24" height="24"></rect>
@@ -246,7 +246,7 @@
                                                         <rect fill="#000000" x="11" y="16" width="2" height="2" rx="1"></rect>
                                                     </g>
                                                 </svg> </button>
-                                            <button class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Delete">
+                                            <button class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Delete">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                         <rect x="0" y="0" width="24" height="24"></rect>
@@ -254,7 +254,7 @@
                                                         <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"></path>
                                                     </g>
                                                 </svg> </button>
-                                            <button class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Mark as read">
+                                            <button class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Mark as read">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                         <rect x="0" y="0" width="24" height="24"></rect>
@@ -262,7 +262,7 @@
                                                         <path d="M10.1818182,8 L17.8181818,8 C19.2324881,8 20,8.76751186 20,10.1818182 L20,17.8181818 C20,19.2324881 19.2324881,20 17.8181818,20 L10.1818182,20 C8.76751186,20 8,19.2324881 8,17.8181818 L8,10.1818182 C8,8.76751186 8.76751186,8 10.1818182,8 Z" fill="#000000"></path>
                                                     </g>
                                                 </svg> </button>
-                                            <button class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Move">
+                                            <button class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Move">
                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                         <rect x="0" y="0" width="24" height="24"></rect>
@@ -290,9 +290,9 @@
                                         </div>
                                     </div>
                                     <div class="inbox__controls">
-                                        <div class="inbox__pages" data-toggle="tooltip" title="" data-original-title="Records per page">
-                                            <span class="inbox__perpage" data-toggle="dropdown">1 - 50 of 235</span>
-                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-xs">
+                                        <div class="inbox__pages" data-bs-toggle="tooltip" title="" data-original-title="Records per page">
+                                            <span class="inbox__perpage" data-bs-toggle="dropdown">1 - 50 of 235</span>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-xs">
                                                 <ul class="nav">
                                                     <li class="nav__item">
                                                         <a href="#" class="nav__link">
@@ -313,19 +313,19 @@
                                             </div>
                                         </div>
 
-                                        <button class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Previose page">
+                                        <button class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Previose page">
                                             <i class="flaticon2-left-arrow"></i>
                                         </button>
 
-                                        <button class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Next page">
+                                        <button class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Next page">
                                             <i class="flaticon2-right-arrow"></i>
                                         </button>
 
-                                        <div class="inbox__sort" data-toggle="tooltip" title="" data-original-title="Sort">
-                                            <button type="button" class="inbox__icon" data-toggle="dropdown">
+                                        <div class="inbox__sort" data-bs-toggle="tooltip" title="" data-original-title="Sort">
+                                            <button type="button" class="inbox__icon" data-bs-toggle="dropdown">
                                                 <i class="flaticon2-console"></i>
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-xs">
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-xs">
                                                 <ul class="nav">
                                                     <li class="nav__item nav__item--active">
                                                         <a href="#" class="nav__link">
@@ -346,16 +346,16 @@
                                             </div>
                                         </div>
 
-                                        <div class="btn-group" data-toggle="tooltip" title="" data-original-title="Settings">
-                                            <button type="button" class="inbox__icon" data-toggle="dropdown">
+                                        <div class="btn-group" data-bs-toggle="tooltip" title="" data-original-title="Settings">
+                                            <button type="button" class="inbox__icon" data-bs-toggle="dropdown">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md">
                                                 <!--begin::Nav-->
                                                 <ul class="nav">
                                                     <li class="nav__head">
                                                         Export Options
-                                                        <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                        <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                     <rect x="0" y="0" width="24" height="24"></rect>
@@ -396,7 +396,7 @@
                                                     <li class="nav__separator"></li>
                                                     <li class="nav__foot">
                                                         <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                        <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                        <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                     </li>
                                                 </ul>
                                                 <!--end::Nav-->
@@ -414,21 +414,21 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--danger" style="background-image: url('./media/users/100_13.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Sean Paul</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Digital PPV Customer Confirmation - </span>
                                                 <span class="inbox__summary">Thank you for ordering UFC 240 Holloway vs Edgar Alternate camera angles...</span>
@@ -437,7 +437,7 @@
                                                 <span class="inbox__label badge badge-unified-brand badge-bold badge-inline">inbox</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             8:30 PM
                                         </div>
                                     </div>
@@ -448,14 +448,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--danger">
                                                     <span>OJ</span>
                                                 </span>
@@ -463,13 +463,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Your iBuy.com grocery shopping confirmation - </span>
                                                 <span class="inbox__summary">Please make sure that you have one of the following cards with you when we deliver your order...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             day ago
                                         </div>
                                     </div>
@@ -480,14 +480,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand">
                                                     <span>EF</span>
                                                 </span>
@@ -495,13 +495,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Your Order #224820998666029 has been Confirmed - </span>
                                                 <span class="inbox__summary">Your Order #224820998666029 has been placed on Saturday, 29 June, 2019 10:02:41 via Online Banking...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             11:20PM
                                         </div>
                                     </div>
@@ -512,14 +512,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_11.jpg')">
                                                     <span></span>
                                                 </span>
@@ -527,13 +527,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Payment Notification DLOP2329KD - </span>
                                                 <span class="inbox__summary">Your payment of 4500USD to AirCar has been authorized and confirmed, thank you...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             2 days ago
                                         </div>
                                     </div>
@@ -544,14 +544,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--success">
                                                     <span>MP</span>
                                                 </span>
@@ -559,13 +559,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Congratulations on your iRun Coach subscription - </span>
                                                 <span class="inbox__summary">Congratulations on your iRun Coach subscription. You made no space for excuses and you decided on a healthier and happier life...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Jul 25
                                         </div>
                                     </div>
@@ -576,14 +576,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_7.jpg')">
                                                     <span></span>
                                                 </span>
@@ -591,13 +591,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Pay bills &amp; win up to 600$ Cashback! - </span>
                                                 <span class="inbox__summary">Please make sure that you have one of the following cards with you when we deliver your order...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             July 24
                                         </div>
                                     </div>
@@ -608,14 +608,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_8.jpg')">
                                                     <span></span>
                                                 </span>
@@ -623,13 +623,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Activate your LIPO Account today - </span>
                                                 <span class="inbox__summary">Thank you for creating a LIPO Account. Please click the link below to activate your account. This link will expire in 24 hours...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Jun 13
                                         </div>
                                     </div>
@@ -640,14 +640,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--dark">
                                                     <span>WE</span>
                                                 </span>
@@ -655,13 +655,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">About your request for PalmLake - </span>
                                                 <span class="inbox__summary">What you requested can't be arranged ahead of time but PalmLake said they'll do their best to accommodate you upon arrival....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             25 May
                                         </div>
                                     </div>
@@ -672,27 +672,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm" style="background-image: url('./media/users/100_12.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Sarah Boysen</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Verification of your card transaction - </span>
                                                 <span class="inbox__summary">This is to confirm that you have used your credit/debit card for the booking. If you did not make this booking, please contact us immediately....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             May 23
                                         </div>
                                     </div>
@@ -703,27 +703,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_14.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Max Born</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Payment Notification (DE223232034) - </span>
                                                 <span class="inbox__summary">Your payment of 4500USD to AirCar has been authorized and confirmed, thank you....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Apr 12
                                         </div>
                                     </div>
@@ -734,27 +734,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_5.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Patty Jo Watson</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Welcome, Patty - </span>
                                                 <span class="inbox__summary">Discover interesting ideas and unique perspectives. Read, explore and follow your interests. Get personalized recommendations delivered to you....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Mar 1
                                         </div>
                                     </div>
@@ -765,27 +765,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--warning">
                                                     <span>RW</span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Roberts O'Neill Wilson</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Optimize with Recommendations, now used by most advertisers - </span>
                                                 <span class="inbox__summary">Your weekly report is a good way to track your performance. See what’s working so far and explore new opportunities for improvement....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Feb 11
                                         </div>
                                     </div>
@@ -796,21 +796,21 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_12.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Blaise Pascal</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Free Video Marketing Guide - </span>
                                                 <span class="inbox__summary">Video has rolled into every marketing platform or channel, leaving...</span>
@@ -828,21 +828,21 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_3.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Pascal Moor</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Pro Article Marketing Guide - </span>
                                                 <span class="inbox__summary">Video has rolled into every marketing platform or channel, leaving...</span>
@@ -859,21 +859,21 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_12.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Blaise Pascal</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Free Video Marketing Guide - </span>
                                                 <span class="inbox__summary">Video has rolled into every marketing platform or channel, leaving...</span>
@@ -890,14 +890,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_7.jpg')">
                                                     <span></span>
                                                 </span>
@@ -905,13 +905,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Pay bills &amp; win up to 600$ Cashback! - </span>
                                                 <span class="inbox__summary">Please make sure that you have one of the following cards with you when we deliver your order...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             July 24
                                         </div>
                                     </div>
@@ -922,14 +922,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_8.jpg')">
                                                     <span></span>
                                                 </span>
@@ -937,13 +937,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Activate your LIPO Account today - </span>
                                                 <span class="inbox__summary">Thank you for creating a LIPO Account. Please click the link below to activate your account. This link will expire in 24 hours...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Jun 13
                                         </div>
                                     </div>
@@ -954,14 +954,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--dark">
                                                     <span>WE</span>
                                                 </span>
@@ -969,13 +969,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">About your request for PalmLake - </span>
                                                 <span class="inbox__summary">What you requested can't be arranged ahead of time but PalmLake said they'll do their best to accommodate you upon arrival....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             25 May
                                         </div>
                                     </div>
@@ -986,27 +986,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm" style="background-image: url('./media/users/100_12.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Sarah Boysen</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Verification of your card transaction - </span>
                                                 <span class="inbox__summary">This is to confirm that you have used your credit/debit card for the booking. If you did not make this booking, please contact us immediately....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             May 23
                                         </div>
                                     </div>
@@ -1017,27 +1017,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_14.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Max Born</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Payment Notification (DE223232034) - </span>
                                                 <span class="inbox__summary">Your payment of 4500USD to AirCar has been authorized and confirmed, thank you....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Apr 12
                                         </div>
                                     </div>
@@ -1048,27 +1048,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_5.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Patty Jo Watson</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Welcome, Patty - </span>
                                                 <span class="inbox__summary">Discover interesting ideas and unique perspectives. Read, explore and follow your interests. Get personalized recommendations delivered to you....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Mar 1
                                         </div>
                                     </div>
@@ -1080,14 +1080,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--dark">
                                                     <span>WE</span>
                                                 </span>
@@ -1095,13 +1095,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">About your request for PalmLake - </span>
                                                 <span class="inbox__summary">What you requested can't be arranged ahead of time but PalmLake said they'll do their best to accommodate you upon arrival....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             25 May
                                         </div>
                                     </div>
@@ -1112,27 +1112,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm" style="background-image: url('./media/users/100_12.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Sarah Boysen</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Verification of your card transaction - </span>
                                                 <span class="inbox__summary">This is to confirm that you have used your credit/debit card for the booking. If you did not make this booking, please contact us immediately....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             May 23
                                         </div>
                                     </div>
@@ -1143,27 +1143,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_14.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Max Born</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Payment Notification (DE223232034) - </span>
                                                 <span class="inbox__summary">Your payment of 4500USD to AirCar has been authorized and confirmed, thank you....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Apr 12
                                         </div>
                                     </div>
@@ -1175,27 +1175,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_14.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Max Born</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Payment Notification (DE223232034) - </span>
                                                 <span class="inbox__summary">Your payment of 4500USD to AirCar has been authorized and confirmed, thank you....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Apr 12
                                         </div>
                                     </div>
@@ -1206,27 +1206,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_5.jpg')">
                                                     <span></span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Patty Jo Watson</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Welcome, Patty - </span>
                                                 <span class="inbox__summary">Discover interesting ideas and unique perspectives. Read, explore and follow your interests. Get personalized recommendations delivered to you....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Mar 1
                                         </div>
                                     </div>
@@ -1237,27 +1237,27 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--warning">
                                                     <span>RW</span>
                                                 </span>
                                                 <a href="#" class="inbox__author">Roberts O'Neill Wilson</a>
                                             </div>
                                         </div>
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Optimize with Recommendations, now used by most advertisers - </span>
                                                 <span class="inbox__summary">Your weekly report is a good way to track your performance. See what’s working so far and explore new opportunities for improvement....</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Feb 11
                                         </div>
                                     </div>
@@ -1269,14 +1269,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand">
                                                     <span>EF</span>
                                                 </span>
@@ -1284,13 +1284,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Your Order #224820998666029 has been Confirmed - </span>
                                                 <span class="inbox__summary">Your Order #224820998666029 has been placed on Saturday, 29 June, 2019 10:02:41 via Online Banking...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             11:20PM
                                         </div>
                                     </div>
@@ -1301,14 +1301,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_11.jpg')">
                                                     <span></span>
                                                 </span>
@@ -1316,13 +1316,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Payment Notification DLOP2329KD - </span>
                                                 <span class="inbox__summary">Your payment of 4500USD to AirCar has been authorized and confirmed, thank you...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             2 days ago
                                         </div>
                                     </div>
@@ -1333,14 +1333,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--success">
                                                     <span>MP</span>
                                                 </span>
@@ -1348,13 +1348,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Congratulations on your iRun Coach subscription - </span>
                                                 <span class="inbox__summary">Congratulations on your iRun Coach subscription. You made no space for excuses and you decided on a healthier and happier life...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             Jul 25
                                         </div>
                                     </div>
@@ -1365,14 +1365,14 @@
                                                     <input type="checkbox">
                                                     <span></span>
                                                 </label>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Star">
                                                     <i class="flaticon-star"></i>
                                                 </span>
-                                                <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
+                                                <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Mark as important">
                                                     <i class="flaticon-add-label-button"></i>
                                                 </span>
                                             </div>
-                                            <div class="inbox__sender" data-toggle="view">
+                                            <div class="inbox__sender" data-bs-toggle="view">
                                                 <span class="media media--sm media--brand" style="background-image: url('./media/users/100_7.jpg')">
                                                     <span></span>
                                                 </span>
@@ -1380,13 +1380,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="inbox__details" data-toggle="view">
+                                        <div class="inbox__details" data-bs-toggle="view">
                                             <div class="inbox__message">
                                                 <span class="inbox__subject">Pay bills &amp; win up to 600$ Cashback! - </span>
                                                 <span class="inbox__summary">Please make sure that you have one of the following cards with you when we deliver your order...</span>
                                             </div>
                                         </div>
-                                        <div class="inbox__datetime" data-toggle="view">
+                                        <div class="inbox__datetime" data-bs-toggle="view">
                                             July 24
                                         </div>
                                     </div>
@@ -1404,7 +1404,7 @@
                                             <i class="flaticon2-left-arrow-1"></i>
                                         </a>
 
-                                        <a href="#" class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Archive">
+                                        <a href="#" class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Archive">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24" height="24"></rect>
@@ -1412,7 +1412,7 @@
                                                     <path d="M3.79274528,6.57253826 L12,12.5 L20.2072547,6.57253826 C20.4311176,6.4108595 20.7436609,6.46126971 20.9053396,6.68513259 C20.9668779,6.77033951 21,6.87277228 21,6.97787787 L21,17 C21,18.1045695 20.1045695,19 19,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,6.97787787 C3,6.70173549 3.22385763,6.47787787 3.5,6.47787787 C3.60510559,6.47787787 3.70753836,6.51099993 3.79274528,6.57253826 Z" fill="#000000"></path>
                                                 </g>
                                             </svg> </a>
-                                        <a href="#" class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Spam">
+                                        <a href="#" class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Spam">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24" height="24"></rect>
@@ -1421,7 +1421,7 @@
                                                     <rect fill="#000000" x="11" y="16" width="2" height="2" rx="1"></rect>
                                                 </g>
                                             </svg> </a>
-                                        <a href="#" class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Delete">
+                                        <a href="#" class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Delete">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24" height="24"></rect>
@@ -1430,7 +1430,7 @@
                                                 </g>
                                             </svg> </a>
 
-                                        <a href="#" class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Mark as read">
+                                        <a href="#" class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Mark as read">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24" height="24"></rect>
@@ -1438,7 +1438,7 @@
                                                     <path d="M10.1818182,8 L17.8181818,8 C19.2324881,8 20,8.76751186 20,10.1818182 L20,17.8181818 C20,19.2324881 19.2324881,20 17.8181818,20 L10.1818182,20 C8.76751186,20 8,19.2324881 8,17.8181818 L8,10.1818182 C8,8.76751186 8.76751186,8 10.1818182,8 Z" fill="#000000"></path>
                                                 </g>
                                             </svg> </a>
-                                        <a href="#" class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Move">
+                                        <a href="#" class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Move">
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
                                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24" height="24"></rect>
@@ -1448,15 +1448,15 @@
                                             </svg> </a>
                                     </div>
                                     <div class="inbox__controls">
-                                        <span class="inbox__pages" data-toggle="tooltip" title="" data-original-title="Records per page">
-                                            <span class="inbox__perpage" data-toggle="dropdown">3 of 230 pages</span>
+                                        <span class="inbox__pages" data-bs-toggle="tooltip" title="" data-original-title="Records per page">
+                                            <span class="inbox__perpage" data-bs-toggle="dropdown">3 of 230 pages</span>
                                         </span>
 
-                                        <button class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Previose message">
+                                        <button class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Previose message">
                                             <i class="flaticon2-left-arrow"></i>
                                         </button>
 
-                                        <button class="inbox__icon" data-toggle="tooltip" title="" data-original-title="Next message">
+                                        <button class="inbox__icon" data-bs-toggle="tooltip" title="" data-original-title="Next message">
                                             <i class="flaticon2-right-arrow"></i>
                                         </button>
                                     </div>
@@ -1487,11 +1487,11 @@
                                 <div class="inbox__messages">
                                     <div class="inbox__message inbox__message--expanded">
                                         <div class="inbox__head">
-                                            <span class="media" data-toggle="expand" style="background-image: url('./media/users/100_13.jpg')">
+                                            <span class="media" data-bs-toggle="expand" style="background-image: url('./media/users/100_13.jpg')">
                                                 <span></span>
                                             </span>
                                             <div class="inbox__info">
-                                                <div class="inbox__author" data-toggle="expand">
+                                                <div class="inbox__author" data-bs-toggle="expand">
                                                     <a href="#" class="inbox__name">Chris Muller</a>
 
                                                     <div class="inbox__status">
@@ -1500,7 +1500,7 @@
                                                 </div>
                                                 <div class="inbox__details">
                                                     <div class="inbox__tome">
-                                                        <span class="inbox__label" data-toggle="dropdown">
+                                                        <span class="inbox__label" data-bs-toggle="dropdown">
                                                             to me <i class="flaticon2-down"></i>
                                                         </span>
                                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-left">
@@ -1530,27 +1530,27 @@
                                                             </table>
                                                         </div>
                                                     </div>
-                                                    <div class="inbox__desc" data-toggle="expand">
+                                                    <div class="inbox__desc" data-bs-toggle="expand">
                                                         With resrpect, i must disagree with Mr.Zinsser. We all know the most part of important part....
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="inbox__actions">
-                                                <div class="inbox__datetime" data-toggle="expand">
+                                                <div class="inbox__datetime" data-bs-toggle="expand">
                                                     Jul 15, 2019, 11:19AM
                                                 </div>
 
                                                 <div class="inbox__group">
-                                                    <span class="inbox__icon inbox__icon--label inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Star">
+                                                    <span class="inbox__icon inbox__icon--label inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Star">
                                                         <i class="flaticon-star"></i>
                                                     </span>
-                                                    <span class="inbox__icon inbox__icon--label inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Mark as important">
+                                                    <span class="inbox__icon inbox__icon--label inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Mark as important">
                                                         <i class="flaticon-add-label-button"></i>
                                                     </span>
-                                                    <span class="inbox__icon inbox__icon--reply inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Reply">
+                                                    <span class="inbox__icon inbox__icon--reply inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Reply">
                                                         <i class="flaticon2-reply-1"></i>
                                                     </span>
-                                                    <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
+                                                    <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
                                                         <i class="flaticon-more"></i>
                                                     </span>
                                                 </div>
@@ -1577,12 +1577,12 @@
                                     </div>
                                     <div class="inbox__message">
                                         <div class="inbox__head">
-                                            <span class="media" data-toggle="expand" style="background-image: url('./media/users/100_10.jpg')">
+                                            <span class="media" data-bs-toggle="expand" style="background-image: url('./media/users/100_10.jpg')">
                                                 <span></span>
                                             </span>
 
                                             <div class="inbox__info">
-                                                <div class="inbox__author" data-toggle="expand">
+                                                <div class="inbox__author" data-bs-toggle="expand">
                                                     <a href="#" class="inbox__name">Lina Nilson</a>
 
                                                     <div class="inbox__status">
@@ -1591,7 +1591,7 @@
                                                 </div>
                                                 <div class="inbox__details">
                                                     <div class="inbox__tome">
-                                                        <span class="inbox__label" data-toggle="dropdown">
+                                                        <span class="inbox__label" data-bs-toggle="dropdown">
                                                             to me <i class="flaticon2-down"></i>
                                                         </span>
                                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-left">
@@ -1622,28 +1622,28 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="inbox__desc" data-toggle="expand">
+                                                    <div class="inbox__desc" data-bs-toggle="expand">
                                                         Jornalists call this critical, introductory section the "Lede," and when bridge properly executed....
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="inbox__actions">
-                                                <div class="inbox__datetime" data-toggle="expand">
+                                                <div class="inbox__datetime" data-bs-toggle="expand">
                                                     Jul 20, 2019, 03:20PM
                                                 </div>
 
                                                 <div class="inbox__group">
-                                                    <span class="inbox__icon inbox__icon--label inbox__icon--on inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Star">
+                                                    <span class="inbox__icon inbox__icon--label inbox__icon--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Star">
                                                         <i class="flaticon-star"></i>
                                                     </span>
-                                                    <span class="inbox__icon inbox__icon--label inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Mark as important">
+                                                    <span class="inbox__icon inbox__icon--label inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Mark as important">
                                                         <i class="flaticon-add-label-button"></i>
                                                     </span>
-                                                    <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Reply">
+                                                    <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Reply">
                                                         <i class="flaticon2-reply-1"></i>
                                                     </span>
-                                                    <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
+                                                    <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
                                                         <i class="flaticon-more"></i>
                                                     </span>
                                                 </div>
@@ -1663,12 +1663,12 @@
                                     </div>
                                     <div class="inbox__message">
                                         <div class="inbox__head">
-                                            <span class="media" data-toggle="expand" style="background-image: url('./media/users/100_3.jpg')">
+                                            <span class="media" data-bs-toggle="expand" style="background-image: url('./media/users/100_3.jpg')">
                                                 <span></span>
                                             </span>
 
                                             <div class="inbox__info">
-                                                <div class="inbox__author" data-toggle="expand">
+                                                <div class="inbox__author" data-bs-toggle="expand">
                                                     <a href="#" class="inbox__name">Sean Stone</a>
 
                                                     <div class="inbox__status">
@@ -1677,7 +1677,7 @@
                                                 </div>
                                                 <div class="inbox__details">
                                                     <div class="inbox__tome">
-                                                        <span class="inbox__label" data-toggle="dropdown">
+                                                        <span class="inbox__label" data-bs-toggle="dropdown">
                                                             to me <i class="flaticon2-down"></i>
                                                         </span>
                                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-left">
@@ -1708,7 +1708,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="inbox__desc" data-toggle="expand">
+                                                    <div class="inbox__desc" data-bs-toggle="expand">
                                                         Headine try at attention-grabbing to the body of your blog post....
                                                     </div>
                                                 </div>
@@ -1720,16 +1720,16 @@
                                                 </div>
 
                                                 <div class="inbox__group">
-                                                    <span class="inbox__icon inbox__icon--label inbox__icon--label--on inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Star">
+                                                    <span class="inbox__icon inbox__icon--label inbox__icon--label--on inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Star">
                                                         <i class="flaticon-star"></i>
                                                     </span>
-                                                    <span class="inbox__icon inbox__icon--label inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Mark as important">
+                                                    <span class="inbox__icon inbox__icon--label inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Mark as important">
                                                         <i class="flaticon-add-label-button"></i>
                                                     </span>
-                                                    <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Reply">
+                                                    <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Reply">
                                                         <i class="flaticon2-reply-1"></i>
                                                     </span>
-                                                    <span class="inbox__icon inbox__icon--light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
+                                                    <span class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
                                                         <i class="flaticon-more"></i>
                                                     </span>
                                                 </div>
@@ -1893,7 +1893,7 @@
                                                         Send
                                                     </button>
 
-                                                    <button type="button" class="btn btn-brand btn-bold dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <button type="button" class="btn btn-brand btn-bold dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                     </button>
 
                                                     <div class="dropdown-menu dropup dropdown-menu-fit dropdown-menu-right">
@@ -1931,10 +1931,10 @@
                                             </div>
 
                                             <div class="inbox__secondary">
-                                                <button class="inbox__icon inbox__icon--light" data-toggle="tooltip" title="" data-original-title="More actions">
+                                                <button class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" title="" data-original-title="More actions">
                                                     <i class="flaticon2-settings"></i>
                                                 </button>
-                                                <button class="inbox__icon inbox__icon--remove inbox__icon--light" data-toggle="tooltip" title="" data-original-title="Dismiss reply">
+                                                <button class="inbox__icon inbox__icon--remove inbox__icon--light" data-bs-toggle="tooltip" title="" data-original-title="Dismiss reply">
                                                     <i class="flaticon2-rubbish-bin-delete-button"></i>
                                                 </button>
                                             </div>
@@ -1958,7 +1958,7 @@
                                             <button type="button" class="inbox__icon inbox__icon--md inbox__icon--light">
                                                 <i class="flaticon2-arrow-1"></i>
                                             </button>
-                                            <button type="button" class="inbox__icon inbox__icon--md inbox__icon--light" data-dismiss="modal">
+                                            <button type="button" class="inbox__icon inbox__icon--md inbox__icon--light" data-bs-dismiss="modal">
                                                 <i class="flaticon2-cross"></i>
                                             </button>
                                         </div>
@@ -2092,7 +2092,7 @@
                                                     Send
                                                 </button>
 
-                                                <button type="button" class="btn btn-brand btn-bold dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <button type="button" class="btn btn-brand btn-bold dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                 </button>
 
                                                 <div class="dropdown-menu dropup dropdown-menu-fit dropdown-menu-right">
@@ -2130,10 +2130,10 @@
                                         </div>
 
                                         <div class="inbox__secondary">
-                                            <button class="inbox__icon inbox__icon--light" data-toggle="tooltip" title="" data-original-title="More actions">
+                                            <button class="inbox__icon inbox__icon--light" data-bs-toggle="tooltip" title="" data-original-title="More actions">
                                                 <i class="flaticon2-settings"></i>
                                             </button>
-                                            <button class="inbox__icon inbox__icon--remove inbox__icon--light" data-toggle="tooltip" title="" data-original-title="Dismiss reply">
+                                            <button class="inbox__icon inbox__icon--remove inbox__icon--light" data-bs-toggle="tooltip" title="" data-original-title="Dismiss reply">
                                                 <i class="flaticon2-rubbish-bin-delete-button"></i>
                                             </button>
                                         </div>
