@@ -385,56 +385,15 @@ $frm->setFormTagAttribute('class', 'form');
                 <div class="card" id="digital-files">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="digital-files-block">
                         <div class="card-head-label">
-                            <h3 class="card-head-title">Specifications
+                            <h3 class="card-head-title">Digital Files
                             </h3>
-                            <span class="text-muted">Product Specifications are added in this
+                            <span class="text-muted">Digital Files are added in this
 
                                 <span class="input-helper"></span>section</span>
+                                <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>)">File</button>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="digital-files-block">
-                        <div id="specificationsFormJs">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
-                                        <span class="form-text text-muted">Lorem ipsum dolor sit,
-                                            amet consectetur adipisicing elit. </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_value" id="sp_value" value="" data-required="1">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_group" id="sp_group" value="" data-required="0">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label"></label>
-                                        <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
-                                        <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
-                                            <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="separator separator-dashed my-4"></div>
+                    <div class="card-body show" id="digital-files-block">                      
                         <div id="digitalFilesListJs">
                         </div>
                     </div>
@@ -447,57 +406,14 @@ $frm->setFormTagAttribute('class', 'form');
                             <span class="text-muted">Product Digital Links are added in this
 
                                 <span class="input-helper"></span>section</span>
+                                <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK;?>)">LINK</button>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="digital-links-block">
-                        <div id="digitalLinksFormJs">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
-                                        <span class="form-text text-muted">Lorem ipsum dolor sit,
-                                            amet consectetur adipisicing elit. </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_value" id="sp_value" value="" data-required="1">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_group" id="sp_group" value="" data-required="0">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label"></label>
-                                        <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
-                                        <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
-                                            <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="separator separator-dashed my-4"></div>
+                    <div class="card-body show" id="digital-links-block">                     
                         <div id="digitalLinksListJs">
                         </div>
                     </div>
                 </div>
-
-
             </div>
             <div class="add-stock-column column-actions">
                 <div class="sticky-top">
