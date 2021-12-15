@@ -405,14 +405,14 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_7.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     Michael
                                                                     Williams </span>
 
                                                             </div>
                                                         </a>
                                                     </td>
-                                                    <td> <span class="purchased"> Cadbury fruit and nut <span class="text-muted fw-bold">+ 2
+                                                    <td> <span class="purchased"> Cadbury fruit and nut <span class="text-muted">+ 2
                                                                 more</span></span></td>
                                                     <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                     </td>
@@ -432,7 +432,7 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     Jason Smith</span>
 
                                                             </div>
@@ -456,14 +456,14 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_3.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     T. Weisman </span>
 
                                                             </div>
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        <span class="purchased">Smart Personal Air Cooler<span class="text-muted fw-bold">+ 2
+                                                        <span class="purchased">Smart Personal Air Cooler<span class="text-muted">+ 2
                                                                 more</span></span>
                                                     </td>
                                                     <td> <span class="date"> 01/05/2021 <time>15:45</time></span>
@@ -483,7 +483,7 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     Robinson </span>
 
                                                             </div>
@@ -507,13 +507,13 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_5.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     Jackie </span>
 
                                                             </div>
                                                         </a>
                                                     </td>
-                                                    <td> <span class="purchased">Wooden Alarm Clock <span class="text-muted fw-bold">+ 8
+                                                    <td> <span class="purchased">Wooden Alarm Clock <span class="text-muted">+ 8
                                                                 more</span></span></td>
                                                     <td> <span class="date"> 13/02/2018 <time>15:45</time></span>
                                                     </td>
@@ -531,13 +531,13 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_6.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     Sourabh Rana </span>
 
                                                             </div>
                                                         </a>
                                                     </td>
-                                                    <td> <span class="purchased"> Cadbury fruit and nut <span class="text-muted fw-bold">+ 2
+                                                    <td> <span class="purchased"> Cadbury fruit and nut <span class="text-muted">+ 2
                                                                 more</span></span></td>
                                                     <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                     </td>
@@ -556,14 +556,14 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_7.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     Michael
                                                                     Williams </span>
 
                                                             </div>
                                                         </a>
                                                     </td>
-                                                    <td> <span class="purchased"> Cadbury fruit and nut <span class="text-muted fw-bold">+ 2
+                                                    <td> <span class="purchased"> Cadbury fruit and nut <span class="text-muted">+ 2
                                                                 more</span></span></td>
                                                     <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                     </td>
@@ -582,7 +582,7 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     Jason Smith</span>
 
                                                             </div>
@@ -606,13 +606,13 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_3.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     T. Weisman </span>
 
                                                             </div>
                                                         </a>
                                                     </td>
-                                                    <td> <span class="purchased">Smart Personal Air Cooler<span class="text-muted fw-bold">+ 2
+                                                    <td> <span class="purchased">Smart Personal Air Cooler<span class="text-muted">+ 2
                                                                 more</span></span></td>
                                                     <td> <span class="date"> 01/05/2021 <time>15:45</time></span>
                                                     </td>
@@ -631,7 +631,7 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     Robinson </span>
 
                                                             </div>
@@ -655,13 +655,13 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_5.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     Jackie </span>
 
                                                             </div>
                                                         </a>
                                                     </td>
-                                                    <td> <span class="purchased">Wooden Alarm Clock <span class="text-muted fw-bold">+ 8
+                                                    <td> <span class="purchased">Wooden Alarm Clock <span class="text-muted">+ 8
                                                                 more</span></span></td>
                                                     <td> <span class="date"> 13/02/2018 <time>15:45</time></span>
                                                     </td>
@@ -680,13 +680,13 @@
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_6.jpg" alt="image">
                                                             </figure>
                                                             <div class="user-profile_data">
-                                                                <span class="text-muted fw-bold">
+                                                                <span class="text-muted">
                                                                     Sourabh Rana </span>
 
                                                             </div>
                                                         </a>
                                                     </td>
-                                                    <td> <span class="purchased"> Cadbury fruit and nut <span class="text-muted fw-bold">+ 2
+                                                    <td> <span class="purchased"> Cadbury fruit and nut <span class="text-muted">+ 2
                                                                 more</span></span></td>
                                                     <td> <span class="date"> 13/10/2021 <time>15:45</time></span>
                                                     </td>

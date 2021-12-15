@@ -294,7 +294,7 @@
                                                             </figure>
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Michael Williams</a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -357,7 +357,7 @@
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">
                                                                     Jessie Clarcson</a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -414,7 +414,7 @@
                                                             </figure>
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Michael Williams</a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -469,7 +469,7 @@
                                                             </figure>
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Michael Williams</a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -525,7 +525,7 @@
                                                             </figure>
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Michael Williams</a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -581,7 +581,7 @@
                                                             </figure>
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Michael Williams</a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -637,7 +637,7 @@
                                                             </figure>
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Michael Williams</a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>

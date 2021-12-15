@@ -13,11 +13,11 @@ $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['cred
     </figure>
     <div class="user-profile_data">
         <a class="user-profile_title" href="<?php echo $href; ?>" <?php echo $onclick; ?>><?php echo $username; ?></a>
-        <span class="text-muted fw-bold"><?php echo $user['credential_email']; ?></span>
-        <?php 
-            if(isset($user['extra_text']) || !empty($user['extra_text'])) {
-                echo '<span>'.$user['extra_text'].'</span>';
-            } 
+        <span class="text-muted"><?php echo $user['credential_email']; ?></span>
+        <?php
+        if (isset($user['extra_text']) || !empty($user['extra_text'])) {
+            echo '<span>' . $user['extra_text'] . '</span>';
+        }
         ?>
     </div>
 </div>
