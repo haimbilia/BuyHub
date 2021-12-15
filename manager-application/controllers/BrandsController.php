@@ -557,6 +557,11 @@ class BrandsController extends ListingBaseController
             $srch->addCondition('brand_active', '=', $post['brand_active']);
         }
 
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('brand_id', 'NOT IN', $excludeRecords);
+        }
+
         $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);
         $srch->setPageNumber($page);
         $doNotLimitRecords = FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 0);

@@ -552,6 +552,11 @@ class BlogPostsController extends ListingBaseController
             $cond->attachCondition('post_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
 
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('post_id', 'NOT IN', $excludeRecords);
+        }
+
         $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
         $alreadyAdded = Collections::getRecords($collectionId);
         if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
@@ -564,9 +569,9 @@ class BlogPostsController extends ListingBaseController
         $posts = $db->fetchAll($rs, 'post_id');
         $json = array();
         foreach ($posts as $key => $post) {
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($post['post_title'], ENT_QUOTES, 'UTF-8'))
+                'text' => strip_tags(html_entity_decode($post['post_title'], ENT_QUOTES, 'UTF-8'))
             );
         }
         die(json_encode($json));

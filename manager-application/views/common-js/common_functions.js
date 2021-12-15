@@ -181,12 +181,12 @@ select2 = function (
     if (1 > ele.length) {
         return false;
     }
-
+    
     ele.select2({
         closeOnSelect: ele.data("closeOnSelect") || true,
         data: data,
         dir: layoutDirection,
-        allowClear: true,
+        allowClear: ele.data("allowClear") || true,
         placeholder: ele.attr("placeholder") || "",
         ajax: {
             url: url,

@@ -1,15 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->addFormTagAttribute('data-onclear', 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');');
-$fld = $frm->getField('collection_for_web');
-if (null != $fld) {
-    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
-}
-
-$fld = $frm->getField('collection_for_app');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
-if (in_array($collection_layout_type, Collections::APP_COLLECTIONS_ONLY)) {
-    $fld->setFieldTagAttribute('disabled', 'disabled');
-}
 
 $generalTab['attr']['onclick'] = 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');';
 
@@ -51,4 +40,4 @@ if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA)) {
 
 $includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
 
-require_once(CONF_THEME_PATH . '_partial/listing/form.php'); 
+require_once(CONF_THEME_PATH . '_partial/listing/lang-form.php'); 
