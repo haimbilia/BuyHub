@@ -59,12 +59,11 @@
                                 $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                                 $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                 ?>
-                                <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
+                                <img width="120" height="68" <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
                             </a>
                         </div>
-
-                        <div class="location">
-                            <div class="location_inner">
+                        <div class="geo-location">
+                            <div class="geo-location_inner">
                                 <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) { ?>
                                     <div class="dropdown">
                                         <?php
@@ -80,29 +79,34 @@
                                         }
                                         $geoAddress =  isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
                                         ?>
-                                        <button class="location_trigger" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button class="button-geo-location geo-location_trigger" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="icn">
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#location">
                                                     </use>
                                                 </svg>
                                             </i>
-                                            <div class="location-selected"><?php echo $geoAddress; ?>
+                                            <div class="geo-location-selected">
+                                                <?php echo $geoAddress; ?>
                                             </div>
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim location_dropdown-menu" aria-labelledby="location-dropdown">
-                                            <div class="location_body">
+                                        <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim geo-location_dropdown-menu" aria-labelledby="location-dropdown">
+                                            <div class="geo-location_body">
                                                 <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
                                                     <i class="icn">
-                                                        <svg class="svg" width="16px" height="16px">
+                                                        <svg class="svg" width="18" height="18">
                                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
                                                             </use>
-                                                        </svg></i>
-                                                    <span><?php echo Labels::getLabel('LBL_DETECT_MY_CURRENT_LOCATION', $siteLangId); ?></span></button>
+                                                        </svg>
+                                                    </i>
+                                                    <span class="txt">
+                                                        <?php echo Labels::getLabel('LBL_DETECT_MY_CURRENT_LOCATION', $siteLangId); ?>
+                                                    </span>
+                                                </button>
                                                 <div class="or">
                                                     <span>Or</span>
                                                 </div>
-                                                <input autocomplete="no" id="ga-autoComplete-header" class="form-control pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+                                                <input autocomplete="no" id="ga-autoComplete-header" class="form-control  geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -111,32 +115,33 @@
                         </div>
                     </div>
                     <div class="top-bar__right">
-                        <div class="short-links">
-                            <ul>
-                                <li>
-                                    <a href="#">
-                                        <i class="icn">
-                                            <svg class="svg" width="16px" height="16px">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#store">
-                                                </use>
-                                            </svg>
+                        <ul class="quick-nav">
+                            <li class="quick-nav-item">
+                                <button type="button" class="quick-nav-link button-store">
+                                    <i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#store">
+                                            </use>
+                                        </svg>
 
-                                        </i>
-                                        <span class="txt">Open A Store</span>
-                                    </a>
-                                </li>
-                                <!-- <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?> -->
-                                <!-- <?php $this->includeTemplate('_partial/headerLanguageArea.php'); ?> -->
-                                <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
-                                <li class="cart dropdown" id="cartSummary"> <?php if ($controllerName != 'Cart') { ?>
-
+                                    </i>
+                                    <span class="txt">Open A Store</span>
+                                </button>
+                            </li>
+                            <!-- <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?> -->
+                            <!-- <?php $this->includeTemplate('_partial/headerLanguageArea.php'); ?> -->
+                            <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
+                            <li class="quick-nav-item">
+                                <div id="cartSummary">
+                                    <?php if ($controllerName != 'Cart') { ?>
                                         <?php $this->includeTemplate('_partial/headerWishListAndCartSummary.php'); ?>
 
                                     <?php } ?>
+                                </div>
 
-                                </li>
-                            </ul>
-                        </div>
+                            </li>
+                        </ul>
+
                     </div>
                 </div>
             </div>

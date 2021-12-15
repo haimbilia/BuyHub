@@ -4,6 +4,7 @@
     top: 0;
     width: 100%;
     font-weight: 300;
+    font-size: 0.8rem;
     background: $bg-white;
     .top-bar {
         border-bottom: $border;
@@ -18,11 +19,9 @@
         }
         &__left {
             display: flex;
+            align-items: center;
         }
-        a {
-            color: inherit;
-            padding: 6px 0.8rem;
-        }
+
         .slogan {
             line-height: 1;
             color: inherit;
@@ -37,14 +36,11 @@
     .logo {
         width: 120px;
         margin: 10px 0;
-        margin-#{$end-direction}: 2rem;
+        margin-#{$end-direction}: 1.5rem;
         display: flex;
         justify-content: center;
         @include media-breakpoint-down(lg) {
-            & {
-                margin: 0 auto;
-                max-width: 100px;
-            }
+            max-width: 100px;
         }
         img {
             &[data-ratio="16:9"] {
@@ -105,64 +101,24 @@
     }
 }
 
-.short-links {
+.quick-nav {
     display: flex;
-    justify-content: flex-end;
-    > ul {
-        display: flex;
-        align-items: center;
-        > li {
-            display: block;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            &:after {
-                top: 0;
-                bottom: 0;
-                #{$start-direction}: 0;
-                position: absolute;
-                content: "";
-                background: rgba(255, 255, 255, 0.4);
-                width: 1px;
-                height: 100%;
-            }
-            &:first-child {
-                margin-#{$end-direction}: 0;
-                &:after {
-                    content: normal;
-                }
-            }
-            &:last-child {
-                a {
-                    padding-#{$end-direction}: 0;
-                }
-            }
-            > .dropdown {
-                > a {
-                    color: inherit;
-                    display: block;
-                    line-height: 1;
-                    text-decoration: none;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                }
-            }
-        }
-        .icn {
-            .svg {
-                margin-#{$end-direction}: 5px;
-            }
-        }
+    align-items: center;
+    justify-content: end;
+    &-item {
+        display: block;
+        padding: 0;
+        position: relative;
+        margin-#{$start-direction}: 10px;
     }
-    .icon--img {
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        margin-#{$end-direction}: 5px;
+    &-link {
+        background: none;
+        border: none;
     }
-    .scroll {
-        max-height: 300px;
+    .icn {
+        .svg {
+            margin-#{$end-direction}: 5px;
+        }
     }
 }
 
@@ -214,86 +170,4 @@
 
 .dropdown.is-active .dropdown__target {
     pointer-events: auto;
-}
-
-.cart {
-    position: relative;
-    padding-#{$start-direction}: 3.125rem;
-    @include media-breakpoint-down(lg) {
-        padding: 0;
-    }
-    > a {
-        padding: 10px 0;
-        margin: 5px 0;
-        display: inline-block;
-        color: inherit;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        text-align: #{$end-direction};
-        @include media-breakpoint-down(lg) {
-            padding: 0;
-            margin: 0;
-        }
-    }
-    span.icn {
-        vertical-align: top;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        //border: solid 1px $brand-color;
-        background: $bg-brand-light;
-        color: $brand-color;
-        margin-#{$end-direction}: 10px;
-        @include media-breakpoint-down(lg) {
-            margin: 0;
-            width: 40px;
-            height: 40px;
-            border-radius: 0;
-            border: none;
-            border-radius: $radius3;
-        }
-        svg {
-            width: 24px;
-            height: 24px;
-            @include media-breakpoint-down(lg) {
-                width: 20px;
-                height: 20px;
-            }
-        }
-    }
-    .icn-txt {
-        color: inherit;
-        font-size: 0.8em;
-        font-weight: 400;
-        text-transform: uppercase;
-        @include media-breakpoint-down(lg) {
-            display: none;
-        }
-        strong {
-            display: block;
-            font-weight: 300;
-        }
-    }
-    .cartQuantity {
-        border-radius: 50%;
-        width: 1rem;
-        height: 1rem;
-        display: block;
-        position: absolute;
-        z-index: 0;
-        bottom: 13px;
-        #{$start-direction}: 30px;
-        border: solid 1px $brand-color;
-        //background-color: $brand-color;
-        //color:lighten($brand-color, 55%);
-        @include bg-brand();
-        font-size: 0.5rem;
-        text-align: center;
-        line-height: 0.9rem;
-    }
 }

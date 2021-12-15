@@ -2,9 +2,13 @@
 $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
 if (!UserAuthentication::isUserLogged()) {
     if (UserAuthentication::isGuestUserLogged()) { ?>
-        <li>
+        <li class="quick-nav-item">
             <div class="dropdown">
-                <a href="javascript:void(0)" class="dropdown-toggle no-after" data-bs-toggle="dropdown"><span class="icn icn-txt"><?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?></span></a>
+                <button type="button" class="button-account dropdown-toggle no-after" data-bs-toggle="dropdown">
+                    <span class="txt">
+                        <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?>
+                    </span>
+                </button>
                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
                     <ul class="nav nav-block">
                         <?php $userName = User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?>
@@ -20,15 +24,18 @@ if (!UserAuthentication::isUserLogged()) {
             </div>
         </li><?php
             } else {
-                ?> <li>
-            <div class="dropdown dropdown--user">
-                <a href="javascript:void(0)" class="sign-in sign-in-popup-js">
-                    <i class="icn icn--login">
+                ?>
+        <li class="quick-nav-item">
+            <div class="dropdown">
+                <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js">
+                    <i class="icn">
                         <svg class="svg" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
                         </svg>
-                    </i> <span>
-                        <?php echo Labels::getLabel('LBL_Account', $siteLangId); ?> </span></a>
+                    </i>
+                    <span class="txt">
+                        <?php echo Labels::getLabel('LBL_Account', $siteLangId); ?> </span>
+                </button>
             </div>
         </li> <?php
             }
@@ -55,9 +62,17 @@ if (!UserAuthentication::isUserLogged()) {
                 $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
                 $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
             } ?>
-    <li class="">
+    <li class="quick-nav-item">
         <div class="dropdown">
-            <a href="javascript:void(0)" class="dropdown-toggle no-after" data-bs-toggle="dropdown"><span class="icn icn-txt"><?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?></span></a>
+            <button type="button" class="quick-nav-link button-account dropdown-toggle no-after" data-bs-toggle="dropdown">
+                <i class="icn">
+                    <svg class="svg" width="18" height="18">
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
+                    </svg>
+                </i>
+                <span class="txt">
+                    <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . User::getAttributesById(UserAuthentication::getLoggedUserId(), "user_name"); ?></span>
+            </button>
             <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dropdownMenuButton">
                 <ul class="nav nav-block">
                     <?php

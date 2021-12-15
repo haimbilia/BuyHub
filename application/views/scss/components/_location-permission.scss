@@ -1,3 +1,63 @@
+.geo-location {
+    position: relative;
+    padding-#{$start-direction}: 1.5rem;
+    &::before {
+        content: "";
+        background: $border-color;
+        width: 1px;
+        height: 20px;
+        position: absolute;
+        #{$start-direction}: 0;
+    }
+    &_inner {
+        display: block;
+        align-items: center;
+    }
+    &_trigger {
+        text-align: inherit;
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        color: currentColor;
+        padding: 0;
+        width: 100%;
+        .svg {
+            margin-#{$end-direction}: 6px;
+            //fill: $brand-color;
+        }
+    }
+    &-selected {
+        white-space: nowrap;
+        max-width: 212px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+    }
+
+    &_body {
+        min-width: 350px;
+        width: 100%;
+        padding: 2rem;
+    }
+    .btn-detect {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .icn {
+            margin-#{$end-direction}: 8px;
+        }
+    }
+    .or {
+        margin: 1.5rem 0;
+    }
+    &_input {
+        background: none;
+        //border: none;
+        min-height: 36px;
+        font-size: 0.8rem;
+    }
+}
 .location-popup-width {
     max-width: 630px;
     padding: 0 !important;
@@ -96,57 +156,5 @@
                 }
             }
         }
-    }
-}
-
-.location {
-    position: relative;
-    &_inner {
-        display: block;
-        align-items: center;
-    }
-    &_trigger {
-        text-align: inherit;
-        background: none;
-        border: none;
-        display: flex;
-        align-items: center;
-        color: currentColor;
-        padding: 0;
-        width: 100%;
-        .svg {
-            margin-#{$end-direction}: 5px;
-            //fill: $brand-color;
-        }
-    }
-    &-selected {
-        white-space: nowrap;
-        max-width: 212px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: block;
-    }
-    &_input {
-        background: none;
-        //border: none;
-        min-height: 36px;
-        font-size: 0.8rem;
-        margin-#{$end-direction}: 8px;
-    }
-    &_body {
-        min-width: 350px;
-        width: 100%;
-        padding: 2rem;
-    }
-    .btn-detect {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .icn {
-            margin-#{$end-direction}: 8px;
-        }
-    }
-    .or {
-        margin: 1.5rem 0;
     }
 }

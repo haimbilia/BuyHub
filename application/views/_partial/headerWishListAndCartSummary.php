@@ -4,27 +4,30 @@ if (UserAuthentication::isUserLogged()) {
     $user_is_buyer = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_is_buyer');
 }
 if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
-    <a href="javascript:void(0)" data-trigger-cart="side-cart">
-        <span class="icn">
-            <svg class="svg">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#main-cart"></use>
-            </svg></span>
-        <span class="cartQuantity"><?php echo (Cart::CART_MAX_DISPLAY_QTY < $totalCartItems) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $totalCartItems; ?></span>
-        <span class="icn-txt"><strong><?php echo Labels::getLabel("LBL_Cart", $siteLangId); ?></strong>
+    <button type="button" class="quick-nav-link button-cart" data-bs-toggle="offcanvas" data-bs-target="#side-cart" aria-controls="side-cart">
+        <i class="icn">
+            <svg class="svg" width="18" height="18">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart"></use>
+            </svg>
+        </i>
+        <span class="txt">
+            <?php echo Labels::getLabel("LBL_My_Bag", $siteLangId); ?>
+            <span class="cart-qty"><?php echo (Cart::CART_MAX_DISPLAY_QTY < $totalCartItems) ? Cart::CART_MAX_DISPLAY_QTY . '+' : $totalCartItems; ?></span>
             <?php /* if (0 < $cartSummary['cartTotal']) { */ ?>
-            <span class="cartValue"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span>
+            <!-- <span class="cartValue"><?php echo CommonHelper::displayMoneyFormat($cartSummary['cartTotal']); ?></span> -->
             <?php /* } */ ?>
         </span>
-    </a>
-    <div class="side-cart" id="side-cart" data-close-on-click-outside-cart="side-cart">
-        <div class="side-cart_head">
-            <h6><strong><?php echo Labels::getLabel('LBL_ITEMS', $siteLangId); ?>(<?php echo $totalCartItems; ?>)</strong>
+    </button>
+    <div class="offcanvas offcanvas-end side-cart" tabindex="-1" id="side-cart" aria-labelledby="side-cartLabel">
+        <div class="offcanvas-header side-cart_head">
+            <h6>
+                <strong><?php echo Labels::getLabel('LBL_ITEMS', $siteLangId); ?>(<?php echo $totalCartItems; ?>)</strong>
             </h6>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 
-            <a href="javascript:void(0)" class="close-layer" data-bs-target-close-cart="side-cart"></a>
         </div>
         <?php if ($totalCartItems > 0) { ?>
-            <div class="side-cart_body scroll scroll-y">
+            <div class="offcanvas-body side-cart_body ">
                 <div class="short-detail">
                     <ul class="list-cart">
                         <?php
@@ -91,12 +94,14 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
 
                                     <div class="cell cell_action">
                                         <ul class="actions">
-                                            <li><a href="javascript:void(0)" class="" onclick="cart.remove('<?php echo md5($product['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                                    <svg class="svg" width="20px" height="20px" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
+                                            <li>
+                                                <a href="javascript:void(0)" class="" onclick="cart.remove('<?php echo md5($product['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                                    <svg class="svg" width="18" height="18" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#bin">
                                                         </use>
                                                     </svg>
-                                                </a></li>
+                                                </a>
+                                            </li>
                                         </ul>
 
                                     </div>
@@ -109,7 +114,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                     </ul>
                 </div>
             </div>
-            <div class="side-cart_foot">
+            <div class="offcanvas-foot side-cart_foot">
                 <div class="cart-summary">
                     <ul>
                         <li>
