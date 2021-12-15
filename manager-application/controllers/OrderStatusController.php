@@ -123,6 +123,7 @@ class OrderStatusController extends ListingBaseController
         $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
+        //CommonHelper::printArray($records,1);
         
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
@@ -150,7 +151,6 @@ class OrderStatusController extends ListingBaseController
 
         if (0 < $recordId) {
             $data = OrderStatus::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('orderstatus_id', 'IFNULL(orderstatus_name,orderstatus_identifier) as orderstatus_name', 'orderstatus_is_active', 'orderstatus_is_digital', 'orderstatus_color_class','orderstatus_type'), true);
-            //CommonHelper::printArray($data,1);
 
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
@@ -318,6 +318,7 @@ class OrderStatusController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'orderstatus_name' => Labels::getLabel('LBL_ORDER_STATUS_NAME', $this->siteLangId),
+            'orderstatus_priority' => Labels::getLabel('LBL_ORDER_STATUS_PRIORITY', $this->siteLangId),
             'orderstatus_is_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -333,6 +334,7 @@ class OrderStatusController extends ListingBaseController
             'select_all',
             'listSerial',
             'orderstatus_name',
+            'orderstatus_priority',
             'orderstatus_is_active',
             'action',
         ];
@@ -340,6 +342,6 @@ class OrderStatusController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop','orderstatus_name','orderstatus_is_active'], Common::excludeKeysForSort());
     }
 }
