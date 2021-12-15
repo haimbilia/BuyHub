@@ -428,7 +428,7 @@ Bugs :
     => 060531 - Admin UI: Nothing is showing while clicking on the User's name on the whole system.
     => 060513 - Admin UI: Order Status's sorting and re-arrange functionality is not working properly if trying to use it simultaneously.
     => 060776 - Recommended tag products section error is coming.
-
+--------------------------TV-9.4.0.20211215----------------------------
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
