@@ -386,6 +386,7 @@ Bugs :
     => 060482 - Admin UI: Search icon is not showing while selecting the option from the "suggested text" on the whole system.
     => 060564 - Admin UI: States listing is not showing for the default selected country under the "Users Addresses.
     => 060570 - Admin UI: Spacing issue between "name" and "address" under the user's addresses.
+    => 060572 - Admin UI: "Spacing" and "text size" issue for the Combined Tax option under the tax structure section.
 
     
 Known Issues and Problems :
