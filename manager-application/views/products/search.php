@@ -19,22 +19,22 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
-            case 'images':            
-                $str = HtmlHelper::imageListCard(AttachedFile::FILETYPE_PRODUCT_IMAGE,$row['product_name'], $row['product_id'],0,$row['product_updated_on']);
-                $td->appendElement('plaintext', $tdAttr, $str ,true);
+            case 'images':
+                $str = HtmlHelper::imageListCard(AttachedFile::FILETYPE_PRODUCT_IMAGE, $row['product_name'], $row['product_id'], 0, $row['product_updated_on']);
+                $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'product_identifier':
-                $str ='<div class="user-profile">
+                $str = '<div class="user-profile">
                             <div class="user-profile_data">
-                                <span class="user-profile_title">'.$row['product_name'].'</span>
-                                <span class="text-muted fw-bold">'.$row[$key].'</span>
+                                <span class="user-profile_title">' . $row['product_name'] . '</span>
+                                <span class="text-muted">' . $row[$key] . '</span>
                             </div>
-                        </div>';              
+                        </div>';
                 $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'user_name':
                 if ($canViewUsers) {
-                    !empty($row[$key]) ? $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",{user_id:'.$row['product_seller_id'].'})'), $row[$key]) : $td->appendElement('plaintext', $tdAttr, (!empty($row[$key]) ? $row[$key] : 'Admin'), true);
+                    !empty($row[$key]) ? $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",{user_id:' . $row['product_seller_id'] . '})'), $row[$key]) : $td->appendElement('plaintext', $tdAttr, (!empty($row[$key]) ? $row[$key] : 'Admin'), true);
                 } else {
                     $td->appendElement('plaintext', $tdAttr, (!empty($row[$key]) ? $row[$key] : 'Admin'), true);
                 }
@@ -45,7 +45,7 @@ foreach ($arrListing as $sn => $row) {
             case 'product':
                 $td->appendElement('plaintext', $tdAttr, ($row['product_seller_id']) ? 'Custom' : 'Catalog');
                 break;
-            case 'product_approved':              
+            case 'product_approved':
                 $statusHtm = Product::getStatusHtml($siteLangId, $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
                 break;
@@ -69,12 +69,12 @@ foreach ($arrListing as $sn => $row) {
                 $data = [
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['product_id']
-                ];        
+                ];
 
-                if ($canEdit) { 
+                if ($canEdit) {
                     $data['otherButtons'][] = [
                         'attr' => [
-                            'href' => UrlHelper::generateUrl('Products', 'form', array($row['product_id'])),                           
+                            'href' => UrlHelper::generateUrl('Products', 'form', array($row['product_id'])),
                             'title' => Labels::getLabel('LBL_EDIT', $siteLangId)
                         ],
                         'label' => '<svg class="svg" width="18" height="18">
@@ -82,8 +82,8 @@ foreach ($arrListing as $sn => $row) {
                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#edit">
                             </use>
                         </svg>'
-                    ];   
-                    $data['deleteButton'] = [];             
+                    ];
+                    $data['deleteButton'] = [];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
