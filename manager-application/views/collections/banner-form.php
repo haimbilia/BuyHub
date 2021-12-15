@@ -16,7 +16,7 @@ if (null != $fld) {
 $bannerFld = $frm->getField('banner');
 $bannerFld->addFieldTagAttribute('class', 'btn btn-brand btn-sm');
 $bannerFld->addFieldTagAttribute('onChange', 'bannerPopupImage(this)');
-$bannerFld->htmlAfterField = '<small class="text--small preferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $adminLangId), '1350 x 405').'</small>';
+$bannerFld->htmlAfterField = '<small class="text--small preferredDimensions-js">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '1350 x 405').'</small>';
 
 $bannerLangFld = $frm->getField('banner_lang_id');
 $bannerLangFld->addFieldTagAttribute('class', 'banner-language-js');
@@ -33,9 +33,9 @@ $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR
 <div id="cropperBox-js"></div>
 <div id="mediaForm-js">
 	<div class="sectionhead" style=" padding-bottom:20px">
-		<h4><?php echo Labels::getLabel('LBL_Banner_Setup', $adminLangId); ?>
+		<h4><?php echo Labels::getLabel('LBL_Banner_Setup', $siteLangId); ?>
 		</h4>
-		<a href="javascript:void(0)" class="themebtn btn-default btn-sm" onClick="reloadBannersList(<?php echo $collection_id;?>)";><?php echo Labels::getLabel('LBL_Back', $adminLangId); ?></a>		
+		<a href="javascript:void(0)" class="themebtn btn-default btn-sm" onClick="reloadBannersList(<?php echo $collection_id;?>)";><?php echo Labels::getLabel('LBL_Back', $siteLangId); ?></a>		
 	</div>
 	<div class="tabs_panel">
 		<?php echo $frm->getFormTag(); ?>
@@ -113,7 +113,7 @@ $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR
 			<?php } ?>
 		</div>
 		<div class="p-4 mb-4 border rounded">
-			<h3 class="mb-4"><?php echo Labels::getLabel('LBL_Banner', $adminLangId); ?></h3>
+			<h3 class="mb-4"><?php echo Labels::getLabel('LBL_Banner', $siteLangId); ?></h3>
 			<div class="row">
 					<?php $fld = $frm->getField('banner_lang_id');
 					if($fld->fldType != 'hidden'){
@@ -182,7 +182,7 @@ $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR
 		<div class="accordians_container accordians_container-categories" defaultLang= "<?php echo $siteDefaultLangId; ?>" language="<?php echo $langId; ?>" id="accordion-language_<?php echo $langId; ?>" onClick="translateBannerData(this)">
 			 <div class="accordian_panel">
 				 <span class="accordian_title accordianhead accordian_title" id="collapse_<?php echo $langId; ?>">
-				 <?php echo $data." "; echo Labels::getLabel('LBL_Language_Data', $adminLangId); ?>
+				 <?php echo $data." "; echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>
 				 </span>
 				 <div class="accordian_body accordiancontent" style="display: none;">
 					 <div class="row">

@@ -34,8 +34,9 @@ body {
     display: flex;
     flex-direction: column;
     color: $txt-gray;
-    background: $bg-gray;
+    background: $bg-gray; 
 }
+a{ text-decoration: none;}
 
 img {
     max-width: 100%;

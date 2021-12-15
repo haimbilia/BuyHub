@@ -523,12 +523,14 @@
         });
     };
 
-    digitalDownloadsForm = function (type) {
-        console.log(type);
+    digitalDownloadsForm = function (type, callback = '') {
         $.ykmodal(fcom.getLoader());
         let productId = getCurrentFrmProductId();
         fcom.ajax(fcom.makeUrl('Products', "digitalDownloadForm", [productId, type]), "", function (t) {
             $.ykmodal(t);
+            if (typeof callback == 'function') {
+                callback();
+            }
             fcom.removeLoader();
         });
     };
@@ -554,14 +556,13 @@
             contentType: false,
             success: function (t) {
                 fcom.removeLoader();
-                var ans = $.parseJSON(t);
-                if (ans.status == 0) {
-                    fcom.displayErrorMessage(ans.msg);
+                t = $.parseJSON(t);
+                if (t.status == 0) {
+                    fcom.displayErrorMessage(t.msg);
                     return;
                 }
-                fcom.displaySuccessMessage(ans.msg);
-
-                //downloadsForm(productId, 0, true);
+                fcom.displaySuccessMessage(t.msg);
+                getDigitalDownloads(t.downloadType, t.recordId, t.langId, t.optionCombi);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Error Occurred.");
@@ -569,31 +570,60 @@
         });
     };
 
-    getDigitalDownloads = function () {
-        var productId = $('#digitalDownloadFrm input[name=record_id]').val();
-        var downloadType = $("#digitalDownloadFrm select[name='download_type']").val();
-        var langId = $("#digitalDownloadFrm select[name='lang_id']").val();
-        var optionCombi = "";
-        if (0 < $("#digitalDownloadFrm select[name='option_comb_id']").length) {
-            optionCombi = $("#digitalDownloadFrm select[name='option_comb_id']").val();
-        }
-
-        if (optionCombi == '') {
-            optionCombi = '0';
-        }
-        var data = '&product_id=' + productId + '&download_type=' + downloadType;
-        data = data + '&option_comb=' + optionCombi + '&langId=' + langId;
-
+    getDigitalDownloads = function (downloadType, recordId, langId, optionCombi = 0) {
+        let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
             fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
-                $("#digital_download_list").html(res);
+                $("#digitalLinksListJs").html(res);
             });
         } else {
             fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {
-                $("#digital_download_list").html(res);
+                $("#digitalFilesListJs").html(res);
             });
         }
-    }
+    };
+
+    attachDigitalPreviewFile = function (option, langId, refId, subRefId) {
+        digitalDownloadsForm(typeDigitalFile, function () {
+            $(".option-comb-id-js").val(option);
+            $(".file-language-js").val(langId);
+            $('#digitalDownloadFrm input[name=dd_link_id]').val(refId);
+            $('#digitalDownloadFrm input[name=dd_link_ref_id]').val(subRefId);
+            $("#downloadableFileMainJs").hide();
+            $('#digitalDownloadFrm input[name=is_preview]').val(1);
+            $('#digitalDownloadFrm input[name=ref_file_id]').val(subRefId);
+        });
+    };
+
+    deleteDigitalFile = function (afileId, prodId, isPreview, fullRow) {
+        var agree = confirm(langLbl.confirmDelete);
+        if (!agree) { return false; }
+
+        var isPreview = isPreview || 0;
+        var fullRow = fullRow || 0;
+
+        var data = '&afile_id=' + afileId + '&ref_id=' + prodId;
+        if (1 == isPreview) {
+            data += '&is_preview=1'
+        }
+        data += '&frow=' + fullRow;
+
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalFile'), data, function (res) {
+            let productId = getCurrentFrmProductId();
+            getDigitalDownloads(typeDigitalFile, productId);
+        });
+    };
+
+    deleteDigitallink = function (linkId, refId) {
+        var agree = confirm(langLbl.confirmDelete);
+        if (!agree) {
+            return false;
+        }
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
+            let productId = getCurrentFrmProductId();
+            getDigitalDownloads(typeDigitalLink, productId);
+        });
+    };
 
 })();
 
@@ -734,7 +764,3 @@ $(document).on('change', '#image_lang_id', function () {
     let optionId = $('#image_option_id').val();
     productImages(productId, fileType, optionId, langId);
 });
-
-
-
-

@@ -68,79 +68,56 @@ $(document).ajaxComplete(function () {
         });
     }
 
-    collectionForm = function (type, layoutType, id) {
+    collectionForm = function (type, layoutType, recordId = 0) {
         fcom.resetEditorInstance();
 
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controllerName, "form", [type, layoutType]), "recordId=" + id, function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, "form", [type, layoutType]), "recordId=" + recordId, function (t) {
             $.ykmodal(t);
             fcom.removeLoader();
         });
     };
 
+    recordForm = function (id, type) {
+        $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl('Collections', 'recordForm', [id, type]), '', function (t) {
+            $.ykmodal(t);
+            fcom.removeLoader();
+        });
+    };
+
+    updateRecord = function (collection_id, record_id) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'updateCollectionRecords'), 'collection_id=' + collection_id + '&record_id=' + record_id, function (t) {});
+    };
+
+    removeCollectionRecord = function (collection_id, record_id) {
+        if (!confirm(langLbl.confirmRemoveProduct)) {
+            return false;
+        }
+        fcom.ajax(fcom.makeUrl(controllerName, 'removeCollectionRecord'), 'collection_id=' + collection_id + '&record_id=' + record_id, function (t) {});
+    };
+
+
+    /* ----------------------------- */
+
     getCollectionTypeLayout = function (frm, collectionType, searchForm) {
         callCollectionTypePopulate(collectionType);
-        fcom.ajax(fcom.makeUrl('Collections', 'getCollectionTypeLayout', [collectionType, searchForm]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'getCollectionTypeLayout', [collectionType, searchForm]), '', function (t) {
             $("#" + frm + " [name=collection_layout_type]").html(t);
         });
     }
 
     collectionLayouts = function () {
-        fcom.ajax(fcom.makeUrl('Collections', 'layouts'), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'layouts'), '', function (t) {
             fcom.updateFaceboxContent(t, 'content fbminwidth faceboxWidth');
-        });
-    };
-    setupCollection = function () {
-        var getFrm = $('#tabs_form form')[0];
-        var validator = $(getFrm).validation({ errordisplay: 3 });
-        validator.validate();
-        if (!validator.isValid()) return;
-        var data = fcom.frmData(getFrm);
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'setup'), data, function (t) {
-            reloadList();
-            if (t.openBannersForm) {
-                banners(t.collectionId);
-                return;
-            }
-            if (t.openRecordForm) {
-                recordForm(t.collectionId, t.collectionType);
-                return;
-            }
-            if (t.openMediaForm) {
-                collectionMediaForm(t.collectionId);
-                return;
-            }
-            $(document).trigger('close.facebox');
-        });
-    }
-    recordForm = function (id, type) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Collections', 'recordForm', [id, type]), '', function (t) {
-                $.facebox(t, 'faceboxWidth');
-                reloadRecordsList(id, type);
-            });
-        });
-    };
-    updateRecord = function (collection_id, record_id) {
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'updateCollectionRecords'), 'collection_id=' + collection_id + '&record_id=' + record_id, function (t) {
-            reloadRecordsList(t.collection_id, t.collection_type);
-        });
-    };
-    removeCollectionRecord = function (collection_id, record_id) {
-        var agree = confirm(langLbl.confirmRemoveProduct);
-        if (!agree) {
-            return false;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeCollectionRecord'), 'collection_id=' + collection_id + '&record_id=' + record_id, function (t) {
-            reloadRecordsList(collection_id, t.collection_type);
         });
     };
     banners = function (collection_id) {
         $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Collections', 'banners', [collection_id]), '', function (t) {
+            fcom.ajax(fcom.makeUrl(controllerName, 'banners', [collection_id]), '', function (t) {
                 $.facebox(t, 'faceboxWidth');
                 reloadBannersList(collection_id);
             });
@@ -148,14 +125,14 @@ $(document).ajaxComplete(function () {
     };
     removeBanner = function (fileId, bannerId, langId, screen) {
         if (!confirm(langLbl.confirmDeleteImage)) { return; }
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeBanner', [fileId, bannerId, langId, screen]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeBanner', [fileId, bannerId, langId, screen]), '', function (t) {
             $("#banner-image-listing").html('');
             $("[name='banner_image_id[" + langId + "_" + screen + "]']").val('');
         });
     };
     reloadBannersList = function (collection_id) {
         $("#banners_list-js").html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Collections', 'searchBanners', [collection_id]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'searchBanners', [collection_id]), '', function (t) {
             $("#banners_list-js").html(t);
         });
     };
@@ -185,7 +162,7 @@ $(document).ajaxComplete(function () {
         });
     };
     bannerForm = function (collection_id, banner_id) {
-        fcom.ajax(fcom.makeUrl('Collections', 'bannerForm', [collection_id, banner_id]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'bannerForm', [collection_id, banner_id]), '', function (t) {
             $("#banners_list-js").html(t);
             bannerImages(collection_id, banner_id, 0, 1);
         });
@@ -193,29 +170,19 @@ $(document).ajaxComplete(function () {
     setupBanners = function (frm) {
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'setupBanner'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupBanner'), data, function (t) {
             reloadBannersList(t.collection_id);
         });
     }
-    reloadRecordsList = function (collection_id, collection_type) {
-        $("#records_list").html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Collections', 'collectionRecords', [collection_id, collection_type]), '', function (t) {
-            $("#records_list").html(t);
-        });
-    };
 
     collectionMediaForm = function (recordId) {
-        if (false === checkControllerName()) {
-            return false;
-        }
-
-        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
+        $.ykmodal(fcom.getLoader());
         fcom.ajax(
             fcom.makeUrl(controllerName, "media", [recordId]),
             "",
             function (t) {
                 fcom.removeLoader();
-                $.ykmodal(t, !$.ykmodal.isSideBarView());
+                $.ykmodal(t);
                 var parentSiblings = $(".displayMediaOnly--js").closest("div.row").siblings('div.row:not(:first)');
                 if (0 < $(".displayMediaOnly--js:checked").val()) {
                     parentSiblings.show();
@@ -231,7 +198,7 @@ $(document).ajaxComplete(function () {
         if (!confirm(langLbl.confirmDeleteImage)) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeImage', [collectionId, langId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeImage', [collectionId, langId]), '', function (t) {
             collectionMediaForm(collectionId);
         });
     };
@@ -239,7 +206,7 @@ $(document).ajaxComplete(function () {
         if (!confirm(langLbl.confirmDeleteImage)) {
             return;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'removeBgImage', [collectionId, langId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeBgImage', [collectionId, langId]), '', function (t) {
             collectionMediaForm(collectionId);
         });
     };
@@ -255,7 +222,7 @@ $(document).ajaxComplete(function () {
     displayMediaOnly = function (collectionId, obj) {
         var parentSiblings = $(obj).closest("div.row").siblings('div.row:not(:first)');
         var value = (obj.checked) ? 1 : 0;
-        fcom.ajax(fcom.makeUrl('Collections', 'displayMediaOnly', [collectionId, value]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'displayMediaOnly', [collectionId, value]), '', function (t) {
             var ans = $.parseJSON(t);
             if (0 == ans.status) {
                 $.systemMessage(ans.msg, 'alert--danger');
@@ -268,7 +235,7 @@ $(document).ajaxComplete(function () {
     };
     popupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            fcom.ajax(fcom.makeUrl('Collections', 'imgCropper'), '', function (t) {
+            fcom.ajax(fcom.makeUrl(controllerName, 'imgCropper'), '', function (t) {
                 $('#cropperBox-js').html(t);
                 $("#mediaForm-js").css("display", "none");
                 var file = inputBtn.files[0];
@@ -299,7 +266,7 @@ $(document).ajaxComplete(function () {
         formData.append('file_type', fileType);
         formData.append('lang_id', langId);
         $.ajax({
-            url: fcom.makeUrl('Collections', 'uploadImage'),
+            url: fcom.makeUrl(controllerName, 'uploadImage'),
             type: 'post',
             dataType: 'json',
             data: formData,
@@ -341,7 +308,7 @@ $(document).ajaxComplete(function () {
         } else {
             var data = "collectionName=" + collectionName + "&toLangId=" + toLangId;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'translatedData'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'translatedData'), data, function (t) {
             if (t.status == 1) {
                 $("input[name='collection_name[" + toLangId + "]']").val(t.collectionName);
                 if ($("textarea[name='epage_content_" + toLangId + "']").length > 0) {
@@ -364,14 +331,14 @@ $(document).ajaxComplete(function () {
             return false;
         }
         var data = "collectionName=" + title + "&toLangId=" + toLangId;
-        fcom.updateWithAjax(fcom.makeUrl('Collections', 'translatedData'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'translatedData'), data, function (t) {
             if (t.status == 1) {
                 $("input[name='banner_title[" + toLangId + "]']").val(t.collectionName);
             }
         });
     }
     bannerImages = function (collectionId, bannerId = 0, langId = 0, screen = 0) {
-        fcom.ajax(fcom.makeUrl('Collections', 'bannerImages', [collectionId, bannerId, langId, screen]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'bannerImages', [collectionId, bannerId, langId, screen]), '', function (t) {
             $('#banner-image-listing').html(t);
             var bannerImageId = $("#banner-image-listing li").attr('id');
             var selectedLangId = $(".banner-language-js").val();
@@ -382,7 +349,7 @@ $(document).ajaxComplete(function () {
     };
     bannerPopupImage = function (inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
-            fcom.ajax(fcom.makeUrl('Collections', 'imgCropper'), '', function (t) {
+            fcom.ajax(fcom.makeUrl(controllerName, 'imgCropper'), '', function (t) {
                 $('#cropperBox-js').html(t);
                 $("#mediaForm-js").css("display", "none");
                 var file = inputBtn.files[0];
@@ -419,7 +386,7 @@ $(document).ajaxComplete(function () {
         formData.append('lang_id', langId);
         formData.append('afile_id', afileId);
         $.ajax({
-            url: fcom.makeUrl('Collections', 'setupBannerImage'),
+            url: fcom.makeUrl(controllerName, 'setupBannerImage'),
             type: 'post',
             dataType: 'json',
             data: formData,
@@ -520,7 +487,7 @@ $(document).on('click', '.File-Js', function () {
             clearInterval(timer);
             $val = $(node).val();
             $.ajax({
-                url: fcom.makeUrl('Collections', 'uploadImage'),
+                url: fcom.makeUrl(controllerName, 'uploadImage'),
                 type: 'post',
                 dataType: 'json',
                 data: new FormData($('#form-upload')[0]),
@@ -549,7 +516,10 @@ $(document).on('click', '.File-Js', function () {
     }, 500);
 });
 (function () {
-    displayImageInFacebox = function (str) {
-        $.facebox('<img class="mx-auto d-block" width="800px;" src="' + str + '">');
+    displayImageInFacebox = function (title, url) {
+        loadCropperSkeleton();
+
+        $("#modalBoxJs .modal-title").text(title);
+        $("#modalBoxJs .modal-body").html('<img class="mx-auto d-block" width="800px;" src="' + url + '">');
     }
 })();

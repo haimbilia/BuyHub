@@ -1884,7 +1884,7 @@ class ConfigurationsController extends ListingBaseController
 
     public function testEmail()
     {
-        $emailObj = new FatMailer($this->adminLangId, 'test_email');
+        $emailObj = new FatMailer($this->siteLangId, 'test_email');
         $emailObj->setTo(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'));
         if (!$emailObj->send()) {
             FatUtility::dieJsonError($emailObj->getError());

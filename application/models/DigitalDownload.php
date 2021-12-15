@@ -180,7 +180,7 @@ class DigitalDownload extends MyAppModel
     {
         $frm = new Form('frmDownload'); 
 
-        $frm->addSelectBox(Labels::getLabel('FRM_OPTION', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '')->requirements()->setRequired();        
+        $frm->addSelectBox(Labels::getLabel('FRM_OPTION', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '');       
        
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', array(0 => Labels::getLabel('FRM_ALL_LANGUAGES', $langId)) + Language::getDropDownList(), '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
 
@@ -199,13 +199,11 @@ class DigitalDownload extends MyAppModel
         // $frm->addHiddenField('', 'selprod_id');
 
         $frm->addHiddenField('', 'record_id',$recordId);
-
-        $frm->addHiddenField('', 'preq_id');
+        // $frm->addHiddenField('', 'preq_id');
         $frm->addHiddenField('', 'dd_link_id');
         $frm->addHiddenField('', 'is_preview', 0);
         $frm->addHiddenField('', 'dd_link_ref_id');
         $frm->addHiddenField('', 'ref_file_id', 0);
-        echo $type;
         $frm->addHiddenField('', 'download_type', $type);
         return $frm;
     }
@@ -348,4 +346,5 @@ class DigitalDownload extends MyAppModel
         
         return FatApp::getDb()->fetchAll($opSrchObj->getResultSet());
     }
+    
 }

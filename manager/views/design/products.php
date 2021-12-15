@@ -358,7 +358,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -433,7 +433,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -512,7 +512,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -585,7 +585,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -665,7 +665,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -744,7 +744,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -824,7 +824,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -900,7 +900,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -978,7 +978,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
