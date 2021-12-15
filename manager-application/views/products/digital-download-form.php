@@ -27,6 +27,7 @@ if($fld){
 $fld = $frm->getField('downloadable_file');
 if($fld){
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+    $fld->addWrapperAttribute('id','downloadableFileMainJs');
 }
 
 $fld = $frm->getField('preview_file');
