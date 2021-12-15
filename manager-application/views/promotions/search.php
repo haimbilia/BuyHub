@@ -24,13 +24,20 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
             case 'user_name':
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $href = "javascript:void(0)";
+                $onclick = 'redirectUser(' . $row['user_id'] . ')';
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
+                    'user' => $row,
+                    'siteLangId' => $siteLangId,
+                    'href' => $href,
+                    'onclick' => $onclick,
+                ], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'shop_name':
                 if (!empty($row['shop_name'])) {
                     if ($canViewShops) {
-                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Shops') . '", ' . $row['shop_id'] . ')'), $row['shop_name'], true);
+                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectToShop(' . $row['shop_id'] . ')'), $row['shop_name'], true);
                     } else {
                         $td->appendElement('plaintext', $tdAttr, $row['shop_name'], true);
                     }

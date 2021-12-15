@@ -31,7 +31,14 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'credential_username':
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $href = "javascript:void(0)";
+                $onclick = 'redirectUser(' . $row['user_id'] . ')';
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
+                    'user' => $row,
+                    'siteLangId' => $siteLangId,
+                    'href' => $href,
+                    'onclick' => $onclick,
+                ], false, true);
                 $td->appendElement('plaintext', array(), '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'voldiscount_min_qty':

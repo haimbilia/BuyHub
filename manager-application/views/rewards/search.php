@@ -17,7 +17,14 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;                
             case 'user_name':
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $href = "javascript:void(0)";
+                $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
+                    'user' => $row,
+                    'siteLangId' => $siteLangId,
+                    'href' => $href,
+                    'onclick' => $onclick,
+                ], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'urp_date_added':

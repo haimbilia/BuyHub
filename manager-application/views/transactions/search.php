@@ -17,14 +17,21 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'user_name':
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $href = "javascript:void(0)";
+                $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
+                    'user' => $row,
+                    'siteLangId' => $siteLangId,
+                    'href' => $href,
+                    'onclick' => $onclick,
+                ], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;    
             case 'utxn_id':
                 $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionNumber($row[$key]) );
             break;
             case 'utxn_date':
-                $td->appendElement('plaintext', $tdAttr,HtmlHelper::formatDateTime($row[$key]));
+                $td->appendElement('html', $tdAttr,HtmlHelper::formatDateTime($row[$key]));
             break;
             case 'utxn_credit':
             case 'utxn_debit':
