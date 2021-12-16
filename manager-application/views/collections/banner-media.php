@@ -1,20 +1,42 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('onsubmit', 'setupBanners($("#' . $frm->getFormTagAttribute('id') . '")[0]); return(false);');
-$frm->addFormTagAttribute('data-onclear', 'bannerForm(' . $collectionId . ',' . $recordId . ')');
 
-$fld = $frm->getField('banner_title');
+HtmlHelper::formatFormFields($frm);
+
+$frm->setFormTagAttribute('data-action', 'setupBannerImage');
+$frm->setFormTagAttribute('data-onclear', 'bannerMediaForm(' . $collectionId . ',' . $recordId . ')');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+
+$fld = $frm->getField('banner_screen');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld->setFieldTagAttribute('class', 'prefDimensionsJs');
 
-$fld = $frm->getField('banner_target');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+$fld = $frm->getField('banner');
+$fld->value = HtmlHelper::getfileInputHtml(
+    [
+        'onChange' => 'loadImageCropper(this)',
+        'accept' => 'image/*',
+        'data-name' => Labels::getLabel("FRM_BANNER_IMAGE", $siteLangId),
+        'data-frm' => $frm->getFormTagAttribute('name')
+    ],
+    $siteLangId,
+    '',
+    '',
+    [],
+    'dropzone-custom dropzoneContainerJs'
+);
 
-$extUrlField = $frm->getField('banner_url');
-$extUrlField->addFieldTagAttribute('placeholder', 'http://');
+$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_PREFERRED_DIMENSIONS', $siteLangId), '1350*405') . '</span>';
+$htmlAfterField .= '<div id="imageListingJs"></div>';
+$fld->htmlAfterField = $htmlAfterField;
+
+$langFld = $frm->getField('lang_id');
+$langFld->developerTags['colWidthValues'] = [null, '6', null, null];
+$langFld->addFieldTagAttribute('onchange', 'loadBannerImages(' . $collectionId . ',' . $recordId . ', this.value);');
+
+$displayLangTab = false;
 
 $languages = $languages ?? [];
 unset($languages[CommonHelper::getDefaultFormLangId()]);
-
-$displayLangTab = false;
 
 $generalTab = [
     'attr' => [
@@ -34,7 +56,7 @@ $otherButtons = [
             'title' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId)
         ],
         'label' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
-        'isActive' => true
+        'isActive' => false
     ],
     [
         'attr' => [
@@ -52,9 +74,14 @@ $otherButtons = [
             'title' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
-        'isActive' => false
+        'isActive' => true
     ]
 ];
 $includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
+require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
-require_once(CONF_THEME_PATH . '_partial/listing/form.php');
+<script type="text/javascript">
+    $('input[name=min_width]').val(1350);
+    $('input[name=min_height]').val(405);
+    var aspectRatio = 10 / 3;
+</script>

@@ -11,12 +11,6 @@ $displayLangTab = $displayLangTab ?? true;
 $languages = $languages ?? [];
 unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
 
-<button class="float-btn" type="button" data-trigger="card-aside" onclick="layoutSelectorForm()">
-    <svg class="svg" width="20" height="20">
-        <use xlink:href="/admin/images/retina/sprite-actions.svg#back"></use>
-    </svg>
-</button>
-
 <div class="modal-header">
     <h5 class="modal-title">
         <?php if (false !== $formBackButtonAttr) {
@@ -64,7 +58,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
                 $title = $generalTabAttr['title'] ?? Labels::getLabel('LBL_GENERAL', $siteLangId);
 
                 ?>
-                <a class="nav-link <?php echo $active . $disabled; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
+                <a class="nav-link <?php echo $active; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
                     <?php echo $label; ?>
                 </a>
                 <?php if (0 < count($languages) && true === $displayLangTab) { ?>
@@ -92,12 +86,13 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
                         $label = isset($link['label']) ? $link['label'] : '';
                         $isActive = isset($link['isActive']) ? $link['isActive'] : false;
                         $active = $isActive ? 'active' : '';
+                        $othetBtnsDisabled = (isset($link['isDisabled']) && false === $link['isDisabled']) || true === $isActive ? '' : $disabled;
 
                         $href = !empty($attr) ? $attr['href'] : 'javascript:void(0);';
                         $onclick = !empty($attr) ? $attr['onclick'] : '';
                         $title = !empty($attr) ? $attr['title'] : '';
                 ?>
-                        <a class="nav-link <?php echo $active . $disabled; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
+                        <a class="nav-link <?php echo $active . $othetBtnsDisabled; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
                             <?php echo $label; ?>
                         </a>
                 <?php }
