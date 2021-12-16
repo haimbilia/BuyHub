@@ -10,10 +10,14 @@ if (null != $fld) {
 
 $fld = $frm->getField('collection_for_web');
 if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('collection_for_app');
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 if (in_array($collection_layout_type, Collections::APP_COLLECTIONS_ONLY)) {
     $fld->setFieldTagAttribute('disabled', 'disabled');
