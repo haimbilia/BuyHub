@@ -496,7 +496,8 @@ $header-height: 65px;
         position: absolute;
         transform: translate(-6px, 0);
         top: calc(50% - 4px);
-        #{$end-direction}: 25px;
+        //#{$end-direction}: 25px;
+        #{$end-direction}: 0;
         &:after,
         &:before {
             content: "";

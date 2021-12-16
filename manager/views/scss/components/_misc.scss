@@ -2366,3 +2366,15 @@ strong {
         }
     }
 }
+
+.child-checkbox-ul {
+    padding-#{$start-direction}: 2rem;
+    list-style: none;
+    margin-top: 15px;
+}
+.out-of-state {
+    padding-#{$end-direction}: 1.2rem;
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
