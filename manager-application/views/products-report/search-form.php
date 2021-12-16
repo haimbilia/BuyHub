@@ -50,28 +50,30 @@ HtmlHelper::renderHiddenFields($frmSearch);
 </div>
 <div class="advanced-search collapse advancedSearchJs" id="collapseKeyword">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
 
                 <label class="label"><?php echo Labels::getLabel('FRM_CATEGORY', $siteLangId); ?></label>
                 <?php echo $frmSearch->getFieldHtml('category_id'); ?>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="label"><?php echo Labels::getLabel('FRM_BRAND', $siteLangId); ?></label>
                 <?php echo $frmSearch->getFieldHtml('brand_id'); ?>
 
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="label"><?php echo Labels::getLabel('FRM_SHOP', $siteLangId); ?></label>
                 <?php echo $frmSearch->getFieldHtml('shop_id'); ?>
 
             </div>
         </div>
-        <div class="col-md-3">
+    </div>
+    <div class="row">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="label"></label>
                 <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>
