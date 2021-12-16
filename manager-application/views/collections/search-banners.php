@@ -38,7 +38,15 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $title, true);
                 break;
             case 'banner_active':
-                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['banner_id'], $row[$key]);
+                $statusAct = ($canEdit) ? 'toggleBannerStatus(event, this, ' . $row['banner_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
+                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
+
+                $htm = '<span class="switch switch-sm switch-icon" data-bs-toggle="tooltip" data-placement="top">
+                            <label>
+                                <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['banner_id'] . '" ' . $checked . ' onclick="' . $statusAct . '">
+                                <span class="input-helper"></span>
+                            </label>
+                        </span>';
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'banner_img':

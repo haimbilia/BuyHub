@@ -395,6 +395,29 @@ class CollectionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    private function updateCollectionStatus($recordId, $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            FatUtility::dieWithError($this->str_invalid_request);
+        }
+
+        $oldStatus = Collections::getAttributesById($recordId, 'collection_active');
+        if ($oldStatus === false) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if ($oldStatus == $status) {
+            return;
+        }
+
+        $collectionObj = new Collections($recordId);
+        if (!$collectionObj->changeStatus($status)) {
+            LibHelper::exitWithError($collectionObj->getError(), true);
+        }
+    }
+
     public function recordForm($recordId, $collectionType)
     {
         $recordId = FatUtility::int($recordId);
@@ -1085,13 +1108,13 @@ class CollectionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function bannerImages($collection_id, $banner_id, $lang_id = 0, $screen = 0)
+    public function bannerImages($collectionId, $recordId, $lang_id = 0, $screen = 0)
     {
         $this->checkEditPrivilege(true);
-        $collection_id = FatUtility::int($collection_id);
-        $banner_id = FatUtility::int($banner_id);
+        $collectionId = FatUtility::int($collectionId);
+        $recordId = FatUtility::int($recordId);
 
-        if (1 > $collection_id) {
+        if (1 > $collectionId) {
             FatUtility::dieWithError($this->str_invalid_request);
         }
         $languages = Language::getAllNames();
@@ -1099,49 +1122,20 @@ class CollectionsController extends ListingBaseController
             $lang_id =  array_key_first($languages);
         }
 
-        $collectionDetails = Collections::getAttributesById($collection_id);
+        $collectionDetails = Collections::getAttributesById($collectionId);
         if (false != $collectionDetails && ($collectionDetails['collection_active'] != applicationConstants::ACTIVE || $collectionDetails['collection_deleted'] == applicationConstants::YES)) {
             LibHelper::exitWithError($this->str_invalid_request_id);
         }
 
-        $bannerLocation = BannerLocation::getDataByCollectionId($collection_id);
-        $blocation_id = $bannerLocation['blocation_id'];
-
-        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $banner_id, 0, $lang_id, (1 == count($languages)), $screen, 1);
+        $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $recordId, 0, $lang_id, (1 == count($languages)), $screen, 1);
         $this->set('images', $images);
         $this->set('languages', Language::getAllNames());
         $this->set('screenTypeArr', $this->getDisplayScreenName());
-        $this->set('blocation_id', $blocation_id);
-        $this->set('banner_id', $banner_id);
+        $this->set('recordId', $recordId);
         $this->_template->render(false, false);
     }
 
-    /* --------------- */
-
-    private function updateCollectionStatus($recordId, $status)
-    {
-        $status = FatUtility::int($status);
-        $recordId = FatUtility::int($recordId);
-        if (1 > $recordId || -1 == $status) {
-            FatUtility::dieWithError($this->str_invalid_request);
-        }
-
-        $oldStatus = Collections::getAttributesById($recordId, 'collection_active');
-        if ($oldStatus === false) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        if ($oldStatus == $status) {
-            return;
-        }
-
-        $collectionObj = new Collections($recordId);
-        if (!$collectionObj->changeStatus($status)) {
-            LibHelper::exitWithError($collectionObj->getError(), true);
-        }
-    }
-
-    public function removeBanner($afileId, $bannerId, $langId = 0, $slide_screen = 0)
+    public function removeBanner($bannerId, $afileId, $langId = 0, $slide_screen = 0)
     {
         $this->objPrivilege->canEditProductCategories();
         $afileId = FatUtility::int($afileId);
@@ -1155,63 +1149,9 @@ class CollectionsController extends ListingBaseController
         if (!$fileHandlerObj->deleteFile($fileType, $bannerId, $afileId, 0, $langId, $slide_screen)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
-        $this->set('msg', Labels::getLabel('MSG_Image_deleted_successfully', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_IMAGE_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-
-    private function getDisplayScreenName()
-    {
-        return [0 => '']  + applicationConstants::getDisplaysArr($this->siteLangId);
-    }
-
-    public function layouts()
-    {
-        $this->_template->render(false, false);
-    }
-
-    public function getCollectionTypeLayout($collectionType, $searchForm = 0)
-    {
-        $this->objPrivilege->canEditCollections();
-        $this->set('collectionType', $collectionType);
-        $availableLayouts = Collections::getTypeSpecificLayouts($this->siteLangId)[$collectionType];
-        if ($searchForm > 0) {
-            $availableLayouts = array(-1 => Labels::getLabel('LBL_Does_Not_matter', $this->siteLangId)) + $availableLayouts;
-        }
-        $this->set('availableLayouts', $availableLayouts);
-        $this->_template->render(false, false);
-    }
-
-    public function getLayoutLimit($collection_layout_type)
-    {
-        switch ($collection_layout_type) {
-            case Collections::TYPE_PRODUCT_LAYOUT1:
-                return Collections::LIMIT_PRODUCT_LAYOUT1;
-                break;
-            case Collections::TYPE_PRODUCT_LAYOUT2:
-                return Collections::LIMIT_PRODUCT_LAYOUT2;
-                break;
-            case Collections::TYPE_PRODUCT_LAYOUT3:
-                return Collections::LIMIT_PRODUCT_LAYOUT3;
-                break;
-            case Collections::TYPE_CATEGORY_LAYOUT1:
-                return Collections::LIMIT_CATEGORY_LAYOUT1;
-                break;
-            case Collections::TYPE_CATEGORY_LAYOUT2:
-                return Collections::LIMIT_CATEGORY_LAYOUT2;
-                break;
-            case Collections::TYPE_SHOP_LAYOUT1:
-                return Collections::LIMIT_SHOP_LAYOUT1;
-                break;
-            case Collections::TYPE_BRAND_LAYOUT1:
-                return Collections::LIMIT_BRAND_LAYOUT1;
-                break;
-            case Collections::TYPE_BLOG_LAYOUT1:
-                return Collections::LIMIT_BLOG_LAYOUT1;
-                break;
-        }
-    }
-
-    /* ^^^^^^^^^^^^^^^^^^^^ */
 
     public function deleteRecord()
     {

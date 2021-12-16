@@ -293,61 +293,34 @@ $(document).on('change', '.prefDimensionsJs', function () {
         $("#modalBoxJs .modal-body").html('<img class="mx-auto d-block" width="800px;" src="' + url + '">');
     }
 
-    /* ----------------------------- */
+    toggleBannerStatus = function (e, obj, recordId, status, callback = "") {
+        e.stopPropagation();
 
-
-    getCollectionTypeLayout = function (frm, collectionType, searchForm) {
-        callCollectionTypePopulate(collectionType);
-        fcom.ajax(fcom.makeUrl(controllerName, 'getCollectionTypeLayout', [collectionType, searchForm]), '', function (t) {
-            $("#" + frm + " [name=collection_layout_type]").html(t);
-        });
-    }
-
-    collectionLayouts = function () {
-        fcom.ajax(fcom.makeUrl(controllerName, 'layouts'), '', function (t) {
-            fcom.updateFaceboxContent(t, 'content fbminwidth faceboxWidth');
-        });
-    };
-
-    toggleBannerStatus = function (e, obj, canEdit) {
-        if (canEdit == 0) {
-            e.preventDefault();
-            return;
-        }
-        if (!confirm(langLbl.confirmUpdateStatus)) {
-            e.preventDefault();
-            return;
-        }
-        var bannerId = parseInt(obj.value);
-        if (bannerId < 1) {
-            $.ykmsg.error(langLbl.invalidRequest, true);
+        var oldStatus = $(obj).attr("data-old-status");
+        if (1 > recordId) {
+            $(obj).prop("checked", 1 == oldStatus);
+            $.ykmsg.error(langLbl.invalidRequest);
+            fcom.removeLoader();
             return false;
         }
-        data = 'bannerId=' + bannerId;
-        fcom.ajax(fcom.makeUrl('Banners', 'changeStatus'), data, function (res) {
-            var ans = $.parseJSON(res);
-            if (ans.status == 1) {
-                $.ykmsg.success(ans.msg);
-                $(obj).toggleClass("active");
-            } else {
-                $.ykmsg.error(ans.msg, true);
+
+        data = "bannerId=" + recordId + "&status=" + status;
+        fcom.ajax(fcom.makeUrl('Banners', "updateStatus"), data,
+            function (res) {
+                $(obj).prop("checked", 1 == status);
+                var ans = JSON.parse(res);
+                if (ans.status == 1) {
+                    $.ykmsg.success(ans.msg);
+                    $(obj).attr({ onclick: "toggleBannerStatus(event, this, " + recordId + ", " + oldStatus + ")", "data-old-status": status });
+                    if ("" != callback) {
+                        eval(callback);
+                    }
+                } else {
+                    $(obj).prop("checked", 1 == oldStatus);
+                    $.ykmsg.error(ans.msg);
+                }
+                fcom.removeLoader();
             }
-        });
-    };
-    removeCollectionImage = function (collectionId, langId) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeImage', [collectionId, langId]), '', function (t) {
-            collectionMediaForm(collectionId);
-        });
-    };
-    removeCollectionBGImage = function (collectionId, langId) {
-        if (!confirm(langLbl.confirmDeleteImage)) {
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'removeBgImage', [collectionId, langId]), '', function (t) {
-            collectionMediaForm(collectionId);
-        });
+        );
     };
 })();
