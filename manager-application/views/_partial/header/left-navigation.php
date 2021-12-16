@@ -30,7 +30,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_PRODUCT_CATALOG" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">
@@ -110,7 +110,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_REQUESTS" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">
@@ -257,7 +257,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_ORDERS" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">
@@ -359,7 +359,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_USERS" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">
@@ -495,7 +495,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_PROMOTIONS" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">
@@ -684,7 +684,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_BLOG" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">
@@ -755,7 +755,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_TAX" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">
@@ -817,7 +817,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_CMS" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">
@@ -946,7 +946,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_REPORTS" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level" id="reportsNav">
@@ -967,7 +967,7 @@
                                                 </use>
                                             </svg>
                                         </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SALES_REPORTS', $siteLangId); ?></span>
-                                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                     </a>
                                     <div id="salesReportNav" class="panel-collapse collapse collapseJs">
                                         <ul class="nav nav-level">
@@ -1029,7 +1029,7 @@
                                         <span class="nav_text">
                                             <?php echo Labels::getLabel('NAV_BUYERS_REPORTS', $siteLangId); ?>
                                         </span>
-                                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                     </a>
                                     <div id="usersReportNav" class="panel-collapse collapse collapseJs">
                                         <ul class="nav nav-level">
@@ -1083,7 +1083,7 @@
                                             </svg>
                                         </span>
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_FINANCIAL_REPORT', $siteLangId); ?></span>
-                                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                     </a>
                                     <div id="financialReportNav" class="panel-collapse collapse collapseJs">
                                         <ul class="nav nav-level">
@@ -1125,7 +1125,7 @@
                                                 </use>
                                             </svg>
                                         </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $siteLangId); ?></span>
-                                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                                     </a>
                                     <div id="subscriptionReportNav" class="panel-collapse collapse collapseJs">
                                         <ul class="nav nav-level">
@@ -1177,7 +1177,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_IMPORT_EXPORT" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">
@@ -1216,7 +1216,7 @@
                         </svg>
                     </span>
                     <span class="menu-title"><?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?></span>
-                    <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                    <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                 </button>
                 <div class="sidebar-dropdown-menu collapse" id="NAV_SHIPPING" aria-labelledby="" data-parent="#sidebar-menu">
                     <ul class="nav nav-level">
@@ -1316,7 +1316,7 @@
                             </svg>
                         </span>
                         <span class="menu-title"><?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?></span>
-                        <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                        <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="sidebar-dropdown-menu collapse" id="NAV_SEO" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">

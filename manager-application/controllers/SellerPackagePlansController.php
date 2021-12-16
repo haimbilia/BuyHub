@@ -309,7 +309,7 @@ class SellerPackagePlansController extends ListingBaseController
                 }
 
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('SellerPackages')],
                     ['title' => $title]
                 ];

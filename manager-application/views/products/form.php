@@ -238,7 +238,7 @@ if(0 < $productId){
                         </div>
                     </div>
                 </div>
-                <div class="card" id="variants-options">
+                <div class="card card-toggle" id="variants-options">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Variants and options
@@ -283,7 +283,7 @@ if(0 < $productId){
                         <div id="variantsListJs"></div>
                     </div>
                 </div>
-                <div class="card" id="media">
+                <div class="card card-toggle" id="media">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Media
@@ -309,7 +309,7 @@ if(0 < $productId){
                         </div>
                     </div>
                 </div>
-                <div class="card" id="specifications">
+                <div class="card card-toggle" id="specifications">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Specifications
@@ -366,7 +366,7 @@ if(0 < $productId){
                         </div>
                     </div>
                 </div>
-                <div class="card" id="tax-shipping">
+                <div class="card card-toggle" id="tax-shipping">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Tax and Shipping
@@ -391,7 +391,7 @@ if(0 < $productId){
                     </div>
                 </div>
                 <?php if($displayDigitalDownloadList){ ?>
-                <div class="card" id="digital-files">
+                <div class="card card-toggle" id="digital-files">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="digital-files-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Digital Files
@@ -410,7 +410,7 @@ if(0 < $productId){
                         </div>
                     </div>
                 </div>
-                <div class="card" id="digital-links">
+                <div class="card card-toggle" id="digital-links">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="digital-links-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Digital Links

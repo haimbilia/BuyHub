@@ -20,7 +20,7 @@ class ShopReportReasonsController extends ListingBaseController
     protected function setLangTemplateData(array $constructorArgs = []): void
     {
         $this->objPrivilege->canEditShopReportReasons();
-        $this->setModel($constructorArgs);        
+        $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('title')];
         $this->set('formTitle', Labels::getLabel('LBL_SHOP_REPORT_REASON_SETUP', $this->siteLangId));
     }
@@ -285,13 +285,13 @@ class ShopReportReasonsController extends ListingBaseController
 
 
     public function getBreadcrumbNodes($action)
-    {       
+    {
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
         switch ($action) {
             case 'index':
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
                 break;

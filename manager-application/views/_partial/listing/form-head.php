@@ -11,9 +11,9 @@ $displayLangTab = $displayLangTab ?? true;
 $languages = $languages ?? [];
 unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
 
-<button class="float-btn" type="button" data-trigger="card-aside" onclick="layoutSelectorForm()">
+<button class="float-btn" type="button" data-trigger="" onclick="layoutSelectorForm()">
     <svg class="svg" width="20" height="20">
-        <use xlink:href="/admin/images/retina/sprite-actions.svg#back"></use>
+        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back"></use>
     </svg>
 </button>
 
@@ -24,8 +24,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
         ?>
             <a class="back" href="javascript:void(0);" onclick="<?php echo $onclick; ?>">
                 <svg class="svg" width="24" height="24">
-                    <use
-                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                     </use>
                 </svg>
             </a>

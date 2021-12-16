@@ -2339,6 +2339,10 @@ strong {
         border-bottom: $border;
         padding: 1rem 2rem;
         //margin-bottom: 1rem;
+
+        .dropdown-toggle-custom-arrow {
+            #{$end-direction}: 30px;
+        }
     }
     &-data {
         display: grid;

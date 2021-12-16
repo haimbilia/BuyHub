@@ -571,9 +571,8 @@
                                 </div>
 
                             </div>
-                            <div class="card">
+                            <div class="card card-toggle">
                                 <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block2" aria-expanded="false" aria-controls="order-block2">
-
                                     <div class="card-head-label">
                                         <h3 class="card-head-title">
                                             Payment Details
