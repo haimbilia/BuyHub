@@ -13,11 +13,11 @@
         }
 
         init(modalClass, dialogClass);
-        if (data.ajax) fillYKModalFromAjax(data.ajax);
-        else if (data.image) fillYKModalFromImage(data.image);
-        else if (data.div) fillYKModalFromHref(data.div);
-        else if ($.isFunction(data)) data.call($);
-        else $.ykmodal.reveal(data, bodyClass)
+        if (data.ajax) { fillYKModalFromAjax(data.ajax); }
+        else if (data.image) { fillYKModalFromImage(data.image); }
+        else if (data.div) { fillYKModalFromHref(data.div); }
+        else if ($.isFunction(data)) { data.call($); }
+        else { $.ykmodal.reveal(data, bodyClass); }
     };
 
     $.extend($.ykmodal, {
@@ -29,24 +29,23 @@
             }
 
             if (0 == $(data).find(".modal-body").length && false === $(data).hasClass("modal-body")) {
-                data = '<div class="modal-body">' + data + "</div>"
+                data = '<div class="modal-body">' + data + "</div>";
             }
 
-            var contentBody = "." + $.ykmodal.element + " .contentBody--js";
-
+            var contentBody = "." + $.ykmodal.element + " .contentBodyJs";
             $(contentBody).html(data);
             var headerHtm = '<div class="modal-header">';
             var closeBtnHtm = '<button type="button" class="btn-close ykmodalJs" data-bs-dismiss="modal" aria-label="' + langLbl.close + '"></button>';
 
             if (1 > $(contentBody).find(".modal-header").length) {
-                $(contentBody).prepend(headerHtm + closeBtnHtm + "</div>")
+                $(contentBody).prepend(headerHtm + closeBtnHtm + "</div>");
             }
-            else if (0 < $(contentBody).find(".modal-header").length && 1 > $("body ." + $.ykmodal.element + " .contentBody--js .modal-header").find(".close").length) {
-                $("body ." + $.ykmodal.element + " .contentBody--js .modal-header").append(closeBtnHtm)
+            else if (0 < $(contentBody).find(".modal-header").length && 1 > $("body ." + $.ykmodal.element + " .contentBodyJs .modal-header").find(".close").length) {
+                $("body ." + $.ykmodal.element + " .contentBodyJs .modal-header").append(closeBtnHtm);
             }
 
             if ("undefined" != typeof bodyClass && 0 == $(data).find(bodyClass).length) {
-                $(contentBody + " .modal-body").addClass(bodyClass)
+                $(contentBody + " .modal-body").addClass(bodyClass);
             }
 
             $.ykmodal.show();
@@ -72,7 +71,7 @@
 
     function init(modalClass, dialogClass) {
         if (1 > $("body").find("." + $.ykmodal.element).length) {
-            var content = '<div class="modal-dialog ' + dialogClass + ' " role="document"><div class="modal-content contentBody--js"></div></div>';
+            var content = '<div class="modal-dialog ' + dialogClass + ' " role="document"><div class="modal-content contentBodyJs"></div></div>';
             var htm = '<div class="modal ' + modalClass + ' fade ' + $.ykmodal.element + '" tabindex="-1" role="dialog">' + content + "</div>";
             $("body").append(htm)
         } else if (true === displayInPopup && true === $("." + $.ykmodal.element).hasClass('fixed-right')) {

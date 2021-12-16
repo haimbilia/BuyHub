@@ -618,13 +618,19 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if ("undefined" != typeof frm.slide_screen) {
             slideScreen = frm.slide_screen.value;
         }
+        
+        var action = 'uploadMedia';
+        if ("undefined" != typeof frm.dataset.action) {
+            action = frm.dataset.action;
+        }
+
         var other_data = $('form[name="' + frmName + '"]').serializeArray();
         $.each(other_data, function (key, input) {
             formData.append(input.name, input.value);
         });
 
         $.ajax({
-            url: fcom.makeUrl(controllerName, "uploadMedia"),
+            url: fcom.makeUrl(controllerName, action),
             type: "post",
             dataType: "json",
             data: formData,

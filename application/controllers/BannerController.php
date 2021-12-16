@@ -166,7 +166,7 @@ class BannerController extends MyAppController
         $fileRow = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $bannerId, 0, $langId, true, $screen);
         $image_name = isset($fileRow['afile_physical_path']) ? $fileRow['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        AttachedFile::displayImage($image_name, $w, $h, '', '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
+        AttachedFile::displayImage($image_name, $w, $h, 'banner-default-image.png', '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
     }
 
     public function showOriginalBanner($bannerId, $langId, $screen = 0, $sizeType = '')

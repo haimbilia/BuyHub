@@ -1463,3 +1463,8 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 SELECT @i := 0;
 UPDATE tbl_collection_to_records SET ctr_display_order = (SELECT @i := @i + 1);
 -- ---------------TV-9.4.0.20211215----------------
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING";
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_FEATURED_SHOPS_WILL_BE_LISTED_ON_FEATURED_SHOPS_PAGE', '1', 'Featured Shops Will Be Listed On Featured Shops Page. Featured Shops Will Get Priority', 1) ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+/* Mark all ribbons shapes to rectangle */
+UPDATE `tbl_badges` SET badge_shape_type = 1 WHERE badge_type = 2;
