@@ -183,7 +183,7 @@ select2 = function (
     }
     
     ele.select2({
-        dropdownParent: ele.parent(),
+        dropdownParent: ele.closest('.modal').length ? ele.closest('.modal') : null,
         closeOnSelect: ele.data("closeOnSelect") || true,
         data: data,
         dir: layoutDirection,
@@ -249,7 +249,7 @@ select2 = function (
     if (0 < ele.closest(".form-group").length) {
         select2Selector.$container.addClass("w-100");
     }
-
+    select2Selector.$container.addClass("custom-select2");
     $("." + $.ykmodal.element).removeAttr("tabindex");
 };
 /**

@@ -6,7 +6,7 @@ $frm->setFormTagAttribute('id', 'digitalDownloadFrm');
 $frm->setFormTagAttribute('enctype', 'multipart/form-data');
 
 $frm->setFormTagAttribute('onsubmit', "setupDigitalDownload($('#digitalDownloadFrm'))");
-
+$frm->setFormTagAttribute('data-onclear', "digitalDownloadsForm($type)");
 
 $fld = $frm->getField('option_comb_id');
 if($fld){
