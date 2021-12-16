@@ -231,7 +231,8 @@ class ShopsController extends ListingBaseController
         $this->set('shopLayoutTemplateId', $shopLayoutTemplateId);
         $this->set('logoFrm', $shopLogoFrm);
         $this->set('shopBannerFrm', $shopBannerFrm);
-        $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
+        $this->set('languageCount', count($languages));
+        // $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
 
         $this->_template->render(false, false);
     }
@@ -448,15 +449,17 @@ class ShopsController extends ListingBaseController
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
 
-        $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'shop_featured', 1, array(), false, 0);
-
         $fld = $frm->addTextBox(Labels::getLabel('FRM_MINIMUM_WALLET_BALANCE', $this->siteLangId), 'shop_cod_min_wallet_balance');
         $fld->requirements()->setFloat();
         $fld->htmlAfterField = "<br><small>" . Labels::getLabel("MSG_SELLER_NEEDS_TO_MAINTAIN_TO_ACCEPT_COD_ORDERS._DEFAULT_IS_-1", $this->siteLangId) . "</small>";
         $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $this->siteLangId), 'shop_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'shop_active', $activeInactiveArr, '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'shop_active', applicationConstants::ACTIVE, array(), false, applicationConstants::INACTIVE);
+
+        $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'shop_featured', 1, array(), false, 0);
+
         $this->appendLangFormFields($frm, $this->siteLangId);
+
         $frm->addHiddenField('', 'shop_lat');
         $frm->addHiddenField('', 'shop_lng');
         $frm->addHtml('', 'space', '');
@@ -471,7 +474,7 @@ class ShopsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_SHOP_NAME', $lang_id), 'shop_name');
         $this->appendLangFormFields($frm);
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
+        // $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 

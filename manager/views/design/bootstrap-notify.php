@@ -483,7 +483,7 @@
                             <div class="card-foot">
                                 <div class="">
                                     <div class="row">
-                                        <div class="col-lg-9 ml-lg-auto">
+                                        <div class="col-lg-9 ms-lg-auto">
                                             <a href="javascript:;" id="notify_btn" class="btn btn-success">Display</a>
                                             <button type="reset" class="btn btn-secondary">Reset</button>
                                         </div>

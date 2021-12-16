@@ -344,16 +344,16 @@
 
                                                 <div class="text-center">
                                                     <!-- BEGIN: Small Modal Toggle -->
-                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#small-modal-size-preview" class="btn btn-brand btn-sm mr-1 mb-2">Show Small Modal</a>
+                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#small-modal-size-preview" class="btn btn-brand btn-sm me-1 mb-2">Show Small Modal</a>
                                                     <!-- END: Small Modal Toggle -->
                                                     <!-- BEGIN: Medium Modal Toggle -->
-                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#medium-modal-size-preview" class="btn btn-brand btn-sm mr-1 mb-2">Show Medium Modal</a>
+                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#medium-modal-size-preview" class="btn btn-brand btn-sm me-1 mb-2">Show Medium Modal</a>
                                                     <!-- END: Medium Modal Toggle -->
                                                     <!-- BEGIN: Large Modal Toggle -->
-                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#large-modal-size-preview" class="btn btn-brand btn-sm mr-1 mb-2">Show Large Modal</a>
+                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#large-modal-size-preview" class="btn btn-brand btn-sm me-1 mb-2">Show Large Modal</a>
                                                     <!-- END: Large Modal Toggle -->
                                                     <!-- BEGIN: Super Large Modal Toggle -->
-                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#superlarge-modal-size-preview" class="btn btn-brand btn-sm mr-1 mb-2">Show Superlarge
+                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#superlarge-modal-size-preview" class="btn btn-brand btn-sm me-1 mb-2">Show Superlarge
                                                         Modal</a>
                                                     <!-- END: Super Large Modal Toggle -->
 
@@ -762,10 +762,10 @@
                             <div class="modal-content">
                                 <div class="modal-body p-10 text-center">
                                     <!-- BEGIN: Hide Modal Toggle -->
-                                    <a id="programmatically-hide-modal" href="javascript:;" class="btn btn-brand mr-1">Hide Modal</a>
+                                    <a id="programmatically-hide-modal" href="javascript:;" class="btn btn-brand me-1">Hide Modal</a>
                                     <!-- END: Hide Modal Toggle -->
                                     <!-- BEGIN: Toggle Modal Toggle -->
-                                    <a id="programmatically-toggle-modal" href="javascript:;" class="btn btn-brand mr-1">Toggle Modal</a>
+                                    <a id="programmatically-toggle-modal" href="javascript:;" class="btn btn-brand me-1">Toggle Modal</a>
                                     <!-- END: Toggle Modal Toggle -->
                                 </div>
                             </div>
@@ -955,7 +955,7 @@
 
 
                                 <div class="modal-footer text-right"><button type="reset" class="btn btn-outline-brand">Cancel</button>
-                                    <button type="submit" class="btn btn-brand  ml-auto">Update</button>
+                                    <button type="submit" class="btn btn-brand  ms-auto">Update</button>
 
 
                                 </div>
@@ -978,7 +978,7 @@
                                         </p>
                                     </div>
                                     <div class="pb-5 pb-8 text-center">
-                                        <button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300 mr-1">Cancel</button>
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300 me-1">Cancel</button>
                                         <button type="button" class="btn btn-danger btn-wide ">Delete</button>
                                     </div>
                                 </div>

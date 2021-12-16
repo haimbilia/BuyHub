@@ -6,6 +6,7 @@ if (!isset($tbody)) {
 }
 
 $serialNo = $page == 1 ? 0 : $pageSize * ($page - 1);
+//CommonHelper::printArray($arrListing,1);
 foreach ($arrListing as $sn => $row) {
     $serialNo++;
     $splPriceId = $row['splprice_id'];
@@ -34,7 +35,15 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $price, true);
                 break;
             case 'credential_username':
-                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
+                $href = "javascript:void(0)";
+                $onclick = 'redirectUser(' . $row['user_id'] . ')';
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
+                    'user' => $row,
+                    'siteLangId' => $siteLangId,
+                    'href' => $href,
+                    'onclick' => $onclick,
+                ], false, true);
+                $td->appendElement('plaintext', array(), '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'splprice_start_date':
             case 'splprice_end_date':

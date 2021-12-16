@@ -466,7 +466,7 @@
                                                                         <div class="icon-group">
                                                                             <input type="text" class="form-control" name="" placeholder="tagify" value="">
 
-                                                                            <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                            <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                                 <i class="la la-trash"></i>
                                                                             </a>
                                                                         </div>
@@ -487,7 +487,7 @@
                                                                         <div class="icon-group">
                                                                             <input type="text" class="form-control" name="" placeholder="tagify" value="">
 
-                                                                            <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                            <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                                 <i class="la la-trash"></i>
                                                                             </a>
                                                                         </div>
@@ -508,7 +508,7 @@
                                                                         <div class="icon-group">
                                                                             <input type="text" class="form-control" name="" placeholder="tagify" value="">
 
-                                                                            <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                            <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                                 <i class="la la-trash"></i>
                                                                             </a>
                                                                         </div>
@@ -529,7 +529,7 @@
                                                                         <div class="icon-group">
                                                                             <input type="text" class="form-control" name="" placeholder="tagify" value="">
 
-                                                                            <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                            <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                                 <i class="la la-trash"></i>
                                                                             </a>
                                                                         </div>
@@ -580,7 +580,7 @@
                                                             <div class="form-group">
 
                                                                 <div class="icon-group"><input type="text" class="form-control" placeholder="">
-                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                         <i class="la la-remove"></i>
                                                                     </a>
                                                                 </div>
@@ -609,7 +609,7 @@
                                                             <div class="form-group">
 
                                                                 <div class="icon-group"><input type="text" class="form-control" placeholder="">
-                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                         <i class="la la-remove"></i>
                                                                     </a>
                                                                 </div>
@@ -638,7 +638,7 @@
                                                             <div class="form-group">
 
                                                                 <div class="icon-group"><input type="text" class="form-control" placeholder="">
-                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                         <i class="la la-remove"></i>
                                                                     </a>
                                                                 </div>
@@ -667,7 +667,7 @@
                                                             <div class="form-group">
 
                                                                 <div class="icon-group"><input type="text" class="form-control" placeholder="">
-                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                         <i class="la la-remove"></i>
                                                                     </a>
                                                                 </div>
@@ -804,7 +804,7 @@
 
                                                                 <div class="icon-group">
                                                                     <input type="text" class="form-control" name="" placeholder="Group" value="">
-                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                         <i class="la la-trash"></i>
                                                                     </a>
                                                                 </div>
@@ -830,7 +830,7 @@
 
                                                                 <div class="icon-group">
                                                                     <input type="text" class="form-control" name="" placeholder="Group" value="">
-                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                         <i class="la la-trash"></i>
                                                                     </a>
                                                                 </div>
@@ -855,7 +855,7 @@
 
                                                                 <div class="icon-group">
                                                                     <input type="text" class="form-control" name="" placeholder="Group" value="">
-                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                         <i class="la la-trash"></i>
                                                                     </a>
                                                                 </div>
@@ -880,7 +880,7 @@
 
                                                                 <div class="icon-group">
                                                                     <input type="text" class="form-control" name="" placeholder="Group" value="">
-                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ml-2">
+                                                                    <a href="javascript:;" data-repeater-delete="" class="btn btn-icon btn-label-brand ms-2">
                                                                         <i class="la la-trash"></i>
                                                                     </a>
                                                                 </div>

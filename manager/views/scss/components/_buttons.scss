@@ -23,7 +23,7 @@
     line-height: 1.5;
     border-width: 2px;
     border-radius: $radius-common !important;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     &:focus {
         outline: none !important;

@@ -81,7 +81,7 @@
                                                 <div class="input-group">
                                                     <input type="search" class="form-control" name="search" value="" placeholder="Search">
                                                     <div class="input-group-append">
-                                                        <button type="button" class="btn btn-brand btn-wide ml-2">Search</button>
+                                                        <button type="button" class="btn btn-brand btn-wide ms-2">Search</button>
                                                     </div>
                                                 </div>
                                             </div>

@@ -282,7 +282,7 @@
                                         <h3 class="card-head-title mb-20">Get in Touch</h3>
                                         <p>Windows 10 automatically installs updates to make for sure</p>
                                     </div>
-                                    <div class="col-xl-6 align-right mr-auto-all">
+                                    <div class="col-xl-6 align-right me-auto-all">
                                         <button type="button" class="btn btn-primary btn-lg">Submit a Request</button>
                                     </div>
                                 </div>
@@ -295,7 +295,7 @@
                                         <h3 class="card-head-title mb-20">Live Chat</h3>
                                         <p>Windows 10 automatically installs updates to make for sure</p>
                                     </div>
-                                    <div class="col-xl-6 align-right mr-auto-all">
+                                    <div class="col-xl-6 align-right me-auto-all">
                                         <button type="button" class="btn btn-success btn-lg">Start Chat</button>
                                     </div>
                                 </div>

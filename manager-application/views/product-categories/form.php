@@ -6,11 +6,15 @@ $fld = $frm->getField('prodcat_parent');
 $fld->setFieldTagAttribute('id', "prodcat_parent");
 
 $fld = $frm->getField('prodcat_active');
-$fld->developerTags['cbLabelAttributes'] = ['class' => 'switch switch-sm switch-icon'];
+HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;   
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
 $fld = $frm->getField('auto_update_other_langs_data');
 if ($fld != null) {
-    $fld->developerTags['cbLabelAttributes'] = ['class' => 'switch switch-sm switch-icon'];
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;   
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
 
 $otherButtons = [

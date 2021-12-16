@@ -32,7 +32,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
             <div class="col-md-12">
                 <div class="input-group">
                     <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-                    <a class="btn advanced-trigger ml-2 collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                    <a class="btn advanced-trigger ms-2 collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                         <svg class="svg" width="22" height="22">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
                             </use>
@@ -50,28 +50,30 @@ HtmlHelper::renderHiddenFields($frmSearch);
 </div>
 <div class="advanced-search collapse advancedSearchJs" id="collapseKeyword">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
 
                 <label class="label"><?php echo Labels::getLabel('FRM_CATEGORY', $siteLangId); ?></label>
                 <?php echo $frmSearch->getFieldHtml('category_id'); ?>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="label"><?php echo Labels::getLabel('FRM_BRAND', $siteLangId); ?></label>
                 <?php echo $frmSearch->getFieldHtml('brand_id'); ?>
 
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="label"><?php echo Labels::getLabel('FRM_SHOP', $siteLangId); ?></label>
                 <?php echo $frmSearch->getFieldHtml('shop_id'); ?>
 
             </div>
         </div>
-        <div class="col-md-3">
+    </div>
+    <div class="row">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="label"></label>
                 <?php echo $frmSearch->getFieldHtml('btn_clear'); ?>

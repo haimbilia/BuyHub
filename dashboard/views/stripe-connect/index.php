@@ -24,8 +24,8 @@
                                 <p> <?php echo Labels::getLabel('API_MOBILE_FRIENDLY_AND_CONVERSION_OPTIMIZED_UI', $siteLangId); ?> </p>
                             </li>
                         </ul>
-                        <div class="text-center"> 
-                            <a class="btn btn-outline-brand btn-sm mr-2" onClick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
+                        <div class="text-center">
+                            <a class="btn btn-outline-brand btn-sm me-2" onClick="register(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'register'); ?>">
                                 <?php echo Labels::getLabel('LBL_REGISTER', $siteLangId); ?>
                             </a>
                         </div>
@@ -41,18 +41,18 @@
                                     </a>
                                 <?php } ?>
                                 <a class="btn btn-outline-brand btn-sm" onClick="unlinkAccount(this)" href="javascript:void(0)" data-href="<?php echo UrlHelper::generateUrl($keyName, 'unlinkAccount') ?>" title="<?php echo Labels::getLabel('LBL_UNLINK_ACCOUNT', $siteLangId); ?>">
-                                    <?php 
-                                        $msg = CommonHelper::replaceStringData(Labels::getLabel('LBL_UNLINK_ACCOUNT_FROM_{WEBSITE-NAME}', $siteLangId), [
-                                            '{WEBSITE-NAME}' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId)
-                                        ]);
-                                        echo $msg; 
+                                    <?php
+                                    $msg = CommonHelper::replaceStringData(Labels::getLabel('LBL_UNLINK_ACCOUNT_FROM_{WEBSITE-NAME}', $siteLangId), [
+                                        '{WEBSITE-NAME}' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId)
+                                    ]);
+                                    echo $msg;
                                     ?>
                                 </a>
-                                <?php if (!empty($accountId) && true === $initialFormSubmitted && false === $userAccountIsValid) { 
+                                <?php if (!empty($accountId) && true === $initialFormSubmitted && false === $userAccountIsValid) {
                                     $msg = Labels::getLabel('MSG_STRIPE_CONNECT_ACCOUNT_NOT_COMPLETE', $siteLangId);
                                     $htm = '<a href="javascript:void(0);" onClick="completeAccount(this)" data-href="' . UrlHelper::generateUrl($keyName, 'completeAccount') . '">' . Labels::getLabel('LBL_CLICK_HERE', $siteLangId) . '</a>';
                                     $msg = CommonHelper::replaceStringData($msg, ['{CLICK-HERE}' => $htm]);
-                                    ?>
+                                ?>
                                     <ul class="errorlist erlist_merchantCatCode mt-4">
                                         <li>
                                             <?php echo $msg; ?>

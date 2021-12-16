@@ -189,12 +189,12 @@
                                             <code>btn-toolbar</code> for more complex components:</span>
                                         <div class="section__content">
                                             <div class="btn-toolbar" role="toolbar" aria-label="...">
-                                                <div class="btn-group mr-2" role="group" aria-label="...">
+                                                <div class="btn-group me-2" role="group" aria-label="...">
                                                     <button type="button" class="btn btn-secondary"><i class="la la-file-text-o"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-bold"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-paperclip"></i></button>
                                                 </div>
-                                                <div class="btn-group mr-2" role="group" aria-label="...">
+                                                <div class="btn-group me-2" role="group" aria-label="...">
                                                     <button type="button" class="btn btn-secondary"><i class="la la-floppy-o"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-files-o"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-header"></i></button>
@@ -209,7 +209,7 @@
                                             <div class="separator separator--dashed"></div>
 
                                             <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-                                                <div class="btn-group mr-2" role="group" aria-label="First group">
+                                                <div class="btn-group me-2" role="group" aria-label="First group">
                                                     <button type="button" class="btn btn-secondary"><i class="la la-file-text-o"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-floppy-o"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-header"></i></button>
