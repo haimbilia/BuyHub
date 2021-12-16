@@ -66,6 +66,7 @@ class TaxStructure extends MyAppModel {
         $srch = static::getSearchObject();
         $srch->addMultipleFields(array('taxstr_id'));
         $srch->addCondition('taxstr_parent', '=', $parentId);
+        $srch->addOrder('taxstr_id','ASC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $combinedTaxes = FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -97,6 +98,7 @@ class TaxStructure extends MyAppModel {
         $srch->addMultipleFields(array('taxstr_id', 'taxstr_name'));
         $srch->addCondition('taxstr_parent', '=', $parentId);
         $srch->addCondition('taxstrlang_lang_id', '=', $lang);
+        $srch->addOrder('taxstrlang_taxstr_id','ASC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
@@ -113,7 +115,7 @@ class TaxStructure extends MyAppModel {
         $srch->addMultipleFields(array('taxstr_id', 'taxstr_identifier'));
         $srch->addCondition('taxstr_parent', '=', $parentId);
         $srch->doNotCalculateRecords();
-        $srch->doNotLimitRecords(); 
+        $srch->doNotLimitRecords();
         return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
     }
 
@@ -127,6 +129,9 @@ class TaxStructure extends MyAppModel {
         $srch = static::getSearchObject();
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id=taxstrlang_taxstr_id', 'taxLang');
         $srch->addCondition('taxstr_parent', '=', $parentId);
+        if (isset($data['deleted_taxstr_id']) && !empty(array_filter($data['deleted_taxstr_id']))) {
+            $srch->addCondition('taxstr_id', 'NOT IN', array_filter($data['deleted_taxstr_id']));
+        }
         $srch->addOrder('taxstr_id', 'ASC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -141,6 +146,7 @@ class TaxStructure extends MyAppModel {
         foreach ($results as $result) {
             $components['taxstr_name'][$result['taxstrlang_lang_id']] = $result['taxstr_name'];
         }
+
         foreach ($postComponents as $key => $postComponent) {
             $component[$key][$postLang] = $postComponent[$postLang];
             $components['taxstr_name'][$postLang] = $data['taxstr_name'];
@@ -282,11 +288,11 @@ class TaxStructure extends MyAppModel {
 
         $db = FatApp::getDb();
         if ($parentId > 0) {
-            $components = $this->getCombinedTax($parentId); 
+            $components = $this->getCombinedTax($parentId);
             if (!$db->deleteRecords(static::DB_TBL, array('smt' => 'taxstr_parent = ?', 'vals' => array($parentId)))) {
                 $this->error = $db->getError();
                 return false;
-            } 
+            }
             foreach ($components as $key => $component) {
                 $db->deleteRecords(static::DB_TBL_LANG, array('smt' => 'taxstrlang_taxstr_id = ?', 'vals' => array($key)));
             }
@@ -359,7 +365,7 @@ class TaxStructure extends MyAppModel {
         }
         return true;
     }
-  
+
     /**
      * saveTranslatedLangData
      *
