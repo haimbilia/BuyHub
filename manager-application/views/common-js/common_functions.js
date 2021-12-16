@@ -133,7 +133,7 @@ getSlugUrl = function (obj, str, extra, pos) {
 
     $(obj)
         .next()
-        .html(SITE_ROOT_URL + str);
+        .html('<a target="_blank" href="' + SITE_ROOT_URL + str + '">' + SITE_ROOT_URL + str + '</a>');
 };
 
 Slugify = function (str, str_val_id, is_slugify) {
@@ -181,7 +181,7 @@ select2 = function (
     if (1 > ele.length) {
         return false;
     }
-    
+
     ele.select2({
         dropdownParent: ele.parent(),
         closeOnSelect: ele.data("closeOnSelect") || true,
@@ -232,14 +232,14 @@ select2 = function (
                 callbackOnUnSelect(e);
             }
         });
-    
+
     var select2Selector = ele.data("select2");
     var elementName = ele.attr('name').replace('[]', '');
-    if ('undefined' != typeof(select2Selector.dropdown)) {
+    if ('undefined' != typeof (select2Selector.dropdown)) {
         $(select2Selector.dropdown.$search).attr('name', elementName + '-select2');
     }
-    
-    if ('undefined' != typeof(select2Selector.selection)) {
+
+    if ('undefined' != typeof (select2Selector.selection)) {
         $(select2Selector.selection.$search).attr('name', elementName + '-select2');
     }
     if (0 < ele.closest(".advancedSearchJs").length) {
