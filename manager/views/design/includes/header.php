@@ -1008,7 +1008,7 @@
                     </a>
                 </div>
             </div>
-            <div class="tab-pane fade pl-3 pr-3" id="quick_panel_tab_chat">
+            <div class="tab-pane fade ps-3 pe-3" id="quick_panel_tab_chat">
                 <div class="searchbar">
                     <div class="input-group">
                         <div class="input-group-prepend"><span class="input-group-text" id="basic-addon1"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
