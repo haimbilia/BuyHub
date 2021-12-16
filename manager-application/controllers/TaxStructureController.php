@@ -137,6 +137,8 @@ class TaxStructureController extends ListingBaseController {
         return $frm;
     }
 
+    /* @@ todo We have to modifiy the current procress for tax component */
+
     public function form() {
         $this->objPrivilege->canEditTax();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -151,6 +153,7 @@ class TaxStructureController extends ListingBaseController {
             if ($taxStrData['taxstr_is_combined']) {
                 $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($taxStrData['taxstr_id'], CommonHelper::getDefaultFormLangId());
             }
+
             if (isset($combinedTaxes)) {
                 $countStart = 0;
                 foreach ($combinedTaxes as $key => $value) {
@@ -164,7 +167,6 @@ class TaxStructureController extends ListingBaseController {
                     }
                 }
             }
-
             $frm->fill($taxStrData);
         }
 
@@ -291,7 +293,6 @@ class TaxStructureController extends ListingBaseController {
             $taxDetails = (new TaxStructure())->getCombinedTaxesWithLang($recordId, $post);
             $post = array_merge($post, $taxDetails);
         }
-
 
         if (!$record->addUpdateCombinedData($post, $record->getMainTableRecordId())) {
             LibHelper::exitWithError($record->getError(), true);
