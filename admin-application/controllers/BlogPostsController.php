@@ -516,7 +516,7 @@ class BlogPostsController extends AdminBaseController
     private function getImagesFrm($post_id = 0)
     {
         $this->objPrivilege->canViewBlogPosts();
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 
         $frm = new Form('frmBlogPostImage', array('id' => 'imageFrm'));
         $frm->addHiddenField('', 'post_id', $post_id);

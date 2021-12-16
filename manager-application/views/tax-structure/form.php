@@ -17,7 +17,7 @@ $addBtn = '<button type="button" class="btn btn--secondary ripplelink add-combin
         </svg>
     </button>';
 $htmlFld = $frm->getField('component_link');
-$htmlFld->value = '<div class="input-group-append">' . $addBtn . $delBtn . '</div>';
+$htmlFld->value = ' ' . $addBtn . $delBtn . ' ';
 $otherButtons = [];
 
 $formTitle = Labels::getLabel('LBL_TAX_STRUCTURE_SETUP', $siteLangId);

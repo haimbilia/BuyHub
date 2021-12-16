@@ -510,25 +510,25 @@
 
                                 </div>
                                 <div class="card-body">
-                                    <ul class="list-stats">
-                                        <li>
+                                    <ul class="list-stats list-stats-double">
+                                        <li class="list-stats-item">
                                             <span class="lable">Name:</span>
                                             <span class="value"> John Doe</span>
                                         </li>
-                                        <li><span class="lable">Apartment / House:</span>
+                                        <li class="list-stats-item  list-stats-item-full"><span class="lable">Apartment / House:</span>
                                             <span class="value"> University Drive</span>
                                         </li>
 
-                                        <li><span class="lable">City &amp; State:</span>
+                                        <li class="list-stats-item  list-stats-item-full"><span class="lable">City &amp; State:</span>
                                             <span class="value"> Mumbai, Maharashtra</span>
                                         </li>
-                                        <li><span class="lable">Postal Code:</span>
+                                        <li class="list-stats-item"><span class="lable">Postal Code:</span>
                                             <span class="value"> 45684 </span>
                                         </li>
-                                        <li><span class="lable">Select Country:</span>
+                                        <li class="list-stats-item"><span class="lable">Select Country:</span>
                                             <span class="value"> India</span>
                                         </li>
-                                        <li><span class="lable">Phone:</span>
+                                        <li class="list-stats-item"><span class="lable">Phone:</span>
                                             <span class="value"> +91 7895456525 </span>
                                         </li>
                                     </ul>
@@ -546,15 +546,15 @@
 
                                 </div>
                                 <div class="card-body">
-                                    <ul class="list-stats">
+                                    <ul class="list-stats  list-stats-double">
                                         <li class="list-stats-item"><span class="lable">Name:</span>
                                             <span class="value"> John Doe </span>
                                         </li>
-                                        <li class="list-stats-item"><span class="lable">Apartment / House:</span>
+                                        <li class="list-stats-item  list-stats-item-full"><span class="lable">Apartment / House:</span>
                                             <span class="value"> University Drive </span>
                                         </li>
 
-                                        <li class="list-stats-item"><span class="lable">City &amp; State:</span>
+                                        <li class="list-stats-item list-stats-item-full"><span class="lable">City &amp; State:</span>
                                             <span class="value"> Mumbai, Maharashtra </span>
                                         </li>
                                         <li class="list-stats-item"><span class="lable">Postal Code:</span>

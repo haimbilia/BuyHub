@@ -346,7 +346,7 @@ class TestimonialsController extends AdminBaseController
 
         $testimonialMediaFrm = $this->getMediaForm($testimonialId);
         $testimonialImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $testimonialId, 0, -1);
-        //$bannerTypeArr = applicationConstants::bannerTypeArr();
+        //$bannerTypeArr = applicationConstants::getAllLanguages();
 
         $this->set('languages', Language::getAllNames());
         $this->set('testimonialId', $testimonialId);

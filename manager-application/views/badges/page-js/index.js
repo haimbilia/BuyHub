@@ -1,4 +1,17 @@
 (function () {
+    mediaForm = function (recordId, langId = 0, slide_screen = 1) {
+        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
+        fcom.ajax(
+            fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]),
+            "",
+            function (t) {
+                fcom.removeLoader();
+                loadImages(recordId, langId);
+                $.ykmodal(t, !$.ykmodal.isSideBarView());
+            }
+        );
+    };
+
     loadImages = function (recordId, lang_id) {
         fcom.ajax(fcom.makeUrl(controllerName, 'images', [recordId, lang_id]), '', function (t) {
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");

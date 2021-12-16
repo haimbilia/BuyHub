@@ -29,15 +29,15 @@ if (!empty($excludeLocations)) {
     }
 }
 ?>
-<div class="portlet">
+<div class="card">
     <form onsubmit="setupZone(this); return(false);" method="post" class="web_form form_horizontal" id="shippingZoneFrm">
-        <div class="portlet__head">
-            <div class="portlet__head-label">
-                <h3 class="portlet__head-title"><?php echo Labels::getLabel('LBL_Zone_Setup', $adminLangId); ?>
+        <div class="card-head">
+            <div class="card-head-label">
+                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_Zone_Setup', $adminLangId); ?>
                 </h3>
             </div>
         </div>
-        <div class="portlet__body">
+        <div class="card-body">
             <input type="hidden" name="shipprozone_id" value="<?php echo (!empty($zone_data)) ? $zone_data['shipprozone_id'] : 0; ?>">
             <input type="hidden" name="shipzone_id" value="<?php echo $zone_id; ?>">
             <input type="hidden" name="shipzone_profile_id" value="<?php echo $profile_id; ?>">
@@ -169,7 +169,7 @@ if (!empty($excludeLocations)) {
                 </div>
             </div>
         </div>
-        <div class="portlet__foot">
+        <div class="card-foot">
             <div class="row">
                 <div class="col-md-12">
                     <?php

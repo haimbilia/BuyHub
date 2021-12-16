@@ -6,10 +6,10 @@ $frm->setFormTagAttribute('onsubmit', 'setupProfile(this); return(false);');
 
 <main class="main mainJs">
     <div class="container">
-        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
 
-        <div class="row">
-            <div class="col-md-12">
+
+        <div class="row justify-content-center">
+            <div class="col-md-8"> <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">

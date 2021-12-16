@@ -38,7 +38,7 @@ if (!empty($excludeLocations)) {
 </div>
 <div class="form-edit-body loaderContainerJs">
     <form onsubmit="setupZone(this); return(false);" method="post" class="form form-edit" id="shippingZoneFrm">
-        <div class="portlet__body">
+        <div class="card-body">
             <input type="hidden" name="shipprozone_id" value="<?php echo (!empty($zone_data)) ? $zone_data['shipprozone_id'] : 0; ?>">
             <input type="hidden" name="shipzone_id" value="<?php echo $zone_id; ?>">
             <input type="hidden" name="shipzone_profile_id" value="<?php echo $profile_id; ?>">
@@ -171,7 +171,7 @@ if (!empty($excludeLocations)) {
                 </div>
             </div>
         </div>
-        <div class="portlet__foot">
+        <div class="card-foot">
             <div class="row">
                 <div class="col-md-12">
                     <?php

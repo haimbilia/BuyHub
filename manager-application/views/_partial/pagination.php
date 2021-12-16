@@ -47,19 +47,25 @@ $pagination .=     FatUtility::getPageString(
     ' <li class="selected"><a href="javascript:void(0);">xxpagexx</a></li>',
     ' <li><a href="javascript:void(0);">...</a></li> ',
     $linksToDisp,
-    ' <li class="first"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="icon" width="40" height="40">
+    ' <li class="first"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#double-arrow-left">
     </use>
 </svg></a></li>',
-    ' <li class="last"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="icon" width="40" height="40">
+    ' <li class="last"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#double-arrow-right">
     </use>
 </svg></a></li>',
-    ' <li class="prev"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"></a></li>',
-    ' <li class="next"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"></a></li>'
+    ' <li class="prev"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#arrow-left">
+    </use>
+</svg></a></li>',
+    ' <li class="next"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#arrow-right">
+    </use>
+</svg></a></li>'
 );
 
-$displayPageSizeDropdown = isset($displayPageSizeDropdown)?$displayPageSizeDropdown:true;
+$displayPageSizeDropdown = isset($displayPageSizeDropdown) ? $displayPageSizeDropdown : true;
 ?>
 <div class="row justify-content-between">
     <div class="col">

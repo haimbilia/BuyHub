@@ -133,7 +133,7 @@ class TaxStructureController extends ListingBaseController
         $componentFld = $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId), 'taxstr_component_name[]', '', ['class' => 'test']);
         $htmlFld = $frm->addHTML('', 'component_link', '');
         $componentFld->attachField($htmlFld);
-        $componentFld->fieldWrapper = ['<div class="component_link"><div class="input-group component-row--js">', '</div></div>'];
+        $componentFld->fieldWrapper = ['<div class="component_link"><div class="input-group mb-2 component-row--js">', '</div></div>'];
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -319,7 +319,7 @@ class TaxStructureController extends ListingBaseController
         $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $lang_id), 'taxstr_name');
 
         if ($isCombined) {
-            $htmlFld = $frm->addHTML('', 'component_link', '<div class="separator separator-dashed my-4"></div>'.'<h3 class="h3">'.Labels::getLabel('FRM_TAX_COMPONENT_NAME', $lang_id).'</h3>');
+            $htmlFld = $frm->addHTML('', 'component_link', '<div class="separator separator-dashed my-4"></div>' . '<h3 class="h3">' . Labels::getLabel('FRM_TAX_COMPONENT_NAME', $lang_id) . '</h3>');
             $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
             $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
             foreach ($combinedTaxes as $key => $value) {
