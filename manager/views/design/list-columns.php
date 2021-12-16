@@ -56,8 +56,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -200,7 +200,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -306,7 +306,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -412,7 +412,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -523,7 +523,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -630,7 +630,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -736,7 +736,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -846,7 +846,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -952,7 +952,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1058,7 +1058,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1169,7 +1169,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1276,7 +1276,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -1382,7 +1382,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-icon" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-icon" data-bs-toggle="dropdown">
                                                     <i class="flaticon-more-1 font-brand"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">

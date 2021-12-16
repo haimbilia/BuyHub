@@ -20,7 +20,7 @@ foreach ($arrListing as $sn => $row) {
                 $body = $row['pnotification_description'];
                 $htm =  '<strong>' . $row['pnotification_title'] . '</strong><br>';
                 $htm .= strlen($body) > 50 ? substr($body, 0, 50) . "..." : $body;
-                $htm = '<span title="' . $body . '" data-toggle="tooltip" data-placement="top">' . $htm . '</span>';
+                $htm = '<span title="' . $body . '" data-bs-toggle="tooltip" data-placement="top">' . $htm . '</span>';
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'pnotification_user_auth_type':

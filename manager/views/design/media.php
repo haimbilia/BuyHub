@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -277,25 +277,25 @@
                                         <div class="section__content">
                                             <div class="d-flex align-items-center">
                                                 <div class="media-group">
-                                                    <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                    <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                    <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                    <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_3.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                    <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_4.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                    <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_5.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                    <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_6.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                    <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                         <span>6+</span>
                                                     </a>
                                                 </div>
@@ -318,7 +318,7 @@
                                                     <a href="#" class="media  media-circle">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_6.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                    <a href="#" class="media media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                         <span>16+</span>
                                                     </a>
                                                 </div>

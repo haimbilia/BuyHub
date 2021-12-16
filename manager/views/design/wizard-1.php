@@ -51,8 +51,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -80,7 +80,7 @@
                                         <div class="wizard-v1__nav-items">
                                             <!--doc: Replace A tag with SPAN tag to disable the step link click -->
                                             <div class="wizard-v1__nav-item" data-FATbitwizard-type="step" data-FATbitwizard-state="current">
-                                                <div class="wizard-v1__nav-body" data-toggle="tab" href="#form_step_1">
+                                                <div class="wizard-v1__nav-body" data-bs-toggle="tab" href="#form_step_1">
                                                     <div class="wizard-v1__nav-icon">
                                                         <i class="flaticon-bus-stop"></i>
                                                     </div>
@@ -90,7 +90,7 @@
                                                 </div>
                                             </div>
                                             <div class="wizard-v1__nav-item" data-FATbitwizard-type="step" data-FATbitwizard-state="pending">
-                                                <div class="wizard-v1__nav-body" data-toggle="tab" href="#form_step_2">
+                                                <div class="wizard-v1__nav-body" data-bs-toggle="tab" href="#form_step_2">
                                                     <div class="wizard-v1__nav-icon">
                                                         <i class="flaticon-list"></i>
                                                     </div>
@@ -100,7 +100,7 @@
                                                 </div>
                                             </div>
                                             <div class="wizard-v1__nav-item" data-FATbitwizard-type="step" data-FATbitwizard-state="pending">
-                                                <div class="wizard-v1__nav-body" data-toggle="tab" href="#form_step_3">
+                                                <div class="wizard-v1__nav-body" data-bs-toggle="tab" href="#form_step_3">
                                                     <div class="wizard-v1__nav-icon">
                                                         <i class="flaticon-responsive"></i>
                                                     </div>
@@ -110,7 +110,7 @@
                                                 </div>
                                             </div>
                                             <div class="wizard-v1__nav-item" data-FATbitwizard-type="step" data-FATbitwizard-state="pending">
-                                                <div class="wizard-v1__nav-body" data-toggle="tab" href="#form_step_4">
+                                                <div class="wizard-v1__nav-body" data-bs-toggle="tab" href="#form_step_4">
                                                     <div class="wizard-v1__nav-icon">
                                                         <i class="flaticon-truck"></i>
                                                     </div>
@@ -120,7 +120,7 @@
                                                 </div>
                                             </div>
                                             <div class="wizard-v1__nav-item" data-FATbitwizard-type="step" data-FATbitwizard-state="pending">
-                                                <div class="wizard-v1__nav-body" data-toggle="tab" href="#form_step_5">
+                                                <div class="wizard-v1__nav-body" data-bs-toggle="tab" href="#form_step_5">
                                                     <div class="wizard-v1__nav-icon">
                                                         <i class="flaticon-globe"></i>
                                                     </div>

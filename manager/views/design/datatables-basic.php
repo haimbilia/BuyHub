@@ -56,8 +56,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -97,7 +97,7 @@
                                 <div class="card-head-wrapper">
                                     <div class="card-head-actions">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-default btn-icon-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-default btn-icon-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="la la-download"></i> Export
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -204,7 +204,7 @@
                                                     <td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
                                                     <td nowrap="">
                                                         <span class="dropdown">
-                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -236,7 +236,7 @@
                                                     <td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
                                                     <td nowrap="">
                                                         <span class="dropdown">
-                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -268,7 +268,7 @@
                                                     <td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
                                                     <td nowrap="">
                                                         <span class="dropdown">
-                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -300,7 +300,7 @@
                                                     <td><span class="badge badge-primary badge-dot"></span>&nbsp;<span class="font-bold font-primary">Retail</span></td>
                                                     <td nowrap="">
                                                         <span class="dropdown">
-                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -332,7 +332,7 @@
                                                     <td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
                                                     <td nowrap="">
                                                         <span class="dropdown">
-                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -364,7 +364,7 @@
                                                     <td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
                                                     <td nowrap="">
                                                         <span class="dropdown">
-                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -396,7 +396,7 @@
                                                     <td><span class="badge badge-danger badge-dot"></span>&nbsp;<span class="font-bold font-danger">Online</span></td>
                                                     <td nowrap="">
                                                         <span class="dropdown">
-                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -428,7 +428,7 @@
                                                     <td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
                                                     <td nowrap="">
                                                         <span class="dropdown">
-                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -460,7 +460,7 @@
                                                     <td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
                                                     <td nowrap="">
                                                         <span class="dropdown">
-                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -492,7 +492,7 @@
                                                     <td><span class="badge badge-success badge-dot"></span>&nbsp;<span class="font-bold font-success">Direct</span></td>
                                                     <td nowrap="">
                                                         <span class="dropdown">
-                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-expanded="true">
                                                                 <i class="la la-ellipsis-h"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">

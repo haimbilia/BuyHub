@@ -5,8 +5,8 @@ if (!isset($tbody)) {
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
 
-$serialNo = ($page - 1) * $pageSize + 1;
 foreach ($arrListing as $sn => $row) {
+    $serialNo = $sn + 1;
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
     $tr->setAttribute("id", $row['currency_id']);
@@ -24,9 +24,6 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'select_all':
                 $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="currency_ids[]" value=' . $row['currency_id'] . '><i class="input-helper"></i></label>', true);
-                break;
-            case 'listSerial':
-                $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'currency_symbol_left':
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayNotApplicable($siteLangId, $row[$key]), true);

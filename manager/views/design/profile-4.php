@@ -56,8 +56,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -96,7 +96,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -207,32 +207,32 @@
                                     <!--begin::Navigation -->
                                     <ul class="nav nav--bold nav--md-space margin-t-20 margin-b-20 hidden" role="tablist">
                                         <li class="nav__item nav__item--active">
-                                            <a class="nav__link active" data-toggle="tab" href="#profile_tab_personal_information" role="tab">
+                                            <a class="nav__link active" data-bs-toggle="tab" href="#profile_tab_personal_information" role="tab">
                                                 <span class="nav__link-icon"><i class="flaticon2-calendar-3"></i></span>
                                                 <span class="nav__link-text">Personal Information</span>
                                             </a>
                                         </li>
                                         <li class="nav__item">
-                                            <a class="nav__link" data-toggle="tab" href="#profile_tab_account_information" role="tab">
+                                            <a class="nav__link" data-bs-toggle="tab" href="#profile_tab_account_information" role="tab">
                                                 <span class="nav__link-icon"><i class="flaticon2-protected"></i></span>
                                                 <span class="nav__link-text">Acccount Information</span>
                                             </a>
                                         </li>
                                         <li class="nav__item">
-                                            <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                            <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                 <span class="nav__link-icon"><i class="flaticon2-hourglass-1"></i></span>
                                                 <span class="nav__link-text">Payments</span>
                                             </a>
                                         </li>
                                         <li class="nav__separator"></li>
                                         <li class="nav__item">
-                                            <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                            <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                 <span class="nav__link-icon"><i class="flaticon2-bell-2"></i></span>
                                                 <span class="nav__link-text">Statements</span>
                                             </a>
                                         </li>
                                         <li class="nav__item">
-                                            <a class="nav__link" href="#" role="tab" data-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
+                                            <a class="nav__link" href="#" role="tab" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="This feature is coming soon!">
                                                 <span class="nav__link-icon"><i class="flaticon2-medical-records-1"></i></span>
                                                 <span class="nav__link-text">Audit Log</span>
                                             </a>
@@ -252,15 +252,15 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-clean btn-sm btn-bold" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-clean btn-sm btn-bold" data-bs-toggle="dropdown">
                                             <i class="flaticon2-add-1 icon-sm"></i> Add deal
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md">
                                             <!--begin::Nav-->
                                             <ul class="nav">
                                                 <li class="nav__head">
                                                     Add new deal
-                                                    <i class="flaticon2-information" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
+                                                    <i class="flaticon2-information" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more..."></i>
                                                 </li>
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__item">
@@ -293,7 +293,7 @@
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Manage deals</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
                                             <!--end::Nav-->
@@ -489,15 +489,15 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-label-brand btn-sm  btn-bold dropdown-toggle" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-label-brand btn-sm  btn-bold dropdown-toggle" data-bs-toggle="dropdown">
                                                     Latest
                                                 </a>
-                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md">
                                                     <!--begin::Nav-->
                                                     <ul class="nav">
                                                         <li class="nav__head">
                                                             Export Options
-                                                            <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                            <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                         <rect x="0" y="0" width="24" height="24"></rect>
@@ -538,7 +538,7 @@
                                                         <li class="nav__separator"></li>
                                                         <li class="nav__foot">
                                                             <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                            <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                            <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                         </li>
                                                     </ul>
                                                     <!--end::Nav-->
@@ -604,7 +604,7 @@
                                                 </h3>
                                             </div>
                                             <div class="card-head-toolbar">
-                                                <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                                     All
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -743,15 +743,15 @@
                                             </div>
                                             <div class="card-head-toolbar">
                                                 <div class="dropdown dropdown-inline">
-                                                    <button type="button" class="btn btn-clean btn-sm btn-icon-md btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button type="button" class="btn btn-clean btn-sm btn-icon-md btn-icon" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="flaticon-more-1"></i>
                                                     </button>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md">
                                                         <!--begin::Nav-->
                                                         <ul class="nav">
                                                             <li class="nav__head">
                                                                 Export Options
-                                                                <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                                <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                             <rect x="0" y="0" width="24" height="24"></rect>
@@ -792,7 +792,7 @@
                                                             <li class="nav__separator"></li>
                                                             <li class="nav__foot">
                                                                 <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                                <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                                <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                             </li>
                                                         </ul>
                                                         <!--end::Nav-->
@@ -888,17 +888,17 @@
                                             <div class="card-head-toolbar">
                                                 <ul class="nav nav-pills nav-pills-sm nav-pills-label nav-pills-bold" role="tablist">
                                                     <li class="nav-item">
-                                                        <a class="nav-link active" data-toggle="tab" href="#widget6_tab1_content" role="tab">
+                                                        <a class="nav-link active" data-bs-toggle="tab" href="#widget6_tab1_content" role="tab">
                                                             Latest
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" data-toggle="tab" href="#widget6_tab2_content" role="tab">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#widget6_tab2_content" role="tab">
                                                             Week
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" data-toggle="tab" href="#widget6_tab3_content" role="tab">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#widget6_tab3_content" role="tab">
                                                             Month
                                                         </a>
                                                     </li>

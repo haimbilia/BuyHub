@@ -16,7 +16,7 @@ foreach ($arrListing as $sn => $row) {
 
     $editListingFrm = new Form('editListingFrm-' . $splPriceId, array('id' => 'editListingFrm-' . $splPriceId));
     foreach ($fields as $key => $val) {
-        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];   
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'select_all':
@@ -50,12 +50,12 @@ foreach ($arrListing as $sn => $row) {
                     'class' => 'dateJs splPriceColJs hide sp-input',
                 );
                 $editListingFrm->addDateField($val, $key, $date, $attr);
-                $td->appendElement('div', array("class" => 'editColJs contenteditable',"contenteditable" => "true", "data-toggle" => "tooltip","data-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $date, true);
+                $td->appendElement('div', array("class" => 'editColJs contenteditable', "contenteditable" => "true", "data-bs-toggle" => "tooltip", "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $date, true);
                 $td->appendElement('plaintext', $tdAttr, $editListingFrm->getFieldHtml($key), true);
                 break;
             case 'splprice_price':
                 $input = '<input type="text" data-price="' . $row['selprod_price'] . '" data-id="' . $splPriceId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" data-oldval="' . $row[$key] . '" data-displayoldval="' . CommonHelper::displayMoneyFormat($row[$key], true, true) . '" class="splPriceColJs hide sp-input"/>';
-                $td->appendElement('div', array("class" => 'editColJs contenteditable', "data-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
+                $td->appendElement('div', array("class" => 'editColJs contenteditable', "contenteditable" => "true", "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
                 $td->appendElement('plaintext', $tdAttr, $input, true);
                 if ($row['selprod_price'] > $row[$key]) {
                     $discountPrice = $row['selprod_price'] - $row[$key];

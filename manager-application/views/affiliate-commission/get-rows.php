@@ -34,7 +34,7 @@ foreach ($arrListing as $sn => $row) {
                     <?php } ?>
                     <?php if (!empty($row['vendor'])) { ?>
                         <span class="timeline-v4__item-user-name">
-                            <a data-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_AFFILIATE_USER', $siteLangId); ?>" href="javascript:void(0);" onclick="redirectUser(<?php echo $row['vendor_id']; ?>)" class="timeline-v4__item-link user-profile user-profile-sm">
+                            <a data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('LBL_AFFILIATE_USER', $siteLangId); ?>" href="javascript:void(0);" onclick="redirectUser(<?php echo $row['vendor_id']; ?>)" class="timeline-v4__item-link user-profile user-profile-sm">
                                 <figure class="user-profile_photo">
                                     <img src="/yokart/manager/images/users/100_1.jpg" alt="image">
                                 </figure>

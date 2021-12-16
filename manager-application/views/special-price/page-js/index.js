@@ -1,4 +1,4 @@
-$(document).on('click', 'table#splPriceListJs tr td .editColJs', function () {
+$(document).on('click', '.editColJs', function () {
     $(this).hide();
     var input = $(this).siblings('input[type="text"]');
     var value = input.attr('value');

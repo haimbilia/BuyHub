@@ -13,23 +13,23 @@
         
             <ul class="actions">
                 <li>
-                    <a href="javascript:void(0)" class="actions-link docs-tooltip"  data-method="rotate" data-option="-90" data-toggle="tooltip"  title="' . Labels::getLabel('LBL_Rotate_Left', $siteLangId) . '">
+                    <a href="javascript:void(0)" class="actions-link docs-tooltip"  data-method="rotate" data-option="-90" data-bs-toggle="tooltip"  title="' . Labels::getLabel('LBL_Rotate_Left', $siteLangId) . '">
                         <span class="fa fa-undo-alt"></span>
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)" class="actions-link docs-tooltip" data-toggle="tooltip" data-method="rotate" data-option="90" title="' . Labels::getLabel('LBL_Rotate_Right', $siteLangId) . '">
+                    <a href="javascript:void(0)" class="actions-link docs-tooltip" data-bs-toggle="tooltip" data-method="rotate" data-option="90" title="' . Labels::getLabel('LBL_Rotate_Right', $siteLangId) . '">
                         <span class="fa fa-redo-alt"></span>
                     </a>
                 </li>
             
                 <li>
-                    <a href="javascript:void(0)" class="actions-link docs-tooltip" data-toggle="tooltip"  data-method="scaleX" data-option="-1" title="' . Labels::getLabel('LBL_Flip_Horizontal', $siteLangId) . '">
+                    <a href="javascript:void(0)" class="actions-link docs-tooltip" data-bs-toggle="tooltip"  data-method="scaleX" data-option="-1" title="' . Labels::getLabel('LBL_Flip_Horizontal', $siteLangId) . '">
                         <span class="fa fa-arrows-alt-h"></span>
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)" class="actions-link docs-tooltip" data-toggle="tooltip" data-method="scaleY" data-option="-1" title="' . Labels::getLabel('LBL_Flip_Vertical', $siteLangId) . '">
+                    <a href="javascript:void(0)" class="actions-link docs-tooltip" data-bs-toggle="tooltip" data-method="scaleY" data-option="-1" title="' . Labels::getLabel('LBL_Flip_Vertical', $siteLangId) . '">
                         <span class="fa fa-arrows-alt-v"></span>
                     </a>
                 </li>
@@ -42,13 +42,13 @@
                 </label>
                 </li>              
                 <li>
-                    <a href="javascript:void(0)" class="actions-link docs-tooltip" data-toggle="tooltip"  data-method="reset" title="' . Labels::getLabel('LBL_RESET', $siteLangId) . '">
+                    <a href="javascript:void(0)" class="actions-link docs-tooltip" data-bs-toggle="tooltip"  data-method="reset" title="' . Labels::getLabel('LBL_RESET', $siteLangId) . '">
                         <span class="fa fa-sync-alt"></span>
                     </a>
                 </li>
             </ul>
             <div class="d-flex">
-                <button type="button" data-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300 mr-1">Cancel</button>
+                <button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300 me-1">Cancel</button>
                 <button type="button" class="btn btn-brand btn-wide " data-method="getCroppedCanvas">' . Labels::getLabel('LBL_APPLY', $siteLangId) . '</button>
             </div>
        

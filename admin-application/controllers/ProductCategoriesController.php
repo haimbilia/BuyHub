@@ -115,7 +115,7 @@ class ProductCategoriesController extends AdminBaseController
             $data = array_merge($data, $catNameArr, $ratingTypes);
         }
         $prodCatFrm->fill($data);
-        $mediaLanguages = applicationConstants::bannerTypeArr();
+        $mediaLanguages = applicationConstants::getAllLanguages();
         $screenArr = applicationConstants::getDisplaysArr($this->adminLangId);
         $langData = Language::getAllNames();
         unset($langData[$siteDefaultLangId]);
@@ -170,7 +170,7 @@ class ProductCategoriesController extends AdminBaseController
             $frm->addTextBox(Labels::getLabel('LBL_Category_Name', $this->adminLangId), 'prodcat_name[' . $langId . ']');
         }
 
-        $mediaLanguages = applicationConstants::bannerTypeArr();
+        $mediaLanguages = applicationConstants::getAllLanguages();
 		
 		if(count($mediaLanguages) > 1){
 			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');

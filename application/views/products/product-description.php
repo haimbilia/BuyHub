@@ -44,12 +44,12 @@
                     <span class="products_price_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                 <?php } ?>
                 <!-- Shop and SelProd Badge  -->
-                    <?php
-                    $selProdBadge = Badge::getSelprodBadges($siteLangId, [$product['selprod_id']]);
-                    $shopBadge = Badge::getShopBadges($siteLangId, [$product['shop_id']]);
-                    $badgesArr = array_merge($selProdBadge, $shopBadge);
-                    $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
-                    ?>
+                <?php
+                $selProdBadge = Badge::getSelprodBadges($siteLangId, [$product['selprod_id']]);
+                $shopBadge = Badge::getShopBadges($siteLangId, [$product['shop_id']]);
+                $badgesArr = array_merge($selProdBadge, $shopBadge);
+                $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+                ?>
                 <!-- Shop and SelProd Badge  -->
             </div>
             <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
@@ -77,7 +77,7 @@
                         <div class="col-md-6">
                             <div class="h6"><?php echo $option['option_name']; ?></div>
                             <div class="dropdown dropdown-options">
-                                <button class="btn btn-outline-gray dropdown-toggle" type="button" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-outline-gray dropdown-toggle" type="button" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                                     <span>
                                         <?php if ($option['option_is_color']) { ?>
                                             <span class="colors" style="background-color:<?php echo $selectedOptionColor; ?>;"></span>

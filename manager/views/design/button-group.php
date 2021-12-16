@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -189,12 +189,12 @@
                                             <code>btn-toolbar</code> for more complex components:</span>
                                         <div class="section__content">
                                             <div class="btn-toolbar" role="toolbar" aria-label="...">
-                                                <div class="btn-group mr-2" role="group" aria-label="...">
+                                                <div class="btn-group me-2" role="group" aria-label="...">
                                                     <button type="button" class="btn btn-secondary"><i class="la la-file-text-o"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-bold"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-paperclip"></i></button>
                                                 </div>
-                                                <div class="btn-group mr-2" role="group" aria-label="...">
+                                                <div class="btn-group me-2" role="group" aria-label="...">
                                                     <button type="button" class="btn btn-secondary"><i class="la la-floppy-o"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-files-o"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-header"></i></button>
@@ -209,7 +209,7 @@
                                             <div class="separator separator--dashed"></div>
 
                                             <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-                                                <div class="btn-group mr-2" role="group" aria-label="First group">
+                                                <div class="btn-group me-2" role="group" aria-label="First group">
                                                     <button type="button" class="btn btn-secondary"><i class="la la-file-text-o"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-floppy-o"></i></button>
                                                     <button type="button" class="btn btn-secondary"><i class="la la-header"></i></button>
@@ -315,7 +315,7 @@
                                                 <button type="button" class="btn btn-secondary"><i class="la la-italic"></i></button>
 
                                                 <div class="btn-group" role="group">
-                                                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Dropdown
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -356,7 +356,7 @@
                                             <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
                                                 <button type="button" class="btn btn-secondary">Button</button>
                                                 <div class="btn-group" role="group">
-                                                    <button id="btnGroupVerticalDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button id="btnGroupVerticalDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Dropdown
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
@@ -366,7 +366,7 @@
                                                 </div>
                                                 <button type="button" class="btn btn-secondary">Button</button>
                                                 <div class="btn-group" role="group">
-                                                    <button id="btnGroupVerticalDrop2" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button id="btnGroupVerticalDrop2" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Dropdown
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop2">

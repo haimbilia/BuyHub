@@ -29,14 +29,17 @@ if (null != $fld) {
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>
-    
+
     <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
 </div>
 
 <script type="text/javascript">
     $(document).ready(function() {
         if ($('#commsetting_user_id').length) {
-            select2('commsetting_user_id', fcom.makeUrl('Users', 'autoComplete'), {'joinShop' : 1, 'user_is_supplier' : 1});
+            select2('commsetting_user_id', fcom.makeUrl('Users', 'autoComplete'), {
+                'joinShop': 1,
+                'user_is_supplier': 1
+            });
         }
         if ($('#commsetting_product_id').length) {
             select2('commsetting_product_id', fcom.makeUrl('Commission', 'productAutoComplete'));

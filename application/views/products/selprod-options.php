@@ -14,19 +14,19 @@ if (!empty($optionRows)) {
                 $optionValueName = $opVal['optionvalue_name'];
                 if ($isColor) {
                     $color = ("#" == $opVal['optionvalue_color_code'][0] ? $opVal['optionvalue_color_code'] : "#" . $opVal['optionvalue_color_code']);
-                    $ul .= '<li data-toggle="tooltip" data-placement="top" title="' . $optionValueName . '"><span class="colors-dot" style="background:' . $color . ';"></span></li>';
+                    $ul .= '<li data-bs-toggle="tooltip" data-placement="top" title="' . $optionValueName . '"><span class="colors-dot" style="background:' . $color . ';"></span></li>';
                 } else {
                     $ul .= '<li><span class="ellipsis">' . $optionValueName . '</span></li>';
                 }
 
                 if ($displayCount == ($count + 1) && (0 < count($option['values']) - $displayCount)) {
-                    $ul .= '<li class="more">+' . (count($option['values']) - $displayCount) . ' ' . Labels::getLabel('LBL_MORE', $siteLangId).' </li>';
+                    $ul .= '<li class="more">+' . (count($option['values']) - $displayCount) . ' ' . Labels::getLabel('LBL_MORE', $siteLangId) . ' </li>';
                     break;
                 }
                 $count++;
-            } 
+            }
             $ul .= '</ul>';
         }
-    } 
+    }
 }
 echo (empty($ul) ? Labels::getLabel('LBL_N/A', $siteLangId) : $ul);

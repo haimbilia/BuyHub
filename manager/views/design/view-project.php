@@ -61,8 +61,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -198,19 +198,19 @@
                                         <div class="widget__details">
                                             <div class="section__content section__content--solid">
                                                 <div class="media-group">
-                                                    <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                    <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
+                                                    <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_10.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
+                                                    <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_11.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                                    <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_3.jpg" alt="image">
                                                     </a>
-                                                    <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                                    <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                         <span>+5</span>
                                                     </a>
                                                 </div>
@@ -235,7 +235,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             Add New Member
                                         </a>
                                     </div>
@@ -489,7 +489,7 @@
                                     </div>
                                     <div class="card-head-toolbar">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 33px, 0px);">
@@ -539,7 +539,7 @@
                                     <!-- WIDGET ROW START -->
                                     <div class="widget_custom mb-20">
                                         <!-- MARK START -->
-                                        <div class="product-mark mr-15">
+                                        <div class="product-mark me-15">
                                             <div class="product-mark-label">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/project/mark-symbol.jpg">
                                             </div>
@@ -547,7 +547,7 @@
                                         <!-- MARK END -->
 
                                         <!-- TITLE START -->
-                                        <div class="pro-td mr-15">
+                                        <div class="pro-td me-15">
                                             <a href="#" class="pro-td-title">Cup & Green</a>
                                             <span class="pro-td-subtitle">Local, clean & environmental</span>
                                             <span class="pro-td-subtitle">Created by: <span class="text-primary">CoreAd</span> </span>
@@ -566,7 +566,7 @@
                                     <!-- WIDGET ROW START -->
                                     <div class="widget_custom mb-20">
                                         <!-- MARK START -->
-                                        <div class="product-mark mr-15">
+                                        <div class="product-mark me-15">
                                             <div class="product-mark-label">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/project/mark-symbol.jpg">
                                             </div>
@@ -574,7 +574,7 @@
                                         <!-- MARK END -->
 
                                         <!-- TITLE START -->
-                                        <div class="pro-td mr-15">
+                                        <div class="pro-td me-15">
                                             <a href="#" class="pro-td-title">Cup & Green</a>
                                             <span class="pro-td-subtitle">Local, clean & environmental</span>
                                             <span class="pro-td-subtitle">Created by: <span class="text-primary">CoreAd</span> </span>
@@ -592,7 +592,7 @@
                                     <!-- WIDGET ROW START -->
                                     <div class="widget_custom mb-20">
                                         <!-- MARK START -->
-                                        <div class="product-mark mr-15">
+                                        <div class="product-mark me-15">
                                             <div class="product-mark-label">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/project/mark-symbol.jpg">
                                             </div>
@@ -600,7 +600,7 @@
                                         <!-- MARK END -->
 
                                         <!-- TITLE START -->
-                                        <div class="pro-td mr-15">
+                                        <div class="pro-td me-15">
                                             <a href="#" class="pro-td-title">Cup & Green</a>
                                             <span class="pro-td-subtitle">Local, clean & environmental</span>
                                             <span class="pro-td-subtitle">Created by: <span class="text-primary">CoreAd</span> </span>
@@ -618,7 +618,7 @@
                                     <!-- WIDGET ROW START -->
                                     <div class="widget_custom mb-20">
                                         <!-- MARK START -->
-                                        <div class="product-mark mr-15">
+                                        <div class="product-mark me-15">
                                             <div class="product-mark-label">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/project/mark-symbol.jpg">
                                             </div>
@@ -626,7 +626,7 @@
                                         <!-- MARK END -->
 
                                         <!-- TITLE START -->
-                                        <div class="pro-td mr-15">
+                                        <div class="pro-td me-15">
                                             <a href="#" class="pro-td-title">Cup & Green</a>
                                             <span class="pro-td-subtitle">Local, clean & environmental</span>
                                             <span class="pro-td-subtitle">Created by: <span class="text-primary">CoreAd</span> </span>
@@ -644,7 +644,7 @@
                                     <!-- WIDGET ROW START -->
                                     <div class="widget_custom">
                                         <!-- MARK START -->
-                                        <div class="product-mark mr-15">
+                                        <div class="product-mark me-15">
                                             <div class="product-mark-label">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/project/mark-symbol.jpg">
                                             </div>
@@ -652,7 +652,7 @@
                                         <!-- MARK END -->
 
                                         <!-- TITLE START -->
-                                        <div class="pro-td mr-15">
+                                        <div class="pro-td me-15">
                                             <a href="#" class="pro-td-title">Cup & Green</a>
                                             <span class="pro-td-subtitle">Local, clean & environmental</span>
                                             <span class="pro-td-subtitle">Created by: <span class="text-primary">CoreAd</span> </span>
@@ -684,7 +684,7 @@
                                     </div>
                                     <div class="card-head-toolbar">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 33px, 0px);">
@@ -840,7 +840,7 @@
                                     </div>
                                     <div class="card-head-toolbar">
                                         <div class="dropdown dropdown-inline">
-                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-lg" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="flaticon-more-1"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 33px, 0px);">
@@ -890,7 +890,7 @@
                                     <!-- WIDGET ROW START -->
                                     <div class="widget_custom mb-20">
                                         <!-- MARK START -->
-                                        <div class="product-mark mr-15">
+                                        <div class="product-mark me-15">
                                             <div class="product-mark-label-sm">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/project/plurk.svg">
                                             </div>
@@ -898,7 +898,7 @@
                                         <!-- MARK END -->
 
                                         <!-- TITLE START -->
-                                        <div class="pro-td mr-15">
+                                        <div class="pro-td me-15">
                                             <a href="#" class="pro-td-title">Top Authors</a>
                                             <span class="pro-td-subtitle">5 day ago</span>
                                         </div>
@@ -911,7 +911,7 @@
                                     <!-- WIDGET ROW START -->
                                     <div class="widget_custom mb-20">
                                         <!-- MARK START -->
-                                        <div class="product-mark mr-15">
+                                        <div class="product-mark me-15">
                                             <div class="product-mark-label-sm">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/project/plurk.svg">
                                             </div>
@@ -919,7 +919,7 @@
                                         <!-- MARK END -->
 
                                         <!-- TITLE START -->
-                                        <div class="pro-td mr-15">
+                                        <div class="pro-td me-15">
                                             <a href="#" class="pro-td-title">Top Authors</a>
                                             <span class="pro-td-subtitle">5 day ago</span>
                                         </div>
@@ -932,7 +932,7 @@
                                     <!-- WIDGET ROW START -->
                                     <div class="widget_custom mb-20">
                                         <!-- MARK START -->
-                                        <div class="product-mark mr-15">
+                                        <div class="product-mark me-15">
                                             <div class="product-mark-label-sm">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/project/plurk.svg">
                                             </div>
@@ -940,7 +940,7 @@
                                         <!-- MARK END -->
 
                                         <!-- TITLE START -->
-                                        <div class="pro-td mr-15">
+                                        <div class="pro-td me-15">
                                             <a href="#" class="pro-td-title">Top Authors</a>
                                             <span class="pro-td-subtitle">5 day ago</span>
                                         </div>
@@ -953,7 +953,7 @@
                                     <!-- WIDGET ROW START -->
                                     <div class="widget_custom mb-20">
                                         <!-- MARK START -->
-                                        <div class="product-mark mr-15">
+                                        <div class="product-mark me-15">
                                             <div class="product-mark-label-sm">
                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/project/plurk.svg">
                                             </div>
@@ -961,7 +961,7 @@
                                         <!-- MARK END -->
 
                                         <!-- TITLE START -->
-                                        <div class="pro-td mr-15">
+                                        <div class="pro-td me-15">
                                             <a href="#" class="pro-td-title">Top Authors</a>
                                             <span class="pro-td-subtitle">5 day ago</span>
                                         </div>

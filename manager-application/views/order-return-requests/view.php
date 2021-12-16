@@ -1,10 +1,10 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 echo $msgsSrchForm->getFormHtml(); ?>
 
 <main class="main">
     <div class="container">
-        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>    <div class="row">
+        <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?> <div class="row">
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-head">
@@ -95,7 +95,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                             </h3>
                         </div>
                         <div class="card-toolbar">
-                            <a href="javascript:void(0);" class="btn btn-icon btn-outline-brand btn-add" onclick="addNewComment(<?php echo $orrequestId; ?>)" title="<?php echo Labels::getLabel('LBL_NEW_COMMENT', $siteLangId); ?>" data-toggle='tooltip' data-placement='top'>
+                            <a href="javascript:void(0);" class="btn btn-icon btn-outline-brand btn-add" onclick="addNewComment(<?php echo $orrequestId; ?>)" title="<?php echo Labels::getLabel('LBL_NEW_COMMENT', $siteLangId); ?>" data-bs-toggle='tooltip' data-placement='top'>
                                 <svg class="svg" width="18" height="18">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
                                     </use>
@@ -162,30 +162,30 @@ echo $msgsSrchForm->getFormHtml(); ?>
                             </div>
                         </div>
                         <div class="card-body">
-                            <ul class="list-text">
+                            <ul class="list-stats">
                                 <?php if (!empty($order['buyer_name'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_CUSTOMER_NAME', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['buyer_name']; ?></span>
                                     </li>
                                 <?php } ?>
 
                                 <?php if (!empty($order['buyer_username'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_CUSTOMER_USERNAME', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['buyer_username']; ?></span>
                                     </li>
                                 <?php } ?>
 
                                 <?php if (!empty($order['buyer_email'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_EMAIL_ID', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['buyer_email']; ?></span>
                                     </li>
                                 <?php } ?>
 
                                 <?php if (!empty($order['buyer_phone'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['buyer_phone']; ?></span>
                                     </li>
@@ -198,7 +198,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                 <!-- Seller Information -->
                 <?php if (!empty($order['op_shop_name']) || !empty($order['seller_name']) || !empty($order['seller_email']) || !empty($order['seller_phone'])) { ?>
                     <div class="card">
-                        <div class="card-head dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block1" aria-expanded="false" aria-controls="order-block1">
+                        <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block1" aria-expanded="false" aria-controls="order-block1">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><i class="fas fa-address-card"></i>
                                     <?php echo Labels::getLabel('LBL_SELLER_INFORMATION', $siteLangId); ?>
@@ -207,30 +207,30 @@ echo $msgsSrchForm->getFormHtml(); ?>
                             <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
                         <div class="card-body collapse" id="order-block1">
-                            <ul class="list-text">
+                            <ul class="list-stats">
                                 <?php if (!empty($order['op_shop_name'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_SHOP_NAME', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['op_shop_name']; ?></span>
                                     </li>
                                 <?php } ?>
 
                                 <?php if (!empty($order['seller_name'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_SELLER_NAME', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['seller_name']; ?></span>
                                     </li>
                                 <?php } ?>
 
                                 <?php if (!empty($order['seller_email'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_EMAIL_ID', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['seller_email']; ?></span>
                                     </li>
                                 <?php } ?>
 
                                 <?php if (!empty($order['seller_phone'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['seller_phone']; ?></span>
                                     </li>

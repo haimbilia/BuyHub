@@ -113,7 +113,7 @@
 
                                                     </td>
                                                     <td data-field="Actions" data-autohide-disabled="false" class="datatable__cell"><span style="overflow: visible; position: relative; width: 110px;">
-                                                            <div class="dropdown"> <a data-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="false"> <i class="la la-ellipsis-h"></i> </a>
+                                                            <div class="dropdown"> <a data-bs-toggle="dropdown" class="btn btn-sm btn-clean btn-icon btn-icon-md" aria-expanded="false"> <i class="la la-ellipsis-h"></i> </a>
                                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim " x-placement="bottom-end">
                                                                     <a href="#" class="dropdown-item">Duplicate</a>
                                                                     <a href="#" class="dropdown-item">Make Default</a>

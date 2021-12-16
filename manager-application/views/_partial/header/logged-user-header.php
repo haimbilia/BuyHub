@@ -24,7 +24,7 @@
                     <div class="main-header-toolbar">
                         <div class="header-action">
                             <div class="header-action__item">
-                                <a class="header-action__trigger quickSearchMain" href="javascript:void(0);" data-toggle="modal" data-target="#search-main">
+                                <a class="header-action__trigger quickSearchMain" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#search-main">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-search">
@@ -54,7 +54,7 @@
                                 </a>
                             </div>
                             <div class="header-action__item dropdown">
-                                <a class="header-action__trigger dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void();" title="<?php echo Labels::getLabel('LBL_Message', $siteLangId); ?>">
+                                <a class="header-action__trigger dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void();" title="<?php echo Labels::getLabel('LBL_Message', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
@@ -342,7 +342,7 @@
                                 </div>
                             </div>
                             <div class="header-action__item dropdown header-account">
-                                <a class="dropdown-toggle no-after" data-toggle="dropdown" href="javascript:void(0)">
+                                <a class="dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
                                     <span class="header-account__img">
                                         <img aria-expanded="false" src="<?php echo UrlHelper::generateFileUrl('Image', 'profileImage', array(AdminAuthentication::getLoggedAdminId(), 'croped', true)); ?>" alt="">
                                     </span>
@@ -370,7 +370,7 @@
                                     <div class="separator m-0"></div>
                                     <nav class="nav nav--header-account">
                                         <?php if (1 < count($languages)) { ?>
-                                            <a class="language-selector collapsed" data-toggle="collapse" href="#languages" role="button" aria-expanded="false" aria-controls="languages">
+                                            <a class="language-selector collapsed" data-bs-toggle="collapse" href="#languages" role="button" aria-expanded="false" aria-controls="languages">
                                                 <?php echo Labels::getLabel('NAV_LANGUAGES', $siteLangId) ?>
                                                 <span class="selected-language">
                                                     <?php echo CommonHelper::getLangCode() ?>
@@ -400,8 +400,8 @@
                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
                     <div class="alert-text"><?php echo $pageData['plang_warring_msg']; ?></div>
                     <div class="alert-close">
-                        <button type="button" class="close closeAlertJs <?php echo 'alert_' . $pageData['plang_id']; ?>" data-dismiss="alert" aria-label="Close" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>">
-                            <span aria-hidden="true"><i class="la la-close"></i></span>
+                        <button type="button" class="btn-close closeAlertJs <?php echo 'alert_' . $pageData['plang_id']; ?>" data-bs-dismiss="alert" aria-label="Close" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>">
+
                         </button>
                     </div>
                 </div>

@@ -42,8 +42,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -85,7 +85,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Basic demo </h6>
                                                 <div class="">
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#modal_1"> Launch
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#modal_1"> Launch
                                                         Modal</button>
                                                 </div>
                                             </div>
@@ -99,7 +99,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Scrollable fixed content</h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#modal_1_2"> Launch
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#modal_1_2"> Launch
                                                         Modal</button>
                                                 </div>
                                             </div>
@@ -114,7 +114,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Scrolling long content</h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#modal_2"> Launch
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#modal_2"> Launch
                                                         Modal</button>
                                                 </div>
                                             </div>
@@ -127,7 +127,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Tooltips and popovers</h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#modal_3"> Launch
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#modal_3"> Launch
                                                         Modal</button>
                                                 </div>
                                             </div>
@@ -140,7 +140,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Large modal</h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#modal_4">Launch
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#modal_4">Launch
                                                         Modal</button>
                                                 </div>
                                             </div>
@@ -153,7 +153,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Small modal</h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#modal_5">Launch
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#modal_5">Launch
                                                         Modal</button>
                                                 </div>
                                             </div>
@@ -167,7 +167,7 @@
                                                 <h6 class="mb-4">Vertically centered
                                                 </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#modal_6"> Launch
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#modal_6"> Launch
                                                         Modal</button>
                                                 </div>
                                             </div>
@@ -182,7 +182,7 @@
                                                 <h6 class="mb-4">Stick to the bottom right
                                                 </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#modal_7"> Launch
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#modal_7"> Launch
                                                         Modal</button>
                                                 </div>
                                             </div>
@@ -196,7 +196,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Blank Modal</h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#basic-modal-preview">
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#basic-modal-preview">
                                                         Launch
                                                         Modal</button>
                                                 </div>
@@ -212,7 +212,7 @@
                                                 <h6 class="mb-4">Programmatically Show/Hide Modal
                                                 </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#programmatically-show-modal">
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#programmatically-show-modal">
                                                         Launch Modal</button>
                                                 </div>
                                             </div>
@@ -227,7 +227,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Warning Modal </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#warning-modal-preview">
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#warning-modal-preview">
                                                         Launch
                                                         Modal</button>
                                                 </div>
@@ -243,7 +243,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Modal With Close Button </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#button-modal-preview">
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#button-modal-preview">
                                                         Launch
                                                         Modal</button>
                                                 </div>
@@ -258,7 +258,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Static Backdrop Modal </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#static-backdrop-modal-preview"> Launch
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#static-backdrop-modal-preview"> Launch
                                                         Modal</button>
                                                 </div>
                                             </div>
@@ -271,7 +271,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Overlapping Modal </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#overlapping-modal-preview">
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#overlapping-modal-preview">
                                                         Launch Modal</button>
                                                 </div>
                                             </div>
@@ -284,7 +284,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Header & Footer Modal </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#header-footer-modal-preview">
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#header-footer-modal-preview">
                                                         Launch Modal</button>
                                                 </div>
                                             </div>
@@ -298,7 +298,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Delete Modal </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#delete-modal-preview">
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#delete-modal-preview">
                                                         Launch
                                                         Modal</button>
                                                 </div>
@@ -312,7 +312,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Success Modal </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#success-modal-preview">
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#success-modal-preview">
                                                         Launch
                                                         Modal</button>
                                                 </div>
@@ -326,7 +326,7 @@
                                             <div class="py-5">
                                                 <h6 class="mb-4">Tiny Slider Modal </h6>
                                                 <div>
-                                                    <button type="button" class="btn btn-brand btn-sm" data-toggle="modal" data-target="#tiny-slider-modal-preview">
+                                                    <button type="button" class="btn btn-brand btn-sm" data-bs-toggle="modal" data-bs-target="#tiny-slider-modal-preview">
                                                         Launch Modal</button>
                                                 </div>
                                             </div>
@@ -344,16 +344,16 @@
 
                                                 <div class="text-center">
                                                     <!-- BEGIN: Small Modal Toggle -->
-                                                    <a href="javascript:;" data-toggle="modal" data-target="#small-modal-size-preview" class="btn btn-brand btn-sm mr-1 mb-2">Show Small Modal</a>
+                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#small-modal-size-preview" class="btn btn-brand btn-sm me-1 mb-2">Show Small Modal</a>
                                                     <!-- END: Small Modal Toggle -->
                                                     <!-- BEGIN: Medium Modal Toggle -->
-                                                    <a href="javascript:;" data-toggle="modal" data-target="#medium-modal-size-preview" class="btn btn-brand btn-sm mr-1 mb-2">Show Medium Modal</a>
+                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#medium-modal-size-preview" class="btn btn-brand btn-sm me-1 mb-2">Show Medium Modal</a>
                                                     <!-- END: Medium Modal Toggle -->
                                                     <!-- BEGIN: Large Modal Toggle -->
-                                                    <a href="javascript:;" data-toggle="modal" data-target="#large-modal-size-preview" class="btn btn-brand btn-sm mr-1 mb-2">Show Large Modal</a>
+                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#large-modal-size-preview" class="btn btn-brand btn-sm me-1 mb-2">Show Large Modal</a>
                                                     <!-- END: Large Modal Toggle -->
                                                     <!-- BEGIN: Super Large Modal Toggle -->
-                                                    <a href="javascript:;" data-toggle="modal" data-target="#superlarge-modal-size-preview" class="btn btn-brand btn-sm mr-1 mb-2">Show Superlarge
+                                                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#superlarge-modal-size-preview" class="btn btn-brand btn-sm me-1 mb-2">Show Superlarge
                                                         Modal</a>
                                                     <!-- END: Super Large Modal Toggle -->
 
@@ -375,7 +375,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h6 class="modal-title" id="exampleModalLabel">Modal title</h6>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -393,7 +393,7 @@
                                         like Aldus PageMaker including versions of Lorem Ipsum.</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-brand">Save changes</button>
                                 </div>
                             </div>
@@ -407,7 +407,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h6 class="modal-title" id="exampleModalLabel">Modal title</h6>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -458,7 +458,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-brand">Save changes</button>
                                 </div>
                             </div>
@@ -472,7 +472,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h6 class="modal-title" id="exampleModalLongTitle">Modal title</h6>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -548,7 +548,7 @@
                                     </p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-brand">Save changes</button>
                                 </div>
                             </div>
@@ -562,20 +562,20 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h6 class="modal-title" id="exampleModalLabel">Modal title</h6>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="modal-body">
                                     <h6>Popover in a modal</h6>
-                                    <p>This <a href="#" role="button" data-toggle="popover" class="btn btn-secondary popover-test" title="" data-content="Popover body content is set in this attribute." data-original-title="Popover title">button</a> triggers a popover on
+                                    <p>This <a href="#" role="button" data-bs-toggle="popover" class="btn btn-secondary popover-test" title="" data-content="Popover body content is set in this attribute." data-original-title="Popover title">button</a> triggers a popover on
                                         click.</p>
                                     <hr>
                                     <h6>Tooltips in a modal</h6>
-                                    <p><a href="#" class="tooltip-test" data-toggle="tooltip" title="" data-original-title="Tooltip">This link</a> and <a href="#" data-toggle="tooltip" class="tooltip-test" title="" data-original-title="Tooltip">that link</a> have tooltips on
+                                    <p><a href="#" class="tooltip-test" data-bs-toggle="tooltip" title="" data-original-title="Tooltip">This link</a> and <a href="#" data-bs-toggle="tooltip" class="tooltip-test" title="" data-original-title="Tooltip">that link</a> have tooltips on
                                         hover.</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-brand">Save changes</button>
                                 </div>
                             </div>
@@ -589,7 +589,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h6 class="modal-title" id="exampleModalLabel">New message</h6>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -605,7 +605,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-brand">Send message</button>
                                 </div>
                             </div>
@@ -619,7 +619,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h6 class="modal-title" id="exampleModalLabel">New message</h6>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -635,7 +635,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-brand">Send message</button>
                                 </div>
                             </div>
@@ -649,7 +649,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h6 class="modal-title" id="exampleModalLongTitle">Modal title</h6>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -667,7 +667,7 @@
                                         like Aldus PageMaker including versions of Lorem Ipsum.</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-brand">Save changes</button>
                                 </div>
                             </div>
@@ -680,7 +680,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h6 class="modal-title" id="exampleModalLabel">Modal title</h6>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -698,7 +698,7 @@
                                         like Aldus PageMaker including versions of Lorem Ipsum.</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-brand">Save changes</button>
                                 </div>
                             </div>
@@ -762,10 +762,10 @@
                             <div class="modal-content">
                                 <div class="modal-body p-10 text-center">
                                     <!-- BEGIN: Hide Modal Toggle -->
-                                    <a id="programmatically-hide-modal" href="javascript:;" class="btn btn-brand mr-1">Hide Modal</a>
+                                    <a id="programmatically-hide-modal" href="javascript:;" class="btn btn-brand me-1">Hide Modal</a>
                                     <!-- END: Hide Modal Toggle -->
                                     <!-- BEGIN: Toggle Modal Toggle -->
-                                    <a id="programmatically-toggle-modal" href="javascript:;" class="btn btn-brand mr-1">Toggle Modal</a>
+                                    <a id="programmatically-toggle-modal" href="javascript:;" class="btn btn-brand me-1">Toggle Modal</a>
                                     <!-- END: Toggle Modal Toggle -->
                                 </div>
                             </div>
@@ -782,7 +782,7 @@
                                             <p>Something went wrong!</p>
                                         </div>
                                         <div class="pb-5 pb-8 text-center">
-                                            <button type="button" data-dismiss="modal" class="btn btn-brand btn-wide">Ok</button>
+                                            <button type="button" data-bs-dismiss="modal" class="btn btn-brand btn-wide">Ok</button>
                                         </div>
                                         <div class="p-4 text-center border-top border-gray-200 dark:border-dark-5">
                                             <a href="" class="link">Why do I have this
@@ -798,8 +798,8 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                                     </button>
                                 </div>
                                 <div class="modal-body p-0">
@@ -810,7 +810,7 @@
                                             <p>Modal with close button</p>
                                         </div>
                                         <div class="pb-5 pb-8 text-center">
-                                            <button type="button" data-dismiss="modal" class="btn btn-brand btn-wide">Ok</button>
+                                            <button type="button" data-bs-dismiss="modal" class="btn btn-brand btn-wide">Ok</button>
                                         </div>
                                     </div>
                                 </div>
@@ -828,7 +828,7 @@
                                         <div class="text-gray-600 mt-2">Something went wrong!</div>
                                     </div>
                                     <div class="px-5 pb-8 text-center">
-                                        <button type="button" data-dismiss="modal" class="btn btn-wide  btn-brand">Ok</button>
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-wide  btn-brand">Ok</button>
                                     </div>
                                     <div class="p-5 text-center border-t border-gray-200 dark:border-dark-5">
                                         <a href="" class="text-theme-17 dark:text-gray-300">Why do I have this
@@ -841,7 +841,7 @@
                     <div id="button-modal-preview" class="modal fade" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <a data-dismiss="modal" href="javascript:;">
+                                <a data-bs-dismiss="modal" href="javascript:;">
                                     <i data-feather="x" class="w-8 h-8 text-gray-500"></i>
                                 </a>
                                 <div class="modal-body p-0">
@@ -851,7 +851,7 @@
                                         <div class="text-gray-600 mt-2">Modal with close button</div>
                                     </div>
                                     <div class="p-2 pb-5 text-center">
-                                        <button type="button" data-dismiss="modal" class="btn btn-brand btn-wide ">Ok</button>
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-brand btn-wide ">Ok</button>
                                     </div>
                                 </div>
                             </div>
@@ -865,7 +865,7 @@
                                         <div class="mb-5">I will not close if you click outside me. Don't even
                                             try
                                             to press escape key.</div>
-                                        <button type="button" data-dismiss="modal" class="btn btn-brand btn-wide ">Ok</button>
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-brand btn-wide ">Ok</button>
                                     </div>
                                 </div>
                             </div>
@@ -878,7 +878,7 @@
                                     <div class="text-center">
                                         <div class="mb-5">Click button bellow to show overlapping modal!</div>
                                         <!-- BEGIN: Overlapping Modal Toggle -->
-                                        <a href="javascript:;" data-toggle="modal" data-target="#next-overlapping-modal-preview" class="btn btn-brand">Show
+                                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#next-overlapping-modal-preview" class="btn btn-brand">Show
                                             Overlapping Modal</a>
                                         <!-- END: Overlapping Modal Toggle -->
                                     </div>
@@ -955,7 +955,7 @@
 
 
                                 <div class="modal-footer text-right"><button type="reset" class="btn btn-outline-brand">Cancel</button>
-                                    <button type="submit" class="btn btn-brand  ml-auto">Update</button>
+                                    <button type="submit" class="btn btn-brand  ms-auto">Update</button>
 
 
                                 </div>
@@ -978,7 +978,7 @@
                                         </p>
                                     </div>
                                     <div class="pb-5 pb-8 text-center">
-                                        <button type="button" data-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300 mr-1">Cancel</button>
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-outline-secondary btn-wide dark:border-dark-5 dark:text-gray-300 me-1">Cancel</button>
                                         <button type="button" class="btn btn-danger btn-wide ">Delete</button>
                                     </div>
                                 </div>
@@ -997,7 +997,7 @@
                                         <p>You clicked the button!</p>
                                     </div>
                                     <div class="pb-5 pb-8 text-center">
-                                        <button type="button" data-dismiss="modal" class="btn btn-brand btn-wide ">Ok</button>
+                                        <button type="button" data-bs-dismiss="modal" class="btn btn-brand btn-wide ">Ok</button>
                                     </div>
                                 </div>
                             </div>

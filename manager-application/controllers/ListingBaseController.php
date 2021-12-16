@@ -85,7 +85,7 @@ class ListingBaseController extends AdminBaseController
 
         $data = [];
         foreach ($this->formLangFields as $fld) {
-            $data[$fld] = $post[$fld];
+            $data[$fld] = $post[$fld] ?? '';
         }
 
         $this->setLangData($this->modelObj, $data, $lang_id);

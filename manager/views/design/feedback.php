@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -155,7 +155,7 @@
                                             <h3 class="text-bold">Or Reach Us by Live Chat</h3>
                                             <p>Base FAQ Question</p>
                                         </div>
-                                        <div class="align-right ml-auto btn-top-show">
+                                        <div class="align-right ms-auto btn-top-show">
                                             <button type="button" class="btn btn-primary btn-lg">Submit a Request</button>
                                         </div>
                                     </div>
@@ -170,7 +170,7 @@
                                             <h3 class="text-bold">Phone Call</h3>
                                             <p>Base FAQ Question</p>
                                         </div>
-                                        <div class="align-right ml-auto btn-top-show">
+                                        <div class="align-right ms-auto btn-top-show">
                                             <button type="button" class="btn btn-success btn-lg">Submit a Request</button>
                                         </div>
                                     </div>

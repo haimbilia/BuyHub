@@ -22,7 +22,7 @@
             <?php
             include 'includes/new-header.php';
             ?>
-            <button class="help-btn btn btn-light" data-toggle="modal" data-target="#help">
+            <button class="help-btn btn btn-light" data-bs-toggle="modal" data-bs-target="#help">
                 <span class="help_label">Help</span>
             </button>
             <div class="modal fixed-right fade" id="help" tabindex="-1" role="dialog" aria-labelledby="help" aria-hidden="true">
@@ -30,8 +30,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                             </button>
                         </div>
                         <div class="modal-body">
@@ -150,27 +150,27 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-brand" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#statistics-1" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#statistics-1" role="tab">
                                                     Sales
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#statistics-2" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#statistics-2" role="tab">
                                                     Sales Earnings
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#statistics-3" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#statistics-3" role="tab">
                                                     Buyer/seller Signups
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#statistics-4" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#statistics-4" role="tab">
                                                     Affiliate Signups
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#statistics-5" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#statistics-5" role="tab">
                                                     Products
                                                 </a>
                                             </li>
@@ -209,7 +209,7 @@
                                             </div>
                                             <div class="card-head--action">
                                                 <div class="dropdown dropdown-inline">
-                                                    <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="flaticon-more-1"></i>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -392,7 +392,7 @@
                                                             </figure>
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Michael Williams</a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -426,7 +426,7 @@
                                                             </figure>
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Maureen Biologist</a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -460,7 +460,7 @@
                                                             </figure>
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Aida Bugg</a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -495,7 +495,7 @@
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Olive Yew
                                                                 </a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -530,7 +530,7 @@
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Patty O'Furniture.
                                                                 </a>
-                                                                <span class="text-muted fw-bold">login@dummyid.com</span>
+                                                                <span class="text-muted">login@dummyid.com</span>
 
                                                             </div>
                                                         </div>
@@ -597,10 +597,10 @@
                                                 <tr>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
@@ -611,7 +611,7 @@
                                                         <div class="user-profile">
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -632,10 +632,10 @@
                                                 <tr>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
@@ -646,7 +646,7 @@
                                                         <div class="user-profile">
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -667,10 +667,10 @@
                                                 <tr>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
@@ -681,7 +681,7 @@
                                                         <div class="user-profile">
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -702,10 +702,10 @@
                                                 <tr>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
@@ -716,7 +716,7 @@
                                                         <div class="user-profile">
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -737,10 +737,10 @@
                                                 <tr>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
@@ -751,7 +751,7 @@
                                                         <div class="user-profile">
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -772,10 +772,10 @@
                                                 <tr>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
@@ -786,7 +786,7 @@
                                                         <div class="user-profile">
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -849,10 +849,10 @@
                                             <td>$1311</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 41%;" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">41%</div>
+                                                    <div class="fw-semi-bold ms-2">41%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -875,10 +875,10 @@
                                             <td>$1311</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 41%;" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">41%</div>
+                                                    <div class="fw-semi-bold ms-2">41%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -901,10 +901,10 @@
                                             <td>$539</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 27%;" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">27%</div>
+                                                    <div class="fw-semi-bold ms-2">27%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -927,10 +927,10 @@
                                             <td>$245</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 17%;" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">17%</div>
+                                                    <div class="fw-semi-bold ms-2">17%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -953,10 +953,10 @@
                                             <td>$234</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">7%</div>
+                                                    <div class="fw-semi-bold ms-2">7%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -979,10 +979,10 @@
                                             <td>$234</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">7%</div>
+                                                    <div class="fw-semi-bold ms-2">7%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -1005,10 +1005,10 @@
                                             <td>$234</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">7%</div>
+                                                    <div class="fw-semi-bold ms-2">7%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -1035,7 +1035,7 @@
                             <div class="card card-flush commerce-card">
                                 <div class="card-head">
                                     <div class="card-head-label">
-                                        <h6 class="h6"> Order Sales <i class="far fa-question-circle" data-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
+                                        <h6 class="h6"> Order Sales <i class="far fa-question-circle" data-bs-toggle="tooltip" data-placement="top" title="Tooltip on top"></i>
                                         </h6>
                                     </div>
                                 </div>

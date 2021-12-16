@@ -22,7 +22,7 @@
             include 'includes/new-header.php';
             ?>
 
-            <button class="help-btn btn btn-light" data-toggle="modal" data-target="#help">
+            <button class="help-btn btn btn-light" data-bs-toggle="modal" data-bs-target="#help">
                 <span class="help_label">Help</span>
             </button>
 
@@ -31,8 +31,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                             </button>
                         </div>
                         <div class="modal-body">
@@ -97,14 +97,14 @@
                                                 <div class="col-md-12">
                                                     <div class="input-group">
                                                         <input type="search" class="form-control" name="search" value="" placeholder="Search">
-                                                        <a class="btn advanced-trigger ml-2 collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                                        <a class="btn advanced-trigger ms-2 collapsed" data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                                             <svg class="svg" width="22" height="22">
                                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
                                                                 </use>
                                                             </svg>
                                                         </a>
                                                         <div class="input-group-append">
-                                                            <button type="button" class="btn btn-brand btn-wide ml-2">Search</button>
+                                                            <button type="button" class="btn btn-brand btn-wide ms-2">Search</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -356,20 +356,20 @@
                                                     <td>432</td>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <span>6+</span>
                                                             </a>
                                                         </div>
@@ -379,7 +379,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -408,7 +408,7 @@
                                                     <td class="align-right">
                                                         <ul class="actions">
                                                             <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#edit" title="Edit">
 
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
@@ -439,10 +439,10 @@
                                                     <td>
                                                         <div class="media-group">
 
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
@@ -454,7 +454,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -482,7 +482,7 @@
                                                     <td class="align-right">
                                                         <ul class="actions">
                                                             <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#edit" title="Edit">
 
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
@@ -512,16 +512,16 @@
                                                     <td>565</td>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
@@ -533,7 +533,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -562,7 +562,7 @@
                                                     <td class="align-right">
                                                         <ul class="actions">
                                                             <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#edit" title="Edit">
 
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
@@ -591,10 +591,10 @@
                                                     <td>877</td>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg" alt="image">
                                                             </a>
 
@@ -606,7 +606,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -636,7 +636,7 @@
                                                     <td class="align-right">
                                                         <ul class="actions">
                                                             <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#edit" title="Edit">
 
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
@@ -666,17 +666,17 @@
                                                     <td>
                                                         <div class="media-group">
 
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <span>6+</span>
                                                             </a>
                                                         </div>
@@ -686,7 +686,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -715,7 +715,7 @@
                                                     <td class="align-right">
                                                         <ul class="actions">
                                                             <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#edit" title="Edit">
 
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
@@ -744,18 +744,18 @@
                                                     <td>95</td>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg" alt="image">
                                                             </a>
 
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <span>6+</span>
                                                             </a>
                                                         </div>
@@ -765,7 +765,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -795,7 +795,7 @@
                                                     <td class="align-right">
                                                         <ul class="actions">
                                                             <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#edit" title="Edit">
 
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
@@ -824,18 +824,18 @@
                                                     <td>12</td>
                                                     <td>
                                                         <div class="media-group">
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
 
 
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <span>6+</span>
                                                             </a>
                                                         </div>
@@ -845,7 +845,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -873,7 +873,7 @@
                                                     <td class="align-right">
                                                         <ul class="actions">
                                                             <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#edit" title="Edit">
 
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
@@ -903,13 +903,13 @@
                                                     <td>
                                                         <div class="media-group">
 
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product2.jpg" alt="image">
-                                                            </a> <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            </a> <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg" alt="image">
                                                             </a>
 
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
 
@@ -921,7 +921,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -949,7 +949,7 @@
                                                     <td class="align-right">
                                                         <ul class="actions">
                                                             <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#edit" title="Edit">
 
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
@@ -980,16 +980,16 @@
                                                         <div class="media-group">
 
 
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product4.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <img data-aspect-ratio="1:1" src="<?php echo CONF_WEBROOT_URL; ?>images/products/product1.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media-sm media-circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
+                                                            <a href="#" class="media media-sm media-circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="avocado">
                                                                 <span>6+</span>
                                                             </a>
                                                         </div>
@@ -999,7 +999,7 @@
 
                                                             <div class="user-profile_data">
                                                                 <a class="user-profile_title" href="javascript:void(0)">Avocado</a>
-                                                                <span class="text-muted fw-bold">Doice & Gabbana
+                                                                <span class="text-muted">Doice & Gabbana
                                                                     Dolce & Gabbana D&g</span>
 
                                                             </div>
@@ -1029,7 +1029,7 @@
                                                     <td class="align-right">
                                                         <ul class="actions">
                                                             <li>
-                                                                <a href="#" data-toggle="modal" data-target="#edit" title="Edit">
+                                                                <a href="#" data-bs-toggle="modal" data-bs-target="#edit" title="Edit">
 
                                                                     <svg class="svg" width="18" height="18">
                                                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
@@ -1091,8 +1091,8 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="">Card title goes here</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                                         </button>
                                     </div>
                                     <form class="modal-body form form-edit">
@@ -1136,7 +1136,7 @@
                                                     <div class="form-group">
                                                         <label class="label">
                                                             <span class="required">Shop Name</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-toggle="tooltip" title="" data-original-title="Specify a target priorty" aria-label="Specify a target priorty" aria-describedby="tooltip849482"></i>
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="" data-original-title="Specify a target priorty" aria-label="Specify a target priorty" aria-describedby="tooltip849482"></i>
                                                         </label>
                                                         <input data-field-caption="Shop Name" type="text" name="shop_name" value="Jason's Store">
 

@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -184,22 +184,22 @@
                                                 <div class="widget__details">
                                                     <div class="section__content section__content--solid">
                                                         <div class="media-group">
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="John Myer">
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_1.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Alison Brandy">
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_10.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Selina Cranson">
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_11.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Luke Walls">
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                                 <img src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_3.jpg" alt="image">
                                                             </a>
-                                                            <a href="#" class="media media--sm media--circle" data-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
+                                                            <a href="#" class="media media--sm media--circle" data-bs-toggle="tooltip" data-skin="brand" data-placement="top" title="" data-original-title="Micheal York">
                                                                 <span>+3</span>
                                                             </a>
                                                         </div>
@@ -357,7 +357,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Latest
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
@@ -365,7 +365,7 @@
                                             <ul class="nav">
                                                 <li class="nav__head">
                                                     Export Options
-                                                    <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                    <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                 <rect x="0" y="0" width="24" height="24"></rect>
@@ -406,7 +406,7 @@
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
                                             <!--end::Nav-->
@@ -517,12 +517,12 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-pills nav-pills-sm nav-pills-label nav-pills-bold" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#widget31_tab1_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#widget31_tab1_content" role="tab">
                                                     Today
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#widget31_tab2_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#widget31_tab2_content" role="tab">
                                                     Week
                                                 </a>
                                             </li>
@@ -841,7 +841,7 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             Today
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-fit dropdown-menu-md dropdown-menu-right">
@@ -849,7 +849,7 @@
                                             <ul class="nav">
                                                 <li class="nav__head">
                                                     Export Options
-                                                    <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                    <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                 <rect x="0" y="0" width="24" height="24"></rect>
@@ -890,7 +890,7 @@
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
                                             <!--end::Nav-->
@@ -987,17 +987,17 @@
                                     <div class="card-head-toolbar">
                                         <ul class="nav nav-pills nav-pills-sm nav-pills-label nav-pills-bold" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-toggle="tab" href="#widget6_tab1_content" role="tab">
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#widget6_tab1_content" role="tab">
                                                     Latest
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#widget6_tab2_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#widget6_tab2_content" role="tab">
                                                     Week
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" data-toggle="tab" href="#widget6_tab3_content" role="tab">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#widget6_tab3_content" role="tab">
                                                     Month
                                                 </a>
                                             </li>

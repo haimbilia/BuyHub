@@ -34,7 +34,7 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
             <div class="row mb-4">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body pt-4 pl-4 pr-4 pb-4">
+                        <div class="card-body pt-4 ps-4 pe-4 pb-4">
                             <?php echo $frm->getFormTag();
                             $pNameFld = $frm->getField('shipprofile_name[' . $siteDefaultLangId . ']');
                             $pNameFld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Customers_won't_see_this", $siteLangId) . "</span>";
@@ -76,7 +76,7 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
                             if (!empty($languages) && count($languages) > 1) {
                             ?>
                                 <div class="accordion my-4" id="specification-accordion">
-                                    <h6 class="dropdown-toggle" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                                    <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
                                         <span>
                                             <?php
                                             echo Labels::getLabel('LBL_Language_Data', $siteLangId); ?>

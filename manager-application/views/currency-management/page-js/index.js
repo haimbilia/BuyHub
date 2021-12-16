@@ -30,15 +30,16 @@ $(document).ajaxComplete(function () {
                 });
                 bindData.then(
                     function (value) {
-                        fcom.ajax(fcom.makeUrl('CurrencyManagement', 'updateOrder'), value, function (res) {
+                        fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function (res) {
                             $.ykmsg.close();
                             fcom.removeLoader();
                             var ans = JSON.parse(res);
-                            if (ans.status == 1) {
-                                $.ykmsg.success(ans.msg);
+                            if (ans.status != 1) {
+                                $.ykmsg.error(ans.msg);
                                 return;
                             }
-                            $.ykmsg.error(ans.msg);
+                            $.ykmsg.success(ans.msg);
+                            reloadList();
                         });
                     },
                     function (error) {
@@ -47,8 +48,7 @@ $(document).ajaxComplete(function () {
                     }
                 );
             },
-        });
-        $("#orderStatuses > tbody").disableSelection();
+        }).disableSelection();
     };
 
     updateCurrencyRates = function (converterClass) {

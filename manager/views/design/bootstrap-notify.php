@@ -54,8 +54,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -483,7 +483,7 @@
                             <div class="card-foot">
                                 <div class="">
                                     <div class="row">
-                                        <div class="col-lg-9 ml-lg-auto">
+                                        <div class="col-lg-9 ms-lg-auto">
                                             <a href="javascript:;" id="notify_btn" class="btn btn-success">Display</a>
                                             <button type="reset" class="btn btn-secondary">Reset</button>
                                         </div>

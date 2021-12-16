@@ -66,8 +66,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -105,15 +105,15 @@
                                         </h3>
                                     </div>
                                     <div class="card-head-toolbar">
-                                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown">
+                                        <a href="#" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown">
                                             <i class="flaticon-more-1"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-animdropdown-menu-fit dropdown-menu-md">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-md">
                                             <!--begin::Nav-->
                                             <ul class="nav nav--block">
                                                 <li class="nav__head">
                                                     Export Options
-                                                    <span data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
+                                                    <span data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">
                                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon svg-icon--brand svg-icon--md1">
                                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                 <rect x="0" y="0" width="24" height="24"></rect>
@@ -154,7 +154,7 @@
                                                 <li class="nav__separator"></li>
                                                 <li class="nav__foot">
                                                     <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
+                                                    <a class="btn btn-clean btn-bold btn-sm" href="#" data-bs-toggle="tooltip" data-placement="right" title="" data-original-title="Click to learn more...">Learn more</a>
                                                 </li>
                                             </ul>
                                             <!--end::Nav-->
@@ -278,7 +278,7 @@
                                                         </span>
                                                     </span>
                                                 </a>
-                                                <a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
+                                                <a href="#" class="widget__item" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                                     <span class="widget__section">
                                                         <span class="widget__icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
@@ -293,7 +293,7 @@
                                                         </span>
                                                     </span>
                                                 </a>
-                                                <a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
+                                                <a href="#" class="widget__item" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                                     <span class="widget__section">
                                                         <span class="widget__icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
@@ -308,7 +308,7 @@
                                                     </span>
                                                     <span class="badge badge-unified-brand badge-inline badge-bolder">new</span>
                                                 </a>
-                                                <a href="#" class="widget__item" data-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
+                                                <a href="#" class="widget__item" data-bs-toggle="tooltip" title="" data-placement="right" data-original-title="Coming soon...">
                                                     <span class="widget__section">
                                                         <span class="widget__icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-icon">
@@ -346,7 +346,7 @@
                                             <div class="card-head-toolbar">
                                                 <div class="card-head-wrapper">
                                                     <div class="dropdown dropdown-inline">
-                                                        <button type="button" class="btn btn-label-brand btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <button type="button" class="btn btn-label-brand btn-sm btn-icon btn-icon-md" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             <i class="flaticon2-gear"></i>
                                                         </button>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -406,11 +406,11 @@
                                                             <div class="col-lg-9 col-xl-6">
                                                                 <div class="avatar avatar--outline" id="user_avatar">
                                                                     <div class="avatar__holder" style="background-image: url(media/users/100_1.jpg&quot;);"></div>
-                                                                    <label class="avatar__upload" data-toggle="tooltip" title="" data-original-title="Change avatar">
+                                                                    <label class="avatar__upload" data-bs-toggle="tooltip" title="" data-original-title="Change avatar">
                                                                         <i class="fa fa-pen"></i>
                                                                         <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                                                                     </label>
-                                                                    <span class="avatar__cancel" data-toggle="tooltip" title="" data-original-title="Cancel avatar">
+                                                                    <span class="avatar__cancel" data-bs-toggle="tooltip" title="" data-original-title="Cancel avatar">
                                                                         <i class="fa fa-times"></i>
                                                                     </span>
                                                                 </div>

@@ -254,7 +254,7 @@ class RibbonsController extends ListingBaseController
         $langId = FatUtility::int($langId);
         $langId = 1 > $langId ? $this->siteLangId : $langId;
 
-        $frm = new Form('frmBadgeLang');
+        $frm = new Form('frmRibbonLang');
         $frm->addHiddenField('', 'badge_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
 

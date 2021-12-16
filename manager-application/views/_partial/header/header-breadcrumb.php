@@ -46,7 +46,7 @@
             $label = $newRecordBtnAttrs['label'] ?? $label;
         }
     ?>
-        <a href="<?php echo $href; ?>" class="btn btn-icon btn-outline-brand btn-add" onclick="<?php echo $onclick; ?>" title="<?php echo $title; ?>" data-toggle='tooltip' data-placement='top'>
+        <a href="<?php echo $href; ?>" class="btn btn-icon btn-outline-brand btn-add" onclick="<?php echo $onclick; ?>" title="<?php echo $title; ?>" data-bs-toggle='tooltip' data-placement='top'>
             <svg class="svg" width="18" height="18">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
                 </use>

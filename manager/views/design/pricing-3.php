@@ -52,8 +52,8 @@
                                     Reports
                                 </a>
 
-                                <div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
-                                    <a href="#" class="btn btn-danger subheader__btn-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown dropdown-inline" data-bs-toggle="tooltip" title="" data-placement="top" data-original-title="Quick actions">
+                                    <a href="#" class="btn btn-danger subheader__btn-options" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Products
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-anim ">
@@ -77,8 +77,8 @@
                         <div class="card-body pd-0">
                             <div class="pricingd-block">
                                 <div class="bg-position bg-brand align-center">
-                                    <div class="text-white title-lg mr-tb-30">Transparent & Simple Pricing</div>
-                                    <div class="select-btn mr-tb-30">
+                                    <div class="text-white title-lg me-tb-30">Transparent & Simple Pricing</div>
+                                    <div class="select-btn me-tb-30">
                                         <span><a href="#" class="btn-grp-select bdr-round-left active">Annual Plans</a></span>
                                         <span><a href="#" class="btn-grp-select bdr-round-right">Monthly Plans</a></span>
                                     </div>
@@ -185,7 +185,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Selected Records</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true"></span>
                                 </button>
                             </div>
@@ -197,7 +197,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-brand" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-brand" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>

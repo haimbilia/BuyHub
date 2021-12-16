@@ -29,9 +29,9 @@
 
             var headerHtm = '<div class="modal-header">';
             var closeBtnHtm =
-                '<button type="button" class="close" data-dismiss="modal" aria-label="' +
+                '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="' +
                 langLbl.close +
-                '"><span aria-hidden="true">&times;</span></button>';
+                '"></button>';
             if (1 > $(contentBody).find(".modal-header").length) {
                 $(contentBody).prepend(headerHtm + closeBtnHtm + "</div>");
             } else if (

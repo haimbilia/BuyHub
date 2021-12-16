@@ -22,7 +22,7 @@
             include 'includes/new-header.php';
             ?>
 
-            <button class="help-btn btn btn-light" data-toggle="modal" data-target="#help">
+            <button class="help-btn btn btn-light" data-bs-toggle="modal" data-bs-target="#help">
                 <span class="help_label">Help</span>
             </button>
 
@@ -31,8 +31,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                             </button>
                         </div>
                         <div class="modal-body">
@@ -78,7 +78,7 @@
                                             <div class="d-flex align-items-center">
                                                 <input type="search" placeholder="keyword">
                                                 <div class="dropdown">
-                                                    <a class="dropdown-toggle no-after p-2" data-toggle="dropdown" href="">
+                                                    <a class="dropdown-toggle no-after p-2" data-bs-toggle="dropdown" href="">
                                                         <span class="icon">
                                                             <svg class="svg" width="20" height="20">
                                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-filters">
@@ -374,8 +374,8 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="">Edit</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                                         </button>
                                     </div>
                                     <form class="modal-body form form-edit">
@@ -405,7 +405,7 @@
                                                     <div class="form-group">
                                                         <label class="label">
                                                             <span class="required">Shop Name</span>
-                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-toggle="tooltip" title="" data-original-title="Specify a target priorty" aria-label="Specify a target priorty" aria-describedby="tooltip849482"></i>
+                                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="" data-original-title="Specify a target priorty" aria-label="Specify a target priorty" aria-describedby="tooltip849482"></i>
                                                         </label>
                                                         <input data-field-caption="Shop Name" type="text" name="shop_name" value="Jason's Store">
                                                     </div>

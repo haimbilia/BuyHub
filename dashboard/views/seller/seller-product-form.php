@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
         <?php
         $data = [
@@ -25,13 +25,13 @@
                     <ul class="tabs_nav-js">
                         <li>
                             <a class="tabs_001" rel="tabs_001" href="javascript:void(0)">
-                                <?php echo Labels::getLabel('LBL_Initial_Setup', $siteLangId); ?> <i class="tabs-icon fa fa-info-circle"  data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Setup_Basic_Details', $siteLangId); ?>">
+                                <?php echo Labels::getLabel('LBL_Initial_Setup', $siteLangId); ?> <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Setup_Basic_Details', $siteLangId); ?>">
                                 </i>
                             </a>
                         </li>
                         <li><a rel="tabs_002" class="tabs_002" href="javascript:void(0)">
-                            <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
-                            <i class="tabs-icon fa fa-info-circle"  data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Downloadable_files/Links', $siteLangId); ?>"></i></a>
+                                <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
+                                <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Downloadable_files/Links', $siteLangId); ?>"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -48,11 +48,11 @@
     </div>
 </main>
 <script>
-var product_id = <?php echo $product_id ;?>;
-var selprod_id = <?php echo $selprod_id ;?>;
-var canAttachDigitalDownload = <?php echo $canAttachDigitalDownload ;?>;
+    var product_id = <?php echo $product_id; ?>;
+    var selprod_id = <?php echo $selprod_id; ?>;
+    var canAttachDigitalDownload = <?php echo $canAttachDigitalDownload; ?>;
 
-$(document).ready(function () {
-    sellerProductForm(product_id, selprod_id);
-});
+    $(document).ready(function() {
+        sellerProductForm(product_id, selprod_id);
+    });
 </script>

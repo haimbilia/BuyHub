@@ -1459,3 +1459,7 @@ ALTER TABLE `tbl_badges` CHANGE `badge_condition_type` `badge_trigger_type` TINY
 
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_USED_%charsTyped%_of_%charsTotal%_CHARS_JS.', '1', 'used %charsTyped% of %charsTotal% chars.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+SELECT @i := 0;
+UPDATE tbl_collection_to_records SET ctr_display_order = (SELECT @i := @i + 1);
+-- ---------------TV-9.4.0.20211215----------------

@@ -225,7 +225,7 @@ class BrandsController extends ListingBaseController
 
         $frm = new Form('frmProdBrand', array('id' => 'frmProdBrand'));
         $frm->addHiddenField('', 'brand_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('FRM_Brand_Name', $this->siteLangId), 'brand_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_BRAND_NAME', $this->siteLangId), 'brand_name');
         //$frm->addRequiredField(Labels::getLabel('FRM_Brand_Identifier', $this->siteLangId), 'brand_identifier');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_BRAND_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
@@ -463,7 +463,7 @@ class BrandsController extends ListingBaseController
         $this->_template->render(false, false);
     }
 
-    public function removeBrandMedia($brand_id, $imageType = '', $afileId = 0)
+    public function removeMedia($brand_id, $imageType = '', $afileId = 0)
     {
         $brand_id = FatUtility::int($brand_id);
         if (!$brand_id) {
@@ -555,6 +555,11 @@ class BrandsController extends ListingBaseController
 
         if (isset($post['brand_active'])) {
             $srch->addCondition('brand_active', '=', $post['brand_active']);
+        }
+
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('brand_id', 'NOT IN', $excludeRecords);
         }
 
         $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);

@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $selProdId = (!empty($data['splprice_selprod_id']) ? $data['splprice_selprod_id'] : 0);
 $frm = SellerProduct::specialPriceForm($adminLangId);
-$prodName = $frm->addSelectBox(Labels::getLabel('LBL_Product', $adminLangId), 'product_name', [], '', array('class' => 'selProd--js','placeholder' => Labels::getLabel('LBL_Select_Product', $adminLangId)));
+$prodName = $frm->addSelectBox(Labels::getLabel('LBL_Product', $adminLangId), 'product_name', [], '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $adminLangId)));
 //$prodName = $frm->addTextBox(Labels::getLabel('LBL_Product', $adminLangId), 'product_name', '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $adminLangId)));
 $prodName->requirements()->setRequired();
 
@@ -50,7 +50,7 @@ $selProdPrice = isset($data['selprod_price']) ? $data['selprod_price'] : 0;
 $selProdPriceLbl = 0 < $selProdPrice ? Labels::getLabel("LBL_CURRENT_PRICE:_{PRICE}", $adminLangId) : '';
 $selProdPriceLbl = !empty($selProdPriceLbl) ? CommonHelper::replaceStringData($selProdPriceLbl, ['{PRICE}' => $selProdPrice]) : '';
 ?>
-<div class="card-body pt-4 pl-4 pr-4 pb-0">
+<div class="card-body pt-4 ps-4 pe-4 pb-0">
     <div class="replaced">
         <?php
         echo $frm->getFormTag();
