@@ -3,22 +3,14 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
-<<<<<<< HEAD
+
 $delBtn = '<button type="button" data-id="' . $firstCompontentId . '" class="btn btn--secondary ripplelink remove-combined-form--js ml-2" title="Remove">
-=======
-$delBtn = '<button type="button" data-id="0" class="btn btn--secondary ripplelink remove-combined-form--js ms-2" title="Remove">
->>>>>>> 69dcc91fd5e2ce61948742a5a61665f4074ab54d
         <svg class="svg" width="18" height="18">
             <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
             </use>
         </svg>
     </button>';
-<<<<<<< HEAD
-$addBtn = '<button type="button"  class="btn btn--secondary ripplelink add-combined-form--js ml-2" title="Add">
-=======
-$addBtn = '<button type="button" class="btn btn--secondary ripplelink add-combined-form--js ms-2" title="Add">
->>>>>>> 69dcc91fd5e2ce61948742a5a61665f4074ab54d
+$addBtn = '<button type="button"  class="btn btn--secondary ripplelink add-combined-form--js ml-2" title="Add"> 
         <svg class="svg" width="18" height="18">
             <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
             </use>
