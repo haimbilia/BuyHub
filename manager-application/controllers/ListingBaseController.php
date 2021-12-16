@@ -6,6 +6,7 @@ class ListingBaseController extends AdminBaseController
     protected object $modelObj;
     protected array $formLangFields;
     protected bool $checkMediaExist = false;
+    protected int $newTabLangId = 0;
 
     public function __construct($action)
     {
@@ -97,13 +98,13 @@ class ListingBaseController extends AdminBaseController
         $recordId = $classObj->getMainTableRecordId(); 
         if (!$classObj->updateLangData((0 < $langId  ? $langId : CommonHelper::getDefaultFormLangId()), $langDataArr)) {
             LibHelper::exitWithError($classObj->getError(), true);
-        } 
-        $newTabLangId = 0;
+        }
+
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $languageId => $langName) {
                 if (!$classObj::getAttributesByLangId($languageId, $recordId)) {
-                    $newTabLangId = $languageId;
+                    $this->newTabLangId = $languageId;
                     break;
                 }
             }
@@ -119,12 +120,12 @@ class ListingBaseController extends AdminBaseController
             }
         }
 
-        if ($this->checkMediaExist == true && $newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
+        if ($this->checkMediaExist == true && $this->newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
             $this->set('openMediaForm', true);
         }
 
         $this->set('recordId', $recordId);
-        $this->set('langId', $newTabLangId);
+        $this->set('langId', $this->newTabLangId);
         $this->set('msg', $this->str_setup_successful);
     }
 

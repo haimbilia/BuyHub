@@ -1,8 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $frm->setFormTagAttribute('class', 'form');
 $displayDigitalDwnBtn = false;
-if(0 < $productId){
-    $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && 1 > $productData['product_seller_id'];
+$displayDigitalDownloadList = false;
+if (0 < $productId) {   
+    $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 1 > $productData['product_seller_id'];
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
 
@@ -105,38 +106,38 @@ if(0 < $productId){
                                             </div>
                                         </a>
                                     </li>
-                                    <?php if($displayDigitalDownloadList){ ?>
-                                    <li class="stock-nav-item">
-                                        <a class="stock-nav-link" href="#digital-files">
-                                            <i class="stock-nav-icn">
-                                                <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                    </use>
-                                                </svg>
-                                            </i>
-                                            <div class="">
-                                                <h6 class="stock-nav-title">
-                                                    Digital files</h6>
-                                                <span class="stock-nav-desc"> Add Digital files
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="stock-nav-item">
-                                        <a class="stock-nav-link" href="#digital-links">
-                                            <i class="stock-nav-icn">
-                                                <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                    </use>
-                                                </svg>
-                                            </i>
-                                            <div class="">
-                                                <h6 class="stock-nav-title">
-                                                    Digital links</h6>
-                                                <span class="stock-nav-desc"> Add Digital links </span>
-                                            </div>
-                                        </a>
-                                    </li>
+                                    <?php if ($displayDigitalDownloadList) { ?>
+                                        <li class="stock-nav-item">
+                                            <a class="stock-nav-link" href="#digital-files">
+                                                <i class="stock-nav-icn">
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                        </use>
+                                                    </svg>
+                                                </i>
+                                                <div class="">
+                                                    <h6 class="stock-nav-title">
+                                                        Digital files</h6>
+                                                    <span class="stock-nav-desc"> Add Digital files
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="stock-nav-item">
+                                            <a class="stock-nav-link" href="#digital-links">
+                                                <i class="stock-nav-icn">
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                        </use>
+                                                    </svg>
+                                                </i>
+                                                <div class="">
+                                                    <h6 class="stock-nav-title">
+                                                        Digital links</h6>
+                                                    <span class="stock-nav-desc"> Add Digital links </span>
+                                                </div>
+                                            </a>
+                                        </li>
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -390,6 +391,7 @@ if(0 < $productId){
                         </div>
                     </div>
                 </div>
+ 
                 <?php if($displayDigitalDownloadList){ ?>
                 <div class="card card-toggle" id="digital-files">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="digital-files-block">
@@ -397,18 +399,21 @@ if(0 < $productId){
                             <h3 class="card-head-title">Digital Files
                             </h3>
                             <span class="text-muted">Digital Files are added in this
+ 
 
-                                <span class="input-helper"></span>section</span>
-                                <?php if($displayDigitalDownloadAddBtn){ ?>
+                                    <span class="input-helper"></span>section</span>
+                                <?php if ($displayDigitalDownloadAddBtn) { ?>
                                     <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>)">File</button>
                                 <?php  } ?>
-                               
-                        </div> <i class="dropdown-toggle-custom-arrow"></i>
-                    </div>
-                    <div class="card-body show" id="digital-files-block">                      
-                        <div id="digitalFilesListJs">
+
+                            </div> <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
+                        <div class="card-body show" id="digital-files-block">
+                            <div id="digitalFilesListJs">
+                            </div>
                         </div>
                     </div>
+ 
                 </div>
                 <div class="card card-toggle" id="digital-links">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="digital-links-block">
@@ -416,18 +421,19 @@ if(0 < $productId){
                             <h3 class="card-head-title">Digital Links
                             </h3>
                             <span class="text-muted">Product Digital Links are added in this
+ 
 
-                                <span class="input-helper"></span>section</span>
-                                <?php if($displayDigitalDownloadAddBtn){ ?>
-                                    <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK;?>)">LINK</button>
-                                <?php  } ?>                                
-                        </div> <i class="dropdown-toggle-custom-arrow"></i>
-                    </div>
-                    <div class="card-body show" id="digital-links-block">                     
-                        <div id="digitalLinksListJs">
+                                    <span class="input-helper"></span>section</span>
+                                <?php if ($displayDigitalDownloadAddBtn) { ?>
+                                    <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>)">LINK</button>
+                                <?php  } ?>
+                            </div> <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
+                        <div class="card-body show" id="digital-links-block">
+                            <div id="digitalLinksListJs">
+                            </div>
                         </div>
                     </div>
-                </div>
                 <?php } ?>
             </div>
             <div class="add-stock-column column-actions">
@@ -560,10 +566,9 @@ if(0 < $productId){
         var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
         var tempImageType = '<?php echo AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP; ?>';
         var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
-        var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';        
-     
-        $(function() {
+        var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
 
+        $(function() {       
             prodSpecifications();
             tagifyProducts();
             if (0 < getCurrentFrmProductId()) {
@@ -583,18 +588,17 @@ if(0 < $productId){
             select2('ps_from_country_id', fcom.makeUrl('Countries', 'autoComplete'), {
                 langId
             });
-
+            
             $('#addProductfrm .optionsJs').each(function(index) {
                 var selectedOptionData = [];
                 if (index in productOptions) {
                     selectedOptionData = [{
                         selected: true,
-                        id: productOptions[0]['option_id'],
-                        text: productOptions[0]['option_name'],
-                        option_is_separate_images: productOptions[0]['option_is_separate_images'],
+                        id: productOptions[index]['option_id'],
+                        text: productOptions[index]['option_name'],
+                        option_is_separate_images: productOptions[index]['option_is_separate_images'],
                     }]
-                }
-
+                }    
                 select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'), optionDataCallback,
                     resetOptionValuesTag,
                     resetOptionValuesTag,
@@ -604,6 +608,7 @@ if(0 < $productId){
                 $(this).data("select2").$container.addClass("w-100");
 
             });
+
 
             $('#addProductfrm .optionValuesJs').each(function(index) {
                 tagifyOptionValue("#" + $(this).attr('id'));
@@ -623,25 +628,19 @@ if(0 < $productId){
                 $('select[name=\'product_seller_id\']').attr('disabled', true);
             <?php } ?>
 
-            $('#addProductfrm').find('input,select').each(function() {
-                if ($(this).data('fatreq') == undefined) {
-                    $(this).data('fatreq', {
-                        "required": false
-                    });
-                }
-                if ($(this).attr('name') == undefined) {
-                    $(this).attr('name', '');
-                }
-            });
-            upcType();
-            <?php if (0 < $productId && $displayDigitalDownloadList){ ?>
-            getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE;?>,<?php echo $productId;?>);
-            getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK;?>,<?php echo $productId;?>);
-        <?php } ?>
-        });
-    </script>
 
-    <?php
+            upcType();
+            <?php if (0 < $productId && $displayDigitalDownloadList) { ?>
+                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $productId; ?>);
+                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $productId; ?>);
+            <?php } ?>          
+           
+
+        });
+    </script>    
+</main>
+
+<?php
     function getVariantUiTr($langId, $i, $productOption = [])
     {
         $deleteClass = $i == 0 ? 'hide' : '';
@@ -689,4 +688,3 @@ if(0 < $productId){
     HTML;
     }
     ?>
-</main>

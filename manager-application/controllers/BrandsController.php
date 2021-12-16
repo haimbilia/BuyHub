@@ -230,11 +230,10 @@ class BrandsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_BRAND_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_BRAND_STATUS', $this->siteLangId), 'brand_active', $activeInactiveArr, '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('FRM_BRAND_STATUS', $this->siteLangId), 'brand_active', applicationConstants::ACTIVE, array(), false, applicationConstants::INACTIVE);
 
         /* $frm->addCheckBox(Labels::getLabel('FRM_Featured',$this->siteLangId), 'brand_featured', 1,array(),false,0); */
-        /* $fld = $frm->addHiddenField('', 'brand_logo', '', array('id' => 'brand_logo'));   */
+
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -281,6 +280,7 @@ class BrandsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
+        $this->set('languageCount', count($languages));
         $this->_template->render(false, false);
     }
 
@@ -303,7 +303,7 @@ class BrandsController extends ListingBaseController
             $this->set('image', $brandImage);
             $this->set('imageFunction', 'brandImage');
         }
-
+        
         $this->set('file_type', $file_type);
         $this->set('brand_id', $brand_id);
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));

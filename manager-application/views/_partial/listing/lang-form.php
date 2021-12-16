@@ -12,23 +12,28 @@ if (!$langFrm->getFormTagAttribute('data-onclear')) {
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
 $langFrm->setFormTagAttribute('dir', $formLayout);
 if (!$langFrm->getFormTagAttribute('onsubmit')) {
-    $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#'.$langFrm->getFormTagAttribute('id').'")[0]); return(false);');
+    $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#' . $langFrm->getFormTagAttribute('id') . '")[0]); return(false);');
 }
 
 $langFld = $langFrm->getField('lang_id');
-if (!$langFld->getfieldTagAttribute('onChange')) {
-    $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
-}
-$translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
-    $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
-    $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="editLangData(' . $recordId . ', ' . $lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
+if (null != $langFld) {
+    if (!$langFld->getfieldTagAttribute('onChange')) {
+        $langFld->setfieldTagAttribute('onChange', "editLangData(" . $recordId . ", this.value);");
+    }
+
+    if (!isset($langFld->htmlAfterField) || empty($langFld->htmlAfterField)) {
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
+            $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
+            $langFld->htmlAfterField = '<a href="javascript:void(0);" onclick="editLangData(' . $recordId . ', ' . $lang_id . ', 1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $siteLangId) . '">
                                 <svg class="svg" width="18" height="18">
                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
                                     </use>
                                 </svg>
                             </a>';
+        }
+    }
 }
 
 $activeLangtab = true;

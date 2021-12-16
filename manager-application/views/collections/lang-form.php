@@ -18,28 +18,10 @@ if ($collection_type == Collections::COLLECTION_TYPE_BANNER) {
     $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'bannerForm(' . $recordId . ',' . $collection_type . ')',
-            'title' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
+            'onclick' => 'banners(' . $recordId . ')',
+            'title' => Labels::getLabel('LBL_BANNERS', $siteLangId),
         ],
-        'label' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
-        'isActive' => false
-    ];
-    $otherButtons[] = [
-        'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => 'bannerMedia(' . $recordId . ',' . $collection_type . ')',
-            'title' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
-        ],
-        'label' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
-        'isActive' => false
-    ];
-    $otherButtons[] = [
-        'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => 'banners(' . $recordId . ',' . $collection_type . ')',
-            'title' => Labels::getLabel('LBL_BANNERS_LISTING', $siteLangId),
-        ],
-        'label' => Labels::getLabel('LBL_BANNERS_LISTING', $siteLangId),
+        'label' => Labels::getLabel('LBL_BANNERS', $siteLangId),
         'isActive' => false
     ];
 }
