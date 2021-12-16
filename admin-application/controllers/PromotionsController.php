@@ -794,7 +794,7 @@ class PromotionsController extends AdminBaseController
 
         $this->set('promotionType', $promotionType);
         $this->set('promotionId', $promotionId);
-        $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
+        $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->set('screenTypeArr', array( 0 => '' ) + applicationConstants::getDisplaysArr($this->adminLangId));
         $this->set('language', Language::getAllNames());
         $this->_template->render(false, false);
@@ -1085,7 +1085,7 @@ class PromotionsController extends AdminBaseController
         $frm->addHiddenField('', 'promotion_id', $promotionId);
         $frm->addHiddenField('', 'promotion_type', $promotionType);
 
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
      
 		if(count($bannerTypeArr) > 1){
 			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');

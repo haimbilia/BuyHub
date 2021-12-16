@@ -114,6 +114,6 @@ class Language extends MyAppModel
         if (0 < $langIdToRemove) {
             unset($arr[$langIdToRemove]);
         }
-        return $arr;
+        return (array) $arr;
     }
 }

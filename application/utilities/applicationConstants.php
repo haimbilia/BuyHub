@@ -457,5 +457,4 @@ class applicationConstants {
         }
         return $sortOrder;
     }
-
 }

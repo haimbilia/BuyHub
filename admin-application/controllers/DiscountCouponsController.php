@@ -435,7 +435,7 @@ class DiscountCouponsController extends AdminBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
         $couponMediaFrm = $this->getMediaForm($coupon_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 
         $this->set('coupon_id', $coupon_id);
         $this->set('couponMediaFrm', $couponMediaFrm);
@@ -1152,7 +1152,7 @@ class DiscountCouponsController extends AdminBaseController
         $coupon_id = FatUtility::int($coupon_id);
         $frm = new Form('frmCouponMedia');
         $frm->addHiddenField('', 'coupon_id', $coupon_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
        
 		if(count($bannerTypeArr) > 1){
 			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $bannerTypeArr,'', array(), '');

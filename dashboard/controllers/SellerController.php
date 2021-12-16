@@ -2198,7 +2198,7 @@ class SellerController extends SellerBaseController
         $this->set('imageType', $imageType);
         $this->set('shopDetails', $shopDetails);
         $this->set('shop_id', $shop_id);
-        $this->set('languages', applicationConstants::bannerTypeArr());
+        $this->set('languages', applicationConstants::getAllLanguages());
         $this->_template->render(false, false);
     }
 
@@ -2715,7 +2715,7 @@ class SellerController extends SellerBaseController
         $this->set('shop_id', $shop_id);
         $this->set('prodCatId', $prodCatId);
         $this->set('attachments', $attachments);
-        $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
+        $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->_template->render(false, false);
     }
 
@@ -3804,7 +3804,7 @@ class SellerController extends SellerBaseController
     {
         $frm = new Form('frmShopLogo');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 		
 		if(count($bannerTypeArr) > 1){
 			 $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'logo-language-js'), '');
@@ -3827,7 +3827,7 @@ class SellerController extends SellerBaseController
     {
         $frm = new Form('frmBackgroundImage');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 		if(count($bannerTypeArr) > 1){
 			$frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'bg-language-js'), '');
         } else  {
@@ -3848,7 +3848,7 @@ class SellerController extends SellerBaseController
     {
         $frm = new Form('frmShopBanner');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 		if(count($bannerTypeArr) > 1){
 			 $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'banner-language-js'), '');
         } else  {
@@ -3956,7 +3956,7 @@ class SellerController extends SellerBaseController
     {
         $frm = new Form('frmCategoryMedia');
         $frm->addHiddenField('', 'prodcat_id', $prodCatId);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
         $frm->addSelectBox(Labels::getLabel('Lbl_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
         $fld1 = $frm->addButton('', 'category_banner', Labels::getLabel('LBL_Upload_File', $this->siteLangId), array('class' => 'catFile-Js', 'id' => 'category_banner'));
         return $frm;

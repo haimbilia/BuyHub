@@ -213,7 +213,7 @@ class ProductCategoriesController extends ListingBaseController
         $frm = new Form('frmRecordImage', array('id' => 'imageFrm'));
         $frm->addHiddenField('', 'prodcat_id', $recordId);
         $frm->addHTML('', 'heading_icon', '');
-        $mediaLanguages = applicationConstants::bannerTypeArr();
+        $mediaLanguages = applicationConstants::getAllLanguages();
 
         if (count($mediaLanguages) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');

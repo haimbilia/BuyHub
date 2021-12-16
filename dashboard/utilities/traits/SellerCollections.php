@@ -476,7 +476,7 @@ trait SellerCollections
     {
         $frm = new Form('frmCollectionMedia');
         $frm->addHiddenField('', 'scollection_id', $scollection_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 		if(count($bannerTypeArr) > 1){
 			 $frm->addSelectBox(Labels::getLabel('Lbl_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array('class' => 'collection-language-js'), '');
         } else  {
@@ -507,7 +507,7 @@ trait SellerCollections
 
         $collectionImg = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $scollection_id, 0, $lang_id, false);
         $this->set('images', $collectionImg);
-        $this->set('languages', applicationConstants::bannerTypeArr());
+        $this->set('languages', applicationConstants::getAllLanguages());
         $this->set('scollection_id', $scollection_id);
         $this->set('lang_id', $lang_id);
         $this->_template->render(false, false);

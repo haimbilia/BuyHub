@@ -1,116 +1,106 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-$collectionMediaFrm->setFormTagAttribute('class', 'web_form');
-$collectionMediaFrm->developerTags['colClassPrefix'] = 'col-sm-';
-$collectionMediaFrm->developerTags['fld_default_col'] = 6;
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$collectionImageDisplayDiv = $collectionMediaFrm->getField('collection_image_display_div');
-$collectionImageDisplayDiv->developerTags['col'] = 12;
+HtmlHelper::formatFormFields($frm);
 
-$languageFld = $collectionMediaFrm->getField('image_lang_id');
-$languageFld->setFieldTagAttribute('class', 'language-js');
+$frm->setFormTagAttribute('data-onclear', 'collectionMediaForm(' . $recordId . ',' . $collection_type . ')');
+$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
 
-$displayMediaOnlyObj = $collectionMediaFrm->getField('collection_display_media_only');
-$displayMediaOnlyObj->setFieldTagAttribute('class', 'displayMediaOnly--js');
-$displayMediaOnlyObj->setFieldTagAttribute('onclick', 'displayMediaOnly('.$collection_id.', this)');
+$displayMediaOnlyObj = $frm->getField('collection_display_media_only');
+$displayMediaOnlyObj->developerTags['noCaptionTag'] = true;
+$displayMediaOnlyObj->setFieldTagAttribute('class', 'displayMediaOnlyJs');
+$displayMediaOnlyObj->setFieldTagAttribute('onclick', 'displayMediaOnly(' . $recordId . ', this)');
 if (0 < $displayMediaOnly) {
     $displayMediaOnlyObj->setFieldTagAttribute('checked', 'checked');
 }
 
-$fld = $collectionMediaFrm->getField('collection_image');
-$fld->setFieldTagAttribute('data-collection_id', $collection_id);
-$fld->addFieldTagAttribute('onChange', 'popupImage(this)');
-$preferredDimensionsStr = '<small class="text--small">'.sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '640*480').'</small>';
-$fld->htmlAfterField = $preferredDimensionsStr;
+$str = '<br><span class="form-text text-muted">' . Labels::getLabel('LBL_IF_USED_FOR_MOBILE_APPLICATIONS', $siteLangId) . '</span>';
+$displayMediaOnlyObj->htmlAfterField = $str;
 
-$headingArea = $collectionMediaFrm->getField('collection_image_heading');
-$str = '<small class="text--small">'.Labels::getLabel('LBL_Used_For_Mobile_Applications', $siteLangId).'</small>';
-$headingArea->value = $str;
+$fld = $frm->getField('collection_image');
+$fld->setWrapperAttribute('class', 'mediaElementsJs');
+$fld->value = HtmlHelper::getfileInputHtml(
+    [
+        'onChange' => 'loadImageCropper(this)',
+        'accept' => 'image/*',
+        'data-name' => Labels::getLabel("FRM_COLLECTION_IMAGE", $siteLangId),
+        'data-frm' => $frm->getFormTagAttribute('name')
+    ],
+    $siteLangId,
+    '',
+    '',
+    [],
+    'dropzone-custom dropzoneContainerJs'
+);
 
-$fileTypeArr = [AttachedFile::FILETYPE_COLLECTION_IMAGE];
+$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_PREFERRED_DIMENSIONS', $siteLangId), '640*480') . '</span>';
+$htmlAfterField .= '<div id="imageListingJs"></div>';
+$fld->htmlAfterField = $htmlAfterField;
 
-foreach ($fileTypeArr as $fileType) {
-    $method = 'collectionReal';
-    $cType = '';
-    $fn = 'removeCollectionImage';
-    if ($fileType == AttachedFile::FILETYPE_COLLECTION_BG_IMAGE) {
-        $method = 'collectionBgReal';
-        $cType = 'bg';
-        $fn = 'removeCollectionBGImage';
-    }
-    $imgUpdatedOn = AttachedFile::setTimeParam($imgUpdatedOn);
-    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', $method, array($collection_id, 0, 'THUMB'), CONF_WEBROOT_FRONT_URL).$imgUpdatedOn, CONF_IMG_CACHE_TIME, '.jpg');
+$langFld = $frm->getField('lang_id');
+$langFld->setWrapperAttribute('class', 'mediaElementsJs');
+$langFld->addFieldTagAttribute('onchange', 'loadImages(' . $recordId . ', this.value);');
 
-    $imagesHtml = '<ul class="grids--onefifth '.$cType.'CollectionImages-js">
-        <li id="'.$cType.'Image-0">
-            <div class="logoWrap">
-                <div class="logothumb">
-                    <img src="'.$imgUrl.'">';
-    if (AttachedFile::getAttachment($fileType, $collection_id, 0, 0, false)) {
-        $imagesHtml .= '<a class="deleteLink white" href="javascript:void(0);" title="Delete '.$collectionImages['afile_name'].'" onclick="'.$fn.'('.$collection_id.',0)" class="delete"><i class="ion-close-round"></i></a>';
-    }
+$generalTab['attr']['onclick'] = 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');';
 
-    $imagesHtml .= '</div>
-                <small><strong> '.Labels::getLabel('LBL_Language', $siteLangId).':</strong> '.Labels::getLabel('LBL_All_Languages', $siteLangId).'</small>
-            </div>
-        </li>';
-    foreach ($languages as $langId => $langName) {
-        $langImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', $method, array($collection_id, $langId, 'THUMB'), CONF_WEBROOT_FRONT_URL).$imgUpdatedOn, CONF_IMG_CACHE_TIME, '.jpg');
-
-        $imagesHtml .= '<li class="d-none" id="'.$cType.'Image-'.$langId.'">
-                            <div class="logoWrap">
-                                <div class="logothumb">
-                                    <img src="'.$langImgUrl.'">';
-        if (AttachedFile::getAttachment($fileType, $collection_id, 0, $langId, false)) {
-            $imagesHtml .= '<a class="deleteLink white" href="javascript:void(0);" title="Delete '.$collectionImages['afile_name'].'" onclick="'.$fn.'('.$collection_id.','.$langId.')" class="delete"><i class="ion-close-round"></i></a>';
-        }
-
-                    $imagesHtml .= '</div>
-                                <small><strong> '.Labels::getLabel('LBL_Language', $siteLangId).':</strong> '.$langName.'</small>
-                            </div>
-                        </li>';
-    }
-    $imagesHtml .= '</ul>';
-
-    if ($fileType == AttachedFile::FILETYPE_COLLECTION_BG_IMAGE) {
-        $collectionBgImageDisplayDiv->value = $imagesHtml;
-    } else {
-        $collectionImageDisplayDiv->value = $imagesHtml;
-    }
+if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) {
+    $otherButtons[] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'recordForm(' . $recordId . ',' . $collection_type . ')',
+            'title' => Labels::getLabel('LBL_LINK_RECORDS', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_LINK_RECORDS', $siteLangId),
+        'isActive' => false
+    ];
 }
 
+if ($collection_type == Collections::COLLECTION_TYPE_BANNER) {
+    $otherButtons[] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'bannerForm(' . $recordId . ',' . $collection_type . ')',
+            'title' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
+        'isActive' => false
+    ];
+    $otherButtons[] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'bannerMedia(' . $recordId . ',' . $collection_type . ')',
+            'title' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
+        'isActive' => false
+    ];
+    $otherButtons[] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'banners(' . $recordId . ',' . $collection_type . ')',
+            'title' => Labels::getLabel('LBL_BANNERS_LISTING', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_BANNERS_LISTING', $siteLangId),
+        'isActive' => false
+    ];
+}
 
-$collectionMediaFrm->developerTags['colClassPrefix'] = 'col-md-';
-$collectionMediaFrm->developerTags['fld_default_col'] = 12;
+if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA)) {
+    $otherButtons[] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'collectionMediaForm(' . $recordId . ',' . $collection_type . ')',
+            'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+        'isActive' => true
+    ];
+}
 
-?>
-<div id="cropperBox-js"></div>
-<section class="section" id="mediaForm-js">
-    <div class="sectionbody space">
-        <div class="row">    <div class="col-sm-12">
-    <div class="tabs_nav_container responsive flat">
-        <ul class="tabs_nav">
-            <li><a href="javascript:void(0)" onclick="collectionForm(<?php echo $collection_type ?>, <?php echo $collection_layout_type ?>, <?php echo $collection_id ?>);"><?php echo Labels::getLabel('LBL_General', $siteLangId); ?></a></li>
-            <?php if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) { ?>
-            <li><a class=""
-                    href="javascript:void(0)"
-                    onclick="recordForm(<?php echo $collection_id ?>, <?php echo $collection_type ?>);">
-                    <?php echo Labels::getLabel('LBL_Link_Records', $siteLangId);?></a>
-            </li>
-            <?php } ?>
-            <li><a class="active" href="javascript:void(0)" onclick="collectionMediaForm(<?php echo $collection_id ?>);"><?php echo Labels::getLabel('LBL_Media', $siteLangId); ?></a></li>
-        </ul>
-        <div class="tabs_panel_wrap">
-            <div class="tabs_panel">
-                <?php echo $collectionMediaFrm->getFormHtml(); ?>
-            </div>
-        </div>
-    </div>
-</div>
+$includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
+require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
+
 <script type="text/javascript">
-$('input[name=min_width]').val(640);
-$('input[name=min_height]').val(480);
-var aspectRatio = 4 / 3;
-var FILETYPE_COLLECTION_IMAGE = '<?php echo AttachedFile::FILETYPE_COLLECTION_IMAGE ?>';
-var FILETYPE_COLLECTION_BG_IMAGE = '<?php echo AttachedFile::FILETYPE_COLLECTION_BG_IMAGE ?>';
+    $('input[name=min_width]').val(640);
+    $('input[name=min_height]').val(480);
+    var aspectRatio = 4 / 3;
 </script>
