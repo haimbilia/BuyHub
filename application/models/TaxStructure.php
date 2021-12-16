@@ -66,7 +66,7 @@ class TaxStructure extends MyAppModel {
         $srch = static::getSearchObject();
         $srch->addMultipleFields(array('taxstr_id'));
         $srch->addCondition('taxstr_parent', '=', $parentId);
-        $srch->addOrder('taxstr_id','ASC');
+        $srch->addOrder('taxstr_id', 'ASC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $combinedTaxes = FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -98,7 +98,7 @@ class TaxStructure extends MyAppModel {
         $srch->addMultipleFields(array('taxstr_id', 'taxstr_name'));
         $srch->addCondition('taxstr_parent', '=', $parentId);
         $srch->addCondition('taxstrlang_lang_id', '=', $lang);
-        $srch->addOrder('taxstrlang_taxstr_id','ASC');
+        $srch->addOrder('taxstrlang_taxstr_id', 'ASC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
@@ -125,6 +125,7 @@ class TaxStructure extends MyAppModel {
      * @param  int $parentId
      * @return object
      */
+    /* @@ todo We have to modifiy the current procress for tax component */
     public function getCombinedTaxesWithLang($parentId, $data = []): array {
         $srch = static::getSearchObject();
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id=taxstrlang_taxstr_id', 'taxLang');
@@ -136,13 +137,18 @@ class TaxStructure extends MyAppModel {
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $results = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $component = [];
+        $unSortcomponent = [];
         $postComponents = $data['taxstr_component_name'] ?? [];
         $postLang = $data['lang_id'] ?? '';
         foreach ($results as $key => $result) {
-            $component[$result['taxstr_id']][$result['taxstrlang_lang_id']] = $result['taxstr_name'];
+            $unSortcomponent[$result['taxstr_id']][$result['taxstrlang_lang_id']] = $result['taxstr_name'];
         }
-        sort($component);
+        $component = [];
+        $i = 0;
+        foreach ($unSortcomponent as $values) {
+            $component[$i++] = $values;
+        }
+
         foreach ($results as $result) {
             $components['taxstr_name'][$result['taxstrlang_lang_id']] = $result['taxstr_name'];
         }

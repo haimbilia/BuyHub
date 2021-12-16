@@ -137,6 +137,8 @@ class TaxStructureController extends ListingBaseController {
         return $frm;
     }
 
+    /* @@ todo We have to modifiy the current procress for tax component */
+
     public function form() {
         $this->objPrivilege->canEditTax();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -151,6 +153,7 @@ class TaxStructureController extends ListingBaseController {
             if ($taxStrData['taxstr_is_combined']) {
                 $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($taxStrData['taxstr_id'], CommonHelper::getDefaultFormLangId());
             }
+
             if (isset($combinedTaxes)) {
                 $countStart = 0;
                 foreach ($combinedTaxes as $key => $value) {
@@ -164,7 +167,6 @@ class TaxStructureController extends ListingBaseController {
                     }
                 }
             }
-
             $frm->fill($taxStrData);
         }
 
@@ -292,7 +294,6 @@ class TaxStructureController extends ListingBaseController {
             $post = array_merge($post, $taxDetails);
         }
 
-
         if (!$record->addUpdateCombinedData($post, $record->getMainTableRecordId())) {
             LibHelper::exitWithError($record->getError(), true);
         }
@@ -314,7 +315,8 @@ class TaxStructureController extends ListingBaseController {
             $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
             $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
             foreach ($combinedTaxes as $key => $value) {
-                $frm->addTextBox('', 'taxstr_component_name[]', $langcombinedTaxes[$key] ?? '');
+                $fld = $frm->addTextBox('', 'taxstr_component_name[]', $langcombinedTaxes[$key] ?? '',['Placeholder'=>Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId)]);
+                $fld->developerTags['noCaptionTag'] = true;
             }
         }
         return $frm;

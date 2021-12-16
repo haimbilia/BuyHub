@@ -52,7 +52,7 @@ foreach ($links as $sn => $row) {
                 break;
             case 'pdl_download_link':
                 if ('' != $row['pdl_download_link'] && 0 == $product['product_seller_id']) {
-                    $td->appendElement('div', array("class"=>"clipboard"), '<input class="form-control copy-input" value="'.$row[$key].'" id="copymain_'. $row['pdl_id'] .'" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_'. $row['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copymain_'. $row['pdl_id'] .'\')"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class"=>"clipboard"), '<input  name ="copy" class="form-control copy-input" value="'.$row[$key].'" id="copymain_'. $row['pdl_id'] .'" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_'. $row['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copymain_'. $row['pdl_id'] .'\')"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
@@ -60,7 +60,7 @@ foreach ($links as $sn => $row) {
                 break;
             case 'pdl_preview_link':
                 if ('' != $row['pdl_preview_link']) {
-                    $td->appendElement('div', array("class"=>"clipboard"), '<input class="form-control copy-input" value="'.$row[$key].'" id="copypreview_'. $row['pdl_id'] .'" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_'. $row['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copypreview_'. $row['pdl_id'] .'\')"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class"=>"clipboard"), '<input name ="copy" class="form-control copy-input" value="'.$row[$key].'" id="copypreview_'. $row['pdl_id'] .'" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_'. $row['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copypreview_'. $row['pdl_id'] .'\')"><i class="far fa-copy"></i></button>', true);
                 } else {
                     $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
