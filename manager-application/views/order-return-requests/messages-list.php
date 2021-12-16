@@ -45,7 +45,7 @@ foreach ($messagesList as $sn => $row) {
                             </figure>
                             <div class="user-profile_data">
                                 ' . $name . '
-                                <span class="text-muted fw-bold">' . $email . '</span>
+                                <span class="text-muted">' . $email . '</span>
                             </div>
                         </div>';
                 $td->appendElement('plaintext', [], $html, true);

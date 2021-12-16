@@ -24,7 +24,7 @@
                     </div>
                     <?php require_once(CONF_THEME_PATH . 'subscription-orders/item-summary.php'); ?>
                 </div>
-                <?php 
+                <?php
                 $paymentFormCond = (!$order["order_payment_status"] && $canEdit && 'CashOnDelivery' != $order['plugin_code']);
                 $paymentHistory = (!empty($order['payments']));
                 if (!$order['order_deleted'] && ($paymentFormCond || $paymentHistory)) { ?>
@@ -59,15 +59,15 @@
 
                         </div>
                         <div class="card-body">
-                            <ul class="list-text">
+                            <ul class="list-stats">
                                 <?php if (!empty($order['buyer_user_name'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_Customer_Name', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['buyer_user_name']; ?></span>
                                     </li>
                                 <?php } ?>
                                 <?php if (!empty($order['buyer_email'])) { ?>
-                                    <li>
+                                    <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?>:</span>
                                         <span class="value"><?php echo $order['buyer_email']; ?></span>
                                     </li>
@@ -87,8 +87,8 @@
 
                     </div>
                     <div class="card-body">
-                        <ul class="list-text">
-                            <li>
+                        <ul class="list-stats">
+                            <li class="list-stats-item">
                                 <span class="lable"><?php echo Labels::getLabel('LBL_PAYMENT_MODE', $siteLangId); ?>:</span>
                                 <span class="value"><?php echo $paymentMethodName; ?></span>
                             </li>

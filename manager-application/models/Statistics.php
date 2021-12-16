@@ -2,9 +2,26 @@
 
 class Statistics extends MyAppModel
 {
+    public const BY_TODAY = 1;
+    public const BY_THIS_WEEK = 7;
+    public const BY_THIS_MONTH = 30;
+    public const BY_LAST_3_MONTHS = 90;
+    public const BY_ALL = -1;
+
     public function __construct()
     {
         $this->db = FatApp::getDb();
+    }
+
+    public static function getIntervals($langId)
+    {
+        return [
+            self::BY_TODAY =>  Labels::getLabel('LBL_TODAY', $langId),
+            self::BY_THIS_WEEK =>  Labels::getLabel('LBL_THIS_WEEK', $langId),
+            self::BY_THIS_MONTH =>  Labels::getLabel('LBL_THIS_MONTH', $langId),
+            self::BY_LAST_3_MONTHS =>  Labels::getLabel('LBL_THIS_YEAR', $langId),
+            self::BY_ALL =>  Labels::getLabel('LBL_ALL', $langId)
+        ];
     }
 
     public function getDashboardSummary($type)
@@ -167,7 +184,7 @@ class Statistics extends MyAppModel
         }
     }
 
-    public function getStats($type)
+    public function getStats($type, $interval = self::BY_THIS_MONTH)
     {
         $type = strtolower($type);
         switch ($type) {

@@ -12,16 +12,16 @@ $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
 $displayLangTab = false;
 $otherButtons = [
     [
-       'attr' => [
+        'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'editLangData('.$recordId.','.array_key_first($languages).');',
+            'onclick' => 'editLangData(' . $recordId . ',' . array_key_first($languages) . ');',
             'title' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
         'isActive' => false
     ],
     [
-       'attr' => [
+        'attr' => [
             'href' => 'javascript:void(0)',
             'onclick' => 'mediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -33,7 +33,7 @@ $otherButtons = [
 $formTitle = Labels::getLabel('LBL_CONTENT_PAGE_SETUP', $siteLangId); ?>
 
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
-    <div class="form-edit-body loaderContainerJs">
-        <?php echo $cbgForm->getFormHtml(); ?>
-    </div>
+<div class="form-edit-body loaderContainerJs">
+    <?php echo $cbgForm->getFormHtml(); ?>
+</div>
 </div> <!-- Close </div> This must be placed. Opening tag is inside form-head.php file. -->

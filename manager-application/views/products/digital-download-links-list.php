@@ -1,21 +1,25 @@
 <?php
-$arr_flds['listSerial'] = Labels::getLabel('LBL_#', $adminLangId);
-if (0 == $product['product_seller_id']) {
-    $arr_flds['pdl_download_link'] = Labels::getLabel('pdl_download_link', $adminLangId);
-}
-$arr_flds['pdl_preview_link'] = Labels::getLabel('LBL_Preview_Link', $adminLangId);
 
-$arr_flds['pddr_options_code'] = Labels::getLabel('LBL_Link_Option', $adminLangId);
-$arr_flds['pdl_lang_id'] = Labels::getLabel('LBL_Link_language', $adminLangId);
-
-if (0 == $product['product_seller_id']) {
-    $arr_flds['action'] = Labels::getLabel('LBL_Action', $adminLangId);
+if(1 > count($links)){
+    return;
 }
 
+
+$arr_flds = [];
+if (0 == $product['product_seller_id']) {
+    $arr_flds['pdl_download_link'] = Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId);
+}
+$arr_flds['pdl_preview_link'] = Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId);
+$arr_flds['pddr_options_code'] = Labels::getLabel('LBL_LINK_OPTION', $siteLangId);
+$arr_flds['pdl_lang_id'] = Labels::getLabel('LBL_LINK_LANGUAGE', $siteLangId);
+if (0 == $product['product_seller_id']) {
+    $arr_flds['action'] = Labels::getLabel('LBL_ACTION', $siteLangId);
+}
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
-foreach ($arr_flds as $val) {
+foreach ($arr_flds as $key => $val) {
+    $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
     $e = $th->appendElement('th', array(), $val);
 }
 
@@ -24,7 +28,7 @@ foreach ($links as $sn => $row) {
     $serialNo++;
     $tr = $tbl->appendElement('tr', array('id' => $row['pdl_id'] . '_' . $row['pdl_record_id']));
 
-    foreach ($fields as $key => $val) {
+    foreach ($arr_flds as $key => $val) {
         $td = $tr->appendElement('td');
         switch ($key) {
             case 'listSerial':
@@ -50,7 +54,7 @@ foreach ($links as $sn => $row) {
                 if ('' != $row['pdl_download_link'] && 0 == $product['product_seller_id']) {
                     $td->appendElement('div', array("class"=>"clipboard"), '<input class="form-control copy-input" value="'.$row[$key].'" id="copymain_'. $row['pdl_id'] .'" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_'. $row['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copymain_'. $row['pdl_id'] .'\')"><i class="far fa-copy"></i></button>', true);
                 } else {
-                    $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $adminLangId), true);
+                    $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 
                 break;
@@ -58,7 +62,7 @@ foreach ($links as $sn => $row) {
                 if ('' != $row['pdl_preview_link']) {
                     $td->appendElement('div', array("class"=>"clipboard"), '<input class="form-control copy-input" value="'.$row[$key].'" id="copypreview_'. $row['pdl_id'] .'" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_'. $row['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copypreview_'. $row['pdl_id'] .'\')"><i class="far fa-copy"></i></button>', true);
                 } else {
-                    $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $adminLangId), true);
+                    $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 break;
             case 'action':
@@ -66,8 +70,8 @@ foreach ($links as $sn => $row) {
                     $td->appendElement(
                         "a",
                         array(
-                            'class' => 'btn btn-clean btn-sm btn-icon',
-                            'title' => Labels::getLabel('LBL_Delete', $adminLangId),
+                            'class' => 'btn btn-clean btn-sm btn-icon align-right',
+                            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
                             'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')', 'href' => 'javascript:void(0);'
                         ),
                         '<i class="fa fa-trash  icon"></i>',
@@ -85,7 +89,7 @@ foreach ($links as $sn => $row) {
 
 if (empty($links)) {
     $tr = $tbl->appendElement('tr')->appendElement('td', ['colspan' => count($arr_flds)]);
-    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_No_Records', $adminLangId), true);
+    $tr->appendElement('plaintext', array(), Labels::getLabel('LBL_NO_RECORDS', $siteLangId), true);
 }
 ?>
 <div class="col-md-12">

@@ -2,6 +2,7 @@
     var selected_products = [];
     bindProductNameSelect2 = function () {
         $("select[name='product_name']").select2({
+            dropdownParent: $("select[name='product_name']").parent(),
             closeOnSelect: true,
             dir: layoutDirection,
             allowClear: true,

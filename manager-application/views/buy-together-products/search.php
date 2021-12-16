@@ -100,16 +100,16 @@ if ($printData) {
         var keyword = e.detail.value;
         var element = e.detail.tagify.DOM.originalInput;
         var list = [];
-        fcom.ajax(fcom.makeUrl('SellerProducts', 'autoCompleteProducts'), {
+        fcom.ajax(fcom.makeUrl('SellerProducts', 'autoComplete'), {
             keyword: keyword,
             selProdId: $(element).data('mainrecord'),
         }, function (t) {
             var ans = JSON.parse(t);
-            for (i = 0; i < ans.products.length; i++) {
-                var products = ans.products;
+            for (i = 0; i < ans.results.length; i++) {
+                var products = ans.results;
                 list.push({
                     "id": products[i].id,
-                    "value": products[i].name,
+                    "value": products[i].text,
                     "mainRecord": $(element).data('mainrecord'),
                 });
             }
