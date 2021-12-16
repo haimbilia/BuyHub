@@ -398,7 +398,11 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 return false;
             }
             $.ykmsg.success(t.msg);
-            reloadList();
+
+            if( t.langId == langLbl.defaultFormLangId){
+                reloadList();
+            }
+            
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
             } else if ("openMediaForm" in t) {
@@ -418,7 +422,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         var parentForm = obj.closest("form").attr("id");
-        console.log(obj.closest("form"));
         $("#" + parentForm + " .selectItemJs").each(function () {
             var tr = $(this).closest('tr');
             if (obj.prop("checked") == false) {

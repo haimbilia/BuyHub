@@ -77,8 +77,8 @@
                         <div class="card-body pd-0">
                             <div class="pricingd-block">
                                 <div class="bg-position bg-brand align-center">
-                                    <div class="text-white title-lg mr-tb-30">Transparent & Simple Pricing</div>
-                                    <div class="select-btn mr-tb-30">
+                                    <div class="text-white title-lg me-tb-30">Transparent & Simple Pricing</div>
+                                    <div class="select-btn me-tb-30">
                                         <span><a href="#" class="btn-grp-select bdr-round-left active">Annual Plans</a></span>
                                         <span><a href="#" class="btn-grp-select bdr-round-right">Monthly Plans</a></span>
                                     </div>

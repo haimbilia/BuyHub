@@ -849,10 +849,10 @@
                                             <td>$1311</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 41%;" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">41%</div>
+                                                    <div class="fw-semi-bold ms-2">41%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -875,10 +875,10 @@
                                             <td>$1311</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 41%;" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">41%</div>
+                                                    <div class="fw-semi-bold ms-2">41%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -901,10 +901,10 @@
                                             <td>$539</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 27%;" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">27%</div>
+                                                    <div class="fw-semi-bold ms-2">27%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -927,10 +927,10 @@
                                             <td>$245</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 17%;" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">17%</div>
+                                                    <div class="fw-semi-bold ms-2">17%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -953,10 +953,10 @@
                                             <td>$234</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">7%</div>
+                                                    <div class="fw-semi-bold ms-2">7%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -979,10 +979,10 @@
                                             <td>$234</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">7%</div>
+                                                    <div class="fw-semi-bold ms-2">7%</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -1005,10 +1005,10 @@
                                             <td>$234</td>
                                             <td class="text-right">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress mr-3 rounded-3 bg-200" style="height: 5px;width:80px">
+                                                    <div class="progress me-3 rounded-3 bg-200" style="height: 5px;width:80px">
                                                         <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 7%;" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                                    <div class="fw-semi-bold ml-2">7%</div>
+                                                    <div class="fw-semi-bold ms-2">7%</div>
                                                 </div>
                                             </td>
                                         </tr>

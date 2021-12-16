@@ -1,5 +1,13 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->addFormTagAttribute('data-onclear', 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');');
+
+$collectionNameFld = $frm->getField('collection_name');
+$fld = $frm->getField('blocation_promotion_cost');
+if (null != $fld) {
+    $collectionNameFld->developerTags['colWidthValues'] = [null, '6', null, null];
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
+
 $fld = $frm->getField('collection_for_web');
 if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -29,10 +37,28 @@ if ($collection_type == Collections::COLLECTION_TYPE_BANNER) {
     $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'banners(' . $recordId . ')',
-            'title' => Labels::getLabel('LBL_BANNERS', $siteLangId),
+            'onclick' => 'bannerForm(' . $recordId . ',' . $collection_type . ')',
+            'title' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
         ],
-        'label' => Labels::getLabel('LBL_BANNERS', $siteLangId),
+        'label' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
+        'isActive' => false
+    ];
+    $otherButtons[] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'bannerMedia(' . $recordId . ',' . $collection_type . ')',
+            'title' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
+        'isActive' => false
+    ];
+    $otherButtons[] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'banners(' . $recordId . ',' . $collection_type . ')',
+            'title' => Labels::getLabel('LBL_BANNERS_LISTING', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_BANNERS_LISTING', $siteLangId),
         'isActive' => false
     ];
 }
@@ -41,7 +67,7 @@ if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA)) {
     $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'collectionMediaForm(' . $recordId . ')',
+            'onclick' => 'collectionMediaForm(' . $recordId . ',' . $collection_type . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),

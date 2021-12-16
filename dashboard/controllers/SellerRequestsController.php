@@ -535,7 +535,7 @@ class SellerRequestsController extends SellerBaseController
 
         $brandMediaFrm = $this->getMediaForm($brand_id);
         $brandImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, -1);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 
         $this->set('languages', Language::getAllNames());
         $this->set('brandReqId', $brand_id);

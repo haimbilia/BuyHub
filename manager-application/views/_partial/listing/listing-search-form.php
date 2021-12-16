@@ -151,7 +151,7 @@ if (null != $keyWordFld || $haveExtraFlds || !empty($firstElement)) {
                             }
                             ?>
                             <?php if ($haveExtraFlds && $extraFldCount > 1) { ?>
-                                <a class="btn advanced-trigger ml-2 collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                                <a class="btn advanced-trigger ms-2 collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                                     <svg class="svg" width="22" height="22">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
                                         </use>

@@ -153,7 +153,7 @@ if (null != $fld) {
                 <div class="row">
                     <div class="col-md-6">
                         <div class="field-set d-flex align-items-center">
-                            <div class="caption-wraper w-auto pr-4">
+                            <div class="caption-wraper w-auto pe-4">
                                 <label class="field_label">
                                     <?php echo $statusFld->getCaption(); ?>
                                 </label>
@@ -184,7 +184,7 @@ if (null != $fld) {
                     <?php
 
                     $fld = $prodCatFrm->getField('icon_lang_id');
-                     $iconLang = $fld->fldType;
+                    $iconLang = $fld->fldType;
                     if ($iconLang != 'hidden') {
                     ?>
 
@@ -231,26 +231,26 @@ if (null != $fld) {
                 <div class="divider"></div>
                 <h3 class="mb-4"><?php echo Labels::getLabel('LBL_Banner', $adminLangId); ?></h3>
                 <div class="row">
-                <?php
+                    <?php
 
                     $fld = $prodCatFrm->getField('banner_lang_id');
                     $bannerLang = $fld->fldType;
                     if ($bannerLang != 'hidden') {
                     ?>
-                    <div class="col-md-3">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label">
-                                    <?php 
-                                    echo $fld->getCaption();
-                                    ?>
-                                </label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $prodCatFrm->getFieldHtml('banner_lang_id'); ?>
+                        <div class="col-md-3">
+                            <div class="field-set">
+                                <div class="caption-wraper"><label class="field_label">
+                                        <?php
+                                        echo $fld->getCaption();
+                                        ?>
+                                    </label></div>
+                                <div class="field-wraper">
+                                    <div class="field_cover">
+                                        <?php echo $prodCatFrm->getFieldHtml('banner_lang_id'); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <?php } else {
                         echo $prodCatFrm->getFieldHtml('banner_lang_id');
                     }

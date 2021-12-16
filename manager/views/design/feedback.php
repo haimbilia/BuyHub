@@ -155,7 +155,7 @@
                                             <h3 class="text-bold">Or Reach Us by Live Chat</h3>
                                             <p>Base FAQ Question</p>
                                         </div>
-                                        <div class="align-right ml-auto btn-top-show">
+                                        <div class="align-right ms-auto btn-top-show">
                                             <button type="button" class="btn btn-primary btn-lg">Submit a Request</button>
                                         </div>
                                     </div>
@@ -170,7 +170,7 @@
                                             <h3 class="text-bold">Phone Call</h3>
                                             <p>Base FAQ Question</p>
                                         </div>
-                                        <div class="align-right ml-auto btn-top-show">
+                                        <div class="align-right ms-auto btn-top-show">
                                             <button type="button" class="btn btn-success btn-lg">Submit a Request</button>
                                         </div>
                                     </div>

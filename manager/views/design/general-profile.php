@@ -143,7 +143,7 @@
                                     <div class="row justify-content-between align-items-center">
                                         <div class="col">
                                             <div class="row no-gutters align-items-center">
-                                                <div class="col-auto mr-3">
+                                                <div class="col-auto me-3">
                                                     <i class="icon-svg btn btn-secondary btn-elevate btn-icon p-2">
                                                         <svg class="svg">
                                                             <use xlink:href="media/retina/sprite.svg#location" href="media/retina/sprite.svg#location"></use>
@@ -179,7 +179,7 @@
                                     <div class="row justify-content-between mb-4">
                                         <div class="col">
                                             <div class="row no-gutters align-items-center">
-                                                <div class="col-auto mr-3">
+                                                <div class="col-auto me-3">
                                                     <i class="btn btn-secondary btn-elevate btn-icon p-2"><img src="../media/flags/4x3/in.svg" alt=""></i>
                                                 </div>
                                                 <div class="col-auto">
@@ -258,7 +258,7 @@
                                     <div class="row justify-content-between  mb-4">
                                         <div class="col">
                                             <div class="row no-gutters align-items-center">
-                                                <div class="col-auto mr-3">
+                                                <div class="col-auto me-3">
                                                     <i class="btn btn-secondary btn-elevate btn-icon p-2"><img src="../media/retina/world.svg" alt=""></i>
                                                 </div>
                                                 <div class="col-auto">

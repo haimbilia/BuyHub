@@ -14,7 +14,6 @@
             }, 500);
         });
     };
-
     setup = function (frm) {
         if (!$(frm).validate())
             return;
@@ -36,7 +35,6 @@
             $.ykmodal.close();
         });
     };
-
     getCountryStates = function (countryId, stateId, div, langId) {
         fcom.ajax(fcom.makeUrl('Shops', 'getStates', [countryId, stateId, langId]), '', function (res) {
             $(div).empty();
@@ -44,31 +42,32 @@
         });
     };
 
-    addTimeSlotRow = function (day) {
-        var fromTimeHtml = $(".js-from_time_" + day).html();
-        var toTimeHtml = $(".js-to_time_" + day).html();
-        var count = $('.js-slot-individual .row').length;
+    addRow = function (day) {
+        var fromTimeHtml = $(".js-slot-from-" + day).parent().html();
+        var toTimeHtml = $(".js-slot-to-" + day).parent().html();
+        var count = $(".js-slot-individual .rows").length;
         var toTime = $(".js-slot-to-" + day + ":last").val();
-        var rowElement = ".js-slot-individual .row-" + count;
 
-        var addRowBtn = $('.js-slot-add-' + day);
-        if (0 < addRowBtn.closest('.field-set').length) {
-            addRowBtn.remove();
-            addRowBtn.closest('.field-set').remove();
+        var rowHtml = '<tr class="rows jsDay-' + day + ' row-' + count + '" data-count=' + count + '><td class="border-0"></td>';
+        rowHtml += '<td class="border-0">' + fromTimeHtml + '</td>';
+        rowHtml += '<td class="border-0">' + toTimeHtml + '</td>';
+        rowHtml += '<td class="align-right  border-0"><ul class="actions">';
+        rowHtml += '<li class="d-none addRowBtn' + day + '-js"><a href="javascript:void(0)" onclick="addRow(' + day + ')" class=""><svg class="svg" width="18" height="18"><use xlink:href="/admin/images/retina/sprite-actions.svg#add"></use> </svg></a></li>';
+        rowHtml += '<li class="btn-remove-row-js" data-day=' + day + '><a href="javascript:void(0)" > <svg class="svg" width="18" height="18"> <use xlink:href="/admin/images/retina/sprite-actions.svg#delete"> </use></svg></a></li>';
+        rowHtml += '</td>';
+
+        var addRowBtn = $('.addRowBtn' + day + '-js');
+        if (0 < addRowBtn.length) {
+            addRowBtn.addClass('d-none');
         }
 
         if (0 < $('.addRowBtn' + day + '-js').length) {
-            $('.addRowBtn' + day + '-js').remove();
+            $('.addRowBtn' + day + '-js').addClass('d-none');
         }
 
-        var addRowBtnHtml = '<input class="addRowBtn' + day + '-js js-slot-add-' + day + ' d-none" onclick="addTimeSlotRow(' + day + ')" type="button" name="btn_add_row[' + day + ']" value="+">';
-        var html = "<div class='row row-" + count + " js-added-rows-" + day + "'><div class='col-md-2 jsWeekDay" + ($(".availabilityType-js:checked").val() == 2 ? ' d-none' : '') + " '></div><div class='col-md-4 js-from_time_" + day + "'>" + fromTimeHtml + "</div><div class='col-md-4 js-to_time_" + day + "'>" + toTimeHtml + "</div><div class='col-md-2'><div class='field-set'><div class='caption-wraper'><label class='field_label'></label></div><div class='field-wraper'><div class='field_cover'><input class='' type='button' data-day='" + day + "' name='btn_remove_row' value='x'>" + addRowBtnHtml + "</div></div></div></div></div>";
-        $(".js-from_time_" + day).last().parent().after(html);
-        $(rowElement + " select").val('').attr('data-row', (count));
-        var frmElement = rowElement + " .js-slot-from-" + day;
-
-        $(frmElement + " option").removeClass('d-none');
-        $(frmElement + " option").each(function () {
+        $(".jsDay-" + day).last().after(rowHtml);
+        $('.row-' + count + " select").val('').attr('data-row', count);
+        $('.row-' + count + " select").find("option").each(function () {
             var toVal = $(this).val();
             if (toVal != '' && toVal <= toTime) {
                 $(this).addClass('d-none');
@@ -76,36 +75,16 @@
         });
     }
 
-    displayFields = function (day, ele) {
-        if ($(ele).prop("checked") == true) {
-            $(".js-slot-from-" + day).removeAttr('disabled');
-            $(".js-slot-to-" + day).removeAttr('disabled');
-            $(".addRowBtnBlock" + day + "-js").removeClass('d-none');
-            displayAddRowField(day, ele);
-        } else {
-            $(".js-slot-from-" + day).attr('disabled', 'true');
-            $(".js-slot-to-" + day).attr('disabled', 'true');
-            $(".js-slot-add-" + day).addClass('d-none');
-            /*$(".js-added-rows-" + day).remove();*/
-            $(".jsDay-" + day).find("[name='btn_remove_row']").trigger('click');
-            $(".addRowBtnBlock" + day + "-js").addClass('d-none');
-
-        }
-    }
-
-    displayAddRowField = function (day, ele) {
+    displayAddRowValues = function (day, ele) {
         var index = $(ele).data('row');
         var rowElement = ".js-slot-individual .row-" + index;
         var frmElement = rowElement + " .js-slot-from-" + day;
         var toElement = rowElement + " .js-slot-to-" + day;
-
         var fromTime = $(frmElement + " option:selected").val();
         var toTime = $(toElement + " option:selected").val();
-
         var toElementIndex = $(rowElement).index();
-        var nextRowElement = ".js-slot-individual .row:eq(" + (toElementIndex + 1) + ")";
+        var nextRowElement = ".js-slot-individual .rows:eq(" + (toElementIndex + 1) + ")";
         var nextFrmElement = nextRowElement + " .js-slot-from-" + day;
-
         if (0 < $(nextFrmElement).length) {
             $(nextFrmElement + " option").removeClass('d-none');
             var nxtFrmSelectedVal = $(nextFrmElement + ' option:selected').val();
@@ -152,61 +131,49 @@
                 $(this).addClass('d-none');
             }
         });
-
         var toTimeLastOpt = $(toElement + " option:last").val();
-
-        if (fromTime != '' && toTime != '' && toTime < toTimeLastOpt) {
-            $(rowElement + " .js-slot-add-" + day).removeClass('d-none');
+        var lastCount = $('.jsDay-' + day).last().data('count');
+        if (index < lastCount) {
+            $(rowElement).find(".addRowBtn" + day + '-js').addClass('d-none');
+        } else if (fromTime != '' && toTime != '' && toTime < toTimeLastOpt) {
+            $(rowElement + " .addRowBtn" + day + '-js').removeClass('d-none');
         } else {
-            $(rowElement + " .js-slot-add-" + day).addClass('d-none');
+            $(rowElement + " .addRowBtn" + day + '-js').addClass('d-none');
         }
-
     }
+
+    displayFields = function (day, ele) {
+        if ($(ele).prop("checked") == true) {
+            $(".js-slot-from-" + day).removeAttr('disabled');
+            $(".js-slot-to-" + day).removeAttr('disabled');
+            $(".addRowBtnBlock" + day + "-js").removeClass('d-none');
+            displayAddRowValues(day, ele);
+        } else {
+            $(".js-slot-from-" + day).attr('disabled', 'true');
+            $(".js-slot-to-" + day).attr('disabled', 'true');
+            $(".js-slot-add-" + day).addClass('d-none');
+            $(".jsDay-" + day).find("[name='btn_remove_row']").trigger('click');
+            $(".addRowBtnBlock" + day + "-js").addClass('d-none');
+        }
+    }
+
 
     displaySlotTimings = function (ele) {
         var selectedVal = $(ele).val();
         if (selectedVal == 2) {
-            $('.js-slot-individual .row').addClass('d-none');
+            $('.js-slot-individual').addClass('d-none');
             $('.js-slot-individual .jsDay-' + DAY_SUNDAY + ' .jsWeekDay').addClass('d-none');
             $('.js-slot-individual .jsDay-' + DAY_SUNDAY).removeClass('d-none');
         } else {
-            $('.js-slot-individual .row').removeClass('d-none');
+            $('.js-slot-individual').removeClass('d-none');
             $('.js-slot-individual .jsDay-' + DAY_SUNDAY + ' .jsWeekDay').removeClass('d-none');
-        }
-    }
-
-    validateTimeFields = function () {
-        var from_time = $("[name='tslot_from_all']").children("option:selected").val();
-        var to_time = $("[name='tslot_to_all']").children("option:selected").val();
-
-        $("[name='tslot_to_all'] option").removeClass('d-none');
-        $("[name='tslot_to_all'] option").each(function () {
-            var toVal = $(this).val();
-            if (toVal != '' && toVal <= from_time) {
-                $(this).addClass('d-none');
-            }
-        });
-
-        if (to_time != '' && to_time <= from_time) {
-            $("[name='tslot_to_all']").val('').addClass('error');
-        } else {
-            $("[name='tslot_to_all']").removeClass('error');
         }
     }
 
 })();
 
-$(document).on("click", "[name='btn_remove_row']", function () {
+$(document).on("click", ".btn-remove-row-js", function () {
     var day = $(this).data('day');
-    $(this).parentsUntil('.row').parent().remove();
-
-    if (0 < $('.js-added-rows-' + day + ':last [name="btn_remove_row"]').length) {
-        var addRowBtnHtml = '<input class="addRowBtn' + day + '-js js-slot-add-' + day + '" onclick="addTimeSlotRow(' + day + ')" type="button" name="btn_add_row[' + day + ']" value="+">';
-        if (1 > $('.js-added-rows-' + day + ':last .addRowBtn' + day + '-js').length) {
-            $('.js-added-rows-' + day + ':last [name="btn_remove_row"]').after(addRowBtnHtml);
-        }
-    } else if (0 < $('.addRowBtnBlock' + day + '-js').length) {
-        var addRowBtnHtml = '<input class="addRowBtn' + day + '-js js-slot-add-' + day + ' mt-4" onclick="addTimeSlotRow(' + day + ')" type="button" name="btn_add_row[' + day + ']" value="+">';
-        $('.addRowBtnBlock' + day + '-js').html(addRowBtnHtml);
-    }
+    $(this).closest('.rows').remove();
+    $('.jsDay-' + day + ':last').find('.addRowBtn' + day + '-js').removeClass('d-none');
 })

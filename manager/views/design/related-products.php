@@ -86,7 +86,7 @@
                                                 <input name='basic' class="form-control" value='tag1, tag2 autofocus'>
                                             </div>
                                             <div class="col-md-2">
-                                                <button type="button" class="btn btn-brand btn-wide ml-2">Save</button>
+                                                <button type="button" class="btn btn-brand btn-wide ms-2">Save</button>
                                             </div>
                                         </div>
                                     </div>

@@ -38,7 +38,7 @@ if (!empty($excludeLocations)) {
 </div>
 <div class="form-edit-body loaderContainerJs">
     <form onsubmit="setupZone(this); return(false);" method="post" class="form form-edit" id="shippingZoneFrm">
-        <div class="portlet__body">
+        <div class="card-body">
             <input type="hidden" name="shipprozone_id" value="<?php echo (!empty($zone_data)) ? $zone_data['shipprozone_id'] : 0; ?>">
             <input type="hidden" name="shipzone_id" value="<?php echo $zone_id; ?>">
             <input type="hidden" name="shipzone_profile_id" value="<?php echo $profile_id; ?>">
@@ -117,7 +117,7 @@ if (!empty($excludeLocations)) {
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-auto mr-3">
+                                                    <div class="col-auto me-3">
                                                         <?php if ($statesCount > 0) { ?>
                                                             <a class="link font-bolder link_<?php echo $countryId; ?> containChild-js" data-bs-toggle="collapse" href="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1">
                                                                 <span class="statecount--js selectedStateCount--js_<?php echo $countryId; ?> " data-totalcount="<?php echo $statesCount; ?>">0</span>
@@ -171,7 +171,7 @@ if (!empty($excludeLocations)) {
                 </div>
             </div>
         </div>
-        <div class="portlet__foot">
+        <div class="card-foot">
             <div class="row">
                 <div class="col-md-12">
                     <?php

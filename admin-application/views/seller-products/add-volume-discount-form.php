@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $selProdId = (!empty($data['voldiscount_selprod_id']) ? $data['voldiscount_selprod_id'] : 0);
 $frm = SellerProduct::volumeDiscountForm($adminLangId);
-$prodName = $frm->addSelectBox(Labels::getLabel('LBL_Product', $adminLangId), 'product_name', [], '', array('class' => 'selProd--js','placeholder' => Labels::getLabel('LBL_Select_Product', $adminLangId)));
+$prodName = $frm->addSelectBox(Labels::getLabel('LBL_Product', $adminLangId), 'product_name', [], '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $adminLangId)));
 //$prodName = $frm->addTextBox(Labels::getLabel('LBL_Product', $adminLangId), 'product_name', '', array('class' => 'selProd--js', 'placeholder' => Labels::getLabel('LBL_Select_Product', $adminLangId)));
 $prodName->requirements()->setRequired();
 
@@ -35,7 +35,7 @@ $selProdStock = isset($data['selprod_stock']) ? $data['selprod_stock'] : 0;
 $selProdStockLbl = 0 < $selProdStock ? Labels::getLabel("LBL_CURRENT_STOCK:_{STOCK}", $adminLangId) : '';
 $selProdStockLbl = !empty($selProdStockLbl) ? CommonHelper::replaceStringData($selProdStockLbl, ['{STOCK}' => $selProdStock]) : '';
 ?>
-<div class="card-body pt-4 pl-4 pr-4 pb-0">
+<div class="card-body pt-4 ps-4 pe-4 pb-0">
     <div class="replaced">
         <?php
         echo $frm->getFormTag();

@@ -407,8 +407,8 @@ $header-height: 65px;
         }
 
         &-full {
-            flex: 1 !important;
-            max-width: inherit !important;
+            flex: 100% !important;
+            max-width: 100% !important;
         }
     }
     .icn {
