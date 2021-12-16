@@ -26,7 +26,7 @@ trait ProductsDigitalDownloads
 
         $canDo = $ddpObj->canEdit($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true);
         
-        $frm = DigitalDownload::getDownloadForm($this->siteLangId);
+        $frm = DigitalDownload::getDownloadForm($this->siteLangId,-1,$selProdId);
 
         $savedOptions = array();
         $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
@@ -65,13 +65,8 @@ trait ProductsDigitalDownloads
             }
         }
         
-        $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
-
-        $data = [
-            'product_id' => $productId,
-            'selprod_id' =>  $selProdId,
-        ];
-        $frm->fill($data);
+        $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);      
+    
         $this->set('canDo', $canDo);     
         $this->set('formTitle', Labels::getLabel('LBL_DIGITAL_FILES_OR_LINKS', $this->siteLangId));
         $this->set('frm', $frm);      
@@ -82,25 +77,25 @@ trait ProductsDigitalDownloads
     {
         $this->objPrivilege->canViewSellerProducts();
 
-        $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            $records = DigitalDownloadSearch::getInventoryLinks($selProdId, $langId);
+            $records = DigitalDownloadSearch::getInventoryLinks($recordId, $langId);
         } else {
-            $records = DigitalDownloadSearch::getInventoryAttachments($selProdId, $langId);
+            $records = DigitalDownloadSearch::getInventoryAttachments($recordId, $langId);
             $records = DigitalDownloadSearch::processAttachmentsWithPreview($records);
         }
         
         $ddpObj = new DigitalDownloadPrivilages();
 
-        $canDoDigDownload = $ddpObj->canEdit($selProdId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true);
+        $canDoDigDownload = $ddpObj->canEdit($recordId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true);
         
         $this->set('canDelete', $canDoDigDownload);
         $this->set('canDoDigDownload', $canDoDigDownload);
         $this->set('records', $records);
-        $this->set('recordId', $selProdId);
+        $this->set('recordId', $recordId);
         $this->set('downloadrefType', Product::CATALOG_TYPE_INVENTORY);
         $languages = Language::getAllNames();
         $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;

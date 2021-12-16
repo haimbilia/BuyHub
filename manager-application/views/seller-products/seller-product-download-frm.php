@@ -15,8 +15,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
             echo HtmlHelper::getFieldHtml($frm, 'download_type', 6);
             echo HtmlHelper::getFieldHtml($frm, 'option_comb_id', 6);
             echo HtmlHelper::getFieldHtml($frm, 'lang_id', 6); 
-            echo $frm->getFieldHtml('product_id');
-            echo $frm->getFieldHtml('selprod_id');
+            echo $frm->getFieldHtml('record_id');         
             echo $frm->getFieldHtml('dd_link_id');
             echo $frm->getFieldHtml('dd_link_ref_id');
             echo $frm->getFieldHtml('is_preview');
