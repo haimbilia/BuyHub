@@ -115,7 +115,7 @@ if (!empty($excludeLocations)) {
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-auto mr-3">
+                                                    <div class="col-auto me-3">
                                                         <?php if ($statesCount > 0) { ?>
                                                             <a class="link font-bolder link_<?php echo $countryId; ?> containChild-js" data-bs-toggle="collapse" href="#state_list_<?php echo $countryId; ?>" aria-expanded="false" aria-controls="state_list_<?php echo $countryId; ?>" data-countryid="<?php echo $countryId; ?>" data-loadedstates="1">
                                                                 <span class="statecount--js selectedStateCount--js_<?php echo $countryId; ?> " data-totalcount="<?php echo $statesCount; ?>">0</span>

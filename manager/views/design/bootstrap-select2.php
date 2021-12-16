@@ -720,7 +720,7 @@
                             <div class="card-foot">
                                 <div class="form__actions">
                                     <div class="row">
-                                        <div class="col-lg-9 ml-lg-auto">
+                                        <div class="col-lg-9 ms-lg-auto">
                                             <button type="reset" class="btn btn-brand">Submit</button>
                                             <button type="reset" class="btn btn-secondary">Cancel</button>
                                         </div>
@@ -1158,7 +1158,7 @@
                             <div class="card-foot">
                                 <div class="form__actions">
                                     <div class="row">
-                                        <div class="col-lg-9 ml-lg-auto">
+                                        <div class="col-lg-9 ms-lg-auto">
                                             <button type="reset" class="btn btn-primary">Submit</button>
                                             <button type="reset" class="btn btn-secondary">Cancel</button>
                                         </div>

@@ -18,7 +18,7 @@ if (!empty($zones)) {
                 <div class="row justify-content-between my-1">
                     <div class="col">
                         <div class="row no-gutters">
-                            <div class="col-auto mr-3">
+                            <div class="col-auto me-3">
                                 <span class="box-icon"><i class="fa fa-globe fa-2x icon"></i></span>
                             </div>
                             <div class="col">

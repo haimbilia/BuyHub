@@ -790,7 +790,7 @@
                 <div class="add-items d-flex px-4 mb-0">
                     <form class="form w-100">
                         <div class="form-group d-flex">
-                            <input type="text" class="form-control todo-list-input mr-2" placeholder="Add To-do">
+                            <input type="text" class="form-control todo-list-input me-2" placeholder="Add To-do">
                             <button type="submit" class="btn btn-primary btn-wide todo-list-add-btn" id="add-task">Add</button>
                         </div>
                     </form>

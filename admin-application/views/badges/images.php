@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php if (!empty($icon)) { ?>
-    <div class="uploaded-img ml-2 uploadedImage--js">
+    <div class="uploaded-img ms-2 uploadedImage--js">
         <div class="logothumb">
             <?php $uploadedTime = AttachedFile::setTimeParam($icon['afile_updated_at']); ?>
             <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'badgeIcon', array($icon['afile_record_id'], $icon['afile_lang_id'], "THUMB", $icon['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" title="<?php echo $icon['afile_name']; ?>" alt="<?php echo $icon['afile_name']; ?>">
@@ -10,7 +10,7 @@
             <?php } ?>
 
         </div>
-        <?php 
+        <?php
         $lang_name = Labels::getLabel('LBL_All', $adminLangId);
         if ($icon['afile_lang_id'] > 0) {
             $lang_name = $languages[$icon['afile_lang_id']]; ?>
