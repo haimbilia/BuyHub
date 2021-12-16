@@ -1462,3 +1462,4 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 SELECT @i := 0;
 UPDATE tbl_collection_to_records SET ctr_display_order = (SELECT @i := @i + 1);
+-- ---------------TV-9.4.0.20211215----------------
