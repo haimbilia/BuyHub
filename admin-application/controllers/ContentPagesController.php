@@ -209,7 +209,7 @@ class ContentPagesController extends AdminBaseController
         $languages = Language::getAllNames();
         $bgImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $cpage_id, 0, $lang_id,(count($languages) > 1) ? false : true);
        
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
         $this->set('bgImages', $bgImages);
         $this->set('bannerTypeArr', $bannerTypeArr);
         $this->set('languages', Language::getAllNames());
@@ -442,7 +442,7 @@ class ContentPagesController extends AdminBaseController
         $frm->addHiddenField('', 'cpage_layout', $cpage_layout);
         $frm->addRequiredField(Labels::getLabel('LBL_Page_Title', $this->adminLangId), 'cpage_title');
         if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
-            $bannerTypeArr = applicationConstants::bannerTypeArr();
+            $bannerTypeArr = applicationConstants::getAllLanguages();
             /*$frm->addButton(
                 Labels::getLabel('LBL_Backgroud_Image', $this->adminLangId),
                 'cpage_bg_image',

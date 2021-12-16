@@ -418,7 +418,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         var parentForm = obj.closest("form").attr("id");
-        console.log(obj.closest("form"));
         $("#" + parentForm + " .selectItemJs").each(function () {
             var tr = $(this).closest('tr');
             if (obj.prop("checked") == false) {

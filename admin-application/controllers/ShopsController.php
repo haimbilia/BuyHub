@@ -470,7 +470,7 @@ class ShopsController extends AdminBaseController
         $this->set('shopLogoFrm', $shopLogoFrm);
         $this->set('shopBannerFrm', $shopBannerFrm);
         $this->set('shopBackgroundImageFrm', $shopBackgroundImageFrm);
-        $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
+        $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->_template->render(false, false);
     }
 
@@ -671,7 +671,7 @@ class ShopsController extends AdminBaseController
         $frm = new Form('frmShopLogo');
         $frm->addHTML('', Labels::getLabel('LBL_Logo', $this->adminLangId), '<h3>' . Labels::getLabel('LBL_Logo', $this->adminLangId) . '</h3>');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 		
 		
 		if(count($bannerTypeArr) > 1){
@@ -698,7 +698,7 @@ class ShopsController extends AdminBaseController
         $frm = new Form('frmShopBanner');
         $frm->addHTML('', Labels::getLabel('LBL_Banners', $this->adminLangId), '<h3>' . Labels::getLabel('LBL_Banners', $this->adminLangId) . '</h3>');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 		if(count($bannerTypeArr) > 1){
 			$frm->addSelectBox(Labels::getLabel('LBL_Language', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');
         } else  {
@@ -721,7 +721,7 @@ class ShopsController extends AdminBaseController
         $frm = new Form('frmBackgroundImage');
         $frm->addHTML('', Labels::getLabel('Lbl_Background_Image', $this->adminLangId), '<h3>' . Labels::getLabel('Lbl_Background_Image', $this->adminLangId) . '</h3>');
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 		if(count($bannerTypeArr) > 1){
 			 $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array(), '');
 		} else  {
@@ -964,7 +964,7 @@ class ShopsController extends AdminBaseController
         $frm = new Form('frmCollectionMedia');
         $frm->addHiddenField('', 'scollection_id', $scollection_id);
         $frm->addHiddenField('', 'shop_id', $shop_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 		
 		if(count($bannerTypeArr) > 1){
 			 $frm->addSelectBox(Labels::getLabel('Lbl_Language', $this->adminLangId), 'lang_id', $bannerTypeArr, '', array('class' => 'collection-language-js'), '');
@@ -996,7 +996,7 @@ class ShopsController extends AdminBaseController
 
         $collectionImg = AttachedFile::getAttachment(AttachedFile::FILETYPE_SHOP_COLLECTION_IMAGE, $scollection_id, 0, $lang_id, false);
         $this->set('images', $collectionImg);
-        $this->set('languages', applicationConstants::bannerTypeArr());
+        $this->set('languages', applicationConstants::getAllLanguages());
         $this->set('scollection_id', $scollection_id);
         $this->set('lang_id', $lang_id);
         $this->_template->render(false, false);

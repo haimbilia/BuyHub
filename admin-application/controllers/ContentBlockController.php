@@ -209,7 +209,7 @@ class ContentBlockController extends AdminBaseController
         }
 
         $bgImages = AttachedFile::getMultipleAttachments($fileType, $epage_id, 0, $lang_id);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
         $this->set('bgImages', $bgImages);
         $this->set('bannerTypeArr', $bannerTypeArr);
         $this->set('languages', Language::getAllNames());

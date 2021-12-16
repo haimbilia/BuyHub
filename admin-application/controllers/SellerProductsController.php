@@ -1762,7 +1762,7 @@ class SellerProductsController extends AdminBaseController
 
     /* private function getDownloadForm($langId){
     $frm = new Form('frmDownload');
-    $bannerTypeArr = applicationConstants::bannerTypeArr();
+    $bannerTypeArr = applicationConstants::getAllLanguages();
 
     $frm->addSelectBox( Labels::getLabel('Lbl_Language',$langId), 'lang_id', $bannerTypeArr, '', array('class'=>'file-language-js'), '' )->requirements()->setRequired();
     //$frm->addTextBox(Labels::getLabel('LBL_Download_name',$langId),'afile_name')->requirements()->setRequired();;
@@ -1776,7 +1776,7 @@ class SellerProductsController extends AdminBaseController
     /* private function getDownloadForm($langId)
     {
         $frm = new Form('frmDownload');
-        $bannerTypeArr = applicationConstants::bannerTypeArr($langId);
+        $bannerTypeArr = applicationConstants::getAllLanguages($langId);
         $digitalDownloadTypeArr = applicationConstants::digitalDownloadTypeArr($langId);
 
         $frm->addSelectBox(Labels::getLabel('LBL_Digital_Download_Type', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
