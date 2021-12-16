@@ -20,17 +20,16 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'selprod_title':
-                $product = $row;             
-                $str = $this->includeTemplate('seller-products/product-info-card.php', ['product' => $product,'options' => $row['options'],'canViewProducts' => $canViewProducts, 'siteLangId' => $siteLangId], false, true);
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['product' => $row, 'options' => $row['options'], 'displayProductName' => true, 'canViewProducts' => $canViewProducts, 'siteLangId' => $siteLangId], false, true);
                 $td->appendElement('plaintext', array(), $str, true);
                 break;
             case 'user_name':
-                if ($canViewUsers) {                    
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectfunc("' . UrlHelper::generateUrl('Users') . '",{user_id:'.$row['selprod_user_id'].'})'), $row['user_name'], true);
+                if ($canViewUsers) {
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onClick' => 'redirectUser(' . $row['selprod_user_id'] . ')'), $row['user_name'], true);
                 } else {
                     $td->appendElement('plaintext', array(), $row['user_name'], true);
                 }
-                $userDetail = '<br/>'.$row['credential_email'];
+                $userDetail = '<br/>' . $row['credential_email'];
                 $td->appendElement('plaintext', array(), $userDetail, true);
                 break;
             case 'selprod_price':
@@ -58,11 +57,12 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = ['onClick'=>'editRecord('.$row['selprod_id'].', false, "modal-dialog-vertical-md")'];
-                    $data['deleteButton'] = [];                    
+                    $data['editButton'] = ['onClick' => 'editRecord(' . $row['selprod_id'] . ', false, "modal-dialog-vertical-md")'];
+                    $data['deleteButton'] = [];
                 }
                 if ($row['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-                    $data['otherButtons'] = [                        [
+                    $data['otherButtons'] = [
+                        [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
                                 'onclick' => "sellerProductDownloadFrm(" . $row['selprod_id'] . ")",
