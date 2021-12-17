@@ -115,6 +115,11 @@ class SellerProductsController extends ListingBaseController
             $cnd->attachCondition('selprod_title', 'LIKE', '%' . $keyword . '%', 'OR');
         }
        
+        $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
+        if (0 < $selProdId) {
+            $srch->addCondition('selprod_id', '=', $selProdId);
+        }
+
         if ($post['user_id'] > 0) {
             $srch->addCondition('selprod_user_id', '=', $post['user_id']);
         } else {
