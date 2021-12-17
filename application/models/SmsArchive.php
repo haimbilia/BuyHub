@@ -25,18 +25,18 @@ class SmsArchive extends MyAppModel
         }
 
         if (false == static::canSendSms($tpl)) {
-            $this->error = Labels::getLabel("MSG_UNABLE_TO_SEND_SMS", $this->langId);
+            $this->error = Labels::getLabel("ERR_UNABLE_TO_SEND_SMS", $this->langId);
             return false;
         }
 
         $tplData = SmsTemplate::getTpl($this->tpl, $this->langId);
         if (!$tplData) {
-            $this->error = Labels::getLabel("MSG_TEMPLATE_NOT_FOUND", $this->langId);
+            $this->error = Labels::getLabel("ERR_TEMPLATE_NOT_FOUND", $this->langId);
             return false;
         }
 
         if (1 > $tplData['stpl_status']) {
-            $this->error = Labels::getLabel("MSG_TEMPLATE_NOT_ACTIVE", $this->langId);
+            $this->error = Labels::getLabel("ERR_TEMPLATE_NOT_ACTIVE", $this->langId);
             return false;
         }
 
@@ -49,7 +49,7 @@ class SmsArchive extends MyAppModel
     {
         $smsGateway = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . Plugin::TYPE_SMS_NOTIFICATION, FatUtility::VAR_INT, 0);
         if (empty($smsGateway) || empty($this->toNumber) || empty($this->body) || 1 > $this->langId) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
 

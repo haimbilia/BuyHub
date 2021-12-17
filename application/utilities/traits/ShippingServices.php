@@ -78,7 +78,7 @@ trait ShippingServices
     {
         $orderProductDetail = OrderProductShipment::getAttributesById($opId, ['opr_response', 'op_invoice_number'], true);
         if (empty($orderProductDetail)) {
-            $this->error = Labels::getLabel("MSG_NO_LABEL_DATA_FOUND", $this->langId);
+            $this->error = Labels::getLabel("ERR_NO_LABEL_DATA_FOUND", $this->langId);
             return false;
         }
         $this->shipmentResponse = json_decode($orderProductDetail['opr_response'], true);
@@ -97,7 +97,7 @@ trait ShippingServices
     {
         $orderReturnRequest = OrderReturnRequest::getReturnRequestById($opId, ['opr_response', 'op_invoice_number'], true);
         if (empty($orderReturnRequest)) {
-            $this->error = Labels::getLabel("MSG_NO_LABEL_DATA_FOUND", $this->langId);
+            $this->error = Labels::getLabel("ERR_NO_LABEL_DATA_FOUND", $this->langId);
             return false;
         }
         $this->filename = "return-label-" . $orderReturnRequest['op_invoice_number'];
@@ -399,7 +399,7 @@ trait ShippingServices
     {
         $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_invoice_number']);
         if (empty($orderData)) {
-            $this->error = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
+            $this->error = Labels::getLabel("ERR_INVALID_ORDER", $this->langId);
             return false;
         }
         $this->loadShippingService($orderData);
@@ -605,7 +605,7 @@ trait ShippingServices
             }
         }
         if (empty($carriers)) {
-            $this->error = Labels::getLabel("MSG_UNABLE_TO_FETCH_CARRIERS", $this->langId);
+            $this->error = Labels::getLabel("ERR_UNABLE_TO_FETCH_CARRIERS", $this->langId);
             return false;
         }
 

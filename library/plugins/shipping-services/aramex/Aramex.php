@@ -660,7 +660,7 @@ class Aramex extends ShippingServicesBase
     {
 
         if ($orderData['ReadyTime'] > $orderData['LastPickupTime'] || $orderData['ReadyTime'] > $orderData['ClosingTime'] || $orderData['ClosingTime'] < $orderData['LastPickupTime'] || time() > strtotime($orderData['PickupDate'])) {
-            $this->error = Labels::getLabel('LBL_INVALID_TIME', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_TIME', $this->langId);
             return false;
         }
 

@@ -247,7 +247,7 @@ class OrderPayment extends Orders
             /* ] */
             return true;
         } else {
-            $this->error = Labels::getLabel('MSG_Invalid_Order', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_Invalid_Order', $this->commonLangId);
             return false;
         }
     }
@@ -329,7 +329,7 @@ class OrderPayment extends Orders
         if (!empty($orderInfo)) {
             $this->addOrderPaymentHistory($paymentOrderId, Orders::ORDER_PAYMENT_PENDING, $comments, $notify);
         } else {
-            $this->error = Labels::getLabel('MSG_Invalid_Order', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_Invalid_Order', $this->commonLangId);
             return false;
         }
         return true;
@@ -393,7 +393,7 @@ class OrderPayment extends Orders
         $orderInfo = $this->attributes;
 
         if ($amountToBeCharge > 0) {
-            $this->error = Labels::getLabel('MSG_Invalid_Order', $defaultSiteLangId);
+            $this->error = Labels::getLabel('ERR_Invalid_Order', $defaultSiteLangId);
             return false;
         }
 

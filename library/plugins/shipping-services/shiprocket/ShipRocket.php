@@ -275,7 +275,7 @@ class ShipRocket extends ShippingServicesBase
 
         $courierCompanies = isset($resp['data']['available_courier_companies']) ? $resp['data']['available_courier_companies'] : [];
         if (empty($courierCompanies)) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_FETCH_CARRIERS', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_FETCH_CARRIERS', $this->langId);
             return [];
         }
 
@@ -355,7 +355,7 @@ class ShipRocket extends ShippingServicesBase
 
         $resp = $this->getResponse();
         if (1 > $resp['success']) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_ADD_LOCATION', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_ADD_LOCATION', $this->langId);
             return 0;
         }
         return (int) $resp['address']['id'];
@@ -445,13 +445,13 @@ class ShipRocket extends ShippingServicesBase
     {
         $this->orderDetail = $this->getSystemOrder($requestParam['op_id']);
         if (empty($this->orderDetail)) {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER', $this->langId);
             return false;
         }
 
         $pickupLocationId = $this->getPickupLocation($this->orderDetail['op_shop_id']);
         if (1 > (int) $pickupLocationId) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_GET_PICKUP_LOCATION', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_GET_PICKUP_LOCATION', $this->langId);
             return false;
         }
 
@@ -555,7 +555,7 @@ class ShipRocket extends ShippingServicesBase
 
         $awbResp = $this->getResponse();
         if (applicationConstants::SUCCESS != $awbResp['awb_assign_status']) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_ASSIGN_AWB_FOR_THE_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_ASSIGN_AWB_FOR_THE_ORDER', $this->langId);
             return false;
         }
 
@@ -565,7 +565,7 @@ class ShipRocket extends ShippingServicesBase
 
         $labelResp = $this->getResponse();
         if (applicationConstants::SUCCESS != $labelResp['label_created']) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_BIND_LABEL', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_BIND_LABEL', $this->langId);
             return false;
         }
         $this->resp = [
@@ -597,7 +597,7 @@ class ShipRocket extends ShippingServicesBase
     /* public function returnShipment(): bool
     {
         if (!is_array($this->orderDetail) || 1 > count($this->orderDetail)) {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER', $this->langId);
             return false;
         }
         $orderTimestamp = strtotime($this->orderDetail['order_date_added']);
@@ -610,7 +610,7 @@ class ShipRocket extends ShippingServicesBase
         $this->buyerReturnAddress = $shippingAddress;
         $pickupLocationId = $this->getReturnPickupLocation();
         if (1 > (int) $pickupLocationId) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_GET_PICKUP_LOCATION', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_GET_PICKUP_LOCATION', $this->langId);
             return false;
         }
 
@@ -696,7 +696,7 @@ class ShipRocket extends ShippingServicesBase
     {
         $orderId = OrderProductShipment::getAttributesById($this->orderDetail['op_id'], 'opship_order_number');
         if (false == $orderId || empty($orderId)) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_LOCATE_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_LOCATE_ORDER', $this->langId);
             return false;
         }
         return $this->doRequest(self::REQUEST_CANCEL_ORDER, ['ids' => [$orderId]]);
@@ -710,7 +710,7 @@ class ShipRocket extends ShippingServicesBase
     public function fetchTrackingDetail(): array
     {
         if (empty($this->orderDetail)) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_LOAD_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_LOAD_ORDER', $this->langId);
             return [];
         }
 
@@ -720,7 +720,7 @@ class ShipRocket extends ShippingServicesBase
 
         $trackingDetail = $this->getResponse();
         if (!array_key_exists('tracking_data', $trackingDetail)) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_FETCH_TRACKING_DETAILS', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_FETCH_TRACKING_DETAILS', $this->langId);
             return [];
         }
 

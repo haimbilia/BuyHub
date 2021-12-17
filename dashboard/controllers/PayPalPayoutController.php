@@ -71,7 +71,7 @@ class PayPalPayoutController extends PayoutBaseController
     public function saveWithdrawalSpecifics($withdrawalId, $data, $elements)
     {
         if (empty($withdrawalId) || empty($data) || empty($elements)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
 

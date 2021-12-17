@@ -185,12 +185,12 @@ class AttachedFile extends MyAppModel
             $compareSize = static::maxFileUploadInBytes();
         }
         if (filesize($fileTmpName) > $compareSize) {
-            $this->error = Labels::getLabel('MSG_INVALID_SIZE', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_SIZE', CommonHelper::getLangId());
             return false;
         }
 
         if (!is_uploaded_file($fileTmpName)) {
-            $this->error = Labels::getLabel('MSG_Unable_To_Upload_File', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_Unable_To_Upload_File', CommonHelper::getLangId());
             return false;
         }
 
@@ -289,19 +289,19 @@ class AttachedFile extends MyAppModel
             $fileExt = pathinfo($name, PATHINFO_EXTENSION);
             $fileExt = strtolower($fileExt);
             if (false === in_array($fileExt, applicationConstants::allowedFileExtensions())) {
-                $this->error = Labels::getLabel('MSG_INVALID_FILE_EXTENSION', $defaultLangIdForErrors);
+                $this->error = Labels::getLabel('ERR_INVALID_FILE_EXTENSION', $defaultLangIdForErrors);
                 return false;
             }
 
             if (strpos(CONF_UPLOADS_PATH, 's3://') === false) {
                 $fileMimeType = mime_content_type($file);
                 if (false === in_array($fileMimeType, applicationConstants::allowedMimeTypes())) {
-                    $this->error = Labels::getLabel('MSG_INVALID_FILE_MIME_TYPE', $defaultLangIdForErrors);
+                    $this->error = Labels::getLabel('ERR_INVALID_FILE_MIME_TYPE', $defaultLangIdForErrors);
                     return false;
                 }
             }
         } else {
-            $this->error = Labels::getLabel('MSG_NO_FILE_UPLOADED', $defaultLangIdForErrors);
+            $this->error = Labels::getLabel('ERR_NO_FILE_UPLOADED', $defaultLangIdForErrors);
             return false;
         }
     }
@@ -341,7 +341,7 @@ class AttachedFile extends MyAppModel
         }
 
         if (!move_uploaded_file($fl, $path . $saveName)) {
-            $this->error = Labels::getLabel('MSG_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
+            $this->error = Labels::getLabel('ERR_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
             return false;
         }
 
@@ -382,7 +382,7 @@ class AttachedFile extends MyAppModel
         }
 
         if (false === copy($file, $path . $saveName)) {
-            $this->error = Labels::getLabel('MSG_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
+            $this->error = Labels::getLabel('ERR_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
             return false;
         }
 
@@ -427,7 +427,7 @@ class AttachedFile extends MyAppModel
         $this->setFldValue('afile_updated_at', date("Y-m-d H:i:s"));
 
         if (!$this->save()) {
-            $this->error = Labels::getLabel('MSG_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
+            $this->error = Labels::getLabel('ERR_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
             return false;
         }
 
@@ -478,7 +478,7 @@ class AttachedFile extends MyAppModel
     public function saveImage($fl, $fileType, $recordId, $recordSubid, $name, $displayOrder = 0, $uniqueRecord = false, $lang_id = 0, $mimeType = '', $screen = 0, $aspectRatio = 0)
     {
         if (getimagesize($fl) === false && $mimeType != 'image/svg+xml') {
-            $this->error = Labels::getLabel('MSG_UNRECOGNISED_IMAGE_FILE', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_UNRECOGNISED_IMAGE_FILE', $this->commonLangId);
             return false;
         }
         return $this->saveAttachment($fl, $fileType, $recordId, $recordSubid, $name, $displayOrder, $uniqueRecord, $lang_id, $screen, $aspectRatio);
@@ -1120,7 +1120,7 @@ class AttachedFile extends MyAppModel
         //if (!in_array($fileType, $allowedFileTypes) && (!$fileType || !$recordId)) {
         // Remove condition of $recordId for handle all data of add/edit product category in single form
         if (!in_array($fileType, $allowedFileTypes) && !$fileType) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 

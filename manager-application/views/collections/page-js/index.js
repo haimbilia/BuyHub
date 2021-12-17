@@ -89,8 +89,24 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     };
 
-    updateRecord = function (collection_id, recordId) {
-        fcom.ajax(fcom.makeUrl(controllerName, 'updateCollectionRecords'), 'collection_id=' + collection_id + '&record_id=' + recordId, function (t) { });
+    updateRecord = async function (e, collection_id) {
+        var record_id = e.params.args.data.id;
+        let response = await $.ajax({
+            url: fcom.makeUrl(controllerName, 'updateCollectionRecords'),
+            type: 'POST',
+            data: { collection_id, record_id, fIsAjax: 1 }
+        });
+
+        res = $.parseJSON(response)
+        if (0 == res.status) {
+            $.ykmsg.error(res.msg);
+            return;
+        }
+
+        var newOption = new Option(e.params.args.data.text, e.params.args.data.id, true, true);
+        let currentEl = $(e.currentTarget);
+        currentEl.append(newOption).trigger('change');
+        currentEl.select2('close');
     };
 
     removeCollectionRecord = function (collection_id, recordId) {

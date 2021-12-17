@@ -147,7 +147,7 @@ class Paytm extends PaymentMethodBase
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (!empty($orderInfo) && $orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $this->error = Labels::getLabel("MSG_INVALID_ORDER_PAID_CANCELLED", $this->langId);
+            $this->error = Labels::getLabel("ERR_INVALID_ORDER_PAID_CANCELLED", $this->langId);
             return false;
         }
 

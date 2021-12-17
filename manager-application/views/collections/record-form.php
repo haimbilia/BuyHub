@@ -77,23 +77,32 @@ if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA)) {
 
 $includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
 
-require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');
+
+$str = Labels::getLabel('ERR_YOU_CANNOT_BIND_MORE_THAN_ALLOWED_LIMIT_{LIMIT}', $siteLangId);
+$errorMsg = CommonHelper::replaceStringData($str, ['{LIMIT}' => Collections::LIMIT_COLLECTION_RECORDS]);
+?>
 
 <script type="text/javascript">
     var ctrlName = '<?php echo $controllerName; ?>';
     var actionName = '<?php echo $actionName; ?>';
     var recordId = '<?php echo $recordId; ?>';
+    var recordLimit = <?php echo Collections::LIMIT_COLLECTION_RECORDS ?>;
     $(function() {
         select2('collectionItemJs', fcom.makeUrl(ctrlName, actionName), function(obj) {
             return {
                 excludeRecords: obj.val()
             }
         }, function(e) {
-            var item = e.params.args.data; 
-            updateRecord(recordId, item.id);   
+            e.preventDefault();
+            if (recordLimit <= $(e.currentTarget).val().length) {
+                $.ykmsg.error('<?php echo $errorMsg; ?>');
+                return;
+            }
+            updateRecord(e, recordId);
         }, function(e) {
-            var item = e.params.args.data; 
-            removeCollectionRecord(recordId, item.id);   
+            var item = e.params.args.data;
+            removeCollectionRecord(recordId, item.id);
         });
     });
 </script>

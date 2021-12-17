@@ -110,7 +110,7 @@ class EasyPost extends ShippingServicesBase
         }
 
         if (!array_key_exists('live_api_key', $this->settings) || empty($this->settings['live_api_key'])) {
-            $this->error = Labels::getLabel('MSG_PRODUCTION_API_KEY_REQUIRED_FOR_CARRIER_LISTING', $this->langId);
+            $this->error = Labels::getLabel('ERR_PRODUCTION_API_KEY_REQUIRED_FOR_CARRIER_LISTING', $this->langId);
             return [];
         }
 
@@ -274,12 +274,12 @@ class EasyPost extends ShippingServicesBase
     public function createParcel(): bool
     {
         if (is_null($this->weight) || empty($this->weight)) {
-            $this->error = Labels::getLabel('MSG_WEIGHT_IS_REQUIRED', $this->langId);
+            $this->error = Labels::getLabel('ERR_WEIGHT_IS_REQUIRED', $this->langId);
             return false;
         }
 
         if (is_null($this->dimensions) || empty($this->dimensions)) {
-            $this->error = Labels::getLabel('MSG_DIMENSIONS_ARE_REQUIRED', $this->langId);
+            $this->error = Labels::getLabel('ERR_DIMENSIONS_ARE_REQUIRED', $this->langId);
             return false;
         }
 
@@ -349,7 +349,7 @@ class EasyPost extends ShippingServicesBase
 
             $shipment = $this->getResponse();
             if (empty($shipment) || 0 == count($shipment['rates'])) {
-                $this->error = Labels::getLabel('MSG_UNABLE_TO_CALCULATE_RATES_FOR_GIVEN_ADDRESSES', $this->langId);
+                $this->error = Labels::getLabel('ERR_UNABLE_TO_CALCULATE_RATES_FOR_GIVEN_ADDRESSES', $this->langId);
                 return [];
             }
             $rates = $shipment['rates'];
@@ -458,7 +458,7 @@ class EasyPost extends ShippingServicesBase
     {
         $shipmentRate = explode('|', $rateId);
         if (empty($shipmentRate)) {
-            $this->error = Labels::getLabel('MSG_INVALID_SHIPMENT_ID', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_SHIPMENT_ID', $this->langId);
             return (true === $formatResp ? [] : (object)[]);
         }
 
@@ -468,14 +468,14 @@ class EasyPost extends ShippingServicesBase
 
         $shipment = $this->getResponse();
         if (empty($shipment) || 0 == count($shipment['rates'])) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_FIND_SHIPPING_RATE', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_FIND_SHIPPING_RATE', $this->langId);
             return (true === $formatResp ? [] : (object)[]);
         }
         $rates = $shipment['rates'];
 
         $key = array_search($shipmentRate[1], array_column($rates, 'id'));
         if (false === $key) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_FIND_SHIPMENT', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_FIND_SHIPMENT', $this->langId);
             return (true === $formatResp ? [] : (object)[]);
         }
 
@@ -572,7 +572,7 @@ class EasyPost extends ShippingServicesBase
     {
         $shipmentRate = explode('|', $rateId);
         if (empty($shipmentRate)) {
-            $this->error = Labels::getLabel('MSG_INVALID_SHIPMENT_ID', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_SHIPMENT_ID', $this->langId);
             return false;
         }
 
@@ -591,7 +591,7 @@ class EasyPost extends ShippingServicesBase
     public function proceedToShipment(array $requestParam): bool
     {
         if (is_null($this->shipment) || empty($this->shipment)) {
-            $this->error = Labels::getLabel('MSG_LOAD_ORDER_BEFORE_SHIPMENT', $this->langId);
+            $this->error = Labels::getLabel('ERR_LOAD_ORDER_BEFORE_SHIPMENT', $this->langId);
             return false;
         }
 
@@ -628,7 +628,7 @@ class EasyPost extends ShippingServicesBase
         }
 
         if (is_null($this->shipment) || empty($this->shipment)) {
-            $this->error = Labels::getLabel('MSG_LOAD_ORDER_BEFORE_PROCEED_TO_RETURN_SHIPMENT', $this->langId);
+            $this->error = Labels::getLabel('ERR_LOAD_ORDER_BEFORE_PROCEED_TO_RETURN_SHIPMENT', $this->langId);
             return false;
         }
 
@@ -674,7 +674,7 @@ class EasyPost extends ShippingServicesBase
         }
 
         if (is_null($this->shipment) || empty($this->shipment)) {
-            $this->error = Labels::getLabel('MSG_LOAD_ORDER_BEFORE_PROCEED_TO_RETURN_SHIPMENT', $this->langId);
+            $this->error = Labels::getLabel('ERR_LOAD_ORDER_BEFORE_PROCEED_TO_RETURN_SHIPMENT', $this->langId);
             return false;
         }
 
