@@ -286,13 +286,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     }
 
-    displayImageInFacebox = function (title, url) {
-        loadCropperSkeleton();
-
-        $("#modalBoxJs .modal-title").text(title);
-        $("#modalBoxJs .modal-body").html('<img class="mx-auto d-block" width="800px;" src="' + url + '">');
-    }
-
     toggleBannerStatus = function (e, obj, recordId, status, callback = "") {
         e.stopPropagation();
 
