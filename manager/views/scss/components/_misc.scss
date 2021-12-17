@@ -2388,7 +2388,8 @@ strong {
         padding-#{$start-direction}: 2rem;
         list-style: none;
         li {
-            margin: 0.5rem 0;
+            margin: 0.7rem 0;
+            &:last-child{ margin-bottom: 0;}
         }
     }
 
@@ -2397,5 +2398,50 @@ strong {
         display: block;
         font-size: 0.8rem;
         font-weight: 500;
+    }
+}
+//
+.contenteditable,
+.click-to-edit {
+    display: inline-block;
+    white-space: nowrap;
+    border-bottom: dashed 2px $brand-color;
+    &:focus,
+    &:active {
+        border: solid 2px $brand-color;
+    }
+}
+.click-to-edit-input {
+    display: inline-block;
+    white-space: nowrap;
+    border: none;
+    outline: solid 2px transparent;
+    &:focus,
+    &:active,
+    &:hover {
+        outline: solid 2px $brand-color;
+        border: none;
+    }
+}
+
+.clipboard {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    .copy-input {
+        //max-width: 248px;
+        width: 100%;
+        cursor: pointer;
+        background-color: $bg-white;
+        font-size: 0.8rem;
+        border: none;
+        border-radius: $radius4;
+        padding: 0;
+        color: $txt-gray;
+        margin-#{$end-direction}: 10px;
+        &:focus {
+            outline: none;
+        }
     }
 }

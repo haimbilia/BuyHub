@@ -287,26 +287,30 @@ if (0 < $productId) {
                 <div class="card card-toggle" id="media">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
-                            <h3 class="card-head-title">Media
-                            </h3>
-                            <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
+                            <h3 class="card-head-title">Media                            </h3>
                             <span class="text-muted">Attach media files for the product </span>
-                        </div> <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
+                        <div class="card-toolbar">
+                           <div class="me-5">
+                               <a href="javascript:void(0)" onclick="imageForm();" class="btn btn-outline-secondary btn-sm">Advance Media</a>
+                            </div>
+                            <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
                     </div>
                     <div class="card-body show" id="stock-block2">
-                        <span class="form-text text-muted  pt-2"> File type must be a .jpg, .gif or .png
-                            smaller than 2MB and at least
-                            800x800 in 1:1 aspect ratio</span>
-                        <div class="mt-5">
+
+                        <div>
                             <h6 class="h6 mb-3">Uploaded media</h6>
                             <ul class="uploaded-stocks" id="productDefaultImagesJs">
-                                <li><button type="button" onclick="$('#hiddenMediaFrmFileJs').click();">upload</button></li>
+                                <li class="browse"><button type="button" class="browse-button" onclick="$('#hiddenMediaFrmFileJs').click();">
+                                        <strong> Upload Images(s)</strong>
+                                        <span class="text-muted form-text">PNG, JPEG, & WEBP Accepted</span></button></li>
                             </ul>
-                            <span class="form-text text-muted pt-2">Pay attention to the quality of
+                            <div class="form-text text-muted pt-2">Pay attention to the quality of
                                 pictures
                                 you add, comply with the
                                 background color standards. Notice that the product shows all the
-                                details</span>
+                                details</div>
                         </div>
                     </div>
                 </div>
@@ -413,27 +417,25 @@ if (0 < $productId) {
                             </div>
                         </div>
                     </div>
-
-            </div>
-            <div class="card card-toggle" id="digital-links">
-                <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="digital-links-block">
-                    <div class="card-head-label">
-                        <h3 class="card-head-title">Digital Links
-                        </h3>
-                        <span class="text-muted">Product Digital Links are added in this
+                    <div class="card card-toggle" id="digital-links">
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="digital-links-block">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Digital Links
+                                </h3>
+                                <span class="text-muted">Product Digital Links are added in this
 
 
-                            <span class="input-helper"></span>section</span>
-                        <?php if ($displayDigitalDownloadAddBtn) { ?>
-                            <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>)">LINK</button>
-                        <?php  } ?>
-                    </div> <i class="dropdown-toggle-custom-arrow"></i>
-                </div>
-                <div class="card-body show" id="digital-links-block">
-                    <div id="digitalLinksListJs">
+                                    <span class="input-helper"></span>section</span>
+                                <?php if ($displayDigitalDownloadAddBtn) { ?>
+                                    <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>)">LINK</button>
+                                <?php  } ?>
+                            </div> <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
+                        <div class="card-body show" id="digital-links-block">
+                            <div id="digitalLinksListJs">
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
         <?php } ?>
         </div>
         <div class="add-stock-column column-actions">
