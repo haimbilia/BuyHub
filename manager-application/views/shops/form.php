@@ -20,7 +20,7 @@ $fld->developerTags['noCaptionTag'] = true;
 
 $urlFld = $frm->getField('urlrewrite_custom');
 $urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
-$urlFld->htmlAfterField = "<small class='text--small'> <a target='_blank' href='" . UrlHelper::generateFullUrl('shops', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . "'> " . UrlHelper::generateFullUrl('shops', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '</a></small>';
+$urlFld->htmlAfterField = "<small class='text--small'>" . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('shops', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</small>';
 $urlFld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value,$recordId)");
 
 $postalCode = $frm->getField('shop_postalcode');

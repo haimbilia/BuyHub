@@ -41,11 +41,8 @@ $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
 $screenFld = $imageFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
 
-if (1 < $languageCount) {
-    $imageLangFld->developerTags['colWidthClasses'] = [null, 'col-md-', null, null];
+if (1 < $languageCount) {   
     $imageLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
-
-    $screenFld->developerTags['colWidthClasses'] = [null, 'col-md-', null, null];
     $screenFld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 /* Image Form */

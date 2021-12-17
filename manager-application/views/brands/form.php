@@ -13,7 +13,7 @@ $fld->setFieldTagAttribute('id', "brand_id");
 $fld = $frm->getField('auto_update_other_langs_data');
 if ($fld != null) {
     HtmlHelper::configureSwitchForCheckbox($fld);
-    $fld->developerTags['noCaptionTag'] = true;   
+    $fld->developerTags['noCaptionTag'] = true;
     $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
 
@@ -25,7 +25,7 @@ if ($fld != null) {
 
 $fld = $frm->getField('urlrewrite_custom');
 $fld->setFieldTagAttribute('id', "urlrewrite_custom");
-$fld->htmlAfterField = '<span class="form-text text-muted"><a href="' . UrlHelper::generateFullUrl('Brands', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '" target="_blank">' . UrlHelper::generateFullUrl('Brands', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '</a></span>';
+$fld->htmlAfterField = '<span class="form-text text-muted">' . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Brands', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</span>';
 $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
 
 $otherButtons = [
