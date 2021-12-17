@@ -284,6 +284,7 @@ Updates/Fixes :
     => 059821 - new tag unable to add in catalog
     => 059913 - on home page favorite icon not updating
     => 060820 - On order subscription getting error
+    => 060772 - Admin UI: Admin is not able to edit the 'Minimum Purchase Quantity' and 'Discount (%)' fields under the Volume Discount section
 
 New Features:  
     => Admin shipped products listing page

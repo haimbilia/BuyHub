@@ -457,11 +457,11 @@ class SpecialPriceController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'product_name' => Labels::getLabel('LBL_Product_Name', $this->siteLangId),
-            'selprod_price' => Labels::getLabel('LBL_Original_Price', $this->siteLangId),
             'credential_username' => Labels::getLabel('LBL_Seller', $this->siteLangId),
+            'selprod_price' => Labels::getLabel('LBL_Original_Price', $this->siteLangId),
+            'splprice_price' => Labels::getLabel('LBL_Special_Price', $this->siteLangId),
             'splprice_start_date' => Labels::getLabel('LBL_Start_Date', $this->siteLangId),
             'splprice_end_date' => Labels::getLabel('LBL_End_Date', $this->siteLangId),
-            'splprice_price' => Labels::getLabel('LBL_Special_Price', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('splPriceTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -475,11 +475,11 @@ class SpecialPriceController extends ListingBaseController
             'select_all',
             'listSerial',
             'product_name',
-            'selprod_price',
             'credential_username',
+            'selprod_price',
+            'splprice_price',
             'splprice_start_date',
             'splprice_end_date',
-            'splprice_price',
             'action',
         ];
     }
