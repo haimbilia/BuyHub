@@ -292,15 +292,6 @@ class CollectionsController extends ListingBaseController
 
         if ($post['collection_type'] == Collections::COLLECTION_TYPE_BANNER) {
             $this->saveBannerLocation($post);
-            $this->set('openBannersForm', true);
-        }
-
-        if (!in_array($post['collection_type'], Collections::COLLECTION_WITHOUT_RECORDS)) {
-            $this->set('openRecordForm', true);
-        }
-
-        if (!in_array($post['collection_type'], Collections::COLLECTION_WITHOUT_MEDIA)) {
-            $this->set('openMediaForm', true);
         }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
