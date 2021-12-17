@@ -32,7 +32,7 @@ class UserCollection extends FatModel
     public function save(int $recordId) : bool
     {
         if (1 > $this->userId || 1 > $this->type) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
 
@@ -58,7 +58,7 @@ class UserCollection extends FatModel
     public function deleteRecords(int $recordId = 0) : bool
     {
         if (1 > $this->userId || 1 > $this->type) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
 

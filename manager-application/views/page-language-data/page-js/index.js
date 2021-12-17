@@ -7,10 +7,7 @@ editLangForm = function (pLangKey, langId, autoFillLangData = 0) {
         fcom.setEditorLayout(langId);
         if(!navigator.clipboard){
             $('[data-toggle="tooltip"]').removeAttr('title');
-        }else{
-            $('[data-toggle="tooltip"]').tooltip();
-        }
-        
+        }        
     });
 };
 

@@ -134,7 +134,8 @@ class RatingTypesController extends ListingBaseController
         }
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_RATING_TYPES_SETUP', $this->siteLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()
@@ -220,7 +221,7 @@ class RatingTypesController extends ListingBaseController
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'ratingtype_name' => Labels::getLabel('LBL_RATING_TYPE', $this->siteLangId),
             'ratingtype_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId),
-            'ratingtype_active' => Labels::getLabel('LBL_STATUS/Email', $this->siteLangId),
+            'ratingtype_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('ratingTypeTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);

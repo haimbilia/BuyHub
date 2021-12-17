@@ -57,6 +57,7 @@ class Collections extends MyAppModel
     public const LIMIT_FAQ_LAYOUT1 = 6;
     public const LIMIT_TESTIMONIAL_LAYOUT1 = 10;
     public const LIMIT_CONTENT_BLOCK_LAYOUT1 = 1;
+    public const LIMIT_COLLECTION_RECORDS = 20;
 
     public const COLLECTION_CRITERIA_PRICE_LOW_TO_HIGH = 1;
     public const COLLECTION_CRITERIA_PRICE_HIGH_TO_LOW = 2;
@@ -368,7 +369,17 @@ class Collections extends MyAppModel
     public function addUpdateCollectionRecord(int $recordId): bool
     {
         if (1 > $this->mainTableRecordId || 1 > $recordId) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+
+        $srch = new SearchBase(static::DB_TBL_COLLECTION_TO_RECORDS);
+        $srch->doNotLimitRecords();
+        $srch->addCondition(static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id', '=', $this->mainTableRecordId);
+        $srch->getResultSet();
+        if (self::LIMIT_COLLECTION_RECORDS <= $srch->recordCount()) {
+            $str = Labels::getLabel('ERR_YOU_CANNOT_BIND_MORE_THAN_ALLOWED_LIMIT_{LIMIT}', $this->commonLangId);
+            $this->error = CommonHelper::replaceStringData($str, ['{LIMIT}' => self::LIMIT_COLLECTION_RECORDS]);
             return false;
         }
 
@@ -377,9 +388,8 @@ class Collections extends MyAppModel
             static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id' => $recordId
         ];
 
-
         $record = new TableRecord(static::DB_TBL_COLLECTION_TO_RECORDS);
-        
+
         $record->assignValues($dataToSave);
         if (!$record->addNew(array(), $dataToSave)) {
             $this->error = $record->getError();
@@ -387,7 +397,7 @@ class Collections extends MyAppModel
         }
         return true;
     }
-    
+
     /**
      * updateRecordOrder
      *
@@ -397,7 +407,7 @@ class Collections extends MyAppModel
     public function updateRecordDisplayOrder(int $recordId): bool
     {
         if (1 > $this->mainTableRecordId || 1 > $recordId) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $db = FatApp::getDb();
@@ -408,7 +418,7 @@ class Collections extends MyAppModel
         $srch->addFld('MAX(ctr_display_order) as ctr_display_order');
         $srch->setPageSize(1);
         $displayOrder = $db->fetch($srch->getResultSet());
-        
+
         if (false === $db->updateFromArray(
             static::DB_TBL_COLLECTION_TO_RECORDS,
             [static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'display_order' => ((int)current($displayOrder)) + 1],
@@ -417,7 +427,7 @@ class Collections extends MyAppModel
                 'vals' => [$this->mainTableRecordId, $recordId]
             ],
             true
-        )){
+        )) {
             $this->error = $db->getError();
             return false;
         }
@@ -606,7 +616,7 @@ class Collections extends MyAppModel
         $srch->addMultipleFields(['prodcat_id as id', 'IFNULL(prodcat_name, prodcat_identifier) as text']);
         $srch->addOrder('ctr_display_order', 'ASC');
         $data = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
-        array_walk($data, function(&$catTitle, $catId) use($lang_id) {
+        array_walk($data, function (&$catTitle, $catId) use ($lang_id) {
             $prodCateObj = new ProductCategory();
             $catTitle = html_entity_decode($prodCateObj->getParentTreeStructure($catId, 0, '', $lang_id), ENT_QUOTES);
         });

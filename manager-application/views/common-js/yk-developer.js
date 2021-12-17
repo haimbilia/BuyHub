@@ -10,6 +10,10 @@ $(function () {
 
     /* Bind Max Length validator. */
     bindMaxLengthValidator();
+
+    $('[data-bs-toggle="popover"]').popover();
+    /* Bind bootstrap tooltip with ajax elements. */
+    $('[data-bs-toggle="tooltip"]').tooltip();
 });
 
 (function () {
@@ -331,8 +335,10 @@ $(function () {
     }
 
     $(document).ajaxComplete(function () {
+        $('[data-bs-toggle="popover"]').popover();
+
         /* Bind bootstrap tooltip with ajax elements. */
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip();
 
         /* Bind Scoll hand if table width is wider. */
         new ScrollHint(".js-scrollable");

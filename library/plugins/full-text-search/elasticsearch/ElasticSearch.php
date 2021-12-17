@@ -401,12 +401,12 @@ class ElasticSearch extends FullTextSearchBase
     public function createIndex()
     {
         if ($this->isIndexExists()) {
-            $this->error = Labels::getLabel('MSG_INDEX_ALREADY_EXISTS', $this->langId);
+            $this->error = Labels::getLabel('ERR_INDEX_ALREADY_EXISTS', $this->langId);
             return false;
         }
         $language = Language::getAttributesById($this->langId, "language_name");
         if (empty($language)) {
-            $this->error = Labels::getLabel('MSG_NO_RECORD_FOUND', $this->langId);
+            $this->error = Labels::getLabel('ERR_NO_RECORD_FOUND', $this->langId);
             return false;
         }
         $params = [

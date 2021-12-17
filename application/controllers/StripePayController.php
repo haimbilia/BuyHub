@@ -119,7 +119,7 @@ class StripePayController extends PaymentController
                     $this->set('payment_method_id', $payment_method['id']);
                     $this->set('client_secret', $charge['client_secret']);
                 } else {
-                    $this->error = Labels::getLabel('LBL_STRIPE_AUTHENTICATION_ERROR', $this->siteLangId);
+                    $this->error = Labels::getLabel('ERR_STRIPE_AUTHENTICATION_ERROR', $this->siteLangId);
                 }
             }
         } else {

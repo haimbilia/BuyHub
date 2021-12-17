@@ -1,10 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="generalForm"></div>
-<?php
-$frm->setFormTagAttribute('class', 'web_form form_horizontal');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 12;
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $countryFld = $frm->getField('shop_country_code');
 $countryFld->setFieldTagAttribute('id', 'geo_country_code');
 $countryFld->setFieldTagAttribute('class', 'addressSelection-js');
@@ -20,7 +14,7 @@ $fld->developerTags['noCaptionTag'] = true;
 
 $urlFld = $frm->getField('urlrewrite_custom');
 $urlFld->setFieldTagAttribute('id', "urlrewrite_custom");
-$urlFld->htmlAfterField = "<small class='text--small'> <a target='_blank' href='" . UrlHelper::generateFullUrl('shops', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . "'> " . UrlHelper::generateFullUrl('shops', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '</a></small>';
+$urlFld->htmlAfterField = "<small class='text--small'>" . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('shops', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</small>';
 $urlFld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value,$recordId)");
 
 $postalCode = $frm->getField('shop_postalcode');

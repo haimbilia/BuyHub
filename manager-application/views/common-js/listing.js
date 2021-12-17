@@ -652,7 +652,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     $("#modalBoxJs").modal("hide");
                     if ("undefined" != typeof frm.dataset.callback) {
                         eval(frm.dataset.callback);                     
-                    }else if ("undefined" != typeof frm.dataset.callbackfn) {                     
+                    }else if ("undefined" != typeof frm.dataset.callbackfn) {
                         window[frm.dataset.callbackfn](ans); /* callback function */                    
                     } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length) {
                         $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();

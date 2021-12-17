@@ -17,7 +17,7 @@ class CurrencyConverterBase extends PluginBase
 
         $currency = Currency::getDefault();
         if (empty($currency)) {
-            $this->error = Labels::getLabel('MSG_DEFAULT_CURRENCY_NOT_SET', $this->langId);
+            $this->error = Labels::getLabel('ERR_DEFAULT_CURRENCY_NOT_SET', $this->langId);
             return false;
         }
         $this->systemCurrencyCode = strtoupper($currency['currency_code']);

@@ -1,8 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
 
 $fld = $frm->getField('bpcategory_identifier');
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','bpcategory_id');getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val(),'','pre',true)");

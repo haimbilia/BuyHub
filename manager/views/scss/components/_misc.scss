@@ -2371,14 +2371,31 @@ strong {
     }
 }
 
-.child-checkbox-ul {
-    padding-#{$start-direction}: 2rem;
-    list-style: none;
-    margin-top: 15px;
-}
-.out-of-state {
-    padding-#{$end-direction}: 1.2rem;
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 500;
+//shipping zone
+
+.list-zones {
+    &-search {
+        top: 0;
+    }
+    &-head {
+        margin: 1rem 0;
+        font-weight: 500;
+    }
+    .list-states {
+        background: $bg-gray;
+        padding: 1.5rem;
+        border-radius: $radius-common;
+        padding-#{$start-direction}: 2rem;
+        list-style: none;
+        li {
+            margin: 0.5rem 0;
+        }
+    }
+
+    .out-of-state {
+        padding-#{$end-direction}: 1.2rem;
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
 }

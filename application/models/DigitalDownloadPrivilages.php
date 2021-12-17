@@ -223,12 +223,12 @@ class DigitalDownloadPrivilages extends FatModel
             case Product::CATALOG_TYPE_PRIMARY:
                 $this->getProduct($recordId);
                 if (1 > count($this->product)) {
-                    $this->error = Labels::getLabel("LBL_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
                     return false;
                 }
                 
                 if ($this->product['product_seller_id'] !== $sellerUserId) {
-                    $this->error = Labels::getLabel("MSG_INVALID_ACCESS", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_ACCESS", $langId);
                     return false;
                 }
                 return true;
@@ -242,12 +242,12 @@ class DigitalDownloadPrivilages extends FatModel
                     || ProductRequest::STATUS_APPROVED == $this->productRequest['preq_status']
                     || applicationConstants::YES == $this->productRequest['preq_deleted']
                 ) {
-                    $this->error = Labels::getLabel("LBL_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
                     return false;
                 }
 
                 if ($this->productRequest['preq_user_id'] !== $sellerUserId) {
-                    $this->error = Labels::getLabel("MSG_INVALID_ACCESS", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_ACCESS", $langId);
                     return false;
                 }
                 return true;
@@ -256,18 +256,18 @@ class DigitalDownloadPrivilages extends FatModel
                 $this->getSellerProduct($recordId);
 
                 if (1 > count($this->sellerProduct)) {
-                    $this->error = Labels::getLabel("LBL_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
                     return false;
                 }
 
                 if ($this->sellerProduct['selprod_user_id'] !== $sellerUserId) {
-                    $this->error = Labels::getLabel("MSG_INVALID_ACCESS", $langId);
+                    $this->error = Labels::getLabel("ERR_INVALID_ACCESS", $langId);
                     return false;
                 }
 
                 $this->getProduct($this->sellerProduct['selprod_product_id']);
                 if (1 > count($this->product)) {
-                    $this->error = Labels::getLabel("LBL_Invalid_Request", $langId);
+                    $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
                     return false;
                 }
                 
@@ -275,13 +275,13 @@ class DigitalDownloadPrivilages extends FatModel
                     && $this->product['product_seller_id'] !== $sellerUserId
                     && applicationConstants::NO == $isPreview
                 ) {
-                    $this->error = Labels::getLabel("LBL_Unauthorized_Access", $langId);
+                    $this->error = Labels::getLabel("ERR_Unauthorized_Access", $langId);
                     return false;
                 }
                 return true;
                 break;
             default:
-                $this->error = Labels::getLabel("LBL_Invalid_Request", $langId);
+                $this->error = Labels::getLabel("ERR_Invalid_Request", $langId);
                 return false;
                 break;
         }

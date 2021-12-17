@@ -825,6 +825,8 @@ class UsersController extends ListingBaseController
             array('id' => 'new_password')
         );
         $newPwd->requirements()->setRequired();
+        $newPwd->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
+        $newPwd->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
 
         $conNewPwd = $frm->addPasswordField(
             Labels::getLabel('LBL_Confirm_New_Password', $this->siteLangId),

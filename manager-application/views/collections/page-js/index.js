@@ -89,8 +89,24 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     };
 
-    updateRecord = function (collection_id, recordId) {
-        fcom.ajax(fcom.makeUrl(controllerName, 'updateCollectionRecords'), 'collection_id=' + collection_id + '&record_id=' + recordId, function (t) { });
+    updateRecord = async function (e, collection_id) {
+        var record_id = e.params.args.data.id;
+        let response = await $.ajax({
+            url: fcom.makeUrl(controllerName, 'updateCollectionRecords'),
+            type: 'POST',
+            data: { collection_id, record_id, fIsAjax: 1 }
+        });
+
+        res = $.parseJSON(response)
+        if (0 == res.status) {
+            $.ykmsg.error(res.msg);
+            return;
+        }
+
+        var newOption = new Option(e.params.args.data.text, e.params.args.data.id, true, true);
+        let currentEl = $(e.currentTarget);
+        currentEl.append(newOption).trigger('change');
+        currentEl.select2('close');
     };
 
     removeCollectionRecord = function (collection_id, recordId) {
@@ -208,6 +224,8 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
             if (t.langId > 0) {
                 bannerLangForm(t.collectionId, t.bannerId, t.langId);
+            } else if ("openMediaForm" in t) {
+                bannerMediaForm(t.collectionId, t.bannerId);
             }
             return;
         });
@@ -250,6 +268,10 @@ $(document).on('change', '.prefDimensionsJs', function () {
         );
     };
 
+    loadBannerImagesCallback = function (res) {
+        loadBannerImages(res.collection_id, res.banner_id, res.lang_id, res.slide_screen);
+    };
+
     loadBannerImages = function (collectionId, bannerId = 0, langId = 0, screen = 1) {
         if (1 > screen || 'undefined' == typeof screen) {
             screen = $('.prefDimensionsJs').val();
@@ -284,13 +306,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
             $.ykmsg.success(ans.msg);
             loadBannerImages(recordId, lang_id);
         });
-    }
-
-    displayImageInFacebox = function (title, url) {
-        loadCropperSkeleton();
-
-        $("#modalBoxJs .modal-title").text(title);
-        $("#modalBoxJs .modal-body").html('<img class="mx-auto d-block" width="800px;" src="' + url + '">');
     }
 
     toggleBannerStatus = function (e, obj, recordId, status, callback = "") {

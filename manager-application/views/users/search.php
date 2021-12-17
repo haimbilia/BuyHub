@@ -190,7 +190,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $serialNo--;
+    $serialNo++;
 }
 
 if (count($arrListing) == 0) {

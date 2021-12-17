@@ -1315,7 +1315,7 @@ class Product extends MyAppModel
         static::removeProductShippingRates($product_id, $userId);
 
         if (empty($data) || count($data) == 0) {
-            // $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->adminLangId);
+            // $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->adminLangId);
             return false;
         }
 

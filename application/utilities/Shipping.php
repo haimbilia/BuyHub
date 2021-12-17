@@ -135,7 +135,7 @@ class Shipping
     {
         $status = (null != $status ? $status : applicationConstants::FAILURE);
         if (empty($this->error) && applicationConstants::FAILURE == $status) {
-            $this->error = Labels::getLabel('MSG_FAILURE', $this->langId);
+            $this->error = Labels::getLabel('ERR_FAILURE', $this->langId);
         }
 
         if (empty($this->successMsg) && applicationConstants::SUCCESS == $status) {

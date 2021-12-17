@@ -42,7 +42,7 @@ class Promotions extends MyAppModel
         unset($data['promotion_id']);
         unset($data['promotion_user_id']);
         if (($promotion_user_id < 1)) {
-            $this->error = Labels::getLabel('LBL_Invalid_Request', $this->langId);
+            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->langId);
             return false;
         }
         if (isset($data['promotion_banner_url']) && $data['promotion_banner_url'] != '') {

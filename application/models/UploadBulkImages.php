@@ -130,7 +130,7 @@ class UploadBulkImages extends FatModel
         $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
         $fileExt = strtolower($fileExt);
         if ('zip' != $fileExt) {
-            $this->error = Labels::getLabel('MSG_INVALID_FILE', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_FILE', $this->langId);
             return false;
         }
 
@@ -151,7 +151,7 @@ class UploadBulkImages extends FatModel
         }
 
         if (false === $fileHandlerObj->extractZip($path . $savedFile)) {
-            $this->error = Labels::getLabel('MSG_COULD_NOT_SAVE_FILE', $this->langId);
+            $this->error = Labels::getLabel('ERR_COULD_NOT_SAVE_FILE', $this->langId);
             return false;
         }
 
