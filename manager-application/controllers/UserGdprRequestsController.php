@@ -170,7 +170,7 @@ class UserGdprRequestsController extends ListingBaseController {
 
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->siteLangId)) {
-            LibHelper::exitWithError(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId), true);
+            LibHelper::exitWithError($emailNotificationObj->getError(), true);
         }
 
         $userReqObj = new UserGdprRequest($userReqId);

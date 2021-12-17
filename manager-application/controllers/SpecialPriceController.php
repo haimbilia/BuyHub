@@ -442,7 +442,7 @@ class SpecialPriceController extends ListingBaseController
 
         $sellerProdObj = new SellerProduct($specialPriceRow['selprod_id']);
         if (!$sellerProdObj->deleteSellerProductSpecialPrice($recordId, $specialPriceRow['selprod_id'])) {
-            LibHelper::exitWithError(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId), true);
+            LibHelper::exitWithError($sellerProdObj->getError(), true);
         }
     }
 

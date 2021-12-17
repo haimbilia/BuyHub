@@ -315,7 +315,8 @@ class TaxStructureController extends ListingBaseController {
             $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
             $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
             foreach ($combinedTaxes as $key => $value) {
-                $frm->addTextBox('', 'taxstr_component_name[]', $langcombinedTaxes[$key] ?? '');
+                $fld = $frm->addTextBox('', 'taxstr_component_name[]', $langcombinedTaxes[$key] ?? '',['Placeholder'=>Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId)]);
+                $fld->developerTags['noCaptionTag'] = true;
             }
         }
         return $frm;

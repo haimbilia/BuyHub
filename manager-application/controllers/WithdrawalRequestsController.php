@@ -258,7 +258,7 @@ class WithdrawalRequestsController extends ListingBaseController
         
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->sendWithdrawRequestNotification($recordId, $this->siteLangId, "U")) {
-            LibHelper::exitWithError(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId), true);
+            LibHelper::exitWithError($emailNotificationObj->getError(), true);
         }
 
         $assignFields = array('utxn_status' => Transactions::STATUS_COMPLETED);

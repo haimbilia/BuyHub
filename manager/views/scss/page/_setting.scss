@@ -105,10 +105,10 @@
     }
     &-desc {
         display: block;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-width: 300px;
+        //white-space: nowrap;
+        //text-overflow: ellipsis;
+        // overflow: hidden;
+        // max-width: 300px;
     }
     &-content {
         flex: 1;

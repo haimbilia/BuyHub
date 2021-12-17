@@ -197,7 +197,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
 
                 <!-- Seller Information -->
                 <?php if (!empty($order['op_shop_name']) || !empty($order['seller_name']) || !empty($order['seller_email']) || !empty($order['seller_phone'])) { ?>
-                    <div class="card">
+                    <div class="card card-toggle">
                         <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block1" aria-expanded="false" aria-controls="order-block1">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><i class="fas fa-address-card"></i>

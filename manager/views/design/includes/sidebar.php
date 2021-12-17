@@ -618,7 +618,7 @@
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text">Sales Reports</span>
-                                <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                                <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                             </a>
                             <div id="salesReportNav" class="panel-collapse collapse collapseJs">
                                 <ul class="nav nav-level">
@@ -659,7 +659,7 @@
                                     </svg>
                                 </span>
                                 <span class="nav_text">Financial report</span>
-                                <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                                <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                             </a>
                             <div id="financialReportNav" class="panel-collapse collapse collapseJs">
                                 <ul class="nav nav-level">
@@ -699,7 +699,7 @@
                                         </use>
                                     </svg>
                                 </span> <span class="nav_text">subscription report</span>
-                                <i class="nav_arrow dropdown-toggle-custom-arrow"></i>
+                                <i class="menu_arrow dropdown-toggle-custom-arrow"></i>
                             </a>
                             <div id="subscriptionReportNav" class="panel-collapse collapse collapseJs">
                                 <ul class="nav nav-level">

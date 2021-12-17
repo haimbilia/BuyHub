@@ -8,35 +8,25 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
 
 <main class="main">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-4"> 
-                <button class="float-btn" type="button" data-trigger="card-aside">
+        <?php
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
+        <div class="row grid-layout">
+            <div class="col-lg-4">
+                <button class="float-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#card-aside" aria-controls="card-aside">
                     <svg class="svg" width="20" height="20">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
                         </use>
                     </svg>
                 </button>
-
-                <div class="card sticky-sidebar card-aside" id="card-aside" data-close-on-click-outside="card-aside">
+                <div class="card sticky-sidebar card-aside" tabindex="-1" id="card-aside" aria-labelledby="card-asideLabel">
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title">
-                                <a class="back" href="<?php echo UrlHelper::generateUrl('Settings'); ?>">
-                                    <svg class="svg" width="24" height="24">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
-                                        </use>
-                                    </svg>
-                                </a>
-                                <?php echo Labels::getLabel('LBL_PLUGINS', $siteLangId); ?>
+                                <?php echo Labels::getLabel('LBL_headings', $siteLangId); ?>
                             </h3>
                         </div>
                         <div class="card-toolbar">
-                            <button class="btn btn-close card-aside-close" data-bs-target-close="card-aside">
-                                <svg class="svg" width="24" height="24">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#close">
-                                    </use>
-                                </svg>
-                            </button>
+                            <button type="button" class="btn-close card-aside-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
                     </div>
                     <div class="card-body p-0">

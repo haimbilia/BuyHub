@@ -105,8 +105,8 @@ class Language extends MyAppModel
     /**
      * getDropDownList
      *
-     * @param  mixed $langIdToRemove - default system lang
-     * @return void
+     * @param  int $langIdToRemove - default system lang
+     * @return array
      */
     public static function getDropDownList(int $langIdToRemove = 0): array
     {

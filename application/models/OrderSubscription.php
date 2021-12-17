@@ -143,7 +143,7 @@ class OrderSubscription extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array(Orders::DB_TBL_CHARGES_PREFIX . 'type', Orders::DB_TBL_CHARGES_PREFIX . 'amount'));
         $srch->addCondition(Orders::DB_TBL_CHARGES_PREFIX . 'op_id', '=', $ossubs_id);
-        $srch->addCondition(Orders::DB_TBL_CHARGES_PREFIX . 'type', '=', Orders::ORDER_SUBSCRIPTION);
+        $srch->addCondition(Orders::DB_TBL_CHARGES_PREFIX . 'order_type', '=', Orders::ORDER_SUBSCRIPTION);
         $rs = $srch->getResultSet();
         return $row = FatApp::getDb()->fetchAll($rs, Orders::DB_TBL_CHARGES_PREFIX . 'type');
     }

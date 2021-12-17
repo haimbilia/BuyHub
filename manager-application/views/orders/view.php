@@ -90,7 +90,7 @@
                 <?php
                 $address = $order['shippingAddress'];
                 if (!empty($address)) { ?>
-                    <div class="card">
+                    <div class="card card-toggle">
                         <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block1" aria-expanded="false" aria-controls="order-block1">
                             <div class="card-head-label">
                                 <h3 class="card-head-title"><i class="fas fa-address-card"></i>
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                 <?php } ?>
-                <div class="card">
+                <div class="card card-toggle">
                     <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block2" aria-expanded="false" aria-controls="order-block2">
                         <div class="card-head-label">
                             <h3 class="card-head-title"><i class="fas fa-address-card"></i>

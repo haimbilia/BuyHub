@@ -154,7 +154,7 @@ class ProductCategoriesController extends ListingBaseController
     public function imagesForm($recordId)
     {
         $this->checkEditPrivilege();
-
+        $languages = Language::getAllNames();
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
@@ -166,7 +166,7 @@ class ProductCategoriesController extends ListingBaseController
         $frm = $this->getImagesFrm($recordId);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-
+        $this->set('languageCount', count($languages));
         $this->_template->render(false, false);
     }
 
@@ -338,7 +338,7 @@ class ProductCategoriesController extends ListingBaseController
         }
         $this->set('imageType', $imageType);
         $this->set('languages', Language::getAllNames());
-        $this->set('canEdit', $canEdit);
+        $this->set('canEdit', $canEdit);        
         $this->_template->render(false, false);
     }
 

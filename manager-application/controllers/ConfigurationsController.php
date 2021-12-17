@@ -464,11 +464,11 @@ class ConfigurationsController extends ListingBaseController
                 }
                 $htmlAfterField .= "<span class='form-text text-muted'>" . Labels::getLabel("FRM_BING_WEBMASTER_MSG", $langId) . "</span>";
                 $fld->htmlAfterField = $htmlAfterField;
-                
+
                 $fld = $frm->addFileUpload(Labels::getLabel('FRM_HTML_FILE_VERIFICATION', $langId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_HTML_FILE_VERIFICATION_MSG", $langId) . '</span>';
 
-                $fld =$frm->addFileUpload(Labels::getLabel('FRM_XML_FILE_AUTHENTICATION', $langId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
+                $fld = $frm->addFileUpload(Labels::getLabel('FRM_XML_FILE_AUTHENTICATION', $langId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_XML_FILE_VERIFICATION_MSG", $langId) . '</span>';
 
                 $fld = $frm->addHtml('', 'hotjar', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_HOTJAR", $langId) . '</h3>');
@@ -1962,7 +1962,7 @@ class ConfigurationsController extends ListingBaseController
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
                 break;

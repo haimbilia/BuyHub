@@ -10,10 +10,14 @@ if (null != $fld) {
 
 $fld = $frm->getField('collection_for_web');
 if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('collection_for_app');
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 if (in_array($collection_layout_type, Collections::APP_COLLECTIONS_ONLY)) {
     $fld->setFieldTagAttribute('disabled', 'disabled');
@@ -37,28 +41,10 @@ if ($collection_type == Collections::COLLECTION_TYPE_BANNER) {
     $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'bannerForm(' . $recordId . ',' . $collection_type . ')',
-            'title' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
+            'onclick' => 'banners(' . $recordId . ')',
+            'title' => Labels::getLabel('LBL_BANNERS', $siteLangId),
         ],
-        'label' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
-        'isActive' => false
-    ];
-    $otherButtons[] = [
-        'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => 'bannerMedia(' . $recordId . ',' . $collection_type . ')',
-            'title' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
-        ],
-        'label' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
-        'isActive' => false
-    ];
-    $otherButtons[] = [
-        'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => 'banners(' . $recordId . ',' . $collection_type . ')',
-            'title' => Labels::getLabel('LBL_BANNERS_LISTING', $siteLangId),
-        ],
-        'label' => Labels::getLabel('LBL_BANNERS_LISTING', $siteLangId),
+        'label' => Labels::getLabel('LBL_BANNERS', $siteLangId),
         'isActive' => false
     ];
 }

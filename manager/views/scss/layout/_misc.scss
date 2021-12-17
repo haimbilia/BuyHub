@@ -26,9 +26,11 @@ $header-height: 65px;
 }
 
 .main-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    @include media-breakpoint-up(lg) {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
     //height: $header-height;
     background-color: #fff;
     // position: fixed;
@@ -496,7 +498,8 @@ $header-height: 65px;
         position: absolute;
         transform: translate(-6px, 0);
         top: calc(50% - 4px);
-        #{$end-direction}: 25px;
+        //#{$end-direction}: 25px;
+        #{$end-direction}: 0;
         &:after,
         &:before {
             content: "";
@@ -525,6 +528,12 @@ $header-height: 65px;
     }
 }
 
+.card-toggle {
+    .dropdown-toggle-custom-arrow {
+        #{$end-direction}: 25px;
+    }
+}
+
 .users-addresses {
     display: flex;
     li {
@@ -550,13 +559,13 @@ $header-height: 65px;
     }
     .card-head {
         flex-direction: row;
-    }
-    &-close {
         @include media-breakpoint-up(lg) {
             display: none !important;
         }
     }
-    &--on & {
+    &-close {
+    }
+    &.show {
         transform: translateX(0);
     }
 }
@@ -574,7 +583,7 @@ $header-height: 65px;
     height: 45px;
     position: fixed;
     margin: 1em;
-    z-index: 9;
+    z-index: $zindex-offcanvas;
     #{$end-direction}: 0.5rem;
     bottom: 6rem;
     display: flex;

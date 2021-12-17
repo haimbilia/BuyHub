@@ -144,6 +144,9 @@ $space: 25px;
     &-title {
         flex: 1;
     }
+    &_arrow {
+        #{$end-direction}: 25px !important;
+    }
     .sidebar-dropdown-menu {
         .nav {
             padding: 0;

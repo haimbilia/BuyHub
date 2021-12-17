@@ -729,7 +729,7 @@ class CustomProductsController extends ListingBaseController
             if (!empty($optons)) {
                 foreach ($optons as $option_id) {
                     if (!$prodObj->addUpdateProductOption($option_id)) {
-                        Message::addErrorMessage(Labels::getLabel($prodObj->getError(), FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1)));
+                        Message::addErrorMessage($prodObj->getError());
                         $db->rollbackTransaction();
                         FatUtility::dieWithError(Message::getHtml());
                     }
@@ -742,7 +742,7 @@ class CustomProductsController extends ListingBaseController
             if (!empty($tags)) {
                 foreach ($tags as $tag_id) {
                     if (!$prodObj->addUpdateProductTag($tag_id)) {
-                        Message::addErrorMessage(Labels::getLabel($prodObj->getError(), FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1)));
+                        Message::addErrorMessage($prodObj->getError());
                         $db->rollbackTransaction();
                         FatUtility::dieWithError(Message::getHtml());
                     }
@@ -986,29 +986,6 @@ class CustomProductsController extends ListingBaseController
             }
 
             if (!empty($prodSpecData)) {
-                /*foreach ($prodSpecData['prod_spec_name'][CommonHelper::getLangId()] as $specKey => $specval) {
-                    $prodSpecObj = new ProdSpecification(0);
-                    $languages = Language::getAllNames();
-                    foreach ($languages as $langId => $langName) {
-                        $data_to_be_save['prodspec_product_id'] = $product_id;
-
-                        $prodSpecObj->assignValues($data_to_be_save);
-
-                        if (!$prodSpecObj->save()) {
-                            Message::addErrorMessage(Labels::getLabel($prodSpecObj->getError(), $this->siteLangId));
-                            FatUtility::dieWithError(Message::getHtml());
-                        };
-                        $prodSpecObj = new ProdSpecification($prodSpecObj->getMainTableRecordId());
-
-                        $data_to_save_lang['prodspec_name'] = $prodSpecData['prod_spec_name'][$langId][$specKey];
-                        $data_to_save_lang['prodspec_value'] = $prodSpecData['prod_spec_value'][$langId][$specKey];
-                        $data_to_save_lang['prodspeclang_lang_id'] = $langId;
-                        if (!$prodSpecObj->updateLangData($langId, $data_to_save_lang)) {
-                            Message::addErrorMessage(Labels::getLabel($ProdSpecObj->getError(), $this->siteLangId));
-                            FatUtility::dieWithError(Message::getHtml());
-                        }
-                    }
-                } */
                 $languages = Language::getAllNames();
                 foreach ($languages as $langId => $langName) {
                     if (!empty($prodSpecData['prod_spec_name'][$langId])) {
