@@ -134,7 +134,8 @@ class RatingTypesController extends ListingBaseController
         }
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_RATING_TYPES_SETUP', $this->siteLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
     public function setup()

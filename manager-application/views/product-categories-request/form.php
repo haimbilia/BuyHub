@@ -1,9 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
-
 $fld = $frm->getField('prodcat_name');
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','prodcat_id');
 getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
