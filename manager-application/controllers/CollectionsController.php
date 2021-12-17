@@ -956,6 +956,10 @@ class CollectionsController extends ListingBaseController
                 }
             }
         }
+        
+        if (1 > $newTabLangId) {
+            $this->set('openMediaForm', true);
+        }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('langId', $newTabLangId);
@@ -1102,6 +1106,7 @@ class CollectionsController extends ListingBaseController
     public function setupBannerImage()
     {
         $this->objPrivilege->canEditProductCategories();
+        $collection_id = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
         $banner_id = FatApp::getPostedData('banner_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $slide_screen = FatApp::getPostedData('banner_screen', FatUtility::VAR_INT, 0);
@@ -1131,7 +1136,10 @@ class CollectionsController extends ListingBaseController
         }
         Banner::setLastModified($banner_id);
         $this->set('file', $_FILES['cropped_image']['name']);
+        $this->set('collection_id', $collection_id);
         $this->set('banner_id', $banner_id);
+        $this->set('lang_id', $lang_id);
+        $this->set('slide_screen', $slide_screen);
         $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }

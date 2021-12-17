@@ -224,6 +224,8 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
             if (t.langId > 0) {
                 bannerLangForm(t.collectionId, t.bannerId, t.langId);
+            } else if ("openMediaForm" in t) {
+                bannerMediaForm(t.collectionId, t.bannerId);
             }
             return;
         });
@@ -264,6 +266,10 @@ $(document).on('change', '.prefDimensionsJs', function () {
                 $.ykmodal(t, false, "modal-dialog-vertical-md");
             }
         );
+    };
+
+    loadBannerImagesCallback = function (res) {
+        loadBannerImages(res.collection_id, res.banner_id, res.lang_id, res.slide_screen);
     };
 
     loadBannerImages = function (collectionId, bannerId = 0, langId = 0, screen = 1) {
