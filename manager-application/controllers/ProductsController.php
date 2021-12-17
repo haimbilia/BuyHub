@@ -739,7 +739,7 @@ class ProductsController extends ListingBaseController
         $optionId = FatApp::getPostedData('optionId', FatUtility::VAR_INT, 0);
 
         if (1 > $productId || 1 > $optionId) {
-            LibHelper::exitWithError(Labels::getLabel($this->str_invalid_request, $this->siteLangId));
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
         if (SellerProduct::isOptionLinked($optionId, $productId)) {
@@ -763,7 +763,7 @@ class ProductsController extends ListingBaseController
         $optionValueId = FatApp::getPostedData('optionValueId', FatUtility::VAR_INT, 0);
 
         if (1 > $productId || 1 > $optionId || 1 > $optionValueId) {
-            LibHelper::exitWithError(Labels::getLabel($this->str_invalid_request, $this->siteLangId));
+            LibHelper::exitWithError($this->str_invalid_request);
         }
 
         if (SellerProduct::isOptionValueLinked($optionId, $optionValueId, $productId)) {
@@ -783,7 +783,7 @@ class ProductsController extends ListingBaseController
         }
         $prod = new Product($productId);
         if (!$prod->addUpdateProductTag($tagId)) {
-            Message::addErrorMessage(Labels::getLabel($prod->getError(), $this->siteLangId));
+            Message::addErrorMessage($prod->getError());
             LibHelper::exitWithError(Message::getHtml());
         }
 

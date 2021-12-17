@@ -1008,7 +1008,7 @@ class SellerProductsController extends ListingBaseController
         // Return Special Price ID if $return is true else it will return bool value.
         $splPriceId = $sellerProdObj->addUpdateSellerProductSpecialPrice($data_to_save, $return);
         if (false === $splPriceId) {
-            FatUtility::dieJsonError(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId));
+            FatUtility::dieJsonError($sellerProdObj->getError());
         }
 
         return $splPriceId;
@@ -1049,7 +1049,7 @@ class SellerProductsController extends ListingBaseController
     {
         $sellerProdObj = new SellerProduct($selProdId);
         if (!$sellerProdObj->deleteSellerProductSpecialPrice($splPriceId, $selProdId)) {
-            FatUtility::dieWithError(Labels::getLabel($sellerProdObj->getError(), $this->siteLangId));
+            FatUtility::dieWithError($sellerProdObj->getError());
         }
         return true;
     }
@@ -1794,7 +1794,7 @@ class SellerProductsController extends ListingBaseController
         }
 
         if (!$cRequestObj->deleteCatalogRequest($row['scatrequest_id'])) {
-            Message::addErrorMessage(Labels::getLabel($cRequestObj->getError(), $this->siteLangId));
+            Message::addErrorMessage($cRequestObj->getError());
             FatUtility::dieJsonError(Message::getHtml());
         }
 
