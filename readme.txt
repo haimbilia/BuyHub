@@ -283,7 +283,7 @@ Updates/Fixes :
     => 059422 - Seller: Admin disable the "Allow Sellers To Add Products" option and then, "Add Seller's Shipping profile" option is not showing to add the shipping for the marketplace product
     => 059821 - new tag unable to add in catalog
     => 059913 - on home page favorite icon not updating
-
+    => 060820 - On order subscription getting error
 
 New Features:  
     => Admin shipped products listing page
