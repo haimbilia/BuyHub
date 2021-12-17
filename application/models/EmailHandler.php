@@ -19,7 +19,7 @@ class EmailHandler extends FatModel
     {
         $langId = 1 > FatUtility::int($langId) ? $this->commonLangId : FatUtility::int($langId);
         if (empty($phone) || empty($tpl) || empty($arrReplacements)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
             return false;
         }
         $phone = 0 < strpos($phone, '+') ? $phone : '+' . $phone;
@@ -43,7 +43,7 @@ class EmailHandler extends FatModel
             $langId = $this->commonLangId;
         }
         if (empty($tpl) || empty($arrReplacements)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST!!_FAILED_TO_SEND_MAIL_TO_ADMINS.', $langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST!!_FAILED_TO_SEND_MAIL_TO_ADMINS.', $langId);
             return false;
         }
         $onlySuperAdmin = FatUtility::int($onlySuperAdmin);
@@ -1185,7 +1185,7 @@ class EmailHandler extends FatModel
 
             return true;
         } else {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
         }
     }
 
@@ -1240,7 +1240,7 @@ class EmailHandler extends FatModel
             $this->sendSms("child_order_status_change", ValidateElement::formatDialCode($orderComment['seller_phone_dcode']) . $orderComment["seller_phone"], $arrReplacements, $langId);
             return true;
         } else {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
         }
     }
 
@@ -1483,7 +1483,7 @@ class EmailHandler extends FatModel
         $ocRequestRs = $ocRequestSrch->getResultSet();
         $ocRequestRow = FatApp::getDb()->fetch($ocRequestRs);
         if (!$ocRequestRow) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1574,7 +1574,7 @@ class EmailHandler extends FatModel
         );
         $rs = $srch->getResultSet();
         if (!$msgDetail = FatApp::getDb()->fetch($rs)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1711,7 +1711,7 @@ class EmailHandler extends FatModel
         );
         $rs = $srch->getResultSet();
         if (!$msgDetail = FatApp::getDb()->fetch($rs)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1897,7 +1897,7 @@ class EmailHandler extends FatModel
         );
         $rs = $srch->getResultSet();
         if (!$msgDetail = FatApp::getDb()->fetch($rs)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $requestDetailUrl = UrlHelper::generateFullUrl('Seller', 'requestedCatalog', array(), CONF_WEBROOT_FRONT_URL);
@@ -2091,7 +2091,7 @@ class EmailHandler extends FatModel
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
         $arrReplacements = array(
@@ -2148,7 +2148,7 @@ class EmailHandler extends FatModel
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -2257,7 +2257,7 @@ class EmailHandler extends FatModel
             $this->sendSms("buyer_notification_review_order_product", $phone, $arrReplacements, $langId);
             return true;
         } else {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
         }
     }
 
@@ -2284,7 +2284,7 @@ class EmailHandler extends FatModel
         $spreviewData = FatApp::getDb()->fetch($schObj->getResultSet());
 
         if (false == $spreviewData) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -2327,7 +2327,7 @@ class EmailHandler extends FatModel
         $schObj->setPageSize(1);
         $spreviewData = FatApp::getDb()->fetch($schObj->getResultSet());
         if (false == $spreviewData) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -2367,7 +2367,7 @@ class EmailHandler extends FatModel
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!$row) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -3039,7 +3039,7 @@ class EmailHandler extends FatModel
             ->send();
 
         if (false === $sendEmail) {
-            $this->error = Labels::getLabel("MSG_UNABLE_TO_SEND_EMAIL", $langId);
+            $this->error = Labels::getLabel("ERR_UNABLE_TO_SEND_EMAIL", $langId);
             return false;
         }
         return true;

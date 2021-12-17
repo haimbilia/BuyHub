@@ -71,7 +71,7 @@ class TwilioSms extends SmsNotificationBase
     {
         $data = FatApp::getPostedData();
         if (empty($data) || !array_key_exists('MessageSid', $data)) {
-            $this->error = Labels::getLabel('LBL_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
         return SmsArchive::updateStatus($this->langId, $data['MessageSid'], $data['MessageStatus'], $data);

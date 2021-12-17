@@ -53,7 +53,7 @@ class PaymentMethodBase extends PluginBase
         $this->userId = $userId;
         $this->userId = FatUtility::int($this->userId);
         if (1 > $this->userId) {
-            $this->error = Labels::getLabel('MSG_INVALID_USER', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_USER', $this->langId);
             return false;
         }
         $this->userInfoColumns = array_merge($this->commonColumns, $this->buyerInfoColumns);
@@ -88,7 +88,7 @@ class PaymentMethodBase extends PluginBase
         $this->userId = $userId;
         $this->userId = FatUtility::int($this->userId);
         if (1 > $this->userId) {
-            $this->error = Labels::getLabel('MSG_INVALID_USER', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_USER', $this->langId);
             return false;
         }
         $this->userInfoColumns = array_merge($this->commonColumns, $this->sellerInfoColumns);
@@ -133,7 +133,7 @@ class PaymentMethodBase extends PluginBase
     {
         $currency = Currency::getDefault();
         if (empty($currency)) {
-            $this->error = Labels::getLabel('MSG_DEFAULT_CURRENCY_NOT_SET', $this->langId);
+            $this->error = Labels::getLabel('ERR_DEFAULT_CURRENCY_NOT_SET', $this->langId);
             return false;
         }
         $this->systemCurrencyCode = strtoupper($currency['currency_code']);

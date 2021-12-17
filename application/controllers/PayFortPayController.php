@@ -42,7 +42,7 @@ class PayFortPayController extends PaymentController
             $this->set('orderInfo', $orderInfo);
             $this->set('requestParams', $requestParams);
         } else {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST_PARAMETERS', $this->siteLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST_PARAMETERS', $this->siteLangId);
         }
 
         if ($this->error) {
@@ -125,7 +125,7 @@ class PayFortPayController extends PaymentController
     private function generatePaymentFormParams($orderId, $orderPaymentObj, &$orderInfo, &$paymentGatewayCharge = 0.00, $returnParams = true)
     {
         if (!$orderId || !$orderPaymentObj) {
-            $this->error = Labels::getLabel('MSG_Invalid_order_request', $this->siteLangId);
+            $this->error = Labels::getLabel('ERR_Invalid_order_request', $this->siteLangId);
             return false;
         }
 
@@ -133,10 +133,10 @@ class PayFortPayController extends PaymentController
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
         if (!$orderInfo['id']) {
-            $this->error = Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
             return false;
         } elseif ($orderInfo["order_payment_status"] != Orders::ORDER_PAYMENT_PENDING) {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
             return false;
         }
 

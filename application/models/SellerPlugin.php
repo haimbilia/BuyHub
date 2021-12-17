@@ -73,7 +73,7 @@ class SellerPlugin extends PluginCommon
     public function getDataByType(int $typeId, int $langId = 0, bool $assoc = false, bool $active = true)
     {
         if (1 > $typeId) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
             return false;
         }
 
@@ -131,7 +131,7 @@ class SellerPlugin extends PluginCommon
     public function getDefaultPluginData(int $typeId, $attr = null, int $langId = 0)
     {
         if (!in_array($typeId, self::getKingpinTypeArr())) {
-            $this->error = Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_PLUGIN_TYPE', CommonHelper::getLangId());
             return false;
         }
         
@@ -194,7 +194,7 @@ class SellerPlugin extends PluginCommon
         $db = FatApp::getDb();
         $pluginData = Plugin::getAttributesById($this->mainTableRecordId);
         if (empty($pluginData)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $langId);
             return false;
         }
 

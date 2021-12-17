@@ -55,7 +55,7 @@ class AttachedFileTemp extends AttachedFile
         }
 
         if (!$this->save()) {
-            $this->error = Labels::getLabel('MSG_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
+            $this->error = Labels::getLabel('ERR_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
             return false;
         }
 

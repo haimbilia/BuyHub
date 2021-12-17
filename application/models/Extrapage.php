@@ -102,7 +102,7 @@ class Extrapage extends MyAppModel
     public function updatePageContent($data = array())
     {
         if (!($this->mainTableRecordId > 0)) {
-            $this->error = Labels::getLabel('MSG_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
 

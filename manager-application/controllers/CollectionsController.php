@@ -202,7 +202,7 @@ class CollectionsController extends ListingBaseController
         $frm = $this->getForm($type, $layoutType, $recordId);
 
         if (0 < $recordId) {
-            $data = Collections::getAttributesByLangId($this->siteLangId, $recordId, true);
+            $data = Collections::getAttributesByLangId($this->siteLangId, $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request);
             }
@@ -220,6 +220,36 @@ class CollectionsController extends ListingBaseController
         $this->set('collection_layout_type', $layoutType);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
+    }
+
+    private function getLayoutLimit($collection_layout_type)
+    {
+        switch ($collection_layout_type) {
+            case Collections::TYPE_PRODUCT_LAYOUT1:
+                return Collections::LIMIT_PRODUCT_LAYOUT1;
+                break;
+            case Collections::TYPE_PRODUCT_LAYOUT2:
+                return Collections::LIMIT_PRODUCT_LAYOUT2;
+                break;
+            case Collections::TYPE_PRODUCT_LAYOUT3:
+                return Collections::LIMIT_PRODUCT_LAYOUT3;
+                break;
+            case Collections::TYPE_CATEGORY_LAYOUT1:
+                return Collections::LIMIT_CATEGORY_LAYOUT1;
+                break;
+            case Collections::TYPE_CATEGORY_LAYOUT2:
+                return Collections::LIMIT_CATEGORY_LAYOUT2;
+                break;
+            case Collections::TYPE_SHOP_LAYOUT1:
+                return Collections::LIMIT_SHOP_LAYOUT1;
+                break;
+            case Collections::TYPE_BRAND_LAYOUT1:
+                return Collections::LIMIT_BRAND_LAYOUT1;
+                break;
+            case Collections::TYPE_BLOG_LAYOUT1:
+                return Collections::LIMIT_BLOG_LAYOUT1;
+                break;
+        }
     }
 
     public function setup()
@@ -794,6 +824,12 @@ class CollectionsController extends ListingBaseController
         $this->set('canEdit', $this->objPrivilege->canEditBanners());
         $this->set('linkTargetsArr', applicationConstants::getLinkTargetsArr($this->siteLangId));
         $this->_template->render(false, false);
+    }
+
+    private function getDisplayScreenName()
+    {
+        $screenTypesArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        return array(0 => '') + $screenTypesArr;
     }
 
     public function bannerForm($collectionId, $recordId = 0)

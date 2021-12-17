@@ -120,10 +120,10 @@ class Currency extends MyAppModel
     {
         $defaultCurrConvAPI = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . PLUGIN::TYPE_CURRENCY_CONVERTER, FatUtility::VAR_INT, 0);
         if (empty($defaultCurrConvAPI)) {
-            $this->error = Labels::getLabel('MSG_DEFAULT_CURRENCY_CONVERTER_NOT_DEFINED', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_DEFAULT_CURRENCY_CONVERTER_NOT_DEFINED', CommonHelper::getLangId());
             return false;
         } elseif (1 > Plugin::getAttributesById($defaultCurrConvAPI, 'plugin_active')) {
-            $this->error = Labels::getLabel('MSG_DEFAULT_CURRENCY_CONVERTER_API_ACTIVE', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_DEFAULT_CURRENCY_CONVERTER_API_ACTIVE', CommonHelper::getLangId());
             return false;
         }
 

@@ -366,7 +366,7 @@ class Orders extends MyAppModel
         if (array_key_exists('coupon_id', $discountInfo)) {
             $couponInfo = DiscountCoupons::getValidCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->getOrderId());
             if ($couponInfo == false) {
-                $this->error = Labels::getLabel('LBL_Invalid_Coupon_Code', $data['order_language_id']);
+                $this->error = Labels::getLabel('ERR_Invalid_Coupon_Code', $data['order_language_id']);
                 return false;
             }
 
@@ -1045,7 +1045,7 @@ class Orders extends MyAppModel
         $order_status_id = FatUtility::int($order_status_id);
         $orderInfo = $this->getOrderById($order_id, $langId);
         if (!$orderInfo) {
-            $this->error = Labels::getLabel('MSG_Error_in_updating_the_order,_Please_try_after_some_time.', $langId);
+            $this->error = Labels::getLabel('ERR_Error_in_updating_the_order,_Please_try_after_some_time.', $langId);
             return false;
         }
 
@@ -1354,7 +1354,7 @@ class Orders extends MyAppModel
 
         $childOrderInfo = $orderSubObj->getOrderSubscriptionByOssubId($ossubs_id, $langId);
         if (empty($childOrderInfo)) {
-            $this->error = Labels::getLabel("MSG_Invalid_Access", $langId);
+            $this->error = Labels::getLabel("ERR_Invalid_Access", $langId);
             return false;
         }
 
@@ -1570,7 +1570,7 @@ class Orders extends MyAppModel
 
         $childOrderInfo = $this->getOrderProductsByOpId($op_id, $langId);
         if (empty($childOrderInfo)) {
-            $this->error = Labels::getLabel("MSG_Invalid_Access", $langId);
+            $this->error = Labels::getLabel("ERR_Invalid_Access", $langId);
             return false;
         }
 
@@ -2738,7 +2738,7 @@ class Orders extends MyAppModel
         $rs = $srch->getResultSet();
         $order = FatApp::getDb()->fetch($rs);
         if (!$order) {
-            $this->error = Labels::getLabel('MSG_Order_Data_Not_Found', $langId);
+            $this->error = Labels::getLabel('ERR_Order_Data_Not_Found', $langId);
             return false;
         }
 

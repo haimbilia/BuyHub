@@ -138,7 +138,7 @@ class PaymentMethods
                 break;
             
             default:
-                $this->error = Labels::getLabel('MSG_INVALID_REFUND_TYPE', $this->langId);
+                $this->error = Labels::getLabel('ERR_INVALID_REFUND_TYPE', $this->langId);
                 return false;
                 break;
         }
@@ -317,7 +317,7 @@ class PaymentMethods
     private function returnRefundAmount(string $comments): bool
     {
         if (empty($this->remoteTxnId)) {
-            $this->error = Labels::getLabel('MSG_NO_REMOTE_TXN_ID_FOUND', $this->langId);
+            $this->error = Labels::getLabel('ERR_NO_REMOTE_TXN_ID_FOUND', $this->langId);
             return false;
         }
         
