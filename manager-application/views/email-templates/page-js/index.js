@@ -9,10 +9,8 @@
             fcom.setEditorLayout(langId);
             if(!navigator.clipboard){
                 $('[data-toggle="tooltip"]').removeAttr('title');
-            }else{
-                $('[data-toggle="tooltip"]').tooltip();
+                return;
             }
-            
         });
     };
 

@@ -175,7 +175,9 @@ class CollectionsController extends ListingBaseController
     public function layoutSelectorForm()
     {
         $typeLayouts = Collections::getTypeSpecificLayouts($this->siteLangId);
+        $typeArr = Collections::getTypeArr($this->siteLangId);
         $this->set('typeLayouts', $typeLayouts);
+        $this->set('typeArr', $typeArr);
         $this->_template->render(false, false);
     }
 

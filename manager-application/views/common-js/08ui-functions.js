@@ -51,25 +51,14 @@ $(document).ready(function () {
     new ScrollHint('.js-scrollable');
 });
 
-jQuery(document).ready(function ($) {
+$(function () {
     jQuery(".stellarnav").stellarNav({
         theme: "custom",
         breakpoint: 1024,
         position: "left",
     });
-});
 
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-});
-
-$(function () {
-    $('[data-toggle="popover"]').popover();
-});
-
-$(document).ready(function (e) {
     let currentTheme = localStorage.getItem("data-theme");
-
     if (currentTheme == "dark") {
         $("html").attr("data-theme", "dark");
         $(".theme-switch").removeClass("light").addClass("dark");
