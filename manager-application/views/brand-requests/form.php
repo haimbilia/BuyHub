@@ -11,19 +11,22 @@ $fld->setFieldTagAttribute('id', "brand_id");
 
 $fld = $frm->getField('urlrewrite_custom');
 $fld->setFieldTagAttribute('id', "urlrewrite_custom");
-$fld->htmlAfterField = '<span class="form-text text-muted">' . UrlHelper::generateFullUrl('Brands', 'View', array($recordId), CONF_WEBROOT_FRONT_URL) . '</span>';
+$fld->htmlAfterField = '<span class="form-text text-muted">' . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Brands', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</span>';
 $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
 
 $fld = $frm->getField('brand_active');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
 
 $fld = $frm->getField('brand_status');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
+
 
 
 $otherButtons = [
     [
-       'attr' => [
+        'attr' => [
             'href' => 'javascript:void(0)',
             'onclick' => 'mediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -31,7 +34,7 @@ $otherButtons = [
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         'isActive' => false
     ]
-]; 
+];
 
 $formTitle = Labels::getLabel('LBL_PRODUCT_BRAND_REQUEST_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

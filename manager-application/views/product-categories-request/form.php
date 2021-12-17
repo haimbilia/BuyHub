@@ -7,6 +7,14 @@ getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
 
 $fld = $frm->getField('prodcat_id');
 $fld->setFieldTagAttribute('id', "prodcat_id");
+
+$fld = $frm->getField('prodcat_active');
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true; 
+
+$fld = $frm->getField('prodcat_active');
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true; 
  
 $otherButtons = [
     [

@@ -576,8 +576,13 @@ class HtmlHelper
     public static function configureCheckboxLabel(&$frm, $fldName)
     {
         $fld = $frm->getField($fldName);
-        $fld->developerTags['noCaptionTag'] = true;   
+        $fld->developerTags['noCaptionTag'] = true;
         $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
         $fld->developerTags['cbHtmlAfterCheckbox'] = '<span class="input-helper"></span>';
+    }
+
+    public static function seoFriendlyUrl($url)
+    {
+        return '<a href="' . $url . '" target="_blank">' . $url . '</a>';
     }
 }
