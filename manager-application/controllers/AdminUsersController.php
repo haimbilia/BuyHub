@@ -24,7 +24,8 @@ class AdminUsersController extends ListingBaseController
         }
     }
 
-    public function setProcedurePermission(){
+    public function setProcedurePermission()
+    {
         $db = FatApp::getDb();
         $con = $db->getConnectionObject();
         if (!$con->query("SET GLOBAL log_bin_trust_function_creators = 1")) {
@@ -37,7 +38,7 @@ class AdminUsersController extends ListingBaseController
     {
         $db = FatApp::getDb();
         $con = $db->getConnectionObject();
-        $queries = array(            
+        $queries = array(
             "DROP FUNCTION IF EXISTS `GETBLOGCATCODE`",
             "CREATE FUNCTION `GETBLOGCATCODE`(`id` INT) RETURNS varchar(255) CHARSET utf8
 			BEGIN
@@ -221,23 +222,23 @@ class AdminUsersController extends ListingBaseController
         }
 
         $srch->addMultipleFields(array('*'));
-        
+
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        
+
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        
+
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        
+
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
-        
+
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -263,8 +264,9 @@ class AdminUsersController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
+        $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_ADMIN_USER_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->_template->render(false, false);
     }
 
     public function setup()
@@ -357,7 +359,7 @@ class AdminUsersController extends ListingBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        
+
         $this->set('recordId', $recordId);
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
@@ -388,12 +390,16 @@ class AdminUsersController extends ListingBaseController
             $fld->requirements()->setRequired();
             $fld->requirements()->setCompareWith('password', 'eq', '');
         }
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
+
         if ($recordId != 1) {
-            $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'admin_active', $activeInactiveArr, '', array(), '');
+            $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'admin_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+            HtmlHelper::configureSwitchForCheckbox($fld);
+            $fld->developerTags['noCaptionTag'] = true;
         }
 
-        $frm->addCheckBox(Labels::getLabel('FRM_SEND_EMAIL_NOTIFICATION', $this->siteLangId), 'admin_email_notification', applicationConstants::YES, array(), false, applicationConstants::NO);
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_SEND_EMAIL_NOTIFICATION', $this->siteLangId), 'admin_email_notification', applicationConstants::YES, array(), false, applicationConstants::NO);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+        $fld->developerTags['noCaptionTag'] = true;
 
         return $frm;
     }

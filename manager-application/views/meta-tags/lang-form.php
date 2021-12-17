@@ -22,6 +22,13 @@ if (!empty($translatorSubscriptionKey) && $lang_id != $siteDefaultLangId) {
 }
 
 $activeLangtab = true;
+
+$fld = $langFrm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+}
+
 $formTitle = Labels::getLabel('LBL_META_TAG_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . 'meta-tags/_partials/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
