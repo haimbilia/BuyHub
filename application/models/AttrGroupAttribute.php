@@ -53,7 +53,7 @@ class AttrGroupAttribute extends MyAppModel
     public function addUpdateAttributes($attrgrp_id, $data)
     {
         if (!$attrgrp_id) {
-            $this->error = Labels::getLabel('MSG_Attribute_Group_not_selected!', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_Attribute_Group_not_selected!', $this->commonLangId);
             return false;
         }
 

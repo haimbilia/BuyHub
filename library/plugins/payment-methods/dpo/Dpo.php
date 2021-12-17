@@ -334,7 +334,7 @@ class Dpo extends PaymentMethodBase
         if (!$this->response = curl_exec($ch)) {
             $this->error = curl_error($ch);
             if (empty($this->error)) {
-                $this->error = Labels::getLabel('MSG_VERIFICATION_ERROR:_UNABLE_TO_CONNECT_TO_THE_PAYMENT_GATEWAY.', $this->langId);
+                $this->error = Labels::getLabel('ERR_VERIFICATION_ERROR:_UNABLE_TO_CONNECT_TO_THE_PAYMENT_GATEWAY.', $this->langId);
             }
             return false;
         }

@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-head">
                 <div class="card-head-label">
-              
+
                 </div>
                 <div class="card-toolbar">
                     <div class="maintenance-mode">

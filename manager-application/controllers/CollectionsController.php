@@ -202,7 +202,7 @@ class CollectionsController extends ListingBaseController
         $frm = $this->getForm($type, $layoutType, $recordId);
 
         if (0 < $recordId) {
-            $data = Collections::getAttributesByLangId($this->siteLangId, $recordId, true);
+            $data = Collections::getAttributesByLangId($this->siteLangId, $recordId, null, true);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request);
             }
@@ -220,6 +220,36 @@ class CollectionsController extends ListingBaseController
         $this->set('collection_layout_type', $layoutType);
         $this->set('frm', $frm);
         $this->_template->render(false, false);
+    }
+
+    private function getLayoutLimit($collection_layout_type)
+    {
+        switch ($collection_layout_type) {
+            case Collections::TYPE_PRODUCT_LAYOUT1:
+                return Collections::LIMIT_PRODUCT_LAYOUT1;
+                break;
+            case Collections::TYPE_PRODUCT_LAYOUT2:
+                return Collections::LIMIT_PRODUCT_LAYOUT2;
+                break;
+            case Collections::TYPE_PRODUCT_LAYOUT3:
+                return Collections::LIMIT_PRODUCT_LAYOUT3;
+                break;
+            case Collections::TYPE_CATEGORY_LAYOUT1:
+                return Collections::LIMIT_CATEGORY_LAYOUT1;
+                break;
+            case Collections::TYPE_CATEGORY_LAYOUT2:
+                return Collections::LIMIT_CATEGORY_LAYOUT2;
+                break;
+            case Collections::TYPE_SHOP_LAYOUT1:
+                return Collections::LIMIT_SHOP_LAYOUT1;
+                break;
+            case Collections::TYPE_BRAND_LAYOUT1:
+                return Collections::LIMIT_BRAND_LAYOUT1;
+                break;
+            case Collections::TYPE_BLOG_LAYOUT1:
+                return Collections::LIMIT_BLOG_LAYOUT1;
+                break;
+        }
     }
 
     public function setup()
@@ -262,15 +292,6 @@ class CollectionsController extends ListingBaseController
 
         if ($post['collection_type'] == Collections::COLLECTION_TYPE_BANNER) {
             $this->saveBannerLocation($post);
-            $this->set('openBannersForm', true);
-        }
-
-        if (!in_array($post['collection_type'], Collections::COLLECTION_WITHOUT_RECORDS)) {
-            $this->set('openRecordForm', true);
-        }
-
-        if (!in_array($post['collection_type'], Collections::COLLECTION_WITHOUT_MEDIA)) {
-            $this->set('openMediaForm', true);
         }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
@@ -796,6 +817,12 @@ class CollectionsController extends ListingBaseController
         $this->_template->render(false, false);
     }
 
+    private function getDisplayScreenName()
+    {
+        $screenTypesArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        return array(0 => '') + $screenTypesArr;
+    }
+
     public function bannerForm($collectionId, $recordId = 0)
     {
         $this->bannersTab = true;
@@ -928,6 +955,10 @@ class CollectionsController extends ListingBaseController
                     break;
                 }
             }
+        }
+        
+        if (1 > $newTabLangId) {
+            $this->set('openMediaForm', true);
         }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
@@ -1075,6 +1106,7 @@ class CollectionsController extends ListingBaseController
     public function setupBannerImage()
     {
         $this->objPrivilege->canEditProductCategories();
+        $collection_id = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
         $banner_id = FatApp::getPostedData('banner_id', FatUtility::VAR_INT, 0);
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $slide_screen = FatApp::getPostedData('banner_screen', FatUtility::VAR_INT, 0);
@@ -1104,7 +1136,10 @@ class CollectionsController extends ListingBaseController
         }
         Banner::setLastModified($banner_id);
         $this->set('file', $_FILES['cropped_image']['name']);
+        $this->set('collection_id', $collection_id);
         $this->set('banner_id', $banner_id);
+        $this->set('lang_id', $lang_id);
+        $this->set('slide_screen', $slide_screen);
         $this->set('msg', $_FILES['cropped_image']['name'] . ' ' . Labels::getLabel('LBL_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }

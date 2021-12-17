@@ -1372,7 +1372,7 @@ class User extends MyAppModel
 
         if (null != $password) {
             if (!ValidateElement::password($password)) {
-                $this->error = Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->commonLangId);
+                $this->error = Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->commonLangId);
                 return false;
             }
         }
@@ -1592,7 +1592,7 @@ class User extends MyAppModel
     public function prepareUserPhoneOtp($dialCode, $phone)
     {
         if (($this->mainTableRecordId < 1)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST.', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST.', $this->commonLangId);
             return false;
         }
         if ($row = $this->getOtpDetail()) {
@@ -1691,13 +1691,13 @@ class User extends MyAppModel
         }
 
         if ('' == $otp || 1 > $otp) {
-            $this->error = Labels::getLabel('MSG_INVALID_OTP', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_OTP', $this->commonLangId);
             return false;
         }
 
         if ($row = $this->getOtpDetail($otp)) {
             if (strtotime($row[static::DB_TBL_UPV_PREFIX . 'expired_on']) < time()) {
-                $this->error = Labels::getLabel('MSG_OTP_EXPIRED.', $this->commonLangId);
+                $this->error = Labels::getLabel('ERR_OTP_EXPIRED.', $this->commonLangId);
                 return false;
             }
 
@@ -1716,7 +1716,7 @@ class User extends MyAppModel
             }
             return (true == $returnRow) ? $row : true;
         } else {
-            $this->error = Labels::getLabel('MSG_INVALID_OTP.', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_OTP.', $this->commonLangId);
             return false;
         }
         return false;
@@ -1793,7 +1793,7 @@ class User extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if (empty($phone) || empty($otp)) {
-            $this->error = Labels::getLabel("MSG_INVALID_REQUEST", $langId);
+            $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
             return false;
         }
 
@@ -2448,7 +2448,7 @@ class User extends MyAppModel
         $userPhone = array_key_exists('user_phone', $postedData) ? $postedData['user_phone_dcode'] . $postedData['user_phone'] : '';
 
         if (empty($userPhone) && !filter_var($postedData['user_email'], FILTER_VALIDATE_EMAIL)) {
-            $this->error = Labels::getLabel("LBL_Invalid_email_address", $this->commonLangId);
+            $this->error = Labels::getLabel("ERR_Invalid_email_address", $this->commonLangId);
             return false;
         }
 
@@ -2474,7 +2474,7 @@ class User extends MyAppModel
         if (empty($userPhone) && isset($postedData['user_newsletter_signup']) && $postedData['user_newsletter_signup'] == 1) {
             if (!MailchimpHelper::saveSubscriber($email)) {
                 $db->rollbackTransaction();
-                $this->error = Labels::getLabel("LBL_Newsletter_is_not_configured_yet,_Please_contact_admin", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_Newsletter_is_not_configured_yet,_Please_contact_admin", $this->commonLangId);
                 return false;
             }
         }
@@ -2572,14 +2572,14 @@ class User extends MyAppModel
         }
 
         if ($row['credential_username'] == $userName) {
-            $this->error = Labels::getLabel('MSG_DUPLICATE_USERNAME', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_DUPLICATE_USERNAME', $this->commonLangId);
             return false;
         }
         if (empty($userPhone) && $row['credential_email'] == $userEmail) {
-            $this->error = Labels::getLabel('MSG_DUPLICATE_EMAIL', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_DUPLICATE_EMAIL', $this->commonLangId);
             return false;
         } elseif (!empty($userPhone) && $row['user_phone_dcode'] . $row['user_phone'] == $userPhone) {
-            $this->error = Labels::getLabel('MSG_DUPLICATE_PHONE.', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_DUPLICATE_PHONE.', $this->commonLangId);
             if ($row['credential_verified'] == applicationConstants::NO) {
                 $this->error .= ' ' . Labels::getLabel('MSG_THIS_PHONE_NUMBER_IS_NOT_VERIFIED_YET._DO_YOU_WANT_TO_CONTINUE?_{CONTINUE-BTN}', $this->commonLangId);
             }
@@ -2726,7 +2726,7 @@ class User extends MyAppModel
                 }
 
                 if ($invalidUser) {
-                    $this->error = Labels::getLabel('MSG_Invalid_User', $this->commonLangId);
+                    $this->error = Labels::getLabel('ERR_Invalid_User', $this->commonLangId);
                     return false;
                 }
             }
@@ -2763,7 +2763,7 @@ class User extends MyAppModel
             }
 
             if (!$row = $this->getUserInfo($attr)) {
-                $this->error = Labels::getLabel("MSG_USER_COULD_NOT_BE_SET", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->commonLangId);
                 return false;
             }
         }
@@ -2809,13 +2809,13 @@ class User extends MyAppModel
 
         $this->assignValues($userData);
         if (!$this->save()) {
-            $this->error = Labels::getLabel("MSG_USER_COULD_NOT_BE_SET", $this->commonLangId) . $this->getError();
+            $this->error = Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->commonLangId) . $this->getError();
             return false;
         }
         $userId = $this->getMainTableRecordId();
         $this->updateUserMeta($socialIdColumn, $socialAccountId);
         if (!$this->setLoginCredentials($username, $email, uniqid(), 1, 1)) {
-            $this->error = Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->commonLangId) . $this->getError();
+            $this->error = Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->commonLangId) . $this->getError();
             $db->rollbackTransaction();
             return false;
         }
@@ -2828,7 +2828,7 @@ class User extends MyAppModel
 
         if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
             if (!$this->notifyAdminRegistration($userData, $this->commonLangId)) {
-                $this->error = Labels::getLabel("MSG_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
                 $db->rollbackTransaction();
                 return false;
             }
@@ -2843,7 +2843,7 @@ class User extends MyAppModel
             $data = array_merge($data, $uData);
 
             if (!$this->userWelcomeEmailRegistration($data, $link, $this->commonLangId)) {
-                $this->error = Labels::getLabel("MSG_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
                 $db->rollbackTransaction();
                 return false;
             }

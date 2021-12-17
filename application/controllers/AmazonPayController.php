@@ -51,7 +51,7 @@ class AmazonPayController extends PaymentController
         } elseif ($orderInfo && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) {
             $this->currencyCode = strtolower($orderInfo["order_currency_code"]);
         } else {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId);
         }
         $this->set('paymentAmount', $paymentAmount);
         $this->set('orderInfo', $orderInfo);

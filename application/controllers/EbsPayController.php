@@ -42,7 +42,7 @@ class EbsPayController extends PaymentController
         $this->set('ebs', $ebs);
 
         if (!strlen(trim($ebs['account_id'])) > 0 && strlen(trim($ebs['secret_key'])) > 0) {
-            $this->error = Labels::getLabel('MSG_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId);
+            $this->error = Labels::getLabel('ERR_PAYMENT_GATEWAY_SETUP_ERROR', $this->siteLangId);
         }
 
         $orderPaymentObj = new OrderPayment($orderId, $this->siteLangId);

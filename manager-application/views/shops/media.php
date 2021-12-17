@@ -101,7 +101,7 @@ $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
         var slide_screen = $(this).val();
         var shop_id = $(this).closest("form").find('input[name="shop_id"]').val();
         var lang_id = $("#imageLanguageJs").val();
-        brandImages(shop_id, 'image', slide_screen, lang_id);
+        shopImages(shop_id, 'image', slide_screen, lang_id);
     });
 
     $(document).on('change', '.prefRatio-js', function() {

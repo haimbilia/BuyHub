@@ -154,7 +154,7 @@ class Mpesa extends PaymentMethodBase
         if (!$this->response = curl_exec($curl)) {
             $this->error = curl_error($curl);
             if (empty($this->error)) {
-				$this->error = Labels::getLabel('MSG_UNABLE_TO_GENERATE_TOKEN', $this->langId);
+				$this->error = Labels::getLabel('ERR_UNABLE_TO_GENERATE_TOKEN', $this->langId);
 			}
             return false;
         }

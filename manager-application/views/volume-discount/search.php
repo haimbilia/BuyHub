@@ -27,7 +27,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'product_name':
-                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId, 'sellerName' => $row['credential_username']], false, true);
+                $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $selProdId, 'siteLangId' => $siteLangId], false, true);
                 $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'credential_username':
@@ -35,6 +35,9 @@ foreach ($arrListing as $sn => $row) {
                 $onclick = 'redirectUser(' . $row['user_id'] . ')';
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', [
                     'user' => $row,
+                    'extraClass' => 'user-profile-sm',
+                    'displayEmail' => false,
+                    'userTitleClass' => 'text-muted',
                     'siteLangId' => $siteLangId,
                     'href' => $href,
                     'onclick' => $onclick,
@@ -43,9 +46,10 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'voldiscount_min_qty':
             case 'voldiscount_percentage':
+                $div = $td->appendElement('div', ['class' => 'text-nowrap d-flex']);
                 $input = '<input type="text" data-id="' . $volDiscountId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" class="volDiscountColJs hide vd-input" data-oldval="' . $row[$key] . '"/>';
-                $td->appendElement('div', array("class" => 'editColJs contenteditable', "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $row[$key], true);
-                $td->appendElement('plaintext', array(), $input, true);
+                $div->appendElement('div', array("class" => 'editColJs', "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $row[$key], true);
+                $div->appendElement('plaintext', array(), $input, true);
                 break;
             case 'action':
                 $data = [

@@ -31,8 +31,7 @@ class BrandsController extends ListingBaseController
         $this->getListingData();
 
         $this->_template->addCss('css/cropper.css');
-        $this->_template->addJs('js/cropper.js');
-        $this->_template->addJs('js/cropper-main.js');
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'brands/page-js/index.js']);
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -267,11 +266,10 @@ class BrandsController extends ListingBaseController
         if (0 < $recordId) {
             $brandLogo = current(AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $recordId, 0, $langId, false));
             if (is_array($brandLogo) && count($brandLogo)) {
-                $data['ratio_type'] = $brandLogo['afile_aspect_ratio'];
+                $data['ratio_type'] = !empty($brandLogo['afile_aspect_ratio']) ? $brandLogo['afile_aspect_ratio'] : AttachedFile::RATIO_TYPE_SQUARE;
             }
         }
         $logoFrm->fill($data);
-
         $data['slide_screen'] = 1 > $slide_screen ? applicationConstants::SCREEN_DESKTOP : $slide_screen;
         $imageFrm = $this->getBrandImageForm($recordId);
         $imageFrm->fill($data);
@@ -303,7 +301,7 @@ class BrandsController extends ListingBaseController
             $this->set('image', $brandImage);
             $this->set('imageFunction', 'brandImage');
         }
-        
+
         $this->set('file_type', $file_type);
         $this->set('brand_id', $brand_id);
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));

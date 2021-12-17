@@ -168,12 +168,12 @@ class OrderProduct extends MyAppModel
     public function bindResponse(int $type, string $response): bool
     {
         if (1 > $this->mainTableRecordId) {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER_PRODUCT_ID', 0);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER_PRODUCT_ID', 0);
             return false;
         }
 
         if (false === self::isValidResponseType($type)) {
-            $this->error = Labels::getLabel('MSG_INVALID_RESPONSE_TYPE', 0);
+            $this->error = Labels::getLabel('ERR_INVALID_RESPONSE_TYPE', 0);
             return false;
         }
 
@@ -209,12 +209,12 @@ class OrderProduct extends MyAppModel
     public function getResponse(int $type = 0, bool $joinTypeTables = false, array $attr = [], int $langId = 0): array
     {
         if (1 > $this->mainTableRecordId) {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER_PRODUCT_ID', $langId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER_PRODUCT_ID', $langId);
             return [];
         }
 
         if (0 < $type && false === self::isValidResponseType($type)) {
-            $this->error = Labels::getLabel('MSG_INVALID_RESPONSE_TYPE', $langId);
+            $this->error = Labels::getLabel('ERR_INVALID_RESPONSE_TYPE', $langId);
             return [];
         }
 

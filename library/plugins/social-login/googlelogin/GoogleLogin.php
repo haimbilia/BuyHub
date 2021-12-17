@@ -81,7 +81,7 @@ class GoogleLogin extends SocialMediaAuthBase
     public function authenticate(string $code): bool
     {
         if (empty($code)) {
-            $this->error = Labels::getLabel('MSG_BAD_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_BAD_REQUEST', $this->langId);
             return false;
         }
 
@@ -112,7 +112,7 @@ class GoogleLogin extends SocialMediaAuthBase
     public function setAccessToken(string $accessToken): bool
     {
         if (empty($accessToken)) {
-            $this->error = Labels::getLabel('MSG_BAD_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_BAD_REQUEST', $this->langId);
             return false;
         }
         $resp = $this->client->setAccessToken($accessToken);

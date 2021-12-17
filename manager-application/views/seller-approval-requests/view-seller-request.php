@@ -45,12 +45,14 @@
                             <div class=""><?php echo $reqStatusArr[$supplierRequest['usuprequest_status']]; ?></div> 
                         </div>
                     </div> 
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="label"><?php echo Labels::getLabel('LBL_Comments/Reason', $siteLangId); ?></label>
-                            <div class=""><?php echo nl2br($supplierRequest['usuprequest_comments']); ?></div> 
-                        </div>
-                    </div>  
+                    <?php if (!empty($supplierRequest['usuprequest_comments'])) { ?>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="label"><?php echo Labels::getLabel('LBL_Comments/Reason', $siteLangId); ?></label>
+                                <div class=""><?php echo nl2br($supplierRequest['usuprequest_comments']); ?></div> 
+                            </div>
+                        </div>  
+                    <?php } ?>
                     <div class="col-md-12">
                         <div class="form-group"><h3 class="h3"><?php echo Labels::getLabel('LBL_Additional_Information', $siteLangId); ?></h3></div>
                     </div>  

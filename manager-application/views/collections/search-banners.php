@@ -99,19 +99,19 @@ $generalTab = [
     'label' => Labels::getLabel('LBL_BANNERS', $siteLangId),
     'isActive' => true
 ];
-
-$otherButtons = [
-    [
-        'attr' => [
-            'href' => 'javascript:void(0);',
-            'onclick' => 'bannerForm(' . $collectionId . ', 0)',
-            'title' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId)
-        ],
-        'label' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
-        'isActive' => false,
-        'isDisabled' => false,
+$otherButtons[] = [
+    'attr' => [
+        'href' => 'javascript:void(0);',
+        'onclick' => 'bannerForm(' . $collectionId . ', 0)',
+        'title' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId)
     ],
-    [
+    'label' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
+    'isActive' => false,
+    'isDisabled' => false,
+];
+
+if (!empty($languages)) {
+    $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',
             'onclick' => 'bannerLangForm(' . $collectionId . ', 0,' . array_key_first($languages) . ')',
@@ -119,17 +119,19 @@ $otherButtons = [
         ],
         'label' => Labels::getLabel('LBL_BANNER_LANG_DATA', $siteLangId),
         'isActive' => false
+    ];
+}
+
+$otherButtons[] = [
+    'attr' => [
+        'href' => 'javascript:void(0)',
+        'onclick' => 'bannerMediaForm(' . $collectionId . ', 0)',
+        'title' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
     ],
-    [
-        'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => 'bannerMediaForm(' . $collectionId . ', 0)',
-            'title' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
-        ],
-        'label' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
-        'isActive' => false
-    ]
+    'label' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
+    'isActive' => false
 ];
+
 $includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
 
 /* Mark all other tabs disabled. */
