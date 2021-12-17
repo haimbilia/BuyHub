@@ -1,16 +1,19 @@
 <?php
 
-class SellerApprovalRequestsController extends ListingBaseController {
+class SellerApprovalRequestsController extends ListingBaseController
+{
 
     protected string $modelClass = 'User';
     protected $pageKey = 'SELLER_APPROVAL_REQUESTS';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewSellerApprovalRequests();
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
@@ -28,7 +31,8 @@ class SellerApprovalRequestsController extends ListingBaseController {
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function getSearchForm($fields = []) {
+    public function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
@@ -43,7 +47,8 @@ class SellerApprovalRequestsController extends ListingBaseController {
         return $frm;
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'seller-approval-requests/search.php', true),
@@ -52,7 +57,8 @@ class SellerApprovalRequestsController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    private function getListingData()
+    {
         $this->objPrivilege->canEditProductCategories();
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
@@ -108,7 +114,8 @@ class SellerApprovalRequestsController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditSellerApprovalRequests($this->admin_id, true));
     }
 
-    public function form() {
+    public function form()
+    {
         $this->objPrivilege->canEditSellerApprovalRequests();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
@@ -127,10 +134,12 @@ class SellerApprovalRequestsController extends ListingBaseController {
         $this->set('languages', []);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_SELLER_APPROVAL_REQUEST', $this->siteLangId));
+        $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditSellerApprovalRequests();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -159,7 +168,7 @@ class SellerApprovalRequestsController extends ListingBaseController {
         }
 
         FatApp::getDb()->startTransaction();
-        if (!$userObj->updateSupplierRequest(['request_id' => $supplierRequest['usuprequest_id'], 'status' => $post['usuprequest_status']])) {
+        if (!$userObj->updateSupplierRequest(['request_id' => $supplierRequest['usuprequest_id'], 'status' => $post['usuprequest_status'], 'comments' => $post['comments']])) {
             FatApp::getDb()->rollbackTransaction();
             LibHelper::exitWithError($userObj->getError());
         }
@@ -185,7 +194,8 @@ class SellerApprovalRequestsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewSellerRequest($requestId) {
+    public function viewSellerRequest($requestId)
+    {
         $this->objPrivilege->canViewSellerApprovalRequests();
         $requestId = FatUtility::int($requestId);
         if (1 > $requestId) {
@@ -208,22 +218,19 @@ class SellerApprovalRequestsController extends ListingBaseController {
         $this->_template->render(false, false);
     }
 
-    private function getForm() {
+    private function getForm()
+    {
         $frm = new Form('frmapproval', array('id' => 'frmapproval'));
         $frm->addHiddenField('', 'usuprequest_id');
         $statusArr = User::getSupplierReqStatusArr($this->siteLangId);
         unset($statusArr[User::SUPPLIER_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'usuprequest_status', $statusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
-        $frm->addTextArea('', 'comments', '');
-        $languageArr = Language::getDropDownList();
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId), 'usuprequest_status', $statusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
+        $frm->addTextArea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'comments', '');
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    private function getFormColumns(): array
+    {
         $shopsTblHeadingCols = CacheHelper::get('approvalRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
@@ -242,7 +249,8 @@ class SellerApprovalRequestsController extends ListingBaseController {
         return $arr;
     }
 
-    private function getDefaultColumns(): array {
+    private function getDefaultColumns(): array
+    {
         return [
             'listSerial',
             'usuprequest_reference',
@@ -253,8 +261,8 @@ class SellerApprovalRequestsController extends ListingBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
+    private function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, ['user_details', 'usuprequest_reference'], Common::excludeKeysForSort());
     }
-
 }

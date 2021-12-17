@@ -17,12 +17,12 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr,  $listSerial);
                 break;
             case 'buyer_detail':
-                $txt = '<a href="javascript:void(0);" onclick="redirectUser('.$row['buyer_id'].')">' . $row['buyer_name'] . ' ( <strong>' . $row['buyer_username'] . '</strong> )</a>';
+                $txt = '<a href="javascript:void(0);" onclick="redirectUser('.$row['buyer_id'].')">' . $row['buyer_name'] . ' <br>( <strong>' . $row['buyer_username'] . '</strong> )</a>';
                 $td->appendElement('plaintext', $tdAttr, $txt, true);
 
                 break;
             case 'vendor_detail':
-                $txt = '<a href="javascript:void(0);" onclick="redirectToShop(' . $row['op_shop_id'] . ')">' . $row['op_shop_name'] . ' ( <strong>' . $row['seller_username'] . '</strong> )</a>';
+                $txt = '<a href="javascript:void(0);" onclick="redirectToShop(' . $row['op_shop_id'] . ')">' . $row['op_shop_name'] . ' <br>( <strong>' . $row['seller_username'] . '</strong> )</a>';
                 $td->appendElement('plaintext', $tdAttr, $txt, true);
                 break;
             case 'reuqest_detail':

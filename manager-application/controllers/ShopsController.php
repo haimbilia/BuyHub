@@ -45,6 +45,7 @@ class ShopsController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'shops/page-js/index.js']);
+        $this->set('includeEditor', true);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -227,6 +228,15 @@ class ShopsController extends ListingBaseController
             $shopLayoutTemplateId = 10001;
         }
 
+        $shopDetails['ratio_type'] = AttachedFile::RATIO_TYPE_SQUARE;
+        if (0 < $shop_id) {
+            $shopLogo = current(AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_SHOP_LOGO, $shop_id, 0, $langId, false));
+            if (is_array($shopLogo) && count($shopLogo)) {
+                $shopDetails['ratio_type'] = !empty($shopLogo['afile_aspect_ratio']) ? $shopLogo['afile_aspect_ratio'] : AttachedFile::RATIO_TYPE_SQUARE;
+            }
+        }
+        $shopLogoFrm->fill($shopDetails);
+
         $this->set('shopDetails', $shopDetails);
         $this->set('shopLayoutTemplateId', $shopLayoutTemplateId);
         $this->set('logoFrm', $shopLogoFrm);
@@ -304,7 +314,7 @@ class ShopsController extends ListingBaseController
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
-        $this->set('shopId', $shop_id);
+        $this->set('recordId', $shop_id);
         $this->set('file', $_FILES['cropped_image']['name']);
         $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('SUC_FILE_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -482,7 +492,7 @@ class ShopsController extends ListingBaseController
     {
         $frm->addTextBox(Labels::getLabel('FRM_SHOP_CITY', $lang_id), 'shop_city');
         $frm->addTextBox(Labels::getLabel('FRM_CONTACT_PERSON', $lang_id), 'shop_contact_person');
-        $frm->addTextarea(Labels::getLabel('FRM_DESCRIPTION', $lang_id), 'shop_description');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $lang_id), 'shop_description');
         $frm->addTextarea(Labels::getLabel('FRM_PAYMENT_POLICY', $lang_id), 'shop_payment_policy');
         $frm->addTextarea(Labels::getLabel('FRM_DELIVERY_POLICY', $lang_id), 'shop_delivery_policy');
         $frm->addTextarea(Labels::getLabel('FRM_REFUND_POLICY', $lang_id), 'shop_refund_policy');

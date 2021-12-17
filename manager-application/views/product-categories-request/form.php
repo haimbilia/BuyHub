@@ -1,15 +1,20 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
-
 $fld = $frm->getField('prodcat_name');
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','prodcat_id');
 getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
 
 $fld = $frm->getField('prodcat_id');
 $fld->setFieldTagAttribute('id', "prodcat_id");
+
+$fld = $frm->getField('prodcat_active');
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true; 
+
+$fld = $frm->getField('prodcat_active');
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true; 
  
 $otherButtons = [
     [

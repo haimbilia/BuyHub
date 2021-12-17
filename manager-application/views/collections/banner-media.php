@@ -2,13 +2,19 @@
 
 HtmlHelper::formatFormFields($frm);
 
+$languages = $languages ?? [];
+unset($languages[CommonHelper::getDefaultFormLangId()]);
+
 $frm->setFormTagAttribute('data-action', 'setupBannerImage');
 $frm->setFormTagAttribute('data-onclear', 'bannerMediaForm(' . $collectionId . ',' . $recordId . ')');
+$frm->setFormTagAttribute('data-callbackfn', 'loadBannerImagesCallback');
 $frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
 
 $fld = $frm->getField('banner_screen');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld->setFieldTagAttribute('class', 'prefDimensionsJs');
+if (!empty($languages)) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 
 $fld = $frm->getField('banner');
 $fld->value = HtmlHelper::getfileInputHtml(
@@ -30,13 +36,12 @@ $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
 
 $langFld = $frm->getField('lang_id');
-$langFld->developerTags['colWidthValues'] = [null, '6', null, null];
-$langFld->addFieldTagAttribute('onchange', 'loadBannerImages(' . $collectionId . ',' . $recordId . ', this.value);');
+if (null != $langFld) {
+    $langFld->developerTags['colWidthValues'] = [null, '6', null, null];
+    $langFld->addFieldTagAttribute('onchange', 'loadBannerImages(' . $collectionId . ',' . $recordId . ', this.value);');
+}
 
 $displayLangTab = false;
-
-$languages = $languages ?? [];
-unset($languages[CommonHelper::getDefaultFormLangId()]);
 
 $generalTab = [
     'attr' => [
@@ -48,35 +53,38 @@ $generalTab = [
     'isActive' => false
 ];
 
-$otherButtons = [
-    [
-        'attr' => [
-            'href' => 'javascript:void(0);',
-            'onclick' => 'bannerForm(' . $collectionId . ',' . $recordId . ')',
-            'title' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId)
-        ],
-        'label' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
-        'isActive' => false
+$otherButtons[] = [
+    'attr' => [
+        'href' => 'javascript:void(0);',
+        'onclick' => 'bannerForm(' . $collectionId . ', ' . $recordId . ')',
+        'title' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId)
     ],
-    [
+    'label' => Labels::getLabel('LBL_ADD_BANNER', $siteLangId),
+    'isActive' => false
+];
+
+if (!empty($languages)) {
+    $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'bannerLangForm(' . $collectionId . ',' . $recordId . ',' . array_key_first($languages) . ')',
+            'onclick' => 'bannerLangForm(' . $collectionId . ', ' . $recordId . ',' . array_key_first($languages) . ')',
             'title' => Labels::getLabel('LBL_BANNER_LANG_DATA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_BANNER_LANG_DATA', $siteLangId),
         'isActive' => false
+    ];
+}
+
+$otherButtons[] = [
+    'attr' => [
+        'href' => 'javascript:void(0)',
+        'onclick' => 'bannerMediaForm(' . $collectionId . ', ' . $recordId . ')',
+        'title' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
     ],
-    [
-        'attr' => [
-            'href' => 'javascript:void(0)',
-            'onclick' => 'bannerMediaForm(' . $collectionId . ',' . $recordId . ')',
-            'title' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
-        ],
-        'label' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
-        'isActive' => true
-    ]
+    'label' => Labels::getLabel('LBL_BANNER_MEDIA', $siteLangId),
+    'isActive' => true
 ];
+
 $includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
