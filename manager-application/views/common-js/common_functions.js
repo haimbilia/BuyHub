@@ -255,16 +255,46 @@ select2 = function (
 /**
  * hiddenfields object = { fieldname : fieldValue}
  */
-redirectUser = function (id) {
-    redirectfunc(fcom.makeUrl('Users'), { user_id: id }, 0, true);
+redirectUser = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['user_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('Users'), extraData, 0, true);
 };
 
-redirectToShop = function (id) {
-    redirectfunc(fcom.makeUrl('Shops'), { shop_id: id }, 0, true);
+redirectToShop = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['shop_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('Shops'), extraData, 0, true);
 };
 
-redirectToProduct = function (id) {
-    redirectfunc(fcom.makeUrl('Products'), { product_id: id }, 0, true);
+redirectToProduct = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['product_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('Products'), extraData, 0, true);
+};
+
+redirectToSellerProduct = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['selprod_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('SellerProducts'), extraData, 0, true);
+};
+
+redirectToShopReport = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['shop_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('ShopsReport'), extraData, 0, true);
+};
+
+redirectToProductReviews = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['reviewed_for_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('ProductReviews'), extraData, 0, true);
 };
 
 redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
@@ -276,8 +306,7 @@ redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
         var target = newTab ? ' target="_blank" ' : " ";
         let inputs = "";
         $.each(hiddenfields, function (index, value) {
-            inputs +=
-                '<input type="hidden" name="' + index + '" value="' + value + '">';
+            inputs += '<input type="hidden" name="' + index + '" value="' + value + '">';
         });
         $("<form" + target + 'action="' + url + '" method="POST">' + inputs + "</form>").appendTo($(document.body)).submit();
     }

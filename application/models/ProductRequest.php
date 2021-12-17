@@ -250,4 +250,25 @@ class ProductRequest extends MyAppModel
         }
         return true;
     }
+
+    public static function getPaymentStatusHtml(int $langId, int $status, string $extraInfo = ''): string
+    {
+        $arr = self::getStatusArr($langId);
+        $msg = $arr[$status] . ' ' . $extraInfo;
+        switch ($status) {
+            case Orders::ORDER_PAYMENT_PENDING:
+                $status = HtmlHelper::INFO;
+                break;
+            case Orders::ORDER_PAYMENT_PAID:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case Orders::ORDER_PAYMENT_CANCELLED:
+                $status = HtmlHelper::DANGER;
+                break;
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, rtrim($msg));
+    }
 }

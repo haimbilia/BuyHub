@@ -363,6 +363,9 @@ class HtmlHelper
                 case AttachedFile::FILETYPE_PRODUCT_IMAGE:
                     $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
+                case AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE:
+                        $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                        break;    
                 default:
             }
 

@@ -1196,7 +1196,7 @@ class ProductCategory extends MyAppModel
             foreach ($ratingTypeArr as $rating) {
                 if (!isset($rating['id'])) {
                     $ratingObj = new RatingType();
-                    $ratingObj->assignValues(['ratingtype_active' => 1, 'ratingtype_identifier' => $rating['value']]);
+                    $ratingObj->assignValues(['ratingtype_active' => 1, 'ratingtype_identifier' => $rating['value'], 'ratingtype_type' => RatingType::TYPE_OTHER]);
                     if (!$ratingObj->save()) {
                         LibHelper::exitWithError($ratingObj->getError(), true);
                     }
