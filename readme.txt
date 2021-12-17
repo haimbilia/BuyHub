@@ -430,6 +430,7 @@ Bugs :
     => 060776 - Recommended tag products section error is coming.
     => 060480 - Admin UI: Every-time page is refreshing while admin clicking(multiple times) on the "save" button while adding the new records.
     => 060771 - Admin UI: Inconsistency => In the table of the special price, seller info. is not showing according to the 'volume discount' section.
+    => 060751 - Admin UI: Client-side validation is not showing while trying to enter the new password < 8 characters under the user's section.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
