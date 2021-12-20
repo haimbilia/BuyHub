@@ -29,7 +29,7 @@ $header-height: 65px;
     @include media-breakpoint-up(lg) {
         position: sticky;
         top: 0;
-        z-index: 100;
+        z-index: $zindex-fixed;
     }
     //height: $header-height;
     background-color: #fff;
@@ -563,8 +563,7 @@ $header-height: 65px;
             display: none !important;
         }
     }
-    &-close {
-    }
+    
     &.show {
         transform: translateX(0);
     }
@@ -594,3 +593,10 @@ $header-height: 65px;
         display: none;
     }
 }
+
+.select2-container{
+    .select2-dropdown{ padding:1rem;}
+    .select2-search__field{}
+}
+
+

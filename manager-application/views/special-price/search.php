@@ -59,7 +59,7 @@ foreach ($arrListing as $sn => $row) {
                     'data-oldval' => $date,
                     'data-price' => $row['selprod_price'],
                     'id' => $key . '-' . $splPriceId,
-                    'class' => 'dateJs splPriceColJs hide sp-input',
+                    'class' => 'dateJs splPriceColJs hide click-to-edit-input sp-input',
                 );
                 $editListingFrm->addDateField($val, $key, $date, $attr);
                 $td->appendElement('div', array("class" => 'editColJs click-to-edit', "data-bs-toggle" => "tooltip", "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $date, true);
@@ -67,7 +67,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'splprice_price':
                 $div = $td->appendElement('div', ['class' => 'text-nowrap d-flex']);
-                $input = '<input type="text" data-price="' . $row['selprod_price'] . '" data-id="' . $splPriceId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" data-oldval="' . $row[$key] . '" data-displayoldval="' . CommonHelper::displayMoneyFormat($row[$key], true, true) . '" class="splPriceColJs hide sp-input"/>';
+                $input = '<input type="text" class="" data-price="' . $row['selprod_price'] . '" data-id="' . $splPriceId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" data-oldval="' . $row[$key] . '" data-displayoldval="' . CommonHelper::displayMoneyFormat($row[$key], true, true) . '" class="splPriceColJs click-to-edit-input hide  sp-input"/>';
                 $div->appendElement('div', array("class" => 'editColJs click-to-edit', "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
                 $div->appendElement('plaintext', $tdAttr, $input, true);
                 if ($row['selprod_price'] > $row[$key]) {

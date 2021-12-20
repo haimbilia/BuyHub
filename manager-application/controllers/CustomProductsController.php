@@ -2,31 +2,163 @@
 
 class CustomProductsController extends ListingBaseController
 {
-    private $canView;
-    private $canEdit;
-
+    protected string $modelClass = 'ProductRequest';
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
-        $this->canView = $this->objPrivilege->canViewCustomProductRequests($this->admin_id, true);
-        $this->canEdit = $this->objPrivilege->canEditCustomProductRequests($this->admin_id, true);
-        $this->set("canView", $this->canView);
-        $this->set("canEdit", $this->canEdit);
-        $this->set("includeEditor", true);
+        $this->objPrivilege->canViewCustomProductRequests();
+    }
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditCustomProductRequests($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditCustomProductRequests();
+        }
     }
 
     public function index()
     {
-        $this->objPrivilege->canViewCustomProductRequests();
-        $frmSearch = $this->catalogCustomProductRequestSearchForm();
-        $this->set('frmSearch', $frmSearch);
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js'));
-        $this->_template->addCss('css/cropper.css');
-        $this->_template->render();
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $pageData = PageLanguageData::getAttributesByKey('MANAGE_PRODUCTS', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->setModel();
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['newRecordBtn'] = false;        
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
+
+        $this->checkEditPrivilege(true);
+        $this->getListingData();
+
+        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->addJs(array('custom-products/page-js/index.js', 'js/select2.js'));
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, null, true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    private function getListingData()
+    {
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'preq_requested_on');
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = 'preq_requested_on';
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING, applicationConstants::SORT_DESC));
+
+        $searchForm = $this->getSearchForm($fields);
+
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+        $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+        $post['seller_id'] = FatApp::getPostedData('seller_id',FatUtility::VAR_INT,0);
+
+        $srch = ProductRequest::getSearchObject($this->siteLangId, false, true);
+        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'preq_user_id = u.user_id', 'u');
+        $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = if(u.user_parent > 0, u.user_parent, u.user_id)', 'shop');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');      
+     
+        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name'));
+        if (!empty($post['keyword'])) {
+            $cond = $srch->addCondition('preq.preq_content', 'like', '%' . $post['keyword'] . '%');
+            $cond->attachCondition('preq_l.preq_lang_data', 'like', '%' . $post['keyword'] . '%', 'OR');
+            $cond->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR'); 
+        }
+
+        if (!empty($post['date_from'])) {
+            $srch->addCondition('preq.preq_added_on', '>=', $post['date_from'] . ' 00:00:00');
+        }        
+
+        if (!empty($post['date_to'])) {
+            $srch->addCondition('preq.preq_added_on', '<=', $post['date_to'] . ' 23:59:59');
+        }
+
+        if (!empty($post['status'])) {
+            $srch->addCondition('preq.preq_status', '=', $post['status']);
+        }
+
+        if (0 < $post['seller_id']) {       
+            $srch->addCondition('preq.preq_user_id', '=', $post['seller_id']);
+        }        
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
+    
+        $rs = $srch->getResultSet();
+        $records = [];
+        while ($res = FatApp::getDb()->fetch($rs)) {           
+            $content = (!empty($res['preq_content'])) ? json_decode($res['preq_content'], true) : array();
+            $langContent = (!empty($res['preq_lang_data'])) ? json_decode($res['preq_lang_data'], true) : array();
+
+            $res = array_merge($res, $content);
+            if (!empty($langContent)) {
+                $res = array_merge($res, $langContent);
+            }
+            $arr = array(
+                'preq_id' => $res['preq_id'],
+                'preq_user_id' => $res['preq_user_id'] ?? 0,
+                'preq_added_on' => $res['preq_added_on'] ?? '',
+                'preq_status' => $res['preq_status'] ?? '',
+                'preq_requested_on' => $res['preq_requested_on'] ?? '',
+                'preq_status_updated_on' => $res['preq_status_updated_on'] ?? '',
+                'user_id' => $res['user_id'] ?? 0,
+                'user_name' => $res['user_name'] ?? '',
+                'user_parent' => $res['user_parent'] ?? 0,
+                'shop_name' => $res['shop_name'] ?? '', 
+                'product_identifier' => $res['product_identifier'],
+                'product_name' => (!empty($res['product_name'])) ? $res['product_name'] : $res['product_identifier'],
+            );
+            $records[] = $arr;
+        }
+        $this->set("arrListing", $records);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+        $this->set('frmSearch', $searchForm);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting); 
+        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
+        $this->checkEditPrivilege(true);
+    } 
+        
+    public function search1()
     {
         $this->objPrivilege->canViewCustomProductRequests();
 
@@ -1921,5 +2053,86 @@ class CustomProductsController extends ListingBaseController
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
         AttachedFile::downloadAttachment($fileName, $file['afile_name']);
     }
+
+    protected function getSearchForm($fields = [])
+    {
+        $frm = new Form('frmRecordSearch');
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'preq_requested_on');
+        }
+        $frm->setRequiredStarWith('caption');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME', $this->siteLangId), 'seller_id', [],'',['id'=>'searchFrmUserIdJs']); 
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', ProductRequest::getStatusArr($this->siteLangId));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'preq_id');
+
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+
+        return $frm;
+    }
     /* Digital downloads*/
+
+    protected function getFormColumns(): array
+    {
+        $emptyCartItemsTblHeadingCols = CacheHelper::get('cProductsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($emptyCartItemsTblHeadingCols) {
+            return json_decode($emptyCartItemsTblHeadingCols);
+        }
+
+        $arr = [ 
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'images' => Labels::getLabel('LBL_IMAGES', $this->siteLangId),
+            'product_identifier' => Labels::getLabel('LBL_NAME', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
+            'preq_added_on' => Labels::getLabel('LBL_CREATED_ON', $this->siteLangId),
+            'preq_requested_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),    
+            'preq_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+        CacheHelper::create('cProductsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array
+    {
+        return [     
+            'listSerial',
+            'images',
+            'product_identifier',
+            'user_name',
+            'preq_added_on',
+            'preq_requested_on',     
+            'preq_status',
+            'action',
+        ];
+    }
+
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['images','product_identifier'], Common::excludeKeysForSort(['product_identifier']));
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey('MANAGE_CATALOG_REQUEST', $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => $pageTitle]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
+        }
+        return $this->nodes;
+    }
+
+
 }

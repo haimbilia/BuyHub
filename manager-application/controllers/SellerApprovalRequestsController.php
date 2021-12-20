@@ -224,7 +224,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $frm->addHiddenField('', 'usuprequest_id');
         $statusArr = User::getSupplierReqStatusArr($this->siteLangId);
         unset($statusArr[User::SUPPLIER_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'usuprequest_status', $statusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId), 'usuprequest_status', $statusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
         $frm->addTextArea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'comments', '');
         return $frm;
     }

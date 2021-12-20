@@ -177,11 +177,14 @@ class RatingTypesController extends ListingBaseController
         $frm = new Form('frmRating', array('id' => 'frmRating'));
         $frm->addHiddenField('', 'ratingtype_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('FRM_RATING_TYPE', $this->siteLangId), 'ratingtype_name');
-        $frm->addSelectBox(Labels::getLabel('FRM_RATING_STATUS', $this->siteLangId), 'ratingtype_active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', array(), '');
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_RATING_STATUS', $this->siteLangId), 'ratingtype_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+        $fld->developerTags['noCaptionTag'] = true;
+
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, [], false, 0);
         }
         return $frm;
     }

@@ -806,7 +806,7 @@ form.custom-form {
 }
 
 .select-language {
-    background-color: darken($input-bg, 5%);
+    background-color: darken($input-bg, 5%) !important; 
 }
 
 .form-search {
