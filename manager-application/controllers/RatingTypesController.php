@@ -248,4 +248,18 @@ class RatingTypesController extends ListingBaseController
     {
         return array_diff($fields, [], Common::excludeKeysForSort());
     }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => $pageTitle]
+                ];
+        }
+        return $this->nodes;
+    }
 }
