@@ -74,6 +74,10 @@ class SellerApprovalRequestsController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
+        if ('user_details' == $sortBy) {
+            $sortBy = 'user_name';
+        }
+
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
@@ -261,6 +265,6 @@ class SellerApprovalRequestsController extends ListingBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['user_details', 'usuprequest_reference'], Common::excludeKeysForSort());
+        return array_diff($fields, ['usuprequest_reference'], Common::excludeKeysForSort());
     }
 }
