@@ -26,6 +26,7 @@ class SellerApprovalRequestsController extends ListingBaseController
             'newRecordBtn' => false
         ]);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_REFERENCE_NUMBER_OR_USER_DETAIL', $this->siteLangId));
         $this->getListingData();
         $this->_template->addJs(['seller-approval-requests/page-js/index.js']);
         $this->_template->render(true, true, '_partial/listing/index.php');
@@ -73,6 +74,10 @@ class SellerApprovalRequestsController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
+        if ('user_details' == $sortBy) {
+            $sortBy = 'user_name';
+        }
+
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
@@ -81,11 +86,10 @@ class SellerApprovalRequestsController extends ListingBaseController
         $srch = $userObj->getUserSupplierRequestsObj();
         $srch->addFld('tusr.*');
         if (!empty($post['keyword'])) {
-            $cond = $srch->addCondition('tusr.usuprequest_reference', '=', '%' . $post['keyword'] . '%', 'AND');
+            $cond = $srch->addCondition('tusr.usuprequest_reference', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('uc.credential_email', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cond->attachCondition('uc.credential_username', 'like', '%' . $post['keyword'] . '%', 'OR');
-            $cond->attachCondition('tusr.usuprequest_reference', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
         if (!empty($post['date_from'])) {
             $srch->addCondition('tusr.usuprequest_date', '>=', $post['date_from'] . ' 00:00:00');
@@ -239,8 +243,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'usuprequest_reference' => Labels::getLabel('LBL_REFERENCE_NUMBER', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
-            'user_details' => Labels::getLabel('LBL_USERNAME/EMAIL', $this->siteLangId),
+            'user_details' => Labels::getLabel('LBL_USER_DETAIL', $this->siteLangId),
             'usuprequest_date' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
             'usuprequest_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -254,7 +257,6 @@ class SellerApprovalRequestsController extends ListingBaseController
         return [
             'listSerial',
             'usuprequest_reference',
-            'user_name',
             'user_details',
             'usuprequest_status',
             'action',
@@ -263,6 +265,6 @@ class SellerApprovalRequestsController extends ListingBaseController
 
     private function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['user_details', 'usuprequest_reference'], Common::excludeKeysForSort());
+        return array_diff($fields, ['usuprequest_reference'], Common::excludeKeysForSort());
     }
 }

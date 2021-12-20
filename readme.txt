@@ -20,6 +20,13 @@ New Feature :
     => 82892 : Easypost Shipping API Integration
     => Shopify sync module for SV seller
     => 85399 : QNB payment gateway 
+    => 80928 : Mollie payment gateway 
+    => MSG-1390138 : Payfast payment gateway 
+    => 85369 : Aramex Shipping API 
+    => 72808 : EasyEcom Marketplace Channel API
+    => 86472 : YoCo Payment gateay
+    => 88040 : ShipRocket Payment gateay
+    => 88449 : ShipEngine Payment gateay
 
 Updates/Fixes : 
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin

@@ -22,9 +22,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'user_details':
-                $td->appendElement('plaintext', array(), '<strong>' . Labels::getLabel('LBL_U', $siteLangId) . ': </strong> ' . $row['credential_username'], true);
-                $td->appendElement('br', array());
-                $td->appendElement('plaintext', array(), '<strong>' . Labels::getLabel('LBL_E', $siteLangId) . ': </strong> ' . $row['credential_email'], true);
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'usuprequest_status':
                 $td->appendElement('plaintext', array(), $reqStatusArr[FatUtility::int($row['usuprequest_status'])], true);

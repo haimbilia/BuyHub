@@ -625,6 +625,7 @@ class User extends MyAppModel
                 'u.' . static::DB_TBL_PREFIX . 'name',
                 'u.' . static::DB_TBL_PREFIX . 'phone_dcode',
                 'u.' . static::DB_TBL_PREFIX . 'phone',
+                'u.' . static::DB_TBL_PREFIX . 'updated_on',
                 'uc.' . static::DB_TBL_CRED_PREFIX . 'username',
                 'uc.' . static::DB_TBL_CRED_PREFIX . 'email',
             )
