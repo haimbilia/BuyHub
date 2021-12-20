@@ -560,7 +560,7 @@
                                             </svg>
                                         </span>
                                         <span class="nav_text">
-                                            <?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?></span>
+                                            <?php echo Labels::getLabel('NAV_PPC_PROMOTION_MANAGEMENT', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>
