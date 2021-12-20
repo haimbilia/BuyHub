@@ -26,6 +26,7 @@ class RatingTypesController extends ListingBaseController
             'newRecordBtn' => false
         ]);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_RATING_TYPE', $this->siteLangId));
         $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
