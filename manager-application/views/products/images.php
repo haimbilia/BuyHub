@@ -1,11 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
 foreach ($images as $image) {
     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
     $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($image['afile_record_id'], "THUMB", 0, $image['afile_id'], $image['afile_lang_id'], $image['afile_type']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     if ($isDefaultLayout  == applicationConstants::YES) {
-?>
-        <li id="<?php echo $image['afile_id']; ?>">
+    ?>
+        <li class="abc" id="<?php echo $image['afile_id']; ?>">
             <div class="uploaded-stocks-item" data-ratio="1:1">
                 <img class="uploaded-stocks-img" data-bs-toggle="tooltip" data-placement="top" src="<?php echo $imgUrl; ?>" title="<?php echo $image['afile_name']; ?>" alt="<?php echo $image['afile_name']; ?>">
                 <div class="uploaded-stocks-actions">
@@ -41,6 +40,20 @@ foreach ($images as $image) {
     <?php }
 }
 
+if ($isDefaultLayout  == applicationConstants::YES) {
+    for ($i = 0; $i < (4 - count($images)); $i++) {       
+    ?>
+        <li class="unsortableJs">
+            <div class="uploaded-stocks-item" data-ratio="1:1">
+                <img class="uploaded-stocks-img" data-bs-toggle="tooltip" data-placement="top" src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/defaults/product_default_image.jpg" title="" alt="">
+                <div class="uploaded-stocks-actions">
+                </div>
+            </div>
+        </li>
+    <?php
+    }
+}
+
 if ($isDefaultLayout  == applicationConstants::NO && count($images)) {
     ?>
     <script type="text/javascript">
@@ -70,4 +83,33 @@ if ($isDefaultLayout  == applicationConstants::NO && count($images)) {
         });
     </script>
 
-<?php } ?>
+<?php }elseif($isDefaultLayout  == applicationConstants::YES && count($images)) {
+    ?>
+ <script type="text/javascript">
+        $(function() {
+            $("#productDefaultImagesJs").sortable({
+                items: "li:not(.unsortableJs)",
+                stop: function() {
+                    var mysortarr = new Array();
+                    $(this).find('li').each(function() {
+                        mysortarr.push($(this).attr("id"));
+                    });
+
+                    var sort = mysortarr.join('-');
+                    var lang_id = $('.language-js').val();
+                    var product_id = $('#hiddenMediaFrmJs').find('[name="product_id"]').val();              
+                    var option_id = 0;
+                    var file_type = $('#hiddenMediaFrmJs').find('[name="file_type"]').val();
+                    fcom.updateWithAjax(fcom.makeUrl('products', 'setImageOrder'), {
+                        product_id,
+                        file_type,
+                        ids: sort
+                    });
+                }
+            }).disableSelection();
+        });
+    </script>
+
+
+<?php 
+} ?>

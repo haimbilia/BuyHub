@@ -29,7 +29,7 @@ foreach ($arrListing as $sn => $row) {
                     <?php if (!empty($row['oshistory_tracking_number'])) { ?>
                         <span class="timeline-v4__item-text">
                             <b><?php echo Labels::getLabel('LBL_TRACKING_NUMBER', $siteLangId); ?>:</b>
-                            <a href="javascript:void(0);" onclick="copyText(this);" class="link link--dark timeline-v4__item-link" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_COPY', $siteLangId); ?>">
+                            <a href="javascript:void(0);" data-title="<?php echo  CommonHelper::displayText($row['oshistory_tracking_number']); ?>" onclick="copyText(this,true);" class="link link--dark timeline-v4__item-link" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_COPY', $siteLangId); ?>">
                                 <?php echo  CommonHelper::displayText($row['oshistory_tracking_number']); ?>
                             </a>
                         </span>

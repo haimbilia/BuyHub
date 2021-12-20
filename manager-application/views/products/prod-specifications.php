@@ -4,7 +4,7 @@ $arr_flds = array(
     'prodspec_name' => Labels::getLabel('FRM_SPECIFICATION_NAME', $langId),
     'prodspec_value' => Labels::getLabel('FRM_SPECIFICATION_VALUE', $langId),
     'prodspec_group' => Labels::getLabel('FRM_SPECIFICATION_GROUP', $langId),
-    'action' => Labels::getLabel('LBL_ACTION', $langId)
+    'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $langId)
 );
 
 $tbl = new HtmlElement('table', array('class' => 'table'));
@@ -87,4 +87,5 @@ foreach ($productSpecifications as  $specification) {
     }
     $count++;
 }
+
 echo $tbl->getHtml();

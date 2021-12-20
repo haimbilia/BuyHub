@@ -294,7 +294,7 @@ $(function () {
             }
         });
     };
-
+    /*
     copyText = function (obj) {
         var copyText = $(obj).text();
 
@@ -313,6 +313,7 @@ $(function () {
             .tooltip("show")
             .attr("data-original-title", elOriginalText);
     };
+    */
 
     installJsColor = function () {
         if (0 < $(".jscolor").length) {
