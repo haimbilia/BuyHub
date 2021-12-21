@@ -5,7 +5,8 @@ class FaqCategoriesController extends ListingBaseController
     protected string $modelClass = 'FaqCategory';
     protected $pageKey = 'MANAGE_FAQ_CATEGORIES';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewFaqCategories();
     }
@@ -21,7 +22,7 @@ class FaqCategoriesController extends ListingBaseController
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
         $actionItemsData['deleteButton'] = true;
-        
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
@@ -42,7 +43,7 @@ class FaqCategoriesController extends ListingBaseController
         ];
         LibHelper::exitWithSuccess($jsonData, true);
     }
-    
+
     public function getListingData()
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
@@ -124,20 +125,20 @@ class FaqCategoriesController extends ListingBaseController
         $this->_template->render(false, false);
     }
 
-    protected function getForm() {
-       $this->checkEditPrivilege();
+    protected function getForm()
+    {
+        $this->checkEditPrivilege();
         $langId = $this->siteLangId;
 
         $frm = new Form('frmFaqCat');
-        $frm->addHiddenField('', 'faqcat_id','');
+        $frm->addHiddenField('', 'faqcat_id', '');
         $frm->addHiddenField('', 'lang_id', $this->siteLangId);
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($langId);
         $faqCatTypeArr = FaqCategory::getFaqCatTypeArr($langId);
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'faqcat_name');
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $langId), 'faqcat_type', $faqCatTypeArr, '', array(), '');
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $langId), 'faqcat_active', $activeInactiveArr, '', array(), '');
-        if (!empty($translatorSubscriptionKey) ) {
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $langId), 'faqcat_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        if (!empty($translatorSubscriptionKey)) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
@@ -145,7 +146,7 @@ class FaqCategoriesController extends ListingBaseController
 
     public function setup()
     {
-       $this->checkEditPrivilege();
+        $this->checkEditPrivilege();
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -153,7 +154,7 @@ class FaqCategoriesController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        
+
         $newTabLangId = $this->siteLangId;
         $recordId = FatUtility::int($post['faqcat_id']);
         $record = new FaqCategory($recordId);
@@ -196,14 +197,15 @@ class FaqCategoriesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($autoFillLangData = 0) {
+    public function langForm($autoFillLangData = 0)
+    {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if ($recordId == 0 || $langId == 0) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        if($langId == 0){
+        if ($langId == 0) {
             $langId = $this->siteLangId;
         }
         $langData = FaqCategory::getAttributesByLangId($langId, $recordId);
@@ -238,7 +240,7 @@ class FaqCategoriesController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         $langId = FatUtility::int($langId);
-        
+
         $langId = 1 > $langId ? $this->siteLangId : $langId;
 
         if ($recordId == 0 || $langId == 0) {
@@ -260,7 +262,7 @@ class FaqCategoriesController extends ListingBaseController
 
     public function langSetup()
     {
-       $this->checkEditPrivilege();
+        $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
         $recordId = $post['faqcat_id'];
         $languages = Language::getAllNames();
@@ -269,14 +271,14 @@ class FaqCategoriesController extends ListingBaseController
         } else {
             $langId = array_key_first($languages);
         }
-        
+
         if ($recordId == 0 || $langId == 0) {
-             LibHelper::exitWithError($this->str_invalid_request_id, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        
+
         $frm = $this->getLangForm($recordId, $langId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         $data = array(
             'faqcatlang_lang_id' => $langId,
             'faqcatlang_faqcat_id' => $recordId,
@@ -287,7 +289,7 @@ class FaqCategoriesController extends ListingBaseController
         if (!$faqcatObj->updateLangData($langId, $data)) {
             LibHelper::exitWithError($faqcatObj->getError(), true);
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(FaqCategory::DB_TBL_LANG);
@@ -304,7 +306,7 @@ class FaqCategoriesController extends ListingBaseController
                 break;
             }
         }
-        
+
         $this->set('recordId', $recordId);
         $this->set('msg', $this->str_setup_successful);
         $this->set('langId', $newTabLangId);
@@ -313,25 +315,25 @@ class FaqCategoriesController extends ListingBaseController
 
     public function deleteRecord()
     {
-       $this->checkEditPrivilege();
+        $this->checkEditPrivilege();
 
         $faqcat_id = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($faqcat_id < 1) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        
+
         $res = FaqCategory::getAttributesById($faqcat_id, array('faqcat_id'));
         if ($res == false) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        
+
         $this->markAsDeleted($faqcat_id);
         LibHelper::exitWithSuccess($this->str_delete_record, true);
     }
 
     public function deleteSelected()
     {
-       $this->checkEditPrivilege();
+        $this->checkEditPrivilege();
         $faqcatIdsArr = FatUtility::int(FatApp::getPostedData('faqcat_ids'));
 
         if (empty($faqcatIdsArr)) {
@@ -350,7 +352,7 @@ class FaqCategoriesController extends ListingBaseController
 
     public function updateOrder()
     {
-       $this->checkEditPrivilege();
+        $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
         if (!empty($post)) {
             $faqCatObj = new FaqCategory();
@@ -363,12 +365,12 @@ class FaqCategoriesController extends ListingBaseController
 
     public function toggleBulkStatuses()
     {
-       $this->checkEditPrivilege();
+        $this->checkEditPrivilege();
 
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $faqcatIdsArr = FatUtility::int(FatApp::getPostedData('faqcat_ids'));
         if (empty($faqcatIdsArr) || -1 == $status) {
-             LibHelper::exitWithError($this->str_invalid_request, true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($faqcatIdsArr as $faqcatId) {
@@ -429,7 +431,7 @@ class FaqCategoriesController extends ListingBaseController
         die(json_encode($json));
     }
 
-     /**
+    /**
      * Undocumented function
      *
      * @return array

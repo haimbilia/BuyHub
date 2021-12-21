@@ -3,6 +3,12 @@ $langFrm->setFormTagAttribute('id', 'frmLangJs1');
 $langFrm->setFormTagAttribute('onsubmit', 'saveContentPageLangData($("#frmLangJs1")); return(false);');
 $displayLangTab = false;
 
+$fld = $langFrm->getField('auto_update_other_langs_data');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+}
+
 $otherButtons = [
     [
        'attr' => [

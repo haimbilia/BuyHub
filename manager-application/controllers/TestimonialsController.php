@@ -11,7 +11,7 @@ class TestimonialsController extends ListingBaseController
         $this->objPrivilege->canViewTestimonial();
     }
 
-        /**
+    /**
      * setLangTemplateData - This function is use to automate load langform and save it. 
      *
      * @param  array $constructorArgs
@@ -50,16 +50,16 @@ class TestimonialsController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        
+
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-        
+
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
         $actionItemsData['deleteButton'] = true;
-        
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
@@ -68,10 +68,10 @@ class TestimonialsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TESTIMONIAL_TITLE', $this->siteLangId));
         $this->checkEditPrivilege(true);
         $this->getListingData();
-        
+
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'testimonials/page-js/index.js']);
-        $this->_template->render(true,true, '_partial/listing/index.php');
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
 
@@ -91,7 +91,7 @@ class TestimonialsController extends ListingBaseController
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        
+
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
@@ -135,10 +135,10 @@ class TestimonialsController extends ListingBaseController
         $frm->addHiddenField('', 'testimonial_id', $testimonialId);
         $frm->addRequiredField(Labels::getLabel('FRM_TESTIMONIAL_TITLE', $this->siteLangId), 'testimonial_title');
         $frm->addRequiredField(Labels::getLabel('FRM_TESTIMONIAL_USER_NAME', $this->siteLangId), 'testimonial_user_name');
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'testimonial_active', $activeInactiveArr, '', [], '');
-        $fld = $frm->addTextarea(Labels::getLabel('LBL_Testimonial_Text', $this->siteLangId), 'testimonial_text');
+
+        $fld = $frm->addTextarea(Labels::getLabel('FRM_TESTIMONIAL_TEXT', $this->siteLangId), 'testimonial_text');
         $fld->requirements()->setRequired();
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'testimonial_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -154,8 +154,7 @@ class TestimonialsController extends ListingBaseController
 
         if (0 < $recordId) {
             $fields = [
-                'testimonial_id', 'testimonial_identifier', 'testimonial_active', 'testimonial_user_name'
-                , 'IFNULL(testimonial_title, testimonial_identifier) AS testimonial_title', 'testimonial_text'
+                'testimonial_id', 'testimonial_identifier', 'testimonial_active', 'testimonial_user_name', 'IFNULL(testimonial_title, testimonial_identifier) AS testimonial_title', 'testimonial_text'
             ];
             $data = Testimonial::getAttributesByLangId($this->siteLangId, $recordId, $fields, true);
 
@@ -193,7 +192,7 @@ class TestimonialsController extends ListingBaseController
             'testimoniallang_lang_id' => $this->siteLangId,
         ];
 
-        unset($post['testimonial_title'], $post['testimonial_text'] );
+        unset($post['testimonial_title'], $post['testimonial_text']);
         $record->assignValues($post);
         if (!$record->save()) {
             LibHelper::exitWithError($record->getError());
@@ -232,7 +231,7 @@ class TestimonialsController extends ListingBaseController
 
     private function getLangForm($testimonialId = 0, $langId = 0)
     {
-        
+
         $frm = new Form('frmTestimonialLang');
         $frm->addHiddenField('', 'testimonial_id', $testimonialId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
@@ -282,13 +281,13 @@ class TestimonialsController extends ListingBaseController
             [
                 'attr' => [
                     'href' => 'javascript:void(0)',
-                    'onclick' => 'mediaForm('.$recordId.')',
+                    'onclick' => 'mediaForm(' . $recordId . ')',
                     'title' => Labels::getLabel('LBL_MEDIA', $langId),
                 ],
                 'label' => Labels::getLabel('LBL_MEDIA', $langId),
                 'isActive' => false
             ]
-        ]; 
+        ];
         $this->set('formTitle', $formTitle);
         $this->set('otherButtons', $otherButtons);
         $this->_template->render(false, false, '_partial/listing/lang-form.php');
@@ -353,8 +352,8 @@ class TestimonialsController extends ListingBaseController
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
-    
-    public function media($recordId = 0, $fileType = 0 , $langId = 0)
+
+    public function media($recordId = 0, $fileType = 0, $langId = 0)
     {
         $this->checkEditPrivilege();
         $recordId = FatUtility::int($recordId);
@@ -381,11 +380,11 @@ class TestimonialsController extends ListingBaseController
         return $frm;
     }
 
-      /**
+    /**
      * Undocumented function
      *
      */
-    public function images($recordId = 0, $fileType = 0, $slideScreen = 0, $langId= 0)
+    public function images($recordId = 0, $fileType = 0, $slideScreen = 0, $langId = 0)
     {
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
@@ -396,7 +395,7 @@ class TestimonialsController extends ListingBaseController
             $langId = array_key_first($languages);
         }
         $langId = $langId == 0 ?  $this->siteLangId : $langId;
-        $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, $langId, $universalImage );
+        $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, $langId, $universalImage);
         $this->set('image', $cbgImage);
         $this->set('imageFunction', 'testimonial');
         $this->set('file_type', 'THUMB');

@@ -1,5 +1,12 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('data-onclear', 'editRecord('.$recordId.','.$faqCatId.')');
+
+$fld = $frm->getField('faq_active');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+}
+
 $generalTab = [
     'attr' => [
         'title' => Labels::getLabel('LBL_GENERAL', $siteLangId),
