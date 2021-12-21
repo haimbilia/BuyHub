@@ -54,7 +54,7 @@ copyText = function (obj, applyToolTipInfo = true) {
       */
 
     if (!navigator.clipboard) {
-        console.warn('clipboard API  only works on localhost and https');
+        console.warn('clipboard API only works on localhost and https');
         // Clipboard API  only works on localhost anf https as per doc
         return;
     }
@@ -67,6 +67,7 @@ copyText = function (obj, applyToolTipInfo = true) {
         console.error("Failed to copy!", err);
     }
 };
+
 tooltipCopyHelper = function (obj, title) {
     $(obj)
         .tooltip("hide")

@@ -34,7 +34,7 @@ class BlogPostsController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);        
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
                 'onclick' => 'addNew(false, "modal-dialog-vertical-md")',
@@ -473,10 +473,12 @@ class BlogPostsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
         $postStatusArr = BlogPost::getBlogPostStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_POST_STATUS', $this->siteLangId), 'post_published', $postStatusArr, '', array(), '');
+
         $frm->addTextBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'categories');
-        $frm->addCheckBox(Labels::getLabel('FRM_COMMENT_OPEN', $this->siteLangId), 'post_comment_opened', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel('FRM_ALLOW_COMMENTS', $this->siteLangId), 'post_comment_opened', 1, array(), false, 0);
+        
         $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'post_featured', 1, array(), false, 0);
+        $frm->addSelectBox(Labels::getLabel('FRM_POST_STATUS', $this->siteLangId), 'post_published', $postStatusArr, '', array(), '');
         return $frm;
     }
 
@@ -588,7 +590,7 @@ class BlogPostsController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'post_title' => Labels::getLabel('LBL_POST_TITLE', $this->siteLangId),
-            'categories' => Labels::getLabel('LBL_CATEGORY', $this->siteLangId),
+            'categories' => Labels::getLabel('LBL_POST_CATEGORY', $this->siteLangId),
             'post_published_on' => Labels::getLabel('LBL_PUBLISHED_DATE', $this->siteLangId),
             'post_published' => Labels::getLabel('LBL_POST_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),

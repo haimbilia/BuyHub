@@ -24,8 +24,24 @@ $fld->setFieldTagAttribute('id', "post_id");
 $fld = $frm->getField('urlrewrite_custom');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld->setFieldTagAttribute('id', "urlrewrite_custom");
-$fld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Blog', 'postDetail', array($recordId), CONF_WEBROOT_FRONT_URL) . '</span>';
+$fld->htmlAfterField = "<span class='form-text text-muted'>" . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Blog', 'postDetail', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</span>';
 $fld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value)");
+
+$fld = $frm->getField('urlrewrite_custom');
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+
+$fld = $frm->getField('post_comment_opened');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+}
+
+$fld = $frm->getField('post_featured');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+}
 
 $otherButtons = [
     [
@@ -68,9 +84,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         }
         $(element).siblings(".tagify").remove();
         tagify = new Tagify(document.querySelector('.tagifyJs'), {
-            whitelist : [],
-            delimiters : "#",
-            editTags : false, 
+            whitelist: [],
+            delimiters: "#",
+            editTags: false,
         }).on('add', addBlogPostCategory).on('input', getCategories).on('focus', getCategories);
     };
     tagifyCategories();

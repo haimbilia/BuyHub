@@ -1,12 +1,18 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $fld = $frm->getField('ucp_functional');
+HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_FUNCTIONAL_COOKIES_INFORMATION', $siteLangId));
+$fld->developerTags['noCaptionTag'] = true;
 $fld->setFieldTagAttribute('disabled', 'disabled');
 
 $fld = $frm->getField('ucp_statistical');
+HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_STATISTICAL_ANALYSIS_COOKIES_INFORMATION', $siteLangId));
+$fld->developerTags['noCaptionTag'] = true;
 $fld->setFieldTagAttribute('disabled', 'disabled');
 
 $fld = $frm->getField('ucp_personalized');
+HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_PERSONALISE_COOKIES_INFORMATION', $siteLangId));
+$fld->developerTags['noCaptionTag'] = true;
 $fld->setFieldTagAttribute('disabled', 'disabled');
 
 $frm->setFormTagAttribute('data-onclear', 'displayCookiesPerferences(' . $recordId . ');');
@@ -40,4 +46,4 @@ $otherButtons[] = [
 ];
 $displayFooterButtons = false;
 $activeGentab = false;
-require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');
