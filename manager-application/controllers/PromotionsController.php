@@ -40,7 +40,7 @@ class PromotionsController extends ListingBaseController
         $this->checkEditPrivilege();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
-        $this->set('formTitle', Labels::getLabel('LBL_PROMOTION_SETUP', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_PPC_PROMOTION_SETUP', $this->siteLangId));
 
         $promotionType = Promotion::getAttributesById($this->mainTableRecordId, 'promotion_type');
         if ($promotionType == Promotion::TYPE_BANNER || $promotionType == Promotion::TYPE_SLIDES) {
@@ -65,7 +65,7 @@ class PromotionsController extends ListingBaseController
         $frmSearch = $this->getSearchForm($fields);
 
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+        $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_PPC_PROMOTION_MANAGEMENT', $this->siteLangId);
 
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
@@ -575,7 +575,7 @@ class PromotionsController extends ListingBaseController
         
         $this->set('includeTabs', $enableTabs);
         $this->set('activeTab', 'GENERAL');
-        $this->set('formTitle', Labels::getLabel('LBL_PROMOTION_SETUP', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_PPC_PROMOTION_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -1105,5 +1105,18 @@ class PromotionsController extends ListingBaseController
     protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_PPC_PROMOTION_MANAGEMENT', $this->siteLangId);
+                $this->nodes = [
+                    ['title' => $pageTitle]
+                ];
+        }
+        return $this->nodes;
     }
 }

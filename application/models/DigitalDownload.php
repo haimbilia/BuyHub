@@ -183,7 +183,7 @@ class DigitalDownload extends MyAppModel
         $frm->addSelectBox(Labels::getLabel('FRM_OPTION', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '');
 
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', array(0 => Labels::getLabel('FRM_ALL_LANGUAGES', $langId)) + Language::getDropDownList(), '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
-         if ($type == applicationConstants::DIGITAL_DOWNLOAD_FILE) {
+        if ($type == applicationConstants::DIGITAL_DOWNLOAD_FILE) {
             $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_FILE', $langId), 'downloadable_file');
             $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_PREVIEW', $langId), 'preview_file');
             $frm->addHiddenField('', 'download_type', $type);

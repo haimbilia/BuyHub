@@ -207,7 +207,7 @@ if (0 < $productId) {
                             $fld = $frm->getField('product_warranty');
                             if (null !== $fld) {
                             ?>
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <?php
                                         $warrantTypes = Product::getWarrantyUnits($langId);
@@ -248,14 +248,15 @@ if (0 < $productId) {
                                 etc for your product</span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="stock-block1">
-                        <div class="form-group row justify-content-between">
-                            <div class="col">
-                                <label class="label">This product has multiple options,
-                                    like different sizes or colors</label>
-                            </div>
-                        </div>
+                    <div class="card-body show" id="stock-block1">                      
                         <table class="table table-variants" id="variantsJs">
+                        <thead>
+                            <tr>
+                                <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId)?></th>
+                                <th><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId)?></th>
+                                <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId)?></th>
+                            </tr>
+                        </thead>
                             <tbody>
                                 <?php
                                 $optionCount = count($productOptions);
@@ -287,26 +288,29 @@ if (0 < $productId) {
                 <div class="card card-toggle" id="media">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
-                            <h3 class="card-head-title">Media
-                            </h3>
-                            <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
+                            <h3 class="card-head-title">Media                            </h3>
                             <span class="text-muted">Attach media files for the product </span>
-                        </div> <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
+                        <div class="card-toolbar">
+                           <div class="me-5">
+                               <a href="javascript:void(0)" onclick="imageForm();" class="btn btn-outline-secondary btn-sm">Advance Media</a>
+                            </div>
+                            <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
                     </div>
                     <div class="card-body show" id="stock-block2">
-                        <span class="form-text text-muted  pt-2"> File type must be a .jpg, .gif or .png
-                            smaller than 2MB and at least
-                            800x800 in 1:1 aspect ratio</span>
-                        <div class="mt-5">
+                        <div>
                             <h6 class="h6 mb-3">Uploaded media</h6>
                             <ul class="uploaded-stocks" id="productDefaultImagesJs">
-                                <li><button type="button" onclick="$('#hiddenMediaFrmFileJs').click();">upload</button></li>
+                                <li class="browse unsortableJs"><button type="button" class="browse-button" onclick="$('#hiddenMediaFrmFileJs').click();">
+                                        <strong> Upload Images(s)</strong>
+                                        <span class="text-muted form-text">PNG, JPEG, & WEBP Accepted</span></button></li>
                             </ul>
-                            <span class="form-text text-muted pt-2">Pay attention to the quality of
+                            <div class="form-text text-muted pt-2">Pay attention to the quality of
                                 pictures
                                 you add, comply with the
                                 background color standards. Notice that the product shows all the
-                                details</span>
+                                details</div>
                         </div>
                     </div>
                 </div>
@@ -362,7 +366,7 @@ if (0 < $productId) {
                                 </div>
                             </div>
                         </div>
-                        <div class="separator separator-dashed my-4"></div>
+                        <div id="specificationsListSeprJs" class="separator separator-dashed my-4 hide"></div>
                         <div id="specificationsListJs">
                         </div>
                     </div>
@@ -394,46 +398,45 @@ if (0 < $productId) {
 
                 <?php if ($displayDigitalDownloadList) { ?>
                     <div class="card card-toggle" id="digital-files">
-                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="digital-files-block">
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
                             <div class="card-head-label">
-                                <h3 class="card-head-title">Digital Files
-                                </h3>
-                                <span class="text-muted">Digital Files are added in this
-
-
-                                    <span class="input-helper"></span>section</span>
-                                <?php if ($displayDigitalDownloadAddBtn) { ?>
-                                    <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>)">File</button>
-                                <?php  } ?>
-
-                            </div> <i class="dropdown-toggle-custom-arrow"></i>
+                                <h3 class="card-head-title">Digital Files</h3>
+                                <span class="text-muted">Digital Files are added in this section </span>
+                            </div>
+                            <?php if ($displayDigitalDownloadAddBtn) { ?>
+                            <div class="card-toolbar">
+                            <div class="me-5">
+                                <a href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE;?>);" class="btn btn-outline-secondary btn-sm">Digital Files</a>
+                                </div>
+                                <i class="dropdown-toggle-custom-arrow"></i>
+                            </div>
+                            <?php } ?>
                         </div>
                         <div class="card-body show" id="digital-files-block">
-                            <div id="digitalFilesListJs">
+                            <div id="digitalFilesDefaultListJs">
                             </div>
                         </div>
                     </div>
-
-            </div>
-            <div class="card card-toggle" id="digital-links">
-                <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="digital-links-block">
-                    <div class="card-head-label">
-                        <h3 class="card-head-title">Digital Links
-                        </h3>
-                        <span class="text-muted">Product Digital Links are added in this
-
-
-                            <span class="input-helper"></span>section</span>
-                        <?php if ($displayDigitalDownloadAddBtn) { ?>
-                            <button type="button" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>)">LINK</button>
-                        <?php  } ?>
-                    </div> <i class="dropdown-toggle-custom-arrow"></i>
-                </div>
-                <div class="card-body show" id="digital-links-block">
-                    <div id="digitalLinksListJs">
+                    <div class="card card-toggle" id="digital-links">
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title">Digital Links</h3>
+                                    <span class="text-muted">Digital Links are added in this section </span>
+                                </div>
+                                <?php if ($displayDigitalDownloadAddBtn) { ?>
+                                <div class="card-toolbar">
+                                <div class="me-5">
+                                    <a href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK;?>);"  class="btn btn-outline-secondary btn-sm">Digital Links</a>
+                                    </div>
+                                    <i class="dropdown-toggle-custom-arrow"></i>
+                                </div>
+                                <?php } ?>
+                        </div>                     
+                        <div class="card-body show" id="digital-links-block">
+                            <div id="digitalLinksDefaultListJs">
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
         <?php } ?>
         </div>
         <div class="add-stock-column column-actions">
@@ -449,15 +452,16 @@ if (0 < $productId) {
                                 echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
                             }
                             $fld = $frm->getField('product_approved');
-                            if (null !=  $fld) {
-                                HtmlHelper::configureSwitchForCheckbox($fld);
-                                echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
-                            }
+                            $uLangDatafld = $frm->getField('auto_update_other_langs_data');
 
-                            $fld = $frm->getField('auto_update_other_langs_data');
                             if (null !=  $fld) {
                                 HtmlHelper::configureSwitchForCheckbox($fld);
-                                echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
+                                echo null ==  $uLangDatafld ? '<div class="setting-block">' . $fld->getHtml() . '</div>' : '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
+                            }
+                            
+                            if (null !=  $uLangDatafld) {
+                                HtmlHelper::configureSwitchForCheckbox($uLangDatafld);
+                                echo '<div class="setting-block">' . $uLangDatafld->getHtml() . '</div>';
                             }
                             ?>
                         </div>
@@ -468,15 +472,15 @@ if (0 < $productId) {
                         <ul class="list-featured">
                             <?php
                             $fld = $frm->getField('product_featured');
+                            $codFld = $frm->getField('product_cod_enabled');
                             if (null !=  $fld) {
                                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', $langId));
-                                echo '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>';
+                                echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>':'<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
                             }
-
-                            $fld = $frm->getField('product_cod_enabled');
+                            
                             if (null !=  $fld && $codEnabled) {
-                                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));
-                                echo '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>';
+                                HtmlHelper::configureSwitchForCheckbox($codEnabled, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));
+                                echo '<li><div class="setting-block">' . $codEnabled->getHtml() . '</div></li>';
                             }
                             ?>
                         </ul>
@@ -535,9 +539,7 @@ if (0 < $productId) {
         $(function() {
             prodSpecifications();
             tagifyProducts();
-            if (0 < getCurrentFrmProductId()) {
-                productDefaultImages();
-            }
+            productDefaultImages();
             var langId = getCurrentFrmLangId();
             select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
                 brand_active: 1,
@@ -592,14 +594,11 @@ if (0 < $productId) {
                 $('select[name=\'product_seller_id\']').attr('disabled', true);
             <?php } ?>
 
-
             upcType();
             <?php if (0 < $productId && $displayDigitalDownloadList) { ?>
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $productId; ?>);
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $productId; ?>);
             <?php } ?>
-
-
         });
     </script>
 </main>

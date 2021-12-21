@@ -128,7 +128,7 @@ class PluginCommon extends MyAppModel
      * getActivatationLimit
      *
      * @param  int $typeId
-     * @return void
+     * @return int
      */
     public static function getActivatationLimit(int $typeId): int
     {

@@ -41,6 +41,9 @@ function getNotifications() {
   );
 } */
 
+
+
+
 copyText = function (obj, applyToolTipInfo = true) {
     var title = $(obj).data("title");
     /*
@@ -51,6 +54,7 @@ copyText = function (obj, applyToolTipInfo = true) {
       */
 
     if (!navigator.clipboard) {
+        console.warn('clipboard API  only works on localhost and https');
         // Clipboard API  only works on localhost anf https as per doc
         return;
     }
@@ -70,8 +74,7 @@ tooltipCopyHelper = function (obj, title) {
         .tooltip("update")
         .tooltip("show");
 
-    $(obj).mouseout(function () {
-        console.log("vvv");
+    $(obj).mouseout(function () {   
         $(obj)
             .tooltip("hide")
             .attr("data-original-title", langLbl.clickToCopy)

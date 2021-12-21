@@ -80,35 +80,24 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
         }
 
         $("#pluginsJs > tbody").sortable({
-                update: function(event, ui) {
-                    fcom.displayProcessing();
-                    $('.listingTableJs').prepend(fcom.getLoader());
+            update: function(event, ui) {
+                fcom.displayProcessing();
+                $('.listingTableJs').prepend(fcom.getLoader());
 
-                    var order = $(this).sortable('toArray');
-                    var data = '';
-                    const bindData = new Promise((resolve, reject) => {
-                        for (let i = 0; i < order.length; i++) {
-                            data += 'plugin[]=' + order[i];
-                            if (i + 1 < order.length) {
-                                data += '&';
-                            }
+                var order = $(this).sortable('toArray');
+                var data = '';
+                const bindData = new Promise((resolve, reject) => {
+                    for (let i = 0; i < order.length; i++) {
+                        data += 'plugin[]=' + order[i];
+                        if (i + 1 < order.length) {
+                            data += '&';
                         }
-                        resolve(data);
-                    });
-                    bindData.then(
-                        function(value) {
-                            fcom.ajax(fcom.makeUrl('plugins', 'updateOrder'), value, function(res) {
-                                fcom.removeLoader();
-                                $.ykmsg.close();
-                                var ans = $.parseJSON(res);
-                                if (ans.status == 1) {
-                                    $.ykmsg.success(ans.msg);
-                                    return;
-                                }
-                                $.ykmsg.error(ans.msg);
-                            });
-                        },
-                        function(error) {
+                    }
+                    resolve(data);
+                });
+                bindData.then(
+                    function(value) {
+                        fcom.ajax(fcom.makeUrl('plugins', 'updateOrder'), value, function(res) {
                             fcom.removeLoader();
                             $.ykmsg.close();
                             var ans = $.parseJSON(res);
@@ -118,13 +107,22 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                             }
                             $.ykmsg.error(ans.msg);
                         });
-                },
-                function(error) {
-                    fcom.removeLoader();
-                    $.ykmsg.close();
-                }
-            );
-        },
-    }).disableSelection();
+                    },
+                    function(error) {
+                        fcom.removeLoader();
+                        $.ykmsg.close();
+                        var ans = $.parseJSON(res);
+                        if (ans.status == 1) {
+                            $.ykmsg.success(ans.msg);
+                            return;
+                        }
+                        $.ykmsg.error(ans.msg);
+                    });
+            },
+            function (error) {
+                fcom.removeLoader();
+                $.ykmsg.close();
+            }
+        }).disableSelection();
     }
 </script>

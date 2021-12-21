@@ -26,6 +26,7 @@ class RatingTypesController extends ListingBaseController
             'newRecordBtn' => false
         ]);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_RATING_TYPE', $this->siteLangId));
         $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
@@ -246,5 +247,19 @@ class RatingTypesController extends ListingBaseController
     private function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, [], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => $pageTitle]
+                ];
+        }
+        return $this->nodes;
     }
 }
