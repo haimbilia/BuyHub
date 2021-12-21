@@ -438,12 +438,12 @@ class VolumeDiscountController extends ListingBaseController
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'product_name' => Labels::getLabel('LBL_Name', $this->siteLangId),
-            'credential_username' => Labels::getLabel('LBL_Seller', $this->siteLangId),
-            'voldiscount_min_qty' => Labels::getLabel('LBL_Minimum_Quantity', $this->siteLangId),
-            'voldiscount_percentage' => Labels::getLabel('LBL_Discount', $this->siteLangId) . ' (%)',
+            'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
+            'credential_username' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
+            'voldiscount_min_qty' => Labels::getLabel('LBL_MINIMUM_QUANTITY', $this->siteLangId),
+            'voldiscount_percentage' => Labels::getLabel('LBL_DISCOUNT', $this->siteLangId) . ' (%)',
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('volumeDiscountTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);

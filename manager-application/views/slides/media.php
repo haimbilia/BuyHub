@@ -3,7 +3,13 @@
 HtmlHelper::formatFormFields($imageFrm);
 $imageFrm->setFormTagAttribute('class', 'modal-body form');
 
+$fld = $imageFrm->getField('slide_screen');
+if (1 < $languageCount) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
+
 $imageLangFld = $imageFrm->getField('lang_id');
+$imageLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
 $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
 $imageLangFld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '1350 x 405') . '</span>';
 
@@ -18,36 +24,39 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
     $imgArr = [
         'url' => UrlHelper::getCachedUrl(
             UrlHelper::generateFileUrl(
-                'Image', 
-                'Slide', 
+                'Image',
+                'Slide',
                 array(
-                    $recordId, 
-                    $image['afile_screen'], 
-                    $image['afile_lang_id'], 
-                    'THUMB', 
+                    $recordId,
+                    $image['afile_screen'],
+                    $image['afile_lang_id'],
+                    'THUMB',
                     false
-                ), CONF_WEBROOT_FRONT_URL
-			) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'
-		),
-		'name' => $image['afile_name'],
-		'afile_id' => $image['afile_id'],
-	]; 
-} 
+                ),
+                CONF_WEBROOT_FRONT_URL
+            ) . $uploadedTime,
+            CONF_IMG_CACHE_TIME,
+            '.jpg'
+        ),
+        'name' => $image['afile_name'],
+        'afile_id' => $image['afile_id'],
+    ];
+}
 
 $slideImage = $imageFrm->getField('slide_image');
 $slideImage->value = '<span id="imageListingJs"></span>';
-$slideImage->value = "<span id='imageListingJs'>". HtmlHelper::getfileInputHtml(
+$slideImage->value = "<span id='imageListingJs'>" . HtmlHelper::getfileInputHtml(
     [
-        'onChange' => 'loadImageCropper(this)', 
-        'accept' => 'image/*', 
+        'onChange' => 'loadImageCropper(this)',
+        'accept' => 'image/*',
         'data-name' => Labels::getLabel("FRM_SLIDE_IMAGE", $siteLangId)
     ],
     $siteLangId,
-    ($canEdit ? 'deleteMedia('.$recordId.','. $image['afile_id'].','.$image['afile_type'].','.$image['afile_lang_id'].','.$image['afile_screen'].')' :''),
-    ($canEdit ? 'editDropZoneImages(this)': ''),
+    ($canEdit ? 'deleteMedia(' . $recordId . ',' . $image['afile_id'] . ',' . $image['afile_type'] . ',' . $image['afile_lang_id'] . ',' . $image['afile_screen'] . ')' : ''),
+    ($canEdit ? 'editDropZoneImages(this)' : ''),
     $imgArr,
     'mt-3 dropzone-custom dropzoneContainerJs'
-)."</span>";
+) . "</span>";
 
 /* Image Form */
 
@@ -55,7 +64,7 @@ $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'mediaForm('.$recordId.')',
+            'onclick' => 'mediaForm(' . $recordId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -66,15 +75,15 @@ $otherButtons = [
 $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); ?>
 
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
-    <div class="form-edit-body loaderContainerJs">
-        <?php echo $imageFrm->getFormHtml(); ?>
-    </div>
-</div> 
+<div class="form-edit-body loaderContainerJs">
+    <?php echo $imageFrm->getFormHtml(); ?>
+</div>
+</div>
 
 
 <script>
-    var minWidthBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id');?> input[name=min_width]');
-    var minHeightBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id');?> input[name=min_height]');
+    var minWidthBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id'); ?> input[name=min_width]');
+    var minHeightBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id'); ?> input[name=min_height]');
 
     $(minWidthBaneerEle).val(2000);
     $(minHeightBaneerEle).val(500);
@@ -108,5 +117,4 @@ $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); ?>
         console.log(recordId, 'THUMB', langId, slideScreen);
         loadImages(recordId, 'THUMB', slideScreen, langId);
     });
-
 </script>

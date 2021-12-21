@@ -273,7 +273,7 @@ class TaxCategoriesController extends ListingBaseController
             $frm->addRequiredField(Labels::getLabel('FRM_TAX_CODE', $this->siteLangId), 'taxcat_code');
         }
 
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'taxcat_active', applicationConstants::getActiveInactiveArr($this->siteLangId));
+        $frm->addCheckBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'taxcat_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {

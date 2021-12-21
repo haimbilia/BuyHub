@@ -209,9 +209,9 @@ class FaqController extends ListingBaseController
         $frm->addHiddenField('', 'faq_id', 0);
         $frm->addHiddenField('', 'lang_id', $this->siteLangId);
         $frm->addRequiredField(Labels::getLabel('FRM_FAQ_TITLE', $this->siteLangId), 'faq_title');
-        $frm->addTextArea(Labels::getLabel('FRM_Content', $this->siteLangId), 'faq_content');
+        $frm->addTextArea(Labels::getLabel('FRM_CONTENT', $this->siteLangId), 'faq_content');
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_Status', $this->siteLangId), 'faq_active', $activeInactiveArr, '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'faq_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 

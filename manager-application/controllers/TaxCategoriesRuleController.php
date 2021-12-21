@@ -40,6 +40,11 @@ class TaxCategoriesRuleController extends ListingBaseController
         $actionItemsData = array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj), [
             'newRecordBtn' => (($ruleId) > 0 ? true : false),
             'newRecordParent' => (($ruleId) > 0 ? $ruleId : 0),
+            'newRecordBtnAttrs' => [
+                'attr' => [
+                    'onclick' => 'addNew(' . $ruleId . ')',
+                ]
+            ]
         ]);
         $this->set('actionItemsData', $actionItemsData);
         $this->getListingData($ruleId);
