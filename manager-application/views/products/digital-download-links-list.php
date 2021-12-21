@@ -3,17 +3,18 @@
 if(1 > count($links)){
     return;
 }
-
-
 $arr_flds = [];
 if (0 == $product['product_seller_id']) {
     $arr_flds['pdl_download_link'] = Labels::getLabel('LBL_DOWNLOAD_LINK', $siteLangId);
 }
 $arr_flds['pdl_preview_link'] = Labels::getLabel('LBL_PREVIEW_LINK', $siteLangId);
+/*
 $arr_flds['pddr_options_code'] = Labels::getLabel('LBL_LINK_OPTION', $siteLangId);
 $arr_flds['pdl_lang_id'] = Labels::getLabel('LBL_LINK_LANGUAGE', $siteLangId);
+*/
+
 if (0 == $product['product_seller_id']) {
-    $arr_flds['action'] = Labels::getLabel('LBL_ACTION', $siteLangId);
+    $arr_flds['action'] = Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId);
 }
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
@@ -29,10 +30,11 @@ foreach ($links as $sn => $row) {
     $tr = $tbl->appendElement('tr', array('id' => $row['pdl_id'] . '_' . $row['pdl_record_id']));
 
     foreach ($arr_flds as $key => $val) {
-        $td = $tr->appendElement('td');
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+        $td = $tr->appendElement('td', $tdAttr);       
         switch ($key) {
             case 'listSerial':
-                $td->appendElement('plaintext', array(), $serialNo, true);
+                $td->appendElement('plaintext', $tdAttr, $serialNo, true);
                 break;
             case 'pdl_lang_id':
                 if (array_key_exists($row['pdl_lang_id'], $languages)) {
@@ -40,7 +42,7 @@ foreach ($links as $sn => $row) {
                 } else {
                     $val = 'Invalid language link-' . $row['pdl_lang_id'];
                 }
-                $td->appendElement('plaintext', array(), $val, true);
+                $td->appendElement('plaintext', $tdAttr, $val, true);
                 break;
             case 'pddr_options_code':
                 if (array_key_exists($row['pddr_options_code'], $options)) {
@@ -48,40 +50,41 @@ foreach ($links as $sn => $row) {
                 } else {
                     $val = 'Invalid option link - ' . $row['pddr_options_code'];
                 }
-                $td->appendElement('plaintext', array(), $val, true);
+                $td->appendElement('plaintext', $tdAttr, $val, true);
                 break;
             case 'pdl_download_link':
                 if ('' != $row['pdl_download_link'] && 0 == $product['product_seller_id']) {
-                    $td->appendElement('div', array("class"=>"clipboard"), '<input  name ="copy" class="form-control copy-input" value="'.$row[$key].'" id="copymain_'. $row['pdl_id'] .'" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_'. $row['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copymain_'. $row['pdl_id'] .'\')"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class"=>"clipboard"), '<input  name ="copy" class="form-control copy-input" value="'.$row[$key].'" readonly> <button type="button" data-title="'.$row[$key].'" class="btn btn-light btn-sm copy-btn"  onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
                 } else {
-                    $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
+                    $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 
                 break;
             case 'pdl_preview_link':
                 if ('' != $row['pdl_preview_link']) {
-                    $td->appendElement('div', array("class"=>"clipboard"), '<input name ="copy" class="form-control copy-input" value="'.$row[$key].'" id="copypreview_'. $row['pdl_id'] .'" readonly> <button class="btn btn-light btn-sm copy-btn" id="copyButton_'. $row['pdl_id'] .'" onclick="fcom.copyToClipboard(\'copypreview_'. $row['pdl_id'] .'\')"><i class="far fa-copy"></i></button>', true);
+                    $td->appendElement('div', array("class"=>"clipboard"), '<input name ="copy" class="form-control copy-input" value="'.$row[$key].'"  readonly> <button type="button" data-title="'.$row[$key].'" class="btn btn-light btn-sm copy-btn" onclick="copyText(this,true)"><i class="far fa-copy"></i></button>', true);
                 } else {
-                    $td->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
+                    $td->appendElement('p', $tdAttr, Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 break;
             case 'action':
                 if (0 == $product['product_seller_id']) {
-                    $td->appendElement(
-                        "a",
-                        array(
-                            'class' => 'btn btn-clean btn-sm btn-icon align-right',
-                            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
-                            'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')', 'href' => 'javascript:void(0);'
-                        ),
-                        '<i class="fa fa-trash  icon"></i>',
-                        true
-                    );
+                    $data = [
+                        'siteLangId' => $siteLangId,
+                        'recordId' => $row['pdl_id']
+                    ];
+                    $data['deleteButton'] = [
+                        'onclick' => 'deleteDigitallink(' . $row['pdl_id'] . ',' . $row['pdl_record_id'] . ')'
+                    ];                  
+
+                    $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                    $td->appendElement('plaintext', $tdAttr, $actionItems, true);
+                    
                 }
 
                 break;
             default:
-                $td->appendElement('plaintext', array(), $row[$key], true);
+                $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
         }
     }

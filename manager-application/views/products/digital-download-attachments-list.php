@@ -1,17 +1,19 @@
 <?php
-if(1 > count($attachments)){
+if (1 > count($attachments)) {
     return;
 }
 $arr_flds = array(
-    // 'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
+    /*'listSerial' => Labels::getLabel('LBL_#', $siteLangId),*/
     'mainfile' => Labels::getLabel('LBL_DD_FILE', $siteLangId),
     'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),
+    /*
     'pddr_options_code' => Labels::getLabel('LBL_DD_OPTION', $siteLangId),
     'afile_lang_id' => Labels::getLabel('LBL_DD_LANGUAGE', $siteLangId),
+    */
 );
 
 if (0 == $product['product_seller_id']) {
-    $arr_flds['action'] = Labels::getLabel('LBL_ACTION', $siteLangId);
+    $arr_flds['action'] = Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId);
 }
 
 $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table'));
@@ -22,89 +24,113 @@ foreach ($arr_flds as $key => $val) {
 }
 
 $serialNo = 0;
-foreach ($attachments as $sn => $row) {    
+foreach ($attachments as $sn => $row) {
     $serialNo++;
     $tr = $tbl->appendElement('tr');
-    foreach ($arr_flds as $key => $val) {      
-        $td = $tr->appendElement('td');
+    foreach ($arr_flds as $key => $val) {
+        $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
+        $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
             case 'listSerial':
                 $td->appendElement('plaintext', array(), $serialNo, true);
                 break;
             case 'mainfile':
                 $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
-                $dvElem = $td->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
                 if (0 < $row['afile_id']) {
                     if (0 == $product['product_seller_id']) {
-                        $dvElem->appendElement(
+                        $ul = new HtmlElement("ul", array("class" => "actions"));     
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
+                        $li->appendElement(
                             "a",
-                            array(
-                                'class' => 'btn btn-light btn-sm',
+                            array(                                
                                 'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
                                 'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['afile_id'], $recordId, $downloadrefType, 0, $row['mainfile'])),
                                 'target' => '_blank'
                             ),
-                            '<i class="fa fa-download  icon"></i>',
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                </use>
+                            </svg>',
                             true
                         );
-                        $dvElem->appendElement(
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);    
+                        $li->appendElement(
                             "a",
-                            array(
-                                'class' => 'btn btn-light btn-sm',
+                            array(                              
                                 'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
                                 'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
                             ),
-                            '<i class="fa fa-trash  icon"></i>',
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                                </use>
+                            </svg>',
                             true
                         );
                     }
+                    $dvElem->appendElement('plaintext', $tdAttr, $ul->getHtml(), true);
                 } else {
                     $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
                 }
                 break;
             case 'preview':
-                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));
-                $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                $dvElem = $td->appendElement('div', array('class' => 'd-flex align-items-center'));               
+                $ul = new HtmlElement("ul", array("class" => "actions"));                
                 if (0 < $row['prev_afile_id']) {
-                    $dvElem->appendElement(
-                        "a",
+                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                    $li->appendElement(
+                        'a',
                         array(
-                            'class' => 'btn btn-light btn-sm',
-                            'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
                             'href' => UrlHelper::generateUrl('Products', 'downloadAttachment', array($row['prev_afile_id'], $recordId, $downloadrefType, 1, $row['preview'])),
-                            'target' => '_blank'
+                            'title' => Labels::getLabel('LBL_DOWNLOAD', $siteLangId),
                         ),
-                        '<i class="fa fa-download  icon"></i>',
+                        '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                            </use>
+                        </svg>',
                         true
                     );
                     if (0 == $product['product_seller_id']) {
-                        $dvElem->appendElement(
-                            "a",
+                        $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                        $li->appendElement(
+                            'a',
                             array(
-                                'class' => 'btn btn-light btn-sm',
+                                'href' => 'javascript:void(0)',
                                 'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
-                                'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)',
-                                'href' => 'javascript:void(0);'
+                                'onclick' => 'deleteDigitalFile(' . $row['prev_afile_id'] . ', ' . $row['afile_record_id'] . ', 1)'
                             ),
-                            '<i class="fa fa-trash  icon"></i>',
+                            '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
+                            </use>
+                            </svg>',
                             true
                         );
                     }
                 } else {
-                    $dvElem->appendElement('p', array(), Labels::getLabel('LBL_NA', $siteLangId), true);
-                    $dvElem->appendElement(
+                    $dvElem->appendElement('div', array('class' => 'text-break'),  Labels::getLabel('LBL_NA', $siteLangId), true);
+                    $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
+                    $li->appendElement(
                         "a",
                         array(
-                            'class' => 'btn btn-light btn-sm',
                             'title' => Labels::getLabel('LBL_ADD', $siteLangId),
                             'href' => 'javascript:void(0);',
                             'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;',
                             'href' => 'javascript:void(0);'
                         ),
-                        '<i class="fa fa-plus  icon"></i>',
+                        '<svg class="svg" width="18" height="18">
+                            <use
+                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                            </use>
+                        </svg>',
                         true
                     );
                 }
+                $dvElem->appendElement('plaintext', $tdAttr, $ul->getHtml(), true);
                 break;
             case 'pddr_options_code':
                 if (array_key_exists($row['pddr_options_code'], $options)) {
@@ -130,17 +156,16 @@ foreach ($attachments as $sn => $row) {
                         $isPreview = 1;
                     }
 
-                    $td->appendElement(
-                        "a",
-                        array(
-                            'class' => 'btn btn-clean btn-sm btn-icon align-right',
-                            'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
-                            'onclick' => 'deleteDigitalFile(' . $fileId . ', ' . $row['afile_record_id'] . ', ' . $isPreview . ', 1)',
-                            'href' => 'javascript:void(0);'
-                        ),
-                        '<i class="fa fa-trash  icon"></i>',
-                        true
-                    );
+                    $data = [
+                        'siteLangId' => $siteLangId,
+                        'recordId' => $row['afile_id']
+                    ];
+
+                    $data['deleteButton'] = [
+                        'onclick' => 'deleteDigitalFile(' . $fileId . ', ' . $row['afile_record_id'] . ', ' . $isPreview . ', 1)'
+                    ];
+                    $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                    $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 }
                 break;
             default:

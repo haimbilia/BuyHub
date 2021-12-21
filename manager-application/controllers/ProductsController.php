@@ -1006,7 +1006,7 @@ class ProductsController extends ListingBaseController
         if (!$product->updateProdImagesOrder($productId, $fileType, $order)) {
             LibHelper::exitWithError($product->getError());
         }
-        $this->set("msg", Labels::getLabel('LBL_Ordered_Successfully', $this->siteLangId));
+        $this->set("msg", $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1243,6 +1243,7 @@ class ProductsController extends ListingBaseController
         }
 
         $optionValId = FatApp::getPostedData('option_comb_id', null, 0);
+        $post['option_comb_id'] = $optionValId;
 
         $ddObj = new DigitalDownload();
         $refId = $ddObj->getReferenceId($productId, $optionValId);
@@ -1386,12 +1387,10 @@ class ProductsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request);
-        }
-        /*
-        showing all links
+        }       
+     
         $optionCombi = FatApp::getPostedData('option_comb', null, '0');
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-        */
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);        
 
         $ddpObj = new DigitalDownloadPrivilages();
 
@@ -1401,7 +1400,7 @@ class ProductsController extends ListingBaseController
         $product = $ddpObj->getProduct($recordId);
         $this->set('product', $product);
 
-        $rows = DigitalDownloadSearch::getLinks($recordId, Product::CATALOG_TYPE_PRIMARY);
+        $rows = DigitalDownloadSearch::getLinks($recordId, Product::CATALOG_TYPE_PRIMARY,$optionCombi, $langId);
         $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + Language::getAllNames();
 
         $productOptions = Product::getProductOptions($recordId, $this->siteLangId, true);
@@ -1419,11 +1418,10 @@ class ProductsController extends ListingBaseController
         $this->objPrivilege->canViewProducts();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        /*
-        showing all links files
+
         $optionComb = FatApp::getPostedData('option_comb', null, '0');
         $langId = FatApp::getPostedData('langId', null, 0);
-        */
+        
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request);
         }
@@ -1435,7 +1433,7 @@ class ProductsController extends ListingBaseController
 
         $product = $ddpObj->getProduct($recordId);
 
-        $attachments = DigitalDownloadSearch::getAttachments($recordId, Product::CATALOG_TYPE_PRIMARY, null, 0, true);
+        $attachments = DigitalDownloadSearch::getAttachments($recordId, Product::CATALOG_TYPE_PRIMARY, $optionComb, $langId);
 
         $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
 
