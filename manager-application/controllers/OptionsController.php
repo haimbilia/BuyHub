@@ -2,7 +2,7 @@
 
 class OptionsController extends ListingBaseController
 {
-    protected string $modelClass = 'MANAGE_OPTIONS';
+    protected string $modelClass = 'Option';
 
     public function __construct($action)
     {
