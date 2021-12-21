@@ -2,7 +2,7 @@
 HtmlHelper::formatFormFields($frm, 6);
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this, "addBankInfoForm"); return(false);');
 $dobFld = $frm->getField('user_dob');
-$dobFld->setFieldTagAttribute('class', 'user_dob_js');
+$dobFld->addFieldTagAttribute('class', 'user_dob_js');
 
 if ($recordId > 0) {
     $fld = $frm->getField('credential_username');
