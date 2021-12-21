@@ -364,8 +364,8 @@ class HtmlHelper
                     $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
                 case AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE:
-                        $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
-                        break;    
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    break;
                 default:
             }
 
@@ -561,6 +561,9 @@ class HtmlHelper
      */
     public static function formatDateTime(string $dateTime, bool $showTime = false, bool $usetimezone = false, string $timezone = '')
     {
+        if ('0000-00-00 00:00:00' ==  $dateTime || '0000-00-00' ==  $dateTime) {
+            return '<p class="date">0000-00-00</p>';
+        }
         $timezone = FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get());
         $timeFormat = FatApp::getConfig('CONF_DATE_FORMAT_TIME', FatUtility::VAR_STRING, 'H:i');
         $formattedDT = FatDate::format($dateTime, $showTime, $usetimezone, $timezone);

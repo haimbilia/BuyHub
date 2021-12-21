@@ -13,6 +13,9 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld->addFieldTagAttribute('onChange', 'callCouponDiscountIn(this.value, ' . applicationConstants::PERCENTAGE . ', ' . applicationConstants::FLAT . '); ');
 $fld->addFieldTagAttribute('class', 'discountTypeJs');
 
+$fld = $frm->getField('coupon_min_order_value');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
 $fld = $frm->getField('coupon_discount_value');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld->addFieldTagAttribute('class', 'discountValueJs');
@@ -34,7 +37,8 @@ $fld = $frm->getField('coupon_uses_coustomer');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('coupon_active');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
 
 $otherButtons = [
     [
