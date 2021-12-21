@@ -26,28 +26,28 @@ foreach ($arrListing as $sn => $row) {
                     'onclick' => $onclick,
                 ], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
-                break;    
+                break;
             case 'utxn_id':
-                $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionNumber($row[$key]) );
-            break;
+                $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionNumber($row[$key]));
+                break;
             case 'utxn_date':
-                $td->appendElement('html', $tdAttr,HtmlHelper::formatDateTime($row[$key]), true);
-            break;
+                $td->appendElement('html', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
+                break;
             case 'utxn_credit':
             case 'utxn_debit':
             case 'balance':
-                $td->appendElement('plaintext', $tdAttr,CommonHelper::displayMoneyFormat($row[$key]));
-            break;														
-            case 'utxn_comments':								
-                $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionComments($row[$key]),true);
-            break;
+                $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key]));
+                break;
+            case 'utxn_comments':
+                $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionComments($row[$key]), true);
+                break;
             case 'utxn_status':
                 $statusHtm = Transactions::getStatusHtml($siteLangId, $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
-                break;						
+                break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-            break;
+                break;
         }
     }
     $serialNo++;
