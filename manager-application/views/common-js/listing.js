@@ -219,8 +219,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 $(this).prop("checked", false);
             }
         });
-        searchRecords(document.frmRecordSearch, loadRowsOnly);
         $('.select2-hidden-accessible').val('').trigger('change');
+        searchRecords(document.frmRecordSearch, loadRowsOnly);
+        
     };
 
     setColumnsData = function (frm) {
