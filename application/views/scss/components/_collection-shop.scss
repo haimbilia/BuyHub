@@ -1,13 +1,11 @@
-.featured {
+.shop-layout-1 {
     display: grid;
     grid-gap: 1rem;
     grid-template-columns: repeat(4, 1fr);
     @include media-breakpoint-down(sm) {
-        & {
-            grid-template-columns: repeat(2, 1fr);
-        }
+        grid-template-columns: repeat(2, 1fr);
     }
-    .featured-item {
+    .shop {
         text-align: center;
         background: $gray-light;
         position: relative;
@@ -18,8 +16,7 @@
         border-radius: $radius4;
         position: relative;
         overflow: hidden;
-        border: solid 1px transparent;
-        height: 100%;
+
         transition: all 0.2s linear;
         animation: slideRight 600ms ease both;
         border: solid 1px transparent;
@@ -28,16 +25,18 @@
             background: none;
             border-color: $brand-color;
         }
-        &__body {
+        &-head {
+        }
+        &-body {
             flex: 1;
         }
-        &__foot {
+        &-foot {
             text-align: center;
             .products__rating {
                 justify-content: center;
             }
         }
-        .featured_logo {
+        &-logo {
             background: #fff;
             border-radius: 50%;
             overflow: hidden;
@@ -52,24 +51,55 @@
             justify-content: center;
             padding: 1rem;
             @include media-breakpoint-down(sm) {
-                & {
-                    width: 100px;
-                    height: 100px;
-                }
+                width: 100px;
+                height: 100px;
             }
         }
-        .featured_detail {
-            position: relative;
-            z-index: 1;
-            min-height: 60px;
-            .featured_name a {
-                font-size: 1em;
-                color: $body-color;
-            }
+        &-title {
+            font-weight: 500;
+            font-size: 1rem;
+            color: $txt-body;
         }
-        .featured_location {
+        &-location {
             font-size: 0.875rem;
-            color: lighten($body-color, 50%);
+            color: $txt-gray;
+        }
+    }
+}
+
+.shop-layout-2 {
+    display: grid;
+    grid-gap: 4rem;
+    grid-template-columns: repeat(3, 1fr);
+    .shop {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        max-width: 488px;
+        &:nth-child(odd) {
+            flex-direction: column-reverse;
+        }
+        &-body {
+            flex: 1;
+        }
+        &-foot {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 2.5rem 1rem;
+        }
+        &-title {
+            font-weight: 500;
+            font-size: 1rem;
+            color: $txt-body;
+        }
+        &-location {
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: $txt-gray;
+            margin-bottom: 1.5rem;
         }
     }
 }

@@ -129,7 +129,7 @@
                                 </button>
                             </li>
                             <!-- <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?> -->
-                            <!-- <?php $this->includeTemplate('_partial/headerLanguageArea.php'); ?> -->
+
                             <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
                             <li class="quick-nav-item">
                                 <div id="cartSummary">
@@ -155,6 +155,41 @@
             </div>
         </div>
     </header>
+    <div class="offcanvas offcanvas-mega-search" id="mega-nav-search" aria-labelledby="mega-nav-searchLabel">
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div class="mega-search">
+            <form action="" class="form mega-search-form">
+                <input class="mega-search-input search--keyword--js no--focus" placeholder="I Am Looking For..." id="header_search_keyword" data-field-caption="I Am Looking For..." data-fatreq="{&quot;required&quot;:false}" type="search" name="keyword" value="">
+                <div class="search-suggestions" id="tagsSuggetionList">
+                    <ul class="text-suggestions">
+                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone"><span class=""><b>iph</b>one</span></a></li>
+                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone5s"><span class=""><b>iph</b>one5s</span></a></li>
+                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone5"><span class=""><b>iph</b>one5</span></a></li>
+                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6"><span class=""><b>iph</b>one 6</span></a></li>
+                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6"><span class=""><b>iph</b>one 6</span></a></li>
+                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6s"><span class=""><b>iph</b>one 6s</span></a></li>
+                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone"><span class=""><b>iph</b>one</span></a></li>
+                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6s plus"><span class=""><b>iph</b>one 6s plus</span></a></li>
+                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone"><span class=""><b>iph</b>one</span></a></li>
+                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 7"><span class=""><b>iph</b>one 7</span></a></li>
+                    </ul>
+                    <div class="matched">
 
-    <!--header end here-->
-    <!--body start here-->
+                        <h6 class="suggestions-title">Matching Categories</h6>
+                        <ul class="text-suggestions matched-category">
+                            <li class=""><a class="" href="/action-figures"><span class="">Action Figures</span></a></li>
+                            <li class=""><a class="" href="/men-sports-wear"><span class="">Sports Wear</span></a></li>
+                            <li class=""><a class="" href="/mobiles-mobile-cases"><span class="">Mobile Cases</span></a></li>
+                            <li class=""><a class="" href="/electronics"><span class="">Electronics</span></a></li>
+                            <li class=""><a class="" href="/gaming-consoles-ps4"><span class="">PS4</span></a></li>
+                            <li class=""><a class="" href="/mobiles"><span class="">Mobiles</span></a></li>
+                            <li class=""><a class="" href="/clothing"><span class="">Clothing</span></a></li>
+                            <li class=""><a class="" href="/puzzles"><span class="">Puzzles</span></a></li>
+                            <li class=""><a class="" href="/clothing-trousers"><span class="">Trousers</span></a></li>
+                            <li class=""><a class="" href="/men-sports-wear-track-suits"><span class="">Track Suits</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>

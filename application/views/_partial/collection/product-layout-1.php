@@ -11,7 +11,7 @@
                 <?php } ?>
             </div>
             <div class="product-listing" data-view="6" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
-                <?php 
+                <?php
                 $tLeftRibbons = $collection['tLeftRibbons'];
                 $tRightRibbons = $collection['tRightRibbons'];
                 foreach ($collection['products'] as $product) {
@@ -36,5 +36,4 @@
             </div>
         </div>
     </section>
-    <hr class="m-0">
 <?php }

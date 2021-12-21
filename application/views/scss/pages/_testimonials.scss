@@ -1,3 +1,81 @@
+.slider-testimonials {
+    text-align: center;
+    margin: 0rem auto;
+    position: relative;
+    display: flex;
+    &-item {
+        flex: 1;
+        margin: auto;
+        max-width: 1000px;
+        padding: 0 1rem;
+        transition: all 0.5s ease-in-out;
+        display: flex;
+        align-items: center;
+    }
+    &-image {
+        position: relative;
+        &:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 0;
+            width: 236px;
+            height: 236px;
+            background: $brand-color;
+            border-top-left-radius: 100px;
+        }
+    }
+    &-user {
+        width: 300px;
+        height: 300px;
+        position: relative;
+        margin-left: 70px;
+        margin-top: 70px;
+    }
+    &-data {
+        margin-left: 2rem;
+        text-align: left;
+        flex: 1;
+    }
+    &-text {
+        max-width: 512px;
+    }
+
+    &-from {
+        margin-top: 2rem;
+        .name {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+    }
+    .slick-arrow {
+        width: 48px;
+        height: 48px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border: none;
+        opacity: 0;
+        transition: all 0.2s ease-in-out;
+        -webkit-transform: scale(0.7);
+        transform: scale(0.7);
+    }
+    &:hover {
+        .slick-arrow {
+            transform: scale(1);
+            opacity: 1;
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.9);
+            }
+        }
+    }
+
+    .slick-center & {
+        background-color: #fff;
+        color: $body-color;
+    }
+}
+
 .testimonials-item {
     display: block;
     position: relative;
@@ -28,7 +106,7 @@
             display: block;
             font-weight: 400;
             font-size: 1rem;
-            color: #3B566E;
+            color: #3b566e;
             margin-top: 20px;
             padding-#{$start-direction}: 100px;
             letter-spacing: 0.69px;
@@ -40,7 +118,7 @@
             display: block;
             font-weight: 400;
             font-size: 14px;
-            color: #6F8BA4;
+            color: #6f8ba4;
             letter-spacing: 0.6px;
             padding-#{$start-direction}: 100px;
             padding-#{$end-direction}: 25px;

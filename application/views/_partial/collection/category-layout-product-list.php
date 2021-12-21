@@ -15,7 +15,7 @@
             $tRightRibbons = $category['tRightRibbons'];
 
             $i = 1;
-            foreach ($category['products'] as $key => $product) { 
+            foreach ($category['products'] as $key => $product) {
                 $selProdRibbons = [];
                 if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
                     $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];

@@ -67,8 +67,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
     var minWidthBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id');?> input[name=min_width]');
     var minHeightBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id');?> input[name=min_height]');
 
-    $(minWidthBaneerEle).val(1350);
-    $(minHeightBaneerEle).val(405);
+    $(minWidthBaneerEle).val(2000);
+    $(minHeightBaneerEle).val(666);
 
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
@@ -80,8 +80,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 
         if ($(this).val() == screenDesktop) {
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '2000 x 500'));
-            $(minWidthBaneerEle).val(1350);
-            $(minHeightBaneerEle).val(405);
+            $(minWidthBaneerEle).val(2000);
+            $(minHeightBaneerEle).val(666);
             aspectRatio = 4 / 1;
         } else if ($(this).val() == screenIpad) {
             $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '1024 x 360'));

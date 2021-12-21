@@ -41,53 +41,59 @@
 .btn {
     padding: 0.6rem 0.75rem;
     height: auto;
-    &.btn-brand {
+    border-radius: 0;
+    &-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
     }
-    &.btn-outline-brand {
+    &-outline-brand {
         border-color: var(--brand-color);
         color: var(--brand-color-inverse);
     }
-    &.btn--white {
+    &-white {
         background: #fff;
         color: #000;
     }
-    &.btn-outline-brand {
+    &-outline-brand {
         background: none;
         border-color: $brand-color;
         color: $brand-color;
     }
-    &.btn-outline-secondary {
+    &-outline-secondary {
         background: none;
         border-color: $secondary-color;
         color: $secondary-color;
     }
-    &.btn-outline-white {
+    &-outline-white {
         background: none;
         border-color: #fff;
         color: #fff;
     }
-    &.btn-outline-gray {
+    &-outline-black {
+        background: none;
+        border-color: #000;
+        color: $body-color;
+    }
+    &-outline-gray {
         background: none;
         border-color: $border-color;
         color: $body-color;
     }
-    &.btn-block {
+    &-block {
         display: block;
         width: 100%;
     }
-    &.btn-wide {
+    &-wide {
         padding-left: 2rem;
         padding-right: 2rem;
     }
-    &.btn-sm {
+    &-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
         line-height: 1.5;
-        border-radius: 0.2rem;
+        //border-radius: 0.2rem;
     }
-    &.btn-arrow {
+    &-arrow {
         svg {
             width: 12px;
             height: 12px;
@@ -96,7 +102,7 @@
             fill: currentColor;
         }
     }
-    &.btn-link {
+    &-link {
         text-decoration: none;
         color: $body-color;
         padding: 0;

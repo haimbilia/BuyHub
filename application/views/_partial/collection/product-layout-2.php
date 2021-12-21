@@ -11,7 +11,7 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                 <?php } ?>
             </div>
             <div class="ft-products">
-                <?php 
+                <?php
                 $tLeftRibbons = $collection['tLeftRibbons'];
                 $tRightRibbons = $collection['tRightRibbons'];
                 foreach ($collection['products'] as $product) {
@@ -37,5 +37,4 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
             </div>
         </div>
     </section>
-    <hr class="m-0">
 <?php }

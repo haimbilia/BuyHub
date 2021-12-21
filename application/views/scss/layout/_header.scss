@@ -1,6 +1,6 @@
 .header {
     position: sticky;
-    z-index: 10;
+    z-index: $zindex-sticky;
     top: 0;
     width: 100%;
     font-weight: 300;
@@ -32,6 +32,16 @@
             border-top: $border;
         }
     }
+    .main-bar {
+        &__inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+            @include media-breakpoint-down(sm) {
+            }
+        }
+    }
 
     .logo {
         width: 120px;
@@ -51,14 +61,7 @@
             }
         }
     }
-    .last-bar {
-        border-top: $border;
-        @include media-breakpoint-down(lg) {
-            & {
-                border: none;
-            }
-        }
-    }
+
     &-location {
         display: flex;
         align-items: center;
@@ -114,60 +117,24 @@
     &-link {
         background: none;
         border: none;
+        font-weight: inherit;
+        &:hover {
+            color: $secondary-color;
+        }
     }
     .icn {
         .svg {
+            color: $secondary-color;
             margin-#{$end-direction}: 5px;
         }
     }
 }
 
-.select-lang-currency {
-    min-width: 330px;
-    font-size: 0.85rem;
-    padding: 2rem;
-    color: $txt-gray;
-    h6 {
-        display: block;
-        padding: 0;
-        margin-bottom: 10px;
-        font-size: 0.8rem;
-        white-space: nowrap;
-        color: currentColor;
-        text-transform: uppercase;
-    }
-    > ul {
-        display: flex;
-        flex-wrap: wrap;
-        > li {
-            border: none;
-            margin-bottom: 10px;
-            margin-#{$end-direction}: 10px;
-            a {
-                color: currentColor;
-                border: $border;
-                border-radius: 3px;
-                display: flex;
-                align-items: center;
-                padding: 0.4rem 0.8rem;
-            }
-            &.is-active {
-                a {
-                    border-color: $brand-color;
-                    color: $brand-color;
-                }
-            }
-            &:last-child {
-                margin: 0;
-            }
-        }
-    }
-    .space {
-        display: table;
-        margin: 1rem 0;
-    }
-}
-
 .dropdown.is-active .dropdown__target {
     pointer-events: auto;
+}
+
+.btn-mega-search {
+    background: transparent;
+    border: none;
 }

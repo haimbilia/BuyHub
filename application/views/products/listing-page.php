@@ -101,7 +101,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
 <?php if (isset($pageTitle)) { ?>
     <section class="bg-brand-light pt-3 pb-3">
         <div class="container">
-            <div class="section-head section--head--center mb-0">
+            <div class="section-head section-head-center mb-0">
                 <div class="section__heading">
                     <h1>
                         <?php $keywordStr = '';

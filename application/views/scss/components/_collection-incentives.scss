@@ -1,0 +1,25 @@
+.incentives-layout-1 {
+    display: grid;
+    grid-gap: 4rem;
+    grid-template-columns: repeat(4, 1fr);
+    .incentives {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        @include media-breakpoint-down(lg) {
+        }
+        &-icon {
+            width: 30px;
+            margin: 1.5rem auto;
+        }
+        &-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: $txt-body;
+        }
+        &-text {
+            font-size: 0.8rem;
+            color: $txt-gray;
+        }
+    }
+}

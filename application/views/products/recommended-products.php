@@ -1,13 +1,13 @@
 <?php if ($recommendedProducts) { ?>
     <div class="container">
-        <div class="section-head section--head--center">
+        <div class="section-head section-head-center">
             <div class="section__heading">
                 <h2><?php echo Labels::getLabel('LBL_Recommended_Products', $siteLangId); ?>
                 </h2>
             </div>
         </div>
         <div class="js-collection-corner collection-corner product-listing" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
-            <?php 
+            <?php
             $tLeftRibbons = $recommendedProductsRibbons['tLeftRibbons'];
             $tRightRibbons = $recommendedProductsRibbons['tRightRibbons'];
             foreach ($recommendedProducts as $rProduct) {

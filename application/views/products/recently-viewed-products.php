@@ -7,7 +7,7 @@ if ($recentViewedProducts) {
 ?>
     <section class="section bg-gray">
         <div class="container">
-            <div class="section-head section--head--center">
+            <div class="section-head section-head-center">
                 <div class="section__heading">
                     <h2>
                         <?php echo Labels::getLabel('LBL_Recently_Viewed', $siteLangId); ?>
@@ -15,7 +15,7 @@ if ($recentViewedProducts) {
                 </div>
             </div>
             <div class="js-collection-corner collection-corner product-listing" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
-                <?php 
+                <?php
                 $tLeftRibbons = isset($recentlyViewedRibbons['tLeftRibbons']) ? $recentlyViewedRibbons['tLeftRibbons'] : [];
                 $tRightRibbons = isset($recentlyViewedRibbons['tRightRibbons']) ? $recentlyViewedRibbons['tRightRibbons'] : [];
                 foreach ($recentViewedProducts as $rProduct) {

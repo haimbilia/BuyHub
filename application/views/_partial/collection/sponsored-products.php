@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php if (isset($collection['products']) && count($collection['products']) > 0) { ?>
-    <section class="section" >
+    <section class="section">
         <div class="container">
             <div class="section-head">
                 <div class="section__heading">
@@ -11,10 +11,10 @@
                 <?php } */ ?>
             </div>
             <div class="product-listing" data-view="6" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
-                <?php 
+                <?php
                 $tLeftRibbons = $collection['tLeftRibbons'];
                 $tRightRibbons = $collection['tRightRibbons'];
-                foreach ($collection['products'] as $product) { 
+                foreach ($collection['products'] as $product) {
                     $selProdRibbons = [];
                     if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
                         $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
@@ -36,5 +36,4 @@
             </div>
         </div>
     </section>
-    <hr class="m-0">
 <?php }

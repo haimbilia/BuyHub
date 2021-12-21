@@ -46,7 +46,7 @@ class HomeController extends MyAppController
 
                 $collections[$ind]['products'] = $sponsoredProds;
                 $collections[$ind]['totProducts'] = count($sponsoredProds);
-                
+
                 if (false === MOBILE_APP_API_CALL) {
                     $collections[$ind]['tLeftRibbons'] = $tLeftRibbons;
                     $collections[$ind]['tRightRibbons'] = $tRightRibbons;
@@ -159,7 +159,7 @@ class HomeController extends MyAppController
                     }
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageProdLayout2;
                     break;
-                case Collections::TYPE_PRODUCT_LAYOUT3:                    
+                case Collections::TYPE_PRODUCT_LAYOUT3:
                     $homePageProdLayout3 = CacheHelper::get('homePageProdLayout3' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageProdLayout3) {
                         $tpl = new FatTemplate('', '');
@@ -395,7 +395,7 @@ class HomeController extends MyAppController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-        
+
     /**
      * currencies : Used for APPs
      *
@@ -445,7 +445,7 @@ class HomeController extends MyAppController
             }
             $fileName = $langCode . '.json';
             $filePath = Labels::JSON_FILE_DIR_NAME . '/' . Labels::TYPE_APP . '/AP/' . $fileName;
-            
+
             if (false === file_exists(CONF_UPLOADS_PATH . $filePath)) {
                 FatUtility::dieJsonError(Labels::getLabel('MSG_FILE_NOT_FOUND._PLEASE_SYNC_FILE_FROM_ADMIN.', $langId));
             }
@@ -630,9 +630,9 @@ class HomeController extends MyAppController
                                     'urlType' => applicationConstants::URL_TYPE_EXTERNAL
                                 );
                             }
-                
+
                             $banner['banner_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Banner', 'HomePageBannerTopLayout', array($banner['banner_id'], $this->siteLangId, CommonHelper::getAppScreenType())) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                
+
                             $banner['banner_url'] = ($urlTypeData['urlType'] == applicationConstants::URL_TYPE_EXTERNAL ? $banner['banner_url'] : $urlTypeData['recordId']);
                             $banner['banner_url_type'] = $urlTypeData['urlType'];
                             $banner['banner_url_title'] = "";
@@ -809,11 +809,11 @@ class HomeController extends MyAppController
                                     if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
                                         $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
                                     }
-                        
+
                                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                                     }
-                        
+
                                     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
                                     $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                     $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
@@ -821,7 +821,6 @@ class HomeController extends MyAppController
                                     $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
                                     $product['ribbons'] = $selProdRibbons;
                                 }
-                                
                             } else {
                                 $collections[$ind]['categories'][$counterInd]['catData'] = $catData;
                                 $collections[$ind]['categories'][$counterInd]['tLeftRibbons'] = $tLeftRibbons;
@@ -1116,12 +1115,12 @@ class HomeController extends MyAppController
         $srchSlide->joinPromotions($langId, true, true, true);
         $srchSlide->addPromotionTypeCondition();
         $srchSlide->joinUserWallet();
-        $srchSlide->joinActiveUser();      
+        $srchSlide->joinActiveUser();
         $srchSlide->addSkipExpiredPromotionAndSlideCondition();
         $srchSlide->joinBudget();
         $srchSlide->joinAttachedFile();
         $srchSlide->addMultipleFields(array('slide_id', 'slide_record_id', 'slide_type', 'IFNULL(promotion_name, promotion_identifier) as promotion_name,IFNULL(slide_title, slide_identifier) as slide_title', 'slide_target', 'slide_url', 'promotion_id', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'slide_img_updated_on'));
-     
+
         $totalSlidesPageSize = FatApp::getConfig('CONF_TOTAL_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
         $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
 
@@ -1186,7 +1185,7 @@ class HomeController extends MyAppController
         $shopObj->addBudgetCondition();
         $shopObj->addOrder('', 'rand()');
         $shopObj->setPageSize($shopPageSize);
-        
+
         $rs = $shopObj->getResultSet();
         $i = 0;
         while ($shops = $db->fetch($rs)) {
@@ -1226,11 +1225,11 @@ class HomeController extends MyAppController
                     if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
                         $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
                     }
-        
+
                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                     }
-        
+
                     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
                     $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
@@ -1373,7 +1372,7 @@ class HomeController extends MyAppController
         $this->set('image_url', $image_url);
         $this->_template->render();
     }
-    
+
     /**
      * countries : Used for APPs
      *
