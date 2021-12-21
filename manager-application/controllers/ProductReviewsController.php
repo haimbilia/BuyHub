@@ -4,7 +4,7 @@ class ProductReviewsController extends ListingBaseController
 {
     
     protected string $modelClass = 'SelProdReview';
-    protected $pageKey = 'MANAGE_SELLER_PRODUCT_REVIEWS';
+    protected $pageKey = 'MANAGE_PRODUCT_REVIEWS';
 
     public function __construct($action)
     {
