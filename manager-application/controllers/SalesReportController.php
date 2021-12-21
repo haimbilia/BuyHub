@@ -31,6 +31,7 @@ class SalesReportController extends ListingBaseController
         $this->set('orderDate', $orderDate);
         $this->set('actionItemsData', $actionItemsData);
         $this->getListingData(false, $orderDate);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_INVOICE_NUMBER', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
 
