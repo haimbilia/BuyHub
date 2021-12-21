@@ -2,7 +2,6 @@
 
 class EmailTemplatesController extends ListingBaseController
 {
-
     public function __construct($action)
     {
         parent::__construct($action);

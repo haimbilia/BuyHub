@@ -23,7 +23,6 @@ class SmsTemplate extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         $srch = new SearchBase(static::DB_TBL);
-        $srch->addOrder(static::DB_TBL_PREFIX . 'name', 'ASC');
         $srch->addMultipleFields(
             [
                 static::DB_TBL_PREFIX . 'code',

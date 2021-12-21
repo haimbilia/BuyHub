@@ -1680,8 +1680,8 @@ trait CustomCatalogProducts
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }
-        $optionValueId = FatApp::getPostedData('optionValueId', FatUtility::VAR_INT, 0);
-        if ($optionValueId < 1) {
+        $optionValueId = FatApp::getPostedData('optionValueId', FatUtility::VAR_STRING);
+        if (empty($optionValueId)) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
             FatUtility::dieWithError(Message::getHtml());
         }

@@ -1473,3 +1473,5 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 VALUES ('LBL_PPC_PROMOTION_MANAGEMENT', '1', 'PPC Promotion Management', 1),
 ('NAV_PPC_PROMOTION_MANAGEMENT', '1', 'PPC Promotion Management', 1) 
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+UPDATE `tbl_product_specifics` SET `product_warranty_unit` = '0';
