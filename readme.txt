@@ -442,6 +442,7 @@ Bugs :
     => 060753 - Admin UI: Validation message is missing while clicking on the 'Resend set password email' option under the user's section.
     => 060733 - Admin UI: Facing issue while adding the users at the admin's panel.
     => 060897 - Tax category rule addition giving issue.
+    => 060600 - Admin UI: Suggestion to give information, on what basis the search functionality will work under the reports section.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
