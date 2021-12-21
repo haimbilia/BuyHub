@@ -25,23 +25,14 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'user_name':
                 $href = "javascript:void(0)";
-                $onclick = 'redirectUser(' . $row['user_id'] . ')';
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', [
-                    'user' => $row,
+                $onclick = 'redirectToShop(' . $row['shop_id'] . ')';
+                $str = $this->includeTemplate('_partial/shop/shop-info-card.php', [
+                    'shop' => $row,
                     'siteLangId' => $siteLangId,
                     'href' => $href,
                     'onclick' => $onclick,
                 ], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
-                break;
-            case 'shop_name':
-                if (!empty($row['shop_name'])) {
-                    if ($canViewShops) {
-                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectToShop(' . $row['shop_id'] . ')'), $row['shop_name'], true);
-                    } else {
-                        $td->appendElement('plaintext', $tdAttr, $row['shop_name'], true);
-                    }
-                }
                 break;
             case 'promotion_type':
                 $td->appendElement('plaintext', $tdAttr, $typeArr[$row[$key]], true);

@@ -57,7 +57,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($canEdit) {
                     $data['otherButtons'][] = [
                         'attr' => [
-                            'href' => UrlHelper::generateUrl('Products', 'form', array($row['preq_id'])),
+                            'href' => UrlHelper::generateUrl('CustomProducts', 'form', array($row['preq_id'])),
                             'title' => Labels::getLabel('LBL_EDIT', $siteLangId)
                         ],
                         'label' => '<svg class="svg" width="18" height="18">
@@ -66,7 +66,7 @@ foreach ($arrListing as $sn => $row) {
                             </use>
                         </svg>'
                     ];
-                    $data['deleteButton'] = [];
+                    $data['deleteButton'] = false;
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);

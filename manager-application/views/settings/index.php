@@ -319,6 +319,22 @@
                                 </div>
                             </a>
                         <?php } ?>
+                        <?php if ($objPrivilege->canViewSmsTemplate(AdminAuthentication::getLoggedAdminId(), true) && SmsArchive::canSendSms()) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('SmsTemplates'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#sms-notification">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SMS_TEMPLATES', $siteLangId); ?></h6>
+                                    <span>Can be used while sending sms</span>
+                                </div>
+                            </a>
+                        <?php } ?>
 
                     </div>
                 <?php } ?>

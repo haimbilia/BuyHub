@@ -2,149 +2,112 @@
 
 class SmsTemplatesController extends ListingBaseController
 {
-    private $stplCode;
+    protected string $pageKey = 'MANAGE_SMS_TEMPLATES';
 
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewSmsTemplate();
-        $this->admin_id = AdminAuthentication::getLoggedAdminId();
+
         if (false === SmsArchive::canSendSms()) {
-            $message = Labels::getLabel("MSG_NO_SMS_PLUGIN_CONFIGURED", $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
+            $msg = Labels::getLabel("MSG_NO_SMS_PLUGIN_CONFIGURED", $this->siteLangId);
+            LibHelper::exitWithError($msg, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
     }
 
     public function index()
     {
-        $frmSearch = $this->getSearchForm();
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtn'] = false;
+        $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['statusButtons'] = true;
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
-        $this->set("canEdit", $this->objPrivilege->canEditSmsTemplate($this->admin_id, true));
-        $this->_template->addJs('js/jscolor.js');
-        $this->_template->render();
-    }
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TEMPLATE_NAME', $this->siteLangId));
+        $this->getListingData();
 
-    public function getSearchForm()
-    {
-        $frm = new Form('frmStplsSearch');
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
-
-    private function getTemplateForm($stplCode = '', $lang_id = 0)
-    {
-        $this->objPrivilege->canViewSmsTemplate();
-        $frm = new Form('frmEtplLang');
-        $frm->addHiddenField('', 'stpl_code', $stplCode);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Name', $this->siteLangId), 'stpl_name');
-        $fld = $frm->addTextArea(Labels::getLabel('LBL_Body', $this->siteLangId), 'stpl_body');
-        $fld->requirements()->setRequired(true);
-        $frm->addHtml(Labels::getLabel('LBL_Replacement_Caption', $this->siteLangId), 'replacement_caption', '<h3>' . Labels::getLabel('LBL_Replacement_Vars', $this->siteLangId) . '</h3>');
-        $frm->addHtml(Labels::getLabel('LBL_Replacement_Vars', $this->siteLangId), 'stpl_replacements', '');
-
-        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-
-        if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
-
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SAVE', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_discard", Labels::getLabel('LBL_DISCARD', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
+        $this->_template->addJs(['sms-templates/page-js/index.js']);
+        $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
     public function search()
     {
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-        $searchForm = $this->getSearchForm();
-        $data = FatApp::getPostedData();
-        $page = (empty($data['page']) || 1 > $data['page']) ? 1 : $data['page'];
-        $post = $searchForm->getFormDataFromArray($data);
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'sms-templates/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    private function getListingData()
+    {
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = current($allowedKeysForSorting);
+        }
+
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+
+        $srchFrm = $this->getSearchForm($fields);
+
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = SmsTemplate::getSearchObject($this->siteLangId);
-        $srch->addOrder(SmsTemplate::DB_TBL_PREFIX . 'code', 'ASC');
         $srch->addGroupBy(SmsTemplate::DB_TBL_PREFIX . 'code');
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('stpl_code', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('stpl_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
+
+        $srch->addOrder($sortBy, $sortOrder);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+
         $rs = $srch->getResultSet();
-        
-        if (!$rs) {
-            Message::addErrorMessage($srch->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
         $records = FatApp::getDb()->fetchAll($rs);
+
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
+        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        $this->set('langId', $this->siteLangId);
-        $this->set("canEdit", $this->objPrivilege->canEditSmsTemplate($this->admin_id, true));
-        $this->_template->render(false, false);
-    }
 
-    public function setup()
-    {
-        $this->objPrivilege->canEditSmsTemplate();
-        $data = FatApp::getPostedData();
-        $lang_id = $data['lang_id'];
-        $frm = $this->getTemplateForm($data['stpl_code'], $lang_id);
-        $post = $frm->getFormDataFromArray($data);
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $stplCode = $post['stpl_code'];
-
-        $data = [
-            'stpl_lang_id' => $lang_id,
-            'stpl_code' => $stplCode,
-            'stpl_name' => $post['stpl_name'],
-            'stpl_body' => $post['stpl_body'],
-        ];
-
-        $stplCode = $data['stpl_code'];
-        $stplObj = new SmsTemplate($stplCode);
-
-        if (!$stplObj->addUpdateData($data)) {
-            Message::addErrorMessage($stplObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(SmsTemplate::DB_TBL);
-            if (false === $updateLangDataobj->updateTranslatedData($stplCode)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-        }
-
-        $this->set('msg', $this->str_setup_successful);
-        $this->_template->render(false, false, 'json-success.php');
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditSmsTemplate($this->admin_id, true));
     }
 
     public function editTemplate($stplCode, $lang_id = 0, $autoFillLangData = 0)
     {
         $lang_id = FatUtility::int($lang_id);
-        
+
         if (empty($stplCode) || 1 > $lang_id) {
             FatUtility::dieJsonError($this->str_invalid_request);
         }
@@ -154,8 +117,7 @@ class SmsTemplatesController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(SmsTemplate::DB_TBL);
             $translatedData = $updateLangDataobj->getTranslatedData($stplCode, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $tempData = current($translatedData);
         } else {
@@ -175,31 +137,82 @@ class SmsTemplatesController extends ListingBaseController
         $this->_template->render(false, false);
     }
 
-    private function validateStatusRequest()
+    private function getTemplateForm($stplCode, $langId)
     {
-        $this->objPrivilege->canEditSmsTemplate();
-        $this->stplCode = FatApp::getPostedData('stplCode', FatUtility::VAR_STRING, '');
-        if (empty($this->stplCode)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+        $this->objPrivilege->canViewSmsTemplate();
+        $frm = new Form('frmEtplLang');
+        $frm->addHiddenField('', 'stpl_code', $stplCode);
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'stpl_name');
+        $fld = $frm->addTextArea(Labels::getLabel('FRM_BODY', $langId), 'stpl_body');
+        $fld->requirements()->setRequired(true);
+        $frm->addHtml(Labels::getLabel('FRM_REPLACEMENT_CAPTION', $langId), 'replacement_caption', '<h3>' . Labels::getLabel('FRM_REPLACEMENT_VARS', $langId) . '</h3>');
+        $frm->addHtml(Labels::getLabel('FRM_REPLACEMENT_VARS', $langId), 'stpl_replacements', '');
+
+        $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+
+        if (!empty($translatorSubscriptionKey) && $langId == $siteLangId) {
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-    }
-    public function makeActive()
-    {
-        $this->validateStatusRequest();
-        $obj = new SmsTemplate($this->stplCode);
-        if (false == $obj->makeActive()) {
-            FatUtility::dieJsonError($obj->getError());
-        }
-        FatUtility::dieJsonSuccess($this->str_update_record);
+
+        return $frm;
     }
 
-    public function makeInActive()
+    public function setup()
     {
-        $this->validateStatusRequest();
-        $obj = new SmsTemplate($this->stplCode);
-        if (false == $obj->makeInActive()) {
-            FatUtility::dieJsonError($obj->getError());
+        $this->objPrivilege->canEditSmsTemplate();
+        $data = FatApp::getPostedData();
+        $lang_id = $data['lang_id'];
+        $frm = $this->getTemplateForm($data['stpl_code'], $lang_id);
+        $post = $frm->getFormDataFromArray($data);
+        if (false === $post) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+
+        $stplCode = $post['stpl_code'];
+
+        $data = [
+            'stpl_lang_id' => $lang_id,
+            'stpl_code' => $stplCode,
+            'stpl_name' => $post['stpl_name'],
+            'stpl_body' => $post['stpl_body'],
+        ];
+
+        $stplCode = $data['stpl_code'];
+        $stplObj = new SmsTemplate($stplCode);
+
+        if (!$stplObj->addUpdateData($data)) {
+            LibHelper::exitWithError($stplObj->getError(), true);
+        }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(SmsTemplate::DB_TBL);
+            if (false === $updateLangDataobj->updateTranslatedData($stplCode)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+        }
+
+        $this->set('msg', $this->str_setup_successful);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function updateStatus()
+    {
+        $this->objPrivilege->canEditSmsTemplate();
+
+        $stplCode = FatApp::getPostedData('recordId', FatUtility::VAR_STRING, '');
+        if (empty($stplCode)) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $this->changeTplStatus($stplCode, $status);
         FatUtility::dieJsonSuccess($this->str_update_record);
     }
 
@@ -214,17 +227,79 @@ class SmsTemplatesController extends ListingBaseController
         }
 
         foreach ($stplCodesArr as $stplCode) {
-            $obj = new SmsTemplate($stplCode);
-            switch ($status) {
-                case applicationConstants::ACTIVE:
-                    $obj->makeActive();
-                    break;
-
-                case applicationConstants::INACTIVE:
-                    $obj->makeInActive();
-                    break;
-            }
+            $this->changeTplStatus($stplCode, $status);
         }
         FatUtility::dieJsonSuccess($this->str_update_record);
+    }
+
+    private function changeTplStatus(string $stplCode, int $status)
+    {
+        if (empty($stplCode) || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $obj = new SmsTemplate($stplCode);
+        if (applicationConstants::ACTIVE == $status) {
+            if (false == $obj->makeActive()) {
+                FatUtility::dieJsonError($obj->getError());
+            }
+        } else if (applicationConstants::INACTIVE == $status) {
+            if (false == $obj->makeInActive()) {
+                FatUtility::dieJsonError($obj->getError());
+            }
+        }
+    }
+
+    protected function getFormColumns(): array
+    {
+        $tblHeadingCols = CacheHelper::get('smsTemplatesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols);
+        }
+
+        $arr = [
+            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'stpl_name' => Labels::getLabel('LBL_name', $this->siteLangId),
+            'stpl_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+
+        if (count(Language::getAllNames()) < 2) {
+            unset($arr['language_name']);
+        }
+
+        CacheHelper::create('smsTemplatesTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array
+    {
+        return [
+            'select_all',
+            'listSerial',
+            'stpl_name',
+            'stpl_status',
+            'action',
+        ];
+    }
+
+    protected function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => $pageTitle]
+                ];
+        }
+        return $this->nodes;
     }
 }
