@@ -1120,6 +1120,7 @@ trait CustomProducts
         }
         unset($post['tag_id']);
         $post['tag_user_id'] = $this->userParentId;
+        $post['tag_lang_id'] = $this->siteLangId;        
         $record = new Tag($tag_id);
         $record->assignValues($post);
 
@@ -1228,7 +1229,7 @@ trait CustomProducts
 
         $frm = new Form('frmTag', array('id' => 'frmTag'));
         $frm->addHiddenField('', 'tag_id', $tag_id);
-        $frm->addRequiredField(Labels::getLabel("LBL_Tag_Identifier", $this->siteLangId), 'tag_identifier');
+        $frm->addRequiredField(Labels::getLabel("LBL_Tag_Name", $this->siteLangId), 'tag_name');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_Save_Changes", $this->siteLangId));
         return $frm;
     }
