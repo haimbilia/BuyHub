@@ -31,7 +31,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionNumber($row[$key]) );
             break;
             case 'utxn_date':
-                $td->appendElement('html', $tdAttr,HtmlHelper::formatDateTime($row[$key]));
+                $td->appendElement('html', $tdAttr,HtmlHelper::formatDateTime($row[$key]), true);
             break;
             case 'utxn_credit':
             case 'utxn_debit':
