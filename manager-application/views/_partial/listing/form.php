@@ -1,9 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $recordId = $recordId ?? 0;
+$colWidthValuesDefault = $colWidthValuesDefault ?? 12;
 $formClassExtra = $formClassExtra ?? '';
 $displayFooterButtons = $displayFooterButtons ?? true;
 
-HtmlHelper::formatFormFields($frm);
+HtmlHelper::formatFormFields($frm, $colWidthValuesDefault);
 if (!$frm->getFormTagAttribute('data-onclear')) {
     $frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
 }
