@@ -3,6 +3,8 @@
 class AdminUsersController extends ListingBaseController
 {
     protected string $modelClass = 'AdminUsers';
+    protected $pageKey = 'MANAGE_ADMIN_USERS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -155,7 +157,7 @@ class AdminUsersController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_ADMIN_SUB_USERS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
