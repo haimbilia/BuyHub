@@ -3,9 +3,9 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 $uploadedTime = AttachedFile::setTimeParam($shop['shop_updated_on']);
 //$prodUrl = UrlHelper::generateUrl('Products', 'view', array($shop['selprod_id']), CONF_WEBROOT_FRONTEND);
 $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, 'THUMB'), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-
+$onclick = !empty($onclick) ? "onclick = " . $onclick : "onclick = 'redirectToShop(" . $shop['shop_id'] . ")'";
 ?>
-<a href="javascript:void(0)" class="product-profile" onclick="redirectUser(<?php echo $shop['shop_user_id']; ?>)">
+<a href="javascript:void(0)" class="product-profile" <?php echo $onclick; ?>>
     <div class="product-profile__thumbnail" data-ratio="1:1">
         <img data-aspect-ratio="1:1" src="<?php echo $imgSrc; ?>">
     </div>
