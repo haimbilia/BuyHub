@@ -176,32 +176,32 @@ class CountriesController extends ListingBaseController
         $frm->addHiddenField('', 'country_id');
 
         $zoneArr = Zone::getAllZones($this->siteLangId, true);
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_ZONE', $this->siteLangId), 'country_zone_id', $zoneArr, '', [], Labels::getLabel('LBL_SELECT', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_ZONE', $this->siteLangId), 'country_zone_id', $zoneArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirements()->setRequired();
 
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_NAME', $this->siteLangId), 'country_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_COUNTRY_NAME', $this->siteLangId), 'country_name');
 
         $currencyArr = Currency::getCurrencyNameWithCode($this->siteLangId);
         $currencyId = FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
         $currencyData = Currency::getAttributesById($currencyId, array('currency_code'));
-        $defaultCurrentySelect = Labels::getLabel('LBL_DEFAULT', $this->siteLangId) . '(' . $currencyData['currency_code'] . ')';
-        $frm->addSelectBox(Labels::getLabel('LBL_CURRENCY', $this->siteLangId), 'country_currency_id', $currencyArr, '', [], $defaultCurrentySelect);
+        $defaultCurrentySelect = Labels::getLabel('FRM_DEFAULT', $this->siteLangId) . '(' . $currencyData['currency_code'] . ')';
+        $frm->addSelectBox(Labels::getLabel('FRM_CURRENCY', $this->siteLangId), 'country_currency_id', $currencyArr, '', [], $defaultCurrentySelect);
 
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_CODE', $this->siteLangId), 'country_code');
-        $frm->addRequiredField(Labels::getLabel('LBL_COUNTRY_ALPHA3_CODE', $this->siteLangId), 'country_code_alpha3');
+        $frm->addRequiredField(Labels::getLabel('FRM_COUNTRY_CODE', $this->siteLangId), 'country_code');
+        $frm->addRequiredField(Labels::getLabel('FRM_COUNTRY_ALPHA3_CODE', $this->siteLangId), 'country_code_alpha3');
 
         $languageArr = Language::getDropDownList();
         if (1 < count($languageArr)) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'country_language_id', $languageArr, '', array(), '');
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'country_language_id', $languageArr, '', array(), '');
         } else {
             $frm->addHiddenField('', 'country_language_id', FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
         }
 
-        $frm->addSelectBox(Labels::getLabel('LBL_STATUS', $this->siteLangId), 'country_active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'country_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;

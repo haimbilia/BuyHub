@@ -20,7 +20,7 @@ trait OrdersPackage
                 $this->viewPageKey = 'SUBSCRIPTION_ORDER_VIEW';
                 $this->tblHeadingKey = 'subscriptionOrdersTblHeadingCols';
                 break;
-            
+
             default:
                 Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER_TYPE', $this->siteLangId));
                 CommonHelper::redirectUserReferer();
@@ -211,18 +211,18 @@ trait OrdersPackage
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'order_date_added', applicationConstants::SORT_DESC);
         }
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
 
         $frm->addSelectBox(Labels::getLabel('FRM_BUYER', $this->siteLangId), 'user_id', []);
 
         $frm->addSelectBox(Labels::getLabel('FRM_DELETED_ORDERS', $this->siteLangId), 'order_deleted', applicationConstants::getYesNoArr($this->siteLangId));
 
-        $frm->addSelectBox(Labels::getLabel('FRM_Payment_Status', $this->siteLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_PAYMENT_STATUS', $this->siteLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($this->siteLangId));
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_Date_From', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_Date_To', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        
+        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+
         $str = Labels::getLabel('FRM_ORDER_FROM_[{CURRENCY-SYMBOL}]', $this->siteLangId);
         $str = CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => $currencySymbol]);
         $frm->addTextBox('', 'price_from', '', array('placeholder' => $str));
@@ -232,7 +232,7 @@ trait OrdersPackage
         $frm->addTextBox('', 'price_to', '', array('placeholder' => $str));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 

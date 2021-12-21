@@ -7,9 +7,11 @@ $fld = $frm->getField('orderstatus_type');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('orderstatus_is_digital');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
 
 $fld = $frm->getField('orderstatus_is_active');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
 
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); 

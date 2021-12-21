@@ -201,21 +201,22 @@ class StatesController extends ListingBaseController
     {
         $frm = new Form('frmState');
         $frm->addHiddenField('', 'state_id');
-        $frm->addRequiredField(Labels::getLabel('LBL_State_Name', $this->siteLangId), 'state_name');
-        //$frm->addRequiredField(Labels::getLabel('LBL_State_Identifier', $this->siteLangId), 'state_identifier');
-        $frm->addRequiredField(Labels::getLabel('LBL_State_Code', $this->siteLangId), 'state_code');
+        $frm->addRequiredField(Labels::getLabel('FRM_STATE_NAME', $this->siteLangId), 'state_name');
+        //$frm->addRequiredField(Labels::getLabel('FRM_STATE_IDENTIFIER', $this->siteLangId), 'state_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_STATE_CODE', $this->siteLangId), 'state_code');
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId, true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Country', $this->siteLangId), 'state_country_id', $countriesArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'state_country_id', $countriesArr, '', array(), '');
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'state_active', $activeInactiveArr, '', array(), '');
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'state_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        HtmlHelper::configureSwitchForCheckbox($fld);
+        $fld->developerTags['noCaptionTag'] = true;
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
     }
@@ -226,8 +227,8 @@ class StatesController extends ListingBaseController
         $this->objPrivilege->canViewStates();
         $frm = new Form('frmStateLang');
         $frm->addHiddenField('', 'state_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_State_Name', $langId), 'state_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_STATE_NAME', $langId), 'state_name');
         return $frm;
     }
 
