@@ -72,8 +72,10 @@ class ConfigurationsController extends ListingBaseController
             $this->set('languages', Language::getAllNames());
         }
 
-        $tabs = Configurations::getTabsArr();
+        $tabs = Configurations::getTabsArr($langId);
+        $tabsMsgArr = Configurations::getTabsMsgArr($langId);
         $this->set('tabs', $tabs);
+        $this->set('tabsMsgArr', $tabsMsgArr);
         $this->set('dispLangTab', $dispLangTab);
         $this->set('lang_id', $langId);
         $this->set('formLayout', Language::getLayoutDirection($langId));
