@@ -1429,7 +1429,7 @@ trait CustomProducts
         }
         if (!User::canAddCustomProduct()) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
         }
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));

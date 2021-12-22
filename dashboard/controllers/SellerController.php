@@ -1129,6 +1129,11 @@ class SellerController extends SellerBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
 
+        if (!User::canAddCustomProduct()) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
+        }
+
         $this->_template->addJs('js/tagify.min.js');
         $this->_template->addJs('js/tagify.polyfills.min.js');
 
@@ -1741,7 +1746,7 @@ class SellerController extends SellerBaseController
     {
         if (!FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            CommonHelper::redirectUserReferer();
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
         }
         $this->userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId());
         $frmSearch = $this->getTaxCatSearchForm($this->siteLangId);
