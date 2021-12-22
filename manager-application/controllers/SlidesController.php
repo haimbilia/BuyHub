@@ -119,6 +119,7 @@ class SlidesController extends ListingBaseController
 
     public function form()
     {
+        $this->checkEditPrivilege(true);
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         $langId = $this->siteLangId;
@@ -148,7 +149,7 @@ class SlidesController extends ListingBaseController
 
         $slideImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, $universalImage);
         $this->set('image', $slideImage);
-        $this->checkEditPrivilege(true);
+        $this->set('formTitle', Labels::getLabel('LBL_SLIDE_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -242,6 +243,7 @@ class SlidesController extends ListingBaseController
 
     public function langForm($autoFillLangData = 0)
     {
+        $this->checkEditPrivilege(true);
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
@@ -278,22 +280,8 @@ class SlidesController extends ListingBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->checkEditPrivilege(true);
-        $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $langId);
-        $this->set('formTitle', $formTitle);
-        $otherButtons = [
-            [
-                'attr' => [
-                    'href' => 'javascript:void(0)',
-                    'onclick' => 'mediaForm(' . $recordId . ')',
-                    'title' => Labels::getLabel('LBL_MEDIA', $langId),
-                ],
-                'label' => Labels::getLabel('LBL_MEDIA', $langId),
-                'isActive' => false
-            ]
-        ];
-        $this->set('otherButtons', $otherButtons);
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
+        $this->set('formTitle', Labels::getLabel('LBL_SLIDE_SETUP', $this->siteLangId));
+        $this->_template->render(false, false);
     }
 
     private function getLangForm($langId = 0)
@@ -358,6 +346,15 @@ class SlidesController extends ListingBaseController
         $this->set('slideId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    protected function isMediaUploaded($recordId)
+    {
+        $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0);
+        if (false !== $attachment && 0 < $attachment['afile_id']) {
+            return true;
+        }
+        return false;
     }
 
     public function images()
