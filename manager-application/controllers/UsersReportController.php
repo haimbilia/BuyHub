@@ -31,6 +31,7 @@ class UsersReportController extends ListingBaseController
         $this->set('frmSearch', $frmSearch);
         $this->set('actionItemsData', $actionItemsData);
         $this->set('userType', $userType);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
         $this->getListingData($userType, false);
         $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }

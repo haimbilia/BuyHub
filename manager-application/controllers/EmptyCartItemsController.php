@@ -131,7 +131,7 @@ class EmptyCartItemsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_EMPTY_CART_ITEMS_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->_template->render(false, false);
     }
 
     public function setup()
@@ -266,16 +266,17 @@ class EmptyCartItemsController extends ListingBaseController
         $frm = new Form('frmEmptyCartItem');
         $frm->addHiddenField('', 'emptycartitem_id');
         //$frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_Identifier', $this->siteLangId), 'emptycartitem_identifier');
-        $frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_Title', $this->siteLangId), 'emptycartitem_title');
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_URL', $this->siteLangId), 'emptycartitem_url');
-        $fld->htmlAfterField = '<small>' . Labels::getLabel('LBL_Prefix_with_{SITEROOT},_if_needs_to_generate_system\'s_url.', $this->siteLangId) . '</small>';
-        $frm->addSelectBox(Labels::getLabel('LBL_Open_Link_in_New_Tab', $this->siteLangId), 'emptycartitem_url_is_newtab', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::NO, array(), '');
-        $frm->addIntegerField(Labels::getLabel('LBL_Display_Order', $this->siteLangId), 'emptycartitem_display_order');
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'emptycartitem_active', applicationConstants::getActiveInactiveArr($this->siteLangId), applicationConstants::ACTIVE, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_EMPTY_CART_ITEM_TITLE', $this->siteLangId), 'emptycartitem_title');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_EMPTY_CART_ITEM_URL', $this->siteLangId), 'emptycartitem_url');
+        $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_PREFIX_WITH_{SITEROOT},_if_needs_to_generate_system\'s_url.', $this->siteLangId) . '</small>';
+        $frm->addSelectBox(Labels::getLabel('FRM_OPEN_LINK_IN_NEW_TAB', $this->siteLangId), 'emptycartitem_url_is_newtab', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::NO, array(), '');
+        $frm->addIntegerField(Labels::getLabel('FRM_DISPLAY_ORDER', $this->siteLangId), 'emptycartitem_display_order');
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'emptycartitem_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);        
         $languageArr = Language::getDropDownList();
+
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -285,8 +286,8 @@ class EmptyCartItemsController extends ListingBaseController
     {
         $frm = new Form('frmEmptyCartItemLang');
         $frm->addHiddenField('', 'emptycartitem_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Empty_Cart_Item_Title', $langId), 'emptycartitem_title');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_EMPTY_CART_ITEM_TITLE', $langId), 'emptycartitem_title');
         return $frm;
     }
 

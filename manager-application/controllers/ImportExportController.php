@@ -488,11 +488,11 @@ class ImportExportController extends ListingBaseController
                 $this->objPrivilege->canViewZones();
                 break;
             case Importexport::TYPE_COUNTRY:
-                $formTitle = Labels::getLabel('LBL_EXPORT_COUNTRY', $this->siteLangId);
+                $formTitle = Labels::getLabel('LBL_EXPORT_COUNTRIES', $this->siteLangId);
                 $this->objPrivilege->canViewCountries();
                 break;
             case Importexport::TYPE_STATE:
-                $formTitle = Labels::getLabel('LBL_EXPORT_STATE', $this->siteLangId);
+                $formTitle = Labels::getLabel('LBL_EXPORT_STATES', $this->siteLangId);
                 $this->objPrivilege->canViewStates();
                 break;
             case Importexport::TYPE_POLICY_POINTS:
@@ -504,7 +504,7 @@ class ImportExportController extends ListingBaseController
                 $this->objPrivilege->canViewUsers();
                 break;
             case Importexport::TYPE_TAX_CATEGORY:
-                $formTitle = Labels::getLabel('LBL_EXPORT_TAX_CATEGORY', $this->siteLangId);
+                $formTitle = Labels::getLabel('LBL_EXPORT_TAX_CATEGORIES', $this->siteLangId);
                 $this->objPrivilege->canViewTax();
                 break;
             default:

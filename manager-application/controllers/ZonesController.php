@@ -127,7 +127,7 @@ class ZonesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_ZONE_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->_template->render(false, false);
     }
 
     public function setup()
@@ -160,15 +160,14 @@ class ZonesController extends ListingBaseController
         $frm = new Form('frmZone');
         $frm->addHiddenField('', 'zone_id');
         //$frm->addRequiredField(Labels::getLabel('LBL_Zone_Identifier', $this->siteLangId), 'zone_identifier');
-        $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $this->siteLangId), 'zone_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_ZONE_NAME', $this->siteLangId), 'zone_name');
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'zone_active', $activeInactiveArr, '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'zone_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
 
         $languageArr = Language::getAllNames(true);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
@@ -179,8 +178,8 @@ class ZonesController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmZoneLang');
         $frm->addHiddenField('', 'zone_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Zone_Name', $langId), 'zone_name');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_ZONE_NAME', $langId), 'zone_name');
         return $frm;
     }
 

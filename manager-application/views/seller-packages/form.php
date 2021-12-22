@@ -12,8 +12,12 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('spackage_images_per_product');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-$fld = $frm->getField('spackage_active');
+$fld = $frm->getField('spackage_type');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+$fld = $frm->getField('spackage_active');
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
 
 $fld = $frm->getField('spackage_display_order');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];

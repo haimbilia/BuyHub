@@ -175,12 +175,12 @@ class OrderReturnReasonsController extends ListingBaseController
         $frm = new Form('frmOrderReturnReason');
         $frm->addHiddenField('', 'orreason_id');
         //$frm->addRequiredField(Labels::getLabel('LBL_Reason_Identifier', $this->siteLangId), 'orreason_identifier');
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $this->siteLangId), 'orreason_title');
+        $frm->addRequiredField(Labels::getLabel('FRM_REASON_TITLE', $this->siteLangId), 'orreason_title');
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
     }
@@ -190,8 +190,8 @@ class OrderReturnReasonsController extends ListingBaseController
         $langId = 1 > $langId ? $this->siteLangId : $langId;
         $frm = new Form('frmOrderReturnReasonLang');
         $frm->addHiddenField('', 'orreason_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Reason_Title', $langId), 'orreason_title');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_REASON_TITLE', $langId), 'orreason_title');
         return $frm;
     }
 

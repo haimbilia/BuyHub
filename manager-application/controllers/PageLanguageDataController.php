@@ -3,7 +3,7 @@ class PageLanguageDataController extends ListingBaseController
 {
     protected $modelClass = 'PageLanguageData';
     protected $pageKey = 'MANAGE_PAGES_LANGUAGE_DATA_BLOCK';
-   
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -38,7 +38,7 @@ class PageLanguageDataController extends ListingBaseController
         $actionItemsData['newRecordBtn'] = false;
         $actionItemsData['performBulkAction'] = false;
         $actionItemsData['deleteButton'] = false;
-       
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
@@ -65,7 +65,7 @@ class PageLanguageDataController extends ListingBaseController
         $this->set('pageData', $pageData);
         $jsonData = [
             'html' => $this->_template->render(false, false, 'page-language-data/display-alert.php', true, true)
-        ];        
+        ];
 
         LibHelper::exitWithSuccess($jsonData, true);
     }
@@ -110,7 +110,7 @@ class PageLanguageDataController extends ListingBaseController
         $srch->addGroupBy(PageLanguageData::DB_TBL_PREFIX . 'key');
 
         $srch->setPageNumber($page);
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageSize($pageSize);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
@@ -131,7 +131,7 @@ class PageLanguageDataController extends ListingBaseController
     {
         $this->checkEditPrivilege();
         $langId = FatUtility::int($langId);
-        
+
         if ($pLangKey == '' || $langId == 0) {
             LibHelper::exitWithError($this->str_invalid_request, true, false, true);
         }
@@ -163,7 +163,7 @@ class PageLanguageDataController extends ListingBaseController
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('langFrm', $langFrm);
-       
+
         $this->_template->render(false, false);
     }
 
@@ -180,14 +180,15 @@ class PageLanguageDataController extends ListingBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $this->siteLangId), 'plang_title');
-        $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_SUMMARY', $this->siteLangId), 'plang_summary');
+        $frm->addTextArea(Labels::getLabel('FRM_PAGE_SUMMARY', $this->siteLangId), 'plang_summary');
         $frm->addTextArea(Labels::getLabel('FRM_WARNING_MESSAGE', $this->siteLangId), 'plang_warring_msg');
         $frm->addTextArea(Labels::getLabel('FRM_RECOMMENDATIONS', $this->siteLangId), 'plang_recommendations');
-        $frm->addHtml(Labels::getLabel('FRM_REPLACEMENT_VARS', $this->siteLangId), 'plang_replacements','');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_HELP_TEXT', $this->siteLangId), 'plang_helping_text');
+        $frm->addHtml(Labels::getLabel('FRM_REPLACEMENT_VARS', $this->siteLangId), 'plang_replacements', '');
         return $frm;
     }
 
-    public function langSetup() 
+    public function langSetup()
     {
         $this->checkEditPrivilege();
         $data = FatApp::getPostedData();
@@ -211,6 +212,7 @@ class PageLanguageDataController extends ListingBaseController
             'plang_summary' => $post['plang_summary'],
             'plang_warring_msg' => $post['plang_warring_msg'],
             'plang_replacements' => $langData['plang_replacements'],
+            'plang_helping_text' => $post['plang_helping_text'],
             'plang_recommendations' => $post['plang_recommendations']
         ];
 
@@ -225,7 +227,7 @@ class PageLanguageDataController extends ListingBaseController
     }
 
 
-     /**
+    /**
      * Undocumented function
      *
      * @return array
@@ -271,5 +273,23 @@ class PageLanguageDataController extends ListingBaseController
     protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, [], Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => $pageTitle]
+                ];
+                break;
+            default:
+                parent::getBreadcrumbNodes($action);
+                break;
+        }
+        return $this->nodes;
     }
 }

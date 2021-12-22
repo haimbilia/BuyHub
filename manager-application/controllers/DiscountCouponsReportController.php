@@ -31,6 +31,7 @@ class DiscountCouponsReportController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('formColumns', $formColumns);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_COUPON_CODE', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }

@@ -8,7 +8,7 @@ $frmSearch->setFormTagAttribute('class', 'form form-search');
 $keyWordFld = $frmSearch->getField('keyword');
 $keyWordFld->addFieldtagAttribute('class', 'form-control');
 $keyWordFld->addFieldtagAttribute('autocomplete', 'off');
-$keyWordFld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SEARCH', $siteLangId));
+$keyWordFld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_BY_SHOP_NAME_OR_OWNER_NAME_OR_OWNER_EMAIL', $siteLangId));
 
 $shopFld = $frmSearch->getField('shop_id');
 $shopFld->addFieldtagAttribute('id', 'shop_id');

@@ -29,6 +29,7 @@ class PreferredPaymentMethodController extends ListingBaseController
         $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PAYMENT_METHOD_OR_BILLING_ADDRESS', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
