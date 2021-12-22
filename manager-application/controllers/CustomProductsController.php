@@ -221,7 +221,7 @@ class CustomProductsController extends ListingBaseController
             $fld->options = [0 => Labels::getLabel('FRM_ADMIN', $langId)];
         }        
 
-        // commonHelper::printArray($productData,true);
+        commonHelper::printArray($productData,true);
         
         $tagData = [];
         /// to save as array...............................
@@ -237,11 +237,13 @@ class CustomProductsController extends ListingBaseController
         }
         $productData['product_tags'] = json_encode($tagData);
         if (1 < $productData['preq_brand_id']) {
+            $productData['product_brand_id'] = $productData['preq_brand_id'];
             $brandData = Brand::getAttributesByLangId($langId, $productData['preq_brand_id'], [Brand::tblFld('name'), Brand::tblFld('identifier')], true, applicationConstants::YES, applicationConstants::NO);
             if (false != $brandData) {
-                $fld = $frm->getField('product_brand_id');
+                $fld = $frm->getField('product_brand_id');                
                 $fld->options = [$productData['preq_brand_id'] => $brandData[Brand::tblFld('name')] ?? $brandData[Brand::tblFld('identifier')]];
             }
+            unset($productData['preq_brand_id']);
         }   
         
         if (!empty($productData['preq_prodcat_id'])) {        
@@ -251,6 +253,7 @@ class CustomProductsController extends ListingBaseController
                 $fld = $frm->getField('ptc_prodcat_id');
                 $fld->options = [$productData['ptc_prodcat_id'] => $catData[ProductCategory::tblFld('name')] ?? $catData[ProductCategory::tblFld('identifier')]];
             }
+            unset($productData['preq_prodcat_id']);
         }
 
         if (Tax::getActivatedServiceId()) {
@@ -290,6 +293,8 @@ class CustomProductsController extends ListingBaseController
                 $option['optionValues'] = product::getOptionValues($option['option_id'], $langId , ($productData[0]['product_option_values'] ?? []) );
             }
         }
+
+        $productData['upc_type'] = applicationConstants::YES;
          
         $this->set("productData", [
             'product_type' => $productData['product_type'],

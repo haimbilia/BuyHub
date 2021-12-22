@@ -911,20 +911,7 @@ class ProductsController extends ListingBaseController
         }
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    protected function markAsDeleted($productId)
-    {
-        $productId = FatUtility::int($productId);
-        if (1 > $productId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
-        }
-        $productObj = new Product($productId);
-
-        if (!$productObj->deleteProduct()) {
-            LibHelper::exitWithError($productObj->getError());
-        }
-    }
+    }    
 
     public function imageForm(int $productId = 0, $tempProductId = 0)
     {
