@@ -7,14 +7,6 @@
         });
     };
 
-    editRecord = function (recordId) {
-        $.ykmodal(fcom.getLoader(), true);
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), "recordId=" + recordId, function (t) {
-            $.ykmodal(t, true);
-            fcom.removeLoader();
-        });
-    };
-
     callPageTypePopulate = function (el) {
         var nlink_type = $(el).val();
         if (nlink_type == 0) {
