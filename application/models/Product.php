@@ -82,9 +82,9 @@ class Product extends MyAppModel
     public const FILTER_TYPE_PRICE = 5;
     /* For API */
 
-    public const WARRANTY_TYPE_DAY = 1;
-    public const WARRANTY_TYPE_MONTH = 2;
-    public const WARRANTY_TYPE_YEAR = 3;
+    public const WARRANTY_TYPE_DAY = 0;
+    public const WARRANTY_TYPE_MONTH = 1;
+    public const WARRANTY_TYPE_YEAR = 2;
 
     public function __construct($id = 0)
     {

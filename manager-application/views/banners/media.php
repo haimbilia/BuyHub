@@ -57,7 +57,7 @@ $otherButtons = [
         'isActive' => true
     ]
 ];
-$formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); 
+$formTitle  = Labels::getLabel('LBL_BANNER_SETUP', $siteLangId);
 $displayFooterButtons = false;
 $activeGentab = '';
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

@@ -213,17 +213,16 @@ class CurrencyManagementController extends ListingBaseController
     {
         $frm = new Form('frmCurrency');
         $frm->addHiddenField('', 'currency_id');
-        $frm->addRequiredField(Labels::getLabel('FRM_Currency_Name', $this->siteLangId), 'currency_name');
-        $frm->addRequiredField(Labels::getLabel('FRM_Currency_code', $this->siteLangId), 'currency_code');
-        $frm->addTextbox(Labels::getLabel('FRM_Currency_Symbol_Left', $this->siteLangId), 'currency_symbol_left');
-        $frm->addTextbox(Labels::getLabel('FRM_Currency_Symbol_Right', $this->siteLangId), 'currency_symbol_right');
-        $fld = $frm->addFloatField(Labels::getLabel('FRM_Currency_Conversion_Value', $this->siteLangId), 'currency_value');
+        $frm->addRequiredField(Labels::getLabel('FRM_CURRENCY_NAME', $this->siteLangId), 'currency_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_CURRENCY_CODE', $this->siteLangId), 'currency_code');
+        $frm->addTextbox(Labels::getLabel('FRM_CURRENCY_SYMBOL_LEFT', $this->siteLangId), 'currency_symbol_left');
+        $frm->addTextbox(Labels::getLabel('FRM_CURRENCY_SYMBOL_RIGHT', $this->siteLangId), 'currency_symbol_right');
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_CURRENCY_CONVERSION_VALUE', $this->siteLangId), 'currency_value');
         if ($defaultCurrency) {
-            $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_This_is_your_default_currency', $this->siteLangId) . '</small>';
+            $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_THIS_IS_YOUR_DEFAULT_CURRENCY', $this->siteLangId) . '</small>';
         }
 
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_Status', $this->siteLangId), 'currency_active', $activeInactiveArr, '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'currency_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');

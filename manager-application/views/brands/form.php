@@ -1,6 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
-HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form form-edit');
 
 $fld = $frm->getField('brand_name');

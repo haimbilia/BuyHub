@@ -478,9 +478,9 @@ if (0 < $productId) {
                                 echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>':'<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
                             }
                             
-                            if (null !=  $codFld && $codEnabled) {
-                                HtmlHelper::configureSwitchForCheckbox($codFld, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));                           
-                                echo '<li><div class="setting-block">' . $codFld->getHtml() . '</div></li>';
+                            if (null !=  $fld && $codEnabled) {
+                                HtmlHelper::configureSwitchForCheckbox($codEnabled, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));
+                                echo '<li><div class="setting-block">' . $codEnabled->getHtml() . '</div></li>';
                             }
                             ?>
                         </ul>

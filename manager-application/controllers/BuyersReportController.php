@@ -29,6 +29,7 @@ class BuyersReportController extends ListingBaseController
         $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME_OR_EMAIL', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render();
     }

@@ -232,6 +232,7 @@ class FaqCategoriesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $faqCatLangFrm);
+        $this->set('formTitle', Labels::getLabel('LBL_FAQ_CATEGORY_SETUP', $this->siteLangId));
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->_template->render(false, false);
     }
