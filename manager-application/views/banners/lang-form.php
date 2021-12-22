@@ -1,6 +1,7 @@
 <?php  defined('SYSTEM_INIT') or die('Invalid Usage.');
 $langFrm->setFormTagAttribute('id', 'frmBannerLangJs');
 $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#frmBannerLangJs")); return(false);');
+$formTitle  = Labels::getLabel('LBL_BANNER_SETUP', $siteLangId);
 $generalTab = [
     'attr' => [
         'title' => Labels::getLabel('LBL_GENERAL', $siteLangId),
