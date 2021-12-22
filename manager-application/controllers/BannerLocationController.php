@@ -156,6 +156,7 @@ class BannerLocationController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('lang_id', $this->siteLangId);
         $this->set('activeInactiveArr', $activeInactiveArr);
+        $this->set('formTitle', Labels::getLabel('LBL_BANNER_LOCATION_SETUP', $this->siteLangId));
         $this->_template->render(false, false, '_partial/listing/form.php');
     }
 
@@ -251,6 +252,7 @@ class BannerLocationController extends ListingBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->set('formTitle', Labels::getLabel('LBL_BANNER_LOCATION_SETUP', $this->siteLangId));
         $this->_template->render(false, false, '_partial/listing/lang-form.php');
     }
 
