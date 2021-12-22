@@ -27,7 +27,6 @@ class TestimonialsController extends ListingBaseController
             'testimonial_title',
             'testimonial_text'
         ];
-        $this->set('formTitle', Labels::getLabel('LBL_TESTIMONIAL_SETUP', $this->siteLangId));
     }
 
 
@@ -166,6 +165,7 @@ class TestimonialsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
+        $this->set('formTitle', Labels::getLabel('LBL_TESTIMONIAL_SETUP', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -271,26 +271,12 @@ class TestimonialsController extends ListingBaseController
             $langFrm->fill($langData);
         }
 
-        // $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $formTitle = Labels::getLabel('LBL_TESTIMONIAL_SETUP', $langId);
-        $otherButtons = [
-            [
-                'attr' => [
-                    'href' => 'javascript:void(0)',
-                    'onclick' => 'mediaForm(' . $recordId . ')',
-                    'title' => Labels::getLabel('LBL_MEDIA', $langId),
-                ],
-                'label' => Labels::getLabel('LBL_MEDIA', $langId),
-                'isActive' => false
-            ]
-        ];
-        $this->set('formTitle', $formTitle);
-        $this->set('otherButtons', $otherButtons);
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
+        $this->set('formTitle', Labels::getLabel('LBL_TESTIMONIAL_SETUP', $this->siteLangId));
+        $this->_template->render(false, false);
     }
 
     public function langSetup()
