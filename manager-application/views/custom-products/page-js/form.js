@@ -1,9 +1,18 @@
 (function () {
 
+    getCurrentFrmLangId = function () {
+        return $("#addProductfrm [name='lang_id']").val();
+    };
+
+    getCurrentFrmRecordId = function () {
+        return $("#addProductfrm [name='record_id']").val();
+    };   
+
+    /**  record_id   =  product_id */
     setup = function (frm) {
         if (!$(frm).validate()) { return; }
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setup'), data, function (res) {
             langForm(res.langId, 0, res.productId);
         });
     };
@@ -12,7 +21,7 @@
         productId = productId || $("#addProductfrm input[name='product_id']").val();
         langId = langId || $("#addProductfrm [name='lang_id']").val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Products', 'form', [productId]), { langId, autoFillLangData }, function (res) {
+        fcom.ajax(fcom.makeUrl('CustomProducts', 'form', [productId]), { langId, autoFillLangData }, function (res) {
             $('.mainJs').replaceWith(res);
             fcom.removeLoader();
         });
@@ -23,7 +32,7 @@
         let langId = $("#addProductfrm [name='lang_id']").val();
         let productType = $(el).val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Products', 'form', [productId, productType]), { langId }, function (res) {
+        fcom.ajax(fcom.makeUrl('CustomProducts', 'form', [productId, productType]), { langId }, function (res) {
             $('.mainJs').replaceWith(res);
             fcom.removeLoader();
         });
@@ -67,7 +76,7 @@
 
     removeTagData = function (e) {
         var tag_id = e.detail.tag.id;
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) { });
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'removeProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) { });
         tagifyProducts();
     };
 
@@ -180,9 +189,9 @@
     };
 
     prodSpecifications = function () {
-        var productId = $("#addProductfrm input[name='product_id']").val();
+        var recordId = getCurrentFrmRecordId();
         var langId = $("#addProductfrm [name='lang_id']").val();
-        fcom.ajax(fcom.makeUrl('Products', 'prodSpecifications'), { product_id: productId, langId }, function (res) {
+        fcom.ajax(fcom.makeUrl('CustomProducts', 'prodSpecifications'), {recordId, langId}, function (res) {
             $('#specificationsListJs').html(res);
             if ($('#specificationsListJs').find('table tbody tr').length == 0) {
                 $('#specificationsListJs').find('table').addClass('hide');
@@ -215,17 +224,11 @@
     };
     deleteProdSpec = function (el) {
         let prodSpecId = $(el).closest('tr').data('id');
-        if (1 > prodSpecId) {
-            $(el).closest('tr').remove();
-            if ($('#specificationsListJs').find('table tbody tr').length == 0) {
-                $('#specificationsListJs').find('table').addClass('hide');
-                $('#specificationsListSeprJs').addClass('hide');
-            }
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId }, function (t) {
-            prodSpecifications();            
-        });
+        $(el).closest('tr').remove();
+        if ($('#specificationsListJs').find('table tbody tr').length == 0) {
+            $('#specificationsListJs').find('table').addClass('hide');
+            $('#specificationsListSeprJs').addClass('hide');
+        }       
     };
 
     getShippingProfileOptions = function (userId) {
@@ -242,22 +245,10 @@
                 });
             }
         });
-    };
-
-    getCurrentFrmLangId = function () {
-        return $("#addProductfrm [name='lang_id']").val();
-    };
-
-    getCurrentFrmProductId = function () {
-        return $("#addProductfrm [name='product_id']").val();
-    };
-
-    getCurrentFrmTempProductId = function () {
-        return $("#addProductfrm [name='temp_product_id']").val();
-    };
+    };   
 
     imageForm = function () {
-        let productId = getCurrentFrmProductId();
+        let productId = getCurrentFrmRecordId();
         let tempProductId = getCurrentFrmTempProductId();
         if (1 > productId) {
             if (tempProductId == undefined) {
@@ -266,7 +257,7 @@
             }
         }
         $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Products', "imageForm", [productId, tempProductId]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('CustomProducts', "imageForm", [productId, tempProductId]), '', function (t) {
             $.ykmodal(t);
             loadImageOptions();
             var fileType = $('#image_file_type').val();
@@ -309,7 +300,7 @@
     };
 
     productImages = function (product_id, file_type, option_id = 0, lang_id = 0) {
-        fcom.ajax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('CustomProducts', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
             $('#productImagesJs').html(t);
         });
     };
@@ -317,7 +308,7 @@
     deleteImage = function (product_id, image_id, file_type) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) { return false; }
-        fcom.ajax(fcom.makeUrl('Products', 'deleteImage', [product_id, image_id, file_type]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('CustomProducts', 'deleteImage', [product_id, image_id, file_type]), '', function (t) {
             var ans = $.parseJSON(t);
             if (ans.status == 0) {
                 fcom.displayErrorMessage(ans.msg);
@@ -380,11 +371,11 @@
             hooks: {
                 beforeRemoveTag: function (tags) {
                     return new Promise((resolve, reject) => {
-                        let productId = getCurrentFrmProductId();
+                        let productId = getCurrentFrmRecordId();
                         if (0 < productId) {
                             let optionId = $(element).closest('.rowJs').find('.optionsJs').val()
                             let optionValueId = tags[0]['data']['id'];
-                            fcom.ajax(fcom.makeUrl('Products', "canDeleteOpValue"), { productId, optionId, optionValueId }, function (t) {
+                            fcom.ajax(fcom.makeUrl('CustomProducts', "canDeleteOpValue"), { productId, optionId, optionValueId }, function (t) {
                                 t = $.parseJSON(t);
                                 if (t.status == 0) {
                                     fcom.displayErrorMessage(t.msg);
@@ -414,7 +405,7 @@
 
             $('#variantsListJs').prepend(fcom.getLoader());
             let type = $('.upc_type:checked').val();
-            let productId = getCurrentFrmProductId();
+            let recordId = getCurrentFrmRecordId();
             let langId = getCurrentFrmLangId();
             let productOptions = {};
             if (type == 1) {
@@ -438,7 +429,7 @@
                     });
                 });
             }
-            fcom.ajax(fcom.makeUrl('Products', "upcListing"), { productId, langId, type, productOptions }, function (t) {
+            fcom.ajax(fcom.makeUrl('CustomProducts', "upcListing"), { recordId , langId, type, productOptions }, function (t) {
                 $('#variantsListJs').html(t);
                 fcom.removeLoader();
                 $('#addProductfrm button[type="submit"]').prop("disabled", false);
@@ -449,7 +440,7 @@
         if (inputBtn.files && inputBtn.files[0]) {
             loadCropperSkeleton(false);
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
-            fcom.ajax(fcom.makeUrl('Products', "imgCropper"), "", function (t) {
+            fcom.ajax(fcom.makeUrl('CustomProducts', "imgCropper"), "", function (t) {
                 t = $.parseJSON(t);
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
@@ -492,7 +483,7 @@
         });
 
         $.ajax({
-            url: fcom.makeUrl('Products', "uploadMedia"),
+            url: fcom.makeUrl('CustomProducts', "uploadMedia"),
             type: "post",
             dataType: "json",
             data: formData,
@@ -522,13 +513,13 @@
     };
 
     productDefaultImages = function () {
-        let productId = getCurrentFrmProductId();
+        let productId = getCurrentFrmRecordId();
         fileType = 0;
         if (1 > productId) {
             productId = getCurrentFrmTempProductId();
             fileType = tempImageType;
         }
-        fcom.ajax(fcom.makeUrl('Products', 'images', [productId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {
+        fcom.ajax(fcom.makeUrl('CustomProducts', 'images', [productId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {
             $('#productDefaultImagesJs li').not(":first").remove();
             $('#productDefaultImagesJs').append(t);
         });
@@ -536,8 +527,8 @@
 
     digitalDownloadsForm = function (type, callback = '') {
         $.ykmodal(fcom.getLoader(),false,'modal-dialog-vertical-md');
-        let productId = getCurrentFrmProductId();
-        fcom.ajax(fcom.makeUrl('Products', "digitalDownloadForm", [productId, type]), "", function (t) {            
+        let productId = getCurrentFrmRecordId();
+        fcom.ajax(fcom.makeUrl('CustomProducts', "digitalDownloadForm", [productId, type]), "", function (t) {            
             $.ykmodal(t,false,'modal-dialog-vertical-md');
             if (typeof callback == 'function') {
                 callback();
@@ -562,7 +553,7 @@
 
         $.ykmodal(fcom.getLoader());
         $.ajax({
-            url: fcom.makeUrl('Products', 'setupDigitalDownload'),
+            url: fcom.makeUrl('CustomProducts', 'setupDigitalDownload'),
             type: "POST",
             data: data,
             processData: false,
@@ -590,14 +581,14 @@
         console.log(optionCombi,"<<<");
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
-            fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
+            fcom.ajax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadLinks'), data, function (res) {
                 if(langId == 0   && optionCombi == 0){
                     $("#digitalLinksDefaultListJs").html(res); 
                 }  
                 $("#digitalFrmListJs").html(res);              
             });
         } else {
-            fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {              
+            fcom.ajax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadAttachments'), data, function (res) {              
                 if(langId == 0   && optionCombi == 0){
                     $("#digitalFilesDefaultListJs").html(res);
                 }
@@ -632,8 +623,8 @@
         }
         data += '&frow=' + fullRow;
 
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalFile'), data, function (res) {
-            let productId = getCurrentFrmProductId();
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalFile'), data, function (res) {
+            let productId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalFile, productId);
         });
     };
@@ -643,8 +634,8 @@
         if (!agree) {
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
-            let productId = getCurrentFrmProductId();
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
+            let productId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, productId);
         });
     };
@@ -653,7 +644,7 @@
 
 /** on option select/deselect */
 async function resetOptionValuesTag(e) {
-    let productId = getCurrentFrmProductId();
+    let productId = getCurrentFrmRecordId();
     if (0 < productId) {
         let optionId = e.params.args.data.id;
         if (e.type == 'select2:selecting') {
@@ -666,7 +657,7 @@ async function resetOptionValuesTag(e) {
         if (0 < optionId) {
             e.preventDefault();
             let response = await $.ajax({
-                url: fcom.makeUrl('Products', 'removeProductOption'),
+                url: fcom.makeUrl('CustomProducts', 'removeProductOption'),
                 type: 'POST',
                 data: { productId, optionId, fIsAjax: 1 }
             });

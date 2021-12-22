@@ -224,6 +224,10 @@ class ProductsController extends ListingBaseController
                 $productData = $this->modelObj::getAttributesByLangId($langId, $productId, null, true);
             }
 
+            if (empty($productData)) {
+                LibHelper::exitWithError($this->str_invalid_request_id, false, true);
+                FatApp::redirectUser(UrlHelper::generateUrl('Products'));
+            }
 
             if (1 > $productType) {                
                 $frm = $this->getForm($langId, $productData['product_type'], $productId);
@@ -235,12 +239,7 @@ class ProductsController extends ListingBaseController
                 $fld->options = [$productData['product_seller_id'] => $userShopName['user_name'] . ' (' . $userShopName['shop_name'] . ')'];
             } else {
                 $fld->options = [0 => Labels::getLabel('FRM_ADMIN', $langId)];
-            }
-
-            if (empty($productData)) {
-                LibHelper::exitWithError($this->str_invalid_request_id, false, true);
-                FatApp::redirectUser(UrlHelper::generateUrl('Products'));
-            }
+            }            
 
             $prodSpecificsDetails = Product::getProductSpecificsDetails($productId);
             if (false != $prodSpecificsDetails) {
@@ -1127,14 +1126,12 @@ class ProductsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function upcListing($productId = 76)
+    public function upcListing()
     {
-        $productId = FatUtility::int($productId);
+        $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT, 0);
         if ($productId < 1) {
             LibHelper::exitWithError($this->str_invalid_request);
         }
-
-        $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         $productOptions = FatApp::getPostedData('productOptions');
 

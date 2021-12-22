@@ -232,7 +232,7 @@ if (0 < $productId) {
                             echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_id', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'record_id', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'temp_product_id', 6, ['id' => 'temp_product_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit', 6, ['id' => 'product_warranty_unit']);
                             ?>
@@ -367,7 +367,7 @@ if (0 < $productId) {
                             </div>
                         </div>
                         <div id="specificationsListSeprJs" class="separator separator-dashed my-4 hide"></div>
-                        <div id="specificationsListJs">
+                        <div id="specificationsListJs">                            
                         </div>
                     </div>
                 </div>
@@ -478,9 +478,9 @@ if (0 < $productId) {
                                 echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>':'<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
                             }
                             
-                            if (null !=  $fld && $codEnabled) {
-                                HtmlHelper::configureSwitchForCheckbox($codEnabled, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));
-                                echo '<li><div class="setting-block">' . $codEnabled->getHtml() . '</div></li>';
+                            if (null !=  $codFld && $codEnabled) {
+                                HtmlHelper::configureSwitchForCheckbox($codFld, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));                           
+                                echo '<li><div class="setting-block">' . $codFld->getHtml() . '</div></li>';
                             }
                             ?>
                         </ul>

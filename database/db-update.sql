@@ -1475,3 +1475,4 @@ VALUES ('LBL_PPC_PROMOTION_MANAGEMENT', '1', 'PPC Promotion Management', 1),
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 UPDATE `tbl_product_specifics` SET `product_warranty_unit` = '0';
+update `tbl_product_requests` set preq_ean_upc_code = Replace(preq_ean_upc_code, '|', ',')

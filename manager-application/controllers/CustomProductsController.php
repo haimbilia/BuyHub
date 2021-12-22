@@ -1,5 +1,6 @@
 <?php
 
+use Aws\ForecastService\ForecastServiceClient;
 use Predis\Configuration\Options;
 
 class CustomProductsController extends ListingBaseController
@@ -191,13 +192,20 @@ class CustomProductsController extends ListingBaseController
             $productData = current($translatedData);
             $productData += $this->modelObj::getAttributesById($preqId);
         } else {       
-            $productData = $this->modelObj::getAttributesByLangId($langId, $preqId, null, true);          
+            $productData = $this->modelObj::getAttributesByLangId($langId, $preqId, null, true);                        
             if(!empty($productData['preq_lang_data'])){
                 $productData = array_merge($productData, json_decode($productData['preq_lang_data'], true));
             } 
             unset($productData['preq_lang_data']);
-
         }
+
+        if (empty($productData)) {
+            LibHelper::exitWithError($this->str_invalid_request_id, false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('CustomProducts'));
+        } 
+
+        $productData['record_id'] = $preqId;
+        
         $productData = array_merge(
             $productData,
             json_decode($productData['preq_content'], true),
@@ -221,7 +229,7 @@ class CustomProductsController extends ListingBaseController
             $fld->options = [0 => Labels::getLabel('FRM_ADMIN', $langId)];
         }        
 
-        commonHelper::printArray($productData,true);
+        //commonHelper::printArray($productData,true);
         
         $tagData = [];
         /// to save as array...............................
@@ -293,8 +301,13 @@ class CustomProductsController extends ListingBaseController
                 $option['optionValues'] = product::getOptionValues($option['option_id'], $langId , ($productData[0]['product_option_values'] ?? []) );
             }
         }
+        $productData['upc_type'] = applicationConstants::NO;
 
-        $productData['upc_type'] = applicationConstants::YES;
+        $productData['preq_ean_upc_code'] = json_decode($productData['preq_ean_upc_code'],true);
+        
+        if(count($productData['preq_ean_upc_code']) &&  array_key_first($productData['preq_ean_upc_code']) != 0){
+            $productData['upc_type'] = applicationConstants::YES;
+        }      
          
         $this->set("productData", [
             'product_type' => $productData['product_type'],
@@ -337,6 +350,63 @@ class CustomProductsController extends ListingBaseController
         $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css', 'css/select2.min.css']);
         $this->set("includeEditor", true);
         $this->_template->render();
+    }
+
+    public function prodSpecifications()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        if (1 > $langId) {
+            $langId = CommonHelper::getDefaultFormLangId();
+        }
+        $productSpecifications =  [];
+        if (0 < $recordId) {
+            $specifications = $this->modelClass::getAttributesById($recordId,'preq_specifications');  
+            if(!empty($specifications) && !isset($specifications['prod_spec_name'])){            
+                $specifications = json_decode($specifications,true);                    
+                foreach($specifications as $specification){
+                    $productSpecifications[] = [
+                        'prodspec_id' =>  '',
+                        'prodspec_name' => $specification['name'],
+                        'prodspec_value' => $specification['value'],
+                        'prodspec_group' => $specification['group'],                    
+                    ];
+                }               
+            }
+        }
+        $this->set('productSpecifications', $productSpecifications);
+        $this->set('langId', $langId);
+        $this->_template->render(false, false,'products/prod-specifications.php');
+    }
+
+    public function upcListing()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if ($recordId < 1) {
+            LibHelper::exitWithError($this->str_invalid_request);
+        }
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+        $productOptions = FatApp::getPostedData('productOptions');
+        $type = FatApp::getPostedData('type', FatUtility::VAR_INT, 0);
+        $upcCodes = $this->modelClass::getAttributesById($recordId,'preq_ean_upc_code'); 
+        $upcCodeData = [];
+        if(!empty($upcCodes)){
+            $upcCodes = json_decode($upcCodes,true); 
+            foreach($upcCodes as $key => $upcCode){
+                $upcCodeData[$key]['upc_code'] = $upcCode;
+            }
+        }
+        
+        $optionCombinations = [];
+        if ($type == applicationConstants::YES && is_array($productOptions)) {
+            $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues');
+        }    
+
+        $this->set('optionCombinations', $optionCombinations);
+        $this->set('upcCodeData', $upcCodeData);
+        $this->set('recordId', $recordId);
+        $this->set('langId', $langId);
+        $this->_template->render(false, false);
     }
             
         
@@ -440,12 +510,9 @@ class CustomProductsController extends ListingBaseController
         if (1 > $recordId && $isRequested == 0) {
             $fld = $frm->addHiddenField('', 'temp_product_id');
             $fld->requirements()->setRequired();
-        }
-        if($isRequested == applicationConstants::YES){
-            $frm->addHiddenField('', 'preq_id', 0);
-        }else{
-            $frm->addHiddenField('', 'product_id', 0);
-        }
+        }        
+
+        $frm->addHiddenField('', 'record_id', 0);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_AND_NEXT', $langId));
         return $frm;
     }
