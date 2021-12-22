@@ -45,7 +45,7 @@ class SlidesController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TESTIMONIAL_TITLE', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_SLIDE_TITLE', $this->siteLangId));
         $this->checkEditPrivilege(true);
         $this->getListingData();
 
