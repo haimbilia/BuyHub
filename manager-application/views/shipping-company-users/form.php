@@ -1,7 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-
-HtmlHelper::formatFormFields($frm);
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 if ($recordId > 0) {
     $fld_credential_username = $frm->getField('credential_username');

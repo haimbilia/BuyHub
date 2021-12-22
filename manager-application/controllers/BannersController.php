@@ -1,7 +1,6 @@
 <?php
 class BannersController extends ListingBaseController
 {
-
     protected string $modelClass = 'Banner';
     protected $pageKey = 'MANAGE_BANNER';
     protected $bannerLocationId;
@@ -119,7 +118,7 @@ class BannersController extends ListingBaseController
         $srch->joinLocations();
         $srch->joinPromotions($this->siteLangId, true);
         $srch->addPromotionTypeCondition();
-        $srch->addMultipleFields(array('IFNULL(promotion_name,promotion_identifier) as promotion_name', 'banner_id', 'banner_type', 'banner_url', 'banner_target', 'banner_active', 'banner_blocation_id', 'banner_title', 'banner_updated_on'));
+        $srch->addMultipleFields(array('IFNULL(promotion_name, promotion_identifier) as promotion_name', 'banner_id', 'banner_type', 'banner_url', 'banner_target', 'banner_active', 'banner_blocation_id', 'banner_title', 'banner_updated_on'));
         $srch->addCondition('b.banner_blocation_id', '=', $recordId);
 
         if (!empty($post['keyword'])) {
@@ -375,7 +374,6 @@ class BannersController extends ListingBaseController
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $displayFor = ($bannerLocationId == BannerLocation::HOME_PAGE_MOBILE_BANNER) ? applicationConstants::SCREEN_MOBILE : '';
         $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'slide_screen', $screenArr, $displayFor, array(), '');
-        $frm->addHTML('', Labels::getLabel('FRM_SLIDE_IMAGE', $this->siteLangId), Labels::getLabel('FRM_SLIDE_IMAGE', $this->siteLangId));
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_BANNER);
         $frm->addHiddenField('', 'min_width', 1350);
         $frm->addHiddenField('', 'min_height', 405);
@@ -417,7 +415,7 @@ class BannersController extends ListingBaseController
         $this->set('bannerLocationId', $bannerLocationId);
         $this->set('recordId', $recordId);
         $this->set('banner_id', $recordId);
-        $this->set('lang_id', $langId);
+        $this->set('langId', $langId);
         $this->set('slideScreen', $slideScreen);
         $this->checkEditPrivilege(true);
         $this->_template->render(false, false);
@@ -453,6 +451,7 @@ class BannersController extends ListingBaseController
         $this->set('bannerLocationId', $bannerLocationId);
         $this->set('recordId', $recordId);
         $this->set('banner_id', $recordId);
+        $this->set('bannerDetail', $bannerDetail);
         $this->checkEditPrivilege(true);
         $this->_template->render(false, false);
     }
@@ -518,6 +517,7 @@ class BannersController extends ListingBaseController
         if ($langId == $this->siteLangId) {
             $fileHandlerObj->deleteFile($fileType, $recordId, 0, 0, 0, $slideScreen);
         }
+
         if (!$fileHandlerObj->deleteFile($fileType, $recordId, $afileId, 0, $langId, $slideScreen)) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
@@ -593,23 +593,21 @@ class BannersController extends ListingBaseController
     public function updateStatus()
     {
         $this->objPrivilege->canEditBanners();
-        $bannerId = FatApp::getPostedData('bannerId', FatUtility::VAR_INT, 0);
+        $bannerId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         if (1 > $bannerId || -1 == $status) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $data = Banner::getAttributesById($bannerId, array('banner_id', 'banner_active'));
 
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true, true);
         }
 
         $obj = new Banner($bannerId);
         if (!$obj->changeStatus($status)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
 
         FatUtility::dieJsonSuccess($this->str_update_record);
@@ -632,7 +630,7 @@ class BannersController extends ListingBaseController
             'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId),
             'banner_title' => Labels::getLabel('LBL_TITLE', $this->siteLangId),
             'banner_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId),
-            'banner_img' => Labels::getLabel('LBLIMAGE', $this->siteLangId),
+            'banner_img' => Labels::getLabel('LBL_IMAGE', $this->siteLangId),
             'banner_target' => Labels::getLabel('LBL_TARGET', $this->siteLangId),
             'banner_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId)

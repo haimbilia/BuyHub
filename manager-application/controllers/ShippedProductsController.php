@@ -1,16 +1,19 @@
 <?php
 
-class ShippedProductsController extends ListingBaseController {
+class ShippedProductsController extends ListingBaseController
+{
 
     protected string $modelClass = 'Product';
     protected $pageKey = 'MANAGE_SHIPPED_PRODUCTS';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewShippedProducts();
     }
 
-    public function index() {
+    public function index()
+    {
         $this->setModel([0]);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
@@ -29,10 +32,12 @@ class ShippedProductsController extends ListingBaseController {
             'shipped-products/page-js/index.js'
         ]);
         $this->getListingData();
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'shipped-products/search.php', true),
@@ -41,7 +46,8 @@ class ShippedProductsController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    private function getListingData()
+    {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -133,7 +139,8 @@ class ShippedProductsController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
     }
 
-    public function form() {
+    public function form()
+    {
         $this->objPrivilege->canEditShippedProducts();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $profileId = FatApp::getPostedData('profileId', FatUtility::VAR_INT, 0);
@@ -145,11 +152,14 @@ class ShippedProductsController extends ListingBaseController {
         $frm->fill(['productId' => $recordId, 'shipping_profile' => $profileId]);
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
+        $this->set('profileId', $profileId);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('formTitle', Labels::getLabel('LBL_SHIPPED_PRODUCTS_SETUP', $this->siteLangId));
+        $this->_template->render(false, false);
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditShippedProducts();
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -176,12 +186,14 @@ class ShippedProductsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getRows() {
+    public function getRows()
+    {
         $this->viewSellerList(false);
         $this->_template->render(false, false);
     }
 
-    public function viewSellerList($render = true) {
+    public function viewSellerList($render = true)
+    {
         $this->objPrivilege->canViewShippedProducts();
         $productId = FatApp::getPostedData('productId', FatUtility::VAR_INT);
         $adminShip = FatApp::getPostedData('adminShip', FatUtility::VAR_INT, 0);
@@ -225,19 +237,24 @@ class ShippedProductsController extends ListingBaseController {
         }
     }
 
-    public function getSearchForm($fields = []) {
+    public function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'shop_name');
         }
-        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', [], '',
-                [
-                    'class' => 'form-control',
-                    'id' => 'searchFrmUserIdJs',
-                    'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
-                ]
+        $frm->addSelectBox(
+            Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId),
+            'user_id',
+            [],
+            '',
+            [
+                'class' => 'form-control',
+                'id' => 'searchFrmUserIdJs',
+                'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
+            ]
         );
         $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $this->siteLangId), 'shipping_profile', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
         HtmlHelper::addSearchButton($frm);
@@ -245,7 +262,8 @@ class ShippedProductsController extends ListingBaseController {
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    private function getFormColumns(): array
+    {
         $shopsTblHeadingCols = CacheHelper::get('shippedProductHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
@@ -263,7 +281,8 @@ class ShippedProductsController extends ListingBaseController {
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             'listSerial',
             'product_name',
@@ -274,11 +293,13 @@ class ShippedProductsController extends ListingBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
+    private function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, ['total_seller_ship', 'total_admin_seller_ship'], Common::excludeKeysForSort());
     }
 
-    private function getForm() {
+    private function getForm()
+    {
         $frm = new Form('productsShippingForm');
         $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true);
         $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
@@ -290,5 +311,4 @@ class ShippedProductsController extends ListingBaseController {
         }
         return $frm;
     }
-
 }

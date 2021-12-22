@@ -3,7 +3,7 @@
 class BlogPostCategoriesController extends ListingBaseController
 {
     protected string $modelClass = 'BlogPostCategory';
-    protected $pageKey = 'BLOG_CATEGORIES';
+    protected string $pageKey = 'BLOG_POST_CATEGORIES';
 
     public function __construct($action)
     {
@@ -43,7 +43,20 @@ class BlogPostCategoriesController extends ListingBaseController
     public function index()
     {
         $this->checkEditPrivilege(true);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = [
+            'newRecordBtn' => true
+        ];
+        $this->set('actionItemsData', $actionItemsData);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+
         $this->_template->addJs(array('js/jquery-sortable-lists.js'));
+
         $this->_template->render();
     }
 

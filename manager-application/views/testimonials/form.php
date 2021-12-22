@@ -8,7 +8,6 @@ if ($fld != null) {
     $fld->developerTags['noCaptionTag'] = true;
 }
 
-$formTitle = Labels::getLabel('LBL_TESTIMONIAL_SETUP', $siteLangId);
 $otherButtons = [
     [
         'attr' => [

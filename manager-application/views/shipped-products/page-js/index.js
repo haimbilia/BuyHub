@@ -5,27 +5,24 @@
             clearSearch();
         });
     };
-    editRecord = function (recordId, profileId, displayInPopup = false, dialogClass = '') {
-        if (false === checkControllerName()) {
-            return false;
-        }
-        fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
+
+    editRecord = function (recordId, profileId) {
+        $.ykmodal(fcom.getLoader(), true);
         data = "recordId=" + recordId + '&profileId=' + profileId;
         fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
-            $.ykmodal(t, true, dialogClass);
+            $.ykmodal(t, true);
             fcom.removeLoader();
         });
     };
 
     viewSellerShip = function (productId) {
-        fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), {productId: productId}, function (t) {
+        fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), { productId: productId }, function (t) {
             $.ykmodal(t, false, '');
         });
     };
 
     viewAdminSellerShip = function (productId) {
-        fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), {productId: productId, adminShip: 1}, function (t) {
+        fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), { productId: productId, adminShip: 1 }, function (t) {
             $.ykmodal(t, false, '');
         });
     };

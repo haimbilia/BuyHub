@@ -1319,6 +1319,9 @@ class AttachedFile extends MyAppModel
             case self::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE:
                 $recordObj = new Extrapage($recordId);
                 break;
+            case self::FILETYPE_BANNER:
+                $recordObj = new Banner($recordId);
+                break;
         }
 
         if (false != $recordObj) {
