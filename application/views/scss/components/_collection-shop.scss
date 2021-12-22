@@ -13,10 +13,9 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        border-radius: $radius4;
+        border-radius: 0;
         position: relative;
         overflow: hidden;
-
         transition: all 0.2s linear;
         animation: slideRight 600ms ease both;
         border: solid 1px transparent;
