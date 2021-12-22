@@ -25,29 +25,6 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $bannerTypeArr[$row[$key]], true);
                 break;
             case 'banner_img':
-                $desktop_url = '';
-                $tablet_url = '';
-                $mobile_url = '';
-                if (!AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $row['banner_id'], 0, $siteLangId)) {
-                    continue 2;
-                } else {
-                    $slideArr = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $row['banner_id'], 0, $siteLangId);
-                    foreach ($slideArr as $slideScreen) {
-                        $uploadedTime = AttachedFile::setTimeParam($slideScreen['afile_updated_at']);
-                        switch ($slideScreen['afile_screen']) {
-                            case applicationConstants::SCREEN_MOBILE:
-                                $mobile_url = '<480:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_MOBILE)) . $uploadedTime . ",";
-                                break;
-                            case applicationConstants::SCREEN_IPAD:
-                                $tablet_url = ' <768:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD)) . $uploadedTime . ',' . '  <1024:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_IPAD)) . $uploadedTime . ",";
-                                break;
-                            case applicationConstants::SCREEN_DESKTOP:
-                                $desktop_url = ' >1024:' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP)) . $uploadedTime . ",";
-                                break;
-                        }
-                    }
-                }
-
                 $uploadedTime = AttachedFile::setTimeParam($row['banner_updated_on']);
                 $img = '<img src="' . UrlHelper::generateFullUrl('Banner', 'Thumb', array($row['banner_id'], $siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" />';
                 $td->appendElement('plaintext', $tdAttr, $img, true);
@@ -56,15 +33,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $linkTargetsArr[$row[$key]], true);
                 break;
             case 'banner_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['banner_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
-                $statusClass = ($canEdit) ? '' : 'disabled';
-                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
-                $htm = '<span class="switch switch-sm switch-icon">
-                    <label>
-                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['banner_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                        <span class="input-helper"></span>
-                    </label>
-                </span>';
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['banner_id'], $row[$key], (1 == $row['banner_id']));
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'action':

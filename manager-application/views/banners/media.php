@@ -2,10 +2,16 @@
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('class', 'modal-body form');
-$frm->setFormTagAttribute('data-callback', 'loadImages('.$bannerLocationId.','. $recordId.',"THUMB",'.$image['afile_screen'].','.$image['afile_lang_id'].')');
+$frm->setFormTagAttribute('data-callback', 'loadImages(' . $bannerLocationId . ',' . $recordId . ',"logo",' . $slideScreen . ',' . $langId . ')');
 $imageLangFld = $frm->getField('lang_id');
+if (1 < count($languages)) {
+    $imageLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
 $screenFld = $frm->getField('slide_screen');
+if (1 < count($languages)) {
+    $screenFld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
 
 $imgArr = [];
@@ -15,42 +21,56 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
     $imgArr = [
         'url' => UrlHelper::getCachedUrl(
             UrlHelper::generateFileUrl(
-                'Banner', 
-                'Thumb', 
+                'Banner',
+                'Thumb',
                 array(
-                    $recordId, 
-                    $image['afile_lang_id'], 
-                    $image['afile_screen'], 
-                    '', 
-                ), CONF_WEBROOT_FRONT_URL
-			) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'
-		),
-		'name' => $image['afile_name'],
-		'afile_id' => $image['afile_id'],
-	]; 
-} 
+                    $recordId,
+                    $image['afile_lang_id'],
+                    $image['afile_screen'],
+                    '',
+                ),
+                CONF_WEBROOT_FRONT_URL
+            ) . $uploadedTime,
+            CONF_IMG_CACHE_TIME,
+            '.jpg'
+        ),
+        'name' => $image['afile_name'],
+        'afile_id' => $image['afile_id'],
+    ];
+}
 
 $slideImage = $frm->getField('banner_image');
 $slideImage->value = '<span id="imageListingJs"></span>';
-$slideImage->value = "<span id='imageListingJs'>". HtmlHelper::getfileInputHtml(
+$slideImage->value = "<span id='imageListingJs'>" . HtmlHelper::getfileInputHtml(
     [
-        'onChange' => 'loadImageCropper(this)', 
-        'accept' => 'image/*', 
+        'onChange' => 'loadImageCropper(this)',
+        'accept' => 'image/*',
         'data-name' => Labels::getLabel("FRM_BANNER_IMAGE", $siteLangId)
     ],
     $siteLangId,
-    ($canEdit ? 'deleteMedia('.$bannerLocationId.','. $recordId.','. $image['afile_id'].','.$image['afile_type'].','.$image['afile_lang_id'].','.$image['afile_screen'].')' :''),
-    ($canEdit ? 'editDropZoneImages(this)': ''),
+    ($canEdit ? 'deleteMedia(' . $bannerLocationId . ',' . $recordId . ',' . $image['afile_id'] . ',' . $image['afile_type'] . ',' . $image['afile_lang_id'] . ',' . $image['afile_screen'] . ')' : ''),
+    ($canEdit ? 'editDropZoneImages(this)' : ''),
     $imgArr,
     'mt-3 dropzone-custom dropzoneContainerJs'
-)."</span>";
+) . "</span>";
 
-$slideImage->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $bannerWidth.' x '.$bannerHeight) . '</span>';
+$slideImage->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $bannerWidth . ' x ' . $bannerHeight) . '</span>';
+
+$generalTab = [
+    'attr' => [
+        'title' => Labels::getLabel('LBL_GENERAL', $siteLangId),
+        'href' => 'javascript:void(0);',
+        'onclick' => 'editRecord(' . $recordId . ',' . $bannerLocationId . ');'
+    ],
+    'label' => Labels::getLabel('LBL_GENERAL', $siteLangId),
+    'isActive' => false
+];
+
 $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'mediaForm('.$recordId.','.$bannerLocationId.')',
+            'onclick' => 'mediaForm(' . $recordId . ',' . $bannerLocationId . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
@@ -60,12 +80,11 @@ $otherButtons = [
 $formTitle  = Labels::getLabel('LBL_BANNER_SETUP', $siteLangId);
 $displayFooterButtons = false;
 $activeGentab = '';
-require_once(CONF_THEME_PATH . '_partial/listing/form.php');
-?>
+require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script>
-    var minWidthBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id');?> input[name=min_width]');
-    var minHeightBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id');?> input[name=min_height]');
+    var minWidthBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id'); ?> input[name=min_width]');
+    var minHeightBaneerEle = $('#<?php echo $frm->getFormTagAttribute('id'); ?> input[name=min_height]');
 
     $(minWidthBaneerEle).val(1350);
     $(minHeightBaneerEle).val(405);
@@ -73,7 +92,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
     var aspectRatio = 4 / 1;
-    $(document).on('change', '#slideScreenJs', function() {
+    $(document).on('change', '#slideScreenJs', function(e) {
+        e.stopPropagation();
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
         var screenMobile = <?php echo applicationConstants::SCREEN_MOBILE ?>;
@@ -99,8 +119,6 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
         let recordId = $(this).closest("form").find('input[name="banner_id"]').val();
         let bannerLocationId = $(this).closest("form").find('input[name="blocation_id"]').val();
         let langId = $("#imageLanguageJs").val();
-        console.log('change Language ---', bannerLocationId, recordId, 'THUMB', langId, slideScreen);
-        loadImages(bannerLocationId, recordId, 'THUMB', slideScreen, langId);
+        loadImages(bannerLocationId, recordId, 'logo', slideScreen, langId);
     });
-
 </script>
