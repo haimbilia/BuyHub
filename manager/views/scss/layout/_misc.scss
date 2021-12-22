@@ -14,7 +14,7 @@ $header-height: 65px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    @include media-breakpoint-up(lg) {
+    @include media-breakpoint-up(md) {
         padding-#{$start-direction}: $side-bar-size;
     }
 }
@@ -563,7 +563,7 @@ $header-height: 65px;
             display: none !important;
         }
     }
-    
+
     &.show {
         transform: translateX(0);
     }
@@ -594,9 +594,10 @@ $header-height: 65px;
     }
 }
 
-.select2-container{
-    .select2-dropdown{ padding:1rem;}
-    .select2-search__field{}
+.select2-container {
+    .select2-dropdown {
+        padding: 1rem;
+    }
+    .select2-search__field {
+    }
 }
-
-

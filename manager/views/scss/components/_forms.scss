@@ -32,6 +32,12 @@ $input-color: #474747;
         background-color: darken($input-bg, 5%);
         transition: 0.3s all ease-in-out;
     }
+    &:disabled {
+        opacity: 0.5;
+        &:hover {
+            cursor: not-allowed;
+        }
+    }
     &.error {
         border: 1px solid $danger-color;
         background-color: transparent;
@@ -47,6 +53,12 @@ $input-color: #474747;
     background-position: calc(100% - 12px) center;
     &:hover {
         cursor: pointer;
+    }
+    &:disabled {
+        opacity: 0.5;
+        &:hover {
+            cursor: not-allowed;
+        }
     }
     [dir="rtl"] & {
         background-position: calc(0% - -12px) center;
@@ -806,7 +818,7 @@ form.custom-form {
 }
 
 .select-language {
-    background-color: darken($input-bg, 5%) !important; 
+    background-color: darken($input-bg, 5%) !important;
 }
 
 .form-search {

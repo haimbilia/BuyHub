@@ -1,7 +1,8 @@
-@import "../../../application/views/scss/themes/theme";
 //
-@import "../../../application/views/scss/bootstrap/bootstrap.scss";
-@import "../../../application/views/scss/bootstrap/variables";
+@import "bootstrap/bootstrap";
+@import "bootstrap/variables";
+//
+@import "themes/variables";
 //
 @import "components/misc";
 @import "components/sidebar";
@@ -50,7 +51,7 @@
 @import "components/product-card";
 // @import 'components/pro-info';
 @import "components/scroll-hint";
-// @import 'components/slider';
+@import "components/slider";
 // @import 'components/social-profiles';
 @import "components/star-rating";
 // @import 'components/steps';

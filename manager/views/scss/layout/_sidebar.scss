@@ -17,7 +17,7 @@ $space: 25px;
     flex-direction: column;
     box-shadow: 0 0 80px 50px rgba(206, 213, 225, 0.12);
     transition: transform 0.3s ease-out;
-    overflow: hidden; 
+    overflow: hidden;
     @include media-breakpoint-down(md) {
         transform: translateX(-100% * $transform-direction);
     }
@@ -33,7 +33,7 @@ $space: 25px;
     }
     &-toggle {
         display: none;
-        @include media-breakpoint-up(lg) {
+        @include media-breakpoint-up(md) {
             display: block;
             border: none;
             background: none;
@@ -264,7 +264,7 @@ $space: 25px;
     }
 }
 
-@include media-breakpoint-up(lg) {
+@include media-breakpoint-up(md) {
     [data-sidebar-minimize="on"] {
         .sidebar {
             width: $side-bar-size-close;
