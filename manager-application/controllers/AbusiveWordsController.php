@@ -127,7 +127,8 @@ class AbusiveWordsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     public function setup()
