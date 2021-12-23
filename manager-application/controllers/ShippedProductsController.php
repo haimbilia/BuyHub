@@ -154,7 +154,7 @@ class ShippedProductsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('profileId', $profileId);
         $this->set('includeTabs', false);
-        $this->set('formTitle', Labels::getLabel('LBL_SHIPPED_PRODUCTS_SETUP', $this->siteLangId));
+        $this->set('formTitle', Labels::getLabel('LBL_UPDATE_SHIPPING_PROFILE', $this->siteLangId));
         $this->_template->render(false, false);
     }
 
@@ -301,14 +301,9 @@ class ShippedProductsController extends ListingBaseController
     private function getForm()
     {
         $frm = new Form('productsShippingForm');
+        $frm->addHiddenField('', 'productId', 0);
         $shipProfileArr = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true);
         $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $this->siteLangId), 'shipping_profile', $shipProfileArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
-        $frm->addHiddenField('', 'productId', 0);
-        $languageArr = Language::getDropDownList();
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
-        }
         return $frm;
     }
 }
