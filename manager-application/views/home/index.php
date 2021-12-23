@@ -121,7 +121,7 @@
                             <li class="list-stats-item">
                                 <span class="label"><?php echo Labels::getLabel('LBL_CANCELLED', $siteLangId); ?></span>
                                 <span class="value">
-                                    <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['cancelled']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                    <i class="icn fas <?php echo (0 < $dashboardInfo['conversionStats']['cancelled']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
                                     <?php echo $dashboardInfo['conversionStats']['cancelled']['%age']; ?>%</span>
 
                             </li>

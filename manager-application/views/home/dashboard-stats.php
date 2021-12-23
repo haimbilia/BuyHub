@@ -21,7 +21,7 @@ switch (strtoupper($stats_type)) {
             exit;
         }
         foreach ($stats_info['rows'] as $key => $val) {
-            $cls = (1 >  $val['visit']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success';
+            $cls = (30 <  $val['visit']) ? 'fa-arrow-up font-success' : '';
             echo '<li class="list-stats-item">
                     <span class="label">' . $key . '</span>
                     <span class="value">
@@ -87,7 +87,7 @@ switch (strtoupper($stats_type)) {
             if ($count > 11) {
                 break;
             }
-            $cls = (1 >  $row['search_count']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success';
+            $cls = (30 <  $row['search_count']) ? 'fa-arrow-up font-success' : '';
             $keyword = ($row['searchitem_keyword'] == '') ? 'Blank Search' : $row['searchitem_keyword'];
             echo '<li class="list-stats-item">
                     <span class="label">' . $keyword . '</span>
