@@ -233,11 +233,8 @@ $(window).on('load', function () {
 	topSellingProducts();
 	getTopSearchKeyword('yearly');
 	traficSource('yearly');
-	/* visitorStats();
-	
+	visitorStats();
 
-	
-	 */
 	// $('.carousel--oneforth-js').slick(getSlickSliderSettings(4));
 	/* FUNCTION FOR SCROLLBAR */
 	/* $('.scrollbar-js').enscroll({
