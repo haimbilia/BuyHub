@@ -92,47 +92,6 @@
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
-                            <h3 class="card-head-title"> <?php echo Labels::getLabel('LBL_Visitors_Statistics', $siteLangId); ?></h3>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <?php if ($dashboardInfo['visitsCount']) { ?>
-                            <ul class="list-stats list-stats-double">
-                                <li class="list-stats-item">
-                                    <span class="label"><?php echo Labels::getLabel('LBL_Today', $siteLangId); ?></span>
-                                    <span class="value">
-                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['today']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
-                                        <?php echo $dashboardInfo['visitsCount']['today'] ?></span>
-                                </li>
-                                <li class="list-stats-item">
-                                    <span class="label"><?php echo Labels::getLabel('LBL_Weekly', $siteLangId); ?></span>
-                                    <span class="value">
-                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['weekly']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
-                                        <?php echo $dashboardInfo['visitsCount']['weekly'] ?></span>
-                                </li>
-                                <li class="list-stats-item">
-                                    <span class="label"><?php echo Labels::getLabel('LBL_last_Month', $siteLangId); ?></span>
-                                    <span class="value">
-                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['lastMonth']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
-                                        <?php echo $dashboardInfo['visitsCount']['lastMonth'] ?></span>
-                                </li>
-                                <li class="list-stats-item">
-                                    <span class="label"><?php echo Labels::getLabel('LBL_Last_3_Months', $siteLangId); ?></span>
-                                    <span class="value">
-                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['last3Month']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
-                                        <?php echo $dashboardInfo['visitsCount']['last3Month'] ?></span>
-                                </li>
-
-                            </ul>
-                        <?php } ?>
-                        <div class="widget__chart">
-                            <div id="visitsGraph" class="ct-chart"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-head">
-                        <div class="card-head-label">
                             <h3 class="card-head-title"> <?php echo Labels::getLabel('LBL_CONVERSIONS_STATISTICS', $siteLangId); ?></h3>
                             <span class="text-muted"> <?php echo Labels::getLabel('LBL_RECENT_CONVERSIONS_STATISTICS', $siteLangId); ?></span>
                         </div>
@@ -173,6 +132,48 @@
                         </div>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-head-label">
+                            <h3 class="card-head-title"> <?php echo Labels::getLabel('LBL_Visitors_Statistics', $siteLangId); ?></h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <?php if ($dashboardInfo['visitsCount']) { ?>
+                            <ul class="list-stats list-stats-double">
+                                <li class="list-stats-item">
+                                    <span class="label"><?php echo Labels::getLabel('LBL_Today', $siteLangId); ?></span>
+                                    <span class="value">
+                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['today']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                        <?php echo $dashboardInfo['visitsCount']['today'] ?></span>
+                                </li>
+                                <li class="list-stats-item">
+                                    <span class="label"><?php echo Labels::getLabel('LBL_Weekly', $siteLangId); ?></span>
+                                    <span class="value">
+                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['weekly']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                        <?php echo $dashboardInfo['visitsCount']['weekly'] ?></span>
+                                </li>
+                                <li class="list-stats-item">
+                                    <span class="label"><?php echo Labels::getLabel('LBL_last_Month', $siteLangId); ?></span>
+                                    <span class="value">
+                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['lastMonth']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                        <?php echo $dashboardInfo['visitsCount']['lastMonth'] ?></span>
+                                </li>
+                                <li class="list-stats-item">
+                                    <span class="label"><?php echo Labels::getLabel('LBL_Last_3_Months', $siteLangId); ?></span>
+                                    <span class="value">
+                                        <i class="icn fas <?php echo (1 > $dashboardInfo['visitsCount']['last3Month']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                        <?php echo $dashboardInfo['visitsCount']['last3Month'] ?></span>
+                                </li>
+
+                            </ul>
+                        <?php } ?>
+                        <div class="widget__chart">
+                            <div id="visitsGraph" class="ct-chart"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
