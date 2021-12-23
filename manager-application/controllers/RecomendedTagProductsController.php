@@ -69,10 +69,10 @@ class RecomendedTagProductsController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = new SearchBase('tbl_tag_product_recommendation', 'tpr');
-        $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', 't.tag_id = tpr.tpr_tag_id', 't');     
+        $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', 't.tag_id = tpr.tpr_tag_id and t.tag_lang_id = ' . $this->siteLangId, 't');
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = tpr.tpr_product_id', 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p_l.productlang_product_id = p.product_id and p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
-        $srch->addMultipleFields(array('tpr.*', 'tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
+        $srch->addMultipleFields(array('tpr.*', 't.tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
 
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
         if (!empty($keyword)) {
@@ -86,7 +86,7 @@ class RecomendedTagProductsController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
-        $rs = $srch->getResultSet();
+        $rs = $srch->getResultSet();       
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set("arrListing", $records);

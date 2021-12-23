@@ -57,6 +57,7 @@ class Collections extends MyAppModel
     public const LIMIT_FAQ_LAYOUT1 = 6;
     public const LIMIT_TESTIMONIAL_LAYOUT1 = 10;
     public const LIMIT_CONTENT_BLOCK_LAYOUT1 = 1;
+    public const LIMIT_COLLECTION_RECORDS = 20;
 
     public const COLLECTION_CRITERIA_PRICE_LOW_TO_HIGH = 1;
     public const COLLECTION_CRITERIA_PRICE_HIGH_TO_LOW = 2;
@@ -190,7 +191,7 @@ class Collections extends MyAppModel
             self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_Testimonial_Layout1', $langId),
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_Content_block_Layout1', $langId),
             self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
-            self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_Faq_Categories', $langId),            
+            self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_Faq_Categories', $langId),
         ];
     }
 
@@ -362,24 +363,72 @@ class Collections extends MyAppModel
     /**
      * addUpdateCollectionRecord
      *
-     * @param  int $collectionId
      * @param  int $recordId
      * @return bool
      */
-    public function addUpdateCollectionRecord(int $collectionId, int $recordId): bool
+    public function addUpdateCollectionRecord(int $recordId): bool
     {
-        if (!$collectionId || !$recordId) {
-            $this->error = Labels::getLabel('MSG_Invalid_Request', $this->commonLangId);
+        if (1 > $this->mainTableRecordId || 1 > $recordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
+        $srch = new SearchBase(static::DB_TBL_COLLECTION_TO_RECORDS);
+        $srch->doNotLimitRecords();
+        $srch->addCondition(static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id', '=', $this->mainTableRecordId);
+        $srch->getResultSet();
+        if (self::LIMIT_COLLECTION_RECORDS <= $srch->recordCount()) {
+            $str = Labels::getLabel('ERR_YOU_CANNOT_BIND_MORE_THAN_ALLOWED_LIMIT_{LIMIT}', $this->commonLangId);
+            $this->error = CommonHelper::replaceStringData($str, ['{LIMIT}' => self::LIMIT_COLLECTION_RECORDS]);
+            return false;
+        }
+
+        $dataToSave = [
+            static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id' => $this->mainTableRecordId,
+            static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id' => $recordId
+        ];
+
         $record = new TableRecord(static::DB_TBL_COLLECTION_TO_RECORDS);
-        $dataToSave = array();
-        $dataToSave[static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id'] = $collectionId;
-        $dataToSave[static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id'] = $recordId;
+
         $record->assignValues($dataToSave);
         if (!$record->addNew(array(), $dataToSave)) {
             $this->error = $record->getError();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * updateRecordOrder
+     *
+     * @param  int $recordId
+     * @return bool
+     */
+    public function updateRecordDisplayOrder(int $recordId): bool
+    {
+        if (1 > $this->mainTableRecordId || 1 > $recordId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
+            return false;
+        }
+        $db = FatApp::getDb();
+
+        $srch = new SearchBase(static::DB_TBL_COLLECTION_TO_RECORDS);
+        $srch->doNotLimitRecords();
+        $srch->doNotCalculateRecords();
+        $srch->addFld('MAX(ctr_display_order) as ctr_display_order');
+        $srch->setPageSize(1);
+        $displayOrder = $db->fetch($srch->getResultSet());
+
+        if (false === $db->updateFromArray(
+            static::DB_TBL_COLLECTION_TO_RECORDS,
+            [static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'display_order' => ((int)current($displayOrder)) + 1],
+            [
+                'smt' => static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id = ? AND ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id = ?',
+                'vals' => [$this->mainTableRecordId, $recordId]
+            ],
+            true
+        )) {
+            $this->error = $db->getError();
             return false;
         }
         return true;
@@ -393,7 +442,7 @@ class Collections extends MyAppModel
      * @return bool
      */
 
-    public function updateCollectionRecordOrder(int $collectionId, array $order): bool
+    /* public function updateCollectionRecordOrder(int $collectionId, array $order): bool
     {
         if (!$collectionId) {
             return false;
@@ -405,19 +454,17 @@ class Collections extends MyAppModel
                 }
                 FatApp::getDb()->updateFromArray(
                     static::DB_TBL_COLLECTION_TO_RECORDS,
-                    array(
-                        static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'display_order' => $i
-                    ),
-                    array(
+                    [static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'display_order' => $i],
+                    [
                         'smt' => static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id = ? AND ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id = ?',
-                        'vals' => array($collectionId, $id)
-                    )
+                        'vals' => [$collectionId, $id]
+                    ]
                 );
             }
             return true;
         }
         return false;
-    }
+    } */
 
     /**
      * addUpdateData
@@ -476,7 +523,7 @@ class Collections extends MyAppModel
         $srch->addCondition('collection_deleted', '=', applicationConstants::NO);
         $srch->addCondition('collection_id', '=', $collection_id);
         $srch->addFld('collection_id');
-        $srch->doNotCalculateRecords();        
+        $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -507,17 +554,11 @@ class Collections extends MyAppModel
 
         $srch->joinTable(SellerProduct::DB_TBL . '_lang', 'LEFT JOIN', 'lang.selprodlang_selprod_id = ' . SellerProduct::DB_TBL_PREFIX . 'id AND selprodlang_lang_id = ' . $lang_id, 'lang');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = sp.selprod_user_id', 'tuc');
-        $srch->addMultipleFields(array('ctr_display_order', 'selprod_id as record_id', 'COALESCE(selprod_title, product_identifier) as record_title', 'credential_username'));
+        $srch->addMultipleFields(array('selprod_id as id', 'CONCAT(COALESCE(selprod_title, product_identifier), " | ", credential_username) as text'));
         $srch->addOrder('ctr_display_order', 'ASC');
         $srch->doNotLimitRecords();
         $srch->doNotCalculateRecords();
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $data = array();
-        while ($row = $db->fetch($rs)) {
-            $data[] = $row;
-        }
-        return $data;
+        return (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
     }
 
 
@@ -572,11 +613,13 @@ class Collections extends MyAppModel
         $srch->joinTable(ProductCategory::DB_TBL, 'INNER JOIN', ProductCategory::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id');
 
         $srch->joinTable(ProductCategory::DB_TBL_LANG, 'LEFT JOIN', 'lang.prodcatlang_prodcat_id = ' . ProductCategory::DB_TBL_PREFIX . 'id AND prodcatlang_lang_id = ' . $lang_id, 'lang');
-        $srch->addMultipleFields(array('ctr_display_order', 'prodcat_id as record_id', 'IFNULL(prodcat_name, prodcat_identifier) as record_title'));
+        $srch->addMultipleFields(['prodcat_id as id', 'IFNULL(prodcat_name, prodcat_identifier) as text']);
         $srch->addOrder('ctr_display_order', 'ASC');
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $data = $db->fetchAll($rs);
+        $data = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+        array_walk($data, function (&$catTitle, $catId) use ($lang_id) {
+            $prodCateObj = new ProductCategory();
+            $catTitle = html_entity_decode($prodCateObj->getParentTreeStructure($catId, 0, '', $lang_id), ENT_QUOTES);
+        });
         return $data;
     }
 
@@ -602,13 +645,10 @@ class Collections extends MyAppModel
         $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', Shop::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id');
 
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'lang.shoplang_shop_id = ' . Shop::DB_TBL_PREFIX . 'id AND shoplang_lang_id = ' . $lang_id, 'lang');
-        $srch->addMultipleFields(array('ctr_display_order', 'shop_id as record_id', 'IFNULL(shop_name, shop_identifier) as record_title'));
+        $srch->addMultipleFields(array('shop_id as id', 'IFNULL(shop_name, shop_identifier) as text'));
         $srch->addOrder('ctr_display_order', 'ASC');
         $rs = $srch->getResultSet();
-
-        $db = FatApp::getDb();
-        $data = $db->fetchAll($rs);
-        return $data;
+        return (array) FatApp::getDb()->fetchAllAssoc($rs);
     }
 
     /**
@@ -631,12 +671,10 @@ class Collections extends MyAppModel
         $srch->addCondition(static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'collection_id', '=', $collectionId);
         $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', Brand::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id');
         $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT JOIN', 'lang.brandlang_brand_id = ' . Brand::DB_TBL_PREFIX . 'id AND brandlang_lang_id = ' . $langId, 'lang');
-        $srch->addMultipleFields(array('ctr_display_order', 'brand_id as record_id', 'IFNULL(brand_name, brand_identifier) as record_title'));
+        $srch->addMultipleFields(array('brand_id as id', 'IFNULL(brand_name, brand_identifier) as text'));
         $srch->addOrder('ctr_display_order', 'ASC');
         $rs = $srch->getResultSet();
-
-        $db = FatApp::getDb();
-        return $db->fetchAll($rs);
+        return (array) FatApp::getDb()->fetchAllAssoc($rs);
     }
 
     /**
@@ -661,10 +699,9 @@ class Collections extends MyAppModel
         $srch->joinTable(BlogPost::DB_TBL, 'INNER JOIN', BlogPost::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id');
 
         $srch->joinTable(BlogPost::DB_TBL_LANG, 'LEFT JOIN', 'lang.postlang_post_id = ' . BlogPost::DB_TBL_PREFIX . 'id AND postlang_lang_id = ' . $langId, 'lang');
-        $srch->addMultipleFields(array('post_id as record_id', 'IFNULL(post_title, post_identifier) as record_title'));
+        $srch->addMultipleFields(array('post_id as id', 'IFNULL(post_title, post_identifier) as text'));
         $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        return $db->fetchAll($rs);
+        return (array) FatApp::getDb()->fetchAllAssoc($rs);
     }
 
     /**
@@ -695,11 +732,10 @@ class Collections extends MyAppModel
             'fc'
         );
         $srch->joinTable(FaqCategory::DB_TBL_LANG, 'LEFT OUTER JOIN', 'fc_l.' . FaqCategory::DB_TBL_LANG_PREFIX . 'faqcat_id = fc.' . FaqCategory::tblFld('id') . ' and fc_l.' . FaqCategory::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'fc_l');
-        $srch->addMultipleFields(array('ctr_display_order', 'faq_id as record_id', 'CONCAT(IFNULL(faq_title, faq_identifier), " | ", IFNULL (faqcat_name, faqcat_identifier)) as record_title'));
+        $srch->addMultipleFields(array('faq_id as id', 'CONCAT(IFNULL(faq_title, faq_identifier), " | ", IFNULL (faqcat_name, faqcat_identifier)) as text'));
         $srch->addOrder('ctr_display_order', 'ASC');
         $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        return $db->fetchAll($rs);
+        return (array) FatApp::getDb()->fetchAllAssoc($rs);
     }
 
     /**
@@ -723,12 +759,11 @@ class Collections extends MyAppModel
 
         $srch->joinTable(FaqCategory::DB_TBL, 'INNER JOIN', FaqCategory::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id');
         $srch->joinTable(FaqCategory::DB_TBL_LANG, 'LEFT JOIN', 'lang.faqcatlang_faqcat_id = ' . FaqCategory::DB_TBL_PREFIX . 'id AND faqcatlang_lang_id = ' . $langId, 'lang');
-       
-        $srch->addMultipleFields(array('ctr_display_order', 'faqcat_id as record_id', 'IFNULL (faqcat_name, faqcat_identifier) as record_title'));
+
+        $srch->addMultipleFields(array('faqcat_id as id', 'IFNULL (faqcat_name, faqcat_identifier) as text'));
         $srch->addOrder('ctr_display_order', 'ASC');
         $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        return $db->fetchAll($rs);
+        return (array) FatApp::getDb()->fetchAllAssoc($rs);
     }
 
     /**
@@ -753,11 +788,10 @@ class Collections extends MyAppModel
         $srch->joinTable(Testimonial::DB_TBL, 'INNER JOIN', Testimonial::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_COLLECTION_TO_RECORDS_PREFIX . 'record_id');
 
         $srch->joinTable(Testimonial::DB_TBL_LANG, 'LEFT JOIN', 'lang.testimoniallang_testimonial_id = ' . Testimonial::DB_TBL_PREFIX . 'id AND testimoniallang_lang_id = ' . $langId, 'lang');
-        $srch->addMultipleFields(array('ctr_display_order', 'testimonial_id as record_id', 'IFNULL(testimonial_title, testimonial_identifier) as record_title'));
+        $srch->addMultipleFields(array('testimonial_id as id', 'IFNULL(testimonial_title, testimonial_identifier) as text'));
         $srch->addOrder('ctr_display_order', 'ASC');
         $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        return $db->fetchAll($rs);
+        return (array) FatApp::getDb()->fetchAllAssoc($rs);
     }
 
     /**

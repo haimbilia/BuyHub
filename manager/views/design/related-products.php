@@ -86,7 +86,7 @@
                                                 <input name='basic' class="form-control" value='tag1, tag2 autofocus'>
                                             </div>
                                             <div class="col-md-2">
-                                                <button type="button" class="btn btn-brand btn-wide ml-2">Save</button>
+                                                <button type="button" class="btn btn-brand btn-wide ms-2">Save</button>
                                             </div>
                                         </div>
                                     </div>
@@ -143,11 +143,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 
@@ -175,11 +175,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 
@@ -207,11 +207,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 
@@ -239,11 +239,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 
@@ -271,11 +271,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 
@@ -303,11 +303,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 
@@ -335,11 +335,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 
@@ -367,11 +367,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 
@@ -399,11 +399,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 
@@ -431,11 +431,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 
@@ -463,11 +463,11 @@
                                                             <div class="media-profile_data">
                                                                 <h5 class="media-profile_title">Apple iPhone 12</h5>
                                                                 <p>
-                                                                    <span class="text-muted fw-bold">Storage: 128
+                                                                    <span class="text-muted">Storage: 128
                                                                         GB</span>
-                                                                    <span class="text-muted fw-bold">Color:
+                                                                    <span class="text-muted">Color:
                                                                         Black</span>
-                                                                    <span class="text-muted fw-bold">Seller:
+                                                                    <span class="text-muted">Seller:
                                                                         michael</span>
                                                                 </p>
 

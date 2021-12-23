@@ -179,7 +179,7 @@ class OrderReturnRequest extends MyAppModel
         $requestRow = $db->fetch($rs);
 
         if (!$requestRow) {
-            $this->error = Labels::getLabel("MSG_Invalid_Request", $this->commonLangId);
+            $this->error = Labels::getLabel("ERR_Invalid_Request", $this->commonLangId);
             return false;
         }
 
@@ -261,7 +261,7 @@ class OrderReturnRequest extends MyAppModel
                     }
                     $resp = $paymentMethodObj->getResponse();
                     if (empty($resp)) {
-                        $this->error = Labels::getLabel('LBL_UNABLE_TO_PLACE_GATEWAY_REFUND_REQUEST', $orderLangId);
+                        $this->error = Labels::getLabel('ERR_UNABLE_TO_PLACE_GATEWAY_REFUND_REQUEST', $orderLangId);
                         $db->rollbackTransaction();
                         return false;
                     }

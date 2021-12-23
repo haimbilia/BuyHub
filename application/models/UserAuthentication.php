@@ -199,7 +199,7 @@ class UserAuthentication extends FatModel
         $row = $db->fetch($rs);
         if (!empty($row)) {
             if ($row['user_is_buyer'] != applicationConstants::YES) {
-                $this->error = Labels::getLabel('MSG_Please_login_with_buyer_account', $this->commonLangId);
+                $this->error = Labels::getLabel('ERR_Please_login_with_buyer_account', $this->commonLangId);
                 return false;
             }
 
@@ -239,7 +239,7 @@ class UserAuthentication extends FatModel
 
         if (!$userObj->save()) {
             $db->rollbackTransaction();
-            $this->error = Labels::getLabel("MSG_USER_COULD_NOT_BE_SET", $this->commonLangId) . $userObj->getError();
+            $this->error = Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->commonLangId) . $userObj->getError();
             return false;
         }
         $userId = $userObj->getMainTableRecordId();
@@ -249,14 +249,14 @@ class UserAuthentication extends FatModel
 
         $pass = CommonHelper::getRandomPassword(8);
         if (!$userObj->setLoginCredentials($useremail, $useremail, $pass, $active, $verify)) {
-            $this->error = Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->commonLangId) . $userObj->getError();
+            $this->error = Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->commonLangId) . $userObj->getError();
             $db->rollbackTransaction();
             return false;
         }
 
         if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
             if (!$userObj->notifyAdminRegistration($data, $this->commonLangId)) {
-                $this->error = Labels::getLabel("MSG_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
                 $db->rollbackTransaction();
                 return false;
             }
@@ -269,7 +269,7 @@ class UserAuthentication extends FatModel
             $data['user_phone'] = !empty($uData['user_phone']) ? $uData['user_phone'] : '';
 
             if (!$userObj->guestUserWelcomeEmail($data, $this->commonLangId)) {
-                $this->error = Labels::getLabel("MSG_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
                 $db->rollbackTransaction();
                 return false;
             }
@@ -434,7 +434,7 @@ class UserAuthentication extends FatModel
                 }
 
                 if (true === MOBILE_APP_API_CALL) {
-                    $this->error = Labels::getLabel('MSG_Your_Account_verification_is_pending', $this->commonLangId);
+                    $this->error = Labels::getLabel('ERR_Your_Account_verification_is_pending', $this->commonLangId);
                 }
 
                 if (FatUtility::isAjaxCall() || true === MOBILE_APP_API_CALL) {
@@ -895,7 +895,7 @@ class UserAuthentication extends FatModel
         }
 
         if (!ValidateElement::password($pwd)) {
-            $this->error = Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->commonLangId);
             return false;
         }
 

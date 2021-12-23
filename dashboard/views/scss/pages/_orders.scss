@@ -501,41 +501,6 @@ hr.dotted {
     }
 }
 
-.dropdown-toggle-custom {
-    position: relative;
-    &-arrow {
-        position: absolute;
-        transform: translate(-6px, 0);
-        top: calc(50% - 4px);
-        #{$end-direction}: 0;
-        &:after,
-        &:before {
-            content: "";
-            position: absolute;
-            background-color: currentColor;
-            width: 1px;
-            height: 6px;
-            transition: all 0.25s ease-in-out;
-        }
-        &:before {
-            transform: translate(-2px, 0) rotate(45deg);
-        }
-        &:after {
-            transform: translate(2px, 0) rotate(-45deg);
-        }
-    }
-    &:not(.collapsed) {
-        .dropdown-toggle-custom-arrow {
-            &:before {
-                transform: translate(2px, 0) rotate(45deg);
-            }
-            &:after {
-                transform: translate(-2px, 0) rotate(-45deg);
-            }
-        }
-    }
-}
-
 .total-savings {
     border: dashed 1px $success-color;
     background-color: lighten($success-color, 50);

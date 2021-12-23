@@ -214,7 +214,7 @@ class AbandonedCart extends MyAppModel
                 ->setVariables($arrReplacements)
                 ->send();
         if (false === $sendEmail) {
-            $this->error = Labels::getLabel('MSG_Email_Not_Sent', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_Email_Not_Sent', $this->commonLangId);
             return false;
         }
         return true;

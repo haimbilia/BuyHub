@@ -68,7 +68,7 @@ class RibbonsController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_RIBBON_NAME', $this->siteLangId));
         $this->getListingData();
 
-        $this->_template->addJs(['js/jscolor.js']);
+        $this->_template->addJs(['js/jscolor.js', 'ribbons/page-js/index.js']);
 
         $this->_template->render(true, true, '_partial/listing/index.php');
     }

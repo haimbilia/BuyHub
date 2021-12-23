@@ -229,7 +229,8 @@ class ShippingZoneRatesController extends ListingBaseController {
         $cndFld = $frm->addHiddenField('', 'is_condition', 0);
         $fld = $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $this->siteLangId), 'shiprate_name');
 
-        $fld = $frm->addFloatField(Labels::getLabel('LBL_Cost', $this->siteLangId), 'shiprate_cost');
+        $frm->addFloatField(Labels::getLabel('LBL_Cost', $this->siteLangId), 'shiprate_cost');
+        $frm->addHtml('', 'add_condition', '');
 
         $fld = $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, '', array('class' => 'list-inline'));
 

@@ -72,8 +72,10 @@ class ConfigurationsController extends ListingBaseController
             $this->set('languages', Language::getAllNames());
         }
 
-        $tabs = Configurations::getTabsArr();
+        $tabs = Configurations::getTabsArr($langId);
+        $tabsMsgArr = Configurations::getTabsMsgArr($langId);
         $this->set('tabs', $tabs);
+        $this->set('tabsMsgArr', $tabsMsgArr);
         $this->set('dispLangTab', $dispLangTab);
         $this->set('lang_id', $langId);
         $this->set('formLayout', Language::getLayoutDirection($langId));
@@ -464,11 +466,11 @@ class ConfigurationsController extends ListingBaseController
                 }
                 $htmlAfterField .= "<span class='form-text text-muted'>" . Labels::getLabel("FRM_BING_WEBMASTER_MSG", $langId) . "</span>";
                 $fld->htmlAfterField = $htmlAfterField;
-                
+
                 $fld = $frm->addFileUpload(Labels::getLabel('FRM_HTML_FILE_VERIFICATION', $langId), 'google_file_verification', array('accept' => '.html', 'onChange' => 'updateVerificationFile(this, "google")'));
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_HTML_FILE_VERIFICATION_MSG", $langId) . '</span>';
 
-                $fld =$frm->addFileUpload(Labels::getLabel('FRM_XML_FILE_AUTHENTICATION', $langId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
+                $fld = $frm->addFileUpload(Labels::getLabel('FRM_XML_FILE_AUTHENTICATION', $langId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_XML_FILE_VERIFICATION_MSG", $langId) . '</span>';
 
                 $fld = $frm->addHtml('', 'hotjar', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_HOTJAR", $langId) . '</h3>');
@@ -890,51 +892,76 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_SELLER_ORDER_STATUSES", $langId), 'CONF_VENDOR_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
+                
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_the_order_starts_displaying_to_Sellers.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_BUYER_ORDER_STATUSES", $langId), 'CONF_BUYER_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_the_order_starts_displaying_to_Buyers.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_PROCESSING_ORDER_STATUS", $langId), 'CONF_PROCESSING_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_the_order_starts_stock_subtraction.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_COMPLETED_ORDER_STATUS", $langId), 'CONF_COMPLETED_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_they_are_considered_completed_and_payment_released_to_Sellers.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_FEEDBACK_READY_ORDER_STATUS", $langId), 'CONF_REVIEW_READY_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_they_are_allowed_to_review_the_orders.", $langId) . "</span>";
 
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_ALLOW_ORDER_CANCELLATION_BY_BUYERS", $langId), 'CONF_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_they_are_allowed_to_place_cancellation_request_on_orders.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_ALLOW_ORDER_CANCELLATION_BY_BUYERS_ON_DIGITAL", $langId), 'CONF_DIGITAL_ALLOW_CANCELLATION_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_they_are_allowed_to_place_cancellation_request_on_orders.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_ALLOW_RETURN/Exchange", $langId), 'CONF_RETURN_EXCHANGE_READY_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_they_are_allowed_to_place_return/exchange_request_on_orders.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_ENABLE_DIGITAL_DOWNLOAD", $langId), 'CONF_ENABLE_DIGITAL_DOWNLOADS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_they_are_allowed_to_access_their_downloadable_Products.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_ORDER_STATUSES_TO_ALLOW_TO_ATTACH_MORE_FILES_WITH_ORDER_PRODUCT", $langId), 'CONF_ALLOW_FILES_TO_ADD_WITH_ORDER_STATUSES', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_ORDER_STATUSES_TO_ALLOW_SELLER_OR_ADMIN_TO_ATTACH_MORE_FILES_WITH_ORDER_PRODUCTS", $langId) . "</span>";
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_ORDER_STATUSES_TO_CALCULATE_BADGE_COUNT_(For_Admin)", $langId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_ORDER_STATUSES_TO_CALCULATE_BADGE_COUNT_FOR_SELLER_ORDERS_IN_ADMIN_LEFT_NAVIGATION_PANEL", $langId) . "</span>";
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_PRODUCTS_ON_ORDER_STAGE(For_Seller_Inventory_Report)", $langId), 'CONF_PRODUCT_IS_ON_ORDER_STATUSES', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_PRODUCTS_ARE_IN_ON_ORDER_USED_ON_SELLER_DASHBOARD_PRODUCTS_INVENTORY_STOCK_STATUS_REPORT", $langId) . "</span>";
 
                 break;
@@ -1101,6 +1128,8 @@ class ConfigurationsController extends ListingBaseController
 
                 $orderStatusArr = Orders::getOrderProductStatusArr($langId);
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_BUYING_COMPLETION_ORDER_STATUS", $langId), 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
+                $fld->developerTags['cbLabelAttributes'] = ['class' => 'checbox'];                
+                $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_they_are_considered_completed_and_payment_released_to_Sellers.", $langId) . "</span>";
 
                 break;
@@ -1884,7 +1913,7 @@ class ConfigurationsController extends ListingBaseController
 
     public function testEmail()
     {
-        $emailObj = new FatMailer($this->adminLangId, 'test_email');
+        $emailObj = new FatMailer($this->siteLangId, 'test_email');
         $emailObj->setTo(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'));
         if (!$emailObj->send()) {
             FatUtility::dieJsonError($emailObj->getError());
@@ -1962,7 +1991,7 @@ class ConfigurationsController extends ListingBaseController
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
                 break;

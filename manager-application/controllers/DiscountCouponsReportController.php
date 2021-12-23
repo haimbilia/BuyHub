@@ -31,6 +31,7 @@ class DiscountCouponsReportController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('formColumns', $formColumns);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_COUPON_CODE', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
@@ -71,7 +72,7 @@ class DiscountCouponsReportController extends ListingBaseController
         $srch->joinTable(DiscountCoupons::DB_TBL, 'LEFT OUTER JOIN', 'coupon_id = couponhistory_coupon_id');
         $srch->joinTable(Credential::DB_TBL, 'LEFT OUTER JOIN', 'credential_user_id = user_id');
         $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'couponhistory_order_id = order_id');
-        $srch->addMultipleFields(array('coupon_code', 'couponhistory_id', 'couponhistory_coupon_id', 'order_number', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username','order_id'));
+        $srch->addMultipleFields(array('coupon_code', 'couponhistory_id', 'couponhistory_coupon_id', 'order_number', 'couponhistory_user_id', 'couponhistory_amount', 'couponhistory_added_on', 'credential_username', 'order_id'));
 
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         if (!empty($date_from)) {
@@ -136,7 +137,7 @@ class DiscountCouponsReportController extends ListingBaseController
         $rs = $srch->getResultSet();
 
         $arrListing = FatApp::getDb()->fetchAll($rs);
-        
+
         $this->set("arrListing", $arrListing);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -175,18 +176,17 @@ class DiscountCouponsReportController extends ListingBaseController
     protected function getFormColumns()
     {
         $discountReportsCacheVar = CacheHelper::get('discountReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if (!$discountReportsCacheVar) {
-            $arr = [
-                'coupon_code' => Labels::getLabel('LBL_COUPON_CODE', $this->siteLangId),
-                'order_number' => Labels::getLabel('LBL_ORDER_NUMBER', $this->siteLangId),
-                'credential_username' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
-                'couponhistory_amount' => Labels::getLabel('LBL_AMOUNT', $this->siteLangId),
-                'couponhistory_added_on' => Labels::getLabel('LBL_DATE', $this->siteLangId)
-            ];
-            CacheHelper::set('discountReportsCacheVar' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        } else {
-            $arr =  unserialize($discountReportsCacheVar);
+        if ($discountReportsCacheVar) {
+            return json_decode($discountReportsCacheVar);
         }
+        $arr = [
+            'coupon_code' => Labels::getLabel('LBL_COUPON_CODE', $this->siteLangId),
+            'order_number' => Labels::getLabel('LBL_ORDER_NUMBER', $this->siteLangId),
+            'credential_username' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
+            'couponhistory_amount' => Labels::getLabel('LBL_AMOUNT', $this->siteLangId),
+            'couponhistory_added_on' => Labels::getLabel('LBL_DATE', $this->siteLangId)
+        ];
+        CacheHelper::create('discountReportsCacheVar' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }

@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$formBackButtonAttr = $formBackButtonAttr ?? false;
 $activeGentab = !empty($activeGentab) ? 'active' : '';
 $activeLangtab = !empty($activeLangtab) ? 'active' : '';
 $disabled = !empty($disabled) ? ' disabled' : '';
@@ -10,8 +11,26 @@ $displayLangTab = $displayLangTab ?? true;
 $languages = $languages ?? [];
 unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
 
+ 
+<button class="float-btn" type="button" data-trigger="" onclick="layoutSelectorForm()">
+    <svg class="svg" width="20" height="20">
+        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back"></use>
+    </svg>
+</button>
+
+ 
 <div class="modal-header">
     <h5 class="modal-title">
+        <?php if (false !== $formBackButtonAttr) {
+            $onclick = $formBackButtonAttr['onclick'] ?? '';
+        ?>
+            <a class="back" href="javascript:void(0);" onclick="<?php echo $onclick; ?>">
+                <svg class="svg" width="24" height="24">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                    </use>
+                </svg>
+            </a>
+        <?php } ?>
         <?php echo $formTitle; ?>
         <?php if (!empty($formSubTitle)) { ?>
             <span class="text-muted"><?php echo $formSubTitle; ?></span>
@@ -37,16 +56,16 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
                     ];
                 }
                 $generalTabAttr = $generalTab['attr'] ?? [];
-                $label = $generalTab['label'] ?? '';
-                $isActive = $generalTab['isActive'] ?? false;
+                $label = $generalTab['label'] ?? Labels::getLabel('LBL_GENERAL', $siteLangId);
+                $isActive = $generalTab['isActive'] ?? $activeGentab;
                 $active = $isActive ? 'active' : '';
 
-                $href = !empty($generalTabAttr) ? $generalTabAttr['href'] : 'javascript:void(0);';
-                $onclick = !empty($generalTabAttr) ? $generalTabAttr['onclick'] : '';
-                $title = !empty($generalTabAttr) ? $generalTabAttr['title'] : '';
+                $href = $generalTabAttr['href'] ?? 'javascript:void(0);';
+                $onclick = $generalTabAttr['onclick'] ?? '';
+                $title = $generalTabAttr['title'] ?? Labels::getLabel('LBL_GENERAL', $siteLangId);
 
                 ?>
-                <a class="nav-link <?php echo $active . $disabled; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
+                <a class="nav-link <?php echo $active; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
                     <?php echo $label; ?>
                 </a>
                 <?php if (0 < count($languages) && true === $displayLangTab) { ?>
@@ -74,12 +93,13 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
                         $label = isset($link['label']) ? $link['label'] : '';
                         $isActive = isset($link['isActive']) ? $link['isActive'] : false;
                         $active = $isActive ? 'active' : '';
+                        $othetBtnsDisabled = (isset($link['isDisabled']) && false === $link['isDisabled']) || true === $isActive ? '' : $disabled;
 
                         $href = !empty($attr) ? $attr['href'] : 'javascript:void(0);';
                         $onclick = !empty($attr) ? $attr['onclick'] : '';
                         $title = !empty($attr) ? $attr['title'] : '';
                 ?>
-                        <a class="nav-link <?php echo $active . $disabled; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
+                        <a class="nav-link <?php echo $active . $othetBtnsDisabled; ?>" href="<?php echo $href; ?>" <?php echo !empty($onclick) ? "onclick='" . $onclick . "'" : ""; ?> title="<?php echo $title; ?>">
                             <?php echo $label; ?>
                         </a>
                 <?php }

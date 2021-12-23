@@ -87,9 +87,16 @@ class PluginsController extends ListingBaseController
 
 
         $attr = array(
-            'plg.*',
-            'plg_l.*',
-            'conf.*'
+            'plg.plugin_id',
+            'plg.plugin_type',
+            'plg.plugin_code',
+            'plg.plugin_active',
+            'plg.plugin_display_order',
+            'plg_l.plugin_name',
+            'plg_l.plugin_description',
+            'plg_l.pluginlang_lang_id',
+            'conf.*',
+            'COALESCE(plg_l.plugin_name, plg.plugin_identifier) as plugin_name'
         );
         $srch = Plugin::getSearchObject($this->siteLangId, false);
         $srch->joinTable(Configurations::DB_TBL, 'LEFT JOIN', "conf_val = plugin_id AND conf_name = 'CONF_DEFAULT_PLUGIN_" . $type . "'", 'conf');
@@ -504,7 +511,7 @@ class PluginsController extends ListingBaseController
                 $pageData = PageLanguageData::getAttributesByKey('MANAGE_PLUGINS', $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_CONFIGURATION_&_MANAGEMENT', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
                     ['title' => $pageTitle]
                 ];
                 break;

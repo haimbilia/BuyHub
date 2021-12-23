@@ -126,7 +126,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_REWARDS_ON_PURCHASE_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->_template->render(false, false);
     }
 
     public function setup()
@@ -134,11 +134,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $this->objPrivilege->canEditRewardsOnPurchase();
 
         $post = FatApp::getPostedData();
-
-        $recordId = 0;
-        if (isset($post['rop_id'])) {
-            $recordId = FatUtility::int($post['rop_id']);
-        }
+        $recordId = FatApp::getPostedData('rop_id', FatUtility::VAR_INT, 0);
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray($post);
@@ -146,10 +142,22 @@ class RewardsOnPurchaseController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+        $purchaseUpto = FatApp::getPostedData('rop_purchase_upto', FatUtility::VAR_FLOAT, 0);
+        if (1 > $purchaseUpto) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_PURCHASE_UPTO_VALUE', $this->siteLangId), true);
+        }
 
-        $recordId = $post['rop_id'];
+        $srch = RewardsOnPurchase::getSearchObject();
+        $srch->doNotCalculateRecords();
+        $srch->addFld('rop_id');
+        $srch->addCondition('rop_purchase_upto', '=', $purchaseUpto);
+        $srch->addCondition('rop_id', '!=', $recordId);
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        if (is_array($result) && !empty($result)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_SAME_PURCHASE_AMOUNT_ALREADY_ADDED', $this->siteLangId), true);
+        }
+        
         unset($post['rop_id']);
-
         $record = new RewardsOnPurchase($recordId);
         $record->assignValues($post);
 
@@ -157,8 +165,7 @@ class RewardsOnPurchaseController extends ListingBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $this->set('msg', $this->str_update_record);
-        $this->_template->render(false, false, 'json-success.php');
+        FatUtility::dieJsonSuccess($this->str_update_record);
     }
 
     public function deleteRecord()

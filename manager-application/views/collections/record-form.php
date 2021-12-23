@@ -1,17 +1,17 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'web_form form_horizontal');
-$frm->developerTags['colClassPrefix'] = 'col-md-';
-$frm->developerTags['fld_default_col'] = 12;
-$fld = $frm->getField('collection_records');
-$fld->setWrapperAttribute('class', 'ui-front');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+$frm->setFormTagAttribute('data-onclear', 'recordForm(' . $recordId . ',' . $collection_type . ')');
+
+$fld = $frm->getField('collection_records[]');
+$fld->setFieldTagAttribute('id', 'collectionItemJs');
+$fld->addFieldTagAttribute('multiple', 'multiple');
+$fld->addFieldTagAttribute('data-allow-clear', 'false');
 
 $actionName = 'autocomplete';
 $hideSelectField = 'hide-addrecord-field--js';
 switch ($collection_type) {
     case Collections::COLLECTION_TYPE_PRODUCT:
-        $controllerName = 'Collections';
-        $actionName = 'autoCompleteSelprods';
+        $controllerName = 'SellerProducts';
         $hideSelectField = '';
         break;
     case Collections::COLLECTION_TYPE_CATEGORY:
@@ -47,127 +47,62 @@ switch ($collection_type) {
         $actionName = '';
         break;
 }
-?>
-<section class="section">
-    <div class="sectionbody space">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="tabs_nav_container responsive flat">
-                    <ul class="tabs_nav">
-                        <li><a class="" href="javascript:void(0)" onclick="collectionForm(<?php echo $collection_type ?>, <?php echo $collection_layout_type ?>, <?php echo $collection_id ?>, 0);">
-                                <?php echo Labels::getLabel('LBL_General', $adminLangId); ?></a>
-                        </li>
-                        <?php if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) { ?>
-                            <li><a class="active" href="javascript:void(0)" onclick="recordForm(<?php echo $collection_id ?>, <?php echo $collection_type ?>);">
-                                    <?php echo Labels::getLabel('LBL_Link_Records', $adminLangId); ?></a>
-                            </li>
-                        <?php } ?>
-                        <?php if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA)) { ?>
-                            <li>
-                                <a class="" href="javascript:void(0)" <?php if ($collection_id > 0) { ?> onclick="collectionMediaForm(<?php echo $collection_id ?>);" <?php } ?>>
-                                    <?php echo Labels::getLabel('LBL_Media', $adminLangId); ?>
-                                </a>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                    <div class="tabs_panel_wrap">
-                        <div class="tabs_panel">
-                            <?php echo $frm->getFormHtml(); ?>
-                            <div id="records_list" class="col-xs-10"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<script type="text/javascript">
-    $("document").ready(function() {
-        var controllerName = '<?php echo $controllerName; ?>';
-        var actionName = '<?php echo $actionName; ?>';        
-        var collectionId = $("input[name='collection_id']").val();
-        
-        <?php if($collection_type == Collections::COLLECTION_TYPE_PRODUCT){ ?>
-            $("select[name='collection_records']").select2({
-                closeOnSelect: true,
-                dir: layoutDirection,
-                allowClear: true,
-                placeholder: $("select[name='collection_records']").attr('placeholder'),
-                ajax: {
-                    url: fcom.makeUrl(controllerName, actionName),
-                    dataType: 'json',
-                    delay: 250,
-                    method: 'post',
-                    data: function (params) {
-                        return {
-                            keyword: params.term, // search term
-                            page: params.page,
-                            collection_id: collectionId
-                        };
-                    },
-                    processResults: function (data, params) {
-                        params.page = params.page || 1;
-                        return {
-                            results: data.products,
-                            pagination: {
-                                more: params.page < data.pageCount
-                            }
-                        };
-                    },
-                    cache: true
-                },
-                minimumInputLength: 0,
-                templateResult: function (result)
-                {
-                    return result.name;
-                },
-                templateSelection: function (result)
-                {
-                    return result.name || result.text;
-                }
-            }).on('select2:selecting', function (e)
-            {   
-                var item = e.params.args.data; 
-                updateRecord(<?php echo $collection_id; ?>, item.id);                
-                setTimeout(function () {
-                    $("select[name='collection_records']").val('').trigger('change.select2');
-                }, 200);
 
-            });
-            
-        <?php }else{ ?>    
-        
-        $('input[name=\'collection_records\']').autocomplete({
-            'classes': {
-                "ui-autocomplete": "custom-ui-autocomplete"
-            },
-            'source': function(request, response) {
-                $.ajax({
-                    url: fcom.makeUrl(controllerName, actionName),
-                    data: {
-                        keyword: request['term'],
-                        fIsAjax: 1,
-                        collection_id: collectionId,
-                    },
-                    dataType: 'json',
-                    type: 'post',
-                    success: function(json) {
-                        response($.map(json, function(item) {
-                            return {
-                                label: item['name'],
-                                value: item['name'],
-                                id: item['id']
-                            };
-                        }));
-                    },
-                });
-            },
-            select: function(event, ul) {
-                updateRecord(<?php echo $collection_id; ?>, ul.item.id);
-                $('input[name=\'collection_records\']').val('');
-                return false;
+$generalTab['attr']['onclick'] = 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');';
+$activeGentab = false;
+
+if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) {
+    $otherButtons[] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'recordForm(' . $recordId . ',' . $collection_type . ')',
+            'title' => Labels::getLabel('LBL_LINK_RECORDS', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_LINK_RECORDS', $siteLangId),
+        'isActive' => true
+    ];
+}
+
+if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA)) {
+    $otherButtons[] = [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'collectionMediaForm(' . $recordId . ',' . $collection_type . ')',
+            'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),
+        'isActive' => false
+    ];
+}
+
+$includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
+
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');
+
+$str = Labels::getLabel('ERR_YOU_CANNOT_BIND_MORE_THAN_ALLOWED_LIMIT_{LIMIT}', $siteLangId);
+$errorMsg = CommonHelper::replaceStringData($str, ['{LIMIT}' => Collections::LIMIT_COLLECTION_RECORDS]);
+?>
+
+<script type="text/javascript">
+    var ctrlName = '<?php echo $controllerName; ?>';
+    var actionName = '<?php echo $actionName; ?>';
+    var recordId = '<?php echo $recordId; ?>';
+    var recordLimit = <?php echo Collections::LIMIT_COLLECTION_RECORDS ?>;
+    $(function() {
+        select2('collectionItemJs', fcom.makeUrl(ctrlName, actionName), function(obj) {
+            return {
+                excludeRecords: obj.val()
             }
+        }, function(e) {
+            e.preventDefault();
+            if (recordLimit <= $(e.currentTarget).val().length) {
+                $.ykmsg.error('<?php echo $errorMsg; ?>');
+                return;
+            }
+            updateRecord(e, recordId);
+        }, function(e) {
+            var item = e.params.args.data;
+            removeCollectionRecord(recordId, item.id);
         });
-        <?php } ?>
     });
 </script>

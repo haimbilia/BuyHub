@@ -258,12 +258,12 @@ class Plugin extends PluginCommon
     public function getDefaultPluginData(int $typeId, $attr = null, int $langId = 0)
     {
         if (!in_array($typeId, self::getKingpinTypeArr())) {
-            $this->error = Labels::getLabel('MSG_INVALID_PLUGIN_TYPE', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_PLUGIN_TYPE', CommonHelper::getLangId());
             return false;
         }
         $kingPin = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . $typeId, FatUtility::VAR_INT, 0);
         if (1 > $kingPin) {
-            $this->error = Labels::getLabel('MSG_PLUGIN_NOT_FOUND', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_PLUGIN_NOT_FOUND', CommonHelper::getLangId());
             return false;
         }
 

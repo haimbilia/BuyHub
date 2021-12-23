@@ -28,6 +28,7 @@ class CatalogReportController extends ListingBaseController
         $this->set('pageTitle', $pageTitle);
         $this->set('frmSearch', $frmSearch);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }

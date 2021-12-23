@@ -6,14 +6,14 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
     $imgArr = [
         'url' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', $imageFunction, array($image['afile_record_id'], $image['afile_lang_id'], "THUMB", $image['afile_id'], $image['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
         'name' => $image['afile_name']
-    ]; 
- } 
+    ];
+}
 
- echo HtmlHelper::getfileInputHtml(
+echo HtmlHelper::getfileInputHtml(
     ['onChange' => 'loadImageCropper(this)', 'accept' => 'image/*', 'data-name' => $file_type == 'logo' ? Labels::getLabel("FRM_SHOP_LOGO", $siteLangId) : Labels::getLabel("FRM_SHOP_BANNER_IMAGE", $siteLangId)],
     $siteLangId,
-    ($canEdit ? 'deleteMedia(' . $image['afile_record_id'] . ',\'' . $file_type . '\',' . $image['afile_id'] .',' . $image['afile_lang_id'].',' . $image['afile_screen'] .')' :''),
-    '',
+    ($canEdit ? 'deleteMedia(' . $image['afile_record_id'] . ',\'' . $file_type . '\',' . $image['afile_id'] . ',' . $image['afile_lang_id'] . ',' . $image['afile_screen'] . ')' : ''),
+    ($canEdit ? 'editDropZoneImages(this)': ''),
     $imgArr,
-    'mt-3'
+    'mt-3 dropzone-custom dropzoneContainerJs'
 );

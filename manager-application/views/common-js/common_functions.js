@@ -41,6 +41,9 @@ function getNotifications() {
   );
 } */
 
+
+
+
 copyText = function (obj, applyToolTipInfo = true) {
     var title = $(obj).data("title");
     /*
@@ -51,6 +54,7 @@ copyText = function (obj, applyToolTipInfo = true) {
       */
 
     if (!navigator.clipboard) {
+        console.warn('clipboard API only works on localhost and https');
         // Clipboard API  only works on localhost anf https as per doc
         return;
     }
@@ -63,6 +67,7 @@ copyText = function (obj, applyToolTipInfo = true) {
         console.error("Failed to copy!", err);
     }
 };
+
 tooltipCopyHelper = function (obj, title) {
     $(obj)
         .tooltip("hide")
@@ -70,8 +75,7 @@ tooltipCopyHelper = function (obj, title) {
         .tooltip("update")
         .tooltip("show");
 
-    $(obj).mouseout(function () {
-        console.log("vvv");
+    $(obj).mouseout(function () {   
         $(obj)
             .tooltip("hide")
             .attr("data-original-title", langLbl.clickToCopy)
@@ -133,7 +137,7 @@ getSlugUrl = function (obj, str, extra, pos) {
 
     $(obj)
         .next()
-        .html(SITE_ROOT_URL + str);
+        .html('<a target="_blank" href="' + SITE_ROOT_URL + str + '">' + SITE_ROOT_URL + str + '</a>');
 };
 
 Slugify = function (str, str_val_id, is_slugify) {
@@ -183,10 +187,11 @@ select2 = function (
     }
 
     ele.select2({
+        dropdownParent: ele.closest('.modal').length ? ele.closest('.modal') : null,
         closeOnSelect: ele.data("closeOnSelect") || true,
         data: data,
         dir: layoutDirection,
-        allowClear: true,
+        allowClear: ele.data("allowClear") || true,
         placeholder: ele.attr("placeholder") || "",
         ajax: {
             url: url,
@@ -231,14 +236,14 @@ select2 = function (
                 callbackOnUnSelect(e);
             }
         });
-    
+
     var select2Selector = ele.data("select2");
     var elementName = ele.attr('name').replace('[]', '');
-    if ('undefined' != typeof(select2Selector.dropdown)) {
+    if ('undefined' != typeof (select2Selector.dropdown)) {
         $(select2Selector.dropdown.$search).attr('name', elementName + '-select2');
     }
-    
-    if ('undefined' != typeof(select2Selector.selection)) {
+
+    if ('undefined' != typeof (select2Selector.selection)) {
         $(select2Selector.selection.$search).attr('name', elementName + '-select2');
     }
     if (0 < ele.closest(".advancedSearchJs").length) {
@@ -248,22 +253,52 @@ select2 = function (
     if (0 < ele.closest(".form-group").length) {
         select2Selector.$container.addClass("w-100");
     }
-
+    select2Selector.$container.addClass("custom-select2");
     $("." + $.ykmodal.element).removeAttr("tabindex");
 };
 /**
  * hiddenfields object = { fieldname : fieldValue}
  */
-redirectUser = function (id) {
-    redirectfunc(fcom.makeUrl('Users'), { user_id: id }, 0, true);
+redirectUser = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['user_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('Users'), extraData, 0, true);
 };
 
-redirectToShop = function (id) {
-    redirectfunc(fcom.makeUrl('Shops'), { shop_id: id }, 0, true);
+redirectToShop = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['shop_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('Shops'), extraData, 0, true);
 };
 
-redirectToProduct = function (id) {
-    redirectfunc(fcom.makeUrl('Products'), { product_id: id }, 0, true);
+redirectToProduct = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['product_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('Products'), extraData, 0, true);
+};
+
+redirectToSellerProduct = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['selprod_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('SellerProducts'), extraData, 0, true);
+};
+
+redirectToShopReport = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['shop_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('ShopsReport'), extraData, 0, true);
+};
+
+redirectToProductReviews = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['reviewed_for_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('ProductReviews'), extraData, 0, true);
 };
 
 redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
@@ -275,8 +310,7 @@ redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
         var target = newTab ? ' target="_blank" ' : " ";
         let inputs = "";
         $.each(hiddenfields, function (index, value) {
-            inputs +=
-                '<input type="hidden" name="' + index + '" value="' + value + '">';
+            inputs += '<input type="hidden" name="' + index + '" value="' + value + '">';
         });
         $("<form" + target + 'action="' + url + '" method="POST">' + inputs + "</form>").appendTo($(document.body)).submit();
     }

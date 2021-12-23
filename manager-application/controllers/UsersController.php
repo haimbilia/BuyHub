@@ -128,7 +128,7 @@ class UsersController extends ListingBaseController
             $srch->addCondition('user_regdate', '<=', $user_regdate_to . ' 23:59:59');
         }
 
-        $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'user_parent', 'credential_username', 'credential_email', 'credential_active', 'credential_verified', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for', 'user_updated_on','shop_updated_on'));
+        $srch->addMultipleFields(array('user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'user_profile_info', 'user_regdate', 'user_is_buyer', 'user_parent', 'credential_username', 'credential_email', 'credential_active', 'credential_verified', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser', 'user_is_affiliate', 'user_registered_initially_for', 'user_updated_on', 'shop_updated_on'));
 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
@@ -142,7 +142,7 @@ class UsersController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
-        
+
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 
@@ -350,34 +350,35 @@ class UsersController extends ListingBaseController
 
         if (1 > $recordId) {
             $userTypesArr = User::getUserTypesArr($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_User_Type', $this->siteLangId), 'user_type', $userTypesArr, '', [], Labels::getLabel('FRM_Select', $this->siteLangId));
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER_TYPE', $this->siteLangId), 'user_type', $userTypesArr, '', [], Labels::getLabel('FRM_Select', $this->siteLangId));
             $fld->requirement->setRequired(true);
         }
 
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Username', $this->siteLangId), 'credential_username', '');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_USERNAME', $this->siteLangId), 'credential_username', '');
         if (1 > $recordId) {
             $fld->setUnique('tbl_user_credentials', 'credential_username', 'credential_user_id', 'user_id', 'user_id');
             $fld->requirements()->setRequired();
             $fld->requirements()->setUsername();
         }
-        $frm->addRequiredField(Labels::getLabel('FRM_Customer_Name', $this->siteLangId), 'user_name');
-        $frm->addDateField(Labels::getLabel('FRM_Date_Of_Birth', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addHiddenField('', 'user_phone_dcode');
-        $phnFld = $frm->addTextBox(Labels::getLabel('FRM_Phone', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
-        $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_Email', $this->siteLangId), 'credential_email', '');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_EMAIL', $this->siteLangId), 'credential_email', '');
         if (1 > $recordId) {
             $fld->setUnique('tbl_user_credentials', 'credential_email', 'credential_user_id', 'user_id', 'user_id');
             $fld->requirements()->setRequired();
         }
+        $frm->addRequiredField(Labels::getLabel('FRM_CUSTOMER_NAME', $this->siteLangId), 'user_name');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_OF_BIRTH', $this->siteLangId), 'user_dob', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addHiddenField('', 'user_phone_dcode');
+        $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'user_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
+
+
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId);
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_Country', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('FRM_Select', $this->siteLangId));
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'user_country_id', $countriesArr, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 223), [], Labels::getLabel('FRM_Select', $this->siteLangId));
 
-        $frm->addSelectBox(Labels::getLabel('FRM_State', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('FRM_Select', $this->siteLangId));
-        $frm->addTextBox(Labels::getLabel('FRM_City', $this->siteLangId), 'user_city');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $this->siteLangId), 'user_state_id', array(), '', [], Labels::getLabel('FRM_Select', $this->siteLangId));
+        $frm->addTextBox(Labels::getLabel('FRM_CITY', $this->siteLangId), 'user_city');
 
         return $frm;
     }
@@ -563,12 +564,12 @@ class UsersController extends ListingBaseController
             $srch->addCondition('shp.shop_supplier_display_status', '=', applicationConstants::YES);
             $srch->addCondition('shp.shop_active', '=', applicationConstants::YES);
         }
-        
+
         if (0 < $joinOrder) {
             $srch->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id = u.user_id', 'o');
             $srch->addGroupby('o.order_user_id');
             if (0 < $orderType) {
-                $srch->addCondition('o.order_type', '=', $orderType);    
+                $srch->addCondition('o.order_type', '=', $orderType);
             }
         }
 
@@ -578,12 +579,12 @@ class UsersController extends ListingBaseController
         $srch->addOrder('credential_email', 'ASC');
 
         $keyword = FatApp::getPostedData('keyword', null, '');
-        
+
         if (!empty($keyword)) {
             $cond = $srch->addCondition('uc.credential_username', 'like', '%' . $keyword . '%');
             $cond->attachCondition('uc.credential_email', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
-            
+
             if (0 < $joinShop) {
                 $cond->attachCondition('shp.shop_identifier', 'LIKE', '%' . $keyword . '%');
                 $cond->attachCondition('s_l.shop_name', 'LIKE', '%' . $keyword . '%');
@@ -618,7 +619,7 @@ class UsersController extends ListingBaseController
             $srch->addCondition('uc.credential_verified', '=', $credential_verified);
         }
         $srch->setPageNumber($page);
-        
+
         $doNotLimitRecords = FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 0);
         if (0 < $doNotLimitRecords) {
             $srch->doNotLimitRecords();
@@ -825,6 +826,8 @@ class UsersController extends ListingBaseController
             array('id' => 'new_password')
         );
         $newPwd->requirements()->setRequired();
+        $newPwd->requirements()->setRegularExpressionToValidate(ValidateElement::PASSWORD_REGEX);
+        $newPwd->requirements()->setCustomErrorMessage(Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
 
         $conNewPwd = $frm->addPasswordField(
             Labels::getLabel('LBL_Confirm_New_Password', $this->siteLangId),
@@ -890,11 +893,11 @@ class UsersController extends ListingBaseController
     {
         $frm = new Form('frmCookiesPreferences');
         $fld = $frm->addCheckBox(Labels::getLabel("FRM_FUNCTIONAL", $this->siteLangId), 'ucp_functional', 1, array(), true, 0);
-        $fld->htmlAfterField = '<div>' . Labels::getLabel('FRM_FUNCTIONAL_COOKIES_INFORMATION', $this->siteLangId) . '</div>';
+        // $fld->htmlAfterField = '<div>' . Labels::getLabel('FRM_FUNCTIONAL_COOKIES_INFORMATION', $this->siteLangId) . '</div>';
         $fld = $frm->addCheckBox(Labels::getLabel("FRM_STATISTICAL_ANALYSIS", $this->siteLangId), 'ucp_statistical', 1, array(), false, 0);
-        $fld->htmlAfterField = '<div>' . Labels::getLabel('FRM_STATISTICAL_ANALYSIS_COOKIES_INFORMATION', $this->siteLangId) . '</div>';
+        // $fld->htmlAfterField = '<div>' . Labels::getLabel('FRM_STATISTICAL_ANALYSIS_COOKIES_INFORMATION', $this->siteLangId) . '</div>';
         $fld = $frm->addCheckBox(Labels::getLabel("FRM_PERSONALISE_EXPERIENCE", $this->siteLangId), 'ucp_personalized', 1, array(), false, 0);
-        $fld->htmlAfterField = '<div>' . Labels::getLabel('FRM_PERSONALISE_COOKIES_INFORMATION', $this->siteLangId) . '</div>';
+        // $fld->htmlAfterField = '<div>' . Labels::getLabel('FRM_PERSONALISE_COOKIES_INFORMATION', $this->siteLangId) . '</div>';
         return $frm;
     }
 

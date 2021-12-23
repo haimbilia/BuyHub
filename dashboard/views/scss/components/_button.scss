@@ -1,112 +1,120 @@
 @-webkit-keyframes moltinShake {
     12.5% {
-        -webkit-transform: translateX(-6px) rotateY(-5deg);
         transform: translateX(-6px) rotateY(-5deg);
     }
     37.5% {
-        -webkit-transform: translateX(5px) rotateY(4deg);
         transform: translateX(5px) rotateY(4deg);
     }
     62.5% {
-        -webkit-transform: translateX(-3px) rotateY(-2deg);
         transform: translateX(-3px) rotateY(-2deg);
     }
     87.5% {
-        -webkit-transform: translateX(2px) rotateY(1deg);
         transform: translateX(2px) rotateY(1deg);
     }
     100% {
-        -webkit-transform: translateX(0);
         transform: translateX(0);
     }
 }
 
 @keyframes moltinShake {
     12.5% {
-        -webkit-transform: translateX(-6px) rotateY(-5deg);
         transform: translateX(-6px) rotateY(-5deg);
     }
     37.5% {
-        -webkit-transform: translateX(5px) rotateY(4deg);
         transform: translateX(5px) rotateY(4deg);
     }
     62.5% {
-        -webkit-transform: translateX(-3px) rotateY(-2deg);
         transform: translateX(-3px) rotateY(-2deg);
     }
     87.5% {
-        -webkit-transform: translateX(2px) rotateY(1deg);
         transform: translateX(2px) rotateY(1deg);
     }
     100% {
-        -webkit-transform: translateX(0);
         transform: translateX(0);
     }
 }
 
 .invalid {
-    -webkit-animation: moltinShake 0.4s ease-in-out 0.1s normal forwards 1 running;
     animation: moltinShake 0.4s ease-in-out 0.1s normal forwards 1 running;
 }
 
 .btn {
     padding: $input-padding;
     height: $input-height;
-    &.btn-brand {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    border-width: 2px;
+    display: inline-flex;
+    align-items: center;
+    &:focus {
+        outline: none !important;
+    }
+    &:hover {
+        outline: none !important;
+    }
+    &-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
+
+        &:hover {
+            color: var(--brand-color-inverse);
+        }
     }
-    &.btn-outline-brand {
+    &-outline-brand {
         border-color: var(--brand-color);
-        color: var(--brand-color-inverse);
+        color: var(--brand-color);
+        &:hover {
+            color: var(--brand-color);
+        }
     }
-    &.btn--white {
+    &--white {
         background: #fff;
         color: #000;
     }
-    &.btn-outline-brand {
+    &-outline-brand {
         background: none;
         border-color: $brand-color;
         color: $brand-color;
     }
-    &.btn-outline-secondary {
+    &-outline-secondary {
         background: none;
         border-color: $secondary-color;
         color: $secondary-color;
     }
-    &.btn-outline-white {
+    &-outline-white {
         background: none;
         border-color: #fff;
         color: #fff;
     }
-    &.btn-outline-gray {
+    &-outline-gray {
         background: none;
         border-color: $border-color;
         color: $txt-body;
     }
-    &.btn-block {
+    &-block {
         display: block;
         width: 100%;
     }
-    &.btn-wide {
+    &-wide {
         padding-left: 2rem;
         padding-right: 2rem;
     }
-    &.btn-sm {
+    &-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
         line-height: 1.5;
         border-radius: 0.2rem;
+        height: auto;
     }
-    &.btn-arrow {
-        svg {
+    &-arrow {
+        .svg {
             width: 12px;
             height: 12px;
             margin-top: -4px;
             margin-#{$end-direction}: 5px;
         }
     }
-    &.btn-link {
+    &-link {
         text-decoration: none;
         color: $txt-body;
         padding: 0;
@@ -123,7 +131,6 @@
         }
         &:hover {
             .arrow {
-                -webkit-transform: translateX(0.25rem);
                 transform: translateX(0.25rem);
             }
         }
@@ -131,31 +138,20 @@
     &:focus {
         outline: none !important;
     }
+
     &.disabled {
         filter: grayscale(1);
     }
     .icn {
-        svg {
+        .svg {
             width: 16px;
             height: 16px;
         }
     }
 }
 
-.btn-group > .btn:not(:last-child):not(.dropdown-toggle),
-.btn-group > .btn-group:not(:last-child) > .btn {
-    border-top-#{$end-direction}-radius: 0;
-    border-bottom-#{$end-direction}-radius: 0;
-}
-
-.btn-group > .btn:not(:first-child),
-.btn-group > .btn-group:not(:first-child) > .btn {
-    border-top-#{$start-direction}-radius: 0;
-    border-bottom-#{$start-direction}-radius: 0;
-}
-
 button:focus,
-.btn:focus {
+:focus {
     outline: none;
     box-shadow: none !important;
 }

@@ -1,9 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-
+HtmlHelper::formatFormFields($frm, 6);
 $frm->setFormTagAttribute('onsubmit', 'saveRecord(this, "addBankInfoForm"); return(false);');
-
 $dobFld = $frm->getField('user_dob');
-$dobFld->setFieldTagAttribute('class', 'user_dob_js');
+$dobFld->addFieldTagAttribute('class', 'user_dob_js');
 
 if ($recordId > 0) {
     $fld = $frm->getField('credential_username');
@@ -47,13 +46,10 @@ $otherButtons[] = [
     'label' => Labels::getLabel('LBL_COOKIES_PREFERENCES', $siteLangId),
     'isActive' => false
 ];
+$colWidthValuesDefault = 6;
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script language="javascript">
     $(document).ready(function() {
         getCountryStates($("#addrCountryIdJs").val(), <?php echo $stateId; ?>, '#addrStateIdJs');
     });
-
-    setTimeout(() => {
-        stylePhoneNumberFld('.phoneJs');
-    }, 200);
 </script>

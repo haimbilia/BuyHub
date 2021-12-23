@@ -280,7 +280,7 @@ class StripeConnect extends PaymentMethodBase
             return false;
         }
 
-        $this->error = Labels::getLabel('MSG_YOUR_ACCOUNT_HAS_BEEN_INCOMPLETE_/_RESTRICTED', $this->langId);
+        $this->error = Labels::getLabel('ERR_YOUR_ACCOUNT_HAS_BEEN_INCOMPLETE_/_RESTRICTED', $this->langId);
         foreach ($requirements->errors as $error) {
             $this->error = ' ' . $error['reason'];
         }
@@ -769,7 +769,7 @@ class StripeConnect extends PaymentMethodBase
     public function updatePersonVerificationDocument(string $side, string $name = 'document'): bool
     {
         if (empty($this->resp)) {
-            $this->error = Labels::getLabel('LBL_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
 
@@ -824,7 +824,7 @@ class StripeConnect extends PaymentMethodBase
             return true;
         }
 
-        $this->error = Labels::getLabel('MSG_UNABLE_TO_DELETE_THIS_ACCOUNT', $this->langId);
+        $this->error = Labels::getLabel('ERR_UNABLE_TO_DELETE_THIS_ACCOUNT', $this->langId);
         return false;
     }
 
@@ -847,7 +847,7 @@ class StripeConnect extends PaymentMethodBase
     public function initiateSession(array $requestParam): bool
     {
         if (empty($requestParam)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
 
@@ -878,7 +878,7 @@ class StripeConnect extends PaymentMethodBase
     public function createPriceObject(array $requestParam): bool
     {
         if (empty($requestParam)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
 
@@ -921,7 +921,7 @@ class StripeConnect extends PaymentMethodBase
     public function bindCustomer(array $requestParam): bool
     {
         if (empty($requestParam)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
 

@@ -2,16 +2,16 @@
     top: $header-height;
     right: 0;
     left: 0;
-    max-height: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    max-height: 70%;
     transform: translateY(-100%);
     z-index: 100;
+    box-shadow: 0 1.2px 1.9px -1px rgba(0, 0, 0, 0.014), 0 3.3px 5.3px -1px rgba(0, 0, 0, 0.038), 0 8.5px 12.7px -1px rgba(0, 0, 0, 0.085), 0 30px 42px -1px rgba(0, 0, 0, 0.15);
 }
 .mega-search {
     max-width: 600px;
     width: 100%;
     margin: 0 auto;
-    padding: 2rem 0;
+    padding: 4rem 0;
     &-input {
         font-size: 0.85rem;
         background: none;
@@ -33,50 +33,52 @@
     }
     .suggestions-title {
         text-transform: uppercase;
-        color: $txt-gray;
+        color: $txt-body;
         font-size: 0.8rem;
-        margin: 0;
+        margin-bottom: 1rem;
         padding: 0;
     }
     .text-suggestions {
         flex: 1;
-
         display: flex;
         flex-direction: column;
         font-size: 0.75rem;
-        li {
+        &-item {
             padding-bottom: 8px;
             transition: all 0.2s ease-in-out;
-            a {
+        }
+        &-link {
+            display: block;
+            position: relative;
+            transition: all 0.2s linear;
+            &:before {
+                visibility: hidden;
+                opacity: 0;
+                position: absolute;
+                left: 10px;
+                top: calc(50% - 3px);
+                content: "";
                 display: block;
-                position: relative;
+                margin: 0;
+                width: 6px;
+                height: 6px;
+                border-top: 1px solid currentColor;
+                border-right: 1px solid currentColor;
+                transform: rotate(45deg);
                 transition: all 0.2s linear;
+            }
+            &:hover {
+                margin-#{$start-direction}: 10px;
+                color: $brand-color;
                 &:before {
-                    visibility: hidden;
-                    opacity: 0;
-                    position: absolute;
-                    left: 10px;
-                    top: calc(50% - 3px);
-                    content: "";
-                    display: block;
-                    margin: 0;
-                    width: 6px;
-                    height: 6px;
-                    border-top: 1px solid currentColor;
-                    border-right: 1px solid currentColor;
-                    transform: rotate(45deg);
-                    transition: all 0.2s linear;
-                }
-                &:hover {
-                    margin-#{$start-direction}: 10px;
-                    color: $brand-color;
-                    &:before {
-                        #{$start-direction}: -12px;
-                        visibility: visible;
-                        opacity: 1;
-                    }
+                    #{$start-direction}: -12px;
+                    visibility: visible;
+                    opacity: 1;
                 }
             }
+        }
+
+        &-span {
         }
     }
     .history-suggestions {

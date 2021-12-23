@@ -225,7 +225,7 @@ class MessagesController extends ListingBaseController
         $tObj = new Thread();
 
         if (!$insertId = $tObj->updateThreadMessages($data, $message_id)) {
-            Message::addErrorMessage(Labels::getLabel($tObj->getError(), $this->siteLangId));
+            Message::addErrorMessage($tObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
         /* ] */

@@ -57,8 +57,8 @@
 
 .sticky-sidebar {
     @include media-breakpoint-up(lg) {
-        position: sticky;
-        top: 2rem;
+        // position: sticky;
+        // top: 2rem;
     }
 }
 
@@ -105,10 +105,10 @@
     }
     &-desc {
         display: block;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-width: 300px;
+        //white-space: nowrap;
+        //text-overflow: ellipsis;
+        // overflow: hidden;
+        // max-width: 300px;
     }
     &-content {
         flex: 1;

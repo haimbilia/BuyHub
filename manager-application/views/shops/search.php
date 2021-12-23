@@ -22,7 +22,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'shop_name':
-                $str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId], false, true);
+                $str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId, 'onclick' => 'return false;'], false, true);
                 $td->appendElement('plaintext', array(), $str, true); 
                 break;
             case 'shop_featured':
@@ -49,22 +49,25 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'numOfReports':
-                if ($canViewShopReports) {
-                    $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('ShopReports', 'index', array($row['shop_id']))), $row[$key]);
+                if ($canViewShopReports && 0 < $row[$key]) {
+                    $fn = 'redirectToShopReport(' . $row['shop_id'] . ')';
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $fn), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
                 break;
             case 'numOfReviews':
-                if ($canViewShopReports) {
-                    $td->appendElement('a', array('target' => '_blank', 'href' => UrlHelper::generateUrl('ProductReviews', 'index', array($row['shop_user_id']))), $row[$key]);
+                if ($canViewShopReports && 0 < $row[$key]) {
+                    $fn = 'redirectToProductReviews(' . $row['shop_user_id'] . ')';
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $fn), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }
                 break;
             case 'numOfProducts':
-                if ($canViewSellerProducts) {
-                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('SellerProducts') . '", ' . $row['shop_user_id'] . ')'), $row[$key]);
+                if ($canViewSellerProducts && 0 < $row[$key]) {
+                    $fn = 'redirectToSellerProduct(0, {"user_id" : ' . $row['shop_user_id'] . '})';
+                    $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => $fn), $row[$key]);
                 } else {
                     $td->appendElement('plaintext', array(), $row[$key], true);
                 }

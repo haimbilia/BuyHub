@@ -86,15 +86,15 @@ class FacebookLogin extends SocialMediaAuthBase
         try {
             $this->accessToken = $this->helper->getAccessToken();
             if (empty($this->accessToken) || null == $this->accessToken) {
-                $this->error = $this->error = Labels::getLabel('MSG_UNABLE_TO_RETRIEVE_ACCESS_TOKEN', $this->langId);
+                $this->error = $this->error = Labels::getLabel('ERR_UNABLE_TO_RETRIEVE_ACCESS_TOKEN', $this->langId);
                 return false;
             }
         } catch (FacebookResponseException $e) {
-            $this->error = Labels::getLabel('MSG_GRAPH_RETURNED_AN_ERROR:_', $this->langId);
+            $this->error = Labels::getLabel('ERR_GRAPH_RETURNED_AN_ERROR:_', $this->langId);
             $this->error .= $e->getMessage();
             return false;
         } catch (FacebookSDKException $e) {
-            $this->error = Labels::getLabel('MSG_FACEBOOK_SDK_RETURNED_AN_ERROR:_', $this->langId);
+            $this->error = Labels::getLabel('ERR_FACEBOOK_SDK_RETURNED_AN_ERROR:_', $this->langId);
             $this->error .= $e->getMessage();
             return false;
         }
@@ -121,7 +121,7 @@ class FacebookLogin extends SocialMediaAuthBase
     public function verifyAccessToken(string $accessToken, string $state = ''): bool
     {
         if (empty($accessToken)) {
-            $this->error = Labels::getLabel('MSG_INVALID_ACCESS_TOKEN', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_ACCESS_TOKEN', $this->langId);
             return false;
         }
 
@@ -135,15 +135,15 @@ class FacebookLogin extends SocialMediaAuthBase
             $graphResponse = $this->fbAuthObj->get('/me?fields=id, name, email, first_name, last_name');
             $this->response = $graphResponse->getGraphUser();
             if (empty($this->response)) {
-                $this->error = Labels::getLabel('MSG_UNABLE_TO_RETRIEVE_USER', $this->langId);
+                $this->error = Labels::getLabel('ERR_UNABLE_TO_RETRIEVE_USER', $this->langId);
                 return false;
             }
             return true;
         } catch (FacebookResponseException $e) {
-            $this->error = Labels::getLabel('MSG_GRAPH_RETURNED_AN_ERROR:_', $this->langId);
+            $this->error = Labels::getLabel('ERR_GRAPH_RETURNED_AN_ERROR:_', $this->langId);
             $this->error .= $e->getMessage();
         } catch (FacebookSDKException $e) {
-            $this->error = Labels::getLabel('MSG_FACEBOOK_SDK_RETURNED_AN_ERROR:_', $this->langId);
+            $this->error = Labels::getLabel('ERR_FACEBOOK_SDK_RETURNED_AN_ERROR:_', $this->langId);
             $this->error .= $e->getMessage();
         }
         return false;

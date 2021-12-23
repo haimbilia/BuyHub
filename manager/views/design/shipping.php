@@ -85,10 +85,10 @@
                                         <div class="col">
                                             <ul class="list mt-4">
                                                 <li class="font-bold">Rates for</li>
-                                                <li><i class="icon-svg mr-3"> <svg class="svg">
+                                                <li><i class="icon-svg me-3"> <svg class="svg">
                                                             <use xlink:href="media/retina/sprite.svg#world" href="media/retina/sprite.svg#world"></use>
                                                         </svg></i>Domestic</li>
-                                                <li><i class="icon-svg mr-3"> <svg class="svg">
+                                                <li><i class="icon-svg me-3"> <svg class="svg">
                                                             <use xlink:href="media/retina/sprite.svg#world" href="media/retina/sprite.svg#world"></use>
                                                         </svg></i>Rest of World</li>
                                             </ul>
@@ -115,10 +115,10 @@
                                         <div class="col">
                                             <ul class="list mt-4">
                                                 <li class="font-bold">Rates for</li>
-                                                <li><i class="icon-svg mr-3"> <svg class="svg">
+                                                <li><i class="icon-svg me-3"> <svg class="svg">
                                                             <use xlink:href="media/retina/sprite.svg#world" href="media/retina/sprite.svg#world"></use>
                                                         </svg></i>Domestic</li>
-                                                <li><i class="icon-svg mr-3"> <svg class="svg">
+                                                <li><i class="icon-svg me-3"> <svg class="svg">
                                                             <use xlink:href="media/retina/sprite.svg#world" href="media/retina/sprite.svg#world"></use>
                                                         </svg></i>Rest of World</li>
                                             </ul>
@@ -145,10 +145,10 @@
                                         <div class="col">
                                             <ul class="list mt-4">
                                                 <li class="font-bold">Rates for</li>
-                                                <li><i class="icon-svg mr-3"> <svg class="svg">
+                                                <li><i class="icon-svg me-3"> <svg class="svg">
                                                             <use xlink:href="media/retina/sprite.svg#world" href="media/retina/sprite.svg#world"></use>
                                                         </svg></i>Domestic</li>
-                                                <li><i class="icon-svg mr-3"> <svg class="svg">
+                                                <li><i class="icon-svg me-3"> <svg class="svg">
                                                             <use xlink:href="media/retina/sprite.svg#world" href="media/retina/sprite.svg#world"></use>
                                                         </svg></i>Rest of World</li>
                                             </ul>
@@ -188,7 +188,7 @@
                                     <div class="row justify-content-between">
                                         <div class="col">
                                             <div class="row no-gutters  align-items-center">
-                                                <div class="col-auto mr-3">
+                                                <div class="col-auto me-3">
                                                     <i class="icon-svg btn btn-secondary btn-elevate btn-icon p-2">
 
                                                         <svg class="svg">
@@ -211,7 +211,7 @@
                                     <div class="row justify-content-between">
                                         <div class="col">
                                             <div class="row no-gutters align-items-center">
-                                                <div class="col-auto mr-3">
+                                                <div class="col-auto me-3">
                                                     <i class="icon-svg btn btn-secondary btn-elevate btn-icon p-2">
                                                         <svg class="svg">
                                                             <use xlink:href="media/retina/sprite.svg#sample-envelope" href="media/retina/sprite.svg#sample-envelope"></use>
@@ -231,7 +231,7 @@
                                     <div class="row justify-content-between">
                                         <div class="col">
                                             <div class="row no-gutters align-items-center">
-                                                <div class="col-auto mr-3">
+                                                <div class="col-auto me-3">
                                                     <i class="icon-svg btn btn-secondary btn-elevate btn-icon p-2">
                                                         <svg class="svg">
                                                             <use xlink:href="media/retina/sprite.svg#sample-envelope" href="media/retina/sprite.svg#sample-envelope"></use>

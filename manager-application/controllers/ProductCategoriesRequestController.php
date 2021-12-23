@@ -66,7 +66,7 @@ class ProductCategoriesRequestController extends ListingBaseController
             ]
         );
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -193,10 +193,10 @@ class ProductCategoriesRequestController extends ListingBaseController
 
         $prodCat = new ProductCategory();
         $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $recordId, [], false);
-        $categories = array(0 => Labels::getLabel('FRM_Parent_Category', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
-        $frm->addSelectBox(Labels::getLabel('FRM_Parent_Category', $this->siteLangId), 'prodcat_parent', $categories, '', array(), '');
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'prodcat_status', applicationConstants::getActiveInactiveArr($this->siteLangId), '', array(), '');
-        $frm->addSelectBox(Labels::getLabel('FRM_Publish', $this->siteLangId), 'prodcat_active', applicationConstants::getYesNoArr($this->siteLangId), '', array(), '');
+        $categories = array(0 => Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
+        $frm->addSelectBox(Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId), 'prodcat_parent', $categories, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId), 'prodcat_status', ProductCategory::getStatusArr($this->siteLangId), '', array(), '');
+        $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH', $this->siteLangId), 'prodcat_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -241,6 +241,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
+        $this->set('languageCount', count($languages));
         $this->_template->render(false, false);
     }
 

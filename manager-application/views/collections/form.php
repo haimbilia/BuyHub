@@ -1,9 +1,29 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$frm->addFormTagAttribute('data-onclear', 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');');
+
+$collectionNameFld = $frm->getField('collection_name');
+$fld = $frm->getField('blocation_promotion_cost');
+if (null != $fld) {
+    $collectionNameFld->developerTags['colWidthValues'] = [null, '6', null, null];
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
+
+$fld = $frm->getField('collection_for_web');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 
 $fld = $frm->getField('collection_for_app');
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['noCaptionTag'] = true;
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 if (in_array($collection_layout_type, Collections::APP_COLLECTIONS_ONLY)) {
     $fld->setFieldTagAttribute('disabled', 'disabled');
 }
+
+$generalTab['attr']['onclick'] = 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');';
 
 if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) {
     $otherButtons[] = [
@@ -33,7 +53,7 @@ if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA)) {
     $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'collectionMediaForm(' . $recordId . ')',
+            'onclick' => 'collectionMediaForm(' . $recordId . ',' . $collection_type . ')',
             'title' => Labels::getLabel('LBL_MEDIA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_MEDIA', $siteLangId),

@@ -36,17 +36,17 @@ foreach ($op['taxOptions'] as $key => $val) {
 </div>
 <div class="modal-body opDetailsJs<?php echo $op['op_id']; ?>">
     <div class="form-edit-body loaderContainerJs">
-        <ul class="list-text">
-            <li>
+        <ul class="list-stats">
+            <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_INVOICE_NUMBER', $siteLangId); ?>:</span>
                 <span class="value"><?php echo $op['op_invoice_number'] ?></span>
             </li>
-            <li>
+            <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_STORE', $siteLangId); ?>:</span>
                 <span class="value"><?php echo $op['op_shop_name'] ?></span>
             </li>
 
-            <?php if (!empty($addresses)) { 
+            <?php if (!empty($addresses)) {
                 $pickupAddress = (!empty($addresses[Orders::PICKUP_ADDRESS_TYPE])) ? $addresses[Orders::PICKUP_ADDRESS_TYPE] : array();
                 $pickupAddrPhone = "";
                 if (!empty($pickupAddress['oua_phone_dcode'])) {
@@ -57,67 +57,67 @@ foreach ($op['taxOptions'] as $key => $val) {
                 unset($pickupAddress['oua_name'], $pickupAddress['oua_order_id'], $pickupAddress['oua_op_id'], $pickupAddress['oua_type'], $pickupAddress['oua_phone_dcode'], $pickupAddress['oua_country_code'], $pickupAddress['oua_country_code_alpha3'], $pickupAddress['oua_state_code'], $pickupAddress['oua_phone']);
 
                 if (!empty($pickupAddrPhone)) { ?>
-                    <li>
+                    <li class="list-stats-item">
                         <span class="lable"><?php echo Labels::getLabel('LBL_PICKUP_ADDRESS_CONTACT', $siteLangId); ?>:</span>
                         <span class="value">
-                            <?php echo $contactName . ' (' . $pickupAddrPhone . ')'; ?>    
+                            <?php echo $contactName . ' (' . $pickupAddrPhone . ')'; ?>
                         </span>
                     </li>
                 <?php } ?>
-                <li>
+                <li class="list-stats-item">
                     <span class="lable"><?php echo Labels::getLabel('LBL_PICKUP_ADDRESS', $siteLangId); ?>:</span>
                     <span class="value">
-                        <?php echo implode(', ', $pickupAddress); ?>    
+                        <?php echo implode(', ', $pickupAddress); ?>
                     </span>
                 </li>
             <?php } ?>
 
-            <li>
+            <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_LABEL', $siteLangId); ?>:</span>
                 <span class="value">
                     <?php echo CommonHelper::displayNotApplicable($siteLangId, $op["opshipping_label"]); ?>
                 </span>
             </li>
             <?php if (!empty($op["opshipping_service_code"])) { ?>
-                <li>
+                <li class="list-stats-item">
                     <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_SERVICES', $siteLangId); ?>:</span>
                     <span class="value">
                         <?php echo CommonHelper::displayNotApplicable($siteLangId, $op["opshipping_service_code"]); ?>
                     </span>
                 </li>
             <?php } ?>
-            <li>
+            <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_STATUS', $siteLangId); ?>:</span>
                 <span class="value">
                     <?php
-                        $orderStatus = ucwords($op['orderstatus_name']);
-                        if (Orders::ORDER_PAYMENT_CANCELLED == $order["order_payment_status"]) {
-                            $orderStatus = Labels::getLabel('LBL_CANCELLED', $siteLangId);
-                        } else {
-                            $paymentMethodCode = Plugin::getAttributesById($order['order_pmethod_id'], 'plugin_code');
-                            if (in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
-                                if ($orderStatus != $order['plugin_name']) {
-                                    $orderStatus .= " - " . $order['plugin_name'];
-                                }
+                    $orderStatus = ucwords($op['orderstatus_name']);
+                    if (Orders::ORDER_PAYMENT_CANCELLED == $order["order_payment_status"]) {
+                        $orderStatus = Labels::getLabel('LBL_CANCELLED', $siteLangId);
+                    } else {
+                        $paymentMethodCode = Plugin::getAttributesById($order['order_pmethod_id'], 'plugin_code');
+                        if (in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
+                            if ($orderStatus != $order['plugin_name']) {
+                                $orderStatus .= " - " . $order['plugin_name'];
                             }
                         }
+                    }
 
-                        echo OrderProduct::getStatusHtml($op["orderstatus_color_class"], $orderStatus);
+                    echo OrderProduct::getStatusHtml($op["orderstatus_color_class"], $orderStatus);
                     ?>
                 </span>
             </li>
 
-            <li>
+            <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_UNIT_PRICE', $siteLangId); ?>:</span>
                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($op["op_unit_price"], true, true); ?></span>
             </li>
-            <li>
+            <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_QUANTITY', $siteLangId); ?>:</span>
                 <span class="value"><?php echo $op['op_qty']; ?></span>
             </li>
 
             <?php if ($isOrderShipped && 0 < $shippingCost) { ?>
-                <li>
+                <li class="list-stats-item">
                     <span class="lable"><?php echo Labels::getLabel('LBL_SHIPPING_COST', $siteLangId); ?>:</span>
                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($shippingCost, true, true); ?></span>
                 </li>
@@ -125,7 +125,7 @@ foreach ($op['taxOptions'] as $key => $val) {
 
             <?php if (empty($taxOptionsTotal)) {
                 if (0 < $totalTax) { ?>
-                    <li>
+                    <li class="list-stats-item">
                         <span class="lable">
                             <?php echo Labels::getLabel('LBL_Tax_Charges', $siteLangId); ?>
                         </span>
@@ -137,12 +137,12 @@ foreach ($op['taxOptions'] as $key => $val) {
                     </li>
                 <?php }
             } else {
-                foreach ($taxOptionsTotal as $key => $val) { 
+                foreach ($taxOptionsTotal as $key => $val) {
                     if (1 > $val['value']) {
                         continue;
                     }
-                    ?>
-                    <li>
+                ?>
+                    <li class="list-stats-item">
                         <span class="lable">
                             <?php echo $val['title']; ?>
                         </span>
@@ -155,19 +155,19 @@ foreach ($op['taxOptions'] as $key => $val) {
             <?php }
             } ?>
             <?php $discount = abs($discount);
-                if (0 < $discount) { ?>
-                    <li class="discounted">
-                        <span class="lable"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></span>
-                        <span class="value">
-                            <?php echo '-' . CommonHelper::displayMoneyFormat($discount, true, false, true, false, true); ?>
-                        </span>
-                    </li>
+            if (0 < $discount) { ?>
+                <li class="list-stats-item discounted">
+                    <span class="lable"><?php echo Labels::getLabel('LBL_Discount', $siteLangId) ?></span>
+                    <span class="value">
+                        <?php echo '-' . CommonHelper::displayMoneyFormat($discount, true, false, true, false, true); ?>
+                    </span>
+                </li>
             <?php } ?>
 
-            <?php 
+            <?php
             $volumeDiscount = abs($volumeDiscount);
             if (0 < $volumeDiscount) { ?>
-                <li>
+                <li class="list-stats-item">
                     <span class="lable"><?php echo Labels::getLabel('LBL_VOLUME_DISCOUNT', $siteLangId); ?>:</span>
                     <span class="value"><?php echo '-' . CommonHelper::displayMoneyFormat($volumeDiscount, true, true); ?></span>
                 </li>
@@ -176,7 +176,7 @@ foreach ($op['taxOptions'] as $key => $val) {
             <?php
             $rewards = abs($rewards);
             if (0 < $rewards) { ?>
-                <li class="discounted">
+                <li class="list-stats-item discounted">
                     <span class="label">
                         <?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?>
                     </span>
@@ -186,9 +186,9 @@ foreach ($op['taxOptions'] as $key => $val) {
                 </li>
             <?php } ?>
 
-            <li>
+            <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_TOTAL', $siteLangId); ?>:</span>
-                <span class="value"<?php echo CommonHelper::displayMoneyFormat($total, true, true, true, false, true); ?></span>
+                <span class="value" <?php echo CommonHelper::displayMoneyFormat($total, true, true, true, false, true); ?></span>
             </li>
         </ul>
     </div>

@@ -204,19 +204,19 @@ class OptionsController extends ListingBaseController
 
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), Option::DB_TBL_PREFIX . 'name');
 
-        $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
-        $frm->addSelectBox(
+        // $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
+        $frm->addCheckBox(
             Labels::getLabel('FRM_HAVE_SEPARATE_IMAGE', $this->siteLangId),
             'option_is_separate_images',
-            $yesNoArr,
-            0,
+            applicationConstants::YES,
             array(),
-            ''
+            false,
+            applicationConstants::NO
         )->requirements()->setRequired();
 
-        $frm->addSelectBox(Labels::getLabel('FRM_IS_COLOR', $this->siteLangId), 'option_is_color', $yesNoArr, 0, array(), '')->requirements()->setRequired();
+        $frm->addCheckBox(Labels::getLabel('FRM_IS_COLOR', $this->siteLangId), 'option_is_color', applicationConstants::YES, array(), false, applicationConstants::NO)->requirements()->setRequired();
 
-        $frm->addSelectBox(Labels::getLabel('FRM_DISPLAY_IN_FILTERS', $this->siteLangId), 'option_display_in_filter', $yesNoArr, 0, array(), '')->requirements()->setRequired();
+        $frm->addCheckBox(Labels::getLabel('FRM_DISPLAY_IN_FILTERS', $this->siteLangId), 'option_display_in_filter',applicationConstants::YES, array(), false, applicationConstants::NO)->requirements()->setRequired();
 
         $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -306,7 +306,7 @@ class OptionsController extends ListingBaseController
 
         $srch = Option::getSearchObject($langId);
         $srch->addOrder('option_identifier');
-        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as text','option_is_separate_images'));
+        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as text', 'option_is_separate_images'));
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('option_name', 'LIKE', '%' . $post['keyword'] . '%');
@@ -315,12 +315,12 @@ class OptionsController extends ListingBaseController
 
         $disAllowOptions = FatApp::getPostedData('disAllowOptions');
 
-        if(is_array($disAllowOptions)){
+        if (is_array($disAllowOptions)) {
             $srch->addCondition('option_id', 'NOT IN', $disAllowOptions);
-        }  
-        
-        $doNotIncludeImageOption = FatApp::getPostedData('doNotIncludeImageOption',FatUtility::VAR_INT, 0);
-        if(0 < $doNotIncludeImageOption){
+        }
+
+        $doNotIncludeImageOption = FatApp::getPostedData('doNotIncludeImageOption', FatUtility::VAR_INT, 0);
+        if (0 < $doNotIncludeImageOption) {
             $srch->addCondition('option_is_separate_images', '=', applicationConstants::NO);
         }
 
@@ -333,7 +333,7 @@ class OptionsController extends ListingBaseController
             'pageCount' => $srch->pages(),
             'results' => $options
         );
-        
+
         die(FatUtility::convertToJson($json));
     }
 

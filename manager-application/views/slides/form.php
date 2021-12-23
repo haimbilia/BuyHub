@@ -1,12 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$fld = $frm->getField('slide_target');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
 $fld = $frm->getField('slide_active');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null]; 
-
-$formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId);
-
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+}
 
 $otherButtons = [
     [

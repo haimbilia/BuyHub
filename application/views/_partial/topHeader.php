@@ -156,37 +156,43 @@
         </div>
     </header>
     <div class="offcanvas offcanvas-mega-search" id="mega-nav-search" aria-labelledby="mega-nav-searchLabel">
-
         <div class="mega-search">
             <form action="" class="form mega-search-form">
                 <input class="mega-search-input search--keyword--js no--focus" placeholder="I Am Looking For..." id="header_search_keyword" data-field-caption="I Am Looking For..." data-fatreq="{&quot;required&quot;:false}" type="search" name="keyword" value="">
                 <div class="search-suggestions" id="tagsSuggetionList">
                     <ul class="text-suggestions">
-                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone"><span class=""><b>iph</b>one</span></a></li>
-                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone5s"><span class=""><b>iph</b>one5s</span></a></li>
-                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone5"><span class=""><b>iph</b>one5</span></a></li>
-                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6"><span class=""><b>iph</b>one 6</span></a></li>
-                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6"><span class=""><b>iph</b>one 6</span></a></li>
-                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6s"><span class=""><b>iph</b>one 6s</span></a></li>
-                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone"><span class=""><b>iph</b>one</span></a></li>
-                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6s plus"><span class=""><b>iph</b>one 6s plus</span></a></li>
-                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone"><span class=""><b>iph</b>one</span></a></li>
-                        <li class=""><a class="" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 7"><span class=""><b>iph</b>one 7</span></a></li>
+                        <li class="text-suggestions-item">
+                            <a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone">
+                                <span class="text-suggestions-span"><b>iph</b>one</span></a>
+                        </li>
+                        <li class="text-suggestions-item">
+                            <a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone5s">
+                                <span class="text-suggestions-span"><b>iph</b>one5s</span></a>
+                        </li>
+                        <li class="text-suggestions-item">
+                            <a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone5"><span class="text-suggestions-span"><b>iph</b>one5</span></a>
+                        </li>
+                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6"><span class="text-suggestions-span"><b>iph</b>one 6</span></a></li>
+                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6"><span class="text-suggestions-span"><b>iph</b>one 6</span></a></li>
+                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6s"><span class="text-suggestions-span"><b>iph</b>one 6s</span></a></li>
+                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone"><span class="text-suggestions-span"><b>iph</b>one</span></a></li>
+                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6s plus"><span class="text-suggestions-span"><b>iph</b>one 6s plus</span></a></li>
+                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone"><span class="text-suggestions-span"><b>iph</b>one</span></a></li>
+                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 7"><span class="text-suggestions-span"><b>iph</b>one 7</span></a></li>
                     </ul>
                     <div class="matched">
-
                         <h6 class="suggestions-title">Matching Categories</h6>
                         <ul class="text-suggestions matched-category">
-                            <li class=""><a class="" href="/action-figures"><span class="">Action Figures</span></a></li>
-                            <li class=""><a class="" href="/men-sports-wear"><span class="">Sports Wear</span></a></li>
-                            <li class=""><a class="" href="/mobiles-mobile-cases"><span class="">Mobile Cases</span></a></li>
-                            <li class=""><a class="" href="/electronics"><span class="">Electronics</span></a></li>
-                            <li class=""><a class="" href="/gaming-consoles-ps4"><span class="">PS4</span></a></li>
-                            <li class=""><a class="" href="/mobiles"><span class="">Mobiles</span></a></li>
-                            <li class=""><a class="" href="/clothing"><span class="">Clothing</span></a></li>
-                            <li class=""><a class="" href="/puzzles"><span class="">Puzzles</span></a></li>
-                            <li class=""><a class="" href="/clothing-trousers"><span class="">Trousers</span></a></li>
-                            <li class=""><a class="" href="/men-sports-wear-track-suits"><span class="">Track Suits</span></a></li>
+                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/action-figures"><span class="text-suggestions-span">Action Figures</span></a></li>
+                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/men-sports-wear"><span class="text-suggestions-span">Sports Wear</span></a></li>
+                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/mobiles-mobile-cases"><span class="text-suggestions-span">Mobile Cases</span></a></li>
+                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/electronics"><span class="text-suggestions-span">Electronics</span></a></li>
+                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/gaming-consoles-ps4"><span class="text-suggestions-span">PS4</span></a></li>
+                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/mobiles"><span class="text-suggestions-span">Mobiles</span></a></li>
+                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/clothing"><span class="text-suggestions-span">Clothing</span></a></li>
+                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/puzzles"><span class="text-suggestions-span">Puzzles</span></a></li>
+                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/clothing-trousers"><span class="text-suggestions-span">Trousers</span></a></li>
+                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/men-sports-wear-track-suits"><span class="text-suggestions-span">Track Suits</span></a></li>
                         </ul>
                     </div>
                 </div>

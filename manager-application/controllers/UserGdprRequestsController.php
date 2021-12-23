@@ -1,17 +1,20 @@
 <?php
 
-class UserGdprRequestsController extends ListingBaseController {
+class UserGdprRequestsController extends ListingBaseController
+{
 
     protected string $modelClass = 'UserGdprRequest';
     protected $pageKey = 'MANAGE_USER_REQUEST';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
         $this->objPrivilege->canViewUserRequests();
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
@@ -25,12 +28,13 @@ class UserGdprRequestsController extends ListingBaseController {
         ]);
         $this->set('actionItemsData', $actionItemsData);
         $this->getListingData();
-         $this->_template->addCss(['css/select2.min.css']);
-        $this->_template->addJs(['js/select2.js', 'user-gdpr-requests/page-js/index.js']); 
+        $this->_template->addCss(['css/select2.min.css']);
+        $this->_template->addJs(['js/select2.js', 'user-gdpr-requests/page-js/index.js']);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'user-gdpr-requests/search.php', true),
@@ -39,7 +43,8 @@ class UserGdprRequestsController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    private function getListingData()
+    {
         $this->objPrivilege->canEditUserRequests();
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
@@ -107,7 +112,8 @@ class UserGdprRequestsController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditSellerApprovalRequests($this->admin_id, true));
     }
 
-    public function updateRequestStatus() {
+    public function updateRequestStatus()
+    {
         $this->objPrivilege->canEditUserRequests();
         $post = FatApp::getPostedData();
         if (empty($post)) {
@@ -133,7 +139,8 @@ class UserGdprRequestsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function viewUserRequest($userReqId) {
+    public function viewUserRequest($userReqId)
+    {
         $userReqId = FatUtility::int($userReqId);
         if (1 > $userReqId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -153,7 +160,8 @@ class UserGdprRequestsController extends ListingBaseController {
         $this->_template->render(false, false);
     }
 
-    public function truncateUserData() {
+    public function truncateUserData()
+    {
         $this->objPrivilege->canEditUserRequests();
         $post = FatApp::getPostedData();
         if (empty($post)) {
@@ -170,7 +178,7 @@ class UserGdprRequestsController extends ListingBaseController {
 
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->gdprRequestStatusUpdate($userReqId, $this->siteLangId)) {
-            LibHelper::exitWithError(Labels::getLabel($emailNotificationObj->getError(), $this->siteLangId), true);
+            LibHelper::exitWithError($emailNotificationObj->getError(), true);
         }
 
         $userReqObj = new UserGdprRequest($userReqId);
@@ -185,30 +193,36 @@ class UserGdprRequestsController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    protected function getSearchForm($fields = []) {
+    protected function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'ureq_date');
-        }         
-        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', [], '',
-                [
-                    'class' => 'form-control',
-                    'id' => 'searchFrmUserIdJs',
-                    'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
-                ]
+        }
+        $frm->addSelectBox(
+            Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId),
+            'user_id',
+            [],
+            '',
+            [
+                'class' => 'form-control',
+                'id' => 'searchFrmUserIdJs',
+                'placeholder' => Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId)
+            ]
         );
         $requestType = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + UserGdprRequest::getUserRequestTypesArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_TYPE', $this->siteLangId), 'request_type', $requestType, -1, array(), '');
         $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_request_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_request_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    private function getFormColumns(): array
+    {
         $shopsTblHeadingCols = CacheHelper::get('gdprRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopsTblHeadingCols) {
             return json_decode($shopsTblHeadingCols);
@@ -226,7 +240,8 @@ class UserGdprRequestsController extends ListingBaseController {
         return $arr;
     }
 
-    private function getDefaultColumns(): array {
+    private function getDefaultColumns(): array
+    {
         return [
             'listSerial',
             'user',
@@ -237,8 +252,8 @@ class UserGdprRequestsController extends ListingBaseController {
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
+    private function excludeKeysForSort($fields = []): array
+    {
         return array_diff($fields, ['user'], Common::excludeKeysForSort());
     }
-
 }

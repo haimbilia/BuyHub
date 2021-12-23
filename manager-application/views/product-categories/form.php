@@ -6,11 +6,15 @@ $fld = $frm->getField('prodcat_parent');
 $fld->setFieldTagAttribute('id', "prodcat_parent");
 
 $fld = $frm->getField('prodcat_active');
-$fld->developerTags['cbLabelAttributes'] = ['class' => 'switch switch-sm switch-icon'];
+HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;   
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
 $fld = $frm->getField('auto_update_other_langs_data');
 if ($fld != null) {
-    $fld->developerTags['cbLabelAttributes'] = ['class' => 'switch switch-sm switch-icon'];
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;   
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
 
 $otherButtons = [
@@ -32,7 +36,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATING_TYPE', $siteLangId); ?>';
     $("document").ready(function() {
 
-        $("#prodcat_parent").select2();
+        $("#prodcat_parent").select2({
+            dropdownParent: $('.'+$.ykmodal.element)
+        });
         $("." + $.ykmodal.element).removeAttr('tabindex');
         addRatingType = function(e) {
             var rt_id = e.detail.tag.id;

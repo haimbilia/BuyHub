@@ -6,7 +6,7 @@ class TransactionsController extends ListingBaseController {
 
     public function __construct($action) {
         parent::__construct($action);
-        $this->objPrivilege->canViewUsers();
+        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
     }
 
     public function index() {

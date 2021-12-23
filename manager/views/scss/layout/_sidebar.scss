@@ -10,7 +10,7 @@ $space: 25px;
     top: 0;
     bottom: 0;
     #{$start-direction}: 0;
-    z-index: 101;
+    z-index: $zindex-offcanvas;
     width: $side-bar-size;
     transition: width 0.3s ease;
     display: flex;
@@ -33,7 +33,7 @@ $space: 25px;
     }
     &-toggle {
         display: none;
-        @include media-breakpoint-up(lg) {
+        @include media-breakpoint-up(md) {
             display: block;
             border: none;
             background: none;
@@ -143,6 +143,9 @@ $space: 25px;
     }
     &-title {
         flex: 1;
+    }
+    &_arrow {
+        #{$end-direction}: 25px !important;
     }
     .sidebar-dropdown-menu {
         .nav {
@@ -261,7 +264,7 @@ $space: 25px;
     }
 }
 
-@include media-breakpoint-up(lg) {
+@include media-breakpoint-up(md) {
     [data-sidebar-minimize="on"] {
         .sidebar {
             width: $side-bar-size-close;

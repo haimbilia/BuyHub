@@ -154,7 +154,7 @@ class ProductCategoriesController extends ListingBaseController
     public function imagesForm($recordId)
     {
         $this->checkEditPrivilege();
-
+        $languages = Language::getAllNames();
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
@@ -166,7 +166,7 @@ class ProductCategoriesController extends ListingBaseController
         $frm = $this->getImagesFrm($recordId);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-
+        $this->set('languageCount', count($languages));
         $this->_template->render(false, false);
     }
 
@@ -213,7 +213,7 @@ class ProductCategoriesController extends ListingBaseController
         $frm = new Form('frmRecordImage', array('id' => 'imageFrm'));
         $frm->addHiddenField('', 'prodcat_id', $recordId);
         $frm->addHTML('', 'heading_icon', '');
-        $mediaLanguages = applicationConstants::bannerTypeArr();
+        $mediaLanguages = applicationConstants::getAllLanguages();
 
         if (count($mediaLanguages) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'icon_lang_id', $mediaLanguages, '', array(), '');
@@ -338,7 +338,7 @@ class ProductCategoriesController extends ListingBaseController
         }
         $this->set('imageType', $imageType);
         $this->set('languages', Language::getAllNames());
-        $this->set('canEdit', $canEdit);
+        $this->set('canEdit', $canEdit);        
         $this->_template->render(false, false);
     }
 
@@ -501,14 +501,15 @@ class ProductCategoriesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function autocomplete()
+    public function autoComplete()
     {
         $search_keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-        $collectionId = FatApp::getPostedData('collection_id', FatUtility::VAR_INT, 0);
         $search_keyword = urldecode($search_keyword);
-        $prodCateObj = new ProductCategory();
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
-        $categories = $prodCateObj->getProdCatAutoSuggest($search_keyword, 10, $langId, $collectionId);
+        $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
+        
+        $prodCateObj = new ProductCategory();
+        $categories = $prodCateObj->getProdCatAutoSuggest($search_keyword, 20, $langId, $excludeRecords);
         $json = array();
         foreach ($categories as $key => $val) {
             $json['results'][] = array(

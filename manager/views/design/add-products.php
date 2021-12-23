@@ -255,18 +255,18 @@
                                             </div>
                                         </div>
                                     </form>
-
                                 </div>
 
                             </div>
-                            <div class="card" id="variants-options">
+                            <div class="card card-toggle" id="variants-options">
                                 <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
                                     <div class="card-head-label">
                                         <h3 class="card-head-title">Variants and options
                                         </h3>
                                         <span class="text-muted">Add options like Color, size
                                             etc for your product</span>
-                                    </div> <i class="dropdown-toggle-custom-arrow"></i>
+                                    </div>
+                                    <i class="dropdown-toggle-custom-arrow"></i>
                                 </div>
                                 <div class="card-body show" id="stock-block1">
                                     <form class="form" action="">
@@ -516,7 +516,7 @@
                                 </form>
 
                             </div>
-                            <div class="card" id="media">
+                            <div class="card card-toggle" id="media">
                                 <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                                     <div class="card-head-label">
                                         <h3 class="card-head-title">Media
@@ -687,7 +687,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card" id="specifications">
+                            <div class="card card-toggle" id="specifications">
                                 <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block3" aria-expanded="false" aria-controls="stock-block3">
                                     <div class="card-head-label">
                                         <h3 class="card-head-title">Specifications
@@ -754,7 +754,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="card" id="tax-shipping">
+                            <div class="card card-toggle" id="tax-shipping">
                                 <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
                                     <div class="card-head-label">
                                         <h3 class="card-head-title">Tax and Shipping

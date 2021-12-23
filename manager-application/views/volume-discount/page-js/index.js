@@ -1,4 +1,4 @@
-$(document).on('click', 'table#volDiscountListJs tr td .editColJs', function(){
+$(document).on('click', '.editColJs', function(){
     $(this).addClass('hide');
     var input = $(this).siblings('input[type="text"]');
     var value = input.val();

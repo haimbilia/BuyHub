@@ -363,6 +363,9 @@ class HtmlHelper
                 case AttachedFile::FILETYPE_PRODUCT_IMAGE:
                     $imgSrc = UrlHelper::generateFileUrl('image', 'product', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
                     break;
+                case AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE:
+                    $imgSrc = UrlHelper::generateFileUrl('image', 'customProduct', array($recordId, "SMALL", 0, $image['afile_id'], 0), CONF_WEBROOT_FRONTEND);
+                    break;
                 default:
             }
 
@@ -405,30 +408,32 @@ class HtmlHelper
         $str .= '</div>';
         return  $str;
     }
+
     /**
      * getFieldHtml
      *
-     * @param  mixed $frm
-     * @param  mixed $fldName
-     * @param  mixed $col
-     * @param  mixed $setFieldTagAttrs 
-     * @param  mixed $labelInfoText  - to show tooltip on label
-     * @param  mixed $labelArr -  to show button on right side of label
-     *  = [
-     *        'attr' => [
-     *            'href' => 'javascript:void(0)',
-     *            'onclick' => 'FN()',
-     *            'title' => <TITLE>
-     *        ],
-     *        'label' => <LABEL>
-     *    ]
-     * @return void
+     * @param  Form $frm
+     * @param  string $fldName
+     * @param  int $col
+     * @param  array $setFieldTagAttrs
+     * @param  string $fieldInfoText
+     * @param  string $labelInfoText : To show tooltip on label
+     * @param  array $labelExtraArr : [
+     *                                   'attr' => [
+     *                                       'href' => 'javascript:void(0)',
+     *                                       'onclick' => 'FN()',
+     *                                       'title' => <TITLE>
+     *                                   ],
+     *                                   'label' => <LABEL>
+     *                               ]
+     * @param  bool $doNotAddFieldWrapper
+     * @return string
      */
-    public static function getFieldHtml($frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [],  string $fieldInfoText = '', string $labelInfoText = '', array $labelExtraArr = [], $doNotAddFieldWrapper = false)
+    public static function getFieldHtml(Form $frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [],  string $fieldInfoText = '', string $labelInfoText = '', array $labelExtraArr = [], bool $doNotAddFieldWrapper = false): string
     {
         $fld = $frm->getField($fldName);
         if (null == $fld) {
-            return;
+            return '';
         }
 
         foreach ($setFieldTagAttrs as $attrkey => $attrVal) {
@@ -558,6 +563,9 @@ class HtmlHelper
      */
     public static function formatDateTime(string $dateTime, bool $showTime = false, bool $usetimezone = false, string $timezone = '')
     {
+        if ('0000-00-00 00:00:00' ==  $dateTime || '0000-00-00' ==  $dateTime) {
+            return '<p class="date">0000-00-00</p>';
+        }
         $timezone = FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get());
         $timeFormat = FatApp::getConfig('CONF_DATE_FORMAT_TIME', FatUtility::VAR_STRING, 'H:i');
         $formattedDT = FatDate::format($dateTime, $showTime, $usetimezone, $timezone);
@@ -571,5 +579,18 @@ class HtmlHelper
         return '<p class="date">' . $date . '
                     <time>' . $time . '</time>
                 </p>';
+    }
+
+    public static function configureCheckboxLabel(&$frm, $fldName)
+    {
+        $fld = $frm->getField($fldName);
+        $fld->developerTags['noCaptionTag'] = true;
+        $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
+        $fld->developerTags['cbHtmlAfterCheckbox'] = '<span class="input-helper"></span>';
+    }
+
+    public static function seoFriendlyUrl($url)
+    {
+        return '<a href="' . $url . '" target="_blank">' . $url . '</a>';
     }
 }

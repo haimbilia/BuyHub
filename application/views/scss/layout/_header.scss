@@ -10,6 +10,8 @@ $header-height: 160px;
     border-bottom: $border;
     .top-bar {
         border-bottom: $border;
+        padding: 0;
+        fill: currentColor;
         transition: all 300ms linear 0s;
         &__inner {
             display: grid;

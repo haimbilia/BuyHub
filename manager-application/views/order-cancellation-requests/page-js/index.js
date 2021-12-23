@@ -1,20 +1,41 @@
-setupStatus = function(frm){
-    if (!$(frm).validate()) return;
-    var transferLocation = $("input[name='ocrequest_refund_in_wallet']:checked").val();
-    if(0 != transferLocation && !confirm(langLbl.confirmTransfer) ){ return; }
+$(function () {
+    bindUserSelect2("buyerJs", { user_is_buyer: 1 });
+    bindUserSelect2("sellerJs", { user_is_supplier: 1, joinShop: 1 });
 
-    var data = fcom.frmData(frm);		
-    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupUpdateStatus'), data, function(t) {
-        searchOrderCancellationRequests(document.frmRequestSearch);
-        $(document).trigger('close.facebox');
+    $(document).on("change", '#ocrequest_status', function () {
+        if ('1' === $(this).val()) {
+            $('[name="ocrequest_refund_in_wallet"]').attr('disabled', false);
+        } else {
+            $('[name="ocrequest_refund_in_wallet"]').attr('disabled', true).val(0);
+        }
     });
-};
+});
 
-
-viewComment = function(id,langId){
-    $.ykmodal(function() {
-        fcom.ajax(fcom.makeUrl(controllerName, 'viewComment', [id, langId]), '', function(t) {
-            $.ykmodal(t);
+(function () {
+    bindUserSelect2 = function (element, obj) {
+        select2(element, fcom.makeUrl('Users', 'autoComplete'), obj, '', function () {
+            clearSearch();
         });
-    }, true);
-};     
+    }
+
+    setupStatus = function (frm) {
+        if (!$(frm).validate()) return;
+        var transferLocation = $("input[name='ocrequest_refund_in_wallet']:checked").val();
+        if (0 != transferLocation && !confirm(langLbl.confirmTransfer)) { return; }
+
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupUpdateStatus'), data, function (t) {
+            searchOrderCancellationRequests(document.frmRequestSearch);
+            $(document).trigger('close.facebox');
+        });
+    };
+
+
+    viewComment = function (id, langId) {
+        $.ykmodal(function () {
+            fcom.ajax(fcom.makeUrl(controllerName, 'viewComment', [id, langId]), '', function (t) {
+                $.ykmodal(t);
+            });
+        }, true);
+    };
+})();

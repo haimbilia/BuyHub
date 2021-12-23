@@ -1,6 +1,4 @@
-<?php
-
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $printData = false;
 if (!isset($tbody)) {
     $printData = true;

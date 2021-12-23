@@ -8,7 +8,7 @@ $frmSearch->setFormTagAttribute('class', 'form form-search');
 $keyWordFld = $frmSearch->getField('keyword');
 $keyWordFld->addFieldtagAttribute('class', 'form-control');
 $keyWordFld->addFieldtagAttribute('autocomplete', 'off');
-$keyWordFld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SEARCH', $siteLangId));
+$keyWordFld->setFieldtagAttribute('placeholder', Labels::getLabel('FRM_SEARCH_BY_SHOP_NAME_OR_OWNER_NAME_OR_OWNER_EMAIL', $siteLangId));
 
 $shopFld = $frmSearch->getField('shop_id');
 $shopFld->addFieldtagAttribute('id', 'shop_id');
@@ -39,7 +39,7 @@ HtmlHelper::renderHiddenFields($frmSearch);
             <div class="col-md-12">
                 <div class="input-group">
                     <?php echo $frmSearch->getFieldHtml('keyword'); ?>
-                    <a class="btn advanced-trigger ml-2 collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
+                    <a class="btn advanced-trigger ms-2 collapsed" data-bs-toggle="collapse" href="#collapseKeyword" aria-expanded="true" aria-controls="collapseKeyword">
                         <svg class="svg" width="22" height="22">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#double-arrow">
                             </use>

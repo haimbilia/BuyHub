@@ -20,6 +20,13 @@ New Feature :
     => 82892 : Easypost Shipping API Integration
     => Shopify sync module for SV seller
     => 85399 : QNB payment gateway 
+    => 80928 : Mollie payment gateway 
+    => MSG-1390138 : Payfast payment gateway 
+    => 85369 : Aramex Shipping API 
+    => 72808 : EasyEcom Marketplace Channel API
+    => 86472 : YoCo Payment gateay
+    => 88040 : ShipRocket Payment gateay
+    => 88449 : ShipEngine Payment gateay
 
 Updates/Fixes : 
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
@@ -283,7 +290,8 @@ Updates/Fixes :
     => 059422 - Seller: Admin disable the "Allow Sellers To Add Products" option and then, "Add Seller's Shipping profile" option is not showing to add the shipping for the marketplace product
     => 059821 - new tag unable to add in catalog
     => 059913 - on home page favorite icon not updating
-
+    => 060820 - On order subscription getting error
+    => 060772 - Admin UI: Admin is not able to edit the 'Minimum Purchase Quantity' and 'Discount (%)' fields under the Volume Discount section
 
 New Features:  
     => Admin shipped products listing page
@@ -310,7 +318,7 @@ Admin UI/UX Enhancements pages:
     => Product Catalog
         - Brands
         - Shops
-        - Categories
+        - Categories        
 
     => Requests
         - Brand request
@@ -325,13 +333,11 @@ Admin UI/UX Enhancements pages:
         - Order Statuses
 
     => Users
-        - Special Price
-        - Volume Discount
-        - Related Products
-        - Promotions
-        - Rewards on purchase
-        - manage weightages
-        - Recommended tag products weightages
+        - Users
+        - Rewards
+        - Transactions
+        - Deleted Users
+        - Users addresses
 
     => Promotions
         - Special Price
@@ -376,6 +382,46 @@ Admin UI/UX Enhancements pages:
 
     => Settings
 
+=========================TV-9.4.0.20211130======================
+=> Product Catalog
+    - Oprions
+
+=> Requests    
+    - Order return requests
+    - Order cancellation requests
+    - Withdrawal requests
+
+=> Orders
+    - Orders
+    - Subscription Orders
+    - Product Reviews
+
+=> Users
+    - Admin Users
+    - GDPR requests
+
+=> Promotions
+    - Discount Coupons
+    - Push notifications
+    - Badges
+    - Ribbons
+
+=> CMS
+    - Home page slidees
+    - Banners
+    - Navigations
+
+=> Reports
+   - Buyers report
+   - Discount coupons
+
+=> Shipping/Pickup
+    - Shipping compnay users
+    - Shipping packages
+    - Shipping profiles
+    - Pickup addresses
+    - Shipped addresses
+
 Bugs : 
     => 060304 - The homepage logo is not clearly visible.
     => 060346 - Admin UI: Nothing(hint text) is showing while hovering on the "Notification icon" on the top header section. 
@@ -386,7 +432,19 @@ Bugs :
     => 060482 - Admin UI: Search icon is not showing while selecting the option from the "suggested text" on the whole system.
     => 060564 - Admin UI: States listing is not showing for the default selected country under the "Users Addresses.
     => 060570 - Admin UI: Spacing issue between "name" and "address" under the user's addresses.
-
+    => 060572 - Admin UI: "Spacing" and "text size" issue for the Combined Tax option under the tax structure section.
+    => 060531 - Admin UI: Nothing is showing while clicking on the User's name on the whole system.
+    => 060513 - Admin UI: Order Status's sorting and re-arrange functionality is not working properly if trying to use it simultaneously.
+    => 060776 - Recommended tag products section error is coming.
+    => 060480 - Admin UI: Every-time page is refreshing while admin clicking(multiple times) on the "save" button while adding the new records.
+    => 060771 - Admin UI: Inconsistency => In the table of the special price, seller info. is not showing according to the 'volume discount' section.
+    => 060751 - Admin UI: Client-side validation is not showing while trying to enter the new password < 8 characters under the user's section.
+    => 060753 - Admin UI: Validation message is missing while clicking on the 'Resend set password email' option under the user's section.
+    => 060733 - Admin UI: Facing issue while adding the users at the admin's panel.
+    => 060897 - Tax category rule addition giving issue.
+    => 060600 - Admin UI: Suggestion to give information, on what basis the search functionality will work under the reports section.
+    => 060619 - Admin UI: "No Record Found" is showing after clicking on the Clear button under the sales reports section.
+    => 060682 - Admin UI: Heading name is not matched with the title and 1st letter of the heading is not capital under the Import/Export section.
     
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

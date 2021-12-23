@@ -13,7 +13,7 @@
             <div class="main-header-toolbar">
                 <div class="header-action">
                     <div class="header-action__item">
-                        <a href="#" class="btn btn-icon btn-outline-brand btn-add mr-2">
+                        <a href="#" class="btn btn-icon btn-outline-brand btn-add me-2">
                             <svg class="svg" width="18" height="18">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                 </use>

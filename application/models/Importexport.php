@@ -73,7 +73,7 @@ class Importexport extends ImportexportCommon
                 $arr[static::TYPE_COUNTRY] = Labels::getLabel('LBL_Countries', $langId);
                 $arr[static::TYPE_STATE] = Labels::getLabel('LBL_States', $langId);
                 //$arr[static::TYPE_POLICY_POINTS] = Labels::getLabel('LBL_Policy_Points', $langId);
-                $arr[static::TYPE_TAX_CATEGORY] = Labels::getLabel('LBL_Tax_Category', $langId);
+                $arr[static::TYPE_TAX_CATEGORY] = Labels::getLabel('LBL_Tax_Categories', $langId);
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_USERS] = Labels::getLabel('LBL_users', $langId);
                     $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('LBL_Language_Labels', $langId);

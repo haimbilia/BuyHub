@@ -1,11 +1,7 @@
 .hero-slider {
     position: relative;
-    padding-top: 20px;
     margin: 0 auto;
     text-align: center;
-    @include media-breakpoint-down(sm) {
-        padding-top: 10px;
-    }
     &-item {
         margin: 0;
         position: relative;
@@ -79,27 +75,6 @@
     }
 }
 
-.banner-wrappers {
-    display: grid;
-    grid-gap: 1rem;
-    grid-template-columns: repeat(2, 1fr);
-    @include media-breakpoint-down(sm) {
-        grid-template-columns: repeat(1, 1fr);
-    }
-    .banner-ppc {
-        border-radius: $radius4;
-        overflow: hidden;
-        .advertise__block {
-            margin-bottom: 2rem;
-            display: block;
-        }
-        img {
-            margin: 0 auto;
-            display: inline-block;
-        }
-    }
-}
-
 .slick-arrow {
     position: absolute;
     top: calc(50% - 20px);
@@ -111,9 +86,6 @@
     text-indent: -999999px;
     z-index: 1;
     cursor: pointer;
-}
-
-.collection-corner {
 }
 
 .how-works {

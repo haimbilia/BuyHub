@@ -1,27 +1,34 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (!empty($images)) {
-    $uploadedTime = AttachedFile::setTimeParam($images['afile_updated_at']); ?>
-    <ul class="grids--onethird mt-0" id="<?php if ($canEdit) { ?>sortable<?php } ?>">
-        <li id="<?php echo $images['afile_id']; ?>">
-            <div class="logoWrap">
-                <div class="logothumb">
-                    <img src="<?php echo UrlHelper::generateFullUrl('Banner', 'Thumb', array($images['afile_record_id'], $images['afile_lang_id'], $images['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime; ?>" title="<?php echo $images['afile_name']; ?>" alt="<?php echo $images['afile_name']; ?>">
-                    <?php if ($canEdit) { ?>
-                        <a class="deleteLink white" href="javascript:void(0);" title="Delete <?php echo $images['afile_name']; ?>" onclick="removeBanner(<?php echo $images['afile_id']; ?>, <?php echo $images['afile_record_id']; ?>, <?php echo $images['afile_lang_id']; ?>, <?php echo $images['afile_screen']; ?>);" class="delete">
-                            <i class="ion-close-round"></i>
-                        </a>
-                    <?php } ?>
-                </div>
-                <?php if (isset($imgTypesArr) && !empty($imgTypesArr[$images['afile_record_subid']])) {
-                    echo '<small class=""><strong>' . Labels::getLabel('LBL_Type', $adminLangId) . ': </strong> ' . $imgTypesArr[$images['afile_record_subid']] . '</small><br/>';
-                }
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-                $lang_name = Labels::getLabel('LBL_All', $adminLangId);
-                if ($images['afile_lang_id'] > 0) {
-                    $lang_name = $languages[$images['afile_lang_id']]; ?>
-                <?php } ?>
-                <small class="text--small"><?php echo Labels::getLabel('LBL_Language', $adminLangId); ?>: <?php echo $lang_name; ?></small>
-            </div>
-        </li>
-    </ul>
-<?php } ?>
+if (!empty($images)) {
+    foreach ($images as $afile_id => $row) {
+        $uploadedTime = AttachedFile::setTimeParam($row['afile_updated_at']);
+        $imgUrl =  UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Banner', 'Thumb', array($row['afile_record_id'], $row['afile_lang_id'], $row['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+?>
+        <div class="dropzone-uploaded dropzoneUploadedJs">
+            <img src="<?php echo $imgUrl; ?>" title="<?php echo $row['afile_name']; ?>" alt="<?php echo $row['afile_name']; ?>">
+            <?php if ($canEdit) { ?>
+                <div class="dropzone-uploaded-action">
+                    <ul class="actions">
+                        <li>
+                            <a href="javascript:void(0)" onclick="editDropZoneImages(this)" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('FRM_CLICK_HERE_TO_EDIT', $siteLangId); ?>">
+                                <svg class="svg" width="18" height="18">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
+                                    </use>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" onclick="removeBannerImage(<?php echo  $recordId; ?>, <?php echo $row['afile_id']; ?>, <?php echo $row['afile_lang_id']; ?>, <?php echo $row['afile_screen']; ?>);" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('FRM_CLICK_HERE_TO_REMOVE', $siteLangId); ?>">
+                                <svg class="svg" width="18" height="18">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                                    </use>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            <?php } ?>
+        </div>
+<?php }
+} ?>

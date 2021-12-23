@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-head">
                 <div class="card-head-label">
-              
+
                 </div>
                 <div class="card-toolbar">
                     <div class="maintenance-mode">
@@ -36,9 +36,10 @@
                     $objPrivilege->canViewCountries(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewStates(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewEmptyCartItems(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)   ||
-                    $objPrivilege->canEditPagesLanguageData(AdminAuthentication::getLoggedAdminId(), true)   ||
-                    $objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canEditPagesLanguageData(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true)
 
                 ) { ?>
                     <div class="setting-search">
@@ -299,6 +300,38 @@
                                 <div class="setting__detail">
                                     <h6><?php echo Labels::getLabel('NAV_SHOP_REPORT_REASONS', $siteLangId); ?></h6>
                                     <span>Shop report reasons management</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('RatingTypes'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#star-outline">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_RATING_TYPES', $siteLangId); ?></h6>
+                                    <span>Can be used while product reviews</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewSmsTemplate(AdminAuthentication::getLoggedAdminId(), true) && SmsArchive::canSendSms()) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('SmsTemplates'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#sms-notification">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SMS_TEMPLATES', $siteLangId); ?></h6>
+                                    <span>Can be used while sending sms</span>
                                 </div>
                             </a>
                         <?php } ?>

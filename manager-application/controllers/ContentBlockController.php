@@ -5,13 +5,13 @@ class ContentBlockController extends ListingBaseController
     protected string $modelClass = 'Extrapage';
     protected $pageKey = 'MANAGE_CONTENT_BLOCK';
 
-    public function __construct($action) 
+    public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewContentBlocks();
     }
 
-     /**
+    /**
      * setLangTemplateData - This function is use to automate load langform and save it. 
      *
      * @param  array $constructorArgs
@@ -22,7 +22,7 @@ class ContentBlockController extends ListingBaseController
         $this->checkEditPrivilege();
         $this->setModel($constructorArgs);
         $this->formLangFields = [
-            $this->modelObj::tblFld('label'), 
+            $this->modelObj::tblFld('label'),
             $this->modelObj::tblFld('content'),
             // $this->modelObj::tblFld('image_content'),
         ];
@@ -43,24 +43,24 @@ class ContentBlockController extends ListingBaseController
             $this->objPrivilege->canEditContentBlocks();
         }
     }
-   
+
     public function index(int $recordId = 0)
     {
         $this->checkEditPrivilege(true);
         $this->set('epage_id', $recordId);
-        
+
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        
+
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_CONTENT_BLOCK', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-        
+
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
         $actionItemsData['newRecordBtn'] = false;
-        
+
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('actionItemsData', $actionItemsData);
@@ -104,15 +104,15 @@ class ContentBlockController extends ListingBaseController
         }
         $srch->addMultipleFields([
             'epage_id', 'IFNULL(epage_label,epage_identifier) AS epage_label',
-            'epage_type', 'epage_content_for', 'epage_active', 'epage_default', 
+            'epage_type', 'epage_content_for', 'epage_active', 'epage_default',
             'epagelang_lang_id', 'IFNULL(epage_content, epage_default_content) AS epage_content', 'epage_updated_on'
         ]);
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageSize($pageSize);
-        $records = FatApp::getDb()->fetchAll( $srch->getResultSet());
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
         $this->set("activeInactiveArr", $activeInactiveArr);
         $this->set("arrListing", $records);
@@ -151,7 +151,7 @@ class ContentBlockController extends ListingBaseController
         }
         if (0 < $recordId) {
             $fieldsArray = [
-                'epage_id', 'epage_identifier', 'epage_active','epage_label', 'epage_content'
+                'epage_id', 'epage_identifier', 'epage_active', 'epage_label', 'epage_content'
             ];
             $data = Extrapage::getAttributesByLangId($this->siteLangId, $recordId, $fieldsArray, true);
             if ($data === false) {
@@ -167,11 +167,11 @@ class ContentBlockController extends ListingBaseController
             $frm->fill($data);
         }
 
-        
+
         $this->set('languages', Language::getAllNames());
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        
+
         if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
             $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
         } elseif ($recordId == Extrapage::ADVERTISER_BANNER_SLOGAN) {
@@ -181,7 +181,7 @@ class ContentBlockController extends ListingBaseController
         } else {
             $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
         }
-        
+
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
             $universalImage = true;
@@ -190,7 +190,7 @@ class ContentBlockController extends ListingBaseController
         }
         $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $this->siteLangId, $universalImage);
         $this->set('image', $cbgImage);
-        
+
         $this->set('imageFunction', 'cblockBackgroundImage');
         $this->checkEditPrivilege(true);
 
@@ -201,12 +201,11 @@ class ContentBlockController extends ListingBaseController
     {
         $frm = new Form('frmAddBlock');
         $frm->addHiddenField('', 'epage_id', $recordId);
-        $frm->addHiddenField('', 'lang_id', $this->siteLangId );
+        $frm->addHiddenField('', 'lang_id', $this->siteLangId);
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $this->siteLangId), 'epage_label');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
+        //$fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         // $fld->requirements()->setRequired();
-
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'epage_active', applicationConstants::getActiveInactiveArr($this->siteLangId), '', [], '');
+       
         if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($this->siteLangId))) {
             if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
@@ -217,7 +216,7 @@ class ContentBlockController extends ListingBaseController
             } else {
                 $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
             }
-            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId) );
+            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId));
             $frm->addHTML('', 'cblock_bg_image', '');
             $frm->addHiddenField('', 'file_type', $fileType);
             $frm->addHiddenField('', 'min_width', 1300);
@@ -226,14 +225,15 @@ class ContentBlockController extends ListingBaseController
         $frm->addHtmlEditor(Labels::getLabel('FRM_Page_Content', $this->siteLangId), 'epage_content');
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'epage_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
         return $frm;
     }
 
-    
-    protected function getLangForm(int $recordId = 0, int $langId = 0) 
+
+    protected function getLangForm(int $recordId = 0, int $langId = 0)
     {
         if ($recordId == 0 || $langId == 0) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -252,7 +252,7 @@ class ContentBlockController extends ListingBaseController
             } else {
                 $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
             }
-            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId) );
+            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId));
             $frm->addHTML('', 'cblock_bg_image', '');
             $frm->addHiddenField('', 'file_type', $fileType);
             $frm->addHiddenField('', 'min_width', 1300);
@@ -262,8 +262,8 @@ class ContentBlockController extends ListingBaseController
 
         return $frm;
     }
-    
-    public function langForm($autoFillLangData = 0) 
+
+    public function langForm($autoFillLangData = 0)
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
@@ -297,14 +297,14 @@ class ContentBlockController extends ListingBaseController
         } else {
             $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
         }
-        
+
         if (true === $this->isPlugin) {
             $pluginDetail = Plugin::getAttributesById($this->mainTableRecordId, ['plugin_type', 'plugin_identifier']);
             if (!in_array($pluginDetail['plugin_type'], Plugin::HAVING_DESCRIPTION)) {
                 $langFrm->removeField($langFrm->getField('plugin_description'));
             }
         }
-        
+
         $bgImages = AttachedFile::getMultipleAttachments($fileType, $recordId, 0, $langId);
         $bannerTypeArr = applicationConstants::getAllLanguages();
         $languages = Language::getAllNames();
@@ -316,7 +316,7 @@ class ContentBlockController extends ListingBaseController
         }
         $cbgImage = AttachedFile::getAttachment($fileType, $recordId, 0, $langId, $universalImage);
         $this->set('image', $cbgImage);
-        
+
         $this->set('imageFunction', 'cblockBackgroundImage');
         $this->set('bgImages', $bgImages);
         $this->set('bannerTypeArr', $bannerTypeArr);
@@ -331,7 +331,7 @@ class ContentBlockController extends ListingBaseController
         $this->checkEditPrivilege(true);
         $this->_template->render(false, false);
     }
-    
+
 
     public function setup()
     {
@@ -353,8 +353,8 @@ class ContentBlockController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $record = new Extrapage($recordId); 
-        $urlrewrite_custom = $post['urlrewrite_custom'];
+        $record = new Extrapage($recordId);
+        /*$urlrewrite_custom = $post['urlrewrite_custom'];*/
         $post['epage_identifier'] = $post['epage_label'];
 
         $languageId =  $post['lang_id'] ? $post['lang_id'] : $this->siteLangId;
@@ -364,7 +364,8 @@ class ContentBlockController extends ListingBaseController
             'epage_label' => $post['epage_label'],
             'epage_content' => $post['epage_content'],
         );
-        unset($post['lang_id'], $post['epage_content'], $post['epage_label'], $post['urlrewrite_custom'], $post['auto_update_other_langs_data']);
+        // unset($post['lang_id'], $post['epage_content'], $post['epage_label'], $post['urlrewrite_custom'], $post['auto_update_other_langs_data']);
+        unset($post['lang_id'], $post['epage_content'], $post['epage_label'], $post['auto_update_other_langs_data']);
 
         if (!$record->updatePageContent($post)) {
             LibHelper::exitWithError($record->getError(), true);
@@ -383,15 +384,17 @@ class ContentBlockController extends ListingBaseController
         }
 
         /* url data[ */
+        /*
         $originalUrl = Extrapage::REWRITE_URL_PREFIX . $recordId;
         if ($urlrewrite_custom == '') {
             UrlRewrite::remove($originalUrl);
         } else {
             $record->rewriteUrl($urlrewrite_custom);
         }
+        */
         /* ] */
 
-        
+
 
 
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
@@ -415,12 +418,12 @@ class ContentBlockController extends ListingBaseController
         $recordId = FatUtility::int($post['epage_id']);
 
         $languages = Language::getAllNames();
-		if(count($languages) > 1){
+        if (count($languages) > 1) {
             $lang_id = FatUtility::int($post['lang_id']);
-		} else  {
-			$lang_id = array_key_first($languages); 
-		}
-       
+        } else {
+            $lang_id = array_key_first($languages);
+        }
+
 
         if ($recordId == 0 || $lang_id == 0) {
             Message::addErrorMessage($this->str_invalid_request_id);
@@ -471,7 +474,7 @@ class ContentBlockController extends ListingBaseController
             $universalImage = false;
             $lang_id = array_key_first($languages);
         }
-    
+
         if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
             $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
         } elseif ($recordId == Extrapage::ADVERTISER_BANNER_SLOGAN) {
@@ -490,7 +493,7 @@ class ContentBlockController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-     /**
+    /**
      * Undocumented function
      *
      */
@@ -557,7 +560,7 @@ class ContentBlockController extends ListingBaseController
         $EPageObj = new Extrapage($recordId);
 
         if (!$EPageObj->changeStatus($status)) {
-            LibHelper::exitWithError($EPageObj->getError(),true);
+            LibHelper::exitWithError($EPageObj->getError(), true);
         }
     }
 
@@ -570,10 +573,10 @@ class ContentBlockController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        
+
         $allowedFileTypeArr = array(
-            AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE, 
-            AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE, 
+            AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE,
+            AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE,
             AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE,
             AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE
         );
@@ -615,7 +618,7 @@ class ContentBlockController extends ListingBaseController
      * Removing Background Media Image 
      *
      */
-    public function removeMedia() 
+    public function removeMedia()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $afileId = FatApp::getPostedData('afileId', FatUtility::VAR_INT, 0);
@@ -637,7 +640,7 @@ class ContentBlockController extends ListingBaseController
         }
 
         $fileHandlerObj = new AttachedFile();
-        if($langId == $this->siteLangId){
+        if ($langId == $this->siteLangId) {
             $fileHandlerObj->deleteFile($fileType, $recordId, 0, 0, 0);
         }
         if (!$fileHandlerObj->deleteFile($fileType, $recordId, $afileId, 0, $langId)) {
@@ -647,7 +650,7 @@ class ContentBlockController extends ListingBaseController
         $this->set('msg', Labels::getLabel('MSG_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-  
+
 
     /**
      * Undocumented function
@@ -699,6 +702,4 @@ class ContentBlockController extends ListingBaseController
     {
         return array_diff($fields, ['epage_id', 'epage_active'], Common::excludeKeysForSort());
     }
-
-    
 }

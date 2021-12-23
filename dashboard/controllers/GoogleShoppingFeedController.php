@@ -197,7 +197,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $recordData = AdsBatch::getBatchesByUserId(UserAuthentication::getLoggedUserId(), $this->adsBatchId);
         $status = AdsBatch::getAttributesById($this->adsBatchId, 'adsbatch_status');
         if (1 > $this->adsBatchId || empty($recordData) || AdsBatch::STATUS_PENDING != $status) {
-            $this->error = Labels::getLabel("LBL_INVALID_REQUEST", $this->siteLangId);
+            $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $this->siteLangId);
             return false;
         }
         return true;

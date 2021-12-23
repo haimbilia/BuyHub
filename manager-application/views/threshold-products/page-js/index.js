@@ -1,16 +1,17 @@
 
-(function () { 
-    sendMail = function (userId, selprodId) { 
+(function () {
+    sendMail = function (userId, selprodId) {
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('ThresholdProducts', 'sendMailThresholdStock', [userId, selprodId]), '', function (res) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'sendMailThresholdStock', [userId, selprodId]), '', function (res) {
+            $.ykmsg.close();
             fcom.removeLoader();
             var t = JSON.parse(res);
-            if (t.status == 1) {
-                $.ykmsg.success(t.msg);
-                searchRecords();
+            if (t.status != 1) {
+                $.ykmsg.error(t.msg);
+                return false;
             }
-            $.ykmsg.error(t.msg);
-            return false;
+            $.ykmsg.success(t.msg);
+            searchRecords();
         });
     };
 

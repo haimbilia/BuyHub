@@ -22,6 +22,10 @@ foreach ($arrListing as $sn => $row) {
                 $str = $this->includeTemplate('_partial/product/product-info-card.php', ['selProdId' => $row['selprod_id'], 'siteLangId' => $siteLangId, 'sellerName' => $row['credential_username']], false, true);
                 $td->appendElement('plaintext', array(), $str, true);
                 break;
+            case 'earch_sent_on':
+                $val = !empty($row[$key]) ? $row[$key] : Labels::getLabel('LBL_N/A', $siteLangId);
+                $td->appendElement('plaintext', array(), $val);
+                break;
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,
@@ -37,7 +41,7 @@ foreach ($arrListing as $sn => $row) {
                         ],
                         'label' => '<i class="icn">
                                             <svg class="svg" width="18" height="18">
-                                                <use xlink:href=""' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#send-email">
+                                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#send-email">
                                                 </use>
                                             </svg>
                                         </i>'

@@ -1459,3 +1459,22 @@ ALTER TABLE `tbl_badges` CHANGE `badge_condition_type` `badge_trigger_type` TINY
 
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_USED_%charsTyped%_of_%charsTotal%_CHARS_JS.', '1', 'used %charsTyped% of %charsTotal% chars.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+SELECT @i := 0;
+UPDATE tbl_collection_to_records SET ctr_display_order = (SELECT @i := @i + 1);
+-- ---------------TV-9.4.0.20211215----------------
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING";
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_FEATURED_SHOPS_WILL_BE_LISTED_ON_FEATURED_SHOPS_PAGE', '1', 'Featured Shops Will Be Listed On Featured Shops Page. Featured Shops Will Get Priority', 1) ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+/* Mark all ribbons shapes to rectangle */
+UPDATE `tbl_badges` SET badge_shape_type = 1 WHERE badge_type = 2;
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_PPC_PROMOTION_MANAGEMENT', '1', 'PPC Promotion Management', 1),
+('NAV_PPC_PROMOTION_MANAGEMENT', '1', 'PPC Promotion Management', 1) 
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+UPDATE `tbl_product_specifics` SET `product_warranty_unit` = '0';
+
+UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'conf_page_size'
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_ACTION_BUTTONS', '1', 'Action', 1) ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

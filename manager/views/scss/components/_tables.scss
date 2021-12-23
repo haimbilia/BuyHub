@@ -31,6 +31,11 @@
             tbody {
             }
         }
+        tr {
+            &:last-child td {
+                border-bottom: none;
+            }
+        }
     }
     tfoot {
     }
@@ -830,13 +835,4 @@
 
 .date {
     white-space: nowrap;
-}
-
-.contenteditable {
-    display: inline-block;
-    border-bottom: dashed 2px $brand-color;
-    &:focus,
-    &:active {
-        border: solid 2px $brand-color;
-    }
 }

@@ -53,24 +53,24 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
     private function doRequest(array $data)
     {
         if (false === $this->merchantId || 1 > $this->merchantId) {
-            $this->error = Labels::getLabel('LBL_INVALID_MERCHANT', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_MERCHANT', $this->langId);
             return false;
         }
 
         if (empty($data) || !array_key_exists('data', $data)) {
-            $this->error = Labels::getLabel('LBL_PLEASE_PASS_REQUIRED_PRODUCT_DATA', $this->langId);
+            $this->error = Labels::getLabel('ERR_PLEASE_PASS_REQUIRED_PRODUCT_DATA', $this->langId);
             return false;
         }
 
         $client = new Google_Client();
         $serviceAccountDetail = $this->getUserMeta('service_account');
         if (empty($serviceAccountDetail)) {
-            $this->error = Labels::getLabel('LBL_SERVICE_ACCOUNT_DETAIL_NOT_FOUND', $this->langId);
+            $this->error = Labels::getLabel('ERR_SERVICE_ACCOUNT_DETAIL_NOT_FOUND', $this->langId);
             return false;
         }
 
         if (!array_key_exists('currency_code', $data)) {
-            $this->error = Labels::getLabel('LBL_INVALID_CURRENCY', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_CURRENCY', $this->langId);
             return false;
         }
 
@@ -132,7 +132,7 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
             $batch->add($request, $product->getOfferId());
         }
         if (empty($request)) {
-            $this->error = Labels::getLabel('LBL_INVALID_PRODUCT_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_PRODUCT_REQUEST', $this->langId);
             return false;
         }
 

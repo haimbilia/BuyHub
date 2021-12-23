@@ -94,7 +94,6 @@ $(document).ready(function () {
     sendSetPasswordEmail = function (userId) {
         fcom.displayProcessing();
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'resendSetPasswordEmail'), { userId: userId }, function (t) {
-            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

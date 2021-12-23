@@ -23,7 +23,6 @@ class SmsTemplate extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         $srch = new SearchBase(static::DB_TBL);
-        $srch->addOrder(static::DB_TBL_PREFIX . 'name', 'ASC');
         $srch->addMultipleFields(
             [
                 static::DB_TBL_PREFIX . 'code',
@@ -75,12 +74,12 @@ class SmsTemplate extends MyAppModel
     {
         $langId = 0 < FatUtility::int($data['stpl_lang_id']) ? $data['stpl_lang_id'] : 0;
         if (1 > $langId) {
-            $this->error = Labels::getLabel('MSG_INVALID_LANGUAGE', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_LANGUAGE', CommonHelper::getLangId());
             return false;
         }
         
         if (empty($data['stpl_body'])) {
-            $this->error = Labels::getLabel('MSG_MESSAGE_BODY_IS_REQUIRED', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_MESSAGE_BODY_IS_REQUIRED', CommonHelper::getLangId());
             return false;
         }
 

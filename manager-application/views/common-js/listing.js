@@ -219,8 +219,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 $(this).prop("checked", false);
             }
         });
-        searchRecords(document.frmRecordSearch, loadRowsOnly);
         $('.select2-hidden-accessible').val('').trigger('change');
+        searchRecords(document.frmRecordSearch, loadRowsOnly);
+        
     };
 
     setColumnsData = function (frm) {
@@ -398,7 +399,11 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 return false;
             }
             $.ykmsg.success(t.msg);
-            reloadList();
+
+            if( t.langId == langLbl.defaultFormLangId){
+                reloadList();
+            }
+            
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
             } else if ("openMediaForm" in t) {
@@ -418,7 +423,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         var parentForm = obj.closest("form").attr("id");
-        console.log(obj.closest("form"));
         $("#" + parentForm + " .selectItemJs").each(function () {
             var tr = $(this).closest('tr');
             if (obj.prop("checked") == false) {
@@ -552,7 +556,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     };
 
     loadCropperSkeleton = function (reopenSideBarOnClose = true) {
-
         autoOpenSideBar = reopenSideBarOnClose;
         $("#modalBoxJs").remove();
         $("body").append(fcom.getModalBody());
@@ -616,13 +619,19 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if ("undefined" != typeof frm.slide_screen) {
             slideScreen = frm.slide_screen.value;
         }
+        
+        var action = 'uploadMedia';
+        if ("undefined" != typeof frm.dataset.action) {
+            action = frm.dataset.action;
+        }
+
         var other_data = $('form[name="' + frmName + '"]').serializeArray();
         $.each(other_data, function (key, input) {
             formData.append(input.name, input.value);
         });
 
         $.ajax({
-            url: fcom.makeUrl(controllerName, "uploadMedia"),
+            url: fcom.makeUrl(controllerName, action),
             type: "post",
             dataType: "json",
             data: formData,
@@ -644,7 +653,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     $("#modalBoxJs").modal("hide");
                     if ("undefined" != typeof frm.dataset.callback) {
                         eval(frm.dataset.callback);                     
-                    }else if ("undefined" != typeof frm.dataset.callbackfn) {                     
+                    }else if ("undefined" != typeof frm.dataset.callbackfn) {
                         window[frm.dataset.callbackfn](ans); /* callback function */                    
                     } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length) {
                         $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();

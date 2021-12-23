@@ -1,9 +1,4 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-
-HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
-$frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');  
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 if ($recordId > 0) {
     $fld_credential_username = $frm->getField('credential_username');

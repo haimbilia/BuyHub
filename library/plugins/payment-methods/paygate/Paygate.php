@@ -172,7 +172,7 @@ class Paygate extends PaymentMethodBase
         $transactionStatus = isset($response['TRANSACTION_STATUS']) ? $response['TRANSACTION_STATUS'] : '';
         $checksum = isset($response['CHECKSUM']) ? $response['CHECKSUM'] : '';
         if (empty($payRequestId) || empty($transactionStatus) || empty($checksum)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
 
@@ -188,7 +188,7 @@ class Paygate extends PaymentMethodBase
         * Check that the checksum returned matches the checksum we generate
         */
         if (false === $this->payWeb3->validateChecksum($checksumData)) {
-            $this->error = Labels::getLabel('MSG_INVALID_CHECKSUM', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_CHECKSUM', $this->langId);
             return false;
         }
 
@@ -206,7 +206,7 @@ class Paygate extends PaymentMethodBase
          * Do the curl post to PayGate
          */
         if (false === $this->payWeb3->doQuery()) {
-            $this->error = Labels::getLabel('MSG_REQUEST_QUERY_MISMATCH', $this->langId);
+            $this->error = Labels::getLabel('ERR_REQUEST_QUERY_MISMATCH', $this->langId);
             return false;
         }
 
@@ -215,7 +215,7 @@ class Paygate extends PaymentMethodBase
         }
 
         if (!isset($this->payWeb3->queryResponse)) {
-            $this->error = Labels::getLabel('MSG_NO_QUERY_RESPONSE', $this->langId);
+            $this->error = Labels::getLabel('ERR_NO_QUERY_RESPONSE', $this->langId);
             return false;
         }
 

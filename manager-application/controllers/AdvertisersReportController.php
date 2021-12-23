@@ -31,6 +31,7 @@ class AdvertisersReportController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('formColumns', $formColumns);
         $this->set('actionItemsData', $actionItemsData);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_NAME', $this->siteLangId));
         $this->getListingData(false);
         $this->_template->render(true, true, '_partial/listing/reports-index.php');
     }
@@ -188,20 +189,20 @@ class AdvertisersReportController extends ListingBaseController
     protected function getFormColumns()
     {
         $avdertiserUserReportsCacheVar = CacheHelper::get('avdertiserUserReportsCacheVar' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if (!$avdertiserUserReportsCacheVar) {
-            $arr = [
-                'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
-                'user_regdate' => Labels::getLabel('LBL_REGISTRATION_DATE', $this->siteLangId),
-                'user_is_supplier' => Labels::getLabel('LBL_IS_SELLER', $this->siteLangId),
-                'promotionsCount' => Labels::getLabel('LBL_TOTAL_PROMOTIONS', $this->siteLangId),
-                'activePromotions' => Labels::getLabel('LBL_ACTIVE_PROMOTIONS', $this->siteLangId),
-                'promotionCharged' => Labels::getLabel('LBL_PROMOTIONS_COST', $this->siteLangId),
-                'availableBalance' => Labels::getLabel('LBL_AVAILABLE_BALANCE', $this->siteLangId),
-            ];
-            CacheHelper::set('avdertiserUserReportsCacheVar' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
-        } else {
-            $arr =  unserialize($avdertiserUserReportsCacheVar);
+        if ($avdertiserUserReportsCacheVar) {
+            return json_decode($avdertiserUserReportsCacheVar);
         }
+
+        $arr = [
+            'name' => Labels::getLabel('LBL_NAME', $this->siteLangId),
+            'user_regdate' => Labels::getLabel('LBL_REGISTRATION_DATE', $this->siteLangId),
+            'user_is_supplier' => Labels::getLabel('LBL_IS_SELLER', $this->siteLangId),
+            'promotionsCount' => Labels::getLabel('LBL_TOTAL_PROMOTIONS', $this->siteLangId),
+            'activePromotions' => Labels::getLabel('LBL_ACTIVE_PROMOTIONS', $this->siteLangId),
+            'promotionCharged' => Labels::getLabel('LBL_PROMOTIONS_COST', $this->siteLangId),
+            'availableBalance' => Labels::getLabel('LBL_AVAILABLE_BALANCE', $this->siteLangId),
+        ];
+        CacheHelper::create('avdertiserUserReportsCacheVar' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
 
         return $arr;
     }

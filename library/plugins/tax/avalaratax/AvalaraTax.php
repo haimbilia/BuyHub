@@ -55,7 +55,7 @@ class AvalaraTax extends TaxBase
 
         $websiteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId, FatUtility::VAR_STRING, 'Yo!Kart');
         if (empty($websiteName) || empty(CONF_WEB_APP_VERSION)) {
-            $this->error = Labels::getLabel('MSG_SITE_NAME_AND_SITE_VERSION_MUST_BE_DEFINED', $this->langId);
+            $this->error = Labels::getLabel('ERR_SITE_NAME_AND_SITE_VERSION_MUST_BE_DEFINED', $this->langId);
             return false;
         }
 

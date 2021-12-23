@@ -15,16 +15,16 @@ if (!empty($zones)) {
 ?>
         <div class="shipping-zone zoneRates-js">
             <div class="shipping-zone-item">
-                <div class="row justify-content-between my-4">
+                <div class="row justify-content-between my-1">
                     <div class="col">
                         <div class="row no-gutters">
-                            <div class="col-auto mr-3">
+                            <div class="col-auto me-3">
                                 <span class="box-icon"><i class="fa fa-globe fa-2x icon"></i></span>
                             </div>
                             <div class="col">
                                 <h6 class="font-bold"><?php echo $zone['shipzone_name'] ?>
                                 </h6>
-                                <p class="mb-0">
+                                <p class="text-muted mb-0">
                                     <span><?php echo implode(', ', $countryNames); ?></span>
                                 </p>
                             </div>

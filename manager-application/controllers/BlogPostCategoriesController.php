@@ -3,7 +3,7 @@
 class BlogPostCategoriesController extends ListingBaseController
 {
     protected string $modelClass = 'BlogPostCategory';
-    protected $pageKey = 'BLOG_CATEGORIES';
+    protected string $pageKey = 'BLOG_POST_CATEGORIES';
 
     public function __construct($action)
     {
@@ -43,7 +43,20 @@ class BlogPostCategoriesController extends ListingBaseController
     public function index()
     {
         $this->checkEditPrivilege(true);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = [
+            'newRecordBtn' => true
+        ];
+        $this->set('actionItemsData', $actionItemsData);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+
         $this->_template->addJs(array('js/jquery-sortable-lists.js'));
+
         $this->_template->render();
     }
 
@@ -211,9 +224,9 @@ class BlogPostCategoriesController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY_PARENT', $this->siteLangId), 'bpcategory_parent', array(0 => Labels::getLabel('LBL_ROOT_CATEGORY', $this->siteLangId)) + $categories, '', array(), '');
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY_STATUS', $this->siteLangId), 'bpcategory_active', $activeInactiveArr, '', array(), '');
-        $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'bpcategory_featured', 1, array(), false, 0);
+
+        $frm->addCheckBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'bpcategory_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'bpcategory_featured', 1, [], false, 0);
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');

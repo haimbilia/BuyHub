@@ -1,5 +1,12 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $frm->setFormTagAttribute('class', 'form');
+$displayDigitalDwnBtn = false;
+$displayDigitalDownloadList = false;
+if (0 < $productId) {
+    $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 1 > $productData['product_seller_id'];
+    $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
+}
+
 ?>
 <main class="main mainJs" dir="<?php echo $formLayout; ?>">
     <div class="container">
@@ -99,37 +106,39 @@ $frm->setFormTagAttribute('class', 'form');
                                             </div>
                                         </a>
                                     </li>
-                                    <li class="stock-nav-item">
-                                        <a class="stock-nav-link" href="#digital-files">
-                                            <i class="stock-nav-icn">
-                                                <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                    </use>
-                                                </svg>
-                                            </i>
-                                            <div class="">
-                                                <h6 class="stock-nav-title">
-                                                    Digital files</h6>
-                                                <span class="stock-nav-desc"> Add Digital files
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="stock-nav-item">
-                                        <a class="stock-nav-link" href="#digital-links">
-                                            <i class="stock-nav-icn">
-                                                <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
-                                                    </use>
-                                                </svg>
-                                            </i>
-                                            <div class="">
-                                                <h6 class="stock-nav-title">
-                                                    Digital links</h6>
-                                                <span class="stock-nav-desc"> Add Digital links </span>
-                                            </div>
-                                        </a>
-                                    </li>
+                                    <?php if ($displayDigitalDownloadList) { ?>
+                                        <li class="stock-nav-item">
+                                            <a class="stock-nav-link" href="#digital-files">
+                                                <i class="stock-nav-icn">
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                        </use>
+                                                    </svg>
+                                                </i>
+                                                <div class="">
+                                                    <h6 class="stock-nav-title">
+                                                        Digital files</h6>
+                                                    <span class="stock-nav-desc"> Add Digital files
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="stock-nav-item">
+                                            <a class="stock-nav-link" href="#digital-links">
+                                                <i class="stock-nav-icn">
+                                                    <svg class="svg" width="20" height="20">
+                                                        <use xlink:href="/yokart/manager/images/retina/sprite.yokart.svg#icon-system-setting">
+                                                        </use>
+                                                    </svg>
+                                                </i>
+                                                <div class="">
+                                                    <h6 class="stock-nav-title">
+                                                        Digital links</h6>
+                                                    <span class="stock-nav-desc"> Add Digital links </span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    <?php } ?>
                                 </ul>
                             </div>
                         </div>
@@ -198,7 +207,7 @@ $frm->setFormTagAttribute('class', 'form');
                             $fld = $frm->getField('product_warranty');
                             if (null !== $fld) {
                             ?>
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <?php
                                         $warrantTypes = Product::getWarrantyUnits($langId);
@@ -230,7 +239,7 @@ $frm->setFormTagAttribute('class', 'form');
                         </div>
                     </div>
                 </div>
-                <div class="card" id="variants-options">
+                <div class="card card-toggle" id="variants-options">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Variants and options
@@ -239,14 +248,15 @@ $frm->setFormTagAttribute('class', 'form');
                                 etc for your product</span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="stock-block1">
-                        <div class="form-group row justify-content-between">
-                            <div class="col">
-                                <label class="label">This product has multiple options,
-                                    like different sizes or colors</label>
-                            </div>
-                        </div>
+                    <div class="card-body show" id="stock-block1">                      
                         <table class="table table-variants" id="variantsJs">
+                        <thead>
+                            <tr>
+                                <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId)?></th>
+                                <th><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId)?></th>
+                                <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId)?></th>
+                            </tr>
+                        </thead>
                             <tbody>
                                 <?php
                                 $optionCount = count($productOptions);
@@ -275,33 +285,36 @@ $frm->setFormTagAttribute('class', 'form');
                         <div id="variantsListJs"></div>
                     </div>
                 </div>
-                <div class="card" id="media">
+                <div class="card card-toggle" id="media">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
-                            <h3 class="card-head-title">Media
-                            </h3>
-                            <a href="javascript:void(0)" onclick="imageForm();" class="link">Advance Media</a>
+                            <h3 class="card-head-title">Media                            </h3>
                             <span class="text-muted">Attach media files for the product </span>
-                        </div> <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
+                        <div class="card-toolbar">
+                           <div class="me-5">
+                               <a href="javascript:void(0)" onclick="imageForm();" class="btn btn-outline-secondary btn-sm">Advance Media</a>
+                            </div>
+                            <i class="dropdown-toggle-custom-arrow"></i>
+                        </div>
                     </div>
                     <div class="card-body show" id="stock-block2">
-                        <span class="form-text text-muted  pt-2"> File type must be a .jpg, .gif or .png
-                            smaller than 2MB and at least
-                            800x800 in 1:1 aspect ratio</span>
-                        <div class="mt-5">
+                        <div>
                             <h6 class="h6 mb-3">Uploaded media</h6>
                             <ul class="uploaded-stocks" id="productDefaultImagesJs">
-                                <li><button type="button" onclick="$('#hiddenMediaFrmFileJs').click();">upload</button></li>
+                                <li class="browse unsortableJs"><button type="button" class="browse-button" onclick="$('#hiddenMediaFrmFileJs').click();">
+                                        <strong> Upload Images(s)</strong>
+                                        <span class="text-muted form-text">PNG, JPEG, & WEBP Accepted</span></button></li>
                             </ul>
-                            <span class="form-text text-muted pt-2">Pay attention to the quality of
+                            <div class="form-text text-muted pt-2">Pay attention to the quality of
                                 pictures
                                 you add, comply with the
                                 background color standards. Notice that the product shows all the
-                                details</span>
+                                details</div>
                         </div>
                     </div>
                 </div>
-                <div class="card" id="specifications">
+                <div class="card card-toggle" id="specifications">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Specifications
@@ -353,12 +366,12 @@ $frm->setFormTagAttribute('class', 'form');
                                 </div>
                             </div>
                         </div>
-                        <div class="separator separator-dashed my-4"></div>
+                        <div id="specificationsListSeprJs" class="separator separator-dashed my-4 hide"></div>
                         <div id="specificationsListJs">
                         </div>
                     </div>
                 </div>
-                <div class="card" id="tax-shipping">
+                <div class="card card-toggle" id="tax-shipping">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
                         <div class="card-head-label">
                             <h3 class="card-head-title">Tax and Shipping
@@ -382,229 +395,121 @@ $frm->setFormTagAttribute('class', 'form');
                         </div>
                     </div>
                 </div>
-                <div class="card" id="digital-files">
-                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="digital-files-block">
-                        <div class="card-head-label">
-                            <h3 class="card-head-title">Specifications
-                            </h3>
-                            <span class="text-muted">Product Specifications are added in this
 
-                                <span class="input-helper"></span>section</span>
-                        </div> <i class="dropdown-toggle-custom-arrow"></i>
-                    </div>
-                    <div class="card-body show" id="digital-files-block">
-                        <div id="specificationsFormJs">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
-                                        <span class="form-text text-muted">Lorem ipsum dolor sit,
-                                            amet consectetur adipisicing elit. </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_value" id="sp_value" value="" data-required="1">
-                                    </div>
-                                </div>
+                <?php if ($displayDigitalDownloadList) { ?>
+                    <div class="card card-toggle" id="digital-files">
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-files-block" aria-expanded="false" aria-controls="stock-block2">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Digital Files</h3>
+                                <span class="text-muted">Digital Files are added in this section </span>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_group" id="sp_group" value="" data-required="0">
-                                    </div>
+                            <?php if ($displayDigitalDownloadAddBtn) { ?>
+                            <div class="card-toolbar">
+                            <div class="me-5">
+                                <a href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE;?>);" class="btn btn-outline-secondary btn-sm">Digital Files</a>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label"></label>
-                                        <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
-                                        <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
-                                            <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
-                                        </button>
-                                    </div>
-                                </div>
+                                <i class="dropdown-toggle-custom-arrow"></i>
                             </div>
+                            <?php } ?>
                         </div>
-                        <div class="separator separator-dashed my-4"></div>
-                        <div id="digitalFilesListJs">
-                        </div>
-                    </div>
-                </div>
-                <div class="card" id="digital-links">
-                    <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="digital-links-block">
-                        <div class="card-head-label">
-                            <h3 class="card-head-title">Digital Links
-                            </h3>
-                            <span class="text-muted">Product Digital Links are added in this
-
-                                <span class="input-helper"></span>section</span>
-                        </div> <i class="dropdown-toggle-custom-arrow"></i>
-                    </div>
-                    <div class="card-body show" id="digital-links-block">
-                        <div id="digitalLinksFormJs">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_NAME', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_label" id="sp_label" value="" data-required="1">
-                                        <span class="form-text text-muted">Lorem ipsum dolor sit,
-                                            amet consectetur adipisicing elit. </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_VALUE', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_value" id="sp_value" value="" data-required="1">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label">
-                                            <?php echo Labels::getLabel('FRM_SPECIFICATION_GROUP', $langId); ?>
-                                        </label>
-                                        <input type="text" name="sp_group" id="sp_group" value="" data-required="0">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="label"></label>
-                                        <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
-                                        <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
-                                            <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="separator separator-dashed my-4"></div>
-                        <div id="digitalLinksListJs">
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-            <div class="add-stock-column column-actions">
-                <div class="sticky-top">
-                    <div class="card">
-                        <div class="card-body">
-                            <button type="submit" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>
-                            <div class="mt-3">
-                                <?php
-                                $fld = $frm->getField('product_active');
-                                if (null !=  $fld) {
-                                    HtmlHelper::configureSwitchForCheckbox($fld);
-                                    echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
-                                }
-                                $fld = $frm->getField('product_approved');
-                                if (null !=  $fld) {
-                                    HtmlHelper::configureSwitchForCheckbox($fld);
-                                    echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
-                                }
-
-                                $fld = $frm->getField('auto_update_other_langs_data');
-                                if (null !=  $fld) {
-                                    HtmlHelper::configureSwitchForCheckbox($fld);
-                                    echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
-                                }
-                                ?>
+                        <div class="card-body show" id="digital-files-block">
+                            <div id="digitalFilesDefaultListJs">
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <ul class="list-featured">
-                                <?php
-                                $fld = $frm->getField('product_featured');
-                                if (null !=  $fld) {
-                                    $caption =  $fld->getCaption();
-                                    $fld->changeCaption('');
-                                ?>
-                                    <li>
-                                        <label class="checkbox">
-                                            <?php echo $fld->getHtml(); ?>
-                                            <span>
-                                                <strong><?php echo $caption; ?></strong>
-                                                <span class="text-muted">
-                                                    <?php echo Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', $langId); ?>
-                                                </span>
-                                            </span>
-                                        </label>
-                                    </li>
-                                <?php } ?>
-                                <?php
-                                $fld = $frm->getField('product_cod_enabled');
-                                if (null !=  $fld) {
-                                    if (!$codEnabled) {
-                                        $fld->addFieldTagAttribute('disabled', 'disabled');
-                                    }
-                                    $caption =  $fld->getCaption();
-                                    $fld->changeCaption('');
-                                ?>
-                                    <li>
-                                        <label class="checkbox">
-                                            <?php echo $fld->getHtml(); ?>
-                                            <span>
-                                                <strong><?php echo $caption; ?></strong>
-                                                <?php if (!$codEnabled) { ?>
-                                                    <div class="alert alert-solid-brand mt-4" role="alert">
-                                                        <div class="alert-icon"><i class="flaticon-warning"></i>
-                                                        </div>
-                                                        <div class="alert-text text-xs">
-                                                            <?php echo Labels::getLabel('MSG_DISCLAIMER', $langId); ?>: <?php echo Labels::getLabel('MSG_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $langId); ?>
-                                                        </div>
-                                                    </div>
-                                                <?php } else { ?>
-                                                    <span class="text-muted">
-                                                        <?php echo Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId); ?>
-                                                    </span>
-                                                <?php  } ?>
-                                            </span>
-                                        </label>
-                                    </li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    </div>
-                    <?php
-                    $fld = $frm->getField('product_tags');
-                    if (null != $fld) {
-                        $fld->addFieldTagAttribute('class', 'form-tagify');
-                        $fld->addFieldTagAttribute('id', 'product_tags');
-                    ?>
-                        <div class="card">
-                            <div class="card-head">
+                    <div class="card card-toggle" id="digital-links">
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
                                 <div class="card-head-label">
-                                    <h3 class="card-head-title">Tags</h3>
-                                    <span class="text-muted">
-                                        <?php echo Labels::getLabel('FRM_PRODUCT_TAG_INFO', $langId); ?>
-                                    </span>
+                                    <h3 class="card-head-title">Digital Links</h3>
+                                    <span class="text-muted">Digital Links are added in this section </span>
                                 </div>
-                            </div>
-                            <div class="card-body">
-                                <?php echo $fld->getHtml(); ?>
+                                <?php if ($displayDigitalDownloadAddBtn) { ?>
+                                <div class="card-toolbar">
+                                <div class="me-5">
+                                    <a href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK;?>);"  class="btn btn-outline-secondary btn-sm">Digital Links</a>
+                                    </div>
+                                    <i class="dropdown-toggle-custom-arrow"></i>
+                                </div>
+                                <?php } ?>
+                        </div>                     
+                        <div class="card-body show" id="digital-links-block">
+                            <div id="digitalLinksDefaultListJs">
                             </div>
                         </div>
-                    <?php } ?>
+                    </div>
+        <?php } ?>
+        </div>
+        <div class="add-stock-column column-actions">
+            <div class="sticky-top">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>
+                        <div class="mt-3">
+                            <?php
+                            $fld = $frm->getField('product_active');
+                            if (null !=  $fld) {
+                                HtmlHelper::configureSwitchForCheckbox($fld);
+                                echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
+                            }
+                            $fld = $frm->getField('product_approved');
+                            $uLangDatafld = $frm->getField('auto_update_other_langs_data');
+
+                            if (null !=  $fld) {
+                                HtmlHelper::configureSwitchForCheckbox($fld);
+                                echo null ==  $uLangDatafld ? '<div class="setting-block">' . $fld->getHtml() . '</div>' : '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
+                            }
+                            
+                            if (null !=  $uLangDatafld) {
+                                HtmlHelper::configureSwitchForCheckbox($uLangDatafld);
+                                echo '<div class="setting-block">' . $uLangDatafld->getHtml() . '</div>';
+                            }
+                            ?>
+                        </div>
+                    </div>
                 </div>
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="list-featured">
+                            <?php
+                            $fld = $frm->getField('product_featured');
+                            $codFld = $frm->getField('product_cod_enabled');
+                            if (null !=  $fld) {
+                                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', $langId));
+                                echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>':'<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
+                            }
+                            
+                            if (null !=  $codFld && $codEnabled) {
+                                HtmlHelper::configureSwitchForCheckbox($codFld, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));                           
+                                echo '<li><div class="setting-block">' . $codFld->getHtml() . '</div></li>';
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+                <?php
+                $fld = $frm->getField('product_tags');
+                if (null != $fld) {
+                    $fld->addFieldTagAttribute('class', 'form-tagify');
+                    $fld->addFieldTagAttribute('id', 'product_tags');
+                ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Tags</h3>
+                                <span class="text-muted">
+                                    <?php echo Labels::getLabel('FRM_PRODUCT_TAG_INFO', $langId); ?>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <?php echo $fld->getHtml(); ?>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
-        </form>
+    </div>
+    </form>
     </div>
     <table class="hide" id="variantCloneJs">
         <?php echo getVariantUiTr($langId, -1);  ?>
@@ -628,13 +533,13 @@ $frm->setFormTagAttribute('class', 'form');
         var productOptions = <?php echo json_encode($productOptions); ?>;
         var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
         var tempImageType = '<?php echo AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP; ?>';
-        $(function() {
+        var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
+        var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
 
+        $(function() {
             prodSpecifications();
             tagifyProducts();
-            if (0 < getCurrentFrmProductId()) {
-                productDefaultImages();
-            }
+            productDefaultImages();
             var langId = getCurrentFrmLangId();
             select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
                 brand_active: 1,
@@ -655,12 +560,11 @@ $frm->setFormTagAttribute('class', 'form');
                 if (index in productOptions) {
                     selectedOptionData = [{
                         selected: true,
-                        id: productOptions[0]['option_id'],
-                        text: productOptions[0]['option_name'],
-                        option_is_separate_images: productOptions[0]['option_is_separate_images'],
+                        id: productOptions[index]['option_id'],
+                        text: productOptions[index]['option_name'],
+                        option_is_separate_images: productOptions[index]['option_is_separate_images'],
                     }]
                 }
-
                 select2($(this).attr('id'), fcom.makeUrl('Options', 'autoComplete'), optionDataCallback,
                     resetOptionValuesTag,
                     resetOptionValuesTag,
@@ -670,6 +574,7 @@ $frm->setFormTagAttribute('class', 'form');
                 $(this).data("select2").$container.addClass("w-100");
 
             });
+
 
             $('#addProductfrm .optionValuesJs').each(function(index) {
                 tagifyOptionValue("#" + $(this).attr('id'));
@@ -689,36 +594,31 @@ $frm->setFormTagAttribute('class', 'form');
                 $('select[name=\'product_seller_id\']').attr('disabled', true);
             <?php } ?>
 
-            $('#addProductfrm').find('input,select').each(function() {
-                if ($(this).data('fatreq') == undefined) {
-                    $(this).data('fatreq', {
-                        "required": false
-                    });
-                }
-                if ($(this).attr('name') == undefined) {
-                    $(this).attr('name', '');
-                }
-            });
             upcType();
+            <?php if (0 < $productId && $displayDigitalDownloadList) { ?>
+                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $productId; ?>);
+                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $productId; ?>);
+            <?php } ?>
         });
     </script>
+</main>
 
-    <?php
-    function getVariantUiTr($langId, $i, $productOption = [])
-    {
-        $deleteClass = $i == 0 ? 'hide' : '';
-        $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
-        $confWebUrl = CONF_WEBROOT_URL;
+<?php
+function getVariantUiTr($langId, $i, $productOption = [])
+{
+    $deleteClass = $i == 0 ? 'hide' : '';
+    $optionLabel = Labels::getLabel('FRM_SELECT_OPTION', $langId);
+    $confWebUrl = CONF_WEBROOT_URL;
 
-        $tagData = [];
-        if (!empty($productOption)) {
-            foreach ($productOption['optionValues'] as $key => $name) {
-                $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
-            }
+    $tagData = [];
+    if (!empty($productOption)) {
+        foreach ($productOption['optionValues'] as $key => $name) {
+            $tagData[] = ['id' => $key, 'value' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8')];
         }
-        $tagData = json_encode($tagData);
+    }
+    $tagData = json_encode($tagData);
 
-        return <<<HTML
+    return <<<HTML
     <tr class="rowJs">
         <td width="30%">
             <select class="optionsJs" id="options$i" name="options[]" class="form-control" placeholder="$optionLabel"> 
@@ -749,6 +649,5 @@ $frm->setFormTagAttribute('class', 'form');
         </td> 
     </tr>
     HTML;
-    }
-    ?>
-</main>
+}
+?>

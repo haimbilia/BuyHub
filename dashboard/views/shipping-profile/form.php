@@ -34,7 +34,7 @@ $submitBtnFld->developerTags['noCaptionTag'] = true;
             <div class="row mb-4">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body pt-4 pl-4 pr-4 pb-4">
+                        <div class="card-body pt-4 ps-4 pe-4 pb-4">
                             <?php echo $frm->getFormTag();
                             $pNameFld = $frm->getField('shipprofile_name[' . $siteDefaultLangId . ']');
                             $pNameFld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("LBL_Customers_won't_see_this", $siteLangId) . "</span>";

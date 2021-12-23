@@ -40,7 +40,7 @@ class AfterShipShipment extends ShipmentTrackingBase
     private function doRequest(string $url, array $requestParam = []): bool
     {
         if (Plugin::INACTIVE == $this->settings['plugin_active']) {
-            $this->error = Labels::getLabel('MSG_PLUGIN_NOT_ACTIVE', $this->langId);
+            $this->error = Labels::getLabel('ERR_PLUGIN_NOT_ACTIVE', $this->langId);
             return false;
         }
 

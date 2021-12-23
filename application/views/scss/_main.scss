@@ -2,17 +2,15 @@
 @import "bootstrap/variables";
 //
 @import "themes/variables";
-//
 
 //
 @import "layout/header";
-//@import "layout/nav";
-@import "layout/mega-nav";
+@import "layout/nav";
+//@import "layout/mega-nav";
 @import "layout/footer";
 //
 @import "components/main-search";
 @import "components/accordion";
-
 @import "components/tagify";
 @import "components/auto-complete";
 @import "components/avtar";
@@ -27,7 +25,6 @@
 @import "components/cookies";
 @import "components/data-not-found";
 @import "components/dropdown";
-
 @import "components/fetured-slider";
 @import "components/form";
 @import "components/graph";
@@ -93,6 +90,7 @@
 @import "components/collection-shop";
 @import "components/collection-category";
 @import "components/collection-brands";
+@import "components/collection-banner";
 @import "components/collection-faq";
 @import "components/collection-incentives";
 @import "components/collection-newsletter";

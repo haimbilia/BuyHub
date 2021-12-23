@@ -27,10 +27,7 @@ foreach ($arrListing as $sn => $row) {
             case 'shop_name':
                 if ($row[$key] != '') {
                     if ($canViewShops) {
-                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectfunc("' . UrlHelper::generateUrl('Shops') . '", ' . $row['shop_id'] . ')'), $row[$key], true);
-                        //$str = $this->includeTemplate('_partial/shop/shop-info-card.php', ['shop' => $row, 'siteLangId' => $siteLangId], false, true);
-                        //$td->appendElement('plaintext', $tdAttr, $str, true); 
-
+                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectToShop(' . $row['shop_id'] . ')'), $row[$key], true);
                     } else {
                         $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                     }
@@ -193,7 +190,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
         }
     }
-    $serialNo--;
+    $serialNo++;
 }
 
 if (count($arrListing) == 0) {
