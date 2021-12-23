@@ -337,12 +337,12 @@ class ProductsController extends ListingBaseController
             } 
 
             $frm->fill($productData);
-            $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'product_id' => $productId]);
+            $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $productId]);
           
         } else {
             $tempProductId = time() . $this->admin_id;
             $frm->fill(['temp_product_id' => $tempProductId]);
-            $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, 'product_id' => $tempProductId]);
+            $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, 'record_id' => $tempProductId]);
         }
 
         $this->set("frm", $frm);
@@ -409,7 +409,7 @@ class ProductsController extends ListingBaseController
             $fld = $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_WARRANTY', $langId), 'product_warranty');
             $fld->requirements()->setInt();
             $fld->requirements()->setPositive();
-            $frm->addHiddenField('', 'product_warranty_unit', current(Product::getWarrantyUnits($langId)));
+            $frm->addHiddenField('', 'product_warranty_unit');
         }
         $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'product_description');
         $frm->addTextBox(Labels::getLabel('FRM_YOUTUBE_VIDEO_URL', $langId), 'product_youtube_video');
@@ -649,7 +649,7 @@ class ProductsController extends ListingBaseController
         $productId = $post['product_id'];
         if (1 > $productId) {
             if (!isset($post['temp_product_id']) || 1 > $post['temp_product_id']) {
-                LibHelper::exitWithError($this->str_invalid_request . "111");
+                LibHelper::exitWithError($this->str_invalid_request);
             }
         }
 
@@ -940,7 +940,7 @@ class ProductsController extends ListingBaseController
         $frm->addHtml('', 'images', '');
         $frm->addHiddenField('', 'min_width', 500);
         $frm->addHiddenField('', 'min_height', 500);
-        $frm->addHiddenField('', 'product_id');
+        $frm->addHiddenField('', 'record_id');
         $frm->addHiddenField('', 'file_type');
 
         return $frm;
@@ -1568,7 +1568,6 @@ class ProductsController extends ListingBaseController
 
     public function getShippingProfileOptions()
     {
-
         $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT);
         if (1 > $langId) {

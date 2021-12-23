@@ -390,7 +390,7 @@ if (0 < $productId) {
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6, ['id' => 'ps_from_country_id']);
-                            echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6, ['id' => 'shipping_profile']);
+                            echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6);
                             ?>
                         </div>
                     </div>
@@ -531,8 +531,7 @@ if (0 < $productId) {
         var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';
         var tagifyObjs = {};
         var productOptions = <?php echo json_encode($productOptions); ?>;
-        var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
-        var tempImageType = '<?php echo AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP; ?>';
+        var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>'; 
         var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
         var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
 
@@ -578,21 +577,23 @@ if (0 < $productId) {
 
             $('#addProductfrm .optionValuesJs').each(function(index) {
                 tagifyOptionValue("#" + $(this).attr('id'));
-            });
+            });    
 
-            getShippingProfileOptions(<?php echo $frm->getField('product_seller_id')->value; ?>);
 
-            <?php if ($isProductAddedByAdmin  && !$isSelProdCreatedBySeller) { ?>
-                select2('product_seller_id', fcom.makeUrl('Users', 'autoComplete'), {
-                    joinShop: 1,
-                    user_is_supplier: 1,
-                    langId
-                }, function(e) {
-                    getShippingProfileOptions(e.params.args.data.id)
-                });
-            <?php } else { ?>
-                $('select[name=\'product_seller_id\']').attr('disabled', true);
-            <?php } ?>
+            <?php             
+            if(isset($isProductAddedByAdmin)  && isset($isSelProdCreatedBySeller)){
+                if ($isProductAddedByAdmin  && !$isSelProdCreatedBySeller) { ?>
+                    select2('product_seller_id', fcom.makeUrl('Users', 'autoComplete'), {
+                        joinShop: 1,
+                        user_is_supplier: 1,
+                        langId
+                    }, function(e) {
+                        getShippingProfileOptions(e.params.args.data.id)
+                    });
+                <?php } else { ?>
+                    $('select[name=\'product_seller_id\']').attr('disabled', true);
+                <?php }
+            } ?>
 
             upcType();
             <?php if (0 < $productId && $displayDigitalDownloadList) { ?>

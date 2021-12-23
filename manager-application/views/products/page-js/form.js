@@ -270,7 +270,7 @@
             $.ykmodal(t);
             loadImageOptions();
             var fileType = $('#image_file_type').val();
-            var productId = $('#image_product_id').val();
+            var productId = $('#image_record_id').val();
             productImages(productId, fileType);
             fcom.removeLoader();
         });
@@ -775,7 +775,7 @@ $(document).on('click', '.optionsDeleteJs', function () {
 $(document).on('change', '#image_option_id', function () {
     let optionId = $(this).val();
     let fileType = $('#image_file_type').val();
-    let productId = $('#image_product_id').val();
+    let productId = $('#image_record_id').val();
     let langId = $('#image_lang_id').val();
     productImages(productId, fileType, optionId, langId);
 });
@@ -783,7 +783,7 @@ $(document).on('change', '#image_option_id', function () {
 $(document).on('change', '#image_lang_id', function () {
     let langId = $(this).val();
     let fileType = $('#image_file_type').val();
-    let productId = $('#image_product_id').val();
+    let productId = $('#image_record_id').val();
     let optionId = $('#image_option_id').val();
     productImages(productId, fileType, optionId, langId);
 });
