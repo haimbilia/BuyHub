@@ -99,6 +99,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('objectCtrlName', $this->objectCtrlName);
 
 
         $this->_template->addJs(['js/select2.js', 'badge-link-conditions/page-js/list.js']);

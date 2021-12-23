@@ -1,16 +1,19 @@
 <?php
 
-class PickupAddressesController extends ListingBaseController {
+class PickupAddressesController extends ListingBaseController
+{
 
     protected string $modelClass = 'Address';
     protected $pageKey = 'MANAGE_PICKUP_ADDRESSES';
 
-    public function __construct($action) {
+    public function __construct($action)
+    {
         parent::__construct($action);
         $this->objPrivilege->canViewPickupAddresses();
     }
 
-    public function index() {
+    public function index()
+    {
         $fields = $this->getFormColumns();
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
@@ -22,13 +25,13 @@ class PickupAddressesController extends ListingBaseController {
         $this->set('actionItemsData', array_merge(HtmlHelper::getDefaultActionItems($fields, $this->modelObj)));
         $this->set('canEdit', $this->objPrivilege->canEditPickupAddresses($this->admin_id, true));
         $this->getListingData();
-        $this->_template->addJs([
-            'pickup-addresses/page-js/index.js'
-        ]);
+        $this->_template->addJs(['pickup-addresses/page-js/index.js']);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ADDRESS_LABEL_OR_ADDRESS_DETAIL', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
-    public function search() {
+    public function search()
+    {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'pickup-addresses/search.php', true),
@@ -37,7 +40,8 @@ class PickupAddressesController extends ListingBaseController {
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData() {
+    private function getListingData()
+    {
         $this->objPrivilege->canViewBrandRequests();
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $data = FatApp::getPostedData();
@@ -70,6 +74,7 @@ class PickupAddressesController extends ListingBaseController {
             $condition->attachCondition('addr_address1', 'like', '%' . $post['keyword'] . '%', 'OR');
             $condition->attachCondition('addr_address2', 'like', '%' . $post['keyword'] . '%', 'OR');
             $condition->attachCondition('addr_city', 'like', '%' . $post['keyword'] . '%', 'OR');
+            $condition->attachCondition('addr_zip', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
@@ -89,26 +94,8 @@ class PickupAddressesController extends ListingBaseController {
         $this->set('canEdit', $this->objPrivilege->canEditPickupAddresses($this->admin_id, true));
     }
 
-    public function form_1() {
-        $this->objPrivilege->canEditBrandRequests();
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        $frm = $this->getForm($recordId);
-        if (0 < $recordId) {
-            $data = Brand::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('brand_name', 'brand_id', 'brand_identifier', 'brand_active', 'brand_featured', 'brand_status', 'brand_seller_id'), true);
-            if ($data === false) {
-                LibHelper::exitWithError($this->str_invalid_request, true);
-            }
-            $data['urlrewrite_custom'] = AdminShopSearch::getUrlRewrite($this->rewriteUrl . $recordId);
-            $frm->fill($data);
-        }
-
-
-        $this->set('recordId', $recordId);
-        $this->set('frm', $frm);
-        $this->_template->render(false, false);
-    }
-
-    public function form($addressId = 0, $langId = 0) {
+    public function form($addressId = 0, $langId = 0)
+    {
         $this->objPrivilege->canEditPickupAddresses();
         $stateId = 0;
         $slotData = [];
@@ -133,7 +120,6 @@ class PickupAddressesController extends ListingBaseController {
             $availability = isset($timeSlotsRow['tslot_availability']) ? $timeSlotsRow['tslot_availability'] : 0;
             $data['tslot_availability'] = $availability;
             $frm->fill($data);
-
             if (!empty($timeSlots)) {
                 foreach ($timeSlots as $key => $slot) {
                     $slotData['tslot_day'][$slot['tslot_day']] = $slot['tslot_day'];
@@ -153,7 +139,8 @@ class PickupAddressesController extends ListingBaseController {
         $this->_template->render(false, false);
     }
 
-    public function setup() {
+    public function setup()
+    {
         $this->objPrivilege->canEditPickupAddresses();
         $post = FatApp::getPostedData();
         $availability = FatApp::getPostedData('tslot_availability', FatUtility::VAR_INT, 1);
@@ -209,6 +196,7 @@ class PickupAddressesController extends ListingBaseController {
                 }
             }
         }
+
         if (!empty($slotDays) && $availability == TimeSlot::DAY_ALL_DAYS) {
             $daysArr = TimeSlot::getDaysArr($this->siteLangId);
             foreach ($daysArr as $day => $label) {
@@ -234,40 +222,41 @@ class PickupAddressesController extends ListingBaseController {
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    private function getForm($addressId = 0, $langId) {
+    private function getForm($addressId, $langId)
+    {
         $addressId = FatUtility::int($addressId);
         $frm = new Form('frmAddress');
         $frm->addHiddenField('', 'addr_id', $addressId);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', Language::getAllNames(), $langId, array(), '');
-        $frm->addTextBox(Labels::getLabel('LBL_Address_Label', $langId), 'addr_title');
-        $frm->addRequiredField(Labels::getLabel('LBL_Name', $langId), 'addr_name');
-        $frm->addRequiredField(Labels::getLabel('LBL_Address_Line1', $langId), 'addr_address1');
-        $frm->addTextBox(Labels::getLabel('LBL_Address_Line2', $langId), 'addr_address2');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getAllNames(), $langId, array(), '');
+        $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $langId), 'addr_title');
+        $frm->addRequiredField(Labels::getLabel('FRM_NAME', $langId), 'addr_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_ADDRESS_LINE1', $langId), 'addr_address1');
+        $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LINE2', $langId), 'addr_address2');
 
         $countryObj = new Countries();
         $countriesArr = $countryObj->getCountriesAssocArr($langId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Country', $langId), 'addr_country_id', $countriesArr, '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $langId), 'addr_country_id', $countriesArr, '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_State', $langId), 'addr_state_id', array(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId))->requirement->setRequired(true);
-        $frm->addRequiredField(Labels::getLabel('LBL_City', $langId), 'addr_city');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATE', $langId), 'addr_state_id', array(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirement->setRequired(true);
+        $frm->addRequiredField(Labels::getLabel('FRM_CITY', $langId), 'addr_city');
 
-        $zipFld = $frm->addRequiredField(Labels::getLabel('LBL_Postalcode', $langId), 'addr_zip');
+        $zipFld = $frm->addRequiredField(Labels::getLabel('FRM_POSTALCODE', $langId), 'addr_zip');
         $frm->addHiddenField('', 'addr_phone_dcode');
-        $phnFld = $frm->addRequiredField(Labels::getLabel('LBL_Phone', $langId), 'addr_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+        $phnFld = $frm->addRequiredField(Labels::getLabel('FRM_PHONE', $langId), 'addr_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
         $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $langId));
+        $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_PHONE_NUMBER_FORMAT.', $langId));
 
         $slotTimingsTypeArr = TimeSlot::getSlotTypeArr($this->siteLangId);
-        $frm->addRadioButtons(Labels::getLabel('LBL_Slot_Timings', $this->siteLangId), 'tslot_availability', $slotTimingsTypeArr, TimeSlot::DAY_INDIVIDUAL_DAYS);
+        $frm->addRadioButtons(Labels::getLabel('FRM_SLOT_TIMINGS', $this->siteLangId), 'tslot_availability', $slotTimingsTypeArr, TimeSlot::DAY_INDIVIDUAL_DAYS);
 
         $daysArr = TimeSlot::getDaysArr($this->siteLangId);
         for ($i = 0; $i < count($daysArr); $i++) {
             $frm->addCheckBox($daysArr[$i], 'tslot_day[' . $i . ']', $i, array(), false);
-            $frm->addSelectBox(Labels::getLabel('LBL_From', $this->siteLangId), 'tslot_from_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
-            $frm->addSelectBox(Labels::getLabel('LBL_To', $this->siteLangId), 'tslot_to_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('LBL_Select', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_FROM', $this->siteLangId), 'tslot_from_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
+            $frm->addSelectBox(Labels::getLabel('FRM_TO', $this->siteLangId), 'tslot_to_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
             $frm->addButton('', 'btn_add_row[' . $i . ']', '+');
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $langId));
         return $frm;
     }
 
@@ -277,7 +266,8 @@ class PickupAddressesController extends ListingBaseController {
      * @param  bool $setVariable
      * @return void
      */
-    protected function checkEditPrivilege(bool $setVariable = false): void {
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
         if (true === $setVariable) {
             $this->set("canEdit", $this->objPrivilege->canEditPickupAddresses($this->admin_id, true));
         } else {
@@ -285,7 +275,8 @@ class PickupAddressesController extends ListingBaseController {
         }
     }
 
-    public function getSearchForm($fields = []) {
+    public function getSearchForm($fields = [])
+    {
         $frm = new Form('frmRecordSearch');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
@@ -297,7 +288,8 @@ class PickupAddressesController extends ListingBaseController {
         return $frm;
     }
 
-    private function getFormColumns(): array {
+    private function getFormColumns(): array
+    {
         $pickupTblHeadingCols = CacheHelper::get('pickupAddressTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($pickupTblHeadingCols) {
             return json_decode($pickupTblHeadingCols);
@@ -305,7 +297,8 @@ class PickupAddressesController extends ListingBaseController {
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'addr_id' => Labels::getLabel('LBL_ADDRESS', $this->siteLangId),
+            'addr_title' => Labels::getLabel('LBL_ADDRESS_LABEL', $this->siteLangId),
+            'addr_detail' => Labels::getLabel('LBL_ADDRESS_DETAIL', $this->siteLangId),
             'addr_phone' => Labels::getLabel('LBL_PHONE_NUMBER', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -313,17 +306,19 @@ class PickupAddressesController extends ListingBaseController {
         return $arr;
     }
 
-    protected function getDefaultColumns(): array {
+    protected function getDefaultColumns(): array
+    {
         return [
             'listSerial',
-            'addr_id',
+            'addr_title',
+            'addr_detail',
             'addr_phone',
             'action',
         ];
     }
 
-    private function excludeKeysForSort($fields = []): array {
-        return array_diff($fields, [], Common::excludeKeysForSort());
+    private function excludeKeysForSort($fields = []): array
+    {
+        return array_diff($fields, ['addr_detail'], Common::excludeKeysForSort());
     }
-
 }

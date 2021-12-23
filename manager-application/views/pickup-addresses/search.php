@@ -27,14 +27,15 @@ foreach ($arrListing as $sn => $row) {
                 }
                 $td->appendElement('plaintext', array(), $addrPhone, true);
                 break;
-            case 'addr_id':
+            case 'addr_detail':
+                $addrName = (strlen($row['addr_name']) > 0) ? $row['addr_name'] . '<br>' : '';
                 $addr2 = (strlen($row['addr_address2']) > 0) ? ', ' . $row['addr_address2'] . '<br>' : '';
                 $addrCity = (strlen($row['addr_city']) > 0) ? $row['addr_city'] . ', ' : '';
                 $addrState = (strlen($row['state_name']) > 0) ? $row['state_name'] . ', ' : '';
                 $addrCountry = (strlen($row['country_name']) > 0) ? $row['country_name'] . '<br>' : '';
                 $addrZip = (strlen($row['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $row['addr_zip'] : '';
                 $address = "<address>
-                                <p>" . $row['addr_address1'] . ' ' . $addr2 . $addrCity . $addrState . $addrCountry . $addrZip .
+                                <p>" . $addrName . $row['addr_address1'] . ' ' . $addr2 . $addrCity . $addrState . $addrCountry . $addrZip .
                         "</address>";
                 $td->appendElement('plaintext', array(), $address, true);
                 break;

@@ -19,6 +19,11 @@ $(document).on("change", "#recordTypeJs", function () {
     setRecordField();
 });
 
+$(window).on('load', function () {
+    /* Mark Sidebar Nav Active. */
+    markNavActive($("[data-selector*=" + objectCtrlName + "]"));
+});
+
 $(document).on('change', '#conditionTypeJs', function () {
     if ("" == $(this).val()) {
         $(this).val(COND_TYPE_AVG_RATING_SHOP).trigger('change');
@@ -54,7 +59,7 @@ $(document).on('change', '#conditionTypeJs', function () {
     editConditionRecord = function (badgeId, recordId = 0, displayInPopup = 0) {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
-        
+
         /* !! is used to convert variable type in to bool. */
         var displayInPopup = !!displayInPopup;
         $.ykmodal(fcom.getLoader(), displayInPopup);

@@ -36,7 +36,8 @@
                         <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Brands'); ?>">
+                                    <?php $navSelector = ['Brands']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Brands'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -49,7 +50,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Shops'); ?>">
+                                    <?php $navSelector = ['Shops']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Shops'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -61,7 +63,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ProductCategories'); ?>">
+                                    <?php $navSelector = ['ProductCategories']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ProductCategories'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -73,7 +76,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Products'); ?>">
+                                    <?php $navSelector = ['Products']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Products'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -85,7 +89,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewOptions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Options'); ?>">
+                                    <?php $navSelector = ['Options']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Options'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -127,7 +132,8 @@
                         <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewBrandRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('brandRequests'); ?>">
+                                    <?php $navSelector = ['brandRequests']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('brandRequests'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -139,7 +145,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ProductCategoriesRequest'); ?>">
+                                    <?php $navSelector = ['ProductCategoriesRequest']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ProductCategoriesRequest'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -152,7 +159,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewSellerApprovalRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('sellerApprovalRequests'); ?>">
+                                    <?php $navSelector = ['sellerApprovalRequests']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('sellerApprovalRequests'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -164,7 +172,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('thresholdProducts'); ?>">
+                                    <?php $navSelector = ['thresholdProducts']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('thresholdProducts'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -177,7 +186,8 @@
 
                             <?php if ($objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('OrderReturnRequests'); ?>">
+                                    <?php $navSelector = ['OrderReturnRequests']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('OrderReturnRequests'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -193,7 +203,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewWithdrawRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('WithdrawalRequests'); ?>">
+                                    <?php $navSelector = ['WithdrawalRequests']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('WithdrawalRequests'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -212,7 +223,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewOrderCancellationRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('OrderCancellationRequests'); ?>">
+                                    <?php $navSelector = ['OrderCancellationRequests']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('OrderCancellationRequests'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -259,7 +271,8 @@
                         <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
+                                    <?php $navSelector = ['Orders']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -271,7 +284,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewSubscriptionOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('SubscriptionOrders'); ?>">
+                                    <?php $navSelector = ['SubscriptionOrders']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('SubscriptionOrders'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -283,7 +297,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('OrderCancelReasons'); ?>">
+                                    <?php $navSelector = ['OrderCancelReasons']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('OrderCancelReasons'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -295,7 +310,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('OrderReturnReasons'); ?>">
+                                    <?php $navSelector = ['OrderReturnReasons']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('OrderReturnReasons'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -310,7 +326,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('OrderStatus'); ?>">
+                                    <?php $navSelector = ['OrderStatus']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('OrderStatus'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -322,7 +339,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewProductReviews(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ProductReviews'); ?>">
+                                    <?php $navSelector = ['ProductReviews']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ProductReviews'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -361,7 +379,8 @@
                         <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('AdminUsers') ?>">
+                                    <?php $navSelector = ['AdminUsers', 'AdminPermissions']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('AdminUsers') ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -374,7 +393,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Users'); ?>">
+                                    <?php $navSelector = ['Users']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Users'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -385,7 +405,8 @@
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Rewards'); ?>">
+                                    <?php $navSelector = ['Rewards']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Rewards'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -396,7 +417,8 @@
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Transactions'); ?>">
+                                    <?php $navSelector = ['Transactions']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Transactions'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -408,7 +430,8 @@
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('DeletedUsers'); ?>">
+                                    <?php $navSelector = ['DeletedUsers']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('DeletedUsers'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -420,7 +443,8 @@
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('UsersAddresses'); ?>">
+                                    <?php $navSelector = ['UsersAddresses']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('UsersAddresses'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -431,7 +455,8 @@
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>">
+                                    <?php $navSelector = ['userGdprRequests']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('userGdprRequests'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -497,7 +522,8 @@
                         <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('SpecialPrice'); ?>">
+                                    <?php $navSelector = ['SpecialPrice']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('SpecialPrice'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -509,7 +535,8 @@
                                 </li>
 
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('VolumeDiscount'); ?>">
+                                    <?php $navSelector = ['VolumeDiscount']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('VolumeDiscount'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -521,7 +548,8 @@
                                 </li>
 
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('RelatedProducts'); ?>">
+                                    <?php $navSelector = ['RelatedProducts']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('RelatedProducts'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -533,7 +561,8 @@
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('BuyTogetherProducts'); ?>">
+                                    <?php $navSelector = ['BuyTogetherProducts']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('BuyTogetherProducts'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -548,7 +577,8 @@
 
                             <?php if ($objPrivilege->canViewPromotions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('promotions'); ?>">
+                                    <?php $navSelector = ['promotions']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('promotions'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -564,7 +594,8 @@
 
                             <?php if ($objPrivilege->canViewRewardsOnPurchase(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('RewardsOnPurchase'); ?>">
+                                    <?php $navSelector = ['RewardsOnPurchase']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('RewardsOnPurchase'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -579,7 +610,8 @@
 
                             <?php if ($objPrivilege->canViewRecomendedWeightages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('SmartRecomendedWeightages'); ?>">
+                                    <?php $navSelector = ['SmartRecomendedWeightages']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('SmartRecomendedWeightages'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -591,7 +623,8 @@
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('RecomendedTagProducts'); ?>">
+                                    <?php $navSelector = ['RecomendedTagProducts']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('RecomendedTagProducts'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -606,7 +639,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('DiscountCoupons'); ?>">
+                                    <?php $navSelector = ['DiscountCoupons']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('DiscountCoupons'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -620,7 +654,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('PushNotifications'); ?>">
+                                    <?php $navSelector = ['PushNotifications']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('PushNotifications'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#mobile">
@@ -634,7 +669,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewBadgesAndRibbons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Badges'); ?>">
+                                    <?php $navSelector = ['Badges']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Badges'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-badge">
@@ -646,7 +682,8 @@
                                     </a>
                                 </li>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Ribbons'); ?>">
+                                    <?php $navSelector = ['Ribbons']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Ribbons'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-ribbon">
@@ -686,7 +723,8 @@
                         <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewBlogPostCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('BlogPostCategories'); ?>">
+                                    <?php $navSelector = ['BlogPostCategories']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('BlogPostCategories'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -698,7 +736,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewBlogPosts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('BlogPosts'); ?>">
+                                    <?php $navSelector = ['BlogPosts']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('BlogPosts'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -710,7 +749,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('BlogContributions'); ?>">
+                                    <?php $navSelector = ['BlogContributions']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('BlogContributions'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -722,7 +762,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('BlogComments'); ?>">
+                                    <?php $navSelector = ['BlogComments']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('BlogComments'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -757,7 +798,8 @@
                         <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('TaxStructure'); ?>">
+                                    <?php $navSelector = ['TaxStructure']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('TaxStructure'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -768,7 +810,8 @@
                                 </li>
 
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('TaxCategories'); ?>">
+                                    <?php $navSelector = ['TaxCategories']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('TaxCategories'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -778,7 +821,8 @@
                                     </a>
                                 </li>
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('TaxCategoriesRule'); ?>">
+                                    <?php $navSelector = ['TaxCategoriesRule']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('TaxCategoriesRule'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -819,7 +863,8 @@
                         <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewSlides(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Slides'); ?>">
+                                    <?php $navSelector = ['Slides']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Slides'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -834,7 +879,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewBanners(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('BannerLocation'); ?>">
+                                    <?php $navSelector = ['BannerLocation']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('BannerLocation'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -849,7 +895,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewContentPages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ContentPages'); ?>">
+                                    <?php $navSelector = ['ContentPages']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ContentPages'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -864,7 +911,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ContentBlock'); ?>">
+                                    <?php $navSelector = ['ContentBlock']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ContentBlock'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -876,7 +924,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('FaqCategories'); ?>">
+                                    <?php $navSelector = ['FaqCategories', 'Faq']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('FaqCategories'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -888,7 +937,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>">
+                                    <?php $navSelector = ['Testimonials']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Testimonials'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -900,7 +950,8 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('Navigations'); ?>">
+                                    <?php $navSelector = ['Navigations']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('Navigations'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -969,35 +1020,40 @@
                                         <ul class="nav nav-level">
                                             <?php if ($objPrivilege->canViewSalesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
-                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>">
+                                                    <?php $navSelector = ['SalesReport']; ?>
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('SalesReport'); ?>">
                                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_SALES_OVER_TIME', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewCatalogReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
-                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>">
+                                                    <?php $navSelector = ['CatalogReport']; ?>
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('CatalogReport'); ?>">
                                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewProductsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
-                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>">
+                                                    <?php $navSelector = ['ProductsReport']; ?>
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ProductsReport'); ?>">
                                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_PRODUCT_VARIENTS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
-                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>">
+                                                    <?php $navSelector = ['ShopsReport']; ?>
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ShopsReport'); ?>">
                                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_SHOPS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
-                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('BuyersReport'); ?>">
+                                                    <?php $navSelector = ['BuyersReport']; ?>
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('BuyersReport'); ?>">
                                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_CUSTOMERS', $siteLangId); ?></span>
                                                     </a>
                                                 </li>
@@ -1031,7 +1087,8 @@
                                         <ul class="nav nav-level">
                                             <?php if ($objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
-                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>">
+                                                    <?php $navSelector = ['UsersReport']; ?>
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_BUYER]); ?>">
                                                         <span class="nav_text">
                                                             <?php echo Labels::getLabel('NAV_BUYERS', $siteLangId); ?>
                                                         </span>
@@ -1040,7 +1097,8 @@
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewSellersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
-                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>">
+                                                    <?php $navSelector = ['UsersReport']; ?>
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('UsersReport', 'index', [User::USER_TYPE_SELLER]); ?>">
                                                         <span class="nav_text">
                                                             <?php echo Labels::getLabel('NAV_SELLERS', $siteLangId); ?>
                                                         </span>
@@ -1049,7 +1107,8 @@
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
-                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>">
+                                                    <?php $navSelector = ['AffiliatesReport']; ?>
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('AffiliatesReport'); ?>">
                                                         <span class="nav_text">
                                                             <?php echo Labels::getLabel('NAV_AFFILIATES', $siteLangId); ?>
                                                         </span>
@@ -1058,7 +1117,8 @@
                                             <?php } ?>
                                             <?php if ($objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                                 <li class="nav_item navItemJs">
-                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('AdvertisersReport'); ?>">
+                                                    <?php $navSelector = ['AdvertisersReport']; ?>
+                                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('AdvertisersReport'); ?>">
                                                         <span class="nav_text">
                                                             <?php echo Labels::getLabel('NAV_ADVERTISERS', $siteLangId); ?>
                                                         </span>
@@ -1142,7 +1202,8 @@
 
                             <?php if ($objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('DiscountCouponsReport'); ?>">
+                                    <?php $navSelector = ['DiscountCouponsReport']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('DiscountCouponsReport'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1178,7 +1239,8 @@
                     <div class="sidebar-dropdown-menu collapse" id="NAV_IMPORT_EXPORT" aria-labelledby="" data-parent="#sidebar-menu">
                         <ul class="nav nav-level">
                             <li class="nav_item navItemJs">
-                                <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ImportExport'); ?>">
+                                <?php $navSelector = ['ImportExport']; ?>
+                                <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ImportExport'); ?>">
                                     <span class="nav_icon">
                                         <svg class="svg" width="24" height="24">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1218,7 +1280,8 @@
                     <ul class="nav nav-level">
                         <?php if ($objPrivilege->canViewShippingCompanyUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
-                                <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ShippingCompanyUsers'); ?>">
+                                <?php $navSelector = ['ShippingCompanyUsers']; ?>
+                                <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ShippingCompanyUsers'); ?>">
                                     <span class="nav_icon">
                                         <svg class="svg" width="24" height="24">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1231,7 +1294,8 @@
 
                         <?php if ($objPrivilege->canViewShippingPackages(AdminAuthentication::getLoggedAdminId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) { ?>
                             <li class="nav_item navItemJs">
-                                <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
+                                <?php $navSelector = ['shippingPackages']; ?>
+                                <a class="nav_link navLinkJs" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('shippingPackages'); ?>">
                                     <span class="nav_icon">
                                         <svg class="svg" width="24" height="24">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1245,7 +1309,8 @@
 
                         <?php if ($objPrivilege->canViewShippingManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
-                                <a class="nav_link navLinkJs" href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
+                                <?php $navSelector = ['shippingProfile']; ?>
+                                <a class="nav_link navLinkJs" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('shippingProfile'); ?>">
                                     <span class="nav_icon">
                                         <svg class="svg" width="24" height="24">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1259,7 +1324,8 @@
 
                         <?php if ($objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
-                                <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>">
+                                <?php $navSelector = ['PickupAddresses']; ?>
+                                <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('PickupAddresses'); ?>">
                                     <span class="nav_icon">
                                         <svg class="svg" width="24" height="24">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1271,7 +1337,8 @@
                         <?php } ?>
                         <?php if ($objPrivilege->canViewShippedProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
-                                <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ShippedProducts'); ?>">
+                                <?php $navSelector = ['ShippedProducts']; ?>
+                                <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ShippedProducts'); ?>">
                                     <span class="nav_icon">
                                         <svg class="svg" width="24" height="24">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1283,7 +1350,8 @@
                         <?php } ?>
                         <?php if ($objPrivilege->canViewTrackingRelationCode(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <li class="nav_item navItemJs">
-                                <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('TrackingCodeRelation'); ?>">
+                                <?php $navSelector = ['TrackingCodeRelation']; ?>
+                                <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('TrackingCodeRelation'); ?>">
                                     <span class="nav_icon">
                                         <svg class="svg" width="24" height="24">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1318,7 +1386,8 @@
                         <ul class="nav nav-level">
                             <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('UrlRewriting'); ?>">
+                                    <?php $navSelector = ['UrlRewriting']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('UrlRewriting'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1331,7 +1400,8 @@
 
                             <?php if ($objPrivilege->canViewImageAttributes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('ImageAttributes'); ?>">
+                                    <?php $navSelector = ['ImageAttributes']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('ImageAttributes'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1346,7 +1416,8 @@
 
                             <?php if ($objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('sitemap', 'generate'); ?>">
+                                    <?php $navSelector = ['sitemap']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('sitemap', 'generate'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1379,7 +1450,8 @@
 
                             <?php if ($objPrivilege->canViewMetaTags(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('MetaTags'); ?>">
+                                    <?php $navSelector = ['MetaTags']; ?>
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" href="<?php echo UrlHelper::generateUrl('MetaTags'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -1398,7 +1470,8 @@
     <div class="sidebar-foot">
         <ul class="menu">
             <li class="menu-item dropdownJs">
-                <button class="menu-section menuLinkJs" onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')" type="button">
+                <?php $navSelector = ['Settings']; ?>
+                <button class="menu-section menuLinkJs" data-selector="<?php echo htmlspecialchars(json_encode($navSelector)); ?>" onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')" type="button">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-system-settings">
@@ -1407,8 +1480,6 @@
                     </span>
                     <span class="menu-title"><?php echo Labels::getLabel('NAV_SETTINGS', $siteLangId); ?></span>
                 </button>
-
-
             </li>
         </ul>
     </div>

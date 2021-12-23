@@ -12,6 +12,11 @@ function searhSettings(e) {
     });
 };
 
+$(window).on('load', function () {
+    /* Mark Sidebar Nav Active. */
+    markNavActive($("[data-selector*=" + controllerName + "]"));
+});
+
 updateMaintenanceModeStatus = function (e, obj, status) {
     $('.settingListJs').prepend(fcom.getLoader());
     e.stopPropagation();
