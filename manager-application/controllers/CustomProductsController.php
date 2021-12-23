@@ -361,17 +361,12 @@ class CustomProductsController extends ListingBaseController
         }
         $productSpecifications =  [];
         if (0 < $recordId) {
-            $specifications = $this->modelClass::getAttributesById($recordId,'preq_specifications');  
-            if(!empty($specifications) && !isset($specifications['prod_spec_name'])){            
-                $specifications = json_decode($specifications,true);                    
-                foreach($specifications as $specification){
-                    $productSpecifications[] = [
-                        'prodspec_id' =>  '',
-                        'prodspec_name' => $specification['name'],
-                        'prodspec_value' => $specification['value'],
-                        'prodspec_group' => $specification['group'],                    
-                    ];
-                }               
+            $langData = $this->modelClass::getAttributesByLangId($langId,$recordId,'preq_lang_data');  
+            if(!empty($langData)){ 
+                $langData = json_decode($langData,true);
+                if(isset($langData['specifications']) && !empty($langData['specifications'])){   
+                    $specifications =  $langData['specifications'];                    
+                }              
             }
         }
         $this->set('productSpecifications', $productSpecifications);
