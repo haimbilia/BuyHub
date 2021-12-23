@@ -103,6 +103,7 @@
                             <div class="card-head">
                                 <div class="card-head-label">
                                     <h3 class="card-head-title"> <?php echo Labels::getLabel('LBL_CONVERSIONS_STATISTICS', $siteLangId); ?></h3>
+                                    <span class="text-muted"> <?php echo Labels::getLabel('LBL_RECENT_CONVERSIONS_STATISTICS', $siteLangId); ?></span>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -124,7 +125,7 @@
                                         <span class="label"><?php echo Labels::getLabel('LBL_PURCHASED', $siteLangId); ?></span>
                                         <span class="value">
                                             <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['added_to_cart']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
-                                            <?php echo $dashboardInfo['conversionStats']['purchased']['%age']; ?>%</span>purchased
+                                            <?php echo $dashboardInfo['conversionStats']['purchased']['%age']; ?>%</span>
 
                                     </li>
                                     <li class="list-stats-item">
@@ -188,9 +189,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="card-body" id="totalSalesJs">
-                        <?php echo require_once('total-sales.php'); ?>
-                    </div>
+                    <div class="card-body" id="totalSalesJs"><?php require_once('total-sales.php'); ?></div>
 
                 </div>
                 <div class="card">
