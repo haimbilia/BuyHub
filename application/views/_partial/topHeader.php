@@ -156,7 +156,7 @@
         </div>
     </header>
     <div class="offcanvas offcanvas-mega-search" id="mega-nav-search" aria-labelledby="mega-nav-searchLabel">
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+
         <div class="mega-search">
             <form action="" class="form mega-search-form">
                 <input class="mega-search-input search--keyword--js no--focus" placeholder="I Am Looking For..." id="header_search_keyword" data-field-caption="I Am Looking For..." data-fatreq="{&quot;required&quot;:false}" type="search" name="keyword" value="">

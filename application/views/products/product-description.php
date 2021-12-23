@@ -8,17 +8,13 @@
                 <a class="link" href="<?php echo UrlHelper::generateUrl('Brands', 'view', [$product['brand_id']]); ?>"><?php echo $product['brand_name']; ?></a>
             </div>
         <?php } ?>
-        <div class="products_title">
+        <div class="products-title">
 
             <h1> <?php echo $product['selprod_title']; ?> </h1>
 
 
         </div>
         <div class="reviews-wrap">
-            <?php
-            $includeRibbon = false;
-            include(CONF_THEME_PATH . '_partial/collection-ui.php'); ?>
-
             <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
                 <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
                 <div class="products-reviews">
@@ -37,11 +33,11 @@
 
 
         <div class="block-detail">
-            <div class="products_price">
-                <span class="products_price_new"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
+            <div class="products-price">
+                <span class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
                 <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                    <del class="products_price_old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
-                    <span class="products_price_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                    <del class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
+                    <span class="products-price-off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                 <?php } ?>
                 <!-- Shop and SelProd Badge  -->
                 <?php

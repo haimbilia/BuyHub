@@ -60,7 +60,7 @@
             margin-bottom: 0;
         }
     }
-    .products_title {
+    .products-title {
         display: flex;
         flex-direction: column;
         h1 {
@@ -102,18 +102,18 @@
             font-weight: 300;
         }
     }
-    .products_price {
+    .products-price {
         font-size: 1.5rem;
         color: $txt-gray;
-        &_new {
+        &-new {
             color: $brand-color;
             font-weight: 500;
         }
-        &_old {
+        &-old {
             font-weight: 300;
             text-decoration: line-through;
         }
-        &_off {
+        &-off {
             font-weight: 300;
             font-size: 0.875rem;
         }
@@ -151,7 +151,7 @@
     .dropdown-toggle {
         font-size: 0.8rem;
         width: 100%;
-        text-align:#{$start-direction};
+        text-align: #{$start-direction};
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -172,8 +172,8 @@
         border-radius: 50%;
         display: inline-block;
         margin-#{$end-direction}: 8px;
-        -webkit-box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.30);
-        box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.30);
+        -webkit-box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.3);
     }
     .is-active {
         background: $bg-gray;
@@ -555,8 +555,8 @@
 .reviews-lisitng {
     border: $border;
     border-radius: $radius4;
-    >ul {
-        >li {
+    > ul {
+        > li {
             border-bottom: $border;
             padding-bottom: 10px;
             margin-bottom: 10px;
@@ -580,17 +580,17 @@
         padding: 0;
         align-items: center;
         .dated {
-            font-size: .625rem;
+            font-size: 0.625rem;
         }
         .profile__dp {
             margin: 0;
         }
         .profile__bio {
             text-align: #{$start-direction};
-            padding-#{$start-direction}: .875rem;
+            padding-#{$start-direction}: 0.875rem;
         }
     }
-    >li {
+    > li {
         border-bottom: $border;
         padding: 1rem 1.5rem;
         &:last-child {
@@ -616,7 +616,7 @@
 
 .yes-no ul li {
     border: none;
-    margin-#{$start-direction}: .5rem;
+    margin-#{$start-direction}: 0.5rem;
 }
 
 .yes-no ul li a {
@@ -746,12 +746,8 @@
     margin: 0 0 20px;
 }
 
-.product-detail-quickview .product-description-inner .products_title {
+.product-detail-quickview .product-description-inner .products-title {
     margin-bottom: 0;
-}
-
-.ft-products .products--layout .products_body {
-    position: static;
 }
 
 .sold-by {
@@ -803,7 +799,7 @@
             display: none;
         }
     }
-    >a {
+    > a {
         border-radius: $radius2;
         padding: 5px 14px;
         font-weight: 600;
@@ -866,7 +862,7 @@
             height: auto;
             &__lbl {
                 flex: 1;
-                font-size: .875rem;
+                font-size: 0.875rem;
                 text-align: #{$end-direction};
             }
             &__count {
@@ -1007,7 +1003,7 @@
 .rating-wrapper {
     padding: 1.5rem;
     background-color: #f3f4f5;
-    border-radius: .25rem;
+    border-radius: 0.25rem;
 }
 
 .overall-rating-count {
@@ -1052,7 +1048,7 @@
     padding-top: 1rem;
     margin: 0 -0.5rem;
     li {
-        padding: .5rem;
+        padding: 0.5rem;
     }
 }
 
@@ -1101,7 +1097,7 @@
             margin-#{$end-direction}: 10px;
             margin-bottom: 5px;
             &:last-child {
-                margin-#{$end-direction}: 0
+                margin-#{$end-direction}: 0;
             }
             a {
                 text-align: center;

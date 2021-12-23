@@ -24,17 +24,17 @@ if ($relatedProductsRs) { ?>
                 <!--product tile-->
                 <div class="products">
                     <?php $this->includeTemplate('_partial/quick-view.php', ['product' => $rProduct,  'siteLangId' => $siteLangId], false); ?>
-                    <div class="products_body">
-                        <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $rProduct, 'siteLangId' => $siteLangId, 'selProdRibbons' => $selProdRibbons), false); ?>
+                    <div class="products-body">
+
                         <?php $uploadedTime = AttachedFile::setTimeParam($rProduct['product_updated_on']); ?>
-                        <div class="products_img">
+                        <div class="products-img">
                             <a title="<?php echo $rProduct['selprod_title']; ?>" href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">
                                 <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $rProduct['product_id']); ?>
                                 <img data-ratio="1:1" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], "CLAYOUT3", $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $rProduct['prodcat_name']; ?>">
                             </a>
                         </div>
                     </div>
-                    <div class="products_foot">
+                    <div class="products-foot">
                         <?php /* if(round($rProduct['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?>
                 <div class="products__rating">
                     <i class="icn"><svg class="svg">
@@ -45,11 +45,11 @@ if ($relatedProductsRs) { ?>
                             href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Be_the_first_to_review_this_product', $siteLangId); ?>
                         </a> </span> <?php } ?>
                 </div> <?php } */ ?>
-                        <div class="products_category">
+                        <div class="products-category">
                             <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo $rProduct['prodcat_name']; ?>
                             </a>
                         </div>
-                        <div class="products_title">
+                        <div class="products-title">
                             <a title="<?php echo $rProduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr($rProduct['selprod_title'], 0, 50) . "..." : $rProduct['selprod_title']; ?>
                             </a>
                         </div>

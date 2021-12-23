@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (isset($collection['products']) && count($collection['products'])) { ?>
-    <section class="section bg-brand-light">
+    <section class="section bg-gray">
         <div class="container">
             <div class="section-head ">
                 <div class="section__heading">
@@ -25,8 +25,9 @@ if (isset($collection['products']) && count($collection['products'])) { ?>
                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                     }
-
+                    echo '<div class="item">';
                     include('product-layout-1-list.php');
+                    echo '</div>';
                 } ?>
             </div>
         </div>

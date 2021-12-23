@@ -1,15 +1,15 @@
 .offcanvas-mega-search {
-    top: 0;
+    top: $header-height;
     right: 0;
     left: 0;
-
     max-height: 100%;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     transform: translateY(-100%);
+    z-index: 100;
 }
 .mega-search {
     max-width: 600px;
-    width: 100%; 
+    width: 100%;
     margin: 0 auto;
     padding: 2rem 0;
     &-input {

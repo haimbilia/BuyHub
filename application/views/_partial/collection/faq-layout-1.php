@@ -13,20 +13,22 @@
                     </h2>
                 </div>
             </div>
-
             <div class="faq-layout-1">
-                <ul class="faq" id="myTab" role="tablist">
+                <ul class="nav nav-tabs nav-tabs-center" role="tablist">
                     <?php $count = 0;
                     foreach ($faqCategories as $faqCatId => $faqCat) { ?>
-                        <li class="faq-item <?php echo ($count == 0) ? 'is-active' : ''; ?>" role="presentation">
-                            <button class="faq-links active" id="faq<?php echo $faqCatId; ?>" data-bs-toggle="tab" data-bs-target="#faq<?php echo $faqCatId; ?>" type="button" role="tab" aria-controls="home" aria-selected="true"><?php echo $faqCat['faqcat_name']; ?></button>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link <?php echo 0 == $count ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#faq<?php echo $faqCatId; ?>" type="button" role="tab" aria-selected="true">
+                                <?php echo $faqCat['faqcat_name']; ?></button>
                         </li>
                     <?php $count++;
                     } ?>
                 </ul>
-                <div class="tab-content" id="myTabContent">
-                    <?php foreach ($faqCategories as $faqCatId => $faqCat) { ?>
-                        <div class="tab-pane fade show active" id="faq<?php echo $faqCatId; ?>" role="tabpanel" aria-labelledby="faq<?php echo $faqCatId; ?>">
+                <div class="tab-content">
+                    <?php $x = 0;
+                    foreach ($faqCategories as $faqCatId => $faqCat) {
+                        $x++; ?>
+                        <div class="tab-pane fade <?php echo 1 == $x ? 'show active' : ''; ?>" id="faq<?php echo $faqCatId; ?>">
                             <ul class="faq-list" id="faqCollapseParent<?php echo $faqCatId; ?>">
                                 <?php
                                 $i = 0;
