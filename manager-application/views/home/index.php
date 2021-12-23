@@ -1,4 +1,4 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); /* CommonHelper::printArray(json_encode( array_values($dashboardInfo['signupsChartData']) ));die; */ ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <script type="text/javascript">
     $SalesChartKey = <?php echo json_encode(array_keys($dashboardInfo['salesChartData'])); ?>;
     $SalesChartVal = <?php echo json_encode(array_values($dashboardInfo['salesChartData'])); ?>;
@@ -73,22 +73,93 @@
                     </div>
 
                 </div>
-                <div class="card">
-                    <div class="card-head">
-                        <div class="card-head-label">
-                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_LATEST_ORDERS', $siteLangId); ?></h3>
-                        </div>
-                        <div class="card-head-toolbar">
-                            <?php if ($objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                                <a class="" target='_new' href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
-                                    <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
-                            <?php } ?>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-head">
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TRAFFIC', $siteLangId); ?> </h3>
+                                </div>
+                                <div class="card-head-toolbar">
+                                    <select class="form-select form-select-sm" onClick="traficSource(this.value)">
+                                        <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
+                                        <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
+                                        <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
+                                        <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <div class="graph-container">
+                                    <div id="piechart" class="ct-chart ct-perfect-fourth graph--traffic"></div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive" id="latestOrdersJs"></div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-head">
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title"> <?php echo Labels::getLabel('LBL_CONVERSIONS_STATISTICS', $siteLangId); ?></h3>
+                                    <span class="text-muted"> <?php echo Labels::getLabel('LBL_RECENT_CONVERSIONS_STATISTICS', $siteLangId); ?></span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-stats list-stats-double">
+
+                                    <li class="list-stats-item">
+                                        <span class="label"><?php echo Labels::getLabel('LBL_ADDED_TO_CART', $siteLangId); ?></span>
+                                        <span class="value">
+                                            <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['added_to_cart']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                            <?php echo $dashboardInfo['conversionStats']['added_to_cart']['%age']; ?>%</span>
+                                    </li>
+                                    <li class="list-stats-item">
+                                        <span class="label"><?php echo Labels::getLabel('LBL_REACHED_CHECKOUT', $siteLangId); ?></span>
+                                        <span class="value">
+                                            <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['reached_checkout']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                            <?php echo $dashboardInfo['conversionStats']['reached_checkout']['%age']; ?>% </span>
+                                    </li>
+                                    <li class="list-stats-item">
+                                        <span class="label"><?php echo Labels::getLabel('LBL_PURCHASED', $siteLangId); ?></span>
+                                        <span class="value">
+                                            <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['added_to_cart']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                            <?php echo $dashboardInfo['conversionStats']['purchased']['%age']; ?>%</span>
+
+                                    </li>
+                                    <li class="list-stats-item">
+                                        <span class="label"><?php echo Labels::getLabel('LBL_CANCELLED', $siteLangId); ?></span>
+                                        <span class="value">
+                                            <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['cancelled']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
+                                            <?php echo $dashboardInfo['conversionStats']['cancelled']['%age']; ?>%</span>
+
+                                    </li>
+                                </ul>
+                                <div class="widget__chart">
+                                    <div class="conversions-statistics" id="conversionStatsJs">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <?php if ($objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_LATEST_ORDERS', $siteLangId); ?></h3>
+                            </div>
+                            <div class="card-head-toolbar">
+                                <a class="" target='_new' href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
+                                    <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive" id="latestOrdersJs"></div>
+                        </div>
+                    </div>
+                <?php } ?>
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
@@ -106,59 +177,19 @@
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
-                            <h3 class="card-head-title">Total Sales </h3>
+                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOTAL_SALES', $siteLangId); ?> </h3>
                         </div>
-                        <?php /*?>
                         <div class="card-head-toolbar">
-                            <select class="form-select form-select-sm">
+                            <select class="form-select form-select-sm" onchange="totalSales(this.value)">
                                 <?php foreach ($intervalsArr as $key => $val) { ?>
-                                    <option value="<?php echo $key;?>"><?php echo $val;?></option>
+                                    <option value="<?php echo $key; ?>" <?php if ($defaultStatsInterval == $key) {
+                                                                            echo 'selected="selected"';
+                                                                        } ?>><?php echo $val; ?></option>
                                 <?php } ?>
                             </select>
                         </div>
-                        <?php */ ?>
-
                     </div>
-                    <div class="card-body">
-
-                        <div class="js-total-sale"></div>
-                        <ul class="list-stats list-stats-inline">
-                            <li class="list-stats-item">
-                                <span class="label">
-                                    <i class="dot" style="background-color:#d70206;"></i>
-                                    <?php echo Labels::getLabel('LBL_Order_Sales', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas fa-arrow-up font-success"></i>
-                                    <?php echo $dashboardInfo["stats"]["totalSales"][4]["totalsales"]; ?></span>
-                            </li>
-                            <li class="list-stats-item">
-                                <span class="label">
-                                    <i class="dot" style="background-color: #f05b4f;"></i>
-                                    <?php echo Labels::getLabel('LBL_Sales_Earnings', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas fa-arrow-up font-success"></i>
-                                    <?php echo $dashboardInfo["stats"]["totalSales"][4]["totalcommission"]; ?>
-                                </span>
-                            </li>
-                            <li class="list-stats-item">
-                                <span class="label"> <i class="dot" style="background-color:#f4c63d;"></i><?php echo Labels::getLabel('LBL_New_Users', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas fa-arrow-up font-success"></i>
-                                    <?php echo $dashboardInfo["stats"]["totalUsers"]['-1']; ?></span>
-
-                            </li>
-                            <li class="list-stats-item">
-                                <span class="label"> <i class="dot" style="background-color:#d17905;"></i>
-                                    <?php echo Labels::getLabel('LBL_New_Shops', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas fa-arrow-up font-success"></i>
-                                    <?php echo $dashboardInfo["stats"]["totalShops"]['-1']; ?>
-                                </span>
-
-                            </li>
-                        </ul>
-
-                    </div>
+                    <div class="card-body" id="totalSalesJs"><?php require_once('total-sales.php'); ?></div>
 
                 </div>
                 <div class="card">
@@ -179,56 +210,46 @@
                     <div class="card-body">
                         <ul class="list-stats list-stats-double topCountriesJs"></ul>
                     </div>
-
                 </div>
-
                 <div class="card">
                     <div class="card-head">
                         <div class="card-head-label">
-                            <h3 class="card-head-title"> <?php echo Labels::getLabel('LBL_CONVERSIONS_STATISTICS', $siteLangId); ?></h3>
-                            <span class="text-muted"> <?php echo Labels::getLabel('LBL_RECENT_CONVERSIONS_STATISTICS', $siteLangId); ?></span>
+                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_REFERERS', $siteLangId); ?> </h3>
+                        </div>
+                        <div class="card-head-toolbar">
+                            <select class="form-select form-select-sm" onClick="topReferers(this.value)">
+                                <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
+                                <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
+                                <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
+                                <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
+                            </select>
                         </div>
 
                     </div>
                     <div class="card-body">
-                        <ul class="list-stats list-stats-double">
-
-                            <li class="list-stats-item">
-                                <span class="label"><?php echo Labels::getLabel('LBL_ADDED_TO_CART', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['added_to_cart']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
-                                    <?php echo $dashboardInfo['conversionStats']['added_to_cart']['%age']; ?>%</span>
-                            </li>
-                            <li class="list-stats-item">
-                                <span class="label"><?php echo Labels::getLabel('LBL_REACHED_CHECKOUT', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['reached_checkout']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
-                                    <?php echo $dashboardInfo['conversionStats']['reached_checkout']['%age']; ?>% </span>
-                            </li>
-                            <li class="list-stats-item">
-                                <span class="label"><?php echo Labels::getLabel('LBL_PURCHASED', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['added_to_cart']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
-                                    <?php echo $dashboardInfo['conversionStats']['purchased']['%age']; ?>%</span>purchased
-
-                            </li>
-                            <li class="list-stats-item">
-                                <span class="label"><?php echo Labels::getLabel('LBL_CANCELLED', $siteLangId); ?></span>
-                                <span class="value">
-                                    <i class="icn fas <?php echo (1 > $dashboardInfo['conversionStats']['cancelled']['%age']) ? 'fa-arrow-down font-danger' : 'fa-arrow-up font-success'; ?>"></i>
-                                    <?php echo $dashboardInfo['conversionStats']['cancelled']['%age']; ?>%</span>
-
-                            </li>
-                        </ul>
-                        <div class="widget__chart">
-                            <div class="conversions-statistics" id="conversionStatsJs">
-                            </div>
+                        <ul class="list-stats list-stats-inline topReferersJs"></ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-head-label">
+                            <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_SEARCH_ITEMS', $siteLangId); ?> </h3>
+                        </div>
+                        <div class="card-head-toolbar">
+                            <select class="form-select form-select-sm" onClick="getTopSearchKeyword(this.value)">
+                                <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
+                                <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
+                                <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
+                                <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
+                            </select>
                         </div>
 
-
                     </div>
-
+                    <div class="card-body">
+                        <ul class="list-stats list-stats-inline topSearchKeywordJs"></ul>
+                    </div>
                 </div>
+
 
             </div>
         </div>
