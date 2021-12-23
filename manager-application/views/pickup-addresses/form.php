@@ -122,7 +122,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                                             </a>
                                                         </li>
                                                     <?php } ?>
-                                                    <li class="addRowBtn<?php echo $i; ?>-js">
+                                                    <li class="addRowBtn<?php echo $i; ?>-js d-none">
                                                         <a href="javascript:void(0)" onclick="addRow('<?php echo $i; ?>')" class="">
                                                             <svg class="svg" width="18" height="18">
                                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
@@ -165,7 +165,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                         </td>
                                         <td class="align-right">
                                             <ul class="actions">
-                                                <li class="addRowBtn<?php echo $i; ?>-js">
+                                                <li class="addRowBtn<?php echo $i; ?>-js d-none">
                                                     <a href="javascript:void(0)" onclick="addRow('<?php echo $i; ?>')" class=""><svg class="svg" width="18" height="18">
                                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
                                                             </use>
