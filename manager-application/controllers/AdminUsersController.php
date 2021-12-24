@@ -268,7 +268,8 @@ class AdminUsersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_ADMIN_USER_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -327,7 +328,8 @@ class AdminUsersController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('adminProfile', $data);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updatePassword()

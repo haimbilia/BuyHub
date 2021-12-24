@@ -329,7 +329,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         if (FatUtility::isAjaxCall()) {
-            $this->_template->render(false, false);
+            $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
             return;
         }
 
@@ -511,7 +512,8 @@ class CustomProductsController extends ListingBaseController
         
         $this->set('displayDownloadTab', $displayDownloadTab);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -606,7 +608,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('productOptions', $productOptions);
         $this->set('frmSellerProduct', $frmSellerProduct);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupSellerProduct()
@@ -682,7 +685,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('productOptions', $productOptions);
         $this->set('displayDownloadTab', $displayDownloadTab);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getSpecificationForm($preqId, $prodspecId = 0, $divCount = 0)
@@ -695,7 +699,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('preqId', $preqId);
         $this->set('divCount', $divCount);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupSpecification($preqId, $prodSpecId = 0)
@@ -821,7 +826,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('customProductLangFrm', $customProductLangFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
         $this->set('displayDownloadTab', $displayDownloadTab);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()
@@ -920,7 +926,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('productOptions', $productOptions);
         $this->set('languages', Language::getAllNames());
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updateStatus()
@@ -1418,7 +1425,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('productType', $productReqData['product_type']);
         $this->set('preqCatId', $prodcat_id);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function validateUpcCode()
@@ -1568,7 +1576,8 @@ class CustomProductsController extends ListingBaseController
         $imagesFrm = $this->getImagesFrm($preq_id, $this->siteLangId);
         $this->set('preq_id', $preq_id);
         $this->set('imagesFrm', $imagesFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($preq_id, $option_id = 0, $lang_id = 0)
@@ -1598,7 +1607,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('preq_id', $preq_id);
         $this->set('imgTypesArr', $imgTypesArr);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setImageOrder()

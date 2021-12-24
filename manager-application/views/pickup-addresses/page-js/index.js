@@ -1,10 +1,10 @@
 (function () {
     editRecord = function (id, langId) {
         var data = 'langId=' + langId;
-        $.ykmodal(fcom.getLoader(), false, '');
-        fcom.ajax(fcom.makeUrl('PickupAddresses', 'form', [id, langId]), data, function (res) {
-            $.ykmodal(res, false, 'modal-dialog-vertical-md');
+        fcom.updateWithAjax(fcom.makeUrl('PickupAddresses', 'form', [id, langId]), data, function (res) {
+            $.ykmodal(res.html, false, 'modal-dialog-vertical-md');
             fcom.removeLoader();
+            $.ykmsg.close();
             var oldLabel = $(".label-js").text();
             $(".label-js").attr("data-listlabel", oldLabel).text(langLbl.pickupAddressForm);
             $(".js-add-pickup-addr").addClass('d-none');
@@ -28,17 +28,19 @@
                 return false;
             }
         }
-
+        $.ykmodal(fcom.getLoader(), false);
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('PickupAddresses', 'setup'), data, function (t) {
+        fcom.ajax(fcom.makeUrl('PickupAddresses', 'setup'), data, function (t) {
             searchRecords();
             $.ykmodal.close();
         });
     };
     getCountryStates = function (countryId, stateId, div, langId) {
-        fcom.ajax(fcom.makeUrl('Shops', 'getStates', [countryId, stateId, langId]), '', function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Shops', 'getStates', [countryId, stateId, langId]), '', function (res) {
+            $.ykmsg.close();
+            fcom.removeLoader();
             $(div).empty();
-            $(div).append(res);
+            $(div).append(res.html);
         });
     };
 

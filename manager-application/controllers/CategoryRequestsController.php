@@ -75,7 +75,8 @@ class CategoryRequestsController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form($categoryReqId = 0)
@@ -97,7 +98,8 @@ class CategoryRequestsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('categoryReqId', $categoryReqId);
         $this->set('frmCategoryReq', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($categoryReqId = 0)
@@ -195,7 +197,8 @@ class CategoryRequestsController extends ListingBaseController
         $this->set('scategoryreq_lang_id', $lang_id);
         $this->set('categoryReqLangFrm', $categoryReqLangFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     /* public function langSetup(){

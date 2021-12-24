@@ -62,7 +62,8 @@ class ShopReportsController extends ListingBaseController
 
         $this->set("arrListing", $records);
         $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function deleteRecord()

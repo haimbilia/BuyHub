@@ -71,7 +71,8 @@ class ProductTempImagesController extends ListingBaseController
         $this->set("canView", $this->canView);
         $this->set("canEdit", $this->canEdit);
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getSearchForm()
@@ -116,7 +117,8 @@ class ProductTempImagesController extends ListingBaseController
 
         $this->set('afile_id', $afile_id);
         $this->set('frmImage', $frmImage);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     // Edit Form Structure

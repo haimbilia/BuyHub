@@ -135,7 +135,8 @@ class CountriesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_COUNTRY_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -144,13 +145,14 @@ class CountriesController extends ListingBaseController
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $countryId = FatApp::getPostedData('country_id', FatUtility::VAR_INT, 0);
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $checkCountryCode = Countries::getCountryByCode($post['country_code'], 'country_id');
-        if (!empty($checkCountryCode)) {
+        $checkCountryId = Countries::getCountryByCode($post['country_code'], 'country_id');
+        if (!empty($checkCountryId) && $checkCountryId != $countryId) {
             LibHelper::exitWithError(Labels::getLabel('ERR_COUNTRY_CODE_ALREADY_EXISTS'), true);
         }
 

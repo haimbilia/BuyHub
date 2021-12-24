@@ -54,7 +54,7 @@
             <?php } ?>
 
             <tr>
-                <td colspan="4">
+                <td colspan="5">
                     <div class="sold_by">
                         <svg class="svg" width="20" height="20">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-store">

@@ -12,7 +12,8 @@ class ShippingProfileProductsController extends ListingBaseController {
 
     public function index($profileId) { 
         $this->set("frm", $this->getForm($profileId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function search($profileId) {
@@ -35,7 +36,8 @@ class ShippingProfileProductsController extends ListingBaseController {
         $this->set('page', $page);
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function autoComplete() {

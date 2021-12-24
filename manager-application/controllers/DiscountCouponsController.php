@@ -169,7 +169,8 @@ class DiscountCouponsController extends ListingBaseController
         $this->set('coupon_type', (isset($data['coupon_type']) ? $data['coupon_type'] : DiscountCoupons::TYPE_DISCOUNT));
         $this->set('couponDiscountIn', isset($data['coupon_discount_in_percent']) ? $data['coupon_discount_in_percent'] : applicationConstants::PERCENTAGE);
         $this->set('formTitle', Labels::getLabel('LBL_DISCOUNT_COUPON_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -458,7 +459,8 @@ class DiscountCouponsController extends ListingBaseController
         $this->set('includeTabs', false);
         $this->set('displayFooterButtons', false);
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getPlanForm()
@@ -607,13 +609,15 @@ class DiscountCouponsController extends ListingBaseController
 
         $this->set('couponData', $couponData);
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getRows()
     {
         $this->rowsData();
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getMediaForm($recordId = 0)
@@ -651,7 +655,8 @@ class DiscountCouponsController extends ListingBaseController
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
         $this->set('formTitle', Labels::getLabel('LBL_DISCOUNT_COUPON_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($recordId, $langId = 0)
@@ -675,7 +680,8 @@ class DiscountCouponsController extends ListingBaseController
         $this->set('images', $images);
         $this->set('recordId', $recordId);
         $this->set('canEdit', $this->objPrivilege->canEditDiscountCoupons($this->admin_id, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function uploadMedia()

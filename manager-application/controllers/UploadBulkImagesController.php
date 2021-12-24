@@ -35,7 +35,8 @@ class UploadBulkImagesController extends ListingBaseController
     {
         $uploadFrm = $this->getUploadForm();
         $this->set("frm", $uploadFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function upload()
@@ -125,7 +126,8 @@ class UploadBulkImagesController extends ListingBaseController
         $this->set('postedData', $post);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->siteLangId, true));
         $this->set('siteLangId', $this->siteLangId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function removeDir($directory)

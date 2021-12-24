@@ -14,23 +14,25 @@ $(document).ready(function () {
         }
 
         $(dv).prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'loadForm', [formType]), '', function (t) {
             fcom.removeLoader();
-            $(dv).html(t);
+            $.ykmsg.close();
+            $(dv).html(t.html);
         });
     };
 
     uploadSuccessCallback = function (resp) {
-        searchRecords();    
+        searchRecords();
     }
 
     searchFiles = function () {
         var data = '';
         var dv = $('#listing');
         $("#listing").html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ImportExport', 'bulkMediaList'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('ImportExport', 'bulkMediaList'), data, function (res) {
+            $.ykmsg.close();
             fcom.removeLoader();
-            $("#listing").html(res);
+            $("#listing").html(res.html);
         });
     };
 

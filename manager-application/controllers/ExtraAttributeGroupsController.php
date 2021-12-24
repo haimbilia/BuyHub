@@ -70,7 +70,8 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form($eattrgroup_id = 0)
@@ -90,7 +91,8 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('eattrgroup_id', $eattrgroup_id);
         $this->set('extraAttrGroupsFrm', $extraAttrGroupsFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -181,7 +183,8 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $this->set('eattrgroup_id', $eattrgroup_id);
         $this->set('eattrgroup_lang_id', $lang_id);
         $this->set('extraAttrGroupLangFrm', $extraAttrGroupLangFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()

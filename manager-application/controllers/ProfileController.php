@@ -43,7 +43,8 @@ class ProfileController extends ListingBaseController
         }
         $this->set('isNewImage', $isNewImage);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updateProfileInfo()
@@ -169,7 +170,8 @@ class ProfileController extends ListingBaseController
     public function changePassword()
     {
         $this->set('frm', $this->getPwdFrm());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updatePassword()

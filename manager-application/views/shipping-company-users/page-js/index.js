@@ -9,15 +9,15 @@ var defaultController = controllerName;
     };
 
     getTransactions = function (userId, frm = '') {
-        $.ykmodal(fcom.getLoader(), false, '');
         var data = 'utxn_user_id=' + userId;
         if (frm) {
             data = fcom.frmData(frm);
         }
-        fcom.ajax(fcom.makeUrl('transactions', 'shippingTransactionSearch'), data, function (t) {
-            $.ykmodal(t, false, '');
+        fcom.updateWithAjax(fcom.makeUrl('transactions', 'shippingTransactionSearch'), data, function (t) {
+            $.ykmodal(t.html, false, '');
+            fcom.removeLoader();
+            $.ykmsg.close();
         });
-        fcom.removeLoader();
     };
 
     goToSearchPage = function (page) {
@@ -36,11 +36,11 @@ var defaultController = controllerName;
     };
 
     addUserTransaction = function (userId) {
-        $.ykmodal(fcom.getLoader(), false, '');
         var data = 'utxn_user_id=' + userId;
-        fcom.ajax(fcom.makeUrl('transactions', 'form'), data, function (t) {
-            $.ykmodal(t, false, 'modal-dialog-vertical-md');
+        fcom.updateWithAjax(fcom.makeUrl('transactions', 'form'), data, function (t) {
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
             fcom.removeLoader();
+            $.ykmsg.close();
         });
         controllerName = defaultController;
     };
@@ -97,30 +97,30 @@ var defaultController = controllerName;
         var frm = document.frmLoadMoreRecordsPaging;
         var page = 1;
         if (
-                "undefined" != typeof frm.page.value &&
-                "" != frm.page.value &&
-                0 < frm.page.value
-                ) {
+            "undefined" != typeof frm.page.value &&
+            "" != frm.page.value &&
+            0 < frm.page.value
+        ) {
             page += parseInt(frm.page.value);
         }
 
         $(frm.page).val(page);
         var reference = $(".appendRowsJs .rowJs:last").data("reference");
         if (
-                "undefined" != typeof reference &&
-                "undefined" != typeof frm.reference
-                ) {
+            "undefined" != typeof reference &&
+            "undefined" != typeof frm.reference
+        ) {
             $(frm.reference).val(reference);
         }
 
         var data = fcom.frmData(frm);
 
         $(".appendRowsJs .rowJs:last")
-                .clone()
-                .removeAttr("class")
-                .addClass("rowJs")
-                .appendTo(".appendRowsJs")
-                .html(fcom.getRowSpinner());
+            .clone()
+            .removeAttr("class")
+            .addClass("rowJs")
+            .appendTo(".appendRowsJs")
+            .html(fcom.getRowSpinner());
         fcom.ajax(fcom.makeUrl('transactions', "getRows"), data, function (rows) {
             $(".appendRowsJs .rowJs:last").remove();
             $(".appendRowsJs").append(rows);

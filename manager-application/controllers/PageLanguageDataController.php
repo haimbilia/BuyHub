@@ -164,7 +164,8 @@ class PageLanguageDataController extends ListingBaseController
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('langFrm', $langFrm);
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getLangForm($pLangKey = '', $lang_id = 0)

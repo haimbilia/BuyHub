@@ -184,7 +184,8 @@ class HomeController extends ListingBaseController
         $this->set('orderSalesStats', $orderSalesStats[$interval]);
         $this->set('shopsSignupStats', $shopsSignupStats[$interval]);
         $this->set('userSignupStats', $userSignupStats[$interval]);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function searchStatistics()
@@ -292,7 +293,8 @@ class HomeController extends ListingBaseController
 
         $this->set('type', $type);
         $this->set('dashboardInfo', $dashboardInfo);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function latestOrders($limit = 5)
@@ -310,7 +312,8 @@ class HomeController extends ListingBaseController
         $dashboardInfo['orderPaymentStatusArr'] = Orders::getOrderPaymentStatusArr($this->siteLangId);
         $this->set('dashboardInfo', $dashboardInfo);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function topSellingProducts($limit = 5)
@@ -329,7 +332,8 @@ class HomeController extends ListingBaseController
         $productsList = FatApp::getDb()->fetchAll($rs);
 
         $this->set('productsList', $productsList);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function dashboardStats()
@@ -397,7 +401,8 @@ class HomeController extends ListingBaseController
         }
         $this->set('stats_type', strtoupper($type));
         $this->set('stats_info', $result);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function clear()

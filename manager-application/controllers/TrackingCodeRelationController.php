@@ -56,7 +56,8 @@ class TrackingCodeRelationController extends ListingBaseController
         $this->set('trackingCourier', $trackingCourier);
         $this->set('carriers', $carriers); 
         $this->set('records', $records); 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setUpCourierRelation()

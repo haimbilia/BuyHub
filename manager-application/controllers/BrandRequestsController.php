@@ -167,7 +167,8 @@ class BrandRequestsController extends ListingBaseController
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -273,7 +274,8 @@ class BrandRequestsController extends ListingBaseController
         $this->set('logoFrm', $logoFrm);
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($brand_id, $file_type, $lang_id = 0, $slide_screen = 0)
@@ -299,7 +301,8 @@ class BrandRequestsController extends ListingBaseController
         $this->set('file_type', $file_type);
         $this->set('brand_id', $brand_id);
         $this->set('canEdit', $this->objPrivilege->canEditBrands($this->admin_id, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function requestMedia($brand_id = 0)
@@ -312,7 +315,8 @@ class BrandRequestsController extends ListingBaseController
         $this->set('brand_id', $brand_id);
         $this->set('brandLogoFrm', $brandLogoFrm);
         $this->set('brandImageFrm', $brandImageFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function uploadMedia()

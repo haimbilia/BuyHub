@@ -49,7 +49,8 @@ class DatabaseBackupRestoreController extends ListingBaseController
         $settingsObj = new Settings();
         $files_array = $settingsObj->getDatabaseDirectoryFiles();
         $this->set("arrListing", $files_array);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function download($file)

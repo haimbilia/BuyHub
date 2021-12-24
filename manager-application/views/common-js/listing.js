@@ -59,6 +59,9 @@ $(document).on("search", "input[name='keyword']", function () {
 });
 
 $(document).on("click", ".resetModalFormJs", function (e) {
+    if ($.ykmodal.isSideBarView()) {
+        $.ykmodal(fcom.getLoader());
+    }
     if (0 > $(".navTabsJs .nav-link").length) {
         $(".navTabsJs .nav-link.active").click();
     } else {
@@ -221,7 +224,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
         $('.select2-hidden-accessible').val('').trigger('change');
         searchRecords(document.frmRecordSearch, loadRowsOnly);
-        
+
     };
 
     setColumnsData = function (frm) {
@@ -273,9 +276,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
-        $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), "", function (t) {
-            $.ykmodal(t, displayInPopup, dialogClass);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "", function (t) {
+            $.ykmodal(t.html, displayInPopup, dialogClass);
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -287,8 +290,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         fcom.resetEditorInstance();
         $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
         data = "recordId=" + recordId;
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
-            $.ykmodal(t, displayInPopup, dialogClass);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            $.ykmodal(t.html, displayInPopup, dialogClass);
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -298,14 +302,14 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
         fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
         data = "recordId=" + recordId + "&langId=" + langId;
-        fcom.ajax(
+        fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
             data,
             function (t) {
-                $.ykmodal(t, !$.ykmodal.isSideBarView());
+                $.ykmodal(t.html, !$.ykmodal.isSideBarView());
                 fcom.removeLoader();
+                $.ykmsg.close();
             }
         );
     };
@@ -400,10 +404,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             }
             $.ykmsg.success(t.msg);
 
-            if( t.langId == langLbl.defaultFormLangId){
+            if (t.langId == langLbl.defaultFormLangId) {
                 reloadList();
             }
-            
+
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
             } else if ("openMediaForm" in t) {
@@ -496,21 +500,17 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
 
-        fcom.ajax(
-            fcom.makeUrl(controllerName, "images", [
-                recordId,
-                fileType,
-                langId,
-                slide_screen,
-            ]),
-            "",
+        fcom.updateWithAjax(
+            fcom.makeUrl(controllerName, "images", [recordId, fileType, langId, slide_screen]), "",
             function (t) {
+                fcom.removeLoader();
+                $.ykmsg.close();
                 if (fileType == "logo") {
-                    $("#logoListingJs").html(t);
+                    $("#logoListingJs").html(t.html);
                     return;
                 }
 
-                $("#imageListingJs").html(t);
+                $("#imageListingJs").html(t.html);
             }
         );
     };
@@ -520,15 +520,13 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
 
-        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
-        fcom.ajax(
-            fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]),
-            "",
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]), "",
             function (t) {
                 fcom.removeLoader();
+                $.ykmsg.close();
                 loadImages(recordId, "logo", slide_screen, langId);
                 loadImages(recordId, "image", slide_screen, langId);
-                $.ykmodal(t, !$.ykmodal.isSideBarView());
+                $.ykmodal(t.html, !$.ykmodal.isSideBarView());
             }
         );
     };
@@ -571,8 +569,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (inputBtn.files && inputBtn.files[0]) {
             loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
-            fcom.ajax(fcom.makeUrl(controllerName, "imgCropper"), "", function (t) {
-                t = $.parseJSON(t);
+            fcom.updateWithAjax(fcom.makeUrl(controllerName, "imgCropper"), "", function (t) {
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var file = inputBtn.files[0];
@@ -610,7 +607,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
         var frmName = formData.get("frmName");
-        var frm = document.forms[frmName];    
+        var frm = document.forms[frmName];
         var langId = 0;
         if ('undefined' != typeof frm.lang_id) {
             langId = frm.lang_id.value;
@@ -619,7 +616,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if ("undefined" != typeof frm.slide_screen) {
             slideScreen = frm.slide_screen.value;
         }
-        
+
         var action = 'uploadMedia';
         if ("undefined" != typeof frm.dataset.action) {
             action = frm.dataset.action;
@@ -648,13 +645,13 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     return;
                 }
                 $.ykmsg.success(ans.msg);
-                if (true === $.ykmodal.isAdded()) {                   
+                if (true === $.ykmodal.isAdded()) {
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
                     if ("undefined" != typeof frm.dataset.callback) {
-                        eval(frm.dataset.callback);                     
-                    }else if ("undefined" != typeof frm.dataset.callbackfn) {
-                        window[frm.dataset.callbackfn](ans); /* callback function */                    
+                        eval(frm.dataset.callback);
+                    } else if ("undefined" != typeof frm.dataset.callbackfn) {
+                        window[frm.dataset.callbackfn](ans); /* callback function */
                     } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length) {
                         $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();
                     } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length) {

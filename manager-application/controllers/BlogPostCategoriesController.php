@@ -66,7 +66,8 @@ class BlogPostCategoriesController extends ListingBaseController
         $records = BlogPostCategory::getBlogPostCatParentChildWiseArr($this->siteLangId, 0, true, false, false);
 
         $this->set("arrListing", $records);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getSubCategories()
@@ -76,7 +77,8 @@ class BlogPostCategoriesController extends ListingBaseController
 
         $childCategories = BlogPostCategory::getBlogPostCatParentChildWiseArr($this->siteLangId, $recordId, true, false, false);
         $this->set("childCategories", $childCategories);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form()
@@ -107,7 +109,8 @@ class BlogPostCategoriesController extends ListingBaseController
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()

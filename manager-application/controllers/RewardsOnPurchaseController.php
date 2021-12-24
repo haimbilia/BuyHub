@@ -126,7 +126,8 @@ class RewardsOnPurchaseController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_REWARDS_ON_PURCHASE_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()

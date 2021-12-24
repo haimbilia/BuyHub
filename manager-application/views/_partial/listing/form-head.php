@@ -10,7 +10,6 @@ $includeTabs = $includeTabs ?? true;
 $displayLangTab = $displayLangTab ?? true;
 $languages = $languages ?? [];
 unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
-
  
 <button class="float-btn" type="button" data-trigger="" onclick="layoutSelectorForm()">
     <svg class="svg" width="20" height="20">

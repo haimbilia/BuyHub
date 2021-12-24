@@ -13,10 +13,10 @@ $(document).ready(function () {
         if (false === checkControllerName()) {
             return false;
         }
-        $.ykmodal(fcom.getLoader());
         data = "recordId=" + recordId + "&addr_record_id=" + addrRecordId;
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

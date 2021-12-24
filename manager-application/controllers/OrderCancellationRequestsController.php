@@ -241,7 +241,8 @@ class OrderCancellationRequestsController extends ListingBaseController
         $this->set('formTitle', Labels::getLabel('LBL_ORDER_CANCELLATION_REQUEST_UPDATE', $this->siteLangId));
 
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($recordId, $langId, $canRefundToCard = false)
@@ -379,7 +380,8 @@ class OrderCancellationRequestsController extends ListingBaseController
         }
         $this->set('title', Labels::getLabel('LBL_VIEW_COMMENT', $langId));
         $this->set('cancelMessage', $records);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 

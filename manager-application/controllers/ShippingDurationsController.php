@@ -60,7 +60,8 @@ class ShippingDurationsController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form($sduration_id = 0)
@@ -81,7 +82,8 @@ class ShippingDurationsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('sduration_id', $sduration_id);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -160,7 +162,8 @@ class ShippingDurationsController extends ListingBaseController
         $this->set('langFrm', $langFrm);
         $this->set('languages', Language::getAllNames());
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()

@@ -204,7 +204,8 @@ class BannersController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_BANNER_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -312,7 +313,8 @@ class BannersController extends ListingBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getLangForm($recordId, $langId)
@@ -418,7 +420,8 @@ class BannersController extends ListingBaseController
         $this->set('langId', $langId);
         $this->set('slideScreen', $slideScreen);
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -453,7 +456,8 @@ class BannersController extends ListingBaseController
         $this->set('banner_id', $recordId);
         $this->set('bannerDetail', $bannerDetail);
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function uploadMedia()
@@ -499,7 +503,6 @@ class BannersController extends ListingBaseController
         $this->set('msg', $file['name'] . ' ' . Labels::getLabel('MSG_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-
 
     public function removeMedia()
     {

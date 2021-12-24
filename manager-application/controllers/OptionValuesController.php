@@ -210,7 +210,8 @@ class OptionValuesController extends ListingBaseController
 
         $this->set('frm', $optionValueFrm);
         $this->set('recordId', $recordId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()

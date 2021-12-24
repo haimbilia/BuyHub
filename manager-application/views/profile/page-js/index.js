@@ -5,18 +5,20 @@
     profileInfoForm = function () {
         $(dv).prepend(fcom.getLoader());
         markMainTabActive();
-        fcom.ajax(fcom.makeUrl('Profile', 'profileInfoForm'), '', function (t) {
-            $(dv).html(t);
+        fcom.updateWithAjax(fcom.makeUrl('Profile', 'profileInfoForm'), '', function (t) {
             fcom.removeLoader();
+            $.ykmsg.close();
+            $(dv).html(t.html);
         });
     };
 
     changePassword = function () {
         $(dv).prepend(fcom.getLoader());
         markMainTabActive();
-        fcom.ajax(fcom.makeUrl('Profile', 'changePassword'), '', function (t) {
-            $(dv).html(t);
+        fcom.updateWithAjax(fcom.makeUrl('Profile', 'changePassword'), '', function (t) {
             fcom.removeLoader();
+            $.ykmsg.close();
+            $(dv).html(t.html);
         });
     };
 
@@ -55,13 +57,12 @@
         });
     };
 
-    popupImage = function (inputBtn) {   
+    popupImage = function (inputBtn) {
         loadCropperSkeleton();
         $("#modalBoxJs .modal-title").text(cropperHeading);
         if (inputBtn) {
             if (inputBtn.files && inputBtn.files[0]) {
-                fcom.ajax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
-                    t = $.parseJSON(t); 
+                fcom.updateWithAjax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
                     $("#modalBoxJs .modal-body").html(t.body);
                     $("#modalBoxJs .modal-footer").html(t.footer);
                     var file = inputBtn.files[0];
@@ -74,14 +75,13 @@
                             var data = e.detail;
                         }
                     };
-                    $(inputBtn).val('');  
+                    $(inputBtn).val('');
                     setTimeout(function () { cropImage(file, options, 'saveProfileImage', inputBtn); }, 100);
-                    return ;
+                    return;
                 });
             }
         } else {
-            fcom.ajax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
-                t = $.parseJSON(t); 
+            fcom.updateWithAjax(fcom.makeUrl('Profile', 'imgCropper'), '', function (t) {
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
                 var container = document.querySelector('.img-container');
@@ -96,7 +96,7 @@
                     }
                 };
                 setTimeout(function () { cropImage(image, options, 'saveProfileImage'); }, 100);
-                return 
+                return
             });
         }
     };
@@ -116,8 +116,8 @@
             complete: function () {
                 $('#loader-js').html(fcom.getLoader());
             },
-            success: function (ans) {   
-                $.ykmsg.success(ans.msg);             
+            success: function (ans) {
+                $.ykmsg.success(ans.msg);
                 $("#modalBoxJs").modal("hide");
                 profileInfoForm();
             },

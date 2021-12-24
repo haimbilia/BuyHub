@@ -334,7 +334,8 @@ class ImportExportController extends ListingBaseController
         $this->set('actionType', $actionType);
         $this->set('displayMediaTab', $displayMediaTab);
         $this->set('formTitle', $formTitle);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function importMediaForm($actionType)
@@ -370,7 +371,8 @@ class ImportExportController extends ListingBaseController
         $this->set('displayMediaTab', true);
         $this->set('actionType', $actionType);
         $this->set('formTitle', $title);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function importInstructions($actionType)
@@ -436,7 +438,8 @@ class ImportExportController extends ListingBaseController
         $this->set('formTitle', Labels::getLabel('LBL_Import_Instructions', $langId));
         $this->set('actionType', $actionType);
         $this->set('displayMediaTab', $displayMediaTab);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function exportForm($actionType)
@@ -517,7 +520,8 @@ class ImportExportController extends ListingBaseController
         $this->set('actionType', $actionType);
         $this->set('displayMediaTab', $displayMediaTab);
         $this->set('formTitle', $formTitle);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function exportMediaForm($actionType)
@@ -559,7 +563,8 @@ class ImportExportController extends ListingBaseController
         $this->set('displayMediaTab', true);
         $this->set('actionType', $actionType);
         $this->set('formTitle', $formTitle);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getImportExportForm($langId, $type = 'EXPORT', $actionType)
@@ -718,14 +723,16 @@ class ImportExportController extends ListingBaseController
     {
         $options = Importexport::getImportExportTypeArr('export', $this->siteLangId, false);
         $this->set('options', $options);
-        $this->_template->render(false, false, 'import-export/export.php');
+        $this->set('html', $this->_template->render(false, false, 'import-export/export.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function import()
     {
         $options = Importexport::getImportExportTypeArr('import', $this->siteLangId, false);
         $this->set('options', $options);
-        $this->_template->render(false, false, 'import-export/import.php');
+        $this->set('html', $this->_template->render(false, false, 'import-export/import.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function settings()
@@ -736,7 +743,8 @@ class ImportExportController extends ListingBaseController
         $frm->fill($settingArr);
         $this->set('frm', $frm);
         $this->set('action', 'settings');
-        $this->_template->render(false, false, 'import-export/settings.php');
+        $this->set('html', $this->_template->render(false, false, 'import-export/settings.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getSettingForm()
@@ -842,7 +850,9 @@ class ImportExportController extends ListingBaseController
         $this->set("frmSearch", $frmSearch);
         $this->getListingData();
         $this->set('action', 'bulkMedia');
-        $this->_template->render(false, false, 'import-export/bulk-media.php');
+
+        $this->set('html', $this->_template->render(false, false, 'import-export/bulk-media.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getSearchForm($fields = [])
@@ -1050,7 +1060,8 @@ class ImportExportController extends ListingBaseController
     {
         $frm = $this->getImportLabelsForm();
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getImportLabelsForm()

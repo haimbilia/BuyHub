@@ -244,7 +244,8 @@ class ProductReviewsController extends ListingBaseController
         $this->set("ratingData", $ratingData);
         $this->set("avgRatingData", $avgRatingData);
         $this->set("frm", $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($recordId)

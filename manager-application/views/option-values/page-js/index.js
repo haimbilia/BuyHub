@@ -52,10 +52,10 @@ $(document).ajaxComplete(function () {
     };
 
     optionValueForm = function (optionId, id = 0) {
-        $.ykmodal(fcom.getLoader());
         var data = "optionvalue_id=" + id + "&option_id=" + optionId;
-        fcom.ajax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

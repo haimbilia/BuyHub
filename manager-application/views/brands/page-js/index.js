@@ -1,21 +1,12 @@
-
 (function () {
-    mediaForm = function (banner_id, langId = 0, slide_screen = 1) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Brands', 'media', [banner_id, langId, slide_screen]), '', function (t) {
-            $.ykmodal(t);
-            brandImages(banner_id, 'logo', slide_screen, langId);
-            brandImages(banner_id, 'image', slide_screen, langId);
-            fcom.removeLoader();
-        });
-    };
-
     brandImages = function (brandId, fileType, slide_screen, langId) {
-        fcom.ajax(fcom.makeUrl('Brands', 'images', [brandId, fileType, langId, slide_screen]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Brands', 'images', [brandId, fileType, langId, slide_screen]), '', function (t) {
+            fcom.removeLoader();
+            $.ykmsg.close();
             if (fileType == 'logo') {
-                $('#logoListingJs').html(t);
+                $('#logoListingJs').html(t.html);
             } else {
-                $('#imageListingJs').html(t);
+                $('#imageListingJs').html(t.html);
             }
         });
     };

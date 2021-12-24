@@ -32,10 +32,10 @@ $(function () {
 
 
     viewComment = function (id, langId) {
-        $.ykmodal(function () {
-            fcom.ajax(fcom.makeUrl(controllerName, 'viewComment', [id, langId]), '', function (t) {
-                $.ykmodal(t);
-            });
-        }, true);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'viewComment', [id, langId]), '', function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
+            fcom.removeLoader();
+        });
     };
 })();

@@ -1,27 +1,27 @@
-addNewFaq = function(faqCatId) {
+addNewFaq = function (faqCatId) {
     fcom.resetEditorInstance();
     $(".selectAllJs, .selectItemJs").prop("checked", false)
-    $.ykmodal(fcom.getLoader(), false, '');
-    fcom.ajax(fcom.makeUrl(controllerName, 'form'), {faqCatId}, function (t) {
-        $.ykmodal(t, false, '');
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), { faqCatId }, function (t) {
+        $.ykmodal(t.html, false, '');
+        $.ykmsg.close();
         fcom.removeLoader();
     });
 };
 
 
-$(document).ready(function() {
+$(document).ready(function () {
     bindSortable();
 });
-$(document).ajaxComplete(function() {
+$(document).ajaxComplete(function () {
     bindSortable();
 });
 
-bindSortable = function() {
+bindSortable = function () {
     if (1 > $('[data-field="dragdrop"]').length) {
         return;
     }
     $("#orderStatuses > tbody").sortable({
-        update: function(event, ui) {
+        update: function (event, ui) {
             fcom.displayProcessing();
             $('.listingTableJs').prepend(fcom.getLoader());
 
@@ -37,8 +37,8 @@ bindSortable = function() {
                 resolve(data);
             });
             bindData.then(
-                function(value) {
-                    fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function(res) {
+                function (value) {
+                    fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function (res) {
                         fcom.removeLoader();
                         $.ykmsg.close();
                         var ans = $.parseJSON(res);
@@ -49,7 +49,7 @@ bindSortable = function() {
                         $.ykmsg.error(ans.msg);
                     });
                 },
-                function(error) {
+                function (error) {
                     fcom.removeLoader();
                     $.ykmsg.close();
                 }
@@ -59,13 +59,12 @@ bindSortable = function() {
 }
 
 
-editRecord = function(recordId, faqCatId) {
+editRecord = function (recordId, faqCatId) {
     fcom.resetEditorInstance();
-    $.ykmodal(fcom.getLoader());
-    data = {recordId, faqCatId};
-    console.log(data);
-    fcom.ajax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
-        $.ykmodal(t);
+    data = { recordId, faqCatId };
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
+        $.ykmodal(t.html);
+        $.ykmsg.close();
         fcom.removeLoader();
     });
 };

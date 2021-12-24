@@ -63,7 +63,8 @@ class ToolTipsController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function form($tooltipId = 0)
@@ -85,7 +86,8 @@ class ToolTipsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('tooltipId', $tooltipId);
         $this->set('tooltipFrm', $tooltipFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langForm($tooltipId = 0, $lang_id = 0, $action = 'add', $autoFillLangData = 0)
@@ -130,7 +132,8 @@ class ToolTipsController extends ListingBaseController
         $this->set('tooltip_lang_id', $lang_id);
         $this->set('tooltipLangFrm', $tooltipLangFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     private function getForm($tooltipId = 0)

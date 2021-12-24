@@ -155,7 +155,8 @@ class ShippedProductsController extends ListingBaseController
         $this->set('profileId', $profileId);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_UPDATE_SHIPPING_PROFILE', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -189,7 +190,8 @@ class ShippedProductsController extends ListingBaseController
     public function getRows()
     {
         $this->viewSellerList(false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function viewSellerList($render = true)
@@ -233,7 +235,8 @@ class ShippedProductsController extends ListingBaseController
         $this->set('siteLangId', $this->siteLangId);
         $this->set('postedData', $post);
         if ($render != false) {
-            $this->_template->render(false, false);
+            $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
         }
     }
 

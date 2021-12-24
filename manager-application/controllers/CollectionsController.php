@@ -178,7 +178,8 @@ class CollectionsController extends ListingBaseController
         $typeArr = Collections::getTypeArr($this->siteLangId);
         $this->set('typeLayouts', $typeLayouts);
         $this->set('typeArr', $typeArr);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function setFormTitle(int $type, int $layoutType, string $backBtnOnclick = 'layoutSelectorForm()'): void
@@ -219,7 +220,8 @@ class CollectionsController extends ListingBaseController
         $this->set('collection_type', $type);
         $this->set('collection_layout_type', $layoutType);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getLayoutLimit($collection_layout_type)
@@ -363,7 +365,8 @@ class CollectionsController extends ListingBaseController
 
         $this->set('collection_type', $data['collection_type']);
         $this->set('collection_layout_type', $data['collection_layout_type']);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     protected function getLangForm($recordId = 0, $langId = 0)
@@ -459,7 +462,8 @@ class CollectionsController extends ListingBaseController
         $this->set('collection_layout_type', $data['collection_layout_type']);
         $this->set('frm', $frm);
         $this->set('displayFooterButtons', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getRecordsForm($recordId = 0, $collectionType = 0)
@@ -584,7 +588,8 @@ class CollectionsController extends ListingBaseController
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
         $this->set('displayMediaOnly', $data['collection_display_media_only']);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($recordId, $langId = 0)
@@ -608,7 +613,8 @@ class CollectionsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('images', $images);
         $this->set('recordId', $recordId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getMediaForm(int $recordId)
@@ -814,7 +820,8 @@ class CollectionsController extends ListingBaseController
         $this->set('collection_layout_type', $layoutType);
         $this->set('canEdit', $this->objPrivilege->canEditBanners());
         $this->set('linkTargetsArr', applicationConstants::getLinkTargetsArr($this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getDisplayScreenName()
@@ -860,7 +867,8 @@ class CollectionsController extends ListingBaseController
         $this->set('collection_type', $type);
         $this->set('collection_layout_type', $layoutType);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getBannerForm(int $collectionId = 0, int $recordId = 0, int $bannerLocationId = 0)
@@ -1008,7 +1016,8 @@ class CollectionsController extends ListingBaseController
 
         $this->set('collection_type', $type);
         $this->set('collection_layout_type', $layoutType);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     protected function getBannerLangForm(int $collectionId = 0, int $recordId = 0, int $langId = 0)
@@ -1074,7 +1083,8 @@ class CollectionsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getBannerMediaForm(int $recordId)
@@ -1168,7 +1178,8 @@ class CollectionsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('screenTypeArr', $this->getDisplayScreenName());
         $this->set('recordId', $recordId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function removeBanner($bannerId, $afileId, $langId = 0, $slide_screen = 0)

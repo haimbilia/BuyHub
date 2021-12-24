@@ -117,7 +117,8 @@ class ShopsController extends ListingBaseController
         $this->set('recordId', $shop_id);
         $this->set('stateId', $data['shop_state_id'] ?? 0);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -210,7 +211,7 @@ class ShopsController extends ListingBaseController
         return false;
     }
 
-    public function media($shop_id)
+    public function media($shop_id, $langId = 0)
     {
         $this->checkEditPrivilege();
         $shop_id = FatUtility::int($shop_id);
@@ -244,7 +245,8 @@ class ShopsController extends ListingBaseController
         $this->set('languageCount', count($languages));
         // $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($shop_id, $file_type, $lang_id = 0, $slide_screen = 0)
@@ -267,7 +269,8 @@ class ShopsController extends ListingBaseController
         $this->set('file_type', $file_type);
         $this->set('shop_id', $shop_id);
         $this->set('canEdit', $this->objPrivilege->canEditShops($this->admin_id, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function uploadMedia()

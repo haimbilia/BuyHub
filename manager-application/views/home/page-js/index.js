@@ -38,7 +38,9 @@
 		data = "rtype=top_referrers&interval=" + interval;
 
 		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
-			$('.topReferersJs').html(t);
+			fcom.removeLoader();
+            $.ykmsg.close();
+			$('.topReferersJs').html(t.html);
 		});
 	};
 
@@ -46,8 +48,10 @@
 		$('.topCountriesJs').html('<li class="list-stats-item">' + fcom.getLoader() + '</li>');
 		data = "rtype=top_countries&interval=" + interval;
 
-		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
-			$('.topCountriesJs').html(t);
+		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+			fcom.removeLoader();
+            $.ykmsg.close();
+			$('.topCountriesJs').html(t.html);
 		});
 	};
 
@@ -55,16 +59,20 @@
 		$('.topProducts').html('<li>' + fcom.getLoader() + '</li>');
 		data = "rtype=top_products&interval=" + interval;
 
-		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
-			$('.topProducts').html(t);
+		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+			fcom.removeLoader();
+            $.ykmsg.close();
+			$('.topProducts').html(t.html);
 		});
 	};
 
 	getTopSearchKeyword = function (interval) {
 		$('.topSearchKeywordJs').html('<li class="list-stats-item">' + fcom.getLoader() + '</li>');
 		data = "rtype=top_search_keyword&interval=" + interval;
-		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
-			$('.topSearchKeywordJs').html(t);
+		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+			fcom.removeLoader();
+            $.ykmsg.close();
+			$('.topSearchKeywordJs').html(t.html);
 		});
 	};
 
@@ -133,16 +141,19 @@
 		}
 		data = "type=" + type;
 		$('#' + tab).html(fcom.getLoader());
-		fcom.ajax(fcom.makeUrl('home', 'searchStatistics'), data, function (t) {
-			$('#' + tab).html(t);
+		fcom.updateWithAjax(fcom.makeUrl('home', 'searchStatistics'), data, function (t) {
+			fcom.removeLoader();
+            $.ykmsg.close();
+			$('#' + tab).html(t.html);
 		});
 	};
 
 	latestOrders = function () {
 		$('#latestOrdersJs').html(fcom.getLoader());
-		fcom.ajax(fcom.makeUrl('home', 'latestOrders'), '', function (t) {
-			$('#latestOrdersJs').html(t);
+		fcom.updateWithAjax(fcom.makeUrl('home', 'latestOrders'), '', function (t) {
 			fcom.removeLoader();
+            $.ykmsg.close();
+			$('#latestOrdersJs').html(t.html);
 		});
 	};
 
@@ -150,16 +161,18 @@
 		data = "interval=" + interval;
 		$('#totalSalesJs').html(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('home', 'totalSales'), data, function (t) {
-			$('#totalSalesJs').html(t);
 			fcom.removeLoader();
+            $.ykmsg.close();
+			$('#totalSalesJs').html(t.html);
 		});
 	};
 
 	topSellingProducts = function () {
 		$('#topSellingProductsJs').html(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('home', 'topSellingProducts'), '', function (t) {
-			$('#topSellingProductsJs').html(t);
 			fcom.removeLoader();
+            $.ykmsg.close();
+			$('#topSellingProductsJs').html(t.html);
 		});
 	};
 

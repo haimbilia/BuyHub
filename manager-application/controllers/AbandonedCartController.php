@@ -58,7 +58,8 @@ class AbandonedCartController extends ListingBaseController
         }        
         $this->set('totCartRecovered', $totCartRecovered); 
         $this->set('canEdit', $this->objPrivilege->canEditAbandonedCart(0, true));    
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function products()
@@ -78,7 +79,8 @@ class AbandonedCartController extends ListingBaseController
         $this->set('recordCount', $abandonedCart->recordCount());
         $this->set('pageCount', $abandonedCart->pages());
         $this->set('postedData', $postedData);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function discountNotification()

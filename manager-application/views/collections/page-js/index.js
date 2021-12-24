@@ -61,9 +61,9 @@ $(document).on('change', '.prefDimensionsJs', function () {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
-        $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl(controllerName, "layoutSelectorForm"), "", function (t) {
-            $.ykmodal(t, false, "modal-dialog-vertical-md");
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "layoutSelectorForm"), "", function (t) {
+            $.ykmodal(t.html, false, "modal-dialog-vertical-md");
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     }
@@ -74,17 +74,17 @@ $(document).on('change', '.prefDimensionsJs', function () {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
-        $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl(controllerName, "form", [type, layoutType]), "recordId=" + collection_id, function (t) {
-            $.ykmodal(t, false, "modal-dialog-vertical-md");
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form", [type, layoutType]), "recordId=" + collection_id, function (t) {
+            $.ykmodal(t.html, false, "modal-dialog-vertical-md");
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
 
     recordForm = function (id, type) {
-        $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl('Collections', 'recordForm', [id, type]), '', function (t) {
-            $.ykmodal(t, false, "modal-dialog-vertical-md");
+        fcom.updateWithAjax(fcom.makeUrl('Collections', 'recordForm', [id, type]), '', function (t) {
+            $.ykmodal(t.html, false, "modal-dialog-vertical-md");
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -117,11 +117,11 @@ $(document).on('change', '.prefDimensionsJs', function () {
     };
 
     collectionMediaForm = function (collection_id, type) {
-        $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl(controllerName, "media", [collection_id, type]), "",
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [collection_id, type]), "",
             function (t) {
                 fcom.removeLoader();
-                $.ykmodal(t, false, "modal-dialog-vertical-md");
+                $.ykmodal(t.html, false, "modal-dialog-vertical-md");
+                $.ykmsg.close();
                 if (0 < $(".displayMediaOnlyJs:checked").val()) {
                     $('.mediaElementsJs').show();
                     loadImages(collection_id);
@@ -133,14 +133,16 @@ $(document).on('change', '.prefDimensionsJs', function () {
     };
 
     loadImages = function (recordId, langId = 0) {
-        fcom.ajax(fcom.makeUrl(controllerName, 'images', [recordId, langId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [recordId, langId]), '', function (t) {
+            fcom.removeLoader();
+            $.ykmsg.close();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();
             }
 
             if ('' != t) {
-                $(".dropzoneContainerJs").append(t);
+                $(".dropzoneContainerJs").append(t.html);
                 $(".dropzoneUploadJs").hide();
             } else {
                 $(".dropzoneUploadJs").show();
@@ -150,7 +152,6 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
     displayMediaOnly = function (collectionId, obj) {
         var value = (obj.checked) ? 1 : 0;
-        $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
         fcom.ajax(fcom.makeUrl(controllerName, 'displayMediaOnly', [collectionId, value]), '', function (t) {
             fcom.removeLoader();
             var ans = $.parseJSON(t);
@@ -182,27 +183,26 @@ $(document).on('change', '.prefDimensionsJs', function () {
     }
 
     bannerForm = function (collection_id, banner_id = 0) {
-        $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl(controllerName, 'bannerForm', [collection_id, banner_id]), '', function (t) {
-            $.ykmodal(t, false, "modal-dialog-vertical-md");
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bannerForm', [collection_id, banner_id]), '', function (t) {
+            $.ykmodal(t.html, false, "modal-dialog-vertical-md");
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
 
     bannerLangForm = function (collection_id, banner_id, langId, autoFillLangData = 0) {
-        $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-
         var data = "collection_id=" + collection_id + "&banner_id=" + banner_id + "&langId=" + langId;
-        fcom.ajax(fcom.makeUrl(controllerName, 'bannerLangForm', [autoFillLangData]), data, function (t) {
-            $.ykmodal(t, false, "modal-dialog-vertical-md");
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bannerLangForm', [autoFillLangData]), data, function (t) {
+            $.ykmodal(t.html, false, "modal-dialog-vertical-md");
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
 
     banners = function (collection_id) {
-        $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl(controllerName, 'searchBanners', [collection_id]), '', function (t) {
-            $.ykmodal(t, false, "modal-dialog-vertical-md");
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'searchBanners', [collection_id]), '', function (t) {
+            $.ykmodal(t.html, false, "modal-dialog-vertical-md");
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -256,14 +256,14 @@ $(document).on('change', '.prefDimensionsJs', function () {
     };
 
     bannerMediaForm = function (collectionId, bannerId, langId = 0, slide_screen = 1) {
-        $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(
+        fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "bannerMedia", [collectionId, bannerId, langId, slide_screen]),
             "",
             function (t) {
                 fcom.removeLoader();
                 loadBannerImages(collectionId, bannerId, langId, slide_screen);
-                $.ykmodal(t, false, "modal-dialog-vertical-md");
+                $.ykmodal(t.html, false, "modal-dialog-vertical-md");
+                $.ykmsg.close();
             }
         );
     };
@@ -276,14 +276,16 @@ $(document).on('change', '.prefDimensionsJs', function () {
         if (1 > screen || 'undefined' == typeof screen) {
             screen = $('.prefDimensionsJs').val();
         }
-        fcom.ajax(fcom.makeUrl(controllerName, 'bannerImages', [collectionId, bannerId, langId, screen]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bannerImages', [collectionId, bannerId, langId, screen]), '', function (t) {
+            fcom.removeLoader();
+            $.ykmsg.close();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();
             }
 
             if ('' != t) {
-                $(".dropzoneContainerJs").append(t);
+                $(".dropzoneContainerJs").append(t.html);
                 $(".dropzoneUploadJs").hide();
             } else {
                 $(".dropzoneUploadJs").show();

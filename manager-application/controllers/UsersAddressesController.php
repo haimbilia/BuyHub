@@ -140,7 +140,8 @@ class UsersAddressesController extends ListingBaseController
         $this->set('stateId', $stateId);
         $this->set('user_id', $userId);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
