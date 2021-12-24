@@ -515,8 +515,7 @@
         });
     };
 
-    getDigitalDownloads = function (downloadType, recordId, langId = 0 , optionCombi = 0) {
-        console.log(optionCombi,"<<<");
+    getDigitalDownloads = function (downloadType, recordId, langId = 0 , optionCombi = 0) {      
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
             fcom.ajax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadLinks'), data, function (res) {
@@ -576,7 +575,7 @@
             let productId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, productId);
         });
-    };
+    };    
 
 })();
 

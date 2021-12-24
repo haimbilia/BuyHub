@@ -1,8 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $frm->setFormTagAttribute('class', 'form');
-$displayDigitalDwnBtn = false;
+$displayDigitalDownloadAddBtn = false;
 $displayDigitalDownloadList = false;
-if (0 < $productId) {
+if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 1 > $productData['product_seller_id'];
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
@@ -156,7 +156,7 @@ if (0 < $productId) {
 
                     <?php
                     $langFld =  $frm->getField('lang_id');
-                    if (0 < $productId) {
+                    if (0 < $recordId) {
                         $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
                         $langFld->setfieldTagAttribute('onchange', 'langForm()');
                         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -595,9 +595,9 @@ if (0 < $productId) {
             <?php } ?>
 
             upcType();
-            <?php if (0 < $productId && $displayDigitalDownloadList) { ?>
-                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $productId; ?>);
-                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $productId; ?>);
+            <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
+                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
+                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
             <?php } ?>
         });
     </script>
