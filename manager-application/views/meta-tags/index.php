@@ -39,9 +39,7 @@
                                             </i>
                                             <div>
                                                 <h6 class="settings-inner-title"><?php echo $metaDetail['name']; ?></h6>
-                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
-                                                    consectetur adipisicing
-                                                    elit. Suscipit est quos </span>
+                                                <span class="settings-inner-desc"><?php echo $metaDetail['msg'];?></span>
                                             </div>
                                         </a>
                                     </li>
