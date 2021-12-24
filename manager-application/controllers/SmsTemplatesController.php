@@ -134,7 +134,8 @@ class SmsTemplatesController extends ListingBaseController
         $this->set('lang_id', $lang_id);
         $this->set('tempFrm', $tempFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getTemplateForm($stplCode, $langId)

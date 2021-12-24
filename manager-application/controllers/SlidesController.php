@@ -150,7 +150,8 @@ class SlidesController extends ListingBaseController
         $slideImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, $universalImage);
         $this->set('image', $slideImage);
         $this->set('formTitle', Labels::getLabel('LBL_SLIDE_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($recordId = 0)
@@ -281,7 +282,8 @@ class SlidesController extends ListingBaseController
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('formTitle', Labels::getLabel('LBL_SLIDE_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getLangForm($langId = 0)
@@ -378,7 +380,8 @@ class SlidesController extends ListingBaseController
         $this->set('universalImage', $universalImage);
         $this->set('recordId', $recordId);
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -505,7 +508,8 @@ class SlidesController extends ListingBaseController
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 

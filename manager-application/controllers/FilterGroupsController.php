@@ -83,7 +83,8 @@ class FilterGroupsController extends ListingBaseController
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setup()
@@ -201,7 +202,8 @@ class FilterGroupsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('filtergroup_id', $filtergroup_id);
         $this->set('filterGroupsFrm', $filterGroupsFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     private function getForm($filtergroup_id = 0)
@@ -255,7 +257,8 @@ class FilterGroupsController extends ListingBaseController
         $this->set('filtergroup_id', $filtergroup_id);
         $this->set('filtergroup_lang_id', $lang_id);
         $this->set('filterGroupLangFrm', $filterGroupLangFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     private function getLangForm($filtergroup_id = 0, $lang_id = 0)

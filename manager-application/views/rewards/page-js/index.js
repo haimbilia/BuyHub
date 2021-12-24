@@ -10,9 +10,9 @@ $(document).ready(function () {
     }
 
     addNewRecord = function (userId) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), "urp_user_id=" + userId, function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), "urp_user_id=" + userId, function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };

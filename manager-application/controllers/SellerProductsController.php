@@ -254,7 +254,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('shippedBySeller', $shippedBySeller);
         $this->set('frm', $frmSellerProduct);
         $this->set('recordId', $selProdId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setUp()
@@ -459,7 +460,8 @@ class SellerProductsController extends ListingBaseController
         $sellerProductRow = SellerProduct::getAttributesById($selprod_id);
         $this->set('product_id', $sellerProductRow['selprod_product_id']);
         $this->set('selprod_id', $selprod_id);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function productSeoGeneralForm()
@@ -490,7 +492,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('activeTab', 'SEO');
         $this->set('seoActiveTab', 'GENERAL');
         $this->set('product_type', $productRow['product_type']);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function productSeoLangForm($metaId, $langId, $autoFillLangData = 0)
@@ -535,7 +538,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('product_type', $productRow['product_type']);
         $this->set('seoActiveTab', '');
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getSeoLangForm($metaId = 0, $lang_id = 0)
@@ -717,7 +721,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('product_id', $sellerProductRow[SellerProduct::DB_TBL_PREFIX . 'product_id']);
         $this->set('product_type', $productRow['product_type']);
         $this->set('activeTab', 'LINKS');
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getLinksFrm()
@@ -870,7 +875,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('siteLangId', $this->siteLangId);
         $this->set('product_type', $productRow['product_type']);
         $this->set('activeTab', 'SPECIAL_PRICE');
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function sellerProductSpecialPriceForm($selprod_id, $splprice_id = 0)
@@ -899,7 +905,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('product_id', $sellerProductRow['selprod_product_id']);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('activeTab', 'SPECIAL_PRICE');
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getSellerProductSpecialPriceForm()
@@ -1081,7 +1088,8 @@ class SellerProductsController extends ListingBaseController
         $productLangRow = Product::getAttributesByLangId($this->siteLangId, $sellerProductRow['selprod_product_id'], array('product_name'));
         $this->set('productCatalogName', $productLangRow['product_name']);
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function sellerProductVolumeDiscountForm($selprod_id, $voldiscount_id)
@@ -1110,7 +1118,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('selprod_id', $sellerProductRow['selprod_id']);
         $this->set('product_id', $sellerProductRow['selprod_product_id']);
         $this->set('activeTab', 'VOLUME_DISCOUNT');
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setUpSellerProductVolumeDiscount()
@@ -1264,7 +1273,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('selprod_id', $sellerProductRow['selprod_id']);
         $this->set('product_id', $sellerProductRow['selprod_product_id']);
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getTaxRates($productId, $userId = 0)
@@ -1323,7 +1333,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('selprod_id', $sellerProductRow['selprod_id']);
         $this->set('product_id', $sellerProductRow['selprod_product_id']);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setUpTaxCategory()
@@ -1409,7 +1420,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('activeTab', 'GENERAL');
         $this->set('product_type', $productRow['product_type']);
         $this->set('ppoint_type', $ppoint_type);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getLinkPoliciesForm($selprod_id, $ppoint_type)
@@ -1503,7 +1515,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->set('catalogReqStatusArr', User::getCatalogReqStatusArr($this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function addCatalogRequest()
@@ -1514,7 +1527,8 @@ class SellerProductsController extends ListingBaseController
         }
         $frm = $this->addNewCatalogRequestForm();
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setUpCatalogRequest()
@@ -1615,7 +1629,8 @@ class SellerProductsController extends ListingBaseController
         }
 
         $this->set("data", $row);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function catalogRequestMsgForm($requestId = 0)
@@ -1648,7 +1663,8 @@ class SellerProductsController extends ListingBaseController
         $searchFrm->getField('requestId')->value = $requestId;
         $this->set('searchFrm', $searchFrm);
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function catalogRequestMessageSearch()
@@ -1861,7 +1877,8 @@ class SellerProductsController extends ListingBaseController
         $frmSearchCatalogProduct->fill($post);
         $this->set("frmSearchCatalogProduct", $frmSearchCatalogProduct);
         $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getCatalogRequestMessageSearchForm()
@@ -1970,7 +1987,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
         $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function sendMailForm($user_id, $selprod_id)
@@ -1985,7 +2003,8 @@ class SellerProductsController extends ListingBaseController
         $frm = $this->getSendMailForm($user_id, $selprod_id);
 
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function sendMailThresholdStock($user_id, $selprod_id)
@@ -2274,7 +2293,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('postedData', $post);
         $this->set('recordCount', $srch->recordCount());
         $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function searchVolumeDiscountProducts()
@@ -2299,7 +2319,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('postedData', FatApp::getPostedData());
         $this->set('recordCount', $srch->recordCount());
         $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getSpecialPriceSearchForm()
@@ -2618,7 +2639,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('postedData', FatApp::getPostedData());
         $this->set('recordCount', $prodSrch->recordCount());
         $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getRelatedProductsSearchForm()
@@ -2802,7 +2824,8 @@ class SellerProductsController extends ListingBaseController
         $this->set('postedData', FatApp::getPostedData());
         $this->set('recordCount', $prodSrch->recordCount());
         $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getUpsellProductsSearchForm()

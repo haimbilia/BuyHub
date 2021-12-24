@@ -1,4 +1,2 @@
-<?php
-defined('SYSTEM_INIT') or die('Invalid Usage.');
-//$arr=array('msg'=>$msg,'catId'=>$catId,'langId'=>$langId);
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 FatUtility::dieJsonSuccess($this->variables);

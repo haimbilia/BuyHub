@@ -166,7 +166,8 @@ class TestimonialsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_TESTIMONIAL_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -276,7 +277,8 @@ class TestimonialsController extends ListingBaseController
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('formTitle', Labels::getLabel('LBL_TESTIMONIAL_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()
@@ -351,7 +353,8 @@ class TestimonialsController extends ListingBaseController
         $this->set('langId', $langId);
         $this->set('imageFrm', $imageFrm);
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getMediaForm($recordId)
@@ -387,7 +390,8 @@ class TestimonialsController extends ListingBaseController
         $this->set('file_type', 'THUMB');
         $this->set('recordId', $recordId);
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 

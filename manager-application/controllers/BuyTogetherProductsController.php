@@ -119,7 +119,8 @@ class BuyTogetherProductsController extends ListingBaseController {
         $this->set('frm', $this->getForm());
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_BIND_PRODUCTS', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm() {

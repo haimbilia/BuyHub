@@ -268,7 +268,8 @@ class OrderReturnRequestsController extends ListingBaseController
             $this->set('attachedFile', $attachedFile);
         }
         $this->set('order', $requestRow);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function addNewComment(int $recordId)
@@ -283,7 +284,8 @@ class OrderReturnRequestsController extends ListingBaseController
         $this->set('orrequestId', $recordId);
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function requestStatusForm(int $recordId)
@@ -306,7 +308,8 @@ class OrderReturnRequestsController extends ListingBaseController
         $this->set('orrequestId', $recordId);
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getMessageListObj(): OrderReturnRequestMessageSearch

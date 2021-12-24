@@ -1,8 +1,8 @@
 (function () {
     mediaForm = function (shopId, langId = 0, slide_screen = 1) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Shops', 'media', [shopId, langId, slide_screen]), '', function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl('Shops', 'media', [shopId, langId, slide_screen]), '', function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
             shopImages(shopId, 'logo', slide_screen, langId);
             shopImages(shopId, 'image', slide_screen, langId);
             fcom.removeLoader();
@@ -10,11 +10,13 @@
     };
 
     shopImages = function (shopId, fileType, slide_screen, langId) {
-        fcom.ajax(fcom.makeUrl('Shops', 'images', [shopId, fileType, langId, slide_screen]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Shops', 'images', [shopId, fileType, langId, slide_screen]), '', function (t) {
+            fcom.removeLoader();
+            $.ykmsg.close();
             if (fileType == 'logo') {
-                $('#logoListingJs').html(t);
+                $('#logoListingJs').html(t.html);
             } else {
-                $('#imageListingJs').html(t);
+                $('#imageListingJs').html(t.html);
             }
         });
     };
@@ -34,7 +36,7 @@
         var shop_id = $(this).closest("form").find('input[name="shop_id"]').val();
         shopImages(shop_id, 'logo', 1, lang_id);
     });
-    
+
     $(document).on('change', '#imageLanguageJs', function () {
         var lang_id = $(this).val();
         var shop_id = $(this).closest("form").find('input[name="shop_id"]').val();

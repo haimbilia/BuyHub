@@ -225,7 +225,8 @@ class EmailTemplatesController extends ListingBaseController
         $this->set('lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updateStatus()
@@ -301,7 +302,8 @@ class EmailTemplatesController extends ListingBaseController
         $this->set('lang_id', $lang_id);
         $this->set('settingFrm', $settingFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupSettings()

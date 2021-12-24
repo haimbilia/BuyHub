@@ -47,7 +47,8 @@ class NotificationsController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->canEdit = $this->objPrivilege->canEditNotifications($this->admin_id, true);
         $this->set("canEdit", $this->canEdit);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function deleteRecords()
@@ -103,6 +104,7 @@ class NotificationsController extends ListingBaseController
         $records = FatApp::getDb()->fetchAll($rs);
         $this->set('labelArr', Notification::getLabelKeyString($this->siteLangId));
         $this->set('arrListing', $records);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 }

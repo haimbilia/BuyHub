@@ -447,7 +447,8 @@ class MetaTagsController extends ListingBaseController
         $this->set('metaId', $metaId);
         $this->set('metaType', $metaType);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langForm($metaId = 0, $langId = 0, $metaType = 'default', $metaTagRecordId = 0, $autoFillLangData = 0)
@@ -482,7 +483,8 @@ class MetaTagsController extends ListingBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()

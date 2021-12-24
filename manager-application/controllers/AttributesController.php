@@ -54,7 +54,8 @@ class AttributesController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function form($attrgrp_id = 0)
@@ -74,7 +75,8 @@ class AttributesController extends ListingBaseController
             
         $this->set('attrgrp_id', $attrgrp_id);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setup()
@@ -280,7 +282,8 @@ class AttributesController extends ListingBaseController
         $this->set('postedData', $post);
         $this->set('languages', Language::getAllNames());
         $this->set('adminDefaultLangId', $this->siteLangId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function manageAttributes($attrgrp_id)
@@ -336,7 +339,8 @@ class AttributesController extends ListingBaseController
         $this->set('attr_lang_id', $lang_id);
         $this->set('attrLangFrm', $attrLangFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function langSetup()

@@ -40,7 +40,8 @@ class SocialPlatformController extends ListingBaseController
             $records = FatApp::getDb()->fetchAll($rs);
         }
         $this->set("arrListing", $records);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form($splatform_id = 0)
@@ -61,7 +62,8 @@ class SocialPlatformController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('splatform_id', $splatform_id);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -140,7 +142,8 @@ class SocialPlatformController extends ListingBaseController
         $this->set('splatform_lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()
@@ -223,7 +226,8 @@ class SocialPlatformController extends ListingBaseController
         $this->set('splatform_id', $splatform_id);
         $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setUpImage($splatform_id)

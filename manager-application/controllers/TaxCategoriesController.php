@@ -142,7 +142,8 @@ class TaxCategoriesController extends ListingBaseController
         }
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     /**

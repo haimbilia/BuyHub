@@ -187,7 +187,8 @@ class SellerPackagePlansController extends ListingBaseController
         $this->set('spPlanId', $spPlanId);
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($spackageId)

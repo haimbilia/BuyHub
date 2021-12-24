@@ -32,7 +32,8 @@ class ShippingZonesController extends ListingBaseController {
         $this->set("zoneLocations", $zoneLocations);
         $this->set("shipRatesData", $shipRates);
         $this->set("profile_id", $profileId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function autoCompleteZone() {
@@ -72,7 +73,8 @@ class ShippingZonesController extends ListingBaseController {
         $this->set("selected", $selected);
         $this->set("zoneLocations", $zoneLocations);
         $this->set("excludeLocations", $excludeLocations);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form($profileId, $zoneId = 0) {
@@ -103,7 +105,8 @@ class ShippingZonesController extends ListingBaseController {
         $this->set('zone_data', $data);
         $this->set('zoneLocations', $zoneLocations);
         $this->set('excludeLocations', $excludeLocations);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup() {

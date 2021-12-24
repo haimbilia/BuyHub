@@ -59,8 +59,10 @@ deleteMedia = function (recordId, afileId ,fileType, langId, slideScreen) {
 
 
 loadImages = function (recordId, imageType, slide_screen, langId) {
-    fcom.ajax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId, slide_screen}, function (t) {	
-        $('#imageListingJs').html(t);
+    fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images' ), {recordId, imageType, langId, slide_screen}, function (t) {	
+        fcom.removeLoader();
+        $.ykmsg.close();
+        $('#imageListingJs').html(t.html);
     });
 };
 $(document).on('change', '#imageLanguageJs', function() {

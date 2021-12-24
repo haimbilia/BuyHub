@@ -1,19 +1,21 @@
-$(document).ready(function() {
-    searchBlogPostCategories();
+$(document).ready(function () {
+	searchBlogPostCategories();
 });
-(function() {
+(function () {
 
 	searchBlogPostCategories = function () {
-		fcom.ajax(fcom.makeUrl('BlogPostCategories', 'search'), '', function (res) {
-			$("#listing").html(res);
+		fcom.updateWithAjax(fcom.makeUrl('BlogPostCategories', 'search'), '', function (res) {
+			$("#listing").html(res.html);
+			$.ykmsg.close();
+			fcom.removeLoader();
 		});
 	};
 
-	reloadList = function(){
+	reloadList = function () {
 		searchBlogPostCategories();
 	}
 
-    displaySubCategories = function (obj, catId = 0, data, callable = '') {
+	displaySubCategories = function (obj, catId = 0, data, callable = '') {
 		$(obj).removeClass('clickable');
 		if (catId > 0) {
 			var recordId = catId;
@@ -40,8 +42,8 @@ $(document).ready(function() {
 			}
 			if (catId == 0) {
 				togglePlusMinus(recordId);
-			}	
-			
+			}
+
 			if (catId > 0) {
 				updateCatOrder(data);
 			}
@@ -52,14 +54,14 @@ $(document).ready(function() {
 		});
 	}
 
-    togglePlusMinus = function (catId) {
+	togglePlusMinus = function (catId) {
 		$("#" + catId).children('div').children('.sortableListsOpener').remove();
 		if ($("#" + catId).hasClass('sortableListsClosed')) {
 			$("#" + catId).removeClass('sortableListsClosed').addClass('sortableListsOpen');
-			$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon cat'+catId+'-js" onclick="hideItems(this)"></i></span>');
+			$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-minus clickable sort-icon cat' + catId + '-js" onclick="hideItems(this)"></i></span>');
 		} else {
 			$("#" + catId).removeClass('sortableListsOpen').addClass('sortableListsClosed');
-			$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon cat'+catId+'-js" onclick="displaySubCategories(this)"></i></span>');
+			$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon cat' + catId + '-js" onclick="displaySubCategories(this)"></i></span>');
 		}
 
 		$("#" + catId + ' > ul:first > li:has(> ul)').children('div').children('.sortableListsOpener').remove();
@@ -71,7 +73,7 @@ $(document).ready(function() {
 		fcom.updateWithAjax(fcom.makeUrl('BlogPostCategories', 'updateOrder'), data, function (res) {
 			searchBlogPostCategories();
 			$("#js-cat-section").removeClass('overlay-blur');
-			setTimeout(function(){
+			setTimeout(function () {
 				data = queryStringToJSON(data);
 				goToCategory(data.catId);
 			}, 1000);
@@ -94,25 +96,25 @@ $(document).ready(function() {
 
 			if (i < parentIds.length) {
 				const element = $('.cat' + parentIds[i] + '-js')[0];
-				i = i+1;
+				i = i + 1;
 				displaySubCategories(element, 0, '', 'goToCategory');
 			}
 			return;
 		} else {
 			i = 0;
 			fcom.ajax(fcom.makeUrl('BlogPostCategories', 'getParentIds', [catId]), '', function (t) {
-				var ans = JSON.parse(t);	
-				if (0 < ans.status) {					
-					parentIds = ans.data;					
-					if (i < parentIds.length) {						
+				var ans = JSON.parse(t);
+				if (0 < ans.status) {
+					parentIds = ans.data;
+					if (i < parentIds.length) {
 						const element = $('.cat' + parentIds[i] + '-js')[0];
-						i = i+1;
+						i = i + 1;
 						displaySubCategories(element, 0, '', 'goToCategory');
 					}
 				}
 			});
 		}
-	}  
+	}
 	goToBlog = function (prodCatId) {
 		window.location.href = fcom.makeUrl('BlogPosts', 'index', [prodCatId]);
 	};

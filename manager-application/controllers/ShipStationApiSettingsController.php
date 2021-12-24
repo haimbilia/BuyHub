@@ -13,7 +13,8 @@ class ShipStationApiSettingsController extends ShippingSettingsController
         
         $this->set('frm', $frm);
         $this->set('shippingMethod', $this->keyName);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setup()

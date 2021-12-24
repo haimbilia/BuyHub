@@ -42,12 +42,14 @@ class TransactionsController extends ListingBaseController {
 
     public function shippingTransactionSearch() {
         $this->getListingData('utxn_id', 'DESC');
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function getRows() {
         $this->getListingData('utxn_id', 'DESC');
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getListingData($customSortBy = false, $customOrder = false) {
@@ -135,7 +137,8 @@ class TransactionsController extends ListingBaseController {
         $this->set('includeTabs', false);
         $this->set('userId', $userId);
         $this->set('formTitle', Labels::getLabel('LBL_USER_TRANSACTIONS_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($userId = 0) {

@@ -580,7 +580,8 @@ class PromotionsController extends ListingBaseController
         $this->set('includeTabs', $enableTabs);
         $this->set('activeTab', 'GENERAL');
         $this->set('formTitle', Labels::getLabel('LBL_PPC_PROMOTION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function media($recordId = 0)
@@ -642,7 +643,8 @@ class PromotionsController extends ListingBaseController
 
         $this->set('mediaFrm', $mediaFrm);
         $this->set('screen', applicationConstants::SCREEN_DESKTOP);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($recordId = 0, $lang_id = 0, $screen = 0)
@@ -705,7 +707,8 @@ class PromotionsController extends ListingBaseController
         $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->set('screenTypeArr', array(0 => '') + applicationConstants::getDisplaysArr($this->siteLangId));
         $this->set('language', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function autoCompleteSelprods(int $userId = 0, int $selProdId = 0, bool $return = false)

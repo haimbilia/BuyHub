@@ -65,7 +65,8 @@ class QuestionnairesController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setup()
@@ -134,7 +135,8 @@ class QuestionnairesController extends ListingBaseController
         $this->set('questionnaire_id', $questionnaire_id);
         $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setupLang()
@@ -205,7 +207,8 @@ class QuestionnairesController extends ListingBaseController
         $this->set('questionnaire_lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function deleteRecord()
@@ -266,7 +269,8 @@ class QuestionnairesController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function questions($questionnaireId)
@@ -347,7 +351,8 @@ class QuestionnairesController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function viewFeedback($feedbackId, $page = 1)
@@ -377,7 +382,8 @@ class QuestionnairesController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', array('page' => $page, 'feedbackId' => $feedbackId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function generateLink($questionnaireId)
@@ -398,7 +404,8 @@ class QuestionnairesController extends ListingBaseController
         $this->set('questionnaireData', $record);
         
         $this->set('link', UrlHelper::generateFullUrl('Questionnaire', 'view', array($questionnaireId), CONF_WEBROOT_FRONT_URL));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function searchQuestionsToLink()
@@ -427,7 +434,8 @@ class QuestionnairesController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function linkQuestionsForm($questionnaire_id)
@@ -440,7 +448,8 @@ class QuestionnairesController extends ListingBaseController
         $this->set('questionnaire_id', $questionnaire_id);
         $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function addQuestion()

@@ -12,8 +12,8 @@
         productId = productId || $("#addProductfrm input[name='product_id']").val();
         langId = langId || $("#addProductfrm [name='lang_id']").val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Products', 'form', [productId]), { langId, autoFillLangData }, function (res) {
-            $('.mainJs').replaceWith(res);
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [productId]), { langId, autoFillLangData }, function (res) {
+            $('.mainJs').replaceWith(res.html);
             fcom.removeLoader();
         });
     };
@@ -23,34 +23,34 @@
         let langId = $("#addProductfrm [name='lang_id']").val();
         let productType = $(el).val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Products', 'form', [productId, productType]), { langId }, function (res) {
-            $('.mainJs').replaceWith(res);
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [productId, productType]), { langId }, function (res) {
+            $('.mainJs').replaceWith(res.html);
             fcom.removeLoader();
         });
     };
 
     addBrand = function () {
         fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Brands', "form"), "", function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl('Brands', "form"), "", function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
 
     addCategory = function () {
         fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ProductCategories', "form"), "", function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl('ProductCategories', "form"), "", function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
     addTaxCategory = function () {
         fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('TaxCategories', "form"), "", function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl('TaxCategories', "form"), "", function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -182,8 +182,10 @@
     prodSpecifications = function () {
         var productId = $("#addProductfrm input[name='product_id']").val();
         var langId = $("#addProductfrm [name='lang_id']").val();
-        fcom.ajax(fcom.makeUrl('Products', 'prodSpecifications'), { product_id: productId, langId }, function (res) {
-            $('#specificationsListJs').html(res);
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'prodSpecifications'), { product_id: productId, langId }, function (res) {
+            $.ykmsg.close();
+            fcom.removeLoader();
+            $('#specificationsListJs').html(res.html);
             if ($('#specificationsListJs').find('table tbody tr').length == 0) {
                 $('#specificationsListJs').find('table').addClass('hide');
                 $('#specificationsListSeprJs').addClass('hide');
@@ -224,7 +226,7 @@
             return;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId }, function (t) {
-            prodSpecifications();            
+            prodSpecifications();
         });
     };
 
@@ -265,14 +267,14 @@
                 return;
             }
         }
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Products', "imageForm", [productId, tempProductId]), '', function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl('Products', "imageForm", [productId, tempProductId]), '', function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
+            fcom.removeLoader();
             loadImageOptions();
             var fileType = $('#image_file_type').val();
             var productId = $('#image_product_id').val();
             productImages(productId, fileType);
-            fcom.removeLoader();
         });
     };
     loadImageOptions = function () {
@@ -309,8 +311,10 @@
     };
 
     productImages = function (product_id, file_type, option_id = 0, lang_id = 0) {
-        fcom.ajax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
-            $('#productImagesJs').html(t);
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
+            fcom.removeLoader();
+            $.ykmsg.close();
+            $('#productImagesJs').html(t.html);
         });
     };
 
@@ -411,7 +415,6 @@
             clearTimeout(upcTypeTriggerEvent);
         }
         upcTypeTriggerEvent = setTimeout(function () {
-
             $('#variantsListJs').prepend(fcom.getLoader());
             let type = $('.upc_type:checked').val();
             let productId = getCurrentFrmProductId();
@@ -438,9 +441,10 @@
                     });
                 });
             }
-            fcom.ajax(fcom.makeUrl('Products', "upcListing"), { productId, langId, type, productOptions }, function (t) {
-                $('#variantsListJs').html(t);
+            fcom.updateWithAjax(fcom.makeUrl('Products', "upcListing"), { productId, langId, type, productOptions }, function (t) {
                 fcom.removeLoader();
+                $.ykmsg.close();
+                $('#variantsListJs').html(t.html);
                 $('#addProductfrm button[type="submit"]').prop("disabled", false);
             });
         }, 2000);
@@ -528,23 +532,25 @@
             productId = getCurrentFrmTempProductId();
             fileType = tempImageType;
         }
-        fcom.ajax(fcom.makeUrl('Products', 'images', [productId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [productId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {
+            $.ykmsg.close();
+            fcom.removeLoader();
             $('#productDefaultImagesJs li').not(":first").remove();
-            $('#productDefaultImagesJs').append(t);
+            $('#productDefaultImagesJs').append(t.html);
         });
-    };  
+    };
 
     digitalDownloadsForm = function (type, callback = '') {
-        $.ykmodal(fcom.getLoader(),false,'modal-dialog-vertical-md');
         let productId = getCurrentFrmProductId();
-        fcom.ajax(fcom.makeUrl('Products', "digitalDownloadForm", [productId, type]), "", function (t) {            
-            $.ykmodal(t,false,'modal-dialog-vertical-md');
+        fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [productId, type]), "", function (t) {
+            $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
+            fcom.removeLoader();
+            $.ykmsg.close();
             if (typeof callback == 'function') {
                 callback();
-            }else{                
-                getDigitalDownloads(type,productId); 
-            }            
-            fcom.removeLoader();
+            } else {
+                getDigitalDownloads(type, productId);
+            }
         });
     };
 
@@ -575,9 +581,9 @@
                     return;
                 }
                 fcom.displaySuccessMessage(t.msg);
-                frm.find('input[type=file],input[type=text]').each(function (i, v) {               
+                frm.find('input[type=file],input[type=text]').each(function (i, v) {
                     $(v).val('');
-                });                
+                });
                 getDigitalDownloads(t.downloadType, t.recordId, t.langId, t.optionComb);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -586,22 +592,26 @@
         });
     };
 
-    getDigitalDownloads = function (downloadType, recordId, langId = 0 , optionCombi = 0) {
-        console.log(optionCombi,"<<<");
+    getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {
+        console.log(optionCombi, "<<<");
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
-            fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
-                if(langId == 0   && optionCombi == 0){
-                    $("#digitalLinksDefaultListJs").html(res); 
-                }  
-                $("#digitalFrmListJs").html(res);              
+            fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
+                $.ykmsg.close();
+                fcom.removeLoader();
+                if (langId == 0 && optionCombi == 0) {
+                    $("#digitalLinksDefaultListJs").html(res.html);
+                }
+                $("#digitalFrmListJs").html(res.html);
             });
         } else {
-            fcom.ajax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {              
-                if(langId == 0   && optionCombi == 0){
-                    $("#digitalFilesDefaultListJs").html(res);
+            fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {
+                $.ykmsg.close();
+                fcom.removeLoader();
+                if (langId == 0 && optionCombi == 0) {
+                    $("#digitalFilesDefaultListJs").html(res.html);
                 }
-                $("#digitalFrmListJs").html(res); 
+                $("#digitalFrmListJs").html(res.html);
             });
         }
     };
@@ -614,7 +624,7 @@
             $('#digitalDownloadFrm input[name=dd_link_ref_id]').val(subRefId);
             $("#downloadableFileMainJs").hide();
             $('#digitalDownloadFrm input[name=is_preview]').val(1);
-            $('#digitalDownloadFrm input[name=ref_file_id]').val(subRefId);            
+            $('#digitalDownloadFrm input[name=ref_file_id]').val(subRefId);
 
         });
     };
@@ -790,21 +800,21 @@ $(document).on('change', '#image_lang_id', function () {
 
 $(document).on('change', '#digitalFrmLangId', function () {
     let langId = $(this).val();
-    let optionCombi = $('#digitalFrmOptionId').val() || 0;  
+    let optionCombi = $('#digitalFrmOptionId').val() || 0;
     let recordId = $('#digitalFrmRecordId').val();
-    let downloadType = $('#digitalFrmdownloadType').val(); 
-    getDigitalDownloads (downloadType, recordId, langId , optionCombi);
+    let downloadType = $('#digitalFrmdownloadType').val();
+    getDigitalDownloads(downloadType, recordId, langId, optionCombi);
 });
 
 $(document).on('change', '#digitalFrmOptionId', function () {
-    let optionCombi = $(this).val();    
-    let langId = $('#digitalFrmLangId').val(); 
+    let optionCombi = $(this).val();
+    let langId = $('#digitalFrmLangId').val();
     let recordId = $('#digitalFrmRecordId').val();
-    let downloadType = $('#digitalFrmdownloadType').val(); 
-    getDigitalDownloads (downloadType, recordId, langId , optionCombi);
+    let downloadType = $('#digitalFrmdownloadType').val();
+    getDigitalDownloads(downloadType, recordId, langId, optionCombi);
 });
 
-$('.stock-nav > ul > li a').click(function (e) { 
+$('.stock-nav > ul > li a').click(function (e) {
     $(this).closest('li').siblings().removeClass('is-active');
     $(this).closest('li').addClass('is-active');
 });

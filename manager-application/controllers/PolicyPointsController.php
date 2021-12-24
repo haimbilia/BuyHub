@@ -44,7 +44,8 @@ class PolicyPointsController extends ListingBaseController
         $this->set("arrListing", $records);
         $this->set("policyPointTypeArr", PolicyPoint::getPolicyPointTypesArr($this->siteLangId));
         $this->set('recordCount', $srch->recordCount());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -68,7 +69,8 @@ class PolicyPointsController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('ppoint_id', $ppointId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -145,7 +147,8 @@ class PolicyPointsController extends ListingBaseController
         $this->set('lang_id', $lang_id);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()

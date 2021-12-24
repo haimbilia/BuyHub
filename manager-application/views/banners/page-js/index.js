@@ -12,32 +12,32 @@ $(document).on('change', '#imageLanguageJs', function (e) {
     addNewBanner = function (bannerLocationId) {
         fcom.resetEditorInstance();
         $(".selectAllJs, .selectItemJs").prop("checked", false)
-        $.ykmodal(fcom.getLoader(), false, '');
-        fcom.ajax(fcom.makeUrl(controllerName, 'form'), { bannerLocationId }, function (t) {
-            $.ykmodal(t, false, '');
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), { bannerLocationId }, function (t) {
+            $.ykmodal(t.html, false, '');
             fcom.removeLoader();
+            $.ykmsg.close();
         });
     };
 
     editRecord = function (recordId, bannerLocationId) {
         fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader());
         data = { recordId, bannerLocationId };
-        fcom.ajax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form'), data, function (t) {
+            $.ykmodal(t.html);
             fcom.removeLoader();
+            $.ykmsg.close();
         });
     };
 
     mediaForm = function (recordId, bannerLocationId, langId = 0, slide_screen = 1) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(
+        fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "media", [recordId, bannerLocationId, langId, slide_screen]),
             "",
             function (t) {
                 fcom.removeLoader();
                 loadImages(bannerLocationId, recordId, "logo", slide_screen, langId);
-                $.ykmodal(t);
+                $.ykmodal(t.html);
+                $.ykmsg.close();
             }
         );
     };
@@ -46,8 +46,10 @@ $(document).on('change', '#imageLanguageJs', function (e) {
         let slidescreen = $('#slideScreenJs').val();
         var data = { bannerLocationId, recordId, imageType, langId, screen: slidescreen };
         console.log(data);
-        fcom.ajax(fcom.makeUrl(controllerName, 'images'), data, function (t) {
-            $('#imageListingJs').html(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images'), data, function (t) {
+            fcom.removeLoader();
+            $.ykmsg.close();
+            $('#imageListingJs').html(t.html);
             reloadList();
         });
     };

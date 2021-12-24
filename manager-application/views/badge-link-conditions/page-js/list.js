@@ -62,12 +62,12 @@ $(document).on('change', '#conditionTypeJs', function () {
 
         /* !! is used to convert variable type in to bool. */
         var displayInPopup = !!displayInPopup;
-        $.ykmodal(fcom.getLoader(), displayInPopup);
         var data = (0 < recordId) ? ("recordId=" + recordId) : '';
 
-        fcom.ajax(fcom.makeUrl(controllerName, 'form', [badgeId]), data, function (t) {
-            $.ykmodal(t, displayInPopup);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [badgeId]), data, function (t) {
+            $.ykmodal(t.html, displayInPopup);
             fcom.removeLoader();
+            $.ykmsg.close();
         });
     };
 

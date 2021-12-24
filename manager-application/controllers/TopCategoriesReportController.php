@@ -116,7 +116,8 @@ class TopCategoriesReportController extends ListingBaseController
             $this->set('pageSize', $pageSize);
             $this->set('postedData', $post);
             $this->set('catTreeAssocArr', $catTreeAssocArr);
-            $this->_template->render(false, false);
+            $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
         }
     }
 

@@ -127,7 +127,8 @@ class BlogCommentsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()

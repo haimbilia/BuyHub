@@ -80,7 +80,8 @@ class ManualShippingApiController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function form($mshipapi_id = 0)
@@ -104,7 +105,8 @@ class ManualShippingApiController extends ListingBaseController
         $this->set('mshipapi_id', $mshipapi_id);
         $this->set('stateId', $stateId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setup()
@@ -191,7 +193,8 @@ class ManualShippingApiController extends ListingBaseController
         $this->set('langFrm', $langFrm);
         $this->set('languages', Language::getAllNames());
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function langSetup()

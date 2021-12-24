@@ -71,7 +71,8 @@ class BadgeRequestsController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getRequestedBadgeObj()
@@ -108,7 +109,8 @@ class BadgeRequestsController extends ListingBaseController
         $this->set('blinkCondId', $blinkCondId);
         $this->set('frm', $frm);
         $this->set('badgeReqId', $badgeReqId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -269,7 +271,8 @@ class BadgeRequestsController extends ListingBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('records', $records);
         $this->set('postedData', FatApp::getPostedData());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function unlinkRecord(int $badgeReqId, int $record_id = 0)

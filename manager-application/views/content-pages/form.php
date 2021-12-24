@@ -8,8 +8,6 @@ $fld->setFieldTagAttribute('id', "urlrewrite_custom");
 $fld->htmlAfterField = '<span class="form-text text-muted">' . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Cms', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</span>';
 $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
 
-$pageLayout = $frm->getField('cpage_layout');
-// $pageLayout->setFieldTagAttribute('onchange', "showLayout($(this))");
 $displayLangTab = false;
 $otherButtons = [
     [

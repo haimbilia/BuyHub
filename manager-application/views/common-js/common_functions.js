@@ -11,11 +11,13 @@ function setSiteDefaultLang(langId) {
 function getNotifications() {
     $("#notificationList").prepend(fcom.getLoader());
 
-    fcom.ajax(
+    fcom.updateWithAjax(
         fcom.makeUrl("Notifications", "notificationList"),
         "",
         function (res) {
-            $("#notificationList").html(res);
+            $.ykmsg.close();
+            fcom.removeLoader();
+            $("#notificationList").html(res.html);
         }
     );
 }
@@ -75,7 +77,7 @@ tooltipCopyHelper = function (obj, title) {
         .tooltip("update")
         .tooltip("show");
 
-    $(obj).mouseout(function () {   
+    $(obj).mouseout(function () {
         $(obj)
             .tooltip("hide")
             .attr("data-original-title", langLbl.clickToCopy)
@@ -352,10 +354,8 @@ $(document).ready(function () {
             markNavActive($(this));
         } else {
             var selectors = $(this).data("selector");
-            if ('undefined' != typeof selectors) {
-                if (selectors.includes(controllerName)) {
-                    markNavActive($(this));
-                }
+            if ('undefined' != typeof selectors && -1 != jQuery.inArray(controllerName, selectors)) {
+                markNavActive($(this));
             }
         }
     });

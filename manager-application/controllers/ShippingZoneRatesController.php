@@ -62,7 +62,9 @@ class ShippingZoneRatesController extends ListingBaseController {
         $this->set('recordId', $zoneId);
         $this->set('frm', $frm);
         $this->set('rateData', $data);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);nder(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup() {
@@ -123,8 +125,10 @@ class ShippingZoneRatesController extends ListingBaseController {
         $this->set('langId', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('activeLangtab', true);
-        $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);ayoutDirection($langId));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup() {

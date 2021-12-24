@@ -230,7 +230,8 @@ class WithdrawalRequestsController extends ListingBaseController
         $this->set('displayLangTab', false);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_WITHDRAWAL_REQUEST_UPDATE', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -318,7 +319,8 @@ class WithdrawalRequestsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }  
         $this->set('details', $record);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     

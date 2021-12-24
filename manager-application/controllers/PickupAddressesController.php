@@ -136,7 +136,8 @@ class PickupAddressesController extends ListingBaseController
         $this->set('langId', $langId);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('slotData', $slotData);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
