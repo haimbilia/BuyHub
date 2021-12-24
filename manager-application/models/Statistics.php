@@ -716,6 +716,16 @@ class Statistics extends MyAppModel
         $rs = $srch->getResultSet();
         $res = $this->db->fetch($rs);
         $totalUser = $res['total_users'];
+
+        $srch = new SearchBase('tbl_user_cart', 'tuc');
+        $srch->addMultipleFields(array('count(usercart_user_id) as total_users'));
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addDirectCondition('usercart_user_id not REGEXP "^-?[0-9]+$"');
+        $rs = $srch->getResultSet();
+        $res = $this->db->fetch($rs);
+        $totalUser += $res['total_users'];
+
         $cartRes = $this->getAddedToCartCount();
         $addedToCartCount = $cartRes["cart_count"];
         $purchasedCount = $this->getUserOrderStatsCount('purchased');

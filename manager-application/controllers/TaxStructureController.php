@@ -21,9 +21,7 @@ class TaxStructureController extends ListingBaseController {
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('actionItemsData', HtmlHelper::getDefaultActionItems($fields, $this->modelObj));
         $this->getListingData();
-        $this->_template->addJs([
-            'tax-structure/page-js/index.js'
-        ]);
+        $this->_template->addJs('tax-structure/page-js/index.js');
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -37,8 +35,7 @@ class TaxStructureController extends ListingBaseController {
     }
 
     private function getListingData() {
-        $db = FatApp::getDb();
-        $post = FatApp::getPostedData();
+        $db = FatApp::getDb(); 
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -119,10 +116,10 @@ class TaxStructureController extends ListingBaseController {
         $frm = new Form('frmTaxStructure', array('id' => 'frmTaxStructure'));
         $frm->addHiddenField('', 'taxstr_id', FatUtility::int($taxStrId));
         $frm->addRequiredField(Labels::getLabel('FRM_TAX_NAME', $this->siteLangId), 'taxstr_name');
-        $frm->addCheckBox(Labels::getLabel('FRM_COMBINED_TAX', $this->siteLangId), 'taxstr_is_combined', 1);
+        $frm->addCheckBox(Labels::getLabel('FRM_COMBINED_TAX', $this->siteLangId), 'taxstr_is_combined', 1,[],false,0);
         HtmlHelper::configureCheckboxLabel($frm, 'taxstr_is_combined');
 
-        $componentFld = $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId), 'taxstr_component_name[]', '', ['class' => 'test']);
+        $componentFld = $frm->addTextBox(Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId), 'taxstr_component_name[]', '', ['placeholder' => Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId).' 1']);
         $htmlFld = $frm->addHTML('', 'component_link', '');
         $componentFld->attachField($htmlFld);
         $componentFld->fieldWrapper = ['<div class="component_link"><div class="input-group mb-2 component-row--js">', '</div></div>'];
@@ -143,8 +140,7 @@ class TaxStructureController extends ListingBaseController {
         $this->objPrivilege->canEditTax();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $lang = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
-        $frm = $this->getForm($recordId);
-
+        $frm = $this->getForm($recordId); 
         if (0 < $recordId) {
             $taxStrData = TaxStructure::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId);
             $combinedData = TaxStructure::getAttributesById($recordId, ['taxstr_is_combined', 'taxstr_id']);
@@ -181,13 +177,14 @@ class TaxStructureController extends ListingBaseController {
     }
 
     public function setup() {
-        $this->objPrivilege->canEditTax();
-
-        $frm = TaxStructure::getForm($this->siteLangId);
-        $post = FatApp::getPostedData();
-
+        $this->objPrivilege->canEditTax(); 
+        $frm = $this->getForm(FatApp::getPostedData('taxstr_id', FatUtility::VAR_INT,0)); 
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData()); 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+        if($post['taxstr_is_combined'] == 1  && empty(array_filter($post['taxstr_component_name']))){
+            LibHelper::exitWithError(Labels::getLabel('ERR_COMPONENT_NAME_SHOULD_NOT_EMPTY!'), true);
         }
         $recordId = $post['taxstr_id'];
         unset($post['taxstr_id']);
@@ -316,8 +313,9 @@ class TaxStructureController extends ListingBaseController {
             $htmlFld = $frm->addHTML('', 'component_link', '<div class="separator separator-dashed my-4"></div>' . '<h3 class="h3">' . Labels::getLabel('FRM_TAX_COMPONENT_NAME', $lang_id) . '</h3>');
             $langcombinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, $lang_id);
             $combinedTaxes = (new TaxStructure())->getCombinedTaxesForLang($recordId, CommonHelper::getDefaultFormLangId());
+            $count = 1;
             foreach ($combinedTaxes as $key => $value) {
-                $fld = $frm->addTextBox('', 'taxstr_component_name[]', $langcombinedTaxes[$key] ?? '',['Placeholder'=>Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId)]);
+                $fld = $frm->addTextBox('', 'taxstr_component_name[]', $langcombinedTaxes[$key] ?? '',['Placeholder'=>Labels::getLabel('FRM_TAX_COMPONENT_NAME', $this->siteLangId).' '.$count++]);
                 $fld->developerTags['noCaptionTag'] = true;
             }
         }

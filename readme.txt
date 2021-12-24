@@ -445,7 +445,14 @@ Bugs :
     => 060600 - Admin UI: Suggestion to give information, on what basis the search functionality will work under the reports section.
     => 060619 - Admin UI: "No Record Found" is showing after clicking on the Clear button under the sales reports section.
     => 060682 - Admin UI: Heading name is not matched with the title and 1st letter of the heading is not capital under the Import/Export section.
-    
+
+==================TV-9.4.0.20211215====================
+    => Dashboard Stats
+    => Product page
+    => UAT Fixes
+
+==================TV-9.4.0.20211223===================
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
 
