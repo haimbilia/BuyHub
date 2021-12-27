@@ -45,7 +45,7 @@ class SlidesController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TESTIMONIAL_TITLE', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_SLIDE_TITLE', $this->siteLangId));
         $this->checkEditPrivilege(true);
         $this->getListingData();
 
@@ -119,6 +119,7 @@ class SlidesController extends ListingBaseController
 
     public function form()
     {
+        $this->checkEditPrivilege(true);
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $frm = $this->getForm($recordId);
         $langId = $this->siteLangId;
@@ -148,8 +149,9 @@ class SlidesController extends ListingBaseController
 
         $slideImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0, $langId, $universalImage);
         $this->set('image', $slideImage);
-        $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('formTitle', Labels::getLabel('LBL_SLIDE_SETUP', $this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm($recordId = 0)
@@ -242,6 +244,7 @@ class SlidesController extends ListingBaseController
 
     public function langForm($autoFillLangData = 0)
     {
+        $this->checkEditPrivilege(true);
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
@@ -278,22 +281,9 @@ class SlidesController extends ListingBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->checkEditPrivilege(true);
-        $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $langId);
-        $this->set('formTitle', $formTitle);
-        $otherButtons = [
-            [
-                'attr' => [
-                    'href' => 'javascript:void(0)',
-                    'onclick' => 'mediaForm(' . $recordId . ')',
-                    'title' => Labels::getLabel('LBL_MEDIA', $langId),
-                ],
-                'label' => Labels::getLabel('LBL_MEDIA', $langId),
-                'isActive' => false
-            ]
-        ];
-        $this->set('otherButtons', $otherButtons);
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
+        $this->set('formTitle', Labels::getLabel('LBL_SLIDE_SETUP', $this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getLangForm($langId = 0)
@@ -360,6 +350,15 @@ class SlidesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    protected function isMediaUploaded($recordId)
+    {
+        $attachment = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $recordId, 0);
+        if (false !== $attachment && 0 < $attachment['afile_id']) {
+            return true;
+        }
+        return false;
+    }
+
     public function images()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -381,7 +380,8 @@ class SlidesController extends ListingBaseController
         $this->set('universalImage', $universalImage);
         $this->set('recordId', $recordId);
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -508,7 +508,8 @@ class SlidesController extends ListingBaseController
         $this->set('imageFrm', $imageFrm);
         $this->set('languageCount', count($languages));
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -525,7 +526,6 @@ class SlidesController extends ListingBaseController
         }
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'slide_screen', $screenArr, '', array(), '');
-        $frm->addHTML('', Labels::getLabel('FRM_SLIDE_IMAGE', $this->siteLangId), Labels::getLabel('FRM_SLIDE_IMAGE', $this->siteLangId));
         $frm->addHiddenField('', 'file_type', AttachedFile::FILETYPE_HOME_PAGE_BANNER);
         $frm->addHiddenField('', 'min_width', 1350);
         $frm->addHiddenField('', 'min_height', 405);

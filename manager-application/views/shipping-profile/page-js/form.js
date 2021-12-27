@@ -44,8 +44,10 @@ $(document).ready(function () {
         }
 
         $(prodListing).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('shippingProfileProducts', 'search', [profileId]), data, function (res) {
-            $(prodListing).html(res);
+        fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'search', [profileId]), data, function (res) {
+            $.ykmsg.close();
+            fcom.removeLoader();
+            $(prodListing).html(res.html);
         });
         $(shipListing).html('');
         fcom.removeLoader();
@@ -54,8 +56,10 @@ $(document).ready(function () {
     searchProductsSection = function (profileId) {
         var dv = '#product-section--js';
         $(dv).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('shippingProfileProducts', 'index', [profileId]), '', function (res) {
-            $(dv).html(res);
+        fcom.updateWithAjax(fcom.makeUrl('shippingProfileProducts', 'index', [profileId]), '', function (res) {
+            $.ykmsg.close();
+			fcom.removeLoader();
+            $(dv).html(res.html);
             searchProducts(profileId);
         });
         fcom.removeLoader();
@@ -89,8 +93,10 @@ $(document).ready(function () {
 
     searchZone = function (profileId, scrollToNew = false) {
         $(zoneListing).html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('ShippingZones', 'search', [profileId]), '', function (res) {
-            $(zoneListing).html(res);
+        fcom.updateWithAjax(fcom.makeUrl('ShippingZones', 'search', [profileId]), '', function (res) {
+            $.ykmsg.close();
+			fcom.removeLoader();
+            $(zoneListing).html(res.html);
             if (true == scrollToNew) {
                 setTimeout(function () {
                     $('html, body').animate({
@@ -108,11 +114,11 @@ $(document).ready(function () {
             $.ykmsg.error(langLbl.saveProfileFirst);
             return;
         }
-        $.ykmodal(fcom.getLoader(), false, '');
-        fcom.ajax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
-            $.ykmodal(t, false, '');
+        fcom.updateWithAjax(fcom.makeUrl('ShippingZones', 'form', [profileId, zoneId]), '', function (t) {
+            $.ykmodal(t.html, false, '');
+            $.ykmsg.close();
+            fcom.removeLoader();
         });
-        fcom.removeLoader();
     };
 
 
@@ -170,17 +176,11 @@ $(document).ready(function () {
     };
 
     addEditShipRates = function (zoneId, rateId) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('shippingZoneRates', 'form', [zoneId, rateId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'form', [zoneId, rateId]), '', function (t) {
             $.ykmsg.close();
-            if (isJson(t)) {
-                var ans = JSON.parse(t);
-                $.ykmsg.error(ans.msg);
-                return;
-            } else {
-                $.ykmodal(t, false, '');
-            }
-        }); 
+            $.ykmodal(t.html, false, '');
+            fcom.removeLoader();
+        });
 
     };
 
@@ -203,11 +203,11 @@ $(document).ready(function () {
     };
 
     editRateLangForm = function (zoneId, rateId, langId) {
-        $.ykmodal(fcom.getLoader(), false, '');
-        fcom.ajax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
-            $.ykmodal(t, false, '');
+        fcom.updateWithAjax(fcom.makeUrl('shippingZoneRates', 'langForm', [zoneId, rateId, langId]), '', function (t) {
+            $.ykmodal(t.html, false, '');
+            $.ykmsg.close();
+            fcom.removeLoader();
         });
-        fcom.removeLoader();
     };
 
     setupLangRate = function (frm) {
@@ -243,7 +243,7 @@ $(document).ready(function () {
     getZoneLocation = function (zoneId) {
         $.ajax({
             url: fcom.makeUrl('ShippingZones', 'getLocations', [zoneId, 1]),
-            data: {fIsAjax: 1},
+            data: { fIsAjax: 1 },
             dataType: 'json',
             type: 'post',
             success: function (res) {
@@ -342,12 +342,12 @@ $(document).on('keyup', "input[name='product_name']", function () {
             'source': function (request, response) {
                 $.ajax({
                     url: fcom.makeUrl('shippingProfileProducts', 'autoComplete'),
-                    data: {fIsAjax: 1, keyword: currObj.val(), shipProfileId: shipProfileId},
+                    data: { fIsAjax: 1, keyword: currObj.val(), shipProfileId: shipProfileId },
                     dataType: 'json',
                     type: 'post',
                     success: function (json) {
                         response($.map(json, function (item) {
-                            return {label: item['name'], value: item['name'], id: item['id']};
+                            return { label: item['name'], value: item['name'], id: item['id'] };
                         }));
                     },
                 });

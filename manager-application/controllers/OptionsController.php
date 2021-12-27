@@ -154,7 +154,8 @@ class OptionsController extends ListingBaseController
         $this->set('hideListBox', $hideListBox);
         $this->set('langId', $this->siteLangId);
         $this->set('formTitle', Labels::getLabel('LBL_OPTION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -212,11 +213,11 @@ class OptionsController extends ListingBaseController
             array(),
             false,
             applicationConstants::NO
-        )->requirements()->setRequired();
+        );
 
-        $frm->addCheckBox(Labels::getLabel('FRM_IS_COLOR', $this->siteLangId), 'option_is_color', applicationConstants::YES, array(), false, applicationConstants::NO)->requirements()->setRequired();
+        $frm->addCheckBox(Labels::getLabel('FRM_IS_COLOR', $this->siteLangId), 'option_is_color', applicationConstants::YES, array(), false, applicationConstants::NO);
 
-        $frm->addCheckBox(Labels::getLabel('FRM_DISPLAY_IN_FILTERS', $this->siteLangId), 'option_display_in_filter',applicationConstants::YES, array(), false, applicationConstants::NO)->requirements()->setRequired();
+        $frm->addCheckBox(Labels::getLabel('FRM_DISPLAY_IN_FILTERS', $this->siteLangId), 'option_display_in_filter',applicationConstants::YES, array(), false, applicationConstants::NO);
 
         $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');

@@ -189,7 +189,8 @@ class PluginsController extends ListingBaseController
         $this->set('type', $pluginType);
         $this->set('frm', $frm);
         $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()

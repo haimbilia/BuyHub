@@ -1,10 +1,10 @@
 (function () {
     editRecord = function (id, langId) {
         var data = 'langId=' + langId;
-        $.ykmodal(fcom.getLoader(), false, '');
-        fcom.ajax(fcom.makeUrl('PickupAddresses', 'form', [id, langId]), data, function (res) {
-            $.ykmodal(res, false, 'modal-dialog-vertical-md');
+        fcom.updateWithAjax(fcom.makeUrl('PickupAddresses', 'form', [id, langId]), data, function (res) {
+            $.ykmodal(res.html, false, 'modal-dialog-vertical-md');
             fcom.removeLoader();
+            $.ykmsg.close();
             var oldLabel = $(".label-js").text();
             $(".label-js").attr("data-listlabel", oldLabel).text(langLbl.pickupAddressForm);
             $(".js-add-pickup-addr").addClass('d-none');
@@ -19,26 +19,28 @@
             return;
         if (1 == $(".availabilityType-js:checked").val()) {
             if (1 > $(".slotDays-js:checked").length) {
-                $.mbsmessage(langLbl.selectTimeslotDay, true, 'alert--danger');
+                $.ylmsg.error(langLbl.selectTimeslotDay);
                 return false;
             }
         } else {
             if ('' == $(".selectAllFromTime-js option:selected").val() || '' == $(".selectAllToTime-js option:selected").val()) {
-                $.mbsmessage(langLbl.invalidTimeSlot, true, 'alert--danger');
+                $.ylmsg.error(langLbl.invalidTimeSlot);
                 return false;
             }
         }
-
+        $.ykmodal(fcom.getLoader(), false);
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('PickupAddresses', 'setup'), data, function (t) {
+        fcom.ajax(fcom.makeUrl('PickupAddresses', 'setup'), data, function (t) {
             searchRecords();
             $.ykmodal.close();
         });
     };
     getCountryStates = function (countryId, stateId, div, langId) {
-        fcom.ajax(fcom.makeUrl('Shops', 'getStates', [countryId, stateId, langId]), '', function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Shops', 'getStates', [countryId, stateId, langId]), '', function (res) {
+            $.ykmsg.close();
+            fcom.removeLoader();
             $(div).empty();
-            $(div).append(res);
+            $(div).append(res.html);
         });
     };
 
@@ -48,12 +50,12 @@
         var count = $(".js-slot-individual .rows").length;
         var toTime = $(".js-slot-to-" + day + ":last").val();
 
-        var rowHtml = '<tr class="rows jsDay-' + day + ' row-' + count + '" data-count=' + count + '><td class="border-0"></td>';
-        rowHtml += '<td class="border-0">' + fromTimeHtml + '</td>';
-        rowHtml += '<td class="border-0">' + toTimeHtml + '</td>';
+        var rowHtml = '<tr class="rows jsDay-' + day + ' row-' + count + '" data-count=' + count + '><td></td>';
+        rowHtml += '<td>' + fromTimeHtml + '</td>';
+        rowHtml += '<td>' + toTimeHtml + '</td>';
         rowHtml += '<td class="align-right  border-0"><ul class="actions">';
-        rowHtml += '<li class="d-none addRowBtn' + day + '-js"><a href="javascript:void(0)" onclick="addRow(' + day + ')" class=""><svg class="svg" width="18" height="18"><use xlink:href="/admin/images/retina/sprite-actions.svg#add"></use> </svg></a></li>';
         rowHtml += '<li class="btn-remove-row-js" data-day=' + day + '><a href="javascript:void(0)" > <svg class="svg" width="18" height="18"> <use xlink:href="/admin/images/retina/sprite-actions.svg#delete"> </use></svg></a></li>';
+        rowHtml += '<li class="d-none addRowBtn' + day + '-js"><a href="javascript:void(0)" onclick="addRow(' + day + ')" class=""><svg class="svg" width="18" height="18"><use xlink:href="/admin/images/retina/sprite-actions.svg#add"></use> </svg></a></li>';
         rowHtml += '</td>';
 
         var addRowBtn = $('.addRowBtn' + day + '-js');
@@ -113,7 +115,7 @@
 
         if (fromTime == '' && toTime != '') {
             $(toElement).val("");
-            $.mbsmessage(langLbl.invalidFromTime, true, 'alert--danger');
+            $.ylmsg.error(langLbl.invalidFromTime);
             return false;
         }
 
@@ -160,13 +162,17 @@
 
     displaySlotTimings = function (ele) {
         var selectedVal = $(ele).val();
+        var sundaySelector = '.js-slot-individual .jsDay-' + DAY_SUNDAY;
         if (selectedVal == 2) {
-            $('.js-slot-individual').addClass('d-none');
-            $('.js-slot-individual .jsDay-' + DAY_SUNDAY + ' .jsWeekDay').addClass('d-none');
-            $('.js-slot-individual .jsDay-' + DAY_SUNDAY).removeClass('d-none');
+            $('.js-slot-individual .timeSlotJs').addClass('d-none');
+            $(sundaySelector + ' .jsWeekDay .weekDaysJs').addClass('d-none');
+            $(sundaySelector + ' .jsWeekDay .allDaysJs').removeClass('d-none');
+            $(sundaySelector).removeClass('d-none');
+            $(sundaySelector + ' .jsWeekDay input').prop("checked", true).trigger('change');
         } else {
-            $('.js-slot-individual').removeClass('d-none');
-            $('.js-slot-individual .jsDay-' + DAY_SUNDAY + ' .jsWeekDay').removeClass('d-none');
+            $('.js-slot-individual .timeSlotJs').removeClass('d-none');
+            $(sundaySelector + ' .jsWeekDay .weekDaysJs').removeClass('d-none');
+            $(sundaySelector + ' .jsWeekDay .allDaysJs').addClass('d-none');
         }
     }
 

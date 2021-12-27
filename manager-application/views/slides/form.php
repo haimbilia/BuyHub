@@ -6,10 +6,6 @@ if ($fld != null) {
     $fld->developerTags['noCaptionTag'] = true;
 }
 
-$formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId);
-
-
-
 $otherButtons = [
     [
         'attr' => [

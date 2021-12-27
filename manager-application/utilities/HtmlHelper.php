@@ -408,30 +408,32 @@ class HtmlHelper
         $str .= '</div>';
         return  $str;
     }
+
     /**
      * getFieldHtml
      *
-     * @param  mixed $frm
-     * @param  mixed $fldName
-     * @param  mixed $col
-     * @param  mixed $setFieldTagAttrs 
-     * @param  mixed $labelInfoText  - to show tooltip on label
-     * @param  mixed $labelArr -  to show button on right side of label
-     *  = [
-     *        'attr' => [
-     *            'href' => 'javascript:void(0)',
-     *            'onclick' => 'FN()',
-     *            'title' => <TITLE>
-     *        ],
-     *        'label' => <LABEL>
-     *    ]
-     * @return void
+     * @param  Form $frm
+     * @param  string $fldName
+     * @param  int $col
+     * @param  array $setFieldTagAttrs
+     * @param  string $fieldInfoText
+     * @param  string $labelInfoText : To show tooltip on label
+     * @param  array $labelExtraArr : [
+     *                                   'attr' => [
+     *                                       'href' => 'javascript:void(0)',
+     *                                       'onclick' => 'FN()',
+     *                                       'title' => <TITLE>
+     *                                   ],
+     *                                   'label' => <LABEL>
+     *                               ]
+     * @param  bool $doNotAddFieldWrapper
+     * @return string
      */
-    public static function getFieldHtml($frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [],  string $fieldInfoText = '', string $labelInfoText = '', array $labelExtraArr = [], $doNotAddFieldWrapper = false)
+    public static function getFieldHtml(Form $frm, string $fldName, int $col = 6, array $setFieldTagAttrs = [],  string $fieldInfoText = '', string $labelInfoText = '', array $labelExtraArr = [], bool $doNotAddFieldWrapper = false): string
     {
         $fld = $frm->getField($fldName);
         if (null == $fld) {
-            return;
+            return '';
         }
 
         foreach ($setFieldTagAttrs as $attrkey => $attrVal) {

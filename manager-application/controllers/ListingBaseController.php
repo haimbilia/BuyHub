@@ -38,7 +38,7 @@ class ListingBaseController extends AdminBaseController
         if ($langData) {
             $langFrm->fill($langData);
         }
-        
+
         if (true === $this->isPlugin) {
             $pluginDetail = Plugin::getAttributesById($this->mainTableRecordId, ['plugin_type', 'plugin_identifier']);
             if (!in_array($pluginDetail['plugin_type'], Plugin::HAVING_DESCRIPTION)) {
@@ -55,10 +55,11 @@ class ListingBaseController extends AdminBaseController
         $directory = (str_replace("-controller", "", strtolower(FatUtility::camel2dashed($className))));
         $renderPath = CONF_THEME_PATH . $directory . DIRECTORY_SEPARATOR . "lang-form.php";
         if (file_exists($renderPath)) {
-            $this->_template->render(false, false);
+            $this->set('html', $this->_template->render(false, false, NULL, true));
         } else {
-            $this->_template->render(false, false, '_partial/listing/lang-form.php');
+            $this->set('html', $this->_template->render(false, false, '_partial/listing/lang-form.php', true));
         }
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function langSetup()
@@ -95,7 +96,7 @@ class ListingBaseController extends AdminBaseController
 
     protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
     {
-        $recordId = $classObj->getMainTableRecordId(); 
+        $recordId = $classObj->getMainTableRecordId();
         if (!$classObj->updateLangData((0 < $langId  ? $langId : CommonHelper::getDefaultFormLangId()), $langDataArr)) {
             LibHelper::exitWithError($classObj->getError(), true);
         }

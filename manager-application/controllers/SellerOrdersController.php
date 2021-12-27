@@ -166,7 +166,8 @@ class SellerOrdersController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('classArr', applicationConstants::getClassArr());
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function view($op_id, $print = false)
@@ -1053,7 +1054,8 @@ class SellerOrdersController extends ListingBaseController
         $trackingInfo = $shipmentTracking->getResponse();
 
         $this->set('trackingInfo', $trackingInfo);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupAdditionalOpAttachment()

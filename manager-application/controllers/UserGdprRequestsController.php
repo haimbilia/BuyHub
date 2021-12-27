@@ -157,7 +157,8 @@ class UserGdprRequestsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $this->set('userRequest', $userRequest);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function truncateUserData()

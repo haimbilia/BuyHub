@@ -52,8 +52,4 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
     $(document).ready(function() {
         getCountryStates($("#addrCountryIdJs").val(), <?php echo $stateId; ?>, '#addrStateIdJs');
     });
-
-    setTimeout(() => {
-        stylePhoneNumberFld('.phoneJs');
-    }, 200);
 </script>

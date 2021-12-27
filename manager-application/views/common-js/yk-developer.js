@@ -349,6 +349,11 @@ $(function () {
 
         /* Bind Max Length validator. */
         bindMaxLengthValidator();
+
+        /* Format Phone Number */
+        setTimeout(() => {
+            stylePhoneNumberFld('.phoneJs');
+        }, 200);
     });
 })();
 

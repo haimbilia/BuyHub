@@ -158,7 +158,8 @@ class TaxCategoriesRuleController extends ListingBaseController
         $this->set('ruleLocations', $ruleLocations ?? []);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     /**
@@ -266,7 +267,8 @@ class TaxCategoriesRuleController extends ListingBaseController
         $ruleId = FatUtility::int($ruleId);
         $this->set('taxStrId', $taxStrId);
         $this->set('combTaxes', (new TaxStructure($taxStrId))->getCombinedTaxesByParent($this->siteLangId, $ruleId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function deleteRecord()

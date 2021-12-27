@@ -11,11 +11,13 @@ function setSiteDefaultLang(langId) {
 function getNotifications() {
     $("#notificationList").prepend(fcom.getLoader());
 
-    fcom.ajax(
+    fcom.updateWithAjax(
         fcom.makeUrl("Notifications", "notificationList"),
         "",
         function (res) {
-            $("#notificationList").html(res);
+            $.ykmsg.close();
+            fcom.removeLoader();
+            $("#notificationList").html(res.html);
         }
     );
 }
@@ -75,7 +77,7 @@ tooltipCopyHelper = function (obj, title) {
         .tooltip("update")
         .tooltip("show");
 
-    $(obj).mouseout(function () {   
+    $(obj).mouseout(function () {
         $(obj)
             .tooltip("hide")
             .attr("data-original-title", langLbl.clickToCopy)
@@ -337,9 +339,9 @@ markNavActive = function (ele) {
     ele.addClass("active");
     var menuLink = ele.parents("li:not(.hasNestedChildJs)").find(".menuLinkJs");
     menuLink.addClass("active");
-    var target = menuLink.data('target');
+    var target = menuLink.data('bsTarget');
     $(target).addClass('show');
-    ele.parents("li.hasNestedChildJs").addClass("show").find(".collapseJs").addClass("show");
+    ele.parents("li.hasNestedChildJs").find(".collapseJs").addClass("show");
 };
 
 $(document).ready(function () {
@@ -351,9 +353,8 @@ $(document).ready(function () {
         if (uri == href) {
             markNavActive($(this));
         } else {
-            var urlParts = uri.split('/');
-            var hrefParts = href.split('/');
-            if ("undefined" != typeof (urlParts[1]) && "undefined" != typeof (hrefParts[1]) && urlParts[1] == hrefParts[1]) {
+            var selectors = $(this).data("selector");
+            if ('undefined' != typeof selectors && -1 != jQuery.inArray(controllerName, selectors)) {
                 markNavActive($(this));
             }
         }

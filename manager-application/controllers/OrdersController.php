@@ -149,14 +149,16 @@ class OrdersController extends ListingBaseController
     public function getItemStatusHistory($orderId)
     {
         $this->rowsData($orderId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getRows($orderId = 0)
     {
         $orderId = FatApp::getPostedData('order_id', FatUtility::VAR_INT, $orderId);
         $this->rowsData($orderId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getCommentDataSrchObj(array $attr)
@@ -196,7 +198,8 @@ class OrdersController extends ListingBaseController
         $this->set('recordId', $opId);
         $this->set('formTitle', $opRow['op_selprod_title']);
         $this->set('displayLangTab', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function orderCommentsForm()
@@ -243,9 +246,9 @@ class OrdersController extends ListingBaseController
             (
                 (in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])) ||
                 (in_array($opRow['op_status_id'], $allowedShippingUserStatuses))) &&
-                $this->objPrivilege->canEditSellerOrders($this->admin_id, true) &&
-                !$shippingHanldedBySeller &&
-                ($opRow['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL &&
+            $this->objPrivilege->canEditSellerOrders($this->admin_id, true) &&
+            !$shippingHanldedBySeller &&
+            ($opRow['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL &&
                 $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED));
 
 
@@ -256,7 +259,8 @@ class OrdersController extends ListingBaseController
         $this->set('displayShippingUserForm', $displayShippingUserForm);
         $this->set('includeTabs', $displayShippingUserForm);
         $this->set('displayLangTab', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getShippingUserForm()
@@ -658,7 +662,8 @@ class OrdersController extends ListingBaseController
         $trackingInfo = $shipmentTracking->getResponse();
 
         $this->set('trackingInfo', $trackingInfo);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -900,22 +905,23 @@ class OrdersController extends ListingBaseController
         $this->set('opsShippingDetail', $opsShippingDetail);
         switch ($chargeType) {
             case OrderProduct::CHARGE_TYPE_SHIPPING:
-                $this->_template->render(false, false, 'orders/order-products-shipping.php');
+                $this->set('html', $this->_template->render(false, false, 'orders/order-products-shipping.php', true));
                 break;
             case OrderProduct::CHARGE_TYPE_TAX:
-                $this->_template->render(false, false, 'orders/order-products-tax.php');
+                $this->set('html', $this->_template->render(false, false, 'orders/order-products-tax.php', true));
                 break;
             case OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT:
-                $this->_template->render(false, false, 'orders/order-products-vol-discount.php');
+                $this->set('html', $this->_template->render(false, false, 'orders/order-products-vol-discount.php', true));
                 break;
             case OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT:
-                $this->_template->render(false, false, 'orders/order-products-rewards.php');
+                $this->set('html', $this->_template->render(false, false, 'orders/order-products-rewards.php', true));
                 break;
 
             default:
                 LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_CHARGE_TYPE', $this->siteLangId), true);
                 break;
         }
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updatePayment()
@@ -1042,10 +1048,10 @@ class OrdersController extends ListingBaseController
         if ($page < 2) {
             $page = 1;
         }
-        
+
         $srch = new OrderProductSearch($this->siteLangId, true, true, true);
         $srch->addMultipleFields(['op_id as id', 'CONCAT("#", op_invoice_number, " | ", op_selprod_title) as text']);
-        
+
         $isReturnOrder = FatApp::getPostedData('return_order', FatUtility::VAR_INT, 0);
         if (0 < $isReturnOrder) {
             $srch->joinTable(OrderReturnRequest::DB_TBL, 'INNER JOIN', 'op.op_id = orr.orrequest_op_id', 'orr');
@@ -1066,7 +1072,7 @@ class OrdersController extends ListingBaseController
         $srch->addOrder('op_id', 'DESC');
 
         $result = FatApp::getDb()->fetchAll($srch->getResultSet());
-        
+
         $json = array(
             'pageCount' => $srch->pages(),
             'results' => $result

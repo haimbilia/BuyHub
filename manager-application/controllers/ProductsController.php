@@ -357,7 +357,8 @@ class ProductsController extends ListingBaseController
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         if (FatUtility::isAjaxCall()) {
-            $this->_template->render(false, false);
+            $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
             return;
         }
 
@@ -738,7 +739,8 @@ class ProductsController extends ListingBaseController
         }
 
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getImageFrm()
@@ -789,7 +791,8 @@ class ProductsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('isDefaultLayout', FatApp::getPostedData('isDefaultLayout', FatUtility::VAR_INT, 0));
         $this->set('canEdit', $this->objPrivilege->canEditProducts(0, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setImageOrder()
@@ -923,7 +926,8 @@ class ProductsController extends ListingBaseController
         }
         $this->set('productSpecifications', $productSpecifications);
         $this->set('langId', $langId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function deleteProdSpec()
@@ -967,7 +971,8 @@ class ProductsController extends ListingBaseController
         $this->set('upcCodeData', $upcCodeData);
         $this->set('recordId', $recordId);
         $this->set('langId', $langId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function digitalDownloadForm($recordId, $type)
@@ -1002,7 +1007,8 @@ class ProductsController extends ListingBaseController
 
         $this->set('frm', $frm);
         $this->set('type', $type);   
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupDigitalDownload()
@@ -1204,8 +1210,9 @@ class ProductsController extends ListingBaseController
 
         $this->set('links', $rows);
         $this->set('languages', $languages);
-        $this->set('options', $optionCombinations);
-        $this->_template->render(false, false);
+        $this->set('options', $optionCombinations);  
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false); 
     }
 
     public function getDigitalDownloadAttachments()
@@ -1239,7 +1246,8 @@ class ProductsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('product', $product);
         $this->set('downloadrefType', Product::CATALOG_TYPE_PRIMARY);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function deleteDigitalLink($linkId, $refId)

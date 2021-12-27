@@ -321,7 +321,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         if (FatUtility::isAjaxCall()) {
-            $this->_template->render(false, false);
+            $this->set('html', $this->_template->render(false, false, NULL, true));
+            $this->_template->render(false, false, 'json-success.php', true, false);
             return;
         }
 
@@ -348,7 +349,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function changeRequestStatus()
@@ -385,8 +387,6 @@ class CustomProductsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-
-
         $db = FatApp::getDb();
         $db->startTransaction();
         $prodReqObj = new ProductRequest($preqId);
@@ -397,8 +397,6 @@ class CustomProductsController extends ListingBaseController
             $db->rollbackTransaction();
             LibHelper::exitWithError($prodReqObj->getError(), true);
         }
-
-
 
         if ($status == ProductRequest::STATUS_APPROVED) {
             $data = array_merge($data, json_decode($data['preq_content'], true));
@@ -489,7 +487,6 @@ class CustomProductsController extends ListingBaseController
                 $db->rollbackTransaction();
                 LibHelper::exitWithError($prodObj->getError(), true);
             }
-
 
             /* ] */
 
@@ -683,8 +680,9 @@ class CustomProductsController extends ListingBaseController
     public function imageForm($recordId = 0)
     {
         $frm = $this->getImageFrm($recordId);
-        $this->set('frm', $frm);
-        $this->_template->render(false, false, 'products/image-form.php');
+        $this->set('frm', $frm);    
+        $this->set('html', $this->_template->render(false, false, 'products/image-form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function digitalDownloadForm($recordId, $type)
@@ -710,8 +708,7 @@ class CustomProductsController extends ListingBaseController
         }
 
         $frm = DigitalDownload::getDownloadForm($this->siteLangId, $type, $recordId);
-
-
+        
         $productOptions = ProductRequest::getProductReqOptions($recordId, $this->siteLangId, true);
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
 
@@ -724,8 +721,9 @@ class CustomProductsController extends ListingBaseController
         }
 
         $this->set('frm', $frm);
-        $this->set('type', $type);
-        $this->_template->render(false, false, 'products/digital-download-form.php');
+        $this->set('type', $type);     
+        $this->set('html', $this->_template->render(false, false, 'products/digital-download-form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function prodSpecifications()
@@ -754,7 +752,8 @@ class CustomProductsController extends ListingBaseController
         }
         $this->set('productSpecifications', $specifications);
         $this->set('langId', $langId);
-        $this->_template->render(false, false, 'products/prod-specifications.php');
+        $this->set('html', $this->_template->render(false, false, 'products/prod-specifications.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);      
     }
 
     public function upcListing()
@@ -783,8 +782,9 @@ class CustomProductsController extends ListingBaseController
         $this->set('optionCombinations', $optionCombinations);
         $this->set('upcCodeData', $upcCodeData);
         $this->set('recordId', $recordId);
-        $this->set('langId', $langId);
-        $this->_template->render(false, false, 'products/upc-listing.php');
+        $this->set('langId', $langId);    
+        $this->set('html', $this->_template->render(false, false, 'products/upc-listing.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($recordId, $optionId = 0, $langId = 0)
@@ -803,7 +803,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('record_id', $recordId);
         $this->set('isDefaultLayout', FatApp::getPostedData('isDefaultLayout', FatUtility::VAR_INT, 0));
         $this->set('canEdit', $this->objPrivilege->canEditProducts(0, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);        
     }
 
     public function setup()
@@ -913,9 +914,6 @@ class CustomProductsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-
-
-
     public function setImageOrder()
     {
         $this->checkEditPrivilege();
@@ -932,7 +930,7 @@ class CustomProductsController extends ListingBaseController
             Message::addErrorMessage($preqObj->getError());
             FatUtility::dieWithError(Message::getHtml());
         }
-        $this->set("msg", Labels::getLabel('LBL_Ordered_Successfully', $this->siteLangId));
+        $this->set("msg", $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
 
@@ -1013,7 +1011,6 @@ class CustomProductsController extends ListingBaseController
 
     private function getImagesFrm($preq_id = 0, $lang_id = 0)
     {
-
         $imgTypesArr = $this->getSeparateImageOptions($preq_id, $lang_id);
         $frm = new Form('imageFrm', array('id' => 'imageFrm'));
         $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, 0, array(), '');
@@ -1151,7 +1148,8 @@ class CustomProductsController extends ListingBaseController
         $this->set('links', $links);
         $this->set('languages', $languages);
         $this->set('options', $optionCombinations);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false); 
     }
 
     public function getDigitalDownloadAttachments()
@@ -1180,8 +1178,9 @@ class CustomProductsController extends ListingBaseController
         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
         $this->set('options', $optionCombinations);
         $this->set('recordId', $recordId);
-        $this->set('downloadrefType', Product::CATALOG_TYPE_REQUEST);
-        $this->_template->render(false, false);
+        $this->set('downloadrefType', Product::CATALOG_TYPE_REQUEST);  
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false); 
     }
 
     public function deleteDigitalLink($linkId, $refId)
@@ -1474,7 +1473,6 @@ class CustomProductsController extends ListingBaseController
         $frm->addHiddenField('', 'min_width', 500);
         $frm->addHiddenField('', 'min_height', 500);
         $frm->addHiddenField('', 'record_id', $recordId);
-
         return $frm;
     }
 

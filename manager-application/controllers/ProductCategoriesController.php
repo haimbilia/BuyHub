@@ -66,7 +66,8 @@ class ProductCategoriesController extends ListingBaseController
         $this->set("arrListing", $records);
         $this->set("recordCount", count($records));
         $this->set("canEdit", $this->objPrivilege->canEditProductCategories(0, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getSubCategories()
@@ -80,7 +81,8 @@ class ProductCategoriesController extends ListingBaseController
         $this->set("childCategories", $childCategories);
         $this->set("level", $level);
         $this->set("canEdit", $this->objPrivilege->canEditProductCategories(0, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updateOrder()
@@ -148,7 +150,8 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
         $this->set('canEditRating', $this->objPrivilege->canEditRatingTypes($this->admin_id, true));
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function imagesForm($recordId)
@@ -167,7 +170,8 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('languageCount', count($languages));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getCategoryForm($recordId = 0, $productReq = 0)
@@ -339,7 +343,8 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('imageType', $imageType);
         $this->set('languages', Language::getAllNames());
         $this->set('canEdit', $canEdit);        
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setUpCatImages()
@@ -608,7 +613,8 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getParentIds(int $catId)

@@ -90,7 +90,8 @@ class ExtraAttributesController extends ListingBaseController
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
         $this->set('postedData', $post);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function form($eattrgroup_id, $eattribute_id = 0)
@@ -118,7 +119,8 @@ class ExtraAttributesController extends ListingBaseController
         $this->set('eattribute_id', $eattribute_id);
         $this->set('eattrgroup_id', $eattrgroup_id);
         $this->set('extraAttributeFrm', $extraAttributeFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function setup()
@@ -228,7 +230,8 @@ class ExtraAttributesController extends ListingBaseController
         $this->set('eattribute_eattrgroup_id', $eattribute_eattrgroup_id);
         $this->set('attribute_lang_id', $lang_id);
         $this->set('extraAttributeLangFrm', $extraAttributeLangFrm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
     
     public function langSetup()

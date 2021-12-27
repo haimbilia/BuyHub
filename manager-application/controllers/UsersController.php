@@ -188,7 +188,8 @@ class UsersController extends ListingBaseController
         $this->set('stateId', $stateId);
         $this->set('displayLangTab', false);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -423,7 +424,8 @@ class UsersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('displayLangTab', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupBankInfo()
@@ -471,7 +473,8 @@ class UsersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updatePassword()
@@ -717,7 +720,8 @@ class UsersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('includeTabs', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function sendMail()
@@ -886,7 +890,8 @@ class UsersController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('recordId', $recordId);
         $this->set('displayLangTab', false);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getCookiesPreferencesForm()
@@ -912,8 +917,7 @@ class UsersController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'user_id' => Labels::getLabel('LBL_USER_ID', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_USER_NAME', $this->siteLangId),
-            'shop_name' => Labels::getLabel('LBL_SHOP', $this->siteLangId),
-            'user_registered_initially_for' => Labels::getLabel('LBL_INITIALLY_REGISTERED_AS', $this->siteLangId),
+            'user_registered_initially_for' => Labels::getLabel('LBL_REGISTERED_AS', $this->siteLangId),
             'user_is_buyer' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
             'user_is_supplier' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
             'user_is_advertiser' => Labels::getLabel('LBL_ADVERTISER', $this->siteLangId),
@@ -934,7 +938,6 @@ class UsersController extends ListingBaseController
             'select_all',
             'user_id',
             'user_name',
-            'shop_name',
             'user_registered_initially_for',
             'user_is_buyer',
             'user_is_supplier',

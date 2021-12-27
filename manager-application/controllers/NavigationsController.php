@@ -55,7 +55,8 @@ class NavigationsController extends ListingBaseController
     public function search()
     {
         $this->getListingData();
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getListingData()
@@ -106,7 +107,8 @@ class NavigationsController extends ListingBaseController
         $this->set("includeWrapper", $includeWrapper);
         $this->set("arrListing", $records);
         $this->set("navId", $recordId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getNavLinks(): array
@@ -158,7 +160,8 @@ class NavigationsController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_NAVIGATION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -289,7 +292,8 @@ class NavigationsController extends ListingBaseController
         $this->set('nlink_id', $nlinkId);
         $this->set('frm', $frm);
         $this->set('formTitle', Labels::getLabel('LBL_NAVIGATION_LINK_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupLink()
@@ -408,7 +412,8 @@ class NavigationsController extends ListingBaseController
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('formTitle', Labels::getLabel('LBL_NAVIGATION_LINK_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setupLinksLang()

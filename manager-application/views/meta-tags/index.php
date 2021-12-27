@@ -12,7 +12,7 @@
                         </use>
                     </svg>
                 </button>
-                <div class="card sticky-sidebar card-aside" tabindex="-1" id="card-aside" aria-labelledby="card-asideLabel">
+                <div class="card  offcanvas sticky-sidebar sticky-top  card-aside" tabindex="-1" id="card-aside" aria-labelledby="card-asideLabel">
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title">
@@ -39,9 +39,7 @@
                                             </i>
                                             <div>
                                                 <h6 class="settings-inner-title"><?php echo $metaDetail['name']; ?></h6>
-                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
-                                                    consectetur adipisicing
-                                                    elit. Suscipit est quos </span>
+                                                <span class="settings-inner-desc"><?php echo $metaDetail['msg'];?></span>
                                             </div>
                                         </a>
                                     </li>

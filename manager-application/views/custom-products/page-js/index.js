@@ -6,8 +6,9 @@ $(function() {
     requestStatusForm = function (recordId) {
         $.ykmodal(fcom.getLoader());
         fcom.ajax(fcom.makeUrl('CustomProducts', "requestStatusForm", [recordId]), "", function (t) {
-            $.ykmodal(t);
-            fcom.removeLoader();
+            $.ykmodal(t.html);
+            $.ykmsg.close() ;
+            fcom.removeLoader();            
         });
     }; 
 

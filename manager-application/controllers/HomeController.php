@@ -8,12 +8,7 @@ class HomeController extends ListingBaseController
     {
         parent::__construct($action);
         $this->objPrivilege->canViewAdminDashboard($this->admin_id);
-    }
-
-    public function totalSales(){
-        $statsObj = new Statistics();
-        $statsObj->getStats('total_sales');
-
+        $this->defaultStatsInterval = Statistics::BY_THIS_MONTH;
     }
 
     public function index()
@@ -23,11 +18,10 @@ class HomeController extends ListingBaseController
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
-        $this->set('pageData', $pageData);
-        $this->set('pageTitle', $pageTitle);
-        $this->set('configuredAnalytics', false);
-        $this->set('objPrivilege', $this->objPrivilege);
-        $this->set('intervalsArr', Statistics::getIntervals($this->siteLangId));
+        $statsObj = new Statistics();
+        $orderSalesStats = $statsObj->getOrderSalesStats($this->defaultStatsInterval);
+        $shopsSignupStats = $statsObj->getShopsSignupStats($this->defaultStatsInterval);
+        $userSignupStats = $statsObj->getUserSignupStats($this->defaultStatsInterval);
 
         $analyticArr = array(
             'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID", FatUtility::VAR_STRING, ''),
@@ -58,8 +52,6 @@ class HomeController extends ListingBaseController
                 /* Message::addErrorMessage(Labels::getLabel('LBL_Analytic_Id_does_not_exist_with_Configured_Account',$this->siteLangId)); */
                 //Message::addErrorMessage($e->getMessage());
             }
-
-            $statsObj = new Statistics();
 
             if ($accountId) {
                 $statsInfo = $analytics->getVisitsByDate();
@@ -92,21 +84,24 @@ class HomeController extends ListingBaseController
                 $socialVisits = $analytics->getSocialVisits();
             }
 
+            /* Conversion Stats [*/
             $conversionStats = $statsObj->getConversionStats();
             $conversionChatData = "['Type','user',{ role: 'style' }],";
             foreach ($conversionStats as $key => $val) {
                 $key = Labels::getLabel('LBL_' . ucwords($key), $this->siteLangId);
                 $conversionChatData .= "['" . $key . "', " . $val["count"] . ",'#AEC785'],";
             }
-
             $conversionChatData = rtrim($conversionChatData, ',');
+            $dashboardInfo['conversionChatData'] = $conversionChatData;
+            $dashboardInfo['conversionStats'] = $conversionStats;
+            /* ] */
 
+            /* Statistics [*/
             $salesData = $statsObj->getDashboardLast12MonthsSummary($this->siteLangId, 'sales', array(), 6);
             $salesChartData = array();
             foreach ($salesData as $key => $val) {
                 $salesChartData[$val["duration"]] = $val["value"];
             }
-
 
             $salesEarningsData = $statsObj->getDashboardLast12MonthsSummary($this->siteLangId, 'earnings', array(), 6);
             $salesEarningsChartData = [];
@@ -125,40 +120,28 @@ class HomeController extends ListingBaseController
             foreach ($affiliateSignupsData as $key => $val) {
                 $affiliateSignupsChartData[$val["duration"]] = $val["value"];
             }
+
             $productsData = $statsObj->getDashboardLast12MonthsSummary($this->siteLangId, 'products', array(), 6);
             $productsChartData = [];
             foreach ($productsData as $key => $val) {
                 $productsChartData[$val["duration"]] = $val["value"];
             }
-            //CommonHelper::printArray($affiliateSignupsChartData);
 
-
-            $dashboardInfo["summary"]["sales"] = $statsObj->getDashboardSummary('sales');
-            $dashboardInfo["summary"]["orders"] = $statsObj->getDashboardSummary('orders');
-            $dashboardInfo["summary"]["users"] = $statsObj->getDashboardSummary('signups');
-            $dashboardInfo["summary"]["shops"] = $statsObj->getDashboardSummary('shops');
-            //$dashboardInfo["summary"]["products"] = $statsObj->getDashboardSummary('products');
-            //$dashboardInfo['topSearchKeyword'] = $statsObj->getTopSearchKeywords('YEARLY');
-            $dashboardInfo["stats"]["totalUsers"] = $statsObj->getStats('total_members');
-            $dashboardInfo["stats"]["totalShops"] = $statsObj->getStats('total_shops');
-            $dashboardInfo["stats"]["totalSales"] = $statsObj->getStats('total_sales');
-
-
-            if ($this->layoutDirection != 'rtl') {
-                $dashboardInfo['productsChartData'] = array_reverse($productsChartData);
+            if (CommonHelper::getLayoutDirection() != 'rtl') {
                 $dashboardInfo['salesChartData'] = array_reverse($salesChartData);
                 $dashboardInfo['salesEarningsChartData'] = array_reverse($salesEarningsChartData);
                 $dashboardInfo['signupsChartData'] = array_reverse($signupsChartData);
                 $dashboardInfo['affiliateSignupsChartData'] = array_reverse($affiliateSignupsChartData);
+                $dashboardInfo['productsChartData'] = array_reverse($productsChartData);
             } else {
-                $dashboardInfo['productsChartData'] = $productsChartData;
                 $dashboardInfo['salesChartData'] = $salesChartData;
                 $dashboardInfo['salesEarningsChartData'] = $salesEarningsChartData;
                 $dashboardInfo['signupsChartData'] = $signupsChartData;
                 $dashboardInfo['affiliateSignupsChartData'] = $affiliateSignupsChartData;
+                $dashboardInfo['productsChartData'] = $productsChartData;
             }
+            /* ] */
 
-            $dashboardInfo['topProducts'] = $statsObj->getTopProducts('YEARLY', $this->siteLangId, 10);
             $dashboardInfo['visits_chart_data'] = isset($visits_chart_data) ? rtrim($visits_chart_data, ',') : '';
             $dashboardInfo['visitsCount'] = (isset($visitCount)) ? $visitCount : '';
             $dashboardInfo['socialVisits'] = isset($socialVisits) ? $socialVisits : '';
@@ -178,7 +161,31 @@ class HomeController extends ListingBaseController
             $this->_template->addCss('css/ie.css');
         }
         $this->set('dashboardInfo', $dashboardInfo);
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('configuredAnalytics', false);
+        $this->set('objPrivilege', $this->objPrivilege);
+        $this->set('intervalsArr', Statistics::getIntervals($this->siteLangId));
+        $this->set('defaultStatsInterval', $this->defaultStatsInterval);
+        $this->set('orderSalesStats', $orderSalesStats[$this->defaultStatsInterval]);
+        $this->set('shopsSignupStats', $shopsSignupStats[$this->defaultStatsInterval]);
+        $this->set('userSignupStats', $userSignupStats[$this->defaultStatsInterval]);
         $this->_template->render();
+    }
+
+    public function totalSales()
+    {
+        $interval = FatApp::getPostedData('interval', FatUtility::VAR_INT, $this->defaultStatsInterval);
+        $statsObj = new Statistics();
+        $orderSalesStats = $statsObj->getOrderSalesStats($interval);
+        $shopsSignupStats = $statsObj->getShopsSignupStats($interval);
+        $userSignupStats = $statsObj->getUserSignupStats($interval);
+
+        $this->set('orderSalesStats', $orderSalesStats[$interval]);
+        $this->set('shopsSignupStats', $shopsSignupStats[$interval]);
+        $this->set('userSignupStats', $userSignupStats[$interval]);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function searchStatistics()
@@ -286,7 +293,8 @@ class HomeController extends ListingBaseController
 
         $this->set('type', $type);
         $this->set('dashboardInfo', $dashboardInfo);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function latestOrders($limit = 5)
@@ -304,7 +312,8 @@ class HomeController extends ListingBaseController
         $dashboardInfo['orderPaymentStatusArr'] = Orders::getOrderPaymentStatusArr($this->siteLangId);
         $this->set('dashboardInfo', $dashboardInfo);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function topSellingProducts($limit = 5)
@@ -323,16 +332,15 @@ class HomeController extends ListingBaseController
         $productsList = FatApp::getDb()->fetchAll($rs);
 
         $this->set('productsList', $productsList);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function dashboardStats()
     {
         $post = FatApp::getPostedData();
         $type = $post['rtype'];
-        //$type = 'visitors_stats';
         $interval = isset($post['interval']) ? $post['interval'] : '';
-        //$interval = 'yearly';
 
         include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
         $analyticArr = array(
@@ -360,7 +368,6 @@ class HomeController extends ListingBaseController
                     switch (strtoupper($type)) {
                         case 'TOP_COUNTRIES':
                             $result = $analytics->getTopCountries($interval, 9);
-
                             break;
                         case 'TOP_REFERRERS':
                             $result = $analytics->getTopReferrers($interval, 9);
@@ -394,7 +401,8 @@ class HomeController extends ListingBaseController
         }
         $this->set('stats_type', strtoupper($type));
         $this->set('stats_info', $result);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function clear()

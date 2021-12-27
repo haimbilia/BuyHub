@@ -170,7 +170,8 @@ class BadgesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -299,7 +300,8 @@ class BadgesController extends ListingBaseController
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
         $this->set('formTitle', Labels::getLabel('LBL_BADGE_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($recordId, $langId = 0)
@@ -323,7 +325,8 @@ class BadgesController extends ListingBaseController
         $this->set('languages', Language::getAllNames());
         $this->set('images', $images);
         $this->set('recordId', $recordId);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getMediaForm($recordId = 0)

@@ -99,6 +99,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $this->set('actionItemsData', $actionItemsData);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('objectCtrlName', $this->objectCtrlName);
 
 
         $this->_template->addJs(['js/select2.js', 'badge-link-conditions/page-js/list.js']);
@@ -317,7 +318,8 @@ class BadgeLinkConditionsController extends ListingBaseController
         $this->set('formTitle', CommonHelper::replaceStringData($str, ['{OBJECT-TYPE}' => $this->objectTypeName]));
 
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm(int $triggerType)

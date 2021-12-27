@@ -134,7 +134,7 @@ class HomeController extends AdminBaseController
             $dashboardInfo["stats"]["totalSales"] = $statsObj->getStats('total_sales');
 
 
-            if ($this->layoutDirection != 'rtl') {
+            if (CommonHelper::getLayoutDirection() != 'rtl') {
                 $dashboardInfo['productsChartData'] = array_reverse($productsChartData);
                 $dashboardInfo['salesChartData'] = array_reverse($salesChartData);
                 $dashboardInfo['salesEarningsChartData'] = array_reverse($salesEarningsChartData);

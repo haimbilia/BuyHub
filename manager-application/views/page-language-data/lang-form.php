@@ -1,6 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($langFrm);
-$langFrm->setFormTagAttribute('data-onclear', "editLangForm('" . $pLangKey . "', this.value);");
+$langFrm->setFormTagAttribute('data-onclear', "editLangForm('" . $pLangKey . "', " . $lang_id . ");");
+
 $langFrm->setFormTagAttribute('id', 'frmpageLangLangDataJs');
 $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#frmpageLangLangDataJs")); return(false);');
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);

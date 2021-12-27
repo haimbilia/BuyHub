@@ -35,7 +35,6 @@ class AbusiveWordsController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_ABUSIVE_KEYWORD', $this->siteLangId));
         $this->getListingData();
-
         $this->_template->render();
     }
 
@@ -127,7 +126,9 @@ class AbusiveWordsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        $this->_template->render(false, false);
+        
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()

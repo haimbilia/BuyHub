@@ -19,7 +19,7 @@ class Statistics extends MyAppModel
             self::BY_TODAY =>  Labels::getLabel('LBL_TODAY', $langId),
             self::BY_THIS_WEEK =>  Labels::getLabel('LBL_THIS_WEEK', $langId),
             self::BY_THIS_MONTH =>  Labels::getLabel('LBL_THIS_MONTH', $langId),
-            self::BY_LAST_3_MONTHS =>  Labels::getLabel('LBL_THIS_YEAR', $langId),
+            self::BY_LAST_3_MONTHS =>  Labels::getLabel('LBL_LAST_3_MONTH', $langId),
             self::BY_ALL =>  Labels::getLabel('LBL_ALL', $langId)
         ];
     }
@@ -184,7 +184,171 @@ class Statistics extends MyAppModel
         }
     }
 
-    public function getStats($type, $interval = self::BY_THIS_MONTH)
+    public function getOrderSalesStats($interval = self::BY_THIS_MONTH)
+    {
+        $srch = new OrderProductSearch();
+        $srch->joinorders();
+        $srch->joinPaymentMethod();
+        $srch->addOrderProductCharges();
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
+        $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
+        $cnd->attachCondition('plugin_code', '=', 'payatstore');
+        $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
+        $srch->addCondition('order_deleted', '=', applicationConstants::NO);
+        $srch->addMultipleFields(array('SUM((op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0) - IFNULL(op_refund_amount,0)) AS totalsales,SUM(op_commission_charged - op_refund_commission) totalcommission'));
+
+        switch ($interval) {
+            case self::BY_TODAY:
+                $srch->addFld(array('1 AS num_days'));
+                $srch->addDirectCondition('DATE(order_date_added) = DATE(NOW())');
+                break;
+            case self::BY_THIS_WEEK:
+                $srch->addFld(array('7 AS num_days'));
+                $srch->addDirectCondition('order_date_added > now() - INTERVAL 7 DAY');
+                break;
+            case self::BY_THIS_MONTH:
+                $srch->addFld(array('30 AS num_days'));
+                $srch->addDirectCondition('order_date_added > now() - INTERVAL 1 MONTH');
+                break;
+            case self::BY_LAST_3_MONTHS:
+                $srch->addFld(array('90 AS num_days'));
+                $srch->addDirectCondition('order_date_added>now() - INTERVAL 3 MONTH');
+                break;
+            case self::BY_ALL:
+                $srchObj1 = clone $srch;
+                $srchObj1->addFld(array('1 AS num_days'));
+                $srchObj1->addDirectCondition('DATE(order_date_added) = DATE(NOW())');
+
+                $srchObj7 = clone $srch;
+                $srchObj7->addFld(array('7 AS num_days'));
+                $srchObj7->addDirectCondition('order_date_added > now() - INTERVAL 7 DAY');
+
+                $srchObj30 = clone $srch;
+                $srchObj30->addFld(array('30 AS num_days'));
+                $srchObj30->addDirectCondition('order_date_added > now() - INTERVAL 1 MONTH');
+
+                $srchObj90 = clone $srch;
+                $srchObj90->addFld(array('90 AS num_days'));
+                $srchObj90->addDirectCondition('order_date_added > now() - INTERVAL 3 MONTH');
+
+                $srchObjAll = clone $srch;
+                $srchObjAll->addFld(array('-1 AS num_days'));
+
+                $sql = $srchObj1->getQuery() . " UNION ALL " . $srchObj7->getQuery() . " UNION ALL " . $srchObj30->getQuery() . " UNION ALL " . $srchObj90->getQuery() . " UNION ALL " . $srchObjAll->getQuery();
+                break;
+            default:
+                $srch->addFld(array('30 AS num_days'));
+                $srch->addDirectCondition('MONTH(order_date_added)=MONTH(NOW())');
+                break;
+        }
+
+        if ($interval != self::BY_ALL) {
+            $sql = $srch->getQuery();
+        }
+
+        $rs = $this->db->query($sql);
+        return $this->db->fetchAll($rs, 'num_days');
+    }
+
+    public function getShopsSignupStats($interval = self::BY_THIS_MONTH)
+    {
+        $srch = Shop::getSearchObject(false);
+        $srch->joinTable('tbl_users', 'INNER JOIN', 'u.user_id = s.shop_user_id', 'u');
+        $srch->joinTable('tbl_user_credentials', 'INNER JOIN', 'u.user_id = c.credential_user_id', 'c');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+
+        switch ($interval) {
+            case self::BY_TODAY:
+                $srch->addFld(array('1 AS num_days', 'count(shop_id) as shopSignups'));
+                $srch->addDirectCondition('DATE(shop_created_on) = DATE(NOW())');
+                break;
+            case self::BY_THIS_WEEK:
+                $srch->addFld(array('7 AS num_days', 'count(shop_id) as shopSignups'));
+                $srch->addDirectCondition('shop_created_on > now() - INTERVAL 7 DAY');
+                break;
+            case self::BY_THIS_MONTH:
+                $srch->addFld(array('30 AS num_days', 'count(shop_id) as shopSignups'));
+                $srch->addDirectCondition('shop_created_on > now() - INTERVAL 1 MONTH');
+                break;
+            case self::BY_LAST_3_MONTHS:
+                $srch->addFld(array('90 AS num_days', 'count(shop_id) as shopSignups'));
+                $srch->addDirectCondition('shop_created_on > now() - INTERVAL 3 MONTH');
+                break;
+            case self::BY_ALL:
+                $srchObj1 = clone $srch;
+                $srchObj1->addFld(array('1 AS num_days', 'count(shop_id) as shopSignups'));
+                $srchObj1->addDirectCondition('DATE(shop_created_on) = DATE(NOW())');
+
+                $srchObj7 = clone $srch;
+                $srchObj7->addFld(array('7 AS num_days', 'count(shop_id) as shopSignups'));
+                $srchObj7->addDirectCondition('shop_created_on > now() - INTERVAL 7 DAY');
+
+                $srchObj30 = clone $srch;
+                $srchObj30->addFld(array('30 AS num_days', 'count(shop_id) as shopSignups'));
+                $srchObj30->addDirectCondition('shop_created_on > now() - INTERVAL 1 MONTH');
+
+                $srchObj90 = clone $srch;
+                $srchObj90->addFld(array('90 AS num_days', 'count(shop_id) as shopSignups'));
+                $srchObj90->addDirectCondition('shop_created_on > now() - INTERVAL 3 MONTH');
+
+                $srchObjAll = clone $srch;
+                $srchObjAll->addFld(array('-1 AS num_days', 'count(shop_id) as shopSignups'));
+
+                $sql = $srchObj1->getQuery() . " UNION ALL " . $srchObj7->getQuery() . " UNION ALL " . $srchObj30->getQuery() . " UNION ALL " . $srchObj90->getQuery() . " UNION ALL " . $srchObjAll->getQuery();
+                break;
+            default:
+                $srch->addFld(array('30 AS num_days', 'count(shop_id) as shopSignups'));
+                $srch->addDirectCondition('MONTH(shop_created_on)=MONTH(NOW())');
+                break;
+        }
+
+        if ($interval != self::BY_ALL) {
+            $sql = $srch->getQuery();
+        }
+
+        $rs = $this->db->query($sql);
+        return $this->db->fetchAll($rs, 'num_days');
+    }
+
+    public function getUserSignupStats($interval = self::BY_THIS_MONTH)
+    {
+        switch ($interval) {
+            case self::BY_TODAY:
+                $sql = 'SELECT 1 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and DATE(user_regdate) = DATE(NOW()) and YEAR(user_regdate) = YEAR(NOW())';
+                break;
+            case self::BY_THIS_WEEK:
+                $sql = 'SELECT 7 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE  user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and  user_regdate > now() - INTERVAL 7 DAY';
+                break;
+            case self::BY_THIS_MONTH:
+                $sql = 'SELECT 30 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and user_regdate > now() - INTERVAL 1 MONTH';
+                break;
+            case self::BY_LAST_3_MONTHS:
+                $sql = 'SELECT 90 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and user_regdate > now() - INTERVAL 3 MONTH';
+                break;
+            case self::BY_ALL:
+                $sql = "SELECT 1 AS num_days, count(user_id)  as users FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and DATE(user_regdate) = DATE(NOW()) and YEAR(user_regdate) = YEAR(NOW())
+				UNION ALL
+				SELECT 7 AS num_days, count(user_id) as users FROM `tbl_users` WHERE  user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and  user_regdate > now() - INTERVAL 7 DAY
+				UNION ALL
+				SELECT 30 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and user_regdate > now() - INTERVAL 1 MONTH
+				UNION ALL
+				SELECT 90 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and user_regdate > now() - INTERVAL 3 MONTH
+				UNION ALL
+				SELECT -1 AS num_days, count(user_id) as users FROM `tbl_users` where user_deleted = " . applicationConstants::NO . " and user_is_shipping_company = " . applicationConstants::NO . " and user_is_shipping_company!=1";
+                break;
+            default:
+                $sql = 'SELECT 30 AS num_days, count(user_id) as users FROM `tbl_users` WHERE user_deleted = ' . applicationConstants::NO . ' and user_is_shipping_company = ' . applicationConstants::NO . ' and MONTH(user_regdate) = MONTH(NOW()) and YEAR(user_regdate) = YEAR(NOW())';
+                break;
+        }
+
+        $rs = $this->db->query($sql);
+        return $this->db->fetchAllAssoc($rs, 'num_days');
+    }
+
+    public function getStats($type)
     {
         $type = strtolower($type);
         switch ($type) {
@@ -243,35 +407,7 @@ class Statistics extends MyAppModel
                 break;
 
             case 'total_shops':
-                $srch = Shop::getSearchObject(false);
-                $srch->joinTable('tbl_users', 'INNER JOIN', 'u.user_id = s.shop_user_id', 'u');
-                $srch->joinTable('tbl_user_credentials', 'INNER JOIN', 'u.user_id = c.credential_user_id', 'c');
-                $srch->doNotCalculateRecords();
-                $srch->doNotLimitRecords();
-
-                $srchObj1 = clone $srch;
-                $srchObj1->addFld(array('1 AS num_days', 'count(shop_id)'));
-                $srchObj1->addDirectCondition('DATE(shop_created_on) = DATE(NOW())');
-
-                $srchObj7 = clone $srch;
-                $srchObj7->addFld(array('7 AS num_days', 'count(shop_id)'));
-                $srchObj7->addDirectCondition('YEARWEEK(shop_created_on) = YEARWEEK(NOW())');
-
-                $srchObj30 = clone $srch;
-                $srchObj30->addFld(array('30 AS num_days', 'count(shop_id)'));
-                $srchObj30->addDirectCondition('MONTH(shop_created_on)=MONTH(NOW())');
-
-                $srchObj90 = clone $srch;
-                $srchObj90->addFld(array('90 AS num_days', 'count(shop_id)'));
-                $srchObj90->addDirectCondition('shop_created_on>date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH)');
-
-                $srchObjAll = clone $srch;
-                $srchObjAll->addFld(array('-1 AS num_days', 'count(shop_id)'));
-
-                $sql = $srchObj1->getQuery() . " UNION ALL " . $srchObj7->getQuery() . " UNION ALL " . $srchObj30->getQuery() . " UNION ALL " . $srchObj90->getQuery() . " UNION ALL " . $srchObjAll->getQuery();
-
-                $rs = $this->db->query($sql);
-                return  $this->db->fetchAllAssoc($rs);
+                return $this->getShopsSignupStats(self::BY_ALL);
                 break;
 
             case 'total_orders':
@@ -309,42 +445,7 @@ class Statistics extends MyAppModel
                 break;
 
             case 'total_sales':
-                $srch = new OrderProductSearch();
-                $srch->joinorders();
-                $srch->joinPaymentMethod();
-                $srch->addOrderProductCharges();
-                $srch->doNotCalculateRecords();
-                $srch->doNotLimitRecords();
-                $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
-                $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
-                $cnd->attachCondition('plugin_code', '=', 'payatstore');
-                $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-                $srch->addCondition('order_deleted', '=', applicationConstants::NO);
-                $srch->addMultipleFields(array('SUM((op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0) - IFNULL(op_refund_amount,0)) AS totalsales,SUM(op_commission_charged - op_refund_commission) totalcommission'));
-
-                $srchObj1 = clone $srch;
-                $srchObj1->addFld(array('1 AS num_days'));
-                $srchObj1->addDirectCondition('DATE(order_date_added) = DATE(NOW())');
-
-                $srchObj7 = clone $srch;
-                $srchObj7->addFld(array('7 AS num_days'));
-                $srchObj7->addDirectCondition('YEARWEEK(order_date_added) = YEARWEEK(NOW())');
-
-                $srchObj30 = clone $srch;
-                $srchObj30->addFld(array('30 AS num_days'));
-                $srchObj30->addDirectCondition('MONTH(order_date_added)=MONTH(NOW())');
-
-                $srchObj90 = clone $srch;
-                $srchObj90->addFld(array('90 AS num_days'));
-                $srchObj90->addDirectCondition('order_date_added>date_sub(date_add(date_add(LAST_DAY(now()),interval 1 DAY),interval -1 MONTH), INTERVAL 3 MONTH)');
-
-                $srchObjAll = clone $srch;
-                $srchObjAll->addFld(array('-1 AS num_days'));
-
-                $sql = $srchObj1->getQuery() . " UNION ALL " . $srchObj7->getQuery() . " UNION ALL " . $srchObj30->getQuery() . " UNION ALL " . $srchObj90->getQuery() . " UNION ALL " . $srchObjAll->getQuery();
-
-                $rs = $this->db->query($sql);
-                return $this->db->fetchAll($rs);
+                return $this->getOrderSalesStats(self::BY_ALL);
                 break;
 
             case 'total_seller_products':
@@ -615,6 +716,16 @@ class Statistics extends MyAppModel
         $rs = $srch->getResultSet();
         $res = $this->db->fetch($rs);
         $totalUser = $res['total_users'];
+
+        $srch = new SearchBase('tbl_user_cart', 'tuc');
+        $srch->addMultipleFields(array('count(usercart_user_id) as total_users'));
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addDirectCondition('usercart_user_id not REGEXP "^-?[0-9]+$"');
+        $rs = $srch->getResultSet();
+        $res = $this->db->fetch($rs);
+        $totalUser += $res['total_users'];
+
         $cartRes = $this->getAddedToCartCount();
         $addedToCartCount = $cartRes["cart_count"];
         $purchasedCount = $this->getUserOrderStatsCount('purchased');

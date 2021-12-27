@@ -156,7 +156,9 @@ class BannerLocationController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('lang_id', $this->siteLangId);
         $this->set('activeInactiveArr', $activeInactiveArr);
-        $this->_template->render(false, false, '_partial/listing/form.php');
+        $this->set('formTitle', Labels::getLabel('LBL_BANNER_LOCATION_SETUP', $this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -251,7 +253,9 @@ class BannerLocationController extends ListingBaseController
         $this->set('lang_id', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false, '_partial/listing/lang-form.php');
+        $this->set('formTitle', Labels::getLabel('LBL_BANNER_LOCATION_SETUP', $this->siteLangId));
+        $this->set('html', $this->_template->render(false, false, '_partial/listing/lang-form.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getLangForm($recordId, $langId)
@@ -306,7 +310,8 @@ class BannerLocationController extends ListingBaseController
 
     public function layouts()
     {
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     /**

@@ -19,7 +19,7 @@
         $(dv).prepend(fcom.getLoader());
         var frm = document.frmRecordSearch;
         var pluginsType = frm.type.value;
-        
+
         /* This function is also called from sort by columns functionality. */
         var type = object;
         if (isNaN(object)) {
@@ -29,8 +29,8 @@
         frm.type.value = type;
         if (pluginsType != type) {
             frm.page.value = 1;
-            frm.sortBy.value ='';
-            frm.sortOrder.value ='';
+            frm.sortBy.value = '';
+            frm.sortOrder.value = '';
         }
         data = fcom.frmData(frm);
 
@@ -45,16 +45,11 @@
     };
 
     editSettingForm = function (keyName) {
-        $.ykmodal(fcom.getLoader());
         var data = 'keyName=' + keyName;
-        fcom.ajax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings'), data, function (t) {
             fcom.removeLoader();
-            var res = isJson(t);
-            if (res && res.status == 0) {
-                $.ykmsg.error(res.msg);
-                return;
-            }
-            $.ykmodal(t);
+            $.ykmsg.close();
+            $.ykmodal(t.html);
         });
     };
 
@@ -62,6 +57,7 @@
         if (!$(frm).validate()) return;
         var data = fcom.frmData(frm);
         var keyName = frm.keyName.value;
+        $.ykmodal(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(keyName + 'Settings', 'setup'), data, function (t) {
             fcom.removeLoader();
         });
@@ -92,7 +88,7 @@
             reloadList();
         });
     };
-    
+
     syncCategories = function () {
         fcom.updateWithAjax(fcom.makeUrl('PatchUpdate', 'updateTaxCategories'), '', function (t) {
             fcom.removeLoader();

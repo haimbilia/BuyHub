@@ -2,16 +2,10 @@
     var dv = "#listing";
 
     reloadList = function () {
-        fcom.ajax(fcom.makeUrl(controllerName, 'search'), '', function (res) {
-            $(dv).html(res);
-        });
-    };
-
-    editRecord = function (recordId) {
-        $.ykmodal(fcom.getLoader(), true);
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), "recordId=" + recordId, function (t) {
-            $.ykmodal(t, true);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), '', function (res) {
+            $.ykmsg.close();
             fcom.removeLoader();
+            $(dv).html(res.html);
         });
     };
 
@@ -38,23 +32,21 @@
     };
 
     addNewLinkForm = function (navId, nlinkId = 0) {
-        fcom.displayProcessing();
-        $.ykmodal(fcom.getLoader(), false);
-        fcom.ajax(fcom.makeUrl(controllerName, "linkForm"), 'nav_id=' + navId + '&nlink_id=' + nlinkId, function (t) {
-            $.ykmodal(t, false);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "linkForm"), 'nav_id=' + navId + '&nlink_id=' + nlinkId, function (t) {
+            $.ykmodal(t.html, false);
             $.ykmsg.close();
             fcom.removeLoader();
         });
     };
 
     linkLangForm = function (navId, nlinkId, langId, autoFillLangData = 0) {
-        $.ykmodal(fcom.getLoader(), false);
         data = "nav_id=" + navId + "&nlink_id=" + nlinkId + "&langId=" + langId;
-        fcom.ajax(
+        fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "linkLangForm", [autoFillLangData]),
             data,
             function (t) {
-                $.ykmodal(t, false);
+                $.ykmodal(t.html, false);
+                $.ykmsg.close();
                 fcom.removeLoader();
             }
         );
@@ -129,15 +121,16 @@
 
         var includeWrapper = (0 < $("#childrens-" + navId).length) ? 0 : 1;
         data += '&includeWrapper=' + includeWrapper;
-        fcom.ajax(fcom.makeUrl(controllerName, 'navLinks'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'navLinks'), data, function (res) {
+            $.ykmsg.close();
             fcom.removeLoader();
             if (0 < nlinkId) {
                 if (0 < $('.children-' + navId + '-' + nlinkId).length) {
-                    $('.children-' + navId + '-' + nlinkId).replaceWith(res);
+                    $('.children-' + navId + '-' + nlinkId).replaceWith(res.html);
                 } else if (0 < $("#childrens-" + navId).length && 0 == includeWrapper) {
-                    $("#childrens-" + navId).append(res);
+                    $("#childrens-" + navId).append(res.html);
                 } else {
-                    $("#parent-" + navId).append(res);        
+                    $("#parent-" + navId).append(res.html);
                 }
                 return;
             }
@@ -145,7 +138,7 @@
             if (0 < $("#childrens-" + navId).length) {
                 $("#childrens-" + navId).remove();
             }
-            $("#parent-" + navId).append(res);
+            $("#parent-" + navId).append(res.html);
             bindSortable();
         });
     }
@@ -156,7 +149,7 @@
         var navRow = $(obj);
         var navId = navRow.data('record-id');
         var childrens = $("#childrens-" + navId);
-        
+
         if (1 > isVisible) {
             togglePlusMinus(obj, isVisible);
             navRow.attr('onclick', 'displaySubRows(this, 1)');
@@ -184,7 +177,7 @@
                 var data = '';
                 const bindData = new Promise((resolve, reject) => {
                     for (let i = 0; i < order.length; i++) {
-                        data += 'nlinksIds[' + (i+1) + ']=' + order[i];
+                        data += 'nlinksIds[' + (i + 1) + ']=' + order[i];
                         if (i + 1 < order.length) {
                             data += '&';
                         }

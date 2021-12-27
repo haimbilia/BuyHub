@@ -71,23 +71,25 @@ $(document).on('change', "select[name='promotion_type']", function () {
     };
 
     promotionMediaForm = function (recordId, langId = 0, screen_id = 1) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controllerName, "media", [recordId]),"", function (t) {
-            $.ykmodal(t);
-            images(recordId, langId, screen_id);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "media", [recordId]), "", function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
             fcom.removeLoader();
+            images(recordId, langId, screen_id);
         });
     };
 
     images = function (promotion_id, lang_id, screen_id) {
-        fcom.ajax(fcom.makeUrl(controllerName, 'images', [promotion_id, lang_id, screen_id]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'images', [promotion_id, lang_id, screen_id]), '', function (t) {
+            fcom.removeLoader();
+            $.ykmsg.close();
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();
             }
 
             if ('' != t) {
-                $(".dropzoneContainerJs").append(t);
+                $(".dropzoneContainerJs").append(t.html);
                 $(".dropzoneUploadJs").hide();
             } else {
                 $(".dropzoneUploadJs").show();

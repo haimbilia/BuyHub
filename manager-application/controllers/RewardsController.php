@@ -121,7 +121,8 @@ class RewardsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
         $this->set('formTitle', Labels::getLabel('LBL_USER_REWARDS_POINT_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm()

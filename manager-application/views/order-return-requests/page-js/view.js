@@ -23,7 +23,7 @@ $(document).on('change', '.requestStatusJs', function () {
             if (append == 1) {
                 $(dv + ' table').append(ans.html);
                 var lastTbodyEle = $(dv + ' table tbody:last');
-                var lastTbodyEleHtm = lastTbodyEle.html();                
+                var lastTbodyEleHtm = lastTbodyEle.html();
                 lastTbodyEle.remove();
                 $(dv + ' table tbody:last').append(lastTbodyEleHtm);
             } else {
@@ -48,10 +48,10 @@ $(document).on('change', '.requestStatusJs', function () {
     };
 
     addNewComment = function (orrequestId) {
-        $.ykmodal(fcom.getLoader(), true);
-        fcom.ajax(fcom.makeUrl(controllerName, "addNewComment", [orrequestId]), "", function (t) {
-            $.ykmodal(t, true);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "addNewComment", [orrequestId]), "", function (t) {
+            $.ykmodal(t.html, true);
             fcom.removeLoader();
+            $.ykmsg.close();
         });
     };
 
@@ -65,9 +65,9 @@ $(document).on('change', '.requestStatusJs', function () {
     };
 
     requestStatusForm = function (orrequestId) {
-        $.ykmodal(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl(controllerName, "requestStatusForm", [orrequestId]), "", function (t) {
-            $.ykmodal(t);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "requestStatusForm", [orrequestId]), "", function (t) {
+            $.ykmodal(t.html);
+            $.ykmsg.close();
             fcom.removeLoader();
         });
     };
@@ -97,10 +97,10 @@ $(document).on('change', '.requestStatusJs', function () {
         if (0 < $(".orrDetailsJs" + orrequestId).length) {
             $.ykmodal.show();
         } else {
-            $.ykmodal(fcom.getLoader(), false);
-            fcom.ajax(fcom.makeUrl(controllerName, 'getItem', [orrequestId]), '', function (ans) {
-                $.ykmodal(ans);
-                fcom.removeLoader()
+            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'getItem', [orrequestId]), '', function (ans) {
+                fcom.removeLoader();
+                $.ykmsg.close();
+                $.ykmodal(ans.html);
             });
         }
     };

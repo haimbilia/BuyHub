@@ -3,7 +3,7 @@
 class BlogPostCategoriesController extends ListingBaseController
 {
     protected string $modelClass = 'BlogPostCategory';
-    protected $pageKey = 'BLOG_CATEGORIES';
+    protected string $pageKey = 'BLOG_POST_CATEGORIES';
 
     public function __construct($action)
     {
@@ -43,7 +43,20 @@ class BlogPostCategoriesController extends ListingBaseController
     public function index()
     {
         $this->checkEditPrivilege(true);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = [
+            'newRecordBtn' => true
+        ];
+        $this->set('actionItemsData', $actionItemsData);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+
         $this->_template->addJs(array('js/jquery-sortable-lists.js'));
+
         $this->_template->render();
     }
 
@@ -53,7 +66,8 @@ class BlogPostCategoriesController extends ListingBaseController
         $records = BlogPostCategory::getBlogPostCatParentChildWiseArr($this->siteLangId, 0, true, false, false);
 
         $this->set("arrListing", $records);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getSubCategories()
@@ -63,7 +77,8 @@ class BlogPostCategoriesController extends ListingBaseController
 
         $childCategories = BlogPostCategory::getBlogPostCatParentChildWiseArr($this->siteLangId, $recordId, true, false, false);
         $this->set("childCategories", $childCategories);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function form()
@@ -94,7 +109,8 @@ class BlogPostCategoriesController extends ListingBaseController
 
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()

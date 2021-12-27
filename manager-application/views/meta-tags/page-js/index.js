@@ -74,18 +74,18 @@ $(document).on('blur', '.metaUrlJs', function () {
 
 
     metaTagForm = function (id, metaType, metaTagRecordId) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
+            $.ykmodal(t.html);
             $.ykmsg.close();
-            $.ykmodal(t);
+            fcom.removeLoader();
         });
     };
 
     editMetaTagForm = function (id, metaType, metaTagRecordId) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [id, metaType, metaTagRecordId]), '', function (t) {
+            $.ykmodal(t.html);
             $.ykmsg.close();
-            $.ykmodal(t);
+            fcom.removeLoader();
         });
     };
 
@@ -103,10 +103,10 @@ $(document).on('blur', '.metaUrlJs', function () {
     }
 
     editMetaTagLangForm = function (metaId, langId, metaType, metaTagRecordId, autoFillLangData = 0) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'langForm', [metaId, langId, metaType, metaTagRecordId, autoFillLangData]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'langForm', [metaId, langId, metaType, metaTagRecordId, autoFillLangData]), '', function (t) {
+            $.ykmodal(t.html);
             $.ykmsg.close();
-            $.ykmodal(t);
+            fcom.removeLoader();
         });
     };
 

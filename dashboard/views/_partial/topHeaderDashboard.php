@@ -8,8 +8,9 @@
 
             <?php if ((User::canViewSupplierTab() && User::canViewBuyerTab()) || (User::canViewSupplierTab() && User::canViewAdvertiserTab() && $userPrivilege->canViewPromotions(0, true)) || (User::canViewBuyerTab() && User::canViewAdvertiserTab())) { ?>
                 <div class="dropdown dashboard-user">
-                    <button class="btn btn-outline-brand dropdown-toggle" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn dropdown-toggle-custom dropdown-toggle no-after" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                         <?php echo ($activeTab == 'S') ? Labels::getLabel('Lbl_Seller', $siteLangId) : (($activeTab == 'B') ? Labels::getLabel('Lbl_Buyer', $siteLangId) : (($activeTab == 'Ad') ? Labels::getLabel('Lbl_Advertiser', $siteLangId) : '')) ?>
+                        <i class="dropdown-toggle-custom-arrow"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim" aria-labelledby="dashboardDropdown">
                         <ul class="nav nav-block">

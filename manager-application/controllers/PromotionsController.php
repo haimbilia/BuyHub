@@ -81,12 +81,12 @@ class PromotionsController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PROMOTION_NAME', $this->siteLangId));
         $this->getListingData();
-        
+
         $this->_template->addCss(['css/select2.min.css', 'css/cropper.css']);
         $this->_template->addJs(['js/select2.js', 'js/cropper.js', 'js/cropper-main.js']);
         $this->_template->render();
     }
-    
+
     public function search()
     {
         $this->getListingData();
@@ -113,6 +113,10 @@ class PromotionsController extends ListingBaseController
             $sortBy = current($allowedKeysForSorting);
         }
 
+        if ('user_name' == $sortBy) {
+            $sortBy = 'shop_name';
+        }
+
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
 
         $srchFrm = $this->getSearchForm($fields);
@@ -129,7 +133,7 @@ class PromotionsController extends ListingBaseController
         $srch->joinPromotionsLogForCount();
         $srch->joinActiveUser(false);
         $srch->joinShops($this->siteLangId);
-        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id', 'IFNULL(shop_name, shop_identifier) as shop_name','user_id','user_updated_on','shop_updated_on']);
+        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_id', 'user_updated_on', 'shop_updated_on']);
         $srch->addCondition('pr.promotion_deleted', '=', applicationConstants::NO);
         $srch->addOrder($sortBy, $sortOrder);
 
@@ -205,7 +209,7 @@ class PromotionsController extends ListingBaseController
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->set('canEdit', $this->objPrivilege->canEditPromotions($this->admin_id, true));
-        
+
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('typeArr', Promotion::getTypeArr($this->siteLangId));
@@ -572,11 +576,12 @@ class PromotionsController extends ListingBaseController
         $this->set('promotionType', $promotionType);
         $this->set('recordId', $recordId);
         $this->set('frm', $frm);
-        
+
         $this->set('includeTabs', $enableTabs);
         $this->set('activeTab', 'GENERAL');
         $this->set('formTitle', Labels::getLabel('LBL_PPC_PROMOTION_SETUP', $this->siteLangId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function media($recordId = 0)
@@ -635,10 +640,11 @@ class PromotionsController extends ListingBaseController
         $this->set('bannerHeight', $bannerHeight);
         $this->set('promotionType', $promotionType);
         $this->set('recordId', $recordId);
-        
+
         $this->set('mediaFrm', $mediaFrm);
         $this->set('screen', applicationConstants::SCREEN_DESKTOP);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function images($recordId = 0, $lang_id = 0, $screen = 0)
@@ -701,7 +707,8 @@ class PromotionsController extends ListingBaseController
         $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->set('screenTypeArr', array(0 => '') + applicationConstants::getDisplaysArr($this->siteLangId));
         $this->set('language', Language::getAllNames());
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function autoCompleteSelprods(int $userId = 0, int $selProdId = 0, bool $return = false)

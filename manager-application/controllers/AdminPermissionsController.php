@@ -131,7 +131,7 @@ class AdminPermissionsController extends ListingBaseController
         $arrListing = AdminPrivilege::getPermissionModulesArr();
         if (!empty($keyword)) {
             $keyword = str_replace('\*', '.*?', preg_quote($keyword, '/'));
-            $result = preg_grep('/' . $keyword . '*/i', $arrListing);
+            $result = preg_grep('/' . $keyword . '/i', $arrListing);
             $arrListing = array_intersect($arrListing, $result);
         }
 

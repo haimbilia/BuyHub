@@ -21,19 +21,15 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'user_name':
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
-                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
-                break;
-            case 'shop_name':
-                if ($row[$key] != '') {
-                    if ($canViewShops) {
-                        $td->appendElement('a', array('href' => 'javascript:void(0)', 'onclick' => 'redirectToShop(' . $row['shop_id'] . ')'), $row[$key], true);
-                    } else {
-                        $td->appendElement('plaintext', $tdAttr, $row[$key], true);
-                    }
-                } else {
-                    $td->appendElement('plaintext', $tdAttr, Labels::getLabel('LBL_N/A', $siteLangId), true);
+                $onclick = $canViewShops && !empty($row['shop_id']) ? 'redirectToShop(' . $row['shop_id'] . ')' : '';
+                $title = '';
+                if (!empty($row['shop_name'])) {
+                    $str = Labels::getLabel('LBL_SHOP:_{SHOP}', $siteLangId);
+                    $row['extra_text'] = CommonHelper::replaceStringData($str, ['{SHOP}' => $row['shop_name']]);
+                    $title = Labels::getLabel('LBL_CLICK_HERE_TO_VISIT_SHOP_LIST', $siteLangId);
                 }
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title], false, true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'credential_active':
                 $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['user_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';

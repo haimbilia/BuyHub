@@ -229,9 +229,15 @@
         }
         .header-dashboard {
             padding-#{$start-direction}: 280px;
+            @include media-breakpoint-down(lg) {
+                padding-#{$start-direction}: 20px;
+            }
         }
         .main {
             padding-#{$start-direction}: 280px;
+            @include media-breakpoint-down(lg) {
+                padding-#{$start-direction}: 0;
+            }
         }
         .menu-head {
             #{$start-direction}: 0 !important;
@@ -250,24 +256,16 @@
             opacity: 0 !important;
             visibility: hidden !important;
         }
-    }
-}
-
-@media (max-width: 1080px) {
-    .sidebar-is-expanded .header-dashboard {
-        padding-#{$start-direction}: 20px;
-    }
-    .sidebar-is-reduced .sidebar {
-        width: 0;
-    }
-    .sidebar-is-reduced .hamburger-toggle {
-        #{$start-direction}: 35px;
-    }
-    .sidebar-is-reduced .header-dashboard {
-        padding-#{$start-direction}: 70px;
-    }
-    .sidebar-is-expanded main.main,
-    .my-dashboard .main {
-        padding-#{$start-direction}: 0;
+        @include media-breakpoint-down(lg) {
+            .sidebar {
+                width: 0;
+            }
+            .hamburger-toggle {
+                #{$start-direction}: 35px;
+            }
+            .header-dashboard {
+                padding-#{$start-direction}: 70px;
+            }
+        }
     }
 }

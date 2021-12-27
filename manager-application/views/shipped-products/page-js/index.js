@@ -5,28 +5,30 @@
             clearSearch();
         });
     };
-    editRecord = function (recordId, profileId, displayInPopup = false, dialogClass = '') {
-        if (false === checkControllerName()) {
-            return false;
-        }
-        fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
+
+    editRecord = function (recordId, profileId) {
+        $.ykmodal(fcom.getLoader(), true);
         data = "recordId=" + recordId + '&profileId=' + profileId;
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
-            $.ykmodal(t, true, dialogClass);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            $.ykmodal(t.html, true);
             fcom.removeLoader();
+            $.ykmsg.close();
         });
     };
 
     viewSellerShip = function (productId) {
-        fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), {productId: productId}, function (t) {
-            $.ykmodal(t, false, '');
+        fcom.updateWithAjax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), { productId: productId }, function (t) {
+            $.ykmodal(t.html, false, '');
+            $.ykmsg.close();
+            fcom.removeLoader();
         });
     };
 
     viewAdminSellerShip = function (productId) {
-        fcom.ajax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), {productId: productId, adminShip: 1}, function (t) {
-            $.ykmodal(t, false, '');
+        fcom.updateWithAjax(fcom.makeUrl('ShippedProducts', 'viewSellerList'), { productId: productId, adminShip: 1 }, function (t) {
+            $.ykmodal(t.html, false, '');
+            $.ykmsg.close();
+            fcom.removeLoader();
         });
     };
 

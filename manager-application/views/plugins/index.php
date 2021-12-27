@@ -18,7 +18,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                         </use>
                     </svg>
                 </button>
-                <div class="card sticky-sidebar card-aside" tabindex="-1" id="card-aside" aria-labelledby="card-asideLabel">
+                <div class="card  offcanvas sticky-sidebar sticky-top  card-aside" tabindex="-1" id="card-aside" aria-labelledby="card-asideLabel">
                     <div class="card-head">
                         <div class="card-head-label">
                             <h3 class="card-head-title">
@@ -119,7 +119,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                         $.ykmsg.error(ans.msg);
                     });
             },
-            function (error) {
+            function(error) {
                 fcom.removeLoader();
                 $.ykmsg.close();
             }

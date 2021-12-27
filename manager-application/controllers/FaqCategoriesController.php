@@ -122,7 +122,8 @@ class FaqCategoriesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('formTitle', Labels::getLabel('LBL_FAQ_CATEGORY_SETUP', $this->siteLangId));
         $this->set('frm', $frm);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     protected function getForm()
@@ -232,8 +233,10 @@ class FaqCategoriesController extends ListingBaseController
         $this->set('recordId', $recordId);
         $this->set('lang_id', $langId);
         $this->set('langFrm', $faqCatLangFrm);
+        $this->set('formTitle', Labels::getLabel('LBL_FAQ_CATEGORY_SETUP', $this->siteLangId));
         $this->set('formLayout', Language::getLayoutDirection($langId));
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     protected function getLangForm($recordId = 0, $langId = 0)

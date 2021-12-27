@@ -45,7 +45,9 @@ class PluginSettingController extends ListingBaseController
         $this->set('frm', $this->frmObj);
         $this->set('identifier', $identifier);
         $this->set('keyName', $this->keyName);
-        $this->_template->render(false, false, 'plugins/settings.php');
+
+        $this->set('html', $this->_template->render(false, false, 'plugins/settings.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()

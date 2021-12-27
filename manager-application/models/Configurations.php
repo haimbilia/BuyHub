@@ -47,34 +47,74 @@ class Configurations extends FatModel
         );
     }
 
-    public static function getTabsArr()
+    public static function getTabsArr(int $langId)
     {
-        $siteLangId = CommonHelper::getLangId();
+        $confTabsCacheVar = CacheHelper::get('confTabsCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($confTabsCacheVar) {
+            return json_decode($confTabsCacheVar);
+        }
 
-        return array(
-            Configurations::FORM_GENERAL => Labels::getLabel('NAV_GENERAL', $siteLangId),
-            Configurations::FORM_LOCAL => Labels::getLabel('NAV_LOCAL', $siteLangId),
-            Configurations::FORM_SEO => Labels::getLabel('NAV_SEO', $siteLangId),
-            Configurations::FORM_USER_ACCOUNT => Labels::getLabel('NAV_ACCOUNT', $siteLangId),
-            Configurations::FORM_PRODUCT => Labels::getLabel('NAV_PRODUCT', $siteLangId),
-            Configurations::FORM_CART_WISHLIST => Labels::getLabel('NAV_CART/Wishlist', $siteLangId),
-            Configurations::FORM_CHECKOUT_PROCESS => Labels::getLabel('NAV_CHECKOUT', $siteLangId),
-            Configurations::FORM_COMMISSION => Labels::getLabel('NAV_COMMISSION', $siteLangId),
-            Configurations::FORM_DISCOUNT => Labels::getLabel('NAV_DISCOUNT', $siteLangId),
-            Configurations::FORM_REWARD_POINTS => Labels::getLabel('NAV_REWARD_POINTS', $siteLangId),
-            Configurations::FORM_AFFILIATE => Labels::getLabel('NAV_AFFILIATE', $siteLangId),
-            Configurations::FORM_REVIEWS => Labels::getLabel('NAV_REVIEWS', $siteLangId),
-            Configurations::FORM_THIRD_PARTY_API => Labels::getLabel('NAV_THIRD_PARTY_API', $siteLangId),
-            Configurations::FORM_EMAIL => Labels::getLabel('NAV_EMAIL', $siteLangId),
-            Configurations::FORM_MEDIA => Labels::getLabel('NAV_MEDIA', $siteLangId),
-            Configurations::FORM_SUBSCRIPTION => Labels::getLabel('NAV_SUBSCRIPTION', $siteLangId),
-            Configurations::FORM_REFERAL => Labels::getLabel('NAV_REFERAL', $siteLangId),
-            Configurations::FORM_SHARING => Labels::getLabel('NAV_SHARING', $siteLangId),
-            Configurations::FORM_SYSTEM => Labels::getLabel('NAV_SYSTEM', $siteLangId),
-            Configurations::FORM_LIVE_CHAT => Labels::getLabel('NAV_LIVE_CHAT', $siteLangId),
-            Configurations::FORM_PPC => Labels::getLabel('NAV_PPC_MANAGEMENT', $siteLangId),
-            Configurations::FORM_SERVER => Labels::getLabel('NAV_SERVER', $siteLangId),
+        $arr =   array(
+            Configurations::FORM_GENERAL => Labels::getLabel('NAV_GENERAL', $langId),
+            Configurations::FORM_LOCAL => Labels::getLabel('NAV_LOCAL', $langId),
+            Configurations::FORM_SEO => Labels::getLabel('NAV_SEO', $langId),
+            Configurations::FORM_USER_ACCOUNT => Labels::getLabel('NAV_ACCOUNT', $langId),
+            Configurations::FORM_PRODUCT => Labels::getLabel('NAV_PRODUCT', $langId),
+            Configurations::FORM_CART_WISHLIST => Labels::getLabel('NAV_CART/Wishlist', $langId),
+            Configurations::FORM_CHECKOUT_PROCESS => Labels::getLabel('NAV_CHECKOUT', $langId),
+            Configurations::FORM_COMMISSION => Labels::getLabel('NAV_COMMISSION', $langId),
+            Configurations::FORM_DISCOUNT => Labels::getLabel('NAV_DISCOUNT', $langId),
+            Configurations::FORM_REWARD_POINTS => Labels::getLabel('NAV_REWARD_POINTS', $langId),
+            Configurations::FORM_AFFILIATE => Labels::getLabel('NAV_AFFILIATE', $langId),
+            Configurations::FORM_REVIEWS => Labels::getLabel('NAV_REVIEWS', $langId),
+            Configurations::FORM_THIRD_PARTY_API => Labels::getLabel('NAV_THIRD_PARTY_API', $langId),
+            Configurations::FORM_EMAIL => Labels::getLabel('NAV_EMAIL', $langId),
+            Configurations::FORM_MEDIA => Labels::getLabel('NAV_MEDIA', $langId),
+            Configurations::FORM_SUBSCRIPTION => Labels::getLabel('NAV_SUBSCRIPTION', $langId),
+            Configurations::FORM_REFERAL => Labels::getLabel('NAV_REFERAL', $langId),
+            Configurations::FORM_SHARING => Labels::getLabel('NAV_SHARING', $langId),
+            Configurations::FORM_SYSTEM => Labels::getLabel('NAV_SYSTEM', $langId),
+            Configurations::FORM_LIVE_CHAT => Labels::getLabel('NAV_LIVE_CHAT', $langId),
+            Configurations::FORM_PPC => Labels::getLabel('NAV_PPC_MANAGEMENT', $langId),
+            Configurations::FORM_SERVER => Labels::getLabel('NAV_SERVER', $langId),
         );
+        CacheHelper::create('confTabsCacheVar' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    public static function getTabsMsgArr($langId)
+    {
+        $confTabMsgCacheVar = CacheHelper::get('confTabMsgCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($confTabMsgCacheVar) {
+            return json_decode($confTabMsgCacheVar);
+        }
+
+        $arr = array(
+            Configurations::FORM_GENERAL => Labels::getLabel('NAV_SETUP_STORE_NAME,_EMAIL,_CONTACT_NUMBER_AND_MORE', $langId),
+            Configurations::FORM_LOCAL => Labels::getLabel('NAV_SETUP_STORE_ADDRESS,_TIME_ZONE,_LANGUAGE_AND_MORE', $langId),
+            Configurations::FORM_SEO => Labels::getLabel('NAV_CONFIGURE_SETTINGS_TO_IMPROVE_SEO_PERFORMANCE', $langId),
+            Configurations::FORM_USER_ACCOUNT => Labels::getLabel('NAV_SETUP_PERMISSIONS_AND_WITHDRAWAL_AMOUNTS', $langId),
+            Configurations::FORM_PRODUCT => Labels::getLabel('NAV_SETUP_PRODUCT_RELATED_SETTINGS_FOR_SELLERS', $langId),
+            Configurations::FORM_CART_WISHLIST => Labels::getLabel('NAV_SETUP_CART_CANCELLATIONS,_REMINDERS_AND_MORE', $langId),
+            Configurations::FORM_CHECKOUT_PROCESS => Labels::getLabel('NAV_SETUP_COD,_WALLET_BALANCE,_ORDER_STATUS_AND_MORE', $langId),
+            Configurations::FORM_COMMISSION => Labels::getLabel('NAV_SETUP_COMMISSION_ON_TAX_AND_SHIPPING', $langId),
+            Configurations::FORM_DISCOUNT => Labels::getLabel('NAV_SETUP_DISCOUNT_COUPONS,_MINIMUM_ORDER_VALUE_AND_MORE', $langId),
+            Configurations::FORM_REWARD_POINTS => Labels::getLabel('NAV_SETUP_BIRTHDAY_REWARDS,_YEAR-END_REWARDS_AND_MORE', $langId),
+            Configurations::FORM_AFFILIATE => Labels::getLabel('NAV_SETUP_AFFILIATE\'S_SIGNUP_COMMISSION,_COMMISSION_VALIDITY_AND_MORE', $langId),
+            Configurations::FORM_REVIEWS => Labels::getLabel('NAV_SETUP_REVIEWS_MODULE_VISIBILITY_AND_DEFAULT_STATUS', $langId),
+            Configurations::FORM_THIRD_PARTY_API => Labels::getLabel('NAV_SETUP_GOOGLE_MAP,_FB_PIXEL,_MICROSOFT_TRANSLATOR,_ETC', $langId),
+            Configurations::FORM_EMAIL => Labels::getLabel('NAV_SETUP_FROM-EMAIL,_REPLY_EMAIL,_CONTACT_EMAIL_AND_MORE', $langId),
+            Configurations::FORM_MEDIA => Labels::getLabel('NAV_SETUP_LOGOS,_FAVICONS,_WATERMARKS_AND_MORE', $langId),
+            Configurations::FORM_SUBSCRIPTION => Labels::getLabel('NAV_SETUP_SUBSCRIPTION_MODULE_VISIBILITY,_SELLER_SUBSCRIPTIONS_AND_MORE', $langId),
+            Configurations::FORM_REFERAL => Labels::getLabel('NAV_SETUP_REFERRAL\'S_REWARD_POINTS,_VALIDITY_AND_MORE', $langId),
+            Configurations::FORM_SHARING => Labels::getLabel('NAV_SETUP_SHARING_FOR_FB_AND_TWITTER', $langId),
+            Configurations::FORM_SYSTEM => Labels::getLabel('NAV_SETUP_SYSTEM_MESSAGES', $langId),
+            Configurations::FORM_LIVE_CHAT => Labels::getLabel('NAV_SETUP_LIVE-CHAT_MODULE_VISIBILITY', $langId),
+            Configurations::FORM_PPC => Labels::getLabel('NAV_SETUP_COST-PER-CLICK,_PPC_SLIDES_COUNT_AND_MORE', $langId),
+            Configurations::FORM_SERVER => Labels::getLabel('NAV_SETUP_SSL_AND_MAINTENANCE_MODE', $langId),
+        );
+        CacheHelper::create('confTabMsgCacheVar' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
     }
 
 
@@ -96,8 +136,8 @@ class Configurations extends FatModel
     }
 
     public static function getConfigurations($attr = [])
-    {        
-      
+    {
+
         $srch = new SearchBase(static::DB_TBL, 'conf');
         if (!empty($attr)) {
             $srch->addCondition('conf_name', 'in', $attr);

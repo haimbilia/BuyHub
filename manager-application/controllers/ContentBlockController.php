@@ -105,7 +105,7 @@ class ContentBlockController extends ListingBaseController
         $srch->addMultipleFields([
             'epage_id', 'IFNULL(epage_label,epage_identifier) AS epage_label',
             'epage_type', 'epage_content_for', 'epage_active', 'epage_default',
-            'epagelang_lang_id', 'IFNULL(epage_content, epage_default_content) AS epage_content', 'epage_updated_on'
+            'epagelang_lang_id', 'IFNULL(epage_content, epage_default_content) AS epage_content'
         ]);
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
@@ -194,7 +194,8 @@ class ContentBlockController extends ListingBaseController
         $this->set('imageFunction', 'cblockBackgroundImage');
         $this->checkEditPrivilege(true);
 
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     private function getForm(int $recordId = 0)
@@ -329,7 +330,8 @@ class ContentBlockController extends ListingBaseController
         $this->set('contentBlockArrWithBg', Extrapage::getContentBlockArrWithBg($this->siteLangId));
         $this->set('activeLangtab', true);
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
@@ -527,7 +529,8 @@ class ContentBlockController extends ListingBaseController
         $this->set('file_type', 'THUMB');
         $this->set('recordId', $recordId);
         $this->checkEditPrivilege(true);
-        $this->_template->render(false, false);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
 
