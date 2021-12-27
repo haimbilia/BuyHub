@@ -16,7 +16,7 @@ $(function() {
         var data = fcom.frmData(frm);
         if (!confirm(langLbl.areYouSure)) { return; }
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeRequestStatus'), data, function (t) {
-            
+            reloadList();
         });
     };
 });

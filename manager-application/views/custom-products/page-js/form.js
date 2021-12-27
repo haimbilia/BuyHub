@@ -10,7 +10,12 @@
 
     /**  record_id   =  product_id */
     setup = function (frm) {
-        if (!$(frm).validate()) { return; }
+        if (!$(frm).validate()) {            
+            $('html,body').stop().animate({
+                scrollTop: $('.error:first').offset().top - ($('.mainHeaderJs').height() + 50),
+            });
+            return; 
+        }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setup'), data, function (res) {
             langForm(res.langId, 0, res.productId);
@@ -351,7 +356,7 @@
             let recordId = getCurrentFrmRecordId();
             let langId = getCurrentFrmLangId();
             let productOptions = {};
-            if (type == 1) {
+            if (type == 0) {
                 $('#addProductfrm select.optionsJs').each(function () {
                     let optionData = $(this).select2('data');
                     if (1 < optionData.length) {
@@ -618,6 +623,14 @@ $(document).on('click', '.warrantyTypeJs', function () {
     let type = $(this).data('type');
     $(this).closest('div').siblings('.warrantyTypeButtonJs').text($(this).text());
     $("#product_warranty_unit").val(type);
+});
+
+$(document).on('change', '#product_fulfillment_type', function () {    
+    if($(this).val() == fulfilmentTypePickup){
+        $('#shipping_profile').parent().parent().addClass('hide');
+    }else{
+        $('#shipping_profile').parent().parent().removeClass('hide');
+    }
 });
 
 $(document).on('click', '.optionsAddJs', function () {

@@ -145,7 +145,7 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
             <div class="add-stock-column column-main">
                 <div class="add-stock-column-head">
                     <div class="add-stock-column-head-label">
-                        <h2 class="h2">Add Product</h2>
+                        <h2 class="h2"><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId):Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
                         <span class="text-muted"> <span class="required"></span> required
                             information</span>
                     </div>
@@ -381,12 +381,12 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
                         <div class="row">
                             <?php
                             echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6,['id' => 'product_fulfillment_type']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'ps_from_country_id', 6, ['id' => 'ps_from_country_id']);
-                            echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'shipping_profile', 6, ['id' => 'shipping_profile']);
                             ?>
                         </div>
                     </div>
@@ -531,6 +531,7 @@ $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData[
         var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>'; 
         var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
         var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
+        var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';   
 
         $(function() {
             prodSpecifications();

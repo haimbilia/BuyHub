@@ -88,7 +88,7 @@ class ProductsController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
 
         $srch = Product::getSearchObject($this->siteLangId);
-        $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
+        //$srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'product_seller_id = user_id', 'tu');
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
@@ -110,33 +110,25 @@ class ProductsController extends ListingBaseController
 
         if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
             $is_custom_or_catalog = FatApp::getPostedData('is_custom_or_catalog', FatUtility::VAR_INT, -1);
-            if ($is_custom_or_catalog > -1) {
-                if ($is_custom_or_catalog > 0) {
-                    if (0 < $product_seller_id) {
-                        $srch->addCondition('product_seller_id', '=', $product_seller_id);
-                    } else {
-                        $srch->addCondition('product_seller_id', '>', 0);
-                    }
-                } else {
-                    if (0 < $product_seller_id) {
-                        $srch->addCondition('product_seller_id', '=', $product_seller_id);
-                    }
-                }
-            } else {
+            if($is_custom_or_catalog == applicationConstants::SYSTEM_CATALOG){
+                $srch->addCondition('product_seller_id', '=', 0);
+            }elseif($is_custom_or_catalog == applicationConstants::CUSTOM_CATALOG){
                 if (0 < $product_seller_id) {
                     $srch->addCondition('product_seller_id', '=', $product_seller_id);
+                } else {
+                    $srch->addCondition('product_seller_id', '>', 0);
                 }
+            }else{
+                if (0 < $product_seller_id) {
+                    $srch->addCondition('product_seller_id', '=', $product_seller_id);
+                } 
             }
         } else {
             if (0 < $product_seller_id) {
                 $srch->addCondition('product_seller_id', '=', $product_seller_id);
             }
-        }
-
-        $product_attrgrp_id = FatApp::getPostedData('product_attrgrp_id', FatUtility::VAR_INT, -1);
-        if ($product_attrgrp_id > -1) {
-            $srch->addCondition('product_attrgrp_id', '=', $product_attrgrp_id);
-        }
+        }    
+          
 
         $prodcat_id = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, -1);
         if ($prodcat_id > 0) {
@@ -166,15 +158,14 @@ class ProductsController extends ListingBaseController
 
         $srch->addMultipleFields(
             array(
-                'product_id', 'product_attrgrp_id',
-                'product_identifier', 'product_approved', 'product_active', 'product_seller_id', 'product_added_on',
-                'product_name', 'attrgrp_name', 'user_name', 'product_updated_on'
+                'product_id','product_identifier', 'product_approved', 'product_active', 'product_seller_id',
+                'product_added_on','product_name', 'user_name', 'product_updated_on'
             )
         );
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
+        $srch->addOrder($sortBy, $sortOrder);      
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
@@ -224,6 +215,8 @@ class ProductsController extends ListingBaseController
             } else {
                 $productData = $this->modelObj::getAttributesByLangId($langId, $recordId, null, true);
             }
+
+            $productData['record_id'] =  $recordId;
 
             if (empty($productData)) {
                 LibHelper::exitWithError($this->str_invalid_request_id, false, true);
@@ -319,10 +312,10 @@ class ProductsController extends ListingBaseController
             $srch->addCondition('upc_product_id', '=', $recordId);
             $srch->addFld('upc_options');
             $row = FatApp::getDb()->fetch($srch->getResultSet());
-            $productData['upc_type'] = applicationConstants::NO;
+            $productData['upc_type'] = applicationConstants::YES;
             if (false != $row) {
-                if ($row['upc_options'] != 0 || $row['upc_options'] != '') {
-                    $productData['upc_type'] = applicationConstants::YES;
+                if ($row['upc_options'] != 0) {                  
+                    $productData['upc_type'] = applicationConstants::NO;
                 }
             }
 
@@ -383,7 +376,7 @@ class ProductsController extends ListingBaseController
     {
         $this->checkEditPrivilege();
 
-        $recordId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         if (1 > $langId ||  !array_key_exists($productType, Product::getProductTypes($langId))) {
@@ -405,7 +398,7 @@ class ProductsController extends ListingBaseController
 
         $this->validateGetForm($post);
 
-        $recordId = $post['product_id'];
+        $recordId = $post['record_id'];
         $langId = $post['lang_id'];
         /* sendApprovalStatusUpdate to seller */
         $sendApprovalStatusUpdate = false;
@@ -692,7 +685,7 @@ class ProductsController extends ListingBaseController
 
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
-        $frm->addHiddenField('', 'page');
+        $frm->addHiddenField('', 'page', 1);
         $frm->addHiddenField('', 'product_id');
 
         HtmlHelper::addSearchButton($frm);
@@ -739,9 +732,9 @@ class ProductsController extends ListingBaseController
     {
         $frm = $this->getImageFrm();
         if (1 > $recordId) {
-            $frm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, 'product_id' => $tempProductId]);
+            $frm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, 'record_id' => $tempProductId]);
         } else {
-            $frm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'product_id' => $recordId]);
+            $frm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $recordId]);
         }
 
         $this->set('frm', $frm);
@@ -793,7 +786,7 @@ class ProductsController extends ListingBaseController
         }
 
         $this->set('images', $images);
-        $this->set('product_id', $recordId);
+        $this->set('recordId', $recordId);
         $this->set('isDefaultLayout', FatApp::getPostedData('isDefaultLayout', FatUtility::VAR_INT, 0));
         $this->set('canEdit', $this->objPrivilege->canEditProducts(0, true));
         $this->_template->render(false, false);
@@ -803,7 +796,7 @@ class ProductsController extends ListingBaseController
     {
         $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
-        $recordId = FatUtility::int($post['product_id']);
+        $recordId = FatUtility::int($post['record_id']);
         $fileType = FatUtility::int($post['file_type']);
         $imageIds = explode('-', $post['ids']);
         $count = 1;
@@ -830,7 +823,7 @@ class ProductsController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
-        $recordId = $recordId = FatUtility::int($post['product_id']);
+        $recordId = $recordId = FatUtility::int($post['record_id']);
         $optionId = FatUtility::int($post['option_id']);
         $fileType = FatUtility::int($post['file_type']);
         if (!in_array($fileType, [AttachedFile::FILETYPE_PRODUCT_IMAGE, AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP])) {
@@ -918,7 +911,7 @@ class ProductsController extends ListingBaseController
 
     public function prodSpecifications()
     {
-        $recordId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         if (1 > $langId) {
             $langId = CommonHelper::getDefaultFormLangId();
@@ -951,13 +944,9 @@ class ProductsController extends ListingBaseController
 
     public function upcListing()
     {
-        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-        if ($recordId < 1) {
-            LibHelper::exitWithError($this->str_invalid_request);
-        }
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);      
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         $productOptions = FatApp::getPostedData('productOptions');
-
         $type = FatApp::getPostedData('type', FatUtility::VAR_INT, 0);
 
         $upcCodeData = [];
@@ -969,7 +958,7 @@ class ProductsController extends ListingBaseController
         }
 
         $optionCombinations = [];
-        if ($type == applicationConstants::YES && is_array($productOptions)) {
+        if ($type == applicationConstants::NO && is_array($productOptions)) {
             $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues');
         }
         // $productOptions = Product::getProductOptions($recordId, $this->siteLangId, true);

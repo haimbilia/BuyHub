@@ -149,7 +149,7 @@ if (0 < $recordId) {
             <div class="add-stock-column column-main">
                 <div class="add-stock-column-head">
                     <div class="add-stock-column-head-label">
-                        <h2 class="h2">Add Product</h2>
+                        <h2 class="h2"><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId):Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
                         <span class="text-muted"> <span class="required"></span> required
                             information</span>
                     </div>
@@ -232,7 +232,7 @@ if (0 < $recordId) {
                             echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_id', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'record_id', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'temp_product_id', 6, ['id' => 'temp_product_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit', 6, ['id' => 'product_warranty_unit']);
                             ?>
@@ -385,7 +385,7 @@ if (0 < $recordId) {
                         <div class="row">
                             <?php
                             echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6,['id' => 'product_fulfillment_type']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
@@ -535,6 +535,7 @@ if (0 < $recordId) {
         var tempImageType = '<?php echo AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP; ?>';
         var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
         var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
+        var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';     
 
         $(function() {
             prodSpecifications();

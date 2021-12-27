@@ -285,12 +285,10 @@ class CustomProductsController extends ListingBaseController
                 }
             }
         }
-        $productData['upc_type'] = applicationConstants::NO;
-
-        $productData['preq_ean_upc_code'] = json_decode($productData['preq_ean_upc_code'], true);
-
+        $productData['upc_type'] = applicationConstants::YES;
+        $productData['preq_ean_upc_code'] = json_decode($productData['preq_ean_upc_code'], true);       
         if (count($productData['preq_ean_upc_code']) &&  array_key_first($productData['preq_ean_upc_code']) != 0) {
-            $productData['upc_type'] = applicationConstants::YES;
+            $productData['upc_type'] = applicationConstants::NO;
         }
 
         $this->set("productData", [
@@ -778,7 +776,7 @@ class CustomProductsController extends ListingBaseController
         }
 
         $optionCombinations = [];
-        if ($type == applicationConstants::YES && is_array($productOptions)) {
+        if ($type == applicationConstants::NO && is_array($productOptions)) {
             $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues');
         }
 

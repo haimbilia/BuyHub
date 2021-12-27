@@ -327,8 +327,8 @@ class applicationConstants {
 
     public static function getCatalogTypeArr($langId) {
         return array(
-            static::CUSTOM_CATALOG => Labels::getLabel('LBL_Custom_Products', $langId),
-            static::SYSTEM_CATALOG => Labels::getLabel('LBL_Catalog_Products', $langId)
+            static::CUSTOM_CATALOG => Labels::getLabel('LBL_SELLER_PRODUCTS', $langId),
+            static::SYSTEM_CATALOG => Labels::getLabel('LBL_MY_PRODUCTS', $langId)
         );
     }
 
