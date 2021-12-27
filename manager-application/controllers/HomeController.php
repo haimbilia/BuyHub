@@ -344,7 +344,7 @@ class HomeController extends ListingBaseController
 
         include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
         $analyticArr = array(
-            'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
+            'clientIda' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID"),
             'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY"),
             'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
             'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID")
@@ -389,7 +389,9 @@ class HomeController extends ListingBaseController
                             break;
                     }
                 } catch (exception $e) {
-                    echo $e->getMessage();
+                    $str = "<li class='list-stats-item'>" . $e->getMessage() . "</li>";
+                    $this->set('html', $str);
+                    $this->_template->render(false, false, 'json-success.php', true, false);
                 }
             }
             if (!empty($result)) {
