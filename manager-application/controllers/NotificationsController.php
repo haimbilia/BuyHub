@@ -1,6 +1,6 @@
 <?php
 
-class NotificationsController extends ListingBaseController
+class NotificationsController extends AdminBaseController
 {
     public function __construct($action)
     {
@@ -10,13 +10,67 @@ class NotificationsController extends ListingBaseController
     }
 
     public function index()
-    {
-        $this->canEdit = $this->objPrivilege->canEditNotifications($this->admin_id, true);
-        $this->set("canEdit", $this->canEdit);
+    {  
+        $frmSearch = $this->getSearchForm();       
+        $this->set("frmSearch", $frmSearch);
+        $this->getListingData();
         $this->_template->render();
     }
 
     public function search()
+    {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, NUll, true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    private function getListingData()
+    {
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $data = FatApp::getPostedData();
+
+        $searchForm = $this->getSearchForm();
+
+        $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
+        $post = $searchForm->getFormDataFromArray($data);
+
+        $srch = Notification::getSearchObject();
+        if (!AdminPrivilege::isAdminSuperAdmin($this->admin_id)) {
+            $recordTypeArr = Notification::getAllowedRecordTypeArr($this->admin_id);
+            $srch->addCondition('notification_record_type', 'IN', $recordTypeArr);
+        }
+
+        $srch->addCondition('n.' . Notification::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
+
+        // if (!empty($post['keyword'])) {
+        //     $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');
+        //     $condition->attachCondition('b_l.brand_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+        // }
+
+        $page = (empty($page) || $page <= 0) ? 1 : $page;
+        $page = FatUtility::int($page);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        //echo $srch->getQuery();
+
+        $srch->addOrder('n.notification_added_on', 'DESC');
+  
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->set("arrListing", $records);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pageSize);
+        $this->set('postedData', $post);
+        $this->set('labelArr', Notification::getLabelKeyString($this->siteLangId));
+        $this->set('canEdit', $this->objPrivilege->canEditNotifications($this->admin_id, true));
+    }
+
+    public function search1()
     {
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
@@ -68,24 +122,24 @@ class NotificationsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function changeStatus()
-    {
-        $this->objPrivilege->canEditNotifications();
+    // public function changeStatus()
+    // {
+    //     $this->objPrivilege->canEditNotifications();
 
-        $notificationIds = FatApp::getPostedData('record_ids');
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
-        $markread = FatApp::getPostedData('markread', FatUtility::VAR_INT, 0);
-        $obj = new Notification();
+    //     $notificationIds = FatApp::getPostedData('record_ids');
+    //     $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+    //     $markread = FatApp::getPostedData('markread', FatUtility::VAR_INT, 0);
+    //     $obj = new Notification();
 
-        if (!$obj->changeNotifyStatus($status, $notificationIds)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        if ($markread != 1) {
-            $this->set('msg', $this->str_update_record);
-        }
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    //     if (!$obj->changeNotifyStatus($status, $notificationIds)) {
+    //         Message::addErrorMessage($obj->getError());
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     if ($markread != 1) {
+    //         $this->set('msg', $this->str_update_record);
+    //     }
+    //     $this->_template->render(false, false, 'json-success.php');
+    // }
 
     public function notificationList()
     {
@@ -107,4 +161,15 @@ class NotificationsController extends ListingBaseController
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
+
+    protected function getSearchForm()
+    {   
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'page');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
+        HtmlHelper::addSearchButton($frm);
+        return $frm;
+    }
+
 }
