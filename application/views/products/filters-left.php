@@ -38,14 +38,9 @@
  <?php
     } ?>
 
- <div class="aside-head filter-head-js">
-     <h6 class="title"><?php echo Labels::getLabel('LBL_FILTERS', $siteLangId); ?></h6>
 
- </div>
 
- <div class="selected-filters" id="filters"><a href="javascript:void(0)" class="resetAll link" id="resetAll" onClick="resetListingFilter()" style="display:none;">
-         <?php echo Labels::getLabel('LBL_Clear_All', $siteLangId); ?>
-     </a></div>
+
 
 
 
@@ -64,7 +59,7 @@
                                     $catUrl = UrlHelper::generateUrl('category', 'view', array($cat['prodcat_id'])); ?>
                                  <li>
                                      <?php if (count($cat['children']) > 0) {
-                                            echo '<span class="acc-trigger" ripple="ripple" ripple-color="#000"></span>';
+                                            echo '<span class="acc-trigger"></span>';
                                         } ?>
                                      <a class="" data-id="<?php echo $cat['prodcat_id']; ?>" href="<?php echo $catUrl; ?>"><?php echo $cat['prodcat_name']; ?></a>
                                      <?php if (count($cat['children']) > 0) {
@@ -73,7 +68,7 @@
                                         ?>
                                  <li>
                                      <?php if (isset($children['children']) && count($children['children']) > 0) {
-                                                    echo '<span class="acc-trigger" ripple="ripple" ripple-color="#000"></span>';
+                                                    echo '<span class="acc-trigger"></span>';
                                                 } ?>
                                      <a class="" data-id="<?php echo $children['prodcat_id']; ?>" href="<?php echo UrlHelper::generateUrl('category', 'view', array($children['prodcat_id'])); ?>"><?php echo $children['prodcat_name']; ?></a>
                                      <?php if (isset($children['children']) && count($children['children']) > 0) {
@@ -330,7 +325,7 @@
                          $.each(catCodeArr, function(key, value) {
                              if ($("ul li a[data-id='" + value + "']").parent().find('span')) {
                                  $("ul li a[data-id='" + value + "']").parent().find('span:first').addClass(
-                                     'is--active');
+                                     'is-active');
                                  $("ul li a[data-id='" + value + "']").parent().find('ul:first').css('display',
                                      'block');
                              }
@@ -465,7 +460,7 @@
                              /* left side filters expand-collapse functionality [ */
                              $('.span--expand').bind('click', function() {
                                  $(this).parent('li.level').toggleClass('is-active');
-                                 $(this).toggleClass('is--active');
+                                 $(this).toggleClass('is-active');
                                  $(this).next('ul').toggle("");
                              });
                              $('.span--expand').click();
@@ -482,12 +477,12 @@
                              var link = $(this);
                              var closest_ul = link.siblings("ul");
 
-                             if (link.hasClass("is--active")) {
+                             if (link.hasClass("is-active")) {
                                  closest_ul.slideUp();
-                                 link.removeClass("is--active");
+                                 link.removeClass("is-active");
                              } else {
                                  closest_ul.slideDown();
-                                 link.addClass("is--active");
+                                 link.addClass("is-active");
                              }
                          });
                          $('.dropdown-menu').on('click', function(e) {

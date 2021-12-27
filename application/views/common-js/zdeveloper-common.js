@@ -41,10 +41,7 @@ $(document).ready(function () {
     ) {
         $("[data-simplebar]").attr("data-simplebar-direction", "rtl");
     }
-    $(document).on("click", ".loginRegBtn--js", function () {
-        $(".container-form").toggleClass("sign-up");
-        $("#sign-up").toggleClass("is-opened");
-    });
+
 });
 $(document).on("keyup", "input.otpVal-js", function (e) {
     if ("" != $(this).val()) {

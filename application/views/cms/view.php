@@ -70,7 +70,7 @@
                             <div class="section__heading">
                                 <h2><?php echo $cPage['cpage_title']; ?></h2>
                                 <?php if (!$isAppUser) { ?>
-                                    <div class="breadcrumbs breadcrumbs--center">
+                                    <div class="breadcrumb  breadcrumb-center">
                                         <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
                                     </div>
                                 <?php } ?>

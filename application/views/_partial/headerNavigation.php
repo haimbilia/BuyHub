@@ -30,7 +30,7 @@
 
 ?>
     <!-- <div class="navigation-wrapper">
-        <ul class="navigations <?php echo ($navLinkCount > 4) ? 'justify-content-between' : ''; ?>">
+        <ul class="navigation <?php echo ($navLinkCount > 4) ? 'justify-content-between' : ''; ?>">
             <?php if (count($headerCategories)) { ?>
                 <li class="navchild categories">
                     <a class="categories-link" href="javascript:void(0)">
@@ -270,155 +270,394 @@
         </ul>
 
     </div> -->
-    <nav id="navigation1" class="navigation">
-        <div class="nav-toggle"></div>
-        <div class="nav-menus-wrapper">
-            <ul class="nav-menu align-to-right">
-                <li><a href="#" target="_blank">Home</a></li>
-                <li>
-                    <a href="#">Dropdown Menu</a>
-                    <ul class="nav-dropdown">
-                        <li>
-                            <a href="#">Menu Level 2</a>
-                            <ul class="nav-dropdown">
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                                <li><a href="#" target="_blank">Link 6</a></li>
-                                <li><a href="#" target="_blank">Link 7</a></li>
-                                <li><a href="#" target="_blank">Link 8</a></li>
-                                <li><a href="#" target="_blank">Link 9</a></li>
-                                <li><a href="#" target="_blank">Link 10</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#">Menu Level 2</a>
-                            <ul class="nav-dropdown">
-                                <li>
-                                    <a href="#">Menu Level 3</a>
-                                    <ul class="nav-dropdown">
-                                        <li><a href="#" target="_blank">Link 1</a></li>
-                                        <li><a href="#" target="_blank">Link 2</a></li>
-                                        <li><a href="#" target="_blank">Link 3</a></li>
-                                        <li><a href="#" target="_blank">Link 4</a></li>
-                                        <li><a href="#" target="_blank">Link 5</a></li>
+    <!-- Start Navigation Bar -->
+    <div class="navigation-wrapper">
+        <ul class="navigation">
+            <li class="navchild">
+                <a target="_self" href="javascript:void(0);">Women</a>
+                <span class="link__mobilenav"></span>
+                <div class="subnav">
+                    <div class="subnav__wrapper">
+                        <div class="container">
+                            <div class="nav__sub-panels">
+                                <div class="nav__panel"><a class="nav__panel-title" href="womens-new-arrivals">NEW IN</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-party-looks"><span>Party Looks</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-tommy-x-rossignol"><span>TOMMYXROSSIGNOL</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="tommy-x-zendaya"><span>TOMMYXZENDAYA</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="women-hilfiger-collection"><span>Hilfiger
+                                                    Collection</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-sustainable-evolution"><span>Sustainable
+                                                    style</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-explore"><span>Explore</span></a></li>
                                     </ul>
-                                </li>
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#">Menu Level 2</a>
-                            <ul class="nav-dropdown">
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" target="_blank">Link 1</a></li>
-                        <li><a href="#" target="_blank">Link 2</a></li>
-                        <li><a href="#" target="_blank">Link 3</a></li>
-                        <li><a href="#" target="_blank">Link 4</a></li>
-                        <li><a href="#" target="_blank">Link 5</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Mega Menu</a>
-                    <div class="megamenu-panel">
-                        <div class="megamenu-lists">
-                            <ul class="megamenu-list list-col-4">
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                                <li><a href="#" target="_blank">Link 6</a></li>
-                                <li><a href="#" target="_blank">Link 7</a></li>
-                                <li><a href="#" target="_blank">Link 8</a></li>
-                            </ul>
-                            <ul class="megamenu-list list-col-4">
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                                <li><a href="#" target="_blank">Link 6</a></li>
-                                <li><a href="#" target="_blank">Link 7</a></li>
-                                <li><a href="#" target="_blank">Link 8</a></li>
-                            </ul>
-                            <ul class="megamenu-list list-col-4">
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                                <li><a href="#" target="_blank">Link 6</a></li>
-                                <li><a href="#" target="_blank">Link 7</a></li>
-                                <li><a href="#" target="_blank">Link 8</a></li>
-                            </ul>
-                            <ul class="megamenu-list list-col-4">
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                                <li><a href="#" target="_blank">Link 6</a></li>
-                                <li><a href="#" target="_blank">Link 7</a></li>
-                                <li><a href="#" target="_blank">Link 8</a></li>
-                            </ul>
+                                </div>
+                                <div class="nav__panel nav__panel--two-column"><a class="nav__panel-title" href="womens-clothes">Clothing</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-coats-jackets"><span>Coats &amp;
+                                                    Jackets</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-hoodies-sweatshirts"><span>Sweatshirts
+                                                    &amp;
+                                                    Hoodies</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="ladies-knitwear"><span>Knitwear</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-dresses-jumpsuits"><span>Dresses &amp;
+                                                    Jumpsuits</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-blazers"><span>Blazers</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-t-shirts"><span>T-Shirts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-tops"><span>Tops</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-shirts-blouses"><span>Shirts &amp;
+                                                    Blouses</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="ladies-polo-shirts"><span>Polo Shirts</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-jeans"><span>Jeans</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-trending"><span>Trending</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="ladies-trousers"><span>Trousers</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-skirts"><span>Skirts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="ladies-shorts"><span>Shorts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-basics"><span>Basics</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-swimwear"><span>Swimwear</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-lingerie"><span>Lingerie</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-lounge-sleepwear"><span>Lounge &amp;
+                                                    Nightwear</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-socks-tights"><span>Socks &amp;
+                                                    Hosiery</span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="nav__panel "><a class="nav__panel-title" href="womens-bags-accessories">Bags &amp; Accessories</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-bags"><span>Bags</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="ladies-watches"><span>Watches</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-hats-gloves-scarves"><span>Hats, Gloves
+                                                    &amp;
+                                                    Scarves</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-purses-keyrings"><span>Wallets &amp;
+                                                    Keyrings</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-belts"><span>Belts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-jewelry"><span>Jewellery</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-sunglasses"><span>Sunglasses</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-fragrances"><span>Fragrances</span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="nav__panel "><a class="nav__panel-title" href="womens-shoes">SHOES</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-new-arrivals-shoes"><span>NEW IN</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-boots"><span>Boots</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-trainers"><span>Trainers</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-flats"><span>Flat Shoes</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-pumps"><span>Pumps</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="womens-sandals"><span>Sandals</span></a></li>
+                                    </ul>
+                                </div>
+
+
+                            </div>
                         </div>
                     </div>
-                </li>
-                <li>
-                    <a href="#">Mega Menu 2</a>
-                    <div class="megamenu-panel">
-                        <div class="megamenu-lists">
-                            <ul class="megamenu-list list-col-4">
-                                <li class="megamenu-list-title"><a href="#">Title Name</a></li>
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                            </ul>
-                            <ul class="megamenu-list list-col-4">
-                                <li class="megamenu-list-title"><a href="#">Title Name</a></li>
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                            </ul>
-                            <ul class="megamenu-list list-col-4">
-                                <li class="megamenu-list-title"><a href="#">Title Name</a></li>
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                            </ul>
-                            <ul class="megamenu-list list-col-4">
-                                <li class="megamenu-list-title"><a href="#">Title Name</a></li>
-                                <li><a href="#" target="_blank">Link 1</a></li>
-                                <li><a href="#" target="_blank">Link 2</a></li>
-                                <li><a href="#" target="_blank">Link 3</a></li>
-                                <li><a href="#" target="_blank">Link 4</a></li>
-                                <li><a href="#" target="_blank">Link 5</a></li>
-                            </ul>
+                </div>
+            </li>
+            <li class="navchild"><a target="_self" href="javascript:void(0);">Men</a> <span class="link__mobilenav"></span>
+                <div class="subnav">
+                    <div class="subnav__wrapper ">
+                        <div class="container">
+                            <div class="nav__sub-panels">
+                                <div class="nav__panel">
+
+
+                                    <a class="nav__panel-title" href="mens-new-arrivals">NEW IN</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-what-to-wear"><span>What to wear:
+                                                    parties</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="men-tommy-x-rossignol"><span>TOMMYXROSSIGNOL</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="tommy-x-mercedes-amg-petronas-f1"><span>TOMMYXMERCEDES-BENZ</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="tommy-x-lewis"><span>TOMMYXLEWIS</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-hilfiger-collection"><span>Hilfiger
+                                                    Collection</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-sustainable-evolution"><span>Sustainable
+                                                    style</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-explore"><span>Explore</span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="nav__panel nav__panel--two-column"><a class="nav__panel-title" href="mens-clothes">Clothing</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-coats-jackets"><span>Coats &amp;
+                                                    Jackets</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-sweatshirts-hoodies"><span>Sweatshirts &amp;
+                                                    Hoodies</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-knitwear"><span>Knitwear</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-t-shirts"><span>T-Shirts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-shirts"><span>Shirts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-polo-shirts"><span>Polo Shirts</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-rugby-shirts"><span>Rugby Shirts</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-jeans"><span>Jeans</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-trousers"><span>Trousers</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-tracksuits"><span>Tracksuits</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-tailored-clothing"><span>Tailored</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-suits"><span>Suits</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-blazers"><span>Blazers</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-shorts"><span>Shorts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-basics"><span>Basics</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-swimwear"><span>Swimwear</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-underwear"><span>Underwear</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-lounge-sleepwear"><span>Lounge &amp;
+                                                    Nightwear</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-socks"><span>Socks</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-big-tall"><span>Big &amp; Tall</span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="nav__panel "><a class="nav__panel-title" href="mens-bags-accessories">Bags &amp; Accessories</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-bags"><span>Bags</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-watches"><span>Watches</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-hats-gloves-scarves"><span>Hats, Gloves &amp;
+                                                    Scarves</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-wallets-keyrings"><span>Wallets &amp;
+                                                    Keyrings</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-belts"><span>Belts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-jewelry-cufflinks"><span>Jewellery &amp;
+                                                    Cufflinks</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-sunglasses"><span>Sunglasses</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-ties-pocket-squares"><span>Ties &amp; Pocket
+                                                    Squares</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-fragrances"><span>Fragrances</span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="nav__panel "><a class="nav__panel-title" href="mens-shoes">Shoes</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-new-arrivals-shoes"><span>NEW IN</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-trainers"><span>Trainers</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-casual-shoes"><span>Casual Shoes</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-formal-shoes"><span>Formal Shoes</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-boots"><span>Boots</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="mens-sandals"><span>Sandals &amp; Flip
+                                                    Flops</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
+                </div>
+            </li>
+            <li class="navchild"><a target="_self" href="/baby-kids">Baby &amp; Kids</a> <span class="link__mobilenav"></span>
+                <div class="subnav">
+                    <div class="subnav__wrapper ">
+                        <div class="container">
+                            <div class="nav__sub-panels">
+                                <div class="nav__panel "><a class="nav__panel-title" href="kids-new-arrivals">NEW IN</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="kids-tommy-jeans-capsule-collection"><span>Tommy
+                                                    Jeans
+                                                    Capsule</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="sports-capsule"><span>Sports Capsule</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="kids-unisex"><span>Unisex</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="kids-holiday-season"><span>Holiday
+                                                    season</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="kids-sustainable-evolution"><span>Sustainable
+                                                    style</span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="nav__panel "><a class="nav__panel-title" href="boys">Boys</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="boys-coats-jackets"><span>Coats &amp;
+                                                    Jackets</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="boys-sweatshirts-hoodies"><span>Sweatshirts &amp;
+                                                    Hoodies</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="boys-jumpers-cardigans"><span>Knitwear</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="boys-tshirts-polos"><span>T-shirts &amp;
+                                                    Polos</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="boys-shirts"><span>Shirts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="boys-jeans"><span>Jeans</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="boys-trousers"><span>Trousers &amp;
+                                                    Shorts</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="boys-underwear-sleepwear"><span>Underwear &amp;
+                                                    Socks</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="boys-shoes-accessories"><span>Shoes &amp;
+                                                    Accessories</span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="nav__panel "><a class="nav__panel-title" href="girls">Girls</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="girls-coats-jackets"><span>Coats &amp;
+                                                    Jackets</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="girls-sweatshirts-hoodies"><span>Sweatshirts &amp;
+                                                    Hoodies</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="girls-dresses"><span>Dresses</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="girls-jumpers-cardigans"><span>Knitwear</span></a>
+                                        </li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="girls-tops-tshirts"><span>Tops &amp;
+                                                    T-shirts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="girls-jeans"><span>Jeans</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="girls-bottoms"><span>Trousers, Shorts &amp;
+                                                    Skirts</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="girls-underwear-sleepwear"><span>Underwear &amp;
+                                                    Socks</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="girls-shoes-accessories"><span>Shoes &amp;
+                                                    Accessories</span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="nav__panel "><a class="nav__panel-title" href="babies">Babies</a>
+                                    <ul class="nav__list">
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="baby-boys"><span>Boys</span></a></li>
+                                        <li class="nav__list-item"><a class="nav__list-item__link " href="baby-girls"><span>Girls</span></a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="navchild"><a target="_self" href="/womens-fashion">Tommy Jeans</a> <span class="link__mobilenav"></span>
+                <div class="subnav">
+                    <div class="subnav__wrapper ">
+                        <div class="container">
+                            <div class="nav__sub-panels">
+                                <div class="nav__sub-panels">
+                                    <div class="nav__panel "><a class="nav__panel-title" href="tommy-jeans-women">TOMMY JEANS WOMEN</a>
+                                        <ul class="nav__list">
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="women-tommy-jeans-capsule-collection"><span>TOMMY
+                                                        JEANS Capsules</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-coats-jackets-tommy-jeans"><span>Coats
+                                                        &amp; Jackets</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-sweatshirts-hoodies-tommy-jeans"><span>Sweatshirts
+                                                        &amp; Hoodies</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-jeans-tommy-jeans"><span>Jeans</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-dresses-tommy-jeans"><span>Dresses</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-tops-tommy-jeans"><span>Tops</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="ladies-knitwear-tommy-jeans"><span>Knitwear</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-trousers-skirts-tommy-jeans"><span>Trousers
+                                                        &amp; Skirts</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-shoes-accessories-tommy-jeans"><span>Shoes
+                                                        &amp; Accessories</span></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="nav__panel "><a class="nav__panel-title" href="tommy-jeans-men">TOMMY JEANS MEN</a>
+                                        <ul class="nav__list">
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="men-tommy-jeans-capsule-collection"><span>TOMMY
+                                                        JEANS Capsules</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-coats-jackets-tommy-jeans"><span>Coats
+                                                        &amp;
+                                                        Jackets</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-sweatshirts-hoodies-tommy-jeans"><span>Sweatshirts
+                                                        &amp; Hoodies</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-jeans-tommy-jeans"><span>Jeans</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-t-shirts-and-polo-shirts-tommy-jeans"><span>T-Shirts
+                                                        &amp; Polos</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-shirts-tommy-jeans"><span>Shirts</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-jumpers-tommy-jeans"><span>Knitwear</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-trousers-tommy-jeans"><span>Trousers
+                                                        &amp;
+                                                        Shorts</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-shoes-accessories-tommy-jeans"><span>Shoes
+                                                        &amp; Accessories</span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="navchild"><a target="_self" href="javascript:void(0)">Tommy Sport</a></li>
+            <li class="navchild"><a target="_self" href="javascript:void(0)">Gifts </a></li>
+            <li class="navchild more">
+                <a target="_self" href="javascript:void(0)">
+                    <span class="d-xl-none">
+                        More
+                    </span>
+                    <span class="d-none d-xl-block">
+                        <svg class="svg" width="24" height="24">
+                            <use xlink:href="media/retina/sprite.svg#hemburger" href="media/retina/sprite.svg#hemburger">
+                            </use>
+                        </svg>
+                    </span>
+                </a>
+                <span class="link__mobilenav"></span>
+                <div class="subnav">
+                    <div class="subnav__wrapper ">
+                        <div class="container">
+                            <div class="nav__sub-panels">
+                                <div class="nav__sub-panels">
+                                    <div class="nav__panel "><a class="nav__panel-title" href="tommy-jeans-women">TOMMY JEANS WOMEN</a>
+                                        <ul class="nav__list">
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="women-tommy-jeans-capsule-collection"><span>TOMMY
+                                                        JEANS Capsules</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-coats-jackets-tommy-jeans"><span>Coats
+                                                        &amp; Jackets</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-sweatshirts-hoodies-tommy-jeans"><span>Sweatshirts
+                                                        &amp; Hoodies</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-jeans-tommy-jeans"><span>Jeans</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-dresses-tommy-jeans"><span>Dresses</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-tops-tommy-jeans"><span>Tops</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="ladies-knitwear-tommy-jeans"><span>Knitwear</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-trousers-skirts-tommy-jeans"><span>Trousers
+                                                        &amp; Skirts</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="womens-shoes-accessories-tommy-jeans"><span>Shoes
+                                                        &amp; Accessories</span></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="nav__panel "><a class="nav__panel-title" href="tommy-jeans-men">TOMMY JEANS MEN</a>
+                                        <ul class="nav__list">
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="men-tommy-jeans-capsule-collection"><span>TOMMY
+                                                        JEANS Capsules</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-coats-jackets-tommy-jeans"><span>Coats
+                                                        &amp;
+                                                        Jackets</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-sweatshirts-hoodies-tommy-jeans"><span>Sweatshirts
+                                                        &amp; Hoodies</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-jeans-tommy-jeans"><span>Jeans</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-t-shirts-and-polo-shirts-tommy-jeans"><span>T-Shirts
+                                                        &amp; Polos</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-shirts-tommy-jeans"><span>Shirts</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-jumpers-tommy-jeans"><span>Knitwear</span></a>
+                                            </li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-trousers-tommy-jeans"><span>Trousers
+                                                        &amp;
+                                                        Shorts</span></a></li>
+                                            <li class="nav__list-item"><a class="nav__list-item__link " href="mens-shoes-accessories-tommy-jeans"><span>Shoes
+                                                        &amp; Accessories</span></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- End Navigation Bar -->
 
 
 
