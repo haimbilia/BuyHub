@@ -109,7 +109,8 @@
                 $objPrivilege->canViewProductCategories(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewWithdrawRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewOrderCancellationRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewOrderReturnRequests(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewCustomProductRequests(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
                 <li class="menu-item dropdownJs">
@@ -147,6 +148,19 @@
                                             </svg>
                                         </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CATEGORIES_REQUESTS', $siteLangId); ?>
                                             <?php if ($categoryReqCount) { ?>(<?php echo $categoryReqCount; ?>)<?php } ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewCustomProductRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" href="<?php echo UrlHelper::generateUrl('CustomProducts'); ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                                </use>
+                                            </svg>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_CUSTOM_PRODUCT_CATALOG_REQUESTS', $siteLangId); ?>
+                                            <?php if ($custProdReqCount) { ?>(<?php echo $custProdReqCount; ?>)<?php } ?></span>
                                     </a>
                                 </li>
                             <?php } ?>

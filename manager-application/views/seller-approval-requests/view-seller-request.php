@@ -71,7 +71,12 @@
                                 if ($val['afile_physical_path'] != '') {
                                     echo "<div><a href='" . UrlHelper::generateUrl('Users', 'downloadAttachment', array($supplierRequest['user_id'], $val['sfreqvalue_formfield_id'])) . "'>" . $val['sfreqvalue_text'] . "</a></div>";
                                 } else {
-                                    echo "<div>" . nl2br($val['sfreqvalue_text']) . '</div>';
+                                    if($val['sformfield_type']  == User::USER_FIELD_TYPE_PHONE){									
+                                        echo '<div>'.filter_var($val['sfreqvalue_text'], FILTER_SANITIZE_NUMBER_INT).'</div>';
+                                    }else{
+                                        echo "<div>" . nl2br($val['sfreqvalue_text']) . '</div>';
+                                    }
+                                    
                                 }
                                 ?> 
                             </div>
