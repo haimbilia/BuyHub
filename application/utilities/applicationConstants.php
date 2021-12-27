@@ -1,6 +1,7 @@
 <?php
 
-class applicationConstants {
+class applicationConstants
+{
 
     public const YES = 1;
     public const NO = 0;
@@ -80,7 +81,8 @@ class applicationConstants {
     public const CURRENCY_SEPARATOR_DECIMAL = '.';
     public const CURRENCY_SEPARATOR_COMMA = ',';
 
-    public static function getWeightUnitsArr($langId, $unitOnly = false) {
+    public static function getWeightUnitsArr($langId, $unitOnly = false)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -101,7 +103,8 @@ class applicationConstants {
         );
     }
 
-    public static function getAllLanguages() {
+    public static function getAllLanguages()
+    {
         $languagesArr = Language::getAllNames();
         if (count($languagesArr) > 1) {
             return [0 => Labels::getLabel('LBL_ALL_LANGUAGES')] + $languagesArr;
@@ -109,7 +112,8 @@ class applicationConstants {
         return $languagesArr;
     }
 
-    public static function digitalDownloadTypeArr($langId) {
+    public static function digitalDownloadTypeArr($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -120,7 +124,8 @@ class applicationConstants {
         );
     }
 
-    public static function sortOrder($langId) {
+    public static function sortOrder($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -131,7 +136,8 @@ class applicationConstants {
         );
     }
 
-    public static function getLengthUnitsArr($langId, $unitOnly = false) {
+    public static function getLengthUnitsArr($langId, $unitOnly = false)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -152,7 +158,8 @@ class applicationConstants {
         );
     }
 
-    public static function getYesNoArr($langId) {
+    public static function getYesNoArr($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -164,14 +171,16 @@ class applicationConstants {
         );
     }
 
-    public static function getYesNoClassArr() {
+    public static function getYesNoClassArr()
+    {
         return array(
             static::YES => applicationConstants::CLASS_SUCCESS,
             static::NO => applicationConstants::CLASS_DANGER
         );
     }
 
-    public static function getActiveInactiveArr($langId) {
+    public static function getActiveInactiveArr($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -183,14 +192,16 @@ class applicationConstants {
         );
     }
 
-    public static function getActiveInactiveClassArr() {
+    public static function getActiveInactiveClassArr()
+    {
         return array(
             static::ACTIVE => static::CLASS_SUCCESS,
             static::INACTIVE => static::CLASS_DANGER
         );
     }
 
-    public static function getBooleanArr($langId) {
+    public static function getBooleanArr($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -202,7 +213,8 @@ class applicationConstants {
         );
     }
 
-    public static function getOnOffArr($langId) {
+    public static function getOnOffArr($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -214,7 +226,8 @@ class applicationConstants {
         );
     }
 
-    public static function getNewsLetterSystemArr($langId) {
+    public static function getNewsLetterSystemArr($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -226,7 +239,8 @@ class applicationConstants {
         );
     }
 
-    public static function getLinkTargetsArr($langId) {
+    public static function getLinkTargetsArr($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -248,7 +262,8 @@ class applicationConstants {
       );
       } */
 
-    public static function getPercentageFlatArr($langId) {
+    public static function getPercentageFlatArr($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -265,21 +280,25 @@ class applicationConstants {
         return array_merge($mimeTypes, static::allowedVideoMimeTypes());
     }
 
-    public static function allowedFileExtensions() {
+    public static function allowedFileExtensions()
+    {
         $extensions = array('zip', 'txt', 'png', 'jpeg', 'jpg', 'gif', 'bmp', 'ico', 'tiff', 'tif', 'svg', 'svgz', 'rar', 'msi', 'cab', 'mp3', 'pdf', 'psd', 'ai', 'eps', 'ps', 'doc', 'docx');
 
         return array_merge($extensions, static::allowedVideoFileExtensions());
     }
 
-    public static function allowedVideoFileExtensions() {
+    public static function allowedVideoFileExtensions()
+    {
         return array(/* 'qt',  */'mov', 'mp4', 'webm');
     }
 
-    public static function allowedVideoMimeTypes() {
+    public static function allowedVideoMimeTypes()
+    {
         return array('video/quicktime', 'video/mp4', 'video/x-m4v', 'video/webm');
     }
 
-    public static function getGenderArr($langId) {
+    public static function getGenderArr($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -291,7 +310,8 @@ class applicationConstants {
         );
     }
 
-    public static function getDisplaysArr($langId) {
+    public static function getDisplaysArr($langId)
+    {
         $langId = FatUtility::int($langId);
         if ($langId < 1) {
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
@@ -304,7 +324,8 @@ class applicationConstants {
         );
     }
 
-    public static function getExcludePaymentGatewayArr() {
+    public static function getExcludePaymentGatewayArr()
+    {
         return array(
             static::CHECKOUT_PRODUCT => array(''),
             static::CHECKOUT_SUBSCRIPTION => array(
@@ -325,21 +346,24 @@ class applicationConstants {
         );
     }
 
-    public static function getCatalogTypeArr($langId) {
+    public static function getCatalogTypeArr($langId)
+    {
         return array(
             static::CUSTOM_CATALOG => Labels::getLabel('LBL_Custom_Products', $langId),
             static::SYSTEM_CATALOG => Labels::getLabel('LBL_Catalog_Products', $langId)
         );
     }
 
-    public static function getCatalogTypeArrForFrontEnd($langId) {
+    public static function getCatalogTypeArrForFrontEnd($langId)
+    {
         return array(
             static::SYSTEM_CATALOG => Labels::getLabel('LBL_Marketplace_Products', $langId),
             static::CUSTOM_CATALOG => Labels::getLabel('LBL_My_Private_Products', $langId)
         );
     }
 
-    public static function getShopBannerSize() {
+    public static function getShopBannerSize()
+    {
         return array(
             Shop::TEMPLATE_ONE => '2000*500',
             Shop::TEMPLATE_TWO => '1300*600',
@@ -349,28 +373,32 @@ class applicationConstants {
         );
     }
 
-    public static function getSmtpSecureArr($langId) {
+    public static function getSmtpSecureArr($langId)
+    {
         return array(
             static::SMTP_TLS => Labels::getLabel('LBL_tls', $langId),
             static::SMTP_SSL => Labels::getLabel('LBL_ssl', $langId),
         );
     }
 
-    public static function getSmtpSecureSettingsArr() {
+    public static function getSmtpSecureSettingsArr()
+    {
         return array(
             static::SMTP_TLS => 'tls',
             static::SMTP_SSL => 'ssl',
         );
     }
 
-    public static function getLayoutDirections($langId) {
+    public static function getLayoutDirections($langId)
+    {
         return array(
             static::LAYOUT_LTR => Labels::getLabel('LBL_Left_To_Right', $langId),
             static::LAYOUT_RTL => Labels::getLabel('LBL_Right_To_Left', $langId),
         );
     }
 
-    public static function getMonthsArr($langId) {
+    public static function getMonthsArr($langId)
+    {
         return array(
             '01' => Labels::getLabel('LBL_January', $langId),
             '02' => Labels::getLabel('LBL_Februry', $langId),
@@ -387,7 +415,8 @@ class applicationConstants {
         );
     }
 
-    public static function getProductListingSettings($langId) {
+    public static function getProductListingSettings($langId)
+    {
         return array(
             static::BASED_ON_DELIVERY_LOCATION => Labels::getLabel('LBL_BASED_ON_DELIVERY_LOCATION', $langId),
             static::BASED_ON_RADIUS => Labels::getLabel('LBL_BASED_ON_RADIUS', $langId),
@@ -395,7 +424,8 @@ class applicationConstants {
         );
     }
 
-    public static function getLocationLevels($langId) {
+    public static function getLocationLevels($langId)
+    {
         return array(
             static::LOCATION_COUNTRY => Labels::getLabel('LBL_COUNTRY_LEVEL', $langId),
             static::LOCATION_STATE => Labels::getLabel('LBL_STATE_LEVEL', $langId),
@@ -403,7 +433,8 @@ class applicationConstants {
         );
     }
 
-    public static function getClassArr() {
+    public static function getClassArr()
+    {
         return array(
             0 => applicationConstants::CLASS_INFO,
             1 => applicationConstants::CLASS_SUCCESS,
@@ -412,14 +443,16 @@ class applicationConstants {
         );
     }
 
-    public static function currencySeparatorArr($langId) {
+    public static function currencySeparatorArr($langId)
+    {
         return array(
             static::CURRENCY_SEPARATOR_DECIMAL => Labels::getLabel('LBL_Decimal_(_._)', $langId),
             static::CURRENCY_SEPARATOR_COMMA => Labels::getLabel('LBL_Comma_(_,_)', $langId)
         );
     }
 
-    public static function getClassColor(string $class): string {
+    public static function getClassColor(string $class): string
+    {
         switch ($class) {
             case applicationConstants::CLASS_INFO:
                 return '#5578eb';
@@ -440,18 +473,21 @@ class applicationConstants {
         }
     }
 
-    public static function getPageSizeValues() {
+    public static function getPageSizeValues()
+    {
         return [10, 20, 25, 50, 100];
     }
 
-    public static function getPageSize(int $pageSize) {
+    public static function getPageSize(int $pageSize)
+    {
         if (!in_array($pageSize, self::getPageSizeValues())) {
             return FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         }
         return $pageSize;
     }
 
-    public static function getSortOrder(string $sortOrder, string $defaultOrder = self::SORT_ASC) {
+    public static function getSortOrder(string $sortOrder, string $defaultOrder = self::SORT_ASC)
+    {
         if (!in_array($sortOrder, [self::SORT_ASC, self::SORT_DESC])) {
             return $defaultOrder;
         }

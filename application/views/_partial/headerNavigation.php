@@ -29,7 +29,7 @@
     }
 
 ?>
-    <div class="navigation-wrapper">
+    <!-- <div class="navigation-wrapper">
         <ul class="navigations <?php echo ($navLinkCount > 4) ? 'justify-content-between' : ''; ?>">
             <?php if (count($headerCategories)) { ?>
                 <li class="navchild categories">
@@ -269,7 +269,156 @@
             <?php } ?>
         </ul>
 
-    </div>
+    </div> -->
+    <nav id="navigation1" class="navigation">
+        <div class="nav-toggle"></div>
+        <div class="nav-menus-wrapper">
+            <ul class="nav-menu align-to-right">
+                <li><a href="#" target="_blank">Home</a></li>
+                <li>
+                    <a href="#">Dropdown Menu</a>
+                    <ul class="nav-dropdown">
+                        <li>
+                            <a href="#">Menu Level 2</a>
+                            <ul class="nav-dropdown">
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                                <li><a href="#" target="_blank">Link 6</a></li>
+                                <li><a href="#" target="_blank">Link 7</a></li>
+                                <li><a href="#" target="_blank">Link 8</a></li>
+                                <li><a href="#" target="_blank">Link 9</a></li>
+                                <li><a href="#" target="_blank">Link 10</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Menu Level 2</a>
+                            <ul class="nav-dropdown">
+                                <li>
+                                    <a href="#">Menu Level 3</a>
+                                    <ul class="nav-dropdown">
+                                        <li><a href="#" target="_blank">Link 1</a></li>
+                                        <li><a href="#" target="_blank">Link 2</a></li>
+                                        <li><a href="#" target="_blank">Link 3</a></li>
+                                        <li><a href="#" target="_blank">Link 4</a></li>
+                                        <li><a href="#" target="_blank">Link 5</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Menu Level 2</a>
+                            <ul class="nav-dropdown">
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#" target="_blank">Link 1</a></li>
+                        <li><a href="#" target="_blank">Link 2</a></li>
+                        <li><a href="#" target="_blank">Link 3</a></li>
+                        <li><a href="#" target="_blank">Link 4</a></li>
+                        <li><a href="#" target="_blank">Link 5</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Mega Menu</a>
+                    <div class="megamenu-panel">
+                        <div class="megamenu-lists">
+                            <ul class="megamenu-list list-col-4">
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                                <li><a href="#" target="_blank">Link 6</a></li>
+                                <li><a href="#" target="_blank">Link 7</a></li>
+                                <li><a href="#" target="_blank">Link 8</a></li>
+                            </ul>
+                            <ul class="megamenu-list list-col-4">
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                                <li><a href="#" target="_blank">Link 6</a></li>
+                                <li><a href="#" target="_blank">Link 7</a></li>
+                                <li><a href="#" target="_blank">Link 8</a></li>
+                            </ul>
+                            <ul class="megamenu-list list-col-4">
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                                <li><a href="#" target="_blank">Link 6</a></li>
+                                <li><a href="#" target="_blank">Link 7</a></li>
+                                <li><a href="#" target="_blank">Link 8</a></li>
+                            </ul>
+                            <ul class="megamenu-list list-col-4">
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                                <li><a href="#" target="_blank">Link 6</a></li>
+                                <li><a href="#" target="_blank">Link 7</a></li>
+                                <li><a href="#" target="_blank">Link 8</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a href="#">Mega Menu 2</a>
+                    <div class="megamenu-panel">
+                        <div class="megamenu-lists">
+                            <ul class="megamenu-list list-col-4">
+                                <li class="megamenu-list-title"><a href="#">Title Name</a></li>
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                            </ul>
+                            <ul class="megamenu-list list-col-4">
+                                <li class="megamenu-list-title"><a href="#">Title Name</a></li>
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                            </ul>
+                            <ul class="megamenu-list list-col-4">
+                                <li class="megamenu-list-title"><a href="#">Title Name</a></li>
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                            </ul>
+                            <ul class="megamenu-list list-col-4">
+                                <li class="megamenu-list-title"><a href="#">Title Name</a></li>
+                                <li><a href="#" target="_blank">Link 1</a></li>
+                                <li><a href="#" target="_blank">Link 2</a></li>
+                                <li><a href="#" target="_blank">Link 3</a></li>
+                                <li><a href="#" target="_blank">Link 4</a></li>
+                                <li><a href="#" target="_blank">Link 5</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
 
 

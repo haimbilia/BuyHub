@@ -50,7 +50,7 @@
             <div class="container">
                 <div class="top-bar__inner">
                     <div class="top-bar__left">
-                        <a class="navs_toggle" href="javascript:void(0)"><span></span></a>
+                        <div class="nav-toggle"></div>
                         <div class="logo">
                             <a href="<?php echo UrlHelper::generateUrl(); ?>">
                                 <?php
