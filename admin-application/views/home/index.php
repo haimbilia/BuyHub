@@ -596,7 +596,7 @@
                 position: "none"
             },
         };
-        <?php if ($layoutDirection == 'rtl') { ?>
+        <?php if (CommonHelper::getLayoutDirection() == 'rtl') { ?>
             optionConversion['hAxis'] = {
                 direction: '-1'
             };

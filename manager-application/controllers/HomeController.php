@@ -127,7 +127,7 @@ class HomeController extends ListingBaseController
                 $productsChartData[$val["duration"]] = $val["value"];
             }
 
-            if ($this->layoutDirection != 'rtl') {
+            if (CommonHelper::getLayoutDirection() != 'rtl') {
                 $dashboardInfo['salesChartData'] = array_reverse($salesChartData);
                 $dashboardInfo['salesEarningsChartData'] = array_reverse($salesEarningsChartData);
                 $dashboardInfo['signupsChartData'] = array_reverse($signupsChartData);

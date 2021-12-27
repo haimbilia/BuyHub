@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $data = array(
-    'layoutDirection'=>$layoutDirection,
+    'layoutDirection'=>CommonHelper::getLayoutDirection(),
     'allBrands'=>$allBrands,
 );
 

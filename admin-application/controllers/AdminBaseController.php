@@ -65,8 +65,7 @@ class AdminBaseController extends FatController
     private function setCommonValues()
     {
         CommonHelper::initCommonVariables(true);
-        $this->adminLangId = CommonHelper::getLangId();
-        $this->layoutDirection = CommonHelper::getLayoutDirection();
+        $this->adminLangId = CommonHelper::getLangId();        
         $this->siteLangCode = CommonHelper::getLangCode();
         $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
 
@@ -212,12 +211,11 @@ class AdminBaseController extends FatController
         $this->set('jsVariables', $jsVariables);
         $this->set('notifyCount', $notifyCount);
         $this->set('languages', $languages);
-        $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
-        $this->set('layoutDirection', $this->layoutDirection);
+        $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());      
 
         $this->includeDatePickerLangJs();
 
-        if ($this->layoutDirection == 'rtl') {
+        if (CommonHelper::getLayoutDirection() == 'rtl') {
             $this->_template->addCss('css/style--arabic.css');
         }
         if (CommonHelper::demoUrl() == true) {

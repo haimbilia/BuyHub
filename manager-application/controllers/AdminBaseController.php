@@ -43,7 +43,6 @@ class AdminBaseController extends FatController
     {
         CommonHelper::initCommonVariables(true);
         $this->siteLangId = CommonHelper::getLangId();
-        $this->layoutDirection = CommonHelper::getLayoutDirection();
         $this->siteLangCode = CommonHelper::getLangCode();
         $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
 
@@ -217,7 +216,6 @@ class AdminBaseController extends FatController
         }
 
         $this->set('languages', $languages);
-        $this->set('layoutDirection', $this->layoutDirection);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
         $this->siteDefaultCurrencyCode = CommonHelper::getCurrencyCode();
