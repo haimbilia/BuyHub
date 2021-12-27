@@ -306,8 +306,9 @@ class CollectionsController extends ListingBaseController
         $frm->addHiddenField('', 'collection_id', $recordId);
         $frm->addHiddenField('', 'collection_active', applicationConstants::ACTIVE);
         $frm->addHiddenField('', 'collection_type', $type);
-        $frm->addHiddenField('', 'collection_layout_type', $layoutType);
-
+       // $frm->addHiddenField('', 'collection_layout_type', $layoutType);
+       $productTypeLayoutArr = Collections::getTypeSpecificLayouts($this->siteLangId);
+       $frm->addSelectBox(Labels::getLabel('FRM_Collection_Layout_Type', $this->siteLangId), 'collection_layout_type', $productTypeLayoutArr[Collections::COLLECTION_TYPE_PRODUCT], $this->siteLangId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'collection_name');
         if ($type == Collections::COLLECTION_TYPE_BANNER) {
             $frm->addTextBox(Labels::getLabel('FRM_PROMOTION_COST', $this->siteLangId), 'blocation_promotion_cost');
@@ -316,7 +317,7 @@ class CollectionsController extends ListingBaseController
         if (!in_array($layoutType, Collections::APP_COLLECTIONS_ONLY)) {
             $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_WEB", $this->siteLangId), 'collection_for_web', 1, array(), true, 0);
         }
-
+        
         $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
 
         $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());

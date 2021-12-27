@@ -1,9 +1,8 @@
   <div class="products-price">
-      <span class="products-price-new"> <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
+      <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
       <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-          <del class="products-price-old"> <?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
-          <div class="products-price-off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?>
-          </div>
+          <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
+          <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
       <?php } ?>
       <?php /* if($product['selprod_sold_count']>0){?>
       <span class="products__price_sold"><?php echo $product['selprod_sold_count'];?>

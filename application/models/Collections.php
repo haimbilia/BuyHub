@@ -30,6 +30,7 @@ class Collections extends MyAppModel
     public const TYPE_PRODUCT_LAYOUT1 = 1;
     public const TYPE_PRODUCT_LAYOUT2 = 2;
     public const TYPE_PRODUCT_LAYOUT3 = 3;
+    public const TYPE_PRODUCT_LAYOUT4 = 19;
     public const TYPE_CATEGORY_LAYOUT1 = 4;
     public const TYPE_CATEGORY_LAYOUT2 = 5;
     public const TYPE_SHOP_LAYOUT1 = 6;
@@ -49,6 +50,7 @@ class Collections extends MyAppModel
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
     public const LIMIT_PRODUCT_LAYOUT2 = 6;
     public const LIMIT_PRODUCT_LAYOUT3 = 12;
+    public const LIMIT_PRODUCT_LAYOUT4 = 3;
     public const LIMIT_CATEGORY_LAYOUT1 = 8;
     public const LIMIT_CATEGORY_LAYOUT2 = 4;
     public const LIMIT_SHOP_LAYOUT1 = 4;
@@ -177,6 +179,7 @@ class Collections extends MyAppModel
             self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_Product_Layout1', $langId),
             self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_Product_Layout2', $langId),
             self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_Product_Layout3', $langId),
+            self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_Product_Layout4', $langId),
             self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_Category_Layout1', $langId),
             self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_Category_Layout2', $langId),
             self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_Shop_Layout1', $langId),
@@ -232,6 +235,7 @@ class Collections extends MyAppModel
                 self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_Product_Layout1', $langId),
                 self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_Product_Layout2', $langId),
                 self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_Product_Layout3', $langId),
+                self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_Product_Layout4', $langId),
             ],
             self::COLLECTION_TYPE_SHOP => [
                 self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_Shop_Layout1', $langId),
