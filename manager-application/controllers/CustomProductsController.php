@@ -384,7 +384,7 @@ class CustomProductsController extends ListingBaseController
         }
 
         if ($status == ProductRequest::STATUS_PENDING) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_REQUEST_ALREADY_PENDING', $this->siteLangId), true);
         }
 
         $db = FatApp::getDb();

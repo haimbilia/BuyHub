@@ -8,7 +8,7 @@ $totalRecords = count($arrListing); ?>
 <div class="modal-body opStausLogJs<?php echo $recordId; ?>">
     <div class="form-edit-body">
         <?php 
-        if ($totalRecords != 0) {
+        if ($totalRecords == 0) {
             echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_NO_RECORD_FOUND', $siteLangId));
         } else { ?>
             <div class="timeline-v4 appendRowsJs">
