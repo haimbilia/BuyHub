@@ -167,6 +167,11 @@ class CategoryController extends MyAppController
                 $h = 100;
                 AttachedFile::displayImage($image_name, $w, $h);
                 break;
+            case 'MEDIUM':
+                $w = 400;
+                $h = 400;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;    
             case 'COLLECTION_PAGE':
                 $w = 45;
                 $h = 41;

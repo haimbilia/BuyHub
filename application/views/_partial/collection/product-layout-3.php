@@ -1,4 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
 if (isset($collection['products']) && count($collection['products'])) { ?>
     <section class="section bg-gray">
         <div class="container">

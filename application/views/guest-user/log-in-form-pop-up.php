@@ -175,7 +175,7 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
                 <p class="more-links">
                     <?php echo $loginFrm->getFieldHtml('forgot'); ?>
                     <a class=""
-                        href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)); ?>">
+                        href="<?php echo UrlHelper::generateUrl('GuestUser', 'registrationForm'); ?>">
                         <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
                     </a>
                     <?php if (isset($includeGuestLogin) && 'true' == $includeGuestLogin) { ?>

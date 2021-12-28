@@ -25,7 +25,7 @@
             echo $frm->getFormHtml(); ?>
             <div class="row justify-content-center">
                 <div class="col-auto text-center">
-                    <a class="link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)); ?>"><?php echo sprintf(Labels::getLabel('LBL_Not_Register_Yet?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_'.$siteLangId));?></a>
+                    <a class="link" href="<?php echo UrlHelper::generateUrl('GuestUser', 'registrationForm'); ?>"><?php echo sprintf(Labels::getLabel('LBL_Not_Register_Yet?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_'.$siteLangId));?></a>
                 </div>
                 <div class="col-auto text-center">
                     <a class="link" href="javascript:void(0)" onclick="openSignInForm(true)"><?php echo sprintf(Labels::getLabel('LBL_Existing_User?', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_'.$siteLangId));?></a>

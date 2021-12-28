@@ -234,17 +234,26 @@ class CollectionsController extends ListingBaseController
             case Collections::TYPE_PRODUCT_LAYOUT3:
                 return Collections::LIMIT_PRODUCT_LAYOUT3;
                 break;
+            case Collections::TYPE_PRODUCT_LAYOUT4:
+                return Collections::LIMIT_PRODUCT_LAYOUT4;
+                break;
             case Collections::TYPE_CATEGORY_LAYOUT1:
                 return Collections::LIMIT_CATEGORY_LAYOUT1;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT2:
                 return Collections::LIMIT_CATEGORY_LAYOUT2;
                 break;
+            case Collections::TYPE_CATEGORY_LAYOUT3:
+                return Collections::LIMIT_CATEGORY_LAYOUT3;
+                break;
             case Collections::TYPE_SHOP_LAYOUT1:
                 return Collections::LIMIT_SHOP_LAYOUT1;
                 break;
             case Collections::TYPE_BRAND_LAYOUT1:
                 return Collections::LIMIT_BRAND_LAYOUT1;
+                break;
+            case Collections::TYPE_BRAND_LAYOUT2:
+                return Collections::LIMIT_BRAND_LAYOUT2;
                 break;
             case Collections::TYPE_BLOG_LAYOUT1:
                 return Collections::LIMIT_BLOG_LAYOUT1;
@@ -306,8 +315,9 @@ class CollectionsController extends ListingBaseController
         $frm->addHiddenField('', 'collection_id', $recordId);
         $frm->addHiddenField('', 'collection_active', applicationConstants::ACTIVE);
         $frm->addHiddenField('', 'collection_type', $type);
-        $frm->addHiddenField('', 'collection_layout_type', $layoutType);
-
+        // $frm->addHiddenField('', 'collection_layout_type', $layoutType);
+        $productTypeLayoutArr = Collections::getTypeSpecificLayouts($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel('FRM_Collection_Layout_Type', $this->siteLangId), 'collection_layout_type', $productTypeLayoutArr[$type], $layoutType, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'collection_name');
         if ($type == Collections::COLLECTION_TYPE_BANNER) {
             $frm->addTextBox(Labels::getLabel('FRM_PROMOTION_COST', $this->siteLangId), 'blocation_promotion_cost');
@@ -956,7 +966,7 @@ class CollectionsController extends ListingBaseController
                 }
             }
         }
-        
+
         if (1 > $newTabLangId) {
             $this->set('openMediaForm', true);
         }

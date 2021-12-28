@@ -30,10 +30,14 @@ class Collections extends MyAppModel
     public const TYPE_PRODUCT_LAYOUT1 = 1;
     public const TYPE_PRODUCT_LAYOUT2 = 2;
     public const TYPE_PRODUCT_LAYOUT3 = 3;
+    public const TYPE_PRODUCT_LAYOUT4 = 19;
     public const TYPE_CATEGORY_LAYOUT1 = 4;
     public const TYPE_CATEGORY_LAYOUT2 = 5;
+    public const TYPE_CATEGORY_LAYOUT3 = 20;
     public const TYPE_SHOP_LAYOUT1 = 6;
+    public const TYPE_SHOP_LAYOUT2 = 22;
     public const TYPE_BRAND_LAYOUT1 = 7;
+    public const TYPE_BRAND_LAYOUT2 = 21;
     public const TYPE_BLOG_LAYOUT1 = 8;
     public const TYPE_SPONSORED_PRODUCT_LAYOUT = 9;
     public const TYPE_SPONSORED_SHOP_LAYOUT = 10;
@@ -49,10 +53,14 @@ class Collections extends MyAppModel
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
     public const LIMIT_PRODUCT_LAYOUT2 = 6;
     public const LIMIT_PRODUCT_LAYOUT3 = 12;
+    public const LIMIT_PRODUCT_LAYOUT4 = 3;
     public const LIMIT_CATEGORY_LAYOUT1 = 8;
     public const LIMIT_CATEGORY_LAYOUT2 = 4;
+    public const LIMIT_CATEGORY_LAYOUT3 = 4;
     public const LIMIT_SHOP_LAYOUT1 = 4;
+    public const LIMIT_SHOP_LAYOUT2 = 3;
     public const LIMIT_BRAND_LAYOUT1 = 5;
+    public const LIMIT_BRAND_LAYOUT2 = 5;
     public const LIMIT_BLOG_LAYOUT1 = 3;
     public const LIMIT_FAQ_LAYOUT1 = 6;
     public const LIMIT_TESTIMONIAL_LAYOUT1 = 10;
@@ -177,10 +185,14 @@ class Collections extends MyAppModel
             self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_Product_Layout1', $langId),
             self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_Product_Layout2', $langId),
             self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_Product_Layout3', $langId),
+            self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_Product_Layout4', $langId),
             self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_Category_Layout1', $langId),
             self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_Category_Layout2', $langId),
+            self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_Category_Layout3', $langId),
             self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_Shop_Layout1', $langId),
+            self::TYPE_SHOP_LAYOUT2 => Labels::getLabel('LBL_Shop_Layout2', $langId),
             self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_Brand_Layout1', $langId),
+            self::TYPE_BRAND_LAYOUT2 => Labels::getLabel('LBL_Brand_Layout2', $langId),
             self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_Blog_Layout1', $langId),
             self::TYPE_SPONSORED_PRODUCT_LAYOUT => Labels::getLabel('LBL_Sponsored_Products', $langId),
             self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_Sponsored_Shops', $langId),
@@ -211,6 +223,7 @@ class Collections extends MyAppModel
             ],
             self::COLLECTION_TYPE_BRAND => [
                 self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_Brand_Layout1', $langId),
+                self::TYPE_BRAND_LAYOUT2 => Labels::getLabel('LBL_Brand_Layout2', $langId),
             ],
             self::COLLECTION_TYPE_BLOG => [
                 self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_Blog_Layout1', $langId),
@@ -218,6 +231,7 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_CATEGORY => [
                 self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_Category_Layout1', $langId),
                 self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_Category_Layout2', $langId),
+                self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_Category_Layout3', $langId),
             ],
             self::COLLECTION_TYPE_FAQ => [
                 self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ', $langId),
@@ -232,9 +246,11 @@ class Collections extends MyAppModel
                 self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_Product_Layout1', $langId),
                 self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_Product_Layout2', $langId),
                 self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_Product_Layout3', $langId),
+                self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_Product_Layout4', $langId),
             ],
             self::COLLECTION_TYPE_SHOP => [
                 self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_Shop_Layout1', $langId),
+                self::TYPE_SHOP_LAYOUT2 => Labels::getLabel('LBL_Shop_Layout2', $langId),
             ],
             self::COLLECTION_TYPE_SPONSORED_PRODUCTS => [
                 self::TYPE_SPONSORED_PRODUCT_LAYOUT => Labels::getLabel('LBL_Sponsored_Products', $langId),
