@@ -555,10 +555,18 @@ function setSiteDefaultLang(langId) {
 
 function getNotifications() {
     $("#notificationList").html(fcom.getLoader());
-
     fcom.ajax(fcom.makeUrl('Notifications', 'notificationList'), '', function (res) {
         $("#notificationList").html(res);
     });
+    $('#notifiListViewAll').attr("href",fcom.makeUrl('Notifications'));
+}
+
+function getNotifications() {
+    $("#notificationList").html(fcom.getLoader());
+    fcom.ajax(fcom.makeUrl('Notifications', 'notificationList'), '', function (res) {
+        $("#notificationList").html(res);
+    });
+    $('#notifiListViewAll').attr("href",fcom.makeUrl('Notifications'));
 }
 
 function selectAll(obj) {

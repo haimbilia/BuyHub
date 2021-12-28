@@ -54,7 +54,7 @@
                                 </a>
                             </div>
                             <div class="header-action__item dropdown">
-                                <a class="header-action__trigger dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void();" title="<?php echo Labels::getLabel('LBL_Message', $siteLangId); ?>">
+                                <a class="header-action__trigger dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void();" onclick="getNotifications();" title="<?php echo Labels::getLabel('LBL_Message', $siteLangId); ?>">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification">
@@ -65,16 +65,16 @@
                                 <div class="header-action__target p-0 dropdown-menu dropdown-menu-right dropdown-menu-anim ">
                                     <div class="header-notification">
                                         <div class="header-notification__head">
-                                            <h5>Notifications <span class="count">24 reports</span></h5>
+                                            <h5><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?> <span class="count">24 reports</span></h5>
                                             <nav class="nav nav--tabs js-tab">
-                                                <a class="is-current" href="#adminNotification">Alerts</a>
-                                                <a href="#adminLogs">Logs</a>                                           
+                                                <a class="is-current" href="javascript:void(0)" onclick="getNotifications()"><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?></a>
+                                                <a href="javascript:void(0)" onclick="getSystemLogs()"><?php echo  Labels::getLabel('LBL_LOGS', $siteLangId); ?></a>                                           
                                             </nav>
                                         </div>
                                         <div class="header-notification__body">
-                                            <div class="tab-1 tab-container visible" id="adminNotification">
+                                            <div class="tab-1 tab-container visible">
                                                 <div class="scroll-y p-4">
-                                                    <div class="notifications">
+                                                    <div class="notifications" id="notificationList">
                                                         <div class="notification">
                                                             <div class="notification__img">
                                                                 <span class="icon">
@@ -91,234 +91,12 @@
                                                             </div>
                                                             <span class="notification__time">1 hr</span>
                                                         </div>
-                                                        <!--item-->
-                                                        <div class="notification">
-                                                            <div class="notification__img">
-                                                                <span class="icon">
-                                                                    <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
-                                                                        </use>
-                                                                    </svg>
-                                                                </span>
-                                                            </div>
-                                                            <div class="notification__detail">
-                                                                <a href="javascript:void(0)" class="title">Project
-                                                                    Alice</a>
-                                                                <div class="summary">Phase 1 development</div>
-                                                            </div>
-                                                            <span class="notification__time">1 hr</span>
-                                                        </div>
-                                                        <!--item-->
-                                                        <div class="notification">
-                                                            <div class="notification__img">
-                                                                <span class="icon">
-                                                                    <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
-                                                                        </use>
-                                                                    </svg>
-                                                                </span>
-                                                            </div>
-                                                            <div class="notification__detail">
-                                                                <a href="javascript:void(0)" class="title">Project
-                                                                    Alice</a>
-                                                                <div class="summary">Phase 1 development</div>
-                                                            </div>
-                                                            <span class="notification__time">1 hr</span>
-                                                        </div>
-                                                        <!--item-->
-                                                        <div class="notification">
-                                                            <div class="notification__img">
-                                                                <span class="icon">
-                                                                    <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
-                                                                        </use>
-                                                                    </svg>
-                                                                </span>
-                                                            </div>
-                                                            <div class="notification__detail">
-                                                                <a href="javascript:void(0)" class="title">Project
-                                                                    Alice</a>
-                                                                <div class="summary">Phase 1 development</div>
-                                                            </div>
-                                                            <span class="notification__time">1 hr</span>
-                                                        </div>
-                                                        <!--item-->
-                                                        <div class="notification">
-                                                            <div class="notification__img">
-                                                                <span class="icon">
-                                                                    <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
-                                                                        </use>
-                                                                    </svg>
-                                                                </span>
-                                                            </div>
-                                                            <div class="notification__detail">
-                                                                <a href="javascript:void(0)" class="title">Project
-                                                                    Alice</a>
-                                                                <div class="summary">Phase 1 development</div>
-                                                            </div>
-                                                            <span class="notification__time">1 hr</span>
-                                                        </div>
-                                                        <!--item-->
-                                                        <div class="notification">
-                                                            <div class="notification__img">
-                                                                <span class="icon">
-                                                                    <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
-                                                                        </use>
-                                                                    </svg>
-                                                                </span>
-                                                            </div>
-                                                            <div class="notification__detail">
-                                                                <a href="javascript:void(0)" class="title">Project
-                                                                    Alice</a>
-                                                                <div class="summary">Phase 1 development</div>
-                                                            </div>
-                                                            <span class="notification__time">1 hr</span>
-                                                        </div>
-                                                        <!--item-->
-                                                        <div class="notification">
-                                                            <div class="notification__img">
-                                                                <span class="icon">
-                                                                    <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
-                                                                        </use>
-                                                                    </svg>
-                                                                </span>
-                                                            </div>
-                                                            <div class="notification__detail">
-                                                                <a href="javascript:void(0)" class="title">Project
-                                                                    Alice</a>
-                                                                <div class="summary">Phase 1 development</div>
-                                                            </div>
-                                                            <span class="notification__time">1 hr</span>
-                                                        </div>
-                                                        <!--item-->
-                                                        <div class="notification">
-                                                            <div class="notification__img">
-                                                                <span class="icon">
-                                                                    <svg class="svg" width="20" height="20">
-                                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-notification-alert">
-                                                                        </use>
-                                                                    </svg>
-                                                                </span>
-                                                            </div>
-                                                            <div class="notification__detail">
-                                                                <a href="javascript:void(0)" class="title">Project
-                                                                    Alice</a>
-                                                                <div class="summary">Phase 1 development</div>
-                                                            </div>
-                                                            <span class="notification__time">1 hr</span>
-                                                        </div>
-                                                        <!--item-->
-                                                    </div>
-                                                </div>
-                                            </div>                                           
-                                            <div class="tab-2 tab-container" id="adminLogs">
-                                                <div class="scroll-y p-4">
-                                                    <div class="log-list">
-                                                        <div class="log">
-                                                            <span class="badge badge-success">200 OK</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">New order</a>
-                                                            </div>
-                                                            <span class="log__time">Just now</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-danger">500 ERR</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">New customer</a>
-                                                            </div>
-                                                            <span class="log__time">2 hrs</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-success">200 OK</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">Payment process</a>
-                                                            </div>
-                                                            <span class="log__time">5 hrs</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-warning">300 WRN</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">Search query</a>
-                                                            </div>
-                                                            <span class="log__time">2 days</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-success">200 OK</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">New order</a>
-                                                            </div>
-                                                            <span class="log__time">Just now</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-danger">500 ERR</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">New customer</a>
-                                                            </div>
-                                                            <span class="log__time">2 hrs</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-success">200 OK</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">Payment process</a>
-                                                            </div>
-                                                            <span class="log__time">5 hrs</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-warning">300 WRN</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">Search query</a>
-                                                            </div>
-                                                            <span class="log__time">2 days</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-success">200 OK</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">New order</a>
-                                                            </div>
-                                                            <span class="log__time">Just now</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-danger">500 ERR</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">New customer</a>
-                                                            </div>
-                                                            <span class="log__time">2 hrs</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-success">200 OK</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">Payment process</a>
-                                                            </div>
-                                                            <span class="log__time">5 hrs</span>
-                                                        </div>
-                                                        <!--log-->
-                                                        <div class="log">
-                                                            <span class="badge badge-warning">300 WRN</span>
-                                                            <div class="log__detail">
-                                                                <a href="#" class="log__title">Search query</a>
-                                                            </div>
-                                                            <span class="log__time">2 days</span>
-                                                        </div>
-                                                        <!--log-->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="header-notification__footer">
-                                            <a href="javascript:void(0)" class="text-link text-link--arrow">View All
+                                            <a href="javascript:void(0)" class="text-link text-link--arrow"><?php echo  Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
                                             </a>
                                         </div>
                                     </div>
