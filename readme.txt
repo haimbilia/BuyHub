@@ -454,6 +454,9 @@ Bugs :
 
 ==================TV-9.4.0.20211223===================
 
+Bugs : 
+    => 060664 - Admin UI: "Alpha-3 Code" column is not showing in the exported file under the countries section.
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
