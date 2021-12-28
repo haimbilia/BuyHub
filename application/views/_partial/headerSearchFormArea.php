@@ -14,7 +14,7 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
         <svg
                 class="svg">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#magnifying"
-                    href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#magnifying"></use>
+                   ></use>
             </svg></span></a>
     <div class="form--search form--search-popup" id="form--search-popup"
         data-close-on-click-outside="form--search-popup">

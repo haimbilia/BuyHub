@@ -35,7 +35,7 @@
         <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo CommonHelper::replaceStringData($lbl, ['{DAYS}' => $cancellationAge]); ?>">
             <i class="icn">
                 <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#easyreturns">
                     </use>
                 </svg>
             </i>
@@ -46,7 +46,7 @@
         <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo $lbl; ?>">
             <i class="icn">
                 <svg class="svg">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#safepayments">
                     </use>
                 </svg>
             </i>

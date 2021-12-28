@@ -11,7 +11,9 @@ if (!empty($reviews)) {
 <div class="detail-content">
     <div class="section-head">
         <div class="section__heading">
-            <h2><?php echo Labels::getLabel('LBl_Rating_&_Reviews', $siteLangId); ?></h2>
+            <h2>
+                <?php echo Labels::getLabel('LBl_Rating_&_Reviews', $siteLangId); ?>
+            </h2>
         </div>
         <div class="section__action">
             <?php if ($canSubmitFeedback || $totReviews > 0) { ?>
@@ -43,13 +45,18 @@ if (!empty($reviews)) {
         </div>
     </div>
 
+    <div class="rating-layout-1">
+        <div class=""></div>
+
+    </div>
+
 
     <div class="rating-wrapper">
         <div class="row justify-content-between align-items-center">
             <div class="col-md-4">
                 <div class="products__rating overall-rating-count">
                     <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-icon" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-icon"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-icon"></use>
                     </svg>
                     <span class="rate"><?php echo round($avgRating, 1); ?><span></span></span>
                 </div>
@@ -67,7 +74,6 @@ if (!empty($reviews)) {
 
 <div class="listing__all"></div>
 <div id="loadMoreReviewsBtnDiv" class="text-center"></div>
-
 <script>
     var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
     var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';

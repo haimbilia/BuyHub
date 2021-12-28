@@ -1,5 +1,4 @@
 .more-sellers {
-    padding: 2rem 3rem;
     .item__pic-seller {
         width: 65px;
         height: 65px;
@@ -34,7 +33,7 @@
         font-weight: 300;
         display: flex;
         align-items: center;
-        >li {
+        > li {
             text-align: center;
             margin-#{$end-direction}: 6px;
             // width: 20px;
@@ -79,12 +78,13 @@
     border: $border;
     border-radius: $radius4;
     overflow-y: auto;
-    >li {
+    > li {
         font-size: 0.8rem;
         //border-radius: $radius4;
         padding: 1rem;
         display: flex;
         //align-items: center;
+        flex-direction: column;
         justify-content: space-between;
         @include media-breakpoint-down(md) {
             display: block;

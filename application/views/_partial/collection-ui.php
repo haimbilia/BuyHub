@@ -101,7 +101,7 @@ if ($showAddToFavorite) {
                                 <li class="social-facebook">
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="facebook" data-url="<?php echo UrlHelper::generateFullUrl('Products', 'view', array($product['selprod_id'])); ?>/">
                                         <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fb">
                                                 </use>
                                             </svg></i>
                                     </a>
@@ -109,7 +109,7 @@ if ($showAddToFavorite) {
                                 <li class="social-twitter">
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="twitter">
                                         <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#tw">
                                                 </use>
                                             </svg></i>
                                     </a>
@@ -117,7 +117,7 @@ if ($showAddToFavorite) {
                                 <li class="social-pintrest">
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="pinterest">
                                         <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pt">
                                                 </use>
                                             </svg></i>
                                     </a>
@@ -125,7 +125,7 @@ if ($showAddToFavorite) {
                                 <li class="social-email">
                                     <a href="javascript:void(0)" class="st-custom-button" data-network="email">
                                         <i class="icn"><svg class="svg">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#envelope">
                                                 </use>
                                             </svg>
                                         </i>

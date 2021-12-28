@@ -55,10 +55,10 @@ foreach ($sellers as $sellerDetail) {
                             <?php echo $sellerDetail['shop_name']; ?>
                         </a>
                         <!-- Shop Badge  -->
-                            <?php
-                            $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);
-                            $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
-                            ?>
+                        <?php
+                        $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);
+                        $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
+                        ?>
                         <!-- Shop Badge  -->
 
                     </div>

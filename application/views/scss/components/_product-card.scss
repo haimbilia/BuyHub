@@ -423,7 +423,7 @@
     display: inline-block;
     vertical-align: middle;
     .totals-review {
-        color: $brand-color !important;
+        color: $brand-color;
         display: block;
         .link {
             &:after {

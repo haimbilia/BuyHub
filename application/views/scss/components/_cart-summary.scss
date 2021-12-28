@@ -18,7 +18,7 @@
             }
             .value {
                 font-weight: 500;
-                text-align:#{$end-direction};
+                text-align: #{$end-direction};
                 margin-#{$start-direction}: auto;
             }
             &.hightlighted {
