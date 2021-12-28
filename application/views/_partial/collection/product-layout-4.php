@@ -3,7 +3,7 @@
 
 
 if (isset($collection['products']) && count($collection['products']) > 0) { ?>
- 
+
 
 
     <section class="section bg-gray">
@@ -38,10 +38,10 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                     if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                         $displayProductNotAvailableLable = true;
                     }
-                    if($gridKey <= Collections::LIMIT_PRODUCT_LAYOUT4){
-                        include('product-layout-4-list.php');
-                    }
-                   
+
+                    include('product-layout-4-list.php');
+
+
 
                     $gridKey++;
 
@@ -52,7 +52,7 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
 
 
 
-               
+
             </div>
 
         </div>
