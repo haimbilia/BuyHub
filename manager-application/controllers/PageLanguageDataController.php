@@ -200,7 +200,7 @@ class PageLanguageDataController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), true, false, true);
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         $langId =  $langId == 1 ? -1 : $langId;
         $langData = PageLanguageData::getAttributesByKey($plangKey, $langId);
@@ -218,7 +218,7 @@ class PageLanguageDataController extends ListingBaseController
         ];
 
         if (!$pLangDataPage->addUpdateData($data)) {
-            LibHelper::exitWithError($pLangDataPage->getError(), true, false, true);
+            LibHelper::exitWithError($pLangDataPage->getError(), true);
         }
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
         $this->set('recordId', $recordId);

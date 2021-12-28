@@ -311,35 +311,6 @@ class AdminBaseController extends FatController
         $this->getStates($countryId, $stateCode, $this->siteLangId, $idCol);
     }
 
-    protected function getUserSearchForm($fields = [])
-    {
-        $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'page', 1);
-        if (!empty($fields)) {
-            $this->addSortingElements($frm, 'user_name');
-        }
-
-        $frm->addSelectBox(Labels::getLabel('FRM_NAME_OR_EMAIL', $this->siteLangId), 'user_id', []);
-
-        $arr_options = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $arr_options1 = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId);
-
-        $arr_options2 = array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + User::getUserTypesArr($this->siteLangId);
-        $arr_options2 = $arr_options2 + array(User::USER_TYPE_BUYER_SELLER => Labels::getLabel('FRM_BUYER', $this->siteLangId) . '+' . Labels::getLabel('FRM_SELLER', $this->siteLangId));
-        $arr_options2 = $arr_options2 + array(User::USER_TYPE_SUB_USER => Labels::getLabel('FRM_SUB_USER', $this->siteLangId));
-
-        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE_USERS', $this->siteLangId), 'user_active', $arr_options, -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('FRM_EMAIL_VERIFIED', $this->siteLangId), 'user_verified', $arr_options1, -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('FRM_USER_TYPE', $this->siteLangId), 'type', $arr_options2, -1, array(), '');
-
-        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_FROM', $this->siteLangId), 'user_regdate_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField(Labels::getLabel('FRM_REG._DATE_TO', $this->siteLangId), 'user_regdate_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
-
-        HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
-        return $frm;
-    }
-
     protected function getUserForm($user_id = 0, $userType = 0)
     {
         $user_id = FatUtility::int($user_id);
@@ -782,11 +753,11 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
             $updateLangDataobj = new TranslateLangData($tbl);
             $translatedText = $updateLangDataobj->directTranslate($data);
             if (false === $translatedText) {
-                FatUtility::dieJsonError($updateLangDataobj->getError());
+                LibHelper::exitWithError($updateLangDataobj->getError());
             }
             return $translatedText;
         }
-        FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+        LibHelper::exitWithError($this->str_invalid_request);
     }
 
     public function imgCropper()

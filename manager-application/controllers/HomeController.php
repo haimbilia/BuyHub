@@ -430,23 +430,22 @@ class HomeController extends ListingBaseController
     public function setLanguage($langId = 0)
     {
         $langId = FatUtility::int($langId);
-        if (0 < $langId) {
-            $languages = Language::getAllNames();
-            if (array_key_exists($langId, $languages)) {
-                setcookie('defaultAdminSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONT_URL);
-            }
-            $this->set('msg', Labels::getLabel('Msg_Please_Wait_We_are_redirecting_you...', $this->siteLangId));
-            $this->_template->render(false, false, 'json-success.php');
+        if (1 > $langId) {    
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_any_language', $this->siteLangId), true);
         }
-        Message::addErrorMessage(Labels::getLabel('MSG_Please_select_any_language', $this->siteLangId));
-        FatUtility::dieWithError(Message::getHtml());
+        $languages = Language::getAllNames();
+        if (array_key_exists($langId, $languages)) {
+            setcookie('defaultAdminSiteLang', $langId, time() + 3600 * 24 * 10, CONF_WEBROOT_FRONT_URL);
+        }
+        $this->set('msg', Labels::getLabel('Msg_Please_Wait_We_are_redirecting_you...', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
     }
 
     public function segregateUrl()
     {
         $url = FatApp::getPostedData('url', FatUtility::VAR_STRING, '');
         if (empty($url)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $segments = CommonHelper::segregateUrl($url);

@@ -602,11 +602,11 @@ class CollectionsController extends ListingBaseController
 
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!$row = Collections::getAttributesById($recordId, 'collection_id')) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_COLLECTION_IMAGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
@@ -736,11 +736,11 @@ class CollectionsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $collectionType = (0 < $recordId) ? Collections::getAttributesById($recordId, 'collection_type') : Collections::COLLECTION_TYPE_PRODUCT;
         if (in_array($collectionType, Collections::COLLECTION_WITHOUT_MEDIA)) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Not_Allowed_To_Update_Media_For_This_Collection', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('LBL_Not_Allowed_To_Update_Media_For_This_Collection', $this->siteLangId), true);
         }
 
         $collectionObj = new Collections($recordId);

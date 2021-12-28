@@ -127,7 +127,7 @@ class AffiliateCommissionController extends ListingBaseController
                 array('afcommsetting_id', 'afcommsetting_prodcat_id', 'afcommsetting_user_id', 'afcommsetting_fees')
             );
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
 
             if ($data['afcommsetting_user_id'] > 0) {
@@ -164,8 +164,7 @@ class AffiliateCommissionController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $post['afcommsetting_prodcat_id'] = FatApp::getPostedData('afcommsetting_prodcat_id', FatUtility::VAR_INT, 0);
@@ -192,8 +191,7 @@ class AffiliateCommissionController extends ListingBaseController
             $rs = $srch->getResultSet();
             $records = FatApp::getDb()->fetchAll($rs);
             if ($records) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Record_already_exists', $this->siteLangId));
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError(Labels::getLabel('MSG_Record_already_exists', $this->siteLangId), true);
             }
         }
         unset($post['afcommsetting_id']);
@@ -201,8 +199,7 @@ class AffiliateCommissionController extends ListingBaseController
 
         $affCommSetObj->assignValues($post);
         if (!$affCommSetObj->save()) {
-            Message::addErrorMessage($affCommSetObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($affCommSetObj->getError(), true);
         }
 
         $recordId = $affCommSetObj->getMainTableRecordId();
@@ -211,8 +208,7 @@ class AffiliateCommissionController extends ListingBaseController
         }
 
         if (!$affCommSetObj->addAffiliateCommissionHistory($recordId)) {
-            Message::addErrorMessage($affCommSetObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($affCommSetObj->getError(), true);
         }
 
         $this->set('msg', $this->str_update_record);

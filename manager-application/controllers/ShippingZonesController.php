@@ -86,7 +86,7 @@ class ShippingZonesController extends ListingBaseController {
         if (0 < $zoneId) {
             $data = ShippingProfileZone::getZone($profileId, $zoneId);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $zoneLocations = $this->getLocations($zoneId);
         }

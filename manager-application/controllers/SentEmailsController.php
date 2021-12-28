@@ -17,7 +17,7 @@ class SentEmailsController extends ListingBaseController
     public function search()
     {
         if (!FatUtility::isAjaxCall()) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $srchFrm = $this->sentEmailSearchForm();
         $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());

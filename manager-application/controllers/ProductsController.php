@@ -381,7 +381,7 @@ class ProductsController extends ListingBaseController
         $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         if (1 > $langId ||  !array_key_exists($productType, Product::getProductTypes($langId))) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $frm = $this->getForm($langId, $productType, $recordId);

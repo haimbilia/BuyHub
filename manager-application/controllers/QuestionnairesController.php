@@ -77,8 +77,7 @@ class QuestionnairesController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $questionnaire_id = $post['questionnaire_id'];
@@ -88,8 +87,7 @@ class QuestionnairesController extends ListingBaseController
         $record->assignValues($post);
         
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
         
         $newTabLangId = 0;
@@ -126,7 +124,7 @@ class QuestionnairesController extends ListingBaseController
         if ($questionnaire_id > 0) {
             $data = Questionnaires::getAttributesById($questionnaire_id);
             if ($data == false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
         }
         
@@ -148,8 +146,7 @@ class QuestionnairesController extends ListingBaseController
         $lang_id = $post['lang_id'];
         
         if ($questionnaire_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $frm = $this->getLangForm($questionnaire_id, $lang_id);
@@ -165,8 +162,7 @@ class QuestionnairesController extends ListingBaseController
         
         $obj = new Questionnaires($questionnaire_id);
         if (!$obj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -192,7 +188,7 @@ class QuestionnairesController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
         
         if ($questionnaire_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         
         $langFrm = $this->getLangForm($questionnaire_id, $lang_id);
@@ -217,20 +213,18 @@ class QuestionnairesController extends ListingBaseController
         
         $questionnaire_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($questionnaire_id < 1) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $data = Questionnaires::getAttributesById($questionnaire_id);
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $obj = new Questionnaires($questionnaire_id);
         $obj->assignValues(array(Questionnaires::tblFld('deleted') => 1));
         if (!$obj->save()) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
         
         FatUtility::dieJsonSuccess($this->str_delete_record);
@@ -247,7 +241,7 @@ class QuestionnairesController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $questionnaireId = FatUtility::int($post['questionnaire_id']);
         if ($questionnaireId <= 0) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $srch = new QuestionnairesSearch($this->siteLangId, false);
         $srch->joinQuestionnarieToQuestions();
@@ -329,7 +323,7 @@ class QuestionnairesController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $questionnaireId = FatUtility::int($post['questionnaire_id']);
         if ($questionnaireId <= 0) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $srch = new QuestionnairesSearch($this->siteLangId, false);
         $srch->joinFeedbacks();
@@ -361,7 +355,7 @@ class QuestionnairesController extends ListingBaseController
         $feedbackId = FatUtility::int($feedbackId);
         $feedbackId = !empty($data['feedbackId']) ? $data['feedbackId'] : $feedbackId;
         if ($feedbackId <= 0) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $pagesize = 5;
         $page = ($page < 1) ? 1 : $page;
@@ -391,8 +385,7 @@ class QuestionnairesController extends ListingBaseController
         $this->objPrivilege->canViewQuestionnaires();
         $questionnaireId = FatUtility::int($questionnaireId);
         if ($questionnaireId <= 0) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         
         $srch = new QuestionnairesSearch($this->siteLangId, false);
@@ -456,16 +449,14 @@ class QuestionnairesController extends ListingBaseController
     {
         $post = FatApp::getPostedData();
         if (empty($post['questionnaireId']) || empty($post['questionId'])) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $questionnaireId = FatUtility::int($post['questionnaireId']);
         $questionId = FatUtility::int($post['questionId']);
         $dataToSave = array('qtq_question_id' => $questionId, 'qtq_questionnaire_id' => $questionnaireId);
         $questionnaireObj = new Questionnaires();
         if (!$questionnaireObj->addQuestionToQuestionnaire($dataToSave)) {
-            Message::addErrorMessage($questionnaireObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($questionnaireObj->getError(), true);
         }
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Question_Added_Successfully', $this->siteLangId));
     }
@@ -474,16 +465,14 @@ class QuestionnairesController extends ListingBaseController
     {
         $post = FatApp::getPostedData();
         if (empty($post['questionnaireId']) || empty($post['questionId'])) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $questionnaireId = FatUtility::int($post['questionnaireId']);
         $questionId = FatUtility::int($post['questionId']);
         $whereCond = array('smt' => 'qtq_question_id = ? and qtq_questionnaire_id = ?', 'vals' => array($questionId, $questionnaireId) );
         $db = FatApp::getDb();
         if (!$db->deleteRecords(Questionnaires::DB_TBL_QUESTIONNAIRE_TO_QUESTION, $whereCond)) {
-            Message::addErrorMessage($db->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($db->getError(), true);
         }
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Question_Removed_Successfully', $this->siteLangId));
     }
@@ -517,7 +506,7 @@ class QuestionnairesController extends ListingBaseController
         }
     }
 
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $this->objPrivilege->canViewQuestionnaires();
         $frm = new Form('frmQuestionnaireSearch');

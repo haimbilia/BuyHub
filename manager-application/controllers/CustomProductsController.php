@@ -165,7 +165,7 @@ class CustomProductsController extends ListingBaseController
 
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $productType = FatUtility::int($productType);
@@ -200,12 +200,12 @@ class CustomProductsController extends ListingBaseController
         unset($productData['preq_lang_data']);
 
         if (empty($productData)) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
             FatApp::redirectUser(UrlHelper::generateUrl('CustomProducts'));
         }
 
         if ($productData['preq_status'] != ProductRequest::STATUS_PENDING) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $productData = array_merge(
@@ -335,12 +335,12 @@ class CustomProductsController extends ListingBaseController
     public function requestStatusForm(int $recordId)
     {
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $reqStatus = $this->modelClass::getAttributesById($recordId, 'preq_status');
 
         if (false === $reqStatus ||  $reqStatus != ProductRequest::STATUS_PENDING) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $frm = $this->getStatusForm($recordId);
@@ -360,7 +360,7 @@ class CustomProductsController extends ListingBaseController
         $frm = $this->getStatusForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), false);
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $preqId = FatUtility::int($post['preq_id']);
@@ -690,21 +690,21 @@ class CustomProductsController extends ListingBaseController
         $this->objPrivilege->canEditProducts();
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $productData = ProductRequest::getAttributesById($recordId, 'preq_content');
         if ($productData == false) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $productData = json_decode($productData, true);
         if (!isset($productData['product_type']) || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!array_key_exists($type, applicationConstants::digitalDownloadTypeArr($this->siteLangId))) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $frm = DigitalDownload::getDownloadForm($this->siteLangId, $type, $recordId);
@@ -760,7 +760,7 @@ class CustomProductsController extends ListingBaseController
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($recordId < 1) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         $productOptions = FatApp::getPostedData('productOptions');
@@ -791,7 +791,7 @@ class CustomProductsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1  > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $languages = Language::getAllNames();
         if (count($languages) <= 1) {
@@ -815,13 +815,13 @@ class CustomProductsController extends ListingBaseController
 
         $reqStatus = $this->modelClass::getAttributesById($recordId, 'preq_status');
         if (false === $reqStatus ||  $reqStatus != ProductRequest::STATUS_PENDING) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         if (1 > $langId ||  !array_key_exists($productType, Product::getProductTypes($langId))) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $frm = $this->getForm($langId, $productType, $recordId);
@@ -927,8 +927,7 @@ class CustomProductsController extends ListingBaseController
             $count++;
         }
         if (!$preqObj->updateProdImagesOrder($preq_id, $order)) {
-            Message::addErrorMessage($preqObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($preqObj->getError(), true);
         }
         $this->set("msg", $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
@@ -1073,34 +1072,34 @@ class CustomProductsController extends ListingBaseController
         $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $productData = ProductRequest::getAttributesById($recordId, 'preq_content');
         if ($productData == false) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $productData = json_decode($productData, true);
         if (!isset($productData['product_type']) || $productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!array_key_exists($type, applicationConstants::digitalDownloadTypeArr($this->siteLangId))) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $frm = DigitalDownload::getDownloadForm($this->siteLangId, $type, $recordId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
 
         $canDo = $ddpObj->canEdit($recordId, Product::CATALOG_TYPE_REQUEST, 0, $this->siteLangId, false, true);
         if (false == $canDo) {
-            LibHelper::exitWithError($ddpObj->getError());
+            LibHelper::exitWithError($ddpObj->getError(), true);
         }
 
         $optionValId = FatApp::getPostedData('option_comb_id', null, 0);
@@ -1110,7 +1109,7 @@ class CustomProductsController extends ListingBaseController
         $refId = $ddObj->getReferenceId($recordId, $optionValId, Product::CATALOG_TYPE_REQUEST);
         if (1 > $refId) {
             if (!$ddObj->saveReference($recordId, $optionValId, Product::CATALOG_TYPE_REQUEST)) {
-                LibHelper::exitWithError($ddObj->getError());
+                LibHelper::exitWithError($ddObj->getError(), true);
             }
         } else {
             $ddObj->setMainTableRecordId($refId);
@@ -1127,7 +1126,7 @@ class CustomProductsController extends ListingBaseController
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $optionCombi = FatApp::getPostedData('option_comb', null, '0');
@@ -1159,7 +1158,7 @@ class CustomProductsController extends ListingBaseController
         $langId = FatApp::getPostedData('langId', null, 0);
 
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
@@ -1193,18 +1192,18 @@ class CustomProductsController extends ListingBaseController
         $linkId = FatUtility::int($linkId);
 
         if (1 > $refId || 1 > $linkId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $reference = DigitalDownload::getAttributesById($refId);
 
         if (false == $reference) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $link = DigitalDownloadSearch::getLinkDetail($linkId);
         if (1 > count($link)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
@@ -1219,13 +1218,13 @@ class CustomProductsController extends ListingBaseController
         );
 
         if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
+            LibHelper::exitWithError($ddpObj->getError(), true);
         }
 
         $ddObj = new DigitalDownload();
 
         if (!$ddObj->deleteLink($linkId, $refId)) {
-            FatUtility::dieJsonError($ddObj->getError());
+            LibHelper::exitWithError($ddObj->getError(), true);
         }
 
         $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($refId);
@@ -1247,12 +1246,12 @@ class CustomProductsController extends ListingBaseController
         $delFullRow = FatApp::getPostedData('frow', FatUtility::VAR_INT, 0);
 
         if (1 > $refId || 1 > $aFileId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $reference = DigitalDownload::getAttributesById($refId);
         if (false == $reference) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
@@ -1267,12 +1266,12 @@ class CustomProductsController extends ListingBaseController
         );
 
         if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
+            LibHelper::exitWithError($ddpObj->getError(), true);
         }
 
         $digDownload = new DigitalDownload();
         if (!$digDownload->deleteAttachment($aFileId, $refId, $isPreviewFile, $delFullRow)) {
-            LibHelper::exitWithError($digDownload->getError());
+            LibHelper::exitWithError($digDownload->getError(), true);
         }
 
         LibHelper::exitWithSuccess($this->str_delete_record, true);
@@ -1286,28 +1285,28 @@ class CustomProductsController extends ListingBaseController
         $requestType = FatUtility::int($requestType);
 
         if (1 > $aFileId || 1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId), true);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
         $canDo = $ddpObj->canDownload($recordId, $requestType, 0, $this->siteLangId, $isPreview, true);
 
         if (false == $canDo) {
-            LibHelper::exitWithError($ddpObj->getError());
+            LibHelper::exitWithError($ddpObj->getError(), true);
         }
 
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, $isPreview);
 
         if (1 > count($file)) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId), true);
         }
 
         if ($file['pddr_record_id'] != $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {
-            LibHelper::exitWithError(Labels::getLabel("ERR_FILE_NOT_FOUND", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("ERR_FILE_NOT_FOUND", $this->siteLangId), true);
         }
 
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';
@@ -1319,7 +1318,7 @@ class CustomProductsController extends ListingBaseController
         if ((!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name']))
             && (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name']))
         ) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId), true);
         }
 
         $langId = FatUtility::int($post['lang_id']);
@@ -1329,7 +1328,7 @@ class CustomProductsController extends ListingBaseController
         $mainFileId = 0;
         if (1 == $isPreview) {
             if (AttachedFile::getAttributesById($refFileId, 'afile_record_id') !=  $ddObj->getMainTableRecordId()) {
-                LibHelper::exitWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             if (array_key_exists('downloadable_file', $_FILES)) {
                 unset($_FILES['downloadable_file']);
@@ -1343,7 +1342,7 @@ class CustomProductsController extends ListingBaseController
         ) {
             $mainFileId = $this->setupDigitalMainFile($ddObj, $langId);
             if (1 > $mainFileId) {
-                LibHelper::exitWithError($ddObj->getError());
+                LibHelper::exitWithError($ddObj->getError(), true);
             }
             $attachWithExistingOrders = $post['attach_with_existing_orders'];
             if (1 === $attachWithExistingOrders) {
@@ -1356,7 +1355,7 @@ class CustomProductsController extends ListingBaseController
             && is_uploaded_file($_FILES['preview_file']['tmp_name'])
         ) {
             if (1 > $this->setupDigitalPreviewFile($ddObj, $langId, $mainFileId)) {
-                LibHelper::exitWithError($ddObj->getError());
+                LibHelper::exitWithError($ddObj->getError(), true);
             }
         }
         $this->set('langId', $langId);
@@ -1438,7 +1437,7 @@ class CustomProductsController extends ListingBaseController
         $previewLink = FatApp::getPostedData('product_preview_link', null, '');
 
         if ('' == $post['product_downloadable_link'] && '' == $post['product_preview_link']) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ADD_LINK', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ADD_LINK', $this->siteLangId), true);
         }
 
         $langId = FatUtility::int($post['lang_id']);
@@ -1446,7 +1445,7 @@ class CustomProductsController extends ListingBaseController
         $ddLinkId = FatUtility::int($post['dd_link_id']);
 
         if (!$ddObj->saveLink($langId, $downloadLink, $previewLink, $ddLinkId)) {
-            LibHelper::exitWithError($ddObj->getError());
+            LibHelper::exitWithError($ddObj->getError(), true);
         }
 
         $this->set('langId', $langId);

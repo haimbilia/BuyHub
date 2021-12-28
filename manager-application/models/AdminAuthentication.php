@@ -270,7 +270,7 @@ class AdminAuthentication extends FatModel
     {
         $aId = FatUtility::convertToType($aId, FatUtility::VAR_INT);
         if ($aId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->siteLangId);
+            $this->error = $this->str_invalid_request;
             return false;
         }
         $db = FatApp::getDb();
@@ -291,7 +291,7 @@ class AdminAuthentication extends FatModel
     {
         $aId = FatUtility::convertToType($aId, FatUtility::VAR_INT);
         if ($aId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->siteLangId);
+            $this->error = $this->str_invalid_request;
             return false;
         }
 

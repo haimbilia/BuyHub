@@ -292,7 +292,7 @@ class BadgesController extends ListingBaseController
         $recordId = Badge::getAttributesById($recordId, 'badge_id');
 
         if (false == $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $frm = $this->getMediaForm($recordId);
         $this->set('recordId', $recordId);
@@ -314,11 +314,11 @@ class BadgesController extends ListingBaseController
 
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!$row = Badge::getAttributesById($recordId, 'badge_id')) {
-            LibHelper::exitWithError($this->str_invalid_request_id, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BADGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
@@ -489,7 +489,7 @@ class BadgesController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new Badge($recordId);
         if (!$obj->deleteRecord(true)) {

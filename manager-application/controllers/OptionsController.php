@@ -260,7 +260,7 @@ class OptionsController extends ListingBaseController
         $optionIdsArr = FatUtility::int(FatApp::getPostedData('option_ids'));
 
         if (empty($optionIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($optionIdsArr as $recordId) {

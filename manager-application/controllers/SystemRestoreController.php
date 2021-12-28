@@ -10,7 +10,7 @@ class SystemRestoreController extends ListingBaseController
     public function index()
     {
         if (!AdminPrivilege::isAdminSuperAdmin($this->admin_id)) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $settingsObj = new Settings();
         
@@ -35,8 +35,7 @@ class SystemRestoreController extends ListingBaseController
     {
         $record = new Configurations();
         if (!$record->update(array("CONF_AUTO_RESTORE_ON" => $val))) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
         $this->set('msg', 'Setting Updated Successfully!!');
         $this->_template->render(false, false, 'json-success.php');
