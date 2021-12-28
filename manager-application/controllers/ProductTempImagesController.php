@@ -29,7 +29,7 @@ class ProductTempImagesController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
 
         if ($post == false) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $srch = new ProductTempImageSearch();
@@ -75,7 +75,7 @@ class ProductTempImagesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmProductTempImages');
 
@@ -96,7 +96,7 @@ class ProductTempImagesController extends ListingBaseController
         $this->objPrivilege->canEditProductTempImages();
 
         if (1 > $afile_id) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $afile_id = FatUtility::int($afile_id);
@@ -111,7 +111,7 @@ class ProductTempImagesController extends ListingBaseController
         $data = FatApp::getDb()->fetch($rs, 'afile_id');
 
         if ($data === false) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frmImage->fill($data);
 
@@ -140,21 +140,18 @@ class ProductTempImagesController extends ListingBaseController
         $post = $updateForm->getFormDataFromArray($data);
 
         if ($post == false) {
-            Message::addErrorMessage(current($updateForm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($updateForm->getValidationErrors()), true);
         }
 
         $afile_id = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
         if (1 > $afile_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $imageObj = new ProductTempImage($afile_id);
         $imageObj->assignValues($post);
         if (!$imageObj->save()) {
-            Message::addErrorMessage($imageObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($imageObj->getError(), true);
         }
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');

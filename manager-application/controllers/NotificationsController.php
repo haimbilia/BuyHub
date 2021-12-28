@@ -114,32 +114,12 @@ class NotificationsController extends AdminBaseController
         $obj = new Notification();
 
         if (!$obj->deleteNotifications($notificationIds)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
 
         $this->set('msg', $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');
     }
-
-    // public function changeStatus()
-    // {
-    //     $this->objPrivilege->canEditNotifications();
-
-    //     $notificationIds = FatApp::getPostedData('record_ids');
-    //     $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
-    //     $markread = FatApp::getPostedData('markread', FatUtility::VAR_INT, 0);
-    //     $obj = new Notification();
-
-    //     if (!$obj->changeNotifyStatus($status, $notificationIds)) {
-    //         Message::addErrorMessage($obj->getError());
-    //         FatUtility::dieWithError(Message::getHtml());
-    //     }
-    //     if ($markread != 1) {
-    //         $this->set('msg', $this->str_update_record);
-    //     }
-    //     $this->_template->render(false, false, 'json-success.php');
-    // }
 
     public function notificationList()
     {

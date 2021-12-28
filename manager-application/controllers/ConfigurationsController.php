@@ -1917,7 +1917,7 @@ class ConfigurationsController extends ListingBaseController
         $emailObj = new FatMailer($this->siteLangId, 'test_email');
         $emailObj->setTo(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'));
         if (!$emailObj->send()) {
-            FatUtility::dieJsonError($emailObj->getError());
+            LibHelper::exitWithError($emailObj->getError(), true);
         }
         FatUtility::dieJsonSuccess("Mail sent to - " . FatApp::getConfig('CONF_SITE_OWNER_EMAIL'));
     }
@@ -1969,7 +1969,7 @@ class ConfigurationsController extends ListingBaseController
     public function deleteVerificationFile($fileType)
     {
         if ($fileType == '') {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $target_dir = CONF_UPLOADS_PATH;
         if ($fileType == 'bing') {

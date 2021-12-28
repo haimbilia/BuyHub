@@ -28,7 +28,7 @@ class BadCategoriesReportController extends ListingBaseController
         $this->search('export');
     } */
     
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmBadCategoriesReportSearch');
         $frm->addHiddenField('', 'page', 1);

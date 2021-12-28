@@ -436,7 +436,7 @@ class BannersController extends ListingBaseController
         $bannerLocationId = FatUtility::int($bannerLocationId);
 
         if (1 > $bannerLocationId || 1 > $recordId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $bannerDetail = Banner::getAttributesById($recordId);
@@ -469,7 +469,7 @@ class BannersController extends ListingBaseController
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $slideScreen = FatApp::getPostedData('slide_screen', FatUtility::VAR_INT, 0);
         if (!$fileType || !$recordId || !$bannerLocationId) {
-            LibHelper::exitWithError($this->str_invalid_request, false, false, true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $file = $_FILES['cropped_image'];
@@ -605,7 +605,7 @@ class BannersController extends ListingBaseController
         $data = Banner::getAttributesById($bannerId, array('banner_id', 'banner_active'));
 
         if ($data == false) {
-            LibHelper::exitWithError($this->str_invalid_request, true, true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $obj = new Banner($bannerId);

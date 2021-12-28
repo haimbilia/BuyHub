@@ -160,7 +160,7 @@ class ProductCategoriesController extends ListingBaseController
         $languages = Language::getAllNames();
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (!ProductCategory::getAttributesById($recordId)) {
@@ -492,13 +492,13 @@ class ProductCategoriesController extends ListingBaseController
 
         /* Sub-Categories have products[ */
         if (true === $prodCateObj->haveProducts()) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_Products_are_associated_with_its_category/sub-categories_so_we_are_not_able_to_delete_this_category', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('LBL_Products_are_associated_with_its_category/sub-categories_so_we_are_not_able_to_delete_this_category', $this->siteLangId), true);
         }
         /* ] */
 
         $prodCateObj->assignValues(array(ProductCategory::tblFld('deleted') => 1));
         if (!$prodCateObj->save()) {
-            FatUtility::dieJsonError($prodCateObj->getError());
+            LibHelper::exitWithError($prodCateObj->getError(), true);
         }
 
         Product::updateMinPrices();

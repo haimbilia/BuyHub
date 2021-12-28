@@ -134,7 +134,7 @@ class BlogPostsController extends ListingBaseController
         if (0 < $recordId) {
             $data = BlogPost::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
-                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             /* url data[ */
             $urlSrch = UrlRewrite::getSearchObject();
@@ -277,7 +277,7 @@ class BlogPostsController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('post_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -294,7 +294,7 @@ class BlogPostsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new BlogPost($recordId);
         if (!$obj->canMarkRecordDelete()) {

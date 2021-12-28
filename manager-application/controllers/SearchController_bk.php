@@ -12,7 +12,7 @@ class SearchController extends ListingBaseController
     {
     }
     
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('search_form');
         $frm->addTextBox(Labels::getLabel('LBL_Name_or_Email_ID:', $this->siteLangId), 'name');

@@ -93,9 +93,9 @@ class AdminGuestController extends FatController
     public function sendResetPasswordLink($usernameOrEmail)
     {
         if (empty($usernameOrEmail)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
+    
         $adminAuthObj = AdminAuthentication::getInstance();
 
         $admin = $adminAuthObj->checkAdminEmailOrUsername($usernameOrEmail);
@@ -121,16 +121,15 @@ class AdminGuestController extends FatController
             '{site_domain}' => UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONTEND),
             '{user_full_name}' => trim($admin['admin_name']),
         );
-        if (!EmailHandler::sendMailTpl(
-            $admin['admin_email'],
-            'admin_forgot_password',
-            $this->siteLangId,
-            $replacements
-        )) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Unable_to_send_email', $this->siteLangId));
-            $this->set('msg', Message::getHtml());
-            $this->_template->render(false, false, 'json-error.php', true, false);
+
+        $sendEmail = (new FatMailer($this->siteLangId, 'admin_forgot_password'))
+            ->setTo($admin['admin_email'])
+            ->setVariables($replacements)
+            ->send();
+        if (!$sendEmail) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Unable_to_send_email', $this->siteLangId), true);
         }
+
         $emaiHandObj = new EmailHandler();
         $emaiHandObj->sendSms('admin_forgot_password', FatApp::getConfig('CONF_SITE_PHONE'), $replacements, $this->siteLangId);
 
@@ -143,14 +142,11 @@ class AdminGuestController extends FatController
         $frm = $this->getForgotForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false == $post) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         $adminEmail = FatApp::getPostedData('admin_email');
         if (FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '') && !CommonHelper::verifyCaptcha()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Incorrect_Security_Code', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-            $this->set('msg', Message::getHtml());
-            $this->_template->render(false, false, 'json-error.php', true, false);
+            LibHelper::exitWithError(Labels::getLabel('MSG_Incorrect_Security_Code', $this->siteLangId), true);
         }
 
         $adminAuthObj = AdminAuthentication::getInstance();
@@ -254,7 +250,7 @@ class AdminGuestController extends FatController
     public function resetPasswordSubmit()
     {
         if (!FatUtility::isAjaxCall()) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
 
         $newPwd = FatApp::getPostedData('new_pwd');
@@ -270,15 +266,13 @@ class AdminGuestController extends FatController
         $frm = $this->getResetPwdForm($adminId, $token);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (!$frm->validate($post)) {
-            FatUtility::dieJsonError($frm->getValidationErrors());
+            LibHelper::exitWithError($frm->getValidationErrors(), true);
         }
-
+        
         $adminAuthObj = AdminAuthentication::getInstance();
-
+        
         if (!$adminAuthObj->checkResetLink($adminId, trim($token))) {
-            Message::addErrorMessage($adminAuthObj->getError());
-            $this->set('msg', Message::getHtml());
-            $this->_template->render(false, false, 'json-error.php', true, false);
+            LibHelper::exitWithError($adminAuthObj->getError(), true);
         }
         $admin_row = $adminAuthObj->getAdminById($adminId);
 
@@ -294,11 +288,17 @@ class AdminGuestController extends FatController
             '{user_full_name}' => trim($admin_row['admin_name']),
             '{login_link}' => UrlHelper::generateFullUrl('adminGuest', 'loginForm', array())
         );
-        EmailHandler::sendMailTpl($admin_row['admin_email'], 'user_admin_password_changed_successfully', $this->siteLangId, $arr_replacements);
+        
+        $sendEmail = (new FatMailer($this->siteLangId, 'user_admin_password_changed_successfully'))
+            ->setTo($admin_row['admin_email'])
+            ->setVariables($arr_replacements)
+            ->send();
+
         if (!empty(FatApp::getConfig('CONF_SITE_PHONE'))) {
             $emaiHandObj = new EmailHandler();
             $emaiHandObj->sendSms('user_admin_password_changed_successfully', FatApp::getConfig('CONF_SITE_PHONE'), $arr_replacements, $this->siteLangId);
         }
+
         $this->set('msg', Labels::getLabel('MSG_Password_Changed_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

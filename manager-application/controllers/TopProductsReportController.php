@@ -150,7 +150,7 @@ class TopProductsReportController extends ListingBaseController
         $this->search('export');
     }
 
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmTopProductsReportSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('id' => 'keyword', 'autocomplete' => 'off'));

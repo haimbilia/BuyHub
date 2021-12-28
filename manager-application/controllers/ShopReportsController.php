@@ -72,14 +72,12 @@ class ShopReportsController extends ListingBaseController
 
         $sreportId = FatApp::getPostedData('sreportId', FatUtility::VAR_INT, 0);
         if ($sreportId < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $obj = new ShopReport($sreportId);
         if (!$obj->deleteRecord()) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
 
         FatUtility::dieJsonSuccess($this->str_delete_record);

@@ -8,8 +8,7 @@ class ShippingSettingsController extends ListingBaseController
         $shippingSettings = $shipObj->getShippingSettings();
         
         if (!$shippingSettings) {
-            Message::addErrorMessage($shipObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($shipObj->getError());
         }
         return $shippingSettings;
     }
@@ -19,16 +18,14 @@ class ShippingSettingsController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         
         $shipObj = new ShippingSettings($keyName);
         $shippingSettings = $shipObj->getShippingSettings();
         
         if (!$shippingSettings) {
-            Message::addErrorMessage($shipObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($shipObj->getError(), true);
         }
         //To Validate Credentails
         
@@ -37,14 +34,12 @@ class ShippingSettingsController extends ListingBaseController
         $apiSecret = $post['shipstation_api_secret_key'];
         $Ship = new Ship();
         if (!$Ship->validateShipstationAccount($apiKey, $apiSecret)) {
-            Message::addErrorMessage($Ship->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($Ship->getError(), true);
         }
 
         $psObj = new ShippingSettings($keyName);
         if (!$psObj->saveSettings($post)) {
-            Message::addErrorMessage($psObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($psObj->getError(), true);
         }
         
         $this->set('msg', $this->str_setup_successful);

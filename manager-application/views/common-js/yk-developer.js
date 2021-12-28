@@ -173,9 +173,10 @@ $(function () {
             fcom.makeUrl("Configurations", "getStates", [countryId, stateId]),
             "",
             function (res) {
+                var json = JSON.parse(res);
                 $.ykmsg.close();
                 $(dv).empty();
-                $(dv).append(res);
+                $(dv).append(json.html);
             }
         );
     };

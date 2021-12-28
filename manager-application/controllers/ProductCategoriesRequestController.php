@@ -176,7 +176,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         $record = new ProductCategory($recordId);
         $record->assignValues($data);
         if (!$record->save()) {
-            LibHelper::exitWithError($cat->getError(), true);
+            LibHelper::exitWithError($record->getError(), true);
         }
         $this->setLangData($record, ['prodcat_name' => $data['prodcat_name']]);
         $record->updateCatCode();

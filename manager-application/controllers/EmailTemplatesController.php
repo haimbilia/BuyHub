@@ -95,14 +95,14 @@ class EmailTemplatesController extends ListingBaseController
         $tpl = FatApp::getPostedData('etpl_code', FatUtility::VAR_STRING, '');
 
         if (empty($tpl)) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_TEMPLATE', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_TEMPLATE', $this->siteLangId), true);
         }
 
         if (false == (new FatMailer($langId, $tpl))->setTo($to)) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_MAIL_NOT_SENT', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_MAIL_NOT_SENT', $this->siteLangId), true);
         }
 
-        $this->set('msg', Labels::getLabel('SUC_MAIL_SENT_SUCCESSFULLY', $this->siteLangId));
+        $this->set('msg', Labels::getLabel('MSG_MAIL_SENT_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
 

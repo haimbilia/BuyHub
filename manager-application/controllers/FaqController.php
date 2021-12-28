@@ -165,8 +165,6 @@ class FaqController extends ListingBaseController
         $this->checkEditPrivilege(true);
     }
 
-
-
     public function form()
     {
         $this->checkEditPrivilege();

@@ -253,7 +253,7 @@ trait OrdersPackage
         $this->objPrivilege->canEditOrders();
         $orderIdsArr = FatUtility::int(FatApp::getPostedData('order_ids'));
         if (empty($orderIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($orderIdsArr as $orderId) {

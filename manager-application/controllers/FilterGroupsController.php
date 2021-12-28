@@ -26,17 +26,7 @@ class FilterGroupsController extends ListingBaseController
         $this->set("search", $search);
         $this->_template->render();
     }
-    
-    public function getSearchForm()
-    {
-        $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
-    
+        
     public function search()
     {
         $this->objPrivilege->canViewFilterGroups();
@@ -95,8 +85,7 @@ class FilterGroupsController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         
         $filtergroup_id = $post['filtergroup_id'];
@@ -106,8 +95,7 @@ class FilterGroupsController extends ListingBaseController
         $record->assignValues($post);
         
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
         
         $newTabLangId = 0;
@@ -140,8 +128,7 @@ class FilterGroupsController extends ListingBaseController
         $lang_id = FatUtility::int($post['lang_id']);
         
         if ($filtergroup_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $frm = $this->getLangForm($filtergroup_id, $lang_id);
@@ -156,16 +143,14 @@ class FilterGroupsController extends ListingBaseController
         
         $filterGroupObj = new FilterGroup($filtergroup_id);
         if (!$filterGroupObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($filterGroupObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($filterGroupObj->getError(), true);
         }
         
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(FilterGroup::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($filtergroup_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -194,7 +179,7 @@ class FilterGroupsController extends ListingBaseController
         if (0 < $filtergroup_id) {
             $data = FilterGroup::getAttributesById($filtergroup_id, array('filtergroup_id', 'filtergroup_identifier', 'filtergroup_active'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $filterGroupsFrm->fill($data);
         }
@@ -233,7 +218,7 @@ class FilterGroupsController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
         
         if ($filtergroup_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         
         $filterGroupLangFrm = $this->getLangForm($filtergroup_id, $lang_id);
@@ -241,8 +226,7 @@ class FilterGroupsController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(FilterGroup::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($filtergroup_id, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -285,19 +269,17 @@ class FilterGroupsController extends ListingBaseController
         
         $filtergroup_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($filtergroup_id < 1) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $filterGroupObj = new FilterGroup($filtergroup_id);
         if (!$filterGroupObj->canRecordMarkDelete($filtergroup_id)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $filterGroupObj->assignValues(array(FilterGroup::tblFld('deleted') => 1));
         if (!$filterGroupObj->save()) {
-            Message::addErrorMessage($filterGroupObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($filterGroupObj->getError(), true);
         }
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }

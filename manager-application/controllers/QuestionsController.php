@@ -90,8 +90,7 @@ class QuestionsController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $question_id = $post['question_id'];
@@ -101,8 +100,7 @@ class QuestionsController extends ListingBaseController
         $record->assignValues($post);
         
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
         
         $newTabLangId = 0;
@@ -139,7 +137,7 @@ class QuestionsController extends ListingBaseController
         if ($question_id > 0) {
             $data = Questions::getAttributesById($question_id);
             if ($data == false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
         }
         
@@ -162,8 +160,7 @@ class QuestionsController extends ListingBaseController
         $lang_id = $post['lang_id'];
         
         if ($question_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $frm = $this->getLangForm($question_id, $lang_id);
@@ -182,8 +179,7 @@ class QuestionsController extends ListingBaseController
         
         $obj = new Questions($question_id);
         if (!$obj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -209,7 +205,7 @@ class QuestionsController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
         
         if ($question_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         
         $langFrm = $this->getLangForm($question_id, $lang_id);
@@ -236,20 +232,18 @@ class QuestionsController extends ListingBaseController
         
         $question_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($question_id < 1) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $data = Questions::getAttributesById($question_id);
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $obj = new Questions($question_id);
         $obj->assignValues(array(Questions::tblFld('deleted') => 1));
         if (!$obj->save()) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
         
         FatUtility::dieJsonSuccess($this->str_delete_record);
@@ -294,7 +288,7 @@ class QuestionsController extends ListingBaseController
         return $frm;
     }
     
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $this->objPrivilege->canViewQuestions();
         $frm = new Form('frmQuestionSearch');

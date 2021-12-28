@@ -132,7 +132,7 @@ trait Catalog
         $recordId = $post['record_id'];
         if (1 > $recordId) {
             if (!isset($post['temp_product_id']) || 1 > $post['temp_product_id']) {
-                LibHelper::exitWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
         }
 

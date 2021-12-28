@@ -45,8 +45,7 @@ class UploadBulkImagesController extends ListingBaseController
         $post = $frm->getFormDataFromArray($_FILES);
 
         if (false === $post) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Data', $this->langId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Data', $this->langId), true);
         }
 
         $fileName = $_FILES['bulk_images']['name'];
@@ -55,8 +54,7 @@ class UploadBulkImagesController extends ListingBaseController
         $uploadBulkImgobj = new UploadBulkImages();
         $savedFile = $uploadBulkImgobj->upload($fileName, $tmpName);
         if (false === $savedFile) {
-            Message::addErrorMessage($uploadBulkImgobj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($uploadBulkImgobj->getError(), true);
         }
 
         $path = CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BULK_IMAGES_PATH;
@@ -71,7 +69,7 @@ class UploadBulkImagesController extends ListingBaseController
         FatUtility::dieJsonSuccess($json);
     }
 
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
@@ -143,8 +141,8 @@ class UploadBulkImagesController extends ListingBaseController
         $uploadDirsArr = FatApp::getPostedData('uploadDirs');
 
         if (empty($uploadDirsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+            LibHelper::exitWithError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
             );
         }
         $obj = new UploadBulkImages();
@@ -157,23 +155,6 @@ class UploadBulkImagesController extends ListingBaseController
         }
         $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function autoCompleteSellerJson()
-    {
-        $pagesize = applicationConstants::PAGE_SIZE;
-        $post = FatApp::getPostedData();
-        $sellersObj = Product::getSellers(array( "product_seller_id", "IFNULL(credential_username,'Admin') as seller", "credential_email" ));
-        $sellersObj->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'product_seller_id = afile_record_id AND afile_type = ' . AttachedFile::FILETYPE_BULK_IMAGES);
-        $sellersObj->addOrder('seller');
-        if ('' != $post['keyword']) {
-            $sellersObj->addCondition('credential_username', 'like', '%' . $post['keyword'] . '%');
-            $sellersObj->addCondition('credential_email', 'like', '%' . $post['keyword'] . '%', 'OR');
-        }
-        $sellersObj->setPageSize($pagesize);
-        $rs = $sellersObj->getResultSet();
-        $sellers = FatApp::getDb()->fetchAll($rs);
-        die(json_encode($sellers));
     }
 
     public function downloadPathsFile($path)

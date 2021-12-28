@@ -81,7 +81,7 @@ class TaxReportController extends ListingBaseController
             while ($row = $db->fetch($rs)) {
                 $arr = array($row['op_shop_name'], $row['owner_name'] . "\n(" . $row['owner_email'] . ")", $row['totChildOrders'], CommonHelper::displayMoneyFormat($row['totTax'], true, true));
                 array_push($sheetData, $arr);
-            }            
+            }
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Tax_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
         } else {
@@ -96,8 +96,7 @@ class TaxReportController extends ListingBaseController
             $this->set('pageSize', $pageSize);
             $this->set('postedData', $post);
             $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);nder(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);
+            $this->_template->render(false, false, 'json-success.php', true, false);
         }
     }
 
@@ -106,7 +105,7 @@ class TaxReportController extends ListingBaseController
         $this->search('export');
     }
 
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmTaxReportSearch');
         $frm->addHiddenField('', 'page', 1);

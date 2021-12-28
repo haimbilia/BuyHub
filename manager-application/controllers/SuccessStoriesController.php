@@ -84,7 +84,7 @@ class SuccessStoriesController extends ListingBaseController
             $rs = $srch->getResultSet();
             $data = FatApp::getDb()->fetch($rs);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -104,8 +104,7 @@ class SuccessStoriesController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         
         $sstory_id = FatUtility::int($post['sstory_id']);
@@ -122,8 +121,7 @@ class SuccessStoriesController extends ListingBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -155,16 +153,15 @@ class SuccessStoriesController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
         
         if ($sstory_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         
-        $langFrm = $this->getLangForm();
+        $langFrm = $this->getLangForm($lang_id);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(SuccessStories::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($sstory_id, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -196,11 +193,10 @@ class SuccessStoriesController extends ListingBaseController
         $lang_id = $post['lang_id'];
 
         if ($sstory_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $frm = $this->getLangForm();
+        $frm = $this->getLangForm($lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['sstory_id']);
         unset($post['lang_id']);
@@ -214,16 +210,14 @@ class SuccessStoriesController extends ListingBaseController
 
         $obj = new SuccessStories($sstory_id);
         if (!$obj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
         
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(SuccessStories::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($sstory_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -250,8 +244,7 @@ class SuccessStoriesController extends ListingBaseController
         if (!empty($post)) {
             $obj = new SuccessStories();
             if (!$obj->updateOrder($post['stories'])) {
-                Message::addErrorMessage($obj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError($obj->getError(), true);
             }
             FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
         }
@@ -263,26 +256,24 @@ class SuccessStoriesController extends ListingBaseController
         
         $sstory_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($sstory_id < 1) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $res = SuccessStories::getAttributesById($sstory_id, array('sstory_id'));
         if ($res == false) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $obj = new SuccessStories($sstory_id);
         $obj->assignValues(array(SuccessStories::tblFld('deleted') => 1));
         if (!$obj->save()) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
         
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
     
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmSearch');
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
@@ -306,7 +297,7 @@ class SuccessStoriesController extends ListingBaseController
         return $frm;
     }
     
-    private function getLangForm()
+    private function getLangForm($lang_id)
     {
         $frm = new Form('frmStories');
         $frm->addHiddenField('', 'sstory_id');

@@ -457,7 +457,7 @@ class MetaTagsController extends ListingBaseController
         $langId = FatUtility::int($langId);
 
         if ($langId == 0) {
-            FatUtility::dieWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $langFrm = $this->getLangForm($metaId, $langId, $metaType, $metaTagRecordId);

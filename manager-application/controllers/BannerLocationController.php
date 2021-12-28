@@ -128,11 +128,11 @@ class BannerLocationController extends ListingBaseController
         return $frm;
     }
 
-    public function Form()
+    public function form()
     {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $recordId) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $frm = $this->getForm($recordId);
