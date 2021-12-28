@@ -6,7 +6,7 @@
             <div class="banner-side-cta">
                 <h2>
                     <?php echo Labels::getLabel('LBL_Dont_have_an_account_yet?', $siteLangId); ?></h2>
-                <a href="javaScript:void(0)" class="btn btn-outline-white">
+                <a href="<?php echo UrlHelper::generateUrl('GuestUser','RegistrationForm');?>" class="btn btn-outline-white">
                     <?php echo Labels::getLabel('LBL_Register_Now', $siteLangId); ?>
                 </a>
             </div>
@@ -34,20 +34,5 @@
 
         </div>
     </section>
-    <section class="enter-page">
-        <div class="banner-side" style="background-image: url(<?php echo CONF_WEBROOT_URL; ?>images/bg-signin.png);">
-            <div class="banner-side-cta">
-                <h2>
-                    <?php echo Labels::getLabel('LBL_Do_You_Have_An_Account?', $siteLangId); ?></h2>
-                <a href="javaScript:void(0)" class="btn btn-outline-white"><?php echo Labels::getLabel('LBL_Sign_In_Now', $siteLangId); ?>
-                </a>
-            </div>
-
-        </div>
-        <div id="sign-up" class="form-sign">
-            <?php $smsPluginStatus = $smsPluginStatus; ?>
-            <?php require_once CONF_VIEW_DIR_PATH . 'guest-user/register-form-detail.php'; ?>
-        </div>
-
-    </section>
+    
 </div>
