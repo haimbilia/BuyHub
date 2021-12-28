@@ -157,7 +157,7 @@ class DiscountCouponsController extends ListingBaseController
         if (0 < $recordId) {
             $data = DiscountCoupons::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
             if ($data === false) {
-                LibHelper::exitWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         } else {
@@ -425,7 +425,7 @@ class DiscountCouponsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $data = DiscountCoupons::getCouponPlans($recordId, $this->siteLangId);
         $tagifyData = [];
@@ -447,7 +447,7 @@ class DiscountCouponsController extends ListingBaseController
 
         $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], true);
         if (empty($couponData)) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
             CommonHelper::redirectUserReferer();
         }
         $str = Labels::getLabel('LBL_BIND_LINKS_FOR_{LINK-TYPE}', $this->siteLangId);
@@ -647,7 +647,7 @@ class DiscountCouponsController extends ListingBaseController
         $couponData = DiscountCoupons::getAttributesById($recordId);
 
         if (false == $couponData) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $frm = $this->getMediaForm($recordId);
         $this->set('recordId', $recordId);
@@ -668,11 +668,11 @@ class DiscountCouponsController extends ListingBaseController
 
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!$row = DiscountCoupons::getAttributesById($recordId, 'coupon_id')) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_DISCOUNT_COUPON_IMAGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);

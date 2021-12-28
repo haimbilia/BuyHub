@@ -205,7 +205,7 @@ class CollectionsController extends ListingBaseController
         if (0 < $recordId) {
             $data = Collections::getAttributesByLangId($this->siteLangId, $recordId, null, true);
             if ($data === false) {
-                LibHelper::exitWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
 
             if ($type == Collections::COLLECTION_TYPE_BANNER) {
@@ -335,7 +335,7 @@ class CollectionsController extends ListingBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId || 1 > $langId) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $this->setLangTemplateData();
@@ -344,7 +344,7 @@ class CollectionsController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData($this->modelObj::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -450,7 +450,7 @@ class CollectionsController extends ListingBaseController
 
         $data = Collections::getAttributesById($recordId);
         if (false != $data && ($data['collection_active'] != applicationConstants::ACTIVE || $data['collection_deleted'] == applicationConstants::YES)) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $this->setFormTitle($collectionType, $data['collection_layout_type']);
@@ -576,7 +576,7 @@ class CollectionsController extends ListingBaseController
 
         $data = Collections::getAttributesById($recordId);
         if (false == $data) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $this->setFormTitle($collectionType, $data['collection_layout_type']);
 
@@ -805,7 +805,7 @@ class CollectionsController extends ListingBaseController
 
         $collectionDetails = Collections::getAttributesById($collectionId);
         if (false != $collectionDetails && ($collectionDetails['collection_active'] != applicationConstants::ACTIVE || $collectionDetails['collection_deleted'] == applicationConstants::YES)) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $type = $collectionDetails['collection_type'];
@@ -838,7 +838,7 @@ class CollectionsController extends ListingBaseController
 
         $collectionDetails = Collections::getAttributesById($collectionId);
         if (false != $collectionDetails && ($collectionDetails['collection_active'] != applicationConstants::ACTIVE || $collectionDetails['collection_deleted'] == applicationConstants::YES)) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $bannerLocation = BannerLocation::getDataByCollectionId($collectionId);
@@ -984,7 +984,7 @@ class CollectionsController extends ListingBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
 
         if (1 > $recordId || 1 > $langId) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getBannerLangForm($collectionId, $recordId, $langId);
@@ -992,7 +992,7 @@ class CollectionsController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(Banner::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($recordId, $langId);
             if (false === $translatedData) {
-                LibHelper::exitWithError($updateLangDataobj->getError());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -1068,7 +1068,7 @@ class CollectionsController extends ListingBaseController
 
         $this->collectionDetails = Collections::getAttributesById($collectionId);
         if (false != $this->collectionDetails && ($this->collectionDetails['collection_active'] != applicationConstants::ACTIVE || $this->collectionDetails['collection_deleted'] == applicationConstants::YES)) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $type = $this->collectionDetails['collection_type'];
         $layoutType = $this->collectionDetails['collection_layout_type'];
@@ -1170,7 +1170,7 @@ class CollectionsController extends ListingBaseController
 
         $collectionDetails = Collections::getAttributesById($collectionId);
         if (false != $collectionDetails && ($collectionDetails['collection_active'] != applicationConstants::ACTIVE || $collectionDetails['collection_deleted'] == applicationConstants::YES)) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $recordId, 0, $lang_id, (1 == count($languages)), $screen, 1);

@@ -275,7 +275,7 @@ class OrderReturnRequestsController extends ListingBaseController
     public function addNewComment(int $recordId)
     {
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $frm = $this->getMessageForm($this->siteLangId);
@@ -291,7 +291,7 @@ class OrderReturnRequestsController extends ListingBaseController
     public function requestStatusForm(int $recordId)
     {
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $requestRow = $this->getRequestRow($recordId);

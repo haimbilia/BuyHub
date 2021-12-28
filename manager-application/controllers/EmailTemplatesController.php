@@ -137,12 +137,6 @@ class EmailTemplatesController extends ListingBaseController
 
         $etplCode = $data['etpl_code'];
         $etplObj = new EmailTemplates($etplCode);
-        /*
-        $record =  $etplObj->getEtpl($etplCode, $lang_id);
-        if($record == false){
-            Message::addErrorMessage($this->str_invalid_request);
-            LibHelper::exitWithError( Message::getHtml() );
-        } */
 
         if (!$etplObj->addUpdateData($data)) {
             LibHelper::exitWithError($etplObj->getError(), true);
@@ -196,7 +190,7 @@ class EmailTemplatesController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
 
         if ($etplCode == '' || $lang_id == 0) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($etplCode, $lang_id);

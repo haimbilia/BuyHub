@@ -88,7 +88,7 @@ class ShippingZoneRatesController extends ListingBaseController {
         $srObj = new ShippingRate($rateId);
         $srObj->assignValues($post);
         if (!$srObj->save()) {
-            LibHelper::exitWithError($srObj->getError());
+            LibHelper::exitWithError($srObj->getError(), true);
         }
         $rateId = $srObj->getMainTableRecordId();
         $this->setLangData($srObj, [
@@ -110,7 +110,7 @@ class ShippingZoneRatesController extends ListingBaseController {
         $langId = FatUtility::int($langId);
 
         if ($rateId == 0 || $langId == 0) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($zoneId, $rateId, $langId);

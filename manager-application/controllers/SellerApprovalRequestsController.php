@@ -160,29 +160,29 @@ class SellerApprovalRequestsController extends ListingBaseController
         $srch->setPageSize(1);
         $supplierRequest = FatApp::getDb()->fetch($srch->getResultSet());
         if ($supplierRequest == false) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $statusArr = array(User::SUPPLIER_REQUEST_APPROVED, User::SUPPLIER_REQUEST_CANCELLED);
         if (!in_array($post['usuprequest_status'], $statusArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Status_Request', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Status_Request', $this->siteLangId), true);
         }
 
         if (in_array($post['usuprequest_status'], $statusArr) && in_array($supplierRequest['usuprequest_status'], $statusArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Status_Request', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Status_Request', $this->siteLangId), true);
         }
 
         FatApp::getDb()->startTransaction();
         if (!$userObj->updateSupplierRequest(['request_id' => $supplierRequest['usuprequest_id'], 'status' => $post['usuprequest_status'], 'comments' => $post['comments']])) {
             FatApp::getDb()->rollbackTransaction();
-            LibHelper::exitWithError($userObj->getError());
+            LibHelper::exitWithError($userObj->getError(), true);
         }
 
         if ($post['usuprequest_status'] == User::SUPPLIER_REQUEST_APPROVED && $supplierRequest['usuprequest_status'] != User::SUPPLIER_REQUEST_APPROVED) {
             $userObj->setMainTableRecordId($supplierRequest['usuprequest_user_id']);
             if (!$userObj->activateSupplier(applicationConstants::ACTIVE)) {
                 FatApp::getDb()->rollbackTransaction();
-                LibHelper::exitWithError($userObj->getError());
+                LibHelper::exitWithError($userObj->getError(), true);
             }
         }
 
@@ -191,7 +191,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $supplierRequest['usuprequest_comments'] = $post['comments'];
         if (!$email->sendSupplierRequestStatusChangeNotification($this->siteLangId, $supplierRequest)) {
             FatApp::getDb()->rollbackTransaction();
-            LibHelper::exitWithError(Labels::getLabel('ERR_EMAIL_COULD_NOT_BE_SENT', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_EMAIL_COULD_NOT_BE_SENT', $this->siteLangId), true);
         }
         FatApp::getDb()->commitTransaction();
         $this->set('msg', $this->str_setup_successful);
@@ -204,7 +204,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $this->objPrivilege->canViewSellerApprovalRequests();
         $requestId = FatUtility::int($requestId);
         if (1 > $requestId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $userObj = new User();
@@ -214,7 +214,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $srch->doNotLimitRecords();
         $supplierRequest = FatApp::getDb()->fetch($srch->getResultSet());
         if ($supplierRequest == false) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $supplierRequest["field_values"] = $userObj->getSupplierRequestFieldsValueArr($requestId, $this->siteLangId);

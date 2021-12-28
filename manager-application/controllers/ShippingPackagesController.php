@@ -117,13 +117,13 @@ class ShippingPackagesController extends ListingBaseController
         $recordId = FatUtility::int(ShippingPackage::getPackageIdByName($packageName));
         $packageId = $post['shippack_id'];
         if (0 < $recordId && $packageId != $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_THIS_PACKAGE_NAME_ALREDY_IN_USE.', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('LBL_THIS_PACKAGE_NAME_ALREDY_IN_USE.', $this->siteLangId), true);
         }
         unset($post['shippack_id']);
         $spObj = new ShippingPackage($packageId);
         $spObj->assignValues($post);
         if (!$spObj->save()) {
-            LibHelper::exitWithError($spObj->getError());
+            LibHelper::exitWithError($spObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('SUC_SETUP_SUCCESSFUL', $this->siteLangId));
