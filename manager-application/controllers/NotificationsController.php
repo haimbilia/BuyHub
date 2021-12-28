@@ -1,12 +1,28 @@
 <?php
 
-class NotificationsController extends AdminBaseController
+class NotificationsController extends ListingBaseController
 {
+    protected string $modelClass = 'Notification';
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewNotifications();
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
+    }
+
+    /**
+     * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
+     *
+     * @param  bool $setVariable
+     * @return void
+     */
+    protected function checkEditPrivilege(bool $setVariable = false): void
+    {
+        if (true === $setVariable) {
+            $this->set("canEdit", $this->objPrivilege->canEditNotifications($this->admin_id, true));
+        } else {
+            $this->objPrivilege->canEditNotifications();
+        }
     }
 
     public function index()
@@ -67,79 +83,26 @@ class NotificationsController extends AdminBaseController
         $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         $this->set('labelArr', Notification::getLabelKeyString($this->siteLangId));
-        $this->set('canEdit', $this->objPrivilege->canEditNotifications($this->admin_id, true));
-    }
+        $this->checkEditPrivilege(true);
+    } 
 
-    public function search1()
+    public function toggleBulkStatuses()
     {
-        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
-
-        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        if ($page < 2) {
-            $page = 1;
+        $this->checkEditPrivilege();
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        $recordsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
+        if (empty($recordsArr) || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-
-        $srch = Notification::getSearchObject();
-
-        if (!AdminPrivilege::isAdminSuperAdmin($this->admin_id)) {
-            $recordTypeArr = Notification::getAllowedRecordTypeArr($this->admin_id);
-            $srch->addCondition('notification_record_type', 'IN', $recordTypeArr);
-        }
-
-        $srch->addOrder('n.notification_added_on', 'DESC');
-        $srch->addCondition('n.' . Notification::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pagesize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        $this->set('labelArr', Notification::getLabelKeyString($this->siteLangId));
-        $this->set('arrListing', $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('page', $page);
-        $this->set('pageSize', $pagesize);
-        $this->set('recordCount', $srch->recordCount());
-        $this->canEdit = $this->objPrivilege->canEditNotifications($this->admin_id, true);
-        $this->set("canEdit", $this->canEdit);
-        $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);
-    }
-
-    public function deleteRecords()
-    {
-        $this->objPrivilege->canEditNotifications();
-
-        $notificationIds = FatApp::getPostedData('record_ids');
-
+        
         $obj = new Notification();
-
-        if (!$obj->deleteNotifications($notificationIds)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $this->set('msg', $this->str_delete_record);
+        if (!$obj->changeNotifyStatus($status, $recordsArr)) {
+            LibHelper::exitWithError($obj->getError(), true);
+        }      
+      
+        $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
-
-    // public function changeStatus()
-    // {
-    //     $this->objPrivilege->canEditNotifications();
-
-    //     $notificationIds = FatApp::getPostedData('record_ids');
-    //     $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
-    //     $markread = FatApp::getPostedData('markread', FatUtility::VAR_INT, 0);
-    //     $obj = new Notification();
-
-    //     if (!$obj->changeNotifyStatus($status, $notificationIds)) {
-    //         Message::addErrorMessage($obj->getError());
-    //         FatUtility::dieWithError(Message::getHtml());
-    //     }
-    //     if ($markread != 1) {
-    //         $this->set('msg', $this->str_update_record);
-    //     }
-    //     $this->_template->render(false, false, 'json-success.php');
-    // }
 
     public function notificationList()
     {
@@ -162,7 +125,7 @@ class NotificationsController extends AdminBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    protected function getSearchForm()
+    protected function getSearchForm(array $fields = [])
     {   
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');

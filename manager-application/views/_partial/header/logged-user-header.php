@@ -67,13 +67,12 @@
                                         <div class="header-notification__head">
                                             <h5>Notifications <span class="count">24 reports</span></h5>
                                             <nav class="nav nav--tabs js-tab">
-                                                <a class="is-current" href="#tab-1">Alerts</a>
-                                                <a href="#tab-2">Updates</a>
-                                                <a href="#tab-3">Logs</a>
+                                                <a class="is-current" href="#adminNotification">Alerts</a>
+                                                <a href="#adminLogs">Logs</a>                                           
                                             </nav>
                                         </div>
                                         <div class="header-notification__body">
-                                            <div class="tab-1 tab-container visible" id="tab-1">
+                                            <div class="tab-1 tab-container visible" id="adminNotification">
                                                 <div class="scroll-y p-4">
                                                     <div class="notifications">
                                                         <div class="notification">
@@ -214,24 +213,8 @@
                                                         <!--item-->
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="tab-2 tab-container" id="tab-2">
-                                                <div class="scroll-y p-4">
-                                                    <div class="update text-center">
-                                                        <div class="update__content">
-                                                            <h5>Get Pro Access</h5>
-                                                            <p>Outlines keep you honest. They stoping you from amazing
-                                                                poorly
-                                                                about drive</p>
-                                                            <a href="#" class="btn btn-sm btn-primary">Upgrade</a>
-                                                        </div>
-                                                        <div class="update__img">
-                                                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/misc/update-img.png" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-3 tab-container" id="tab-3">
+                                            </div>                                           
+                                            <div class="tab-2 tab-container" id="adminLogs">
                                                 <div class="scroll-y p-4">
                                                     <div class="log-list">
                                                         <div class="log">
