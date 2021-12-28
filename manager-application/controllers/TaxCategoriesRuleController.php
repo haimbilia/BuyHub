@@ -203,24 +203,24 @@ class TaxCategoriesRuleController extends ListingBaseController
         unset($post['taxrule_id']);
         $taxRuleObj->assignValues($post);
         if (!$taxRuleObj->save()) {
-            LibHelper::exitWithError(Message::getHtml());
+            LibHelper::exitWithError($taxRuleObj->getError(), true);
         }
 
 
         if (!$taxRuleObj->addUpdateRate($post['trr_rate'])) {
-            LibHelper::exitWithError($taxRuleObj->getError());
+            LibHelper::exitWithError($taxRuleObj->getError(), true);
         }
 
         $ruleId = $taxRuleObj->getMainTableRecordId();
         /* [ update location data */
         if (!$taxRuleObj->addUpdateLocationData($ruleId, $post)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Location_Data', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Location_Data', $this->siteLangId), true);
         }
         /* ] */
 
         /* [ UPDATE COMBINED TAX DETAILS */
         if (!$taxRuleObj->addUpdateCombinedData($combinedTaxDetails, $ruleId)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Combined_Tax_Data', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_Unable_to_Update_Combined_Tax_Data', $this->siteLangId), true);
         }
         /* ] */
 
@@ -286,7 +286,7 @@ class TaxCategoriesRuleController extends ListingBaseController
 
         $taxRule = new TaxRule($recordId);
         if (!$taxRule->deleteRelatedRecord()) {
-            LibHelper::exitWithError($taxRule->getError());
+            LibHelper::exitWithError($taxRule->getError(), true);
         }
 
         $this->set('msg', $this->str_setup_successful);

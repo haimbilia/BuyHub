@@ -153,8 +153,7 @@ class PickupAddressesController extends ListingBaseController
         $frm = $this->getForm($post['addr_id'], $post['lang_id']);
         $postedData = $frm->getFormDataFromArray($post);
         if (false === $postedData) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         if ($availability == TimeSlot::DAY_ALL_DAYS && !isset($slotFromTime[TimeSlot::DAY_SUNDAY])) {
             LibHelper::exitWithError($this->str_invalid_request, true);

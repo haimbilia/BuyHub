@@ -3,31 +3,43 @@ class SitemapController extends AdminBaseController
 {
     private $siteMapLanguages = [];
     private $defaultLangId = 0;
-
+    private $siteMapIndexArr = [];
+    private $sitemapListInc = 1;
+    private $recordCountInc = 0;
+    private $limit = 2000;
+    private $sitemapDir = 'sitemap';
 
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->siteMapLanguages = Language::getAllNames(false);
         $this->defaultLangId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
+        $recordId = 0;
+        if (!FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0)) {
+            $recordId = $this->defaultLangId;
+        }
+        $this->siteMapLanguages = Language::getAllNames(false, $recordId);
     }
 
     public function generate()
     {
         set_time_limit(0);
-        global $sitemapListInc;
-        $sitemapListInc = 0;
 
-        $this->writePrimarySitemapIndex();
+        $structure = $this->getStructure();
+        foreach ($structure as $val) {
+            $this->sitemapListInc = 1;
+            $this->recordCountInc = 0;
+            $this->writeSitemapIndex($val);
+        }
+
+        $this->writeStructureIndex();
+
 
         if (1 < count($this->siteMapLanguages)) {
             $this->writeSitemapLangSpecific();
         }
 
-        $structure = $this->getStructure();
-        foreach ($structure as $val) {
-            $this->writeSitemapIndex($val);
-        }
+        $this->writePrimarySitemapIndex();
+
         Message::addMessage(Labels::getLabel('MSG_SITEMAP_HAS_BEEN_UPDATED_SUCCESSFULLY', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
@@ -36,19 +48,19 @@ class SitemapController extends AdminBaseController
     {
         switch ($type) {
             case 'products':
-                $this->writeProductSitemap();
+                $this->writeProductSitemap($type);
                 break;
             case 'categories':
-                $this->writeCategorySitemap();
+                $this->writeCategorySitemap($type);
                 break;
             case 'brands':
-                $this->writeBrandSitemap();
+                $this->writeBrandSitemap($type);
                 break;
             case 'shops':
-                $this->writeShopSitemap();
+                $this->writeShopSitemap($type);
                 break;
             case 'cms':
-                $this->writeCmsSitemap();
+                $this->writeCmsSitemap($type);
                 break;
         }
     }
@@ -65,14 +77,14 @@ class SitemapController extends AdminBaseController
         return $prodSrchObj;
     }
 
-    private function writeProductSitemap()
+    private function writeProductSitemap($type)
     {
         $prodSrch = $this->getProductSrchObj();
 
         foreach ($this->siteMapLanguages as $language) {
             $this->startSitemapXml();
             $url = UrlHelper::getUrlScheme();
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $url .=  '/' . strtolower($language['language_code']);
                 $file .= '/' . strtolower($language['language_code']);
@@ -89,37 +101,39 @@ class SitemapController extends AdminBaseController
             }
 
             $this->endSitemapXml($file);
+            $this->resetSiteMapListInc($type);
         }
     }
 
-    private function writeCategorySitemap()
+    private function writeCategorySitemap($type)
     {
         foreach ($this->siteMapLanguages as $language) {
             $this->startSitemapXml();
             $url = UrlHelper::getUrlScheme();
 
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $url .=  '/' . strtolower($language['language_code']);
                 $file .= '/' . strtolower($language['language_code']);
             }
             $file .= '/categories';
-
-            $categoriesArr = ProductCategory::getArray($this->siteLangId, 0, false, true, false, CONF_USE_FAT_CACHE, false);
+            $categoriesArr = ProductCategory::getArray($language['language_id'], 0, false, true, false, CONF_USE_FAT_CACHE, false);
             foreach ($categoriesArr as $key => $val) {
                 $this->writeSitemapUrl(UrlHelper::generateFullUrl('category', 'view', array($val['prodcat_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file);
             }
+
             $this->endSitemapXml($file);
+            $this->resetSiteMapListInc($type);
         }
     }
 
-    private function writeBrandSitemap()
+    private function writeBrandSitemap($type)
     {
         foreach ($this->siteMapLanguages as $language) {
             $prodSrchObj = $this->getProductSrchObj($language['language_id']);
             $this->startSitemapXml();
             $url = UrlHelper::getUrlScheme();
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $url .=  '/' . strtolower($language['language_code']);
                 $file .= '/' . strtolower($language['language_code']);
@@ -138,15 +152,16 @@ class SitemapController extends AdminBaseController
             }
 
             $this->endSitemapXml($file);
+            $this->resetSiteMapListInc($type);
         }
     }
 
-    private function writeShopSitemap()
+    private function writeShopSitemap($type)
     {
         foreach ($this->siteMapLanguages as $language) {
             $this->startSitemapXml();
             $url = UrlHelper::getUrlScheme();
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $url .=  '/' . strtolower($language['language_code']);
                 $file .= '/' . strtolower($language['language_code']);
@@ -167,15 +182,16 @@ class SitemapController extends AdminBaseController
             }
 
             $this->endSitemapXml($file);
+            $this->resetSiteMapListInc($type);
         }
     }
 
-    private function writeCmsSitemap()
+    private function writeCmsSitemap($type)
     {
         foreach ($this->siteMapLanguages as $language) {
             $this->startSitemapXml();
             $url = UrlHelper::getUrlScheme();
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $url .=  '/' . strtolower($language['language_code']);
                 $file .= '/' . strtolower($language['language_code']);
@@ -201,6 +217,7 @@ class SitemapController extends AdminBaseController
                 }
             }
             $this->endSitemapXml($file);
+            $this->resetSiteMapListInc($type);
         }
     }
 
@@ -214,12 +231,11 @@ class SitemapController extends AdminBaseController
 
     private function writeSitemapUrl($url, $file, $freq = 'weekly')
     {
-        static $sitemap_i;
-        $sitemap_i++;
-        if ($sitemap_i > 2000) {
-            $sitemap_i = 1;
+        $this->recordCountInc++;
+        if ($this->recordCountInc > $this->limit) {
             $this->endSitemapXml($file, true);
             $this->startSitemapXml();
+            $this->recordCountInc = 0;
         }
         echo "
 			<url>
@@ -233,12 +249,10 @@ class SitemapController extends AdminBaseController
 
     private function endSitemapXml($file, $changeList = false)
     {
-        global $sitemapListInc;
+        $file = $file . $this->sitemapListInc;
         if ($changeList) {
-            $sitemapListInc++;
+            $this->sitemapListInc++;
         }
-
-        $file = (1 >  $sitemapListInc) ? $file : $file . $sitemapListInc;
 
         echo '</urlset>' . "\n";
         $contents = ob_get_clean();
@@ -254,7 +268,7 @@ class SitemapController extends AdminBaseController
 
         if (1 < count($this->siteMapLanguages)) {
             foreach ($this->siteMapLanguages as $language) {
-                $url = UrlHelper::getUrlScheme() . '/sitemap';
+                $url = UrlHelper::getUrlScheme() . '/'. $this->sitemapDir;
                 // $url .=  "/" . strtolower($language['language_code']);
                 if ($this->defaultLangId != $language['language_id']) {
                     $url .=  "/" . strtolower($language['language_code']);
@@ -264,7 +278,7 @@ class SitemapController extends AdminBaseController
         } else {
             $structure = $this->getStructure();
             foreach ($structure as $val) {
-                echo "<sitemap><loc>" . UrlHelper::getUrlScheme() . '/sitemap' . '/' . strtolower($val) . ".xml</loc></sitemap>\n";
+                echo "<sitemap><loc>" . UrlHelper::getUrlScheme() . '/'. $this->sitemapDir . '/' . strtolower($val) . ".xml</loc></sitemap>\n";
             }
         }
 
@@ -278,34 +292,70 @@ class SitemapController extends AdminBaseController
     {
         $structure = $this->getStructure();
         foreach ($this->siteMapLanguages as $language) {
-            $this->startSitemapXml();
+            ob_start();
+            echo "<?xml version='1.0' encoding='UTF-8'?>
+    <sitemapindex xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\n";
             foreach ($structure as $val) {
-                $url = UrlHelper::getUrlScheme() . '/sitemap';
+                $url = UrlHelper::getUrlScheme() . '/'. $this->sitemapDir;
                 if ($this->defaultLangId != $language['language_id']) {
                     $url .=  "/" . strtolower($language['language_code']);
                 }
                 $url .= "/" . strtolower($val) . '.xml';
 
-                echo "
-                <url>
-                    <loc>" . $url . "</loc>
-                    <lastmod>" . date('Y-m-d') . "</lastmod>
-                    <changefreq>weekly</changefreq>
-                    <priority>0.8</priority>
-                </url>";
-                echo "\n";
+                echo "<sitemap><loc>" . $url . "</loc></sitemap>\n";
             }
 
-            echo '</urlset>' . "\n";
+            echo "</sitemapindex>";
             $contents = ob_get_clean();
             $rs = '';
 
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $file .= '/' . strtolower($language['language_code']);
             }
 
             CommonHelper::writeFile($file . '/sitemap.xml', $contents, $rs);
+        }
+    }
+
+    private function writeStructureIndex()
+    {
+        foreach ($this->siteMapLanguages as $language) {
+            foreach ($this->siteMapIndexArr as $type => $listingCount) {
+                if (1 == $listingCount) {
+                    $url = CONF_UPLOADS_PATH . '/' . $this->sitemapDir;
+                    if ($this->defaultLangId != $language['language_id']) {
+                        $url .= '/' . strtolower($language['language_code']);
+                    }
+
+                    $url .= '/' . strtolower($type);
+
+                    rename($url . '1.xml', $url . '.xml');
+                    continue;
+                }
+
+                ob_start();
+                echo "<?xml version='1.0' encoding='UTF-8'?>
+		<sitemapindex xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\n";
+
+                for ($i = 1; $i <= $listingCount; $i++) {
+                    $url = UrlHelper::getUrlScheme() . '/' . $this->sitemapDir;
+                    if ($this->defaultLangId != $language['language_id']) {
+                        $url .= '/' . strtolower($language['language_code']);
+                    }
+                    echo "<sitemap><loc>" . $url . '/' . strtolower($type) . $i . ".xml</loc></sitemap>\n";
+                }
+
+                echo "</sitemapindex>";
+                $contents = ob_get_clean();
+                $rs = '';
+
+                $file = $this->sitemapDir;
+                if ($this->defaultLangId != $language['language_id']) {
+                    $file .= '/' . strtolower($language['language_code']);
+                }
+                CommonHelper::writeFile($file . '/' . strtolower($type) . '.xml', $contents, $rs);
+            }
         }
     }
 
@@ -318,5 +368,11 @@ class SitemapController extends AdminBaseController
             'shops',
             'cms'
         ];
+    }
+
+    private function resetSiteMapListInc($type)
+    {
+        $this->siteMapIndexArr[$type] = $this->sitemapListInc;
+        $this->sitemapListInc = 1;
     }
 }

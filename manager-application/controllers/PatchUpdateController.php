@@ -67,14 +67,13 @@ class PatchUpdateController extends ListingBaseController
                 $rule['taxrule_taxstr_id'] = $structureId;        
                 $taxRuleObj->assignValues($rule);
                 if (!$taxRuleObj->save()) {
-                    Message::addErrorMessage($taxRuleObj->getError());
-                    FatUtility::dieJsonError(Message::getHtml());
+                    LibHelper::exitWithError($taxRuleObj->getError());
                 }
 
                 $ruleId = $taxRuleObj->getMainTableRecordId();
                 
                 if (!$taxRuleObj->addUpdateRate(0)) {        
-                    FatUtility::dieJsonError($taxRuleObj->getError());
+                    LibHelper::exitWithError($taxRuleObj->getError());
                 }
                 
                 /* [ update location data */
@@ -90,8 +89,7 @@ class PatchUpdateController extends ListingBaseController
                 );
                 $locObj = new TaxRuleLocation();
                 if (!$locObj->updateLocations($locData)) {
-                    Message::addErrorMessage($locObj->getError());
-                    FatUtility::dieJsonError(Message::getHtml());
+                    LibHelper::exitWithError($locObj->getError());
                 }
 
                 $combinedTax = array(                
@@ -99,9 +97,8 @@ class PatchUpdateController extends ListingBaseController
                     'taxruledet_rate' => 0,
                 );              
                 $taxRuleObj->addUpdateCombinedTax($combinedTax, 0);
-                if (!$taxRuleComObj->save()) {
-                    Message::addErrorMessage($locObj->getError());
-                    FatUtility::dieJsonError(Message::getHtml());
+                if (!$taxRuleObj->save()) {
+                    LibHelper::exitWithError($locObj->getError());
                 }
             }
         }
@@ -113,21 +110,21 @@ class PatchUpdateController extends ListingBaseController
         $plugin = new Plugin();
         $getDefaultPlugin = $plugin->getDefaultPluginData(Plugin::TYPE_TAX_SERVICES, ['plugin_id', 'plugin_code']);
         if (!$getDefaultPlugin) {
-            FatUtility::dieWithError($plugin->getError());
+            LibHelper::exitWithError($plugin->getError(), true);
         }
         $pluginKey = $getDefaultPlugin['plugin_code'];
         $pluginId = $getDefaultPlugin['plugin_id'];
         if (false === $taxPluginObj = PluginHelper::callPlugin($pluginKey, [$this->siteLangId], $error, $this->siteLangId)) {
-            FatUtility::dieWithError($error);
+            LibHelper::exitWithError($error, true);
         }
 
         if (false === $taxPluginObj->init()) {
-            FatUtility::dieWithError($taxPluginObj->getError());
+            LibHelper::exitWithError($taxPluginObj->getError(), true);
         }
 
         $codesArr = $taxPluginObj->getCodes(null, null, null, array(), false);
         if (is_array($codesArr) && array_key_exists('status', $codesArr) && false === $codesArr['status']) {
-            FatUtility::dieWithError($codesArr['msg']);
+            LibHelper::exitWithError($codesArr['msg'], true);
         }
 
         $db = FatApp::getDb();

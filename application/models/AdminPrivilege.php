@@ -131,6 +131,7 @@ class AdminPrivilege
     public const SECTION_SYSTEMLOG = 123;
     public const SECTION_SETTINGS = 124;
     public const SECTION_PAGES_LANGUAGE_DATA = 125;
+    public const SECTION_CATEGORY_REQUEST = 126;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -188,6 +189,7 @@ class AdminPrivilege
                 static::SECTION_CATALOG_REQUESTS => Labels::getLabel('NAV_CATALOG_REQUESTS', $langId),
                 static::SECTION_CUSTOM_PRODUCT_REQUESTS => Labels::getLabel('NAV_CUSTOM_CATALOG_REQUESTS', $langId),
                 static::SECTION_CUSTOM_CATALOG_PRODUCT_REQUESTS => Labels::getLabel('NAV_CUSTOM_CATALOG_PRODUCT_REQUESTS', $langId),
+                static::SECTION_CATEGORY_REQUEST => Labels::getLabel('NAV_CATEGORY_REQUEST', $langId),
 
                 static::SECTION_CONTENT_PAGES => Labels::getLabel('NAV_CONTENT_PAGES', $langId),
                 static::SECTION_CONTENT_BLOCKS => Labels::getLabel('NAV_CONTENT_BLOCKS', $langId),
@@ -1671,5 +1673,15 @@ class AdminPrivilege
     public function canEditPagesLanguageData($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_PAGES_LANGUAGE_DATA, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewCategoryRequests($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_CATEGORY_REQUEST, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditCategoryRequests($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_CATEGORY_REQUEST, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

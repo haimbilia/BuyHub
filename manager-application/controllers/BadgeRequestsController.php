@@ -29,7 +29,7 @@ class BadgeRequestsController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            FatUtility::dieJsonError(current($searchForm->getValidationErrors()));
+            LibHelper::exitWithError(current($searchForm->getValidationErrors()), true);
         }
 
         $srch = $this->getRequestedBadgeObj();
@@ -97,7 +97,7 @@ class BadgeRequestsController extends ListingBaseController
             $srch->addCondition('breq_id', '=', $badgeReqId);
             $requestedBadge = FatApp::getDb()->fetch($srch->getResultSet());
             if ($requestedBadge === false) {
-                FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+                LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
             }
             $requestedBadge['record_ids'] = json_encode($this->records($badgeReqId, true));
             $blinkCondId = $requestedBadge['breq_blinkcond_id'];
@@ -120,17 +120,17 @@ class BadgeRequestsController extends ListingBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $badgeLinkCondId = FatApp::getPostedData('breq_blinkcond_id', FatUtility::VAR_INT, 0);
         if (1 > $badgeLinkCondId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_BADGE', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_BADGE', $this->siteLangId), true);
         }
 
         $recordIds = isset($post['record_ids']) ? json_decode($post['record_ids'], true) : [];
         if (null === $recordIds || false === $recordIds || empty($recordIds)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_PLEASE_SELECT_ATLEAST_ONE_RECORD', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_ATLEAST_ONE_RECORD', $this->siteLangId), true);
         }
 
         $badgeReqId = FatApp::getPostedData('breq_id', FatUtility::VAR_INT, 0);
@@ -140,7 +140,7 @@ class BadgeRequestsController extends ListingBaseController
         $status = BadgeRequest::getRequestStatus($post['breq_blinkcond_id'], UserAuthentication::getLoggedUserId());
         if (BadgeRequest::REQUEST_APPROVED == $status || BadgeRequest::REQUEST_REJECTED == $status) {
             $msg = Labels::getLabel('MSG_YOUR_REQUEST_TO_THIS_BADGE_ID_ALREADY_APPROVED/REJECTED', $this->siteLangId);
-            FatUtility::dieJsonError($msg);
+            LibHelper::exitWithError($msg, true);
         }
 
         unset($post['breq_message']);
@@ -149,8 +149,7 @@ class BadgeRequestsController extends ListingBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
         $badgeReqId = $record->getMainTableRecordId();
 
@@ -171,7 +170,7 @@ class BadgeRequestsController extends ListingBaseController
     }
 
 
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_KEYWORD', $this->siteLangId), 'keyword', '');
@@ -179,9 +178,11 @@ class BadgeRequestsController extends ListingBaseController
         $frm->addTextBox(Labels::getLabel('LBL_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_name', '', array('id' => 'keyword', 'autocomplete' => 'off'));
         $frm->addHiddenField('', 'user_id');
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_SEARCH', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'breq_id');
+        }
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
@@ -278,7 +279,7 @@ class BadgeRequestsController extends ListingBaseController
     public function unlinkRecord(int $badgeReqId, int $record_id = 0)
     {
         if (1 > $badgeReqId || 1 > $record_id) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
         $smt = 'badgelink_breq_id = ?';
         $vals = [$badgeReqId];
@@ -295,7 +296,7 @@ class BadgeRequestsController extends ListingBaseController
                 'vals' => $vals
             ]
         )) {
-            FatUtility::dieJsonError($db->getError());
+            LibHelper::exitWithError($db->getError(), true);
         }
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
     }

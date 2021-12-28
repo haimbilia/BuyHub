@@ -115,12 +115,12 @@ class ThresholdProductsController extends ListingBaseController
         $userObj = new User($user_id);
         $user = $userObj->getUserInfo(null, false, false);
         if (!$user) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->sendProductStockAlert($selprod_id, $this->siteLangId)) {
-            LibHelper::exitWithError($emailNotificationObj->getError());
+            LibHelper::exitWithError($emailNotificationObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('SUC_YOUR_MESSAGE_SENT_TO', $this->siteLangId) . ' - ' . $user["credential_email"]);

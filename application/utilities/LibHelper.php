@@ -43,7 +43,8 @@ class LibHelper extends FatUtility
             FatUtility::dieJsonError($message);
         }
 
-        if (true === $json) {
+        $fOutMode = FatApp::getPostedData('fOutMode', FatUtility::VAR_STRING);
+        if (true === $json || 'json' == $fOutMode) {
             FatUtility::dieJsonError($message);
         }
 

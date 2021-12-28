@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $frm->setFormTagAttribute('onsubmit', 'setupStatus(this); return(false);');
 $frm->setFormTagAttribute('data-onclear', 'requestStatusForm(' . $orrequestId . ')');
-$frm->setFormTagAttribute('data-status', $status);
+$frm->setFormTagAttribute('data-status', $oldStatus);
 
 $frm->getField('orrequest_status')->setFieldTagAttribute('class', 'requestStatusJs');
 $frm->getField('orrequest_admin_comment')->setWrapperAttribute('class', 'commentSectionJs hide');

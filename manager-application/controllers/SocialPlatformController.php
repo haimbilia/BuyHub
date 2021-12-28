@@ -54,7 +54,7 @@ class SocialPlatformController extends ListingBaseController
         if (0 < $splatform_id) {
             $data = SocialPlatform::getAttributesById($splatform_id);
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -74,8 +74,7 @@ class SocialPlatformController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $splatform_id = $post['splatform_id'];
@@ -85,8 +84,7 @@ class SocialPlatformController extends ListingBaseController
         $recordObj = new SocialPlatform($splatform_id);
         $recordObj->assignValues($data_to_be_save, true);
         if (!$recordObj->save()) {
-            Message::addErrorMessage($recordObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($recordObj->getError(), true);
         }
 
         $splatform_id = $recordObj->getMainTableRecordId();
@@ -117,7 +115,7 @@ class SocialPlatformController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
 
         if ($splatform_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($splatform_id, $lang_id);
@@ -125,8 +123,7 @@ class SocialPlatformController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(SocialPlatform::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($splatform_id, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -161,8 +158,7 @@ class SocialPlatformController extends ListingBaseController
         }
         
         if ($splatform_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $frm = $this->getLangForm($splatform_id, $lang_id);
@@ -177,16 +173,14 @@ class SocialPlatformController extends ListingBaseController
 
         $socialObj = new SocialPlatform($splatform_id);
         if (!$socialObj->updateLangData($lang_id, $data_to_update)) {
-            Message::addErrorMessage($socialObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($socialObj->getError(), true);
         }
         
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(SocialPlatform::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($splatform_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -212,8 +206,7 @@ class SocialPlatformController extends ListingBaseController
         $splatform_id = FatUtility::int($splatform_id);
         $splatformDetail = SocialPlatform::getAttributesById($splatform_id);
         if (false == $splatformDetail) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $frm = $this->getMediaForm($splatform_id);
@@ -234,21 +227,11 @@ class SocialPlatformController extends ListingBaseController
     {
         $splatform_id = FatUtility::int($splatform_id);
         if (!$splatform_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $post = FatApp::getPostedData();
-
-        /* $fileMimeType = mime_content_type($_FILES['file']['tmp_name']);
-        if($fileMimeType == 'image/svg+xml'){
-        Message::addErrorMessage(Labels::getLabel('LBL_SVG_images_are_not_supported_in_emails',$this->siteLangId));
-        FatUtility::dieJsonError(Message::getHtml());
-        } */
-
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            Message::addErrorMessage(Labels::getLabel('LBL_Please_select_a_file', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Please_select_a_file', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -262,8 +245,7 @@ class SocialPlatformController extends ListingBaseController
             -1
         )
         ) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('file', $_FILES['cropped_image']['name']);
@@ -276,14 +258,12 @@ class SocialPlatformController extends ListingBaseController
     {
         $splatform_id = FatUtility::int($splatform_id);
         if (!$splatform_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $fileHandlerObj = new AttachedFile();
         if (!$fileHandlerObj->deleteFile(AttachedFile::FILETYPE_SOCIAL_PLATFORM_IMAGE, $splatform_id)) {
-            Message::addErrorMessage($fileHandlerObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('msg', Labels::getLabel('LBL_Deleted_Successfully', $this->siteLangId));
@@ -296,8 +276,7 @@ class SocialPlatformController extends ListingBaseController
 
         $splatform_id = FatApp::getPostedData('splatformId', FatUtility::VAR_INT, 0);
         if ($splatform_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $this->markAsDeleted($splatform_id);
@@ -311,8 +290,8 @@ class SocialPlatformController extends ListingBaseController
         $splatformIdsArr = FatUtility::int(FatApp::getPostedData('splatform_ids'));
 
         if (empty($splatformIdsArr)) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+            LibHelper::exitWithError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
             );
         }
 
@@ -330,31 +309,28 @@ class SocialPlatformController extends ListingBaseController
     {
         $splatform_id = FatUtility::int($splatform_id);
         if (1 > $splatform_id) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+            LibHelper::exitWithError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
             );
         }
         $obj = new SocialPlatform($splatform_id);
         if (!$obj->deleteRecord(true)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 
-    public function changeStatus()
+    public function updateStatus()
     {
         $this->objPrivilege->canEditSocialPlatforms();
         $splatformId = FatApp::getPostedData('splatformId', FatUtility::VAR_INT, 0);
         if (0 >= $splatformId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $data = SocialPlatform::getAttributesById($splatformId, array('splatform_id', 'splatform_active'));
 
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $status = ($data['splatform_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
@@ -371,8 +347,8 @@ class SocialPlatformController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $splatformIdsArr = FatUtility::int(FatApp::getPostedData('splatform_ids'));
         if (empty($splatformIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+            LibHelper::exitWithError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
             );
         }
 
@@ -392,15 +368,14 @@ class SocialPlatformController extends ListingBaseController
         $status = FatUtility::int($status);
         $splatformId = FatUtility::int($splatformId);
         if (1 > $splatformId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+            LibHelper::exitWithError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
             );
         }
 
         $socialPlatObj = new SocialPlatform($splatformId);
         if (!$socialPlatObj->changeStatus($status)) {
-            Message::addErrorMessage($socialPlatObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($socialPlatObj->getError(), true);
         }
     }
 

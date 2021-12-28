@@ -34,7 +34,7 @@ class BadgeRequest extends MyAppModel
      * getStatusArr
      *
      * @param  int $langId
-     * @return void
+     * @return array
      */
     public static function getStatusArr(int $langId): array
     {

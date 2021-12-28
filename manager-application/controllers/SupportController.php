@@ -35,8 +35,7 @@ class SupportController extends ListingBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray($data);
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         
         $headers = 'MIME-Version: 1.0' . "\r\n";
@@ -48,8 +47,7 @@ class SupportController extends ListingBaseController
         $body .= "<b>Description:</b> " . $post['description'] . '<br/>';
         
         if (!mail("team@fatbit.com", $post['title'], $body, $headers)) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $this->set('msg', Labels::getLabel('LBL_Mail_Sent_Successfully', $this->siteLangId));

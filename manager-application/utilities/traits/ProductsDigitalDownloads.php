@@ -11,7 +11,7 @@ trait ProductsDigitalDownloads
         $sellerProductRow = SellerProduct::getAttributesById($selProdId, ['selprod_user_id', 'selprod_product_id']);
 
         if (false == $sellerProductRow) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $productId = $sellerProductRow['selprod_product_id'];
@@ -19,7 +19,7 @@ trait ProductsDigitalDownloads
         $product = Product::getAttributesById($productId, ['product_attachements_with_inventory']);
 
         if (false == $product) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
@@ -116,19 +116,19 @@ trait ProductsDigitalDownloads
         $inventoryId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         
         if (1 > $inventoryId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
         if (false == $ddpObj->canEdit($inventoryId, Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true)) {
-            FatUtility::dieJsonError($ddpObj->getError());
+            LibHelper::exitWithError($ddpObj->getError());
         }
         
         $selProdData = $ddpObj->getSellerProduct($inventoryId);
 
         if (!is_array($selProdData) && 1 > count($selProdData)) {
             Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Message::getHtml());
         }
         
         $selProdOption = explode('_', $selProdData['selprod_code']);
@@ -147,7 +147,7 @@ trait ProductsDigitalDownloads
         
         if (1 > $refId) {
             if (!$ddObj->saveReference($inventoryId, $optionComb, Product::CATALOG_TYPE_INVENTORY)) {
-                FatUtility::dieWithError($ddObj->getError());
+                LibHelper::exitWithError($ddObj->getError());
             }
             $refId = $ddObj->getMainTableRecordId();
         }
@@ -162,7 +162,7 @@ trait ProductsDigitalDownloads
             }
         }
         
-        FatUtility::dieJsonError(Message::getHtml());
+        LibHelper::exitWithError(Message::getHtml());
     }
 
     private function setupDigitalFile($ddObj, $refId, $recordId)
@@ -306,17 +306,23 @@ trait ProductsDigitalDownloads
 
         if (1 > $refId || 1 > $linkId) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Message::getHtml());
         }
 
         $reference = DigitalDownload::getAttributesById($refId);
         
         if (false == $reference) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Message::getHtml());
         }
         
-        /* $canDelete = DigitalDownload::canDelete($reference['pddr_record_id'], Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true); */
+        /* 
+            $canDelete = DigitalDownload::canDelete($reference['pddr_record_id'], Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true); 
+            if (false == $canDelete) {
+                Message::addErrorMessage(Labels::getLabel('MSG_Not_allowed_to_delete_link', $this->siteLangId));
+                LibHelper::exitWithError(Message::getHtml());
+            }
+        */
 
         $ddpObj = new DigitalDownloadPrivilages();
         $canDo = $ddpObj->canEdit(
@@ -329,18 +335,13 @@ trait ProductsDigitalDownloads
         );
         
         if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
-        }
-
-        if (false == $canDelete) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Not_allowed_to_delete_link', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($ddpObj->getError());
         }
 
         $ddObj = new DigitalDownload();
         
         if (!$ddObj->deleteLink($linkId, $refId)) {
-            FatUtility::dieJsonError($ddObj->getError());
+            LibHelper::exitWithError($ddObj->getError());
         }
 
         $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($refId);
@@ -364,7 +365,7 @@ trait ProductsDigitalDownloads
 
         if (1 > $refId || 1 > $aFileId) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Message::getHtml());
         }
 
         
@@ -372,14 +373,14 @@ trait ProductsDigitalDownloads
         
         if (false == $reference) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Message::getHtml());
         }
         
         /* $canDelete = DigitalDownload::canDelete($reference['pddr_record_id'], Product::CATALOG_TYPE_INVENTORY, 0, $this->siteLangId, true, true);
 
         if (false == $canDelete) {
             Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Message::getHtml());
         } */
 
         $ddpObj = new DigitalDownloadPrivilages();
@@ -393,13 +394,13 @@ trait ProductsDigitalDownloads
         );
         
         if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
+            LibHelper::exitWithError($ddpObj->getError());
         }
 
         $digDownload = new DigitalDownload();
         
         if (!$digDownload->deleteAttachment($aFileId, $refId, $isPreviewFile, $delFullRow)) {
-            FatUtility::dieJsonError($digDownload->getError());
+            LibHelper::exitWithError($digDownload->getError());
         }
 
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->siteLangId));
@@ -415,7 +416,7 @@ trait ProductsDigitalDownloads
         $requestType = FatUtility::int($requestType);
 
         if (1 > $aFileId || 1 > $recordId) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("LBL_Invalid_Request", $this->siteLangId));
         }
 
         $ddpObj = new DigitalDownloadPrivilages();
@@ -425,7 +426,7 @@ trait ProductsDigitalDownloads
         $selProdData = $ddpObj->getSellerProduct($recordId);
         
         if (1 > count($selProdData)) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
         
         $ddpObj->getProduct($selProdData['selprod_product_id']);
@@ -438,20 +439,20 @@ trait ProductsDigitalDownloads
         $canDo = $ddpObj->canDownload($recordId, $requestType, 0, $this->siteLangId, $isPreview, true);
         
         if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
+            LibHelper::exitWithError($ddpObj->getError());
         }
         
         $file = DigitalDownloadSearch::getAttachmentDetail($aFileId, $recordId, $requestType, $isPreview);
         if (1 > count($file)) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
         }
         
         if ($file['pddr_record_id'] != $recordId) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
         }
         
         if (!file_exists(CONF_UPLOADS_PATH . $file['afile_physical_path'])) {
-            FatUtility::dieWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("LBL_File_not_found", $this->siteLangId));
         }
         
         $fileName = isset($file['afile_physical_path']) ? $file['afile_physical_path'] : '';

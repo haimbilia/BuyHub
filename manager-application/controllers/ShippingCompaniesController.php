@@ -46,15 +46,10 @@ class ShippingCompaniesController extends ListingBaseController
         $shippingCompanyId = FatUtility::int($shippingCompanyId);
 
         $frm = $this->getForm($shippingCompanyId);
-
-        /* if(1 > $shippingCompanyId){
-        Message::addErrorMessage($this->str_invalid_request_id);
-        FatUtility::dieJsonError( Message::getHtml() );
-        } */
         if (0 < $shippingCompanyId) {
             $data = ShippingCompanies::getAttributesById($shippingCompanyId, array('scompany_id', 'scompany_identifier', 'scompany_active'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -73,24 +68,17 @@ class ShippingCompaniesController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $scompany_id = FatUtility::int($post['scompany_id']);
         unset($post['scompany_id']);
 
-        /* $data = ShippingCompanies::getAttributesById($scompany_id,array('scompany_id'));
-        if ($data === false) {
-        FatUtility::dieWithError($this->str_invalid_request);
-        } */
-
         $record = new ShippingCompanies($scompany_id);
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -121,7 +109,7 @@ class ShippingCompaniesController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
 
         if ($scompany_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $langFrm = $this->getLangForm($scompany_id, $lang_id);
@@ -129,8 +117,7 @@ class ShippingCompaniesController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(ShippingCompanies::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($scompany_id, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -159,8 +146,7 @@ class ShippingCompaniesController extends ListingBaseController
         $lang_id = $post['lang_id'];
 
         if ($scompany_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $frm = $this->getLangForm($scompany_id, $lang_id);
@@ -177,16 +163,14 @@ class ShippingCompaniesController extends ListingBaseController
         $sCompanyObj = new ShippingCompanies($scompany_id);
 
         if (!$sCompanyObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($sCompanyObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($sCompanyObj->getError(), true);
         }
         
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ShippingCompanies::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($scompany_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -213,27 +197,24 @@ class ShippingCompaniesController extends ListingBaseController
         if (!empty($post)) {
             $sCompanyObj = new ShippingCompanies();
             if (!$sCompanyObj->updateOrder($post['shippingMethod'])) {
-                Message::addErrorMessage($sCompanyObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError($sCompanyObj->getError(), true);
             }
             FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Order_Updated_Successfully', $this->siteLangId));
         }
     }
 
-    public function changeStatus()
+    public function updateStatus()
     {
         $this->objPrivilege->canEditShippingCompanies();
         $scompanyId = FatApp::getPostedData('scompanyId', FatUtility::VAR_INT, 0);
         if (0 >= $scompanyId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $data = ShippingCompanies::getAttributesById($scompanyId, array('scompany_id', 'scompany_active'));
 
         if ($data == false) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $status = ($data['scompany_active'] == applicationConstants::ACTIVE) ? applicationConstants::INACTIVE : applicationConstants::ACTIVE;
@@ -251,8 +232,8 @@ class ShippingCompaniesController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $scompanyIdsArr = FatUtility::int(FatApp::getPostedData('scompany_ids'));
         if (empty($scompanyIdsArr) || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+            LibHelper::exitWithError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
             );
         }
 
@@ -272,15 +253,14 @@ class ShippingCompaniesController extends ListingBaseController
         $status = FatUtility::int($status);
         $scompanyId = FatUtility::int($scompanyId);
         if (1 > $scompanyId || -1 == $status) {
-            FatUtility::dieWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId)
+            LibHelper::exitWithError(
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
             );
         }
 
         $obj = new ShippingCompanies($scompanyId);
         if (!$obj->changeStatus($status)) {
-            Message::addErrorMessage($obj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($obj->getError(), true);
         }
     }
 

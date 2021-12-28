@@ -101,7 +101,7 @@ class NavigationsController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $includeWrapper = FatApp::getPostedData('includeWrapper', FatUtility::VAR_INT, applicationConstants::YES);
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $records = $this->getNavLinks();
         $this->set("includeWrapper", $includeWrapper);
@@ -273,7 +273,7 @@ class NavigationsController extends ListingBaseController
         $navId = FatApp::getPostedData('nav_id', FatUtility::VAR_INT, 0);
         $nlinkId = FatApp::getPostedData('nlink_id', FatUtility::VAR_INT, 0);
         if (!$navId) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frm = $this->getLinksForm();
         if (!$nlinkId) {

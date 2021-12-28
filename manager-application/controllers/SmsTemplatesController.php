@@ -109,7 +109,7 @@ class SmsTemplatesController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
 
         if (empty($stplCode) || 1 > $lang_id) {
-            FatUtility::dieJsonError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $tempFrm = $this->getTemplateForm($stplCode, $lang_id);
@@ -224,7 +224,7 @@ class SmsTemplatesController extends ListingBaseController
         $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
         $stplCodesArr = FatApp::getPostedData('stpl_codes');
         if (empty($stplCodesArr) || 0 > $status) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         foreach ($stplCodesArr as $stplCode) {
@@ -242,11 +242,11 @@ class SmsTemplatesController extends ListingBaseController
         $obj = new SmsTemplate($stplCode);
         if (applicationConstants::ACTIVE == $status) {
             if (false == $obj->makeActive()) {
-                FatUtility::dieJsonError($obj->getError());
+                LibHelper::exitWithError($obj->getError(), true);
             }
         } else if (applicationConstants::INACTIVE == $status) {
             if (false == $obj->makeInActive()) {
-                FatUtility::dieJsonError($obj->getError());
+                LibHelper::exitWithError($obj->getError(), true);
             }
         }
     }

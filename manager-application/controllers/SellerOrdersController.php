@@ -465,8 +465,7 @@ class SellerOrdersController extends ListingBaseController
         $post = FatApp::getPostedData();
         $op_id = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
         if (1 > $op_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $srch = new OrderProductSearch($this->siteLangId, true, true);
@@ -488,8 +487,7 @@ class SellerOrdersController extends ListingBaseController
         $orderDetail = FatApp::getDb()->fetch($rs);
 
         if (!$orderDetail) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $srch = new SearchBase(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'optosu');
@@ -499,16 +497,14 @@ class SellerOrdersController extends ListingBaseController
         $rs = $srch->getResultSet();
         $shippingUserRow = FatApp::getDb()->fetch($rs);
         if ($shippingUserRow) {
-            Message::addErrorMessage('Already Assigned to shipping company user');
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('ERR_ALREADY_ASSIGNED_TO_SHIPPING_COMPANY_USER', $this->siteLangId), true);
         }
 
         $frm = $this->getShippingCompanyUserForm();
         $post = $frm->getFormDataFromArray($post);
 
         if (!false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $db = FatApp::getDb();
@@ -522,8 +518,7 @@ class SellerOrdersController extends ListingBaseController
         }
 
         if (!$row) {
-            Message::addErrorMessage($db->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($db->getError(), true);
         }
 
         $orderObj = new Orders($orderDetail['order_id']);
@@ -561,8 +556,7 @@ class SellerOrdersController extends ListingBaseController
             );
             if (!$txnObj->addTransaction($txnDataArr)) {
                 $db->rollbackTransaction();
-                Message::addErrorMessage($txnObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError($txnObj->getError(), true);
             }
         }
 
@@ -580,14 +574,12 @@ class SellerOrdersController extends ListingBaseController
 
         $post = FatApp::getPostedData();
         if (!isset($post['op_id'])) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $op_id = FatUtility::int($post['op_id']);
         if (1 > $op_id) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj() ?? NULL;
@@ -596,8 +588,7 @@ class SellerOrdersController extends ListingBaseController
         $manualShipping = FatApp::getPostedData('manual_shipping', FatUtility::VAR_INT, 0);
         $trackingNumber = FatApp::getPostedData('tracking_number', FatUtility::VAR_STRING, '');
         if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && empty($shippingApiObj)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId), true);
         }
 
         $oCancelRequestSrch = new OrderCancelRequestSearch();
@@ -607,8 +598,7 @@ class SellerOrdersController extends ListingBaseController
         $oCancelRequestSrch->addCondition('ocrequest_status', '!=', OrderCancelRequest::CANCELLATION_REQUEST_STATUS_DECLINED);
         $oCancelRequestRs = $oCancelRequestSrch->getResultSet();
         if (FatApp::getDb()->fetch($oCancelRequestRs)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Cancel_request_is_submitted_for_this_order', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Cancel_request_is_submitted_for_this_order', $this->siteLangId), true);
         }
 
         $orderObj = new Orders();
@@ -632,8 +622,7 @@ class SellerOrdersController extends ListingBaseController
         }
 
         if (empty($orderDetail)) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if ($orderDetail['plugin_code'] == 'CashOnDelivery') {
@@ -647,8 +636,7 @@ class SellerOrdersController extends ListingBaseController
         $post = $frm->getFormDataFromArray($post);
 
         if (!false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $restrictOrderStatusChange = array_merge(
@@ -658,8 +646,7 @@ class SellerOrdersController extends ListingBaseController
         );
 
         if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && !$orderDetail['optsu_user_id'] && in_array($post["op_status_id"], $restrictOrderStatusChange) && $orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_assign_shipping_user', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_assign_shipping_user', $this->siteLangId), true);
         }
 
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
@@ -699,12 +686,10 @@ class SellerOrdersController extends ListingBaseController
             }
             $trackingNumber = FatApp::getPostedData("tracking_number", FatUtility::VAR_STRING, '');
             if (!$orderObj->addChildProductOrderHistory($op_id, $orderDetail["order_language_id"], $post["op_status_id"], $post["comments"], $post["customer_notified"], $trackingNumber, 0, true, $trackingCourierCode, $opship_tracking_url)) {
-                Message::addErrorMessage($this->str_invalid_request);
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
         } else {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
@@ -721,8 +706,7 @@ class SellerOrdersController extends ListingBaseController
                     $updateArray = array('order_payment_status' => Orders::ORDER_PAYMENT_PAID);
                     $whr = array('smt' => 'order_id = ?', 'vals' => array($orderDetail['order_id']));
                     if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL, $updateArray, $whr)) {
-                        Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                        FatUtility::dieJsonError(Message::getHtml());
+                        LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId), true);
                     }
                 }
             }
@@ -808,7 +792,6 @@ class SellerOrdersController extends ListingBaseController
         if (in_array($opRow["op_status_id"], $notAllowedStatues)) {
             $notEligible = true;
             Message::addErrorMessage(sprintf(Labels::getLabel('LBL_this_order_already', $this->siteLangId), $orderStatuses[$opRow["op_status_id"]]));
-            //FatUtility::dieWithError( Message::getHtml() );
             CommonHelper::redirectUserReferer();
         }
 
@@ -827,14 +810,12 @@ class SellerOrdersController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (!false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $op_id = FatUtility::int($post['op_id']);
         if (1 > $op_id) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_access', $this->siteLangId), true);
         }
 
         if (false !== OrderCancelRequest::getCancelRequestById($op_id)) {
@@ -854,21 +835,18 @@ class SellerOrdersController extends ListingBaseController
         $orderDetail = (array) FatApp::getDb()->fetch($rs);
 
         if (empty($orderDetail)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId), true);
         }
 
         $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
         $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
 
         if (in_array($orderDetail["op_status_id"], $notAllowedStatues)) {
-            Message::addErrorMessage(sprintf(Labels::getLabel('LBL_this_order_already', $this->siteLangId), $orderStatuses[$orderDetail["op_status_id"]]));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(sprintf(Labels::getLabel('LBL_this_order_already', $this->siteLangId), $orderStatuses[$orderDetail["op_status_id"]]), true);
         }
 
         if (!$orderObj->addChildProductOrderHistory($op_id, $this->siteLangId, FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"), $post["comments"], true)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_ERROR_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_ERROR_INVALID_REQUEST', $this->siteLangId), true);
         }
 
         /* Update To Shipping Service */
@@ -883,12 +861,12 @@ class SellerOrdersController extends ListingBaseController
         $paymentMethodObj = new PaymentMethods();
         if (true === $paymentMethodObj->canRefundToCard($pluginKey, $this->siteLangId)) {
             if (false == $paymentMethodObj->initiateRefund($orderDetail, PaymentMethods::REFUND_TYPE_CANCEL)) {
-                FatUtility::dieJsonError($paymentMethodObj->getError());
+                LibHelper::exitWithError($paymentMethodObj->getError(), true);
             }
 
             $resp = $paymentMethodObj->getResponse();
             if (empty($resp)) {
-                FatUtility::dieJsonError(Labels::getLabel('LBL_UNABLE_TO_PLACE_GATEWAY_REFUND_REQUEST', $this->siteLangId));
+                LibHelper::exitWithError(Labels::getLabel('LBL_UNABLE_TO_PLACE_GATEWAY_REFUND_REQUEST', $this->siteLangId), true);
             }
 
             // Debit from wallet if plugin/payment method support's direct payment to card of customer.
@@ -1035,21 +1013,18 @@ class SellerOrdersController extends ListingBaseController
     public function orderTrackingInfo($trackingNumber, $courier, $orderNumber)
     {
         if (empty($trackingNumber) || empty($courier)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_request', $this->siteLangId), true);
         }
 
         $shipmentTracking = new ShipmentTracking();
         if (false === $shipmentTracking->init($this->siteLangId)) {
-            Message::addErrorMessage($shipmentTracking->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($shipmentTracking->getError(), true);
         }
 
         $shipmentTracking->createTracking($trackingNumber, $courier, $orderNumber);
 
         if (false === $shipmentTracking->getTrackingInfo($trackingNumber, $courier)) {
-            Message::addErrorMessage($shipmentTracking->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($shipmentTracking->getError(), true);
         }
         $trackingInfo = $shipmentTracking->getResponse();
 
@@ -1062,7 +1037,7 @@ class SellerOrdersController extends ListingBaseController
     {
         $opId = FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0);
         if (1 > $opId) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId) . __LINE__);
+            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId) , true);
         }
 
         $opSrch = OrderProduct::getSearchObject();
@@ -1079,19 +1054,18 @@ class SellerOrdersController extends ListingBaseController
         $row = FatApp::getDb()->fetch($rs);
 
         if (!is_array($row)) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId), true);
         }
 
         if (!DigitalOrderProduct::canAttachMoreFiles($row['op_status_id'])) {
-            FatUtility::dieJsonError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel("MSG_INVALID_REQUEST", $this->siteLangId), true);
         }
 
         if (
             !isset($_FILES['additional_attachment']['tmp_name'])
             || !is_uploaded_file($_FILES['additional_attachment']['tmp_name'])
         ) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -1109,6 +1083,6 @@ class SellerOrdersController extends ListingBaseController
             FatUtility::dieJsonSuccess(Labels::getLabel('LBL_File_uploaded_successfully', $this->siteLangId));
         }
 
-        FatUtility::dieJsonError($fileHandlerObj->getError());
+        LibHelper::exitWithError($fileHandlerObj->getError(), true);
     }
 }

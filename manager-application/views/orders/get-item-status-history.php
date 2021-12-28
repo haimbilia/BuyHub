@@ -5,11 +5,11 @@ $totalRecords = count($arrListing); ?>
         <?php echo 0 < $totalRecords ? $arrListing[0]['op_product_name'] : Labels::getLabel('LBL_ITEM_STATUS_HISTORY', $siteLangId); ?>
     </h5>
 </div>
-<div class="modal-body opStausLogJs<?php echo $opId; ?>">
+<div class="modal-body opStausLogJs<?php echo $recordId; ?>">
     <div class="form-edit-body">
         <?php 
         if ($totalRecords == 0) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_NO_RECORD_FOUND', $siteLangId), false, false, true);
+            echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_NO_RECORD_FOUND', $siteLangId));
         } else { ?>
             <div class="timeline-v4 appendRowsJs">
                 <?php require_once('get-rows.php'); ?>

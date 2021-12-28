@@ -24,12 +24,12 @@ class ExtraAttributesController extends ListingBaseController
         $this->objPrivilege->canViewExtraAttributes();
         $eattrgroup_id = FatUtility::int($eattrgroup_id);
         if ($eattrgroup_id <= 0) {
-            FatUtility::dieWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id);
         }
         
         $extraAttrGroupdata = ExtraAttributeGroup::getAttributesById($eattrgroup_id, array('eattrgroup_id', 'eattrgroup_identifier'));
         if ($extraAttrGroupdata === false) {
-            FatUtility::dieWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id);
         }
         
         $frmSearch = $this->getSearchForm($eattrgroup_id);
@@ -46,7 +46,7 @@ class ExtraAttributesController extends ListingBaseController
         $data = FatApp::getPostedData();
         $eattrgroup_id = FatUtility::int($data['eattrgroup_id']);
         if ($eattrgroup_id <= 0) {
-            FatUtility::dieWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $searchForm = $this->getSearchForm($eattrgroup_id);
@@ -100,7 +100,7 @@ class ExtraAttributesController extends ListingBaseController
         
         $eattrgroup_id = FatUtility::int($eattrgroup_id);
         if ($eattrgroup_id <= 0) {
-            FatUtility::dieWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $eattribute_id = FatUtility::int($eattribute_id);
@@ -110,7 +110,7 @@ class ExtraAttributesController extends ListingBaseController
             $extraAttrObj = new ExtraAttribute();
             $data = $extraAttrObj->getAttributesByIdAndGroupId($eattrgroup_id, $eattribute_id, array('eattribute_id', 'eattribute_eattrgroup_id', 'eattribute_identifier'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $extraAttributeFrm->fill($data);
         }
@@ -130,8 +130,7 @@ class ExtraAttributesController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $eattrgroup_id = FatUtility::int($post['eattribute_eattrgroup_id']);
@@ -142,8 +141,7 @@ class ExtraAttributesController extends ListingBaseController
             $extraAttrObj = new ExtraAttribute();
             $data = $extraAttrObj->getAttributesByIdAndGroupId($eattrgroup_id, $eattribute_id, array('eattribute_id'));
             if ($data === false) {
-                Message::addErrorMessage($this->str_invalid_request_id);
-                FatUtility::dieJsonError(Message::getHtml());
+                LibHelper::exitWithError($this->str_invalid_request_id, true);
             }
         }
         
@@ -151,8 +149,7 @@ class ExtraAttributesController extends ListingBaseController
         $record->assignValues($post);
         
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
         
         
@@ -199,12 +196,12 @@ class ExtraAttributesController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
         
         if ($eattribute_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         
         $data = ExtraAttribute::getAttributesById($eattribute_id);
         if ($data == false) {
-            FatUtility::dieWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $eattribute_eattrgroup_id = $data['eattribute_eattrgroup_id'];
         
@@ -213,8 +210,7 @@ class ExtraAttributesController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(ExtraAttribute::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($eattribute_id, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -245,8 +241,7 @@ class ExtraAttributesController extends ListingBaseController
         $eattribute_eattrgroup_id = FatUtility::int($post['eattribute_eattrgroup_id']);
         
         if ($eattribute_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $data = array(
@@ -257,16 +252,14 @@ class ExtraAttributesController extends ListingBaseController
         
         $extraAttrObj = new ExtraAttribute($eattribute_id);
         if (!$extraAttrObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($extraAttrObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($extraAttrObj->getError(), true);
         }
         
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ExtraAttribute::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($eattribute_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -290,19 +283,16 @@ class ExtraAttributesController extends ListingBaseController
         $this->objPrivilege->canEditExtraAttributes();
         $eattribute_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($eattribute_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $extraAttrObj = new ExtraAttribute($eattribute_id);
         if (!$extraAttrObj->canDeleteRecord($eattribute_id)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         if (!$extraAttrObj->deleteRecord()) {
-            Message::addErrorMessage($extraAttrObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($extraAttrObj->getError(), true);
         }
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }

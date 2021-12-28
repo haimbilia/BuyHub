@@ -83,7 +83,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         if (0 < $eattrgroup_id) {
             $data = ExtraAttributeGroup::getAttributesById($eattrgroup_id, array('eattrgroup_id', 'eattrgroup_identifier'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $extraAttrGroupsFrm->fill($data);
         }
@@ -103,8 +103,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $eattrgroup_id = $post['eattrgroup_id'];
@@ -114,8 +113,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -159,7 +157,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $lang_id = FatUtility::int($lang_id);
 
         if ($eattrgroup_id == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $extraAttrGroupLangFrm = $this->getLangForm($eattrgroup_id, $lang_id);
@@ -167,8 +165,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(ExtraAttributeGroup::DB_TBL);
             $translatedData = $updateLangDataobj->getTranslatedData($eattrgroup_id, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -196,8 +193,7 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $lang_id = $post['lang_id'];
 
         if ($eattrgroup_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $frm = $this->getLangForm($eattrgroup_id, $lang_id);
@@ -212,16 +208,14 @@ class ExtraAttributeGroupsController extends ListingBaseController
 
         $extraAttributeGroupObj = new ExtraAttributeGroup($eattrgroup_id);
         if (!$extraAttributeGroupObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($extraAttributeGroupObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($extraAttributeGroupObj->getError(), true);
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ExtraAttributeGroup::DB_TBL);
             if (false === $updateLangDataobj->updateTranslatedData($eattrgroup_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -245,20 +239,17 @@ class ExtraAttributeGroupsController extends ListingBaseController
         $this->objPrivilege->canEditExtraAttributes();
         $eattrgroup_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($eattrgroup_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $extraAttrGroupObj = new ExtraAttributeGroup($eattrgroup_id);
         if (!$extraAttrGroupObj->canRecordMarkDelete($eattrgroup_id)) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $extraAttrGroupObj->assignValues(array(ExtraAttributeGroup::tblFld('deleted') => 1));
         if (!$extraAttrGroupObj->save()) {
-            Message::addErrorMessage($optionObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($extraAttrGroupObj->getError(), true);
         }
         FatUtility::dieJsonSuccess($this->str_delete_record);
     }
@@ -276,18 +267,6 @@ class ExtraAttributeGroupsController extends ListingBaseController
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
-        return $frm;
-    }
-
-    public function getSearchForm()
-    {
-        $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
         return $frm;
     }
 }

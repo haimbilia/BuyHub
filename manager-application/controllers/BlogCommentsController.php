@@ -117,7 +117,7 @@ class BlogCommentsController extends ListingBaseController
         $srch->addCondition('bpcomment_id', '=', $recordId);
         $data = FatApp::getDb()->fetch($srch->getResultSet());
         if ($data === false) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $frm->fill($data);
         $statusArr = BlogComment::getBlogCommentStatusArr($this->siteLangId);
@@ -187,7 +187,7 @@ class BlogCommentsController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('bpcomment_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -204,7 +204,7 @@ class BlogCommentsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $obj = new BlogComment($recordId);
         if (!$obj->canMarkRecordDelete($recordId)) {

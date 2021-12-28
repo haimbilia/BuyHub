@@ -275,7 +275,7 @@ class OrderReturnRequestsController extends ListingBaseController
     public function addNewComment(int $recordId)
     {
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         
         $frm = $this->getMessageForm($this->siteLangId);
@@ -291,7 +291,7 @@ class OrderReturnRequestsController extends ListingBaseController
     public function requestStatusForm(int $recordId)
     {
         if (1 > $recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         $requestRow = $this->getRequestRow($recordId);
@@ -299,13 +299,13 @@ class OrderReturnRequestsController extends ListingBaseController
 
         $paymentMethodObj = new PaymentMethods();
         $canRefundToCard = $paymentMethodObj->canRefundToCard($pluginKey, $this->siteLangId);
-        $status = OrderReturnRequest::getAttributesById($recordId, 'orrequest_status');
+        $oldStatus = OrderReturnRequest::getAttributesById($recordId, 'orrequest_status');
 
         $frm = $this->getUpdateStatusForm($recordId, $this->siteLangId, $canRefundToCard);
-        $frm->fill(['orrequest_status' => $status]);
+        $frm->fill(['orrequest_status' => $oldStatus]);
 
-        $this->set('status', $status);
         $this->set('orrequestId', $recordId);
+        $this->set('oldStatus', $oldStatus);
         $this->set('frm', $frm);
         $this->set('includeTabs', false);
         $this->set('html', $this->_template->render(false, false, NULL, true));

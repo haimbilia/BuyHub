@@ -151,7 +151,7 @@ class ImageAttributesController extends ListingBaseController
         $optionId = FatUtility::int($optionId);
 
         if ($recordId < 1) {
-            LibHelper::exitWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         switch ($moduleType) {

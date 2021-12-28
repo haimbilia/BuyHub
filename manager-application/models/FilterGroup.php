@@ -4,6 +4,7 @@ class FilterGroup extends MyAppModel
 {
     public const DB_TBL = 'tbl_filter_groups';
     public const DB_TBL_PREFIX = 'filtergroup_';
+    public const DB_TBL_LANG = 'tbl_filter_groups_lang';
     private $db;
 
     public function __construct($id = 0)

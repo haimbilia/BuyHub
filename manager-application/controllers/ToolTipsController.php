@@ -4,7 +4,7 @@ class ToolTipsController extends ListingBaseController
 {
     private $canView;
     private $canEdit;
-    
+
     public function __construct($action)
     {
         $ajaxCallArray = array('form', 'langForm', 'search', 'setup', 'langSetup');
@@ -15,11 +15,11 @@ class ToolTipsController extends ListingBaseController
         $this->admin_id = AdminAuthentication::getLoggedAdminId();
         $this->canView = $this->objPrivilege->canViewTooltip($this->admin_id, true);
         $this->canEdit = $this->objPrivilege->canEditTooltip($this->admin_id, true);
-        
+
         $this->set("canView", $this->canView);
         $this->set("canEdit", $this->canEdit);
     }
-        
+
     public function index()
     {
         $this->objPrivilege->canViewTooltip();
@@ -27,37 +27,37 @@ class ToolTipsController extends ListingBaseController
         $this->set("search", $search);
         $this->_template->render();
     }
-    
+
     public function search()
     {
         $this->objPrivilege->canViewTooltip();
-        
+
         $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 
         $searchForm = $this->getSearchForm();
         $data = FatApp::getPostedData();
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
-        
+
         $srch = Tooltip::getSearchObject();
         $srch->addFld('t.*');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('t.tooltip_key', 'like', '%' . $post['keyword'] . '%');
         }
-        
+
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
-        
+
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        
-        
+
+
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        
+
         //echo '<pre>';
         //print_r($records);die;
-        
+
         $this->set('arrListing', $records);
         $this->set('pageCount', $srch->pages());
         $this->set('page', $page);
@@ -66,23 +66,23 @@ class ToolTipsController extends ListingBaseController
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     public function form($tooltipId = 0)
     {
         $this->objPrivilege->canEditTooltip();
-        
+
         $tooltipId = FatUtility::int($tooltipId);
         $tooltipFrm = $this->getForm($tooltipId);
 
         if (0 < $tooltipId) {
             $data = Tooltip::getAttributesById($tooltipId, array('tooltip_id', 'tooltip_key', 'tooltip_default_value'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
 
             $tooltipFrm->fill($data);
         }
-    
+
         $this->set('languages', Language::getAllNames());
         $this->set('tooltipId', $tooltipId);
         $this->set('tooltipFrm', $tooltipFrm);
@@ -93,16 +93,16 @@ class ToolTipsController extends ListingBaseController
     public function langForm($tooltipId = 0, $lang_id = 0, $action = 'add', $autoFillLangData = 0)
     {
         $this->objPrivilege->canEditTooltip();
-        
+
         $tooltipId = FatUtility::int($tooltipId);
         $lang_id = FatUtility::int($lang_id);
-        
+
         if ($tooltipId == 0 || $lang_id == 0) {
-            FatUtility::dieWithError($this->str_invalid_request);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
-        
+
         $data = Tooltip::getAttributesById($tooltipId, array('tooltip_default_value'));
-        
+
         if ($action == 'edit') {
             $defaultValue = $data['tooltip_default_value'];
         } else {
@@ -114,8 +114,7 @@ class ToolTipsController extends ListingBaseController
             $updateLangDataobj = new TranslateLangData(Tooltip::DB_TBL_LANG);
             $translatedData = $updateLangDataobj->getTranslatedData($tooltipId, $lang_id);
             if (false === $translatedData) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
             $langData = current($translatedData);
         } else {
@@ -125,7 +124,7 @@ class ToolTipsController extends ListingBaseController
         if ($langData) {
             $tooltipLangFrm->fill($langData);
         }
-        
+
         $this->set('languages', Language::getAllNames());
         $this->set('tooltipId', $tooltipId);
         $this->set('action', $action);
@@ -135,27 +134,27 @@ class ToolTipsController extends ListingBaseController
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     private function getForm($tooltipId = 0)
     {
         $this->objPrivilege->canEditTooltip();
         $tooltipId = FatUtility::int($tooltipId);
 
         $actionValue = Labels::getLabel('LBL_Add_New', $this->siteLangId);
-        
+
         if ($tooltipId > 0) {
             $actionValue = Labels::getLabel('LBL_Update', $this->siteLangId);
         }
-            
+
         $frm = new Form('frmTooltip', array('id' => 'frmTooltip'));
         $frm->addHiddenField('', 'tooltip_id', 0);
         $fld = $frm->addTextBox(Labels::getLabel('LBL_Tooltip_Key', $this->siteLangId), 'tooltip_key');
         $fld->requirements()->setRequired();
-        
+
         $fld1 = $frm->addTextarea(Labels::getLabel('LBL_Tooltip_Default_Value', $this->siteLangId), 'tooltip_default_value');
-                
+
         $fld1->requirements()->setRequired();
-                    
+
         $frm->addSubmitButton('', 'btn_submit', $actionValue);
         return $frm;
     }
@@ -166,28 +165,26 @@ class ToolTipsController extends ListingBaseController
 
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $tooltip_id = $post['tooltip_id'];
-        
-        
+
+
         unset($post['tooltip_id']);
         $data = $post;
-        
+
         $record = new Tooltip($tooltip_id);
         $record->assignValues($data);
-        
+
         if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($record->getError(), true);
         }
-        
+
         $tooltip_id = $record->getMainTableRecordId();
-        
+
         $newTabLangId = 0;
         if ($tooltip_id > 0) {
             $tooltipId = $tooltip_id;
@@ -202,33 +199,33 @@ class ToolTipsController extends ListingBaseController
             $tooltipId = $record->getMainTableRecordId();
             $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
-        
+
 
         $this->set('msg', Labels::getLabel('MSG_Tooltip_Setup_Successful', $this->siteLangId));
         $this->set('tooltipId', $tooltipId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     private function getLangForm($tooltipId = 0, $lang_id = 0, $default_val = 0)
     {
         $frm = new Form('frmTooltipLang', array('id' => 'frmTooltipLang'));
         $frm->addHiddenField('', 'tooltip_id', $tooltipId);
         $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        
+
         if ($default_val) {
             $frm->addTextBox(Labels::getLabel('LBL_Tooltip_Default', $this->siteLangId), 'tooltip_default_value_new', $default_val);
         }
 
         $fld = $frm->addTextarea(Labels::getLabel('LBL_Tooltip_Text', $this->siteLangId), 'tooltip_text');
-        
+
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
             $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
+
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
         return $frm;
     }
@@ -237,37 +234,34 @@ class ToolTipsController extends ListingBaseController
     {
         $this->objPrivilege->canEditTooltip();
         $post = FatApp::getPostedData();
-        
+
         $tooltip_id = $post['tooltip_id'];
         $lang_id = $post['lang_id'];
-        
+
         if ($tooltip_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
-        
+
         $frm = $this->getLangForm($tooltip_id, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         unset($post['tooltip_id']);
         unset($post['lang_id']);
         $data = array(
-        'tooltiplang_lang_id' => $lang_id,
-        'tooltiplang_tooltip_id' => $tooltip_id,
-        'tooltip_text' => $post['tooltip_text'],
+            'tooltiplang_lang_id' => $lang_id,
+            'tooltiplang_tooltip_id' => $tooltip_id,
+            'tooltip_text' => $post['tooltip_text'],
         );
         $tooltipObj = new Tooltip($tooltip_id);
-        
+
         if (!$tooltipObj->updateLangData($lang_id, $data)) {
-            Message::addErrorMessage($tooltipObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($tooltipObj->getError(), true);
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(Tooltip::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($tooltip_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 
@@ -279,14 +273,14 @@ class ToolTipsController extends ListingBaseController
                 break;
             }
         }
-        
+
         $this->set('msg', Labels::getLabel('MSG_Tooltip_Setup_Successful', $this->siteLangId));
         $this->set('tooltipId', $tooltip_id);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');
     }
-    
-    public function getSearchForm()
+
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $f1 = $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));

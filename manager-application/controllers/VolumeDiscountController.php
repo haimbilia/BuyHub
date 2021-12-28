@@ -146,13 +146,13 @@ class VolumeDiscountController extends ListingBaseController
         $data = FatApp::getPostedData();
 
         if (empty($data)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $selprod_id = FatUtility::int($data['voldiscount_selprod_id']);
 
         if (1 > $selprod_id) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $volDiscountId = $this->updateSelProdVolDiscount($selprod_id, 0, $data['voldiscount_min_qty'], $data['voldiscount_percentage']);
@@ -185,19 +185,19 @@ class VolumeDiscountController extends ListingBaseController
     {
         $volDiscountId = FatApp::getPostedData('voldiscount_id', FatUtility::VAR_INT, 0);
         if (1 > $volDiscountId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $attribute = FatApp::getPostedData('attribute', FatUtility::VAR_STRING, '');
 
         $columns = array('voldiscount_min_qty', 'voldiscount_percentage');
         if (!in_array($attribute, $columns)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $otherColumns = array_values(array_diff($columns, [$attribute]));
         $otherColumnsValue = SellerProductVolumeDiscount::getAttributesById($volDiscountId, $otherColumns);
         if (empty($otherColumnsValue)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $value = FatApp::getPostedData('value');
         $selProdId = FatApp::getPostedData('selProdId', FatUtility::VAR_INT, 0);
@@ -397,7 +397,7 @@ class VolumeDiscountController extends ListingBaseController
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('selprod_ids'));
 
         if (empty($recordIdsArr)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {
@@ -415,13 +415,13 @@ class VolumeDiscountController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $volumeDiscountRow = SellerProductVolumeDiscount::getAttributesById($recordId);
         $sellerProductRow = SellerProduct::getAttributesById($volumeDiscountRow['voldiscount_selprod_id'], array('selprod_user_id'), false);
         if (!$volumeDiscountRow || !$sellerProductRow) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $volumeDiscountSelprodId = $volumeDiscountRow['voldiscount_selprod_id'];
 

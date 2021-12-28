@@ -143,6 +143,7 @@ class OrdersController extends ListingBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('page', $page);
         $this->set('pageSize', $pagesize);
+        $this->set('recordId', $recordId);
         $this->set('postedData', FatApp::getPostedData());
     }
 
@@ -646,7 +647,7 @@ class OrdersController extends ListingBaseController
     public function orderTrackingInfo($trackingNumber, $courier, $orderNumber)
     {
         if (empty($trackingNumber) || empty($courier)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_request', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $shipmentTracking = new ShipmentTracking();
