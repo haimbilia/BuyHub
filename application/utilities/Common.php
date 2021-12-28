@@ -112,7 +112,7 @@ class Common
         /* $frm->addSelectBox('', 'category', $categoriesArr, '', array(), Labels::getLabel('LBL_All', CommonHelper::getLangId()) ); */
         $frm->addTextBox('', 'keyword');
         $frm->addHiddenField('', 'category');
-        $frm->addSubmitButton('', 'btnSiteSrchSubmit', Labels::getLabel('LBL_Search', CommonHelper::getLangId()));
+       /*  $frm->addSubmitButton('', 'btnSiteSrchSubmit', Labels::getLabel('LBL_Search', CommonHelper::getLangId())); */
         return $frm;
     }
 

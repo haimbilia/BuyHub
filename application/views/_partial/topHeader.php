@@ -175,52 +175,22 @@
             <div class="container">
                 <div class="main-bar__inner">
                     <?php $this->includeTemplate('_partial/headerNavigation.php'); ?>
-                    <?php $this->includeTemplate('_partial/headerSearchFormArea.php'); ?>
+                    <div class="main-search">
+                        <button class="btn-mega-search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <?php //$this->includeTemplate('_partial/headerSearchFormArea.php'); 
+                    ?>
                 </div>
             </div>
         </div>
     </header>
     <div class="offcanvas offcanvas-mega-search" id="mega-nav-search" aria-labelledby="mega-nav-searchLabel">
         <div class="mega-search">
-            <form action="" class="form mega-search-form">
-                <input class="mega-search-input search--keyword--js no--focus" placeholder="I Am Looking For..." id="header_search_keyword" data-field-caption="I Am Looking For..." data-fatreq="{&quot;required&quot;:false}" type="search" name="keyword" value="">
-                <div class="search-suggestions" id="tagsSuggetionList">
-                    <ul class="text-suggestions">
-                        <li class="text-suggestions-item">
-                            <a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone">
-                                <span class="text-suggestions-span"><b>iph</b>one</span></a>
-                        </li>
-                        <li class="text-suggestions-item">
-                            <a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone5s">
-                                <span class="text-suggestions-span"><b>iph</b>one5s</span></a>
-                        </li>
-                        <li class="text-suggestions-item">
-                            <a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone5"><span class="text-suggestions-span"><b>iph</b>one5</span></a>
-                        </li>
-                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6"><span class="text-suggestions-span"><b>iph</b>one 6</span></a></li>
-                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6"><span class="text-suggestions-span"><b>iph</b>one 6</span></a></li>
-                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6s"><span class="text-suggestions-span"><b>iph</b>one 6s</span></a></li>
-                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone"><span class="text-suggestions-span"><b>iph</b>one</span></a></li>
-                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 6s plus"><span class="text-suggestions-span"><b>iph</b>one 6s plus</span></a></li>
-                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone"><span class="text-suggestions-span"><b>iph</b>one</span></a></li>
-                        <li class="text-suggestions-item"><a class="text-suggestions-link" href="javascript:void(0)" onclick="searchTags(this)" data-txt="iPhone 7"><span class="text-suggestions-span"><b>iph</b>one 7</span></a></li>
-                    </ul>
-                    <div class="matched">
-                        <h6 class="suggestions-title">Matching Categories</h6>
-                        <ul class="text-suggestions matched-category">
-                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/action-figures"><span class="text-suggestions-span">Action Figures</span></a></li>
-                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/men-sports-wear"><span class="text-suggestions-span">Sports Wear</span></a></li>
-                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/mobiles-mobile-cases"><span class="text-suggestions-span">Mobile Cases</span></a></li>
-                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/electronics"><span class="text-suggestions-span">Electronics</span></a></li>
-                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/gaming-consoles-ps4"><span class="text-suggestions-span">PS4</span></a></li>
-                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/mobiles"><span class="text-suggestions-span">Mobiles</span></a></li>
-                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/clothing"><span class="text-suggestions-span">Clothing</span></a></li>
-                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/puzzles"><span class="text-suggestions-span">Puzzles</span></a></li>
-                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/clothing-trousers"><span class="text-suggestions-span">Trousers</span></a></li>
-                            <li class="text-suggestions-item"><a class="text-suggestions-link" href="/men-sports-wear-track-suits"><span class="text-suggestions-span">Track Suits</span></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </form>
+        <?php $this->includeTemplate('_partial/headerSearchFormArea.php'); ?>
+            
         </div>
     </div>
