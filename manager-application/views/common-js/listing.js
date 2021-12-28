@@ -426,8 +426,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             obj.removeAttr("disabled");
         }
 
-        var parentForm = obj.closest("form").attr("id");
-        $("#" + parentForm + " .selectItemJs").each(function () {
+        $(".listingRecordJs .selectItemJs").each(function () {
             var tr = $(this).closest('tr');
             if (obj.prop("checked") == false) {
                 $(this).prop("checked", false);
