@@ -6,7 +6,7 @@ class SitemapController extends AdminBaseController
     private $siteMapIndexArr = [];
     private $sitemapListInc = 1;
     private $recordCountInc = 0;
-    private $limit = 20;
+    private $limit = 2000;
     private $sitemapDir = 'sitemap';
 
     public function __construct($action)
@@ -84,7 +84,7 @@ class SitemapController extends AdminBaseController
         foreach ($this->siteMapLanguages as $language) {
             $this->startSitemapXml();
             $url = UrlHelper::getUrlScheme();
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $url .=  '/' . strtolower($language['language_code']);
                 $file .= '/' . strtolower($language['language_code']);
@@ -111,7 +111,7 @@ class SitemapController extends AdminBaseController
             $this->startSitemapXml();
             $url = UrlHelper::getUrlScheme();
 
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $url .=  '/' . strtolower($language['language_code']);
                 $file .= '/' . strtolower($language['language_code']);
@@ -133,7 +133,7 @@ class SitemapController extends AdminBaseController
             $prodSrchObj = $this->getProductSrchObj($language['language_id']);
             $this->startSitemapXml();
             $url = UrlHelper::getUrlScheme();
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $url .=  '/' . strtolower($language['language_code']);
                 $file .= '/' . strtolower($language['language_code']);
@@ -161,7 +161,7 @@ class SitemapController extends AdminBaseController
         foreach ($this->siteMapLanguages as $language) {
             $this->startSitemapXml();
             $url = UrlHelper::getUrlScheme();
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $url .=  '/' . strtolower($language['language_code']);
                 $file .= '/' . strtolower($language['language_code']);
@@ -191,7 +191,7 @@ class SitemapController extends AdminBaseController
         foreach ($this->siteMapLanguages as $language) {
             $this->startSitemapXml();
             $url = UrlHelper::getUrlScheme();
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $url .=  '/' . strtolower($language['language_code']);
                 $file .= '/' . strtolower($language['language_code']);
@@ -268,7 +268,7 @@ class SitemapController extends AdminBaseController
 
         if (1 < count($this->siteMapLanguages)) {
             foreach ($this->siteMapLanguages as $language) {
-                $url = UrlHelper::getUrlScheme() . '/sitemap';
+                $url = UrlHelper::getUrlScheme() . '/'. $this->sitemapDir;
                 // $url .=  "/" . strtolower($language['language_code']);
                 if ($this->defaultLangId != $language['language_id']) {
                     $url .=  "/" . strtolower($language['language_code']);
@@ -278,7 +278,7 @@ class SitemapController extends AdminBaseController
         } else {
             $structure = $this->getStructure();
             foreach ($structure as $val) {
-                echo "<sitemap><loc>" . UrlHelper::getUrlScheme() . '/sitemap' . '/' . strtolower($val) . ".xml</loc></sitemap>\n";
+                echo "<sitemap><loc>" . UrlHelper::getUrlScheme() . '/'. $this->sitemapDir . '/' . strtolower($val) . ".xml</loc></sitemap>\n";
             }
         }
 
@@ -296,7 +296,7 @@ class SitemapController extends AdminBaseController
             echo "<?xml version='1.0' encoding='UTF-8'?>
     <sitemapindex xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\n";
             foreach ($structure as $val) {
-                $url = UrlHelper::getUrlScheme() . '/sitemap';
+                $url = UrlHelper::getUrlScheme() . '/'. $this->sitemapDir;
                 if ($this->defaultLangId != $language['language_id']) {
                     $url .=  "/" . strtolower($language['language_code']);
                 }
@@ -309,7 +309,7 @@ class SitemapController extends AdminBaseController
             $contents = ob_get_clean();
             $rs = '';
 
-            $file = 'sitemap';
+            $file = $this->sitemapDir;
             if ($this->defaultLangId != $language['language_id']) {
                 $file .= '/' . strtolower($language['language_code']);
             }
@@ -322,6 +322,18 @@ class SitemapController extends AdminBaseController
     {
         foreach ($this->siteMapLanguages as $language) {
             foreach ($this->siteMapIndexArr as $type => $listingCount) {
+                if (1 == $listingCount) {
+                    $url = CONF_UPLOADS_PATH . '/' . $this->sitemapDir;
+                    if ($this->defaultLangId != $language['language_id']) {
+                        $url .= '/' . strtolower($language['language_code']);
+                    }
+
+                    $url .= '/' . strtolower($type);
+
+                    rename($url . '1.xml', $url . '.xml');
+                    continue;
+                }
+
                 ob_start();
                 echo "<?xml version='1.0' encoding='UTF-8'?>
 		<sitemapindex xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>\n";
