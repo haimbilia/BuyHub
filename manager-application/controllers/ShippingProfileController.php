@@ -154,7 +154,7 @@ class ShippingProfileController extends ListingBaseController
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post)) {
-            FatUtility::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
         }
         $profileId = $post['shipprofile_id'];
         unset($post['shipprofile_id']);

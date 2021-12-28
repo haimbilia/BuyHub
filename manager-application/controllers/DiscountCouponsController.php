@@ -249,7 +249,7 @@ class DiscountCouponsController extends ListingBaseController
         $status = FatUtility::int($status);
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId || !in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         $data = DiscountCoupons::getAttributesById($recordId, array('coupon_id', 'coupon_active'));

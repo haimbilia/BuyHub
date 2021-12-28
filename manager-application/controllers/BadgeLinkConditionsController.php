@@ -417,7 +417,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $toDate = FatApp::getPostedData('blinkcond_to_date', FatUtility::VAR_STRING, '');
 
         if (!empty($fromDate) && !empty($toDate) && $fromDate > $toDate) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', true, $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_TO_DATE_MUST_BE_GREATER_THAN_OR_EQUAL_TO_FROM_DATE', true, $this->siteLangId), true);
         }
 
         $conditionType = FatApp::getPostedData('blinkcond_condition_type', FatUtility::VAR_INT, 0);

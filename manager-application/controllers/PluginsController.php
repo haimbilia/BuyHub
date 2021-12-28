@@ -419,7 +419,7 @@ class PluginsController extends ListingBaseController
         $pluginType = FatApp::getPostedData('plugin_type', FatUtility::VAR_INT, 0);
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
         if (empty($recordIdsArr) || -1 == $status || 1 > $pluginType) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $error = '';
         foreach ($recordIdsArr as $recordId) {
@@ -441,7 +441,7 @@ class PluginsController extends ListingBaseController
 
         $recordIdsArr = FatUtility::int(FatApp::getPostedData('plugin_ids'));
         if (empty($recordIdsArr) || -1 == $status || 1 > $pluginGroupType) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
         foreach ($recordIdsArr as $recordId) {

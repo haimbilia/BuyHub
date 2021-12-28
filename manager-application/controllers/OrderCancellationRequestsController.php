@@ -284,8 +284,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $row = FatApp::getDb()->fetch($rs);
 
         if (!$row) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED', $this->siteLangId));
         }
 
         $db = FatApp::getDb();
@@ -318,7 +317,7 @@ class OrderCancellationRequestsController extends ListingBaseController
                         if (true === $paymentMethodObj->canRefundToCard($pluginKey, $row['order_language_id'])) {
                             if (false == $paymentMethodObj->initiateRefund($row, PaymentMethods::REFUND_TYPE_CANCEL)) {
                                 $db->rollbackTransaction();
-                                FatUtility::dieJsonError($paymentMethodObj->getError());
+                                LibHelper::exitWithError($paymentMethodObj->getError(), true);
                             }
                             $resp = $paymentMethodObj->getResponse();
                             if (empty($resp)) {

@@ -627,6 +627,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             formData.append(input.name, input.value);
         });
 
+        formData.append('fOutMode', 'json');
         $.ajax({
             url: fcom.makeUrl(controllerName, action),
             type: "post",

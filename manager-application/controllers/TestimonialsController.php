@@ -404,14 +404,14 @@ class TestimonialsController extends ListingBaseController
         $lang_id = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
 
         if (empty($post)) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Invalid_Request_Or_File_not_supported', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request_Or_File_not_supported', $this->siteLangId), true);
         }
         if (!$recordId) {
-            FatUtility::dieJsonError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!is_uploaded_file($_FILES['cropped_image']['tmp_name'])) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_Select_A_File', $this->siteLangId), true);
         }
 
         $fileHandlerObj = new AttachedFile();
@@ -427,7 +427,7 @@ class TestimonialsController extends ListingBaseController
             false,
             $lang_id
         )) {
-            FatUtility::dieJsonError($fileHandlerObj->getError());
+            LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
         $this->set('recordId', $recordId);

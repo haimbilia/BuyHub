@@ -20,33 +20,28 @@ class TrackingCodeRelationController extends ListingBaseController
     {
         $shipmentTracking = new ShipmentTracking(); 
 		if (false === $shipmentTracking->init($this->siteLangId)) {
-			Message::addErrorMessage($shipmentTracking->getError());
-            FatUtility::dieWithError(Message::getHtml());
+			LibHelper::exitWithError($shipmentTracking->getError(), true);
 		}
 		
         if(false === $shipmentTracking->getTrackingCouriers()) {
-			Message::addErrorMessage($shipmentTracking->getError());
-            FatUtility::dieWithError(Message::getHtml());
+			LibHelper::exitWithError($shipmentTracking->getError(), true);
 		}
 		
         $trackingCourier = $shipmentTracking->getResponse();
         if($trackingCourier == false){
-            Message::addErrorMessage($shipmentTracking->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($shipmentTracking->getError(), true);
         }
         
         $plugin = new Plugin();
         $shipApiPluginData = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, ['plugin_code', 'plugin_id']);
         $shipApi = PluginHelper::callPlugin($shipApiPluginData['plugin_code'], [$this->siteLangId], $error, $this->siteLangId);
         if($shipApi->init() === false){              
-            Message::addErrorMessage($shipApi->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($shipApi->getError(), true);
         }
         
         $carriers = $shipApi->getCarriers();
         if(empty($carriers)){
-            Message::addErrorMessage($shipApi->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($shipApi->getError(), true);
         }
        
         $trackingApiPluginId = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, 'plugin_id');
@@ -65,16 +60,14 @@ class TrackingCodeRelationController extends ListingBaseController
         $trackingApiCode = FatApp::getPostedData('trackingApiCode', FatUtility::VAR_STRING, '');
         $shipApiCode = FatApp::getPostedData('shipApiCode', FatUtility::VAR_STRING, '');
         if(empty($trackingApiCode) || empty($shipApiCode)){
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
         }
         
         $plugin = new Plugin();
         $trackingApiPluginId = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, 'plugin_id');
         $shipApiPluginId = $plugin->getDefaultPluginData(Plugin::TYPE_SHIPPING_SERVICES, 'plugin_id');
         if($trackingApiPluginId < 1 || $shipApiPluginId < 1){
-            Message::addErrorMessage(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('LBL_Invalid_Request', $this->siteLangId), true);
         }
         
         $data = array(
@@ -85,8 +78,7 @@ class TrackingCodeRelationController extends ListingBaseController
             
         );
         if (!FatApp::getDb()->insertFromArray(TrackingCourierCodeRelation::DB_TBL, $data, false, array(), $data)) {
-            Message::addErrorMessage(FatApp::getDb()->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(FatApp::getDb()->getError(), true);
         }
         
         $this->set('msg', $this->str_update_record);

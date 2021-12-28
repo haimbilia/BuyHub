@@ -112,8 +112,7 @@ class MessagesController extends ListingBaseController
         $searchForm = $this->getMessageSearchForm();
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
         if (empty($post['thread_id'])) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $srch = new MessageSearch();
         $srch->joinThreadMessage();
@@ -141,7 +140,7 @@ class MessagesController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function getSearchForm()
+    public function getSearchForm(array $fields = [])
     {
         $frm = new Form('frmSearch');
         $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
@@ -150,9 +149,6 @@ class MessagesController extends ListingBaseController
         $frm->addDateField(Labels::getLabel('LBL_Date_From', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender' ));
         $frm->addDateField(Labels::getLabel('LBL_Date_To', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addHiddenField('', 'thread_id');
-        $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
-        $fld_submit->attachField($fld_cancel);
         return $frm;
     }
 
@@ -173,7 +169,7 @@ class MessagesController extends ListingBaseController
         if (0 < $message_id) {
             $data = Thread::getAttributesById($message_id, array('message_id,message_text'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -203,8 +199,7 @@ class MessagesController extends ListingBaseController
         $frm = $this->getForm($message_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         $message_id = FatUtility::int($message_id);
 
@@ -216,8 +211,7 @@ class MessagesController extends ListingBaseController
         $rs = $srch->getResultSet();
         $requestRow = FatApp::getDb()->fetch($rs);
         if (!$requestRow) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId), true);
         }
 
         /* Save Message[ */
@@ -228,8 +222,7 @@ class MessagesController extends ListingBaseController
         $tObj = new Thread();
 
         if (!$insertId = $tObj->updateThreadMessages($data, $message_id)) {
-            Message::addErrorMessage($tObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
+            LibHelper::exitWithError($tObj->getError(), true);
         }
         /* ] */
 
@@ -243,15 +236,11 @@ class MessagesController extends ListingBaseController
 
         $message_id = FatApp::getPostedData('id', FatUtility::VAR_INT, 0);
         if ($message_id < 1) {
-            Message::addErrorMessage($this->str_invalid_request_id);
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $obj = new Thread($message_id);
         if (!$obj->deleteThreadMessage($message_id)) {
-            Message::addErrorMessage(
-                Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId)
-            );
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
         FatUtility::dieJsonSuccess($this->str_delete_record);

@@ -33,8 +33,8 @@ class AttributesController extends ListingBaseController
         $srch = AttributeGroup::getSearchObject();
         $srch->addFld('ag.*');
         
-        if (!empty($post['attrgrp_name'])) {
-            $srch->addCondition('ag.attrgrp_name', 'like', '%' . $post['attrgrp_name'] . '%');
+        if (!empty($post['keyword'])) {
+            $srch->addCondition('ag.attrgrp_name', 'like', '%' . $post['keyword'] . '%');
         }
         
         $page = (empty($page) || $page <= 0) ? 1 : $page;
@@ -68,7 +68,7 @@ class AttributesController extends ListingBaseController
         if (0 < $attrgrp_id) {
             $data = Brand::getAttributesById($attrgrp_id, array('attrgrp_id', 'attrgrp_name'));
             if ($data === false) {
-                FatUtility::dieWithError($this->str_invalid_request);
+                LibHelper::exitWithError($this->str_invalid_request, true);
             }
             $frm->fill($data);
         }
@@ -87,7 +87,7 @@ class AttributesController extends ListingBaseController
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         
         if (false === $post) {
-            FatUtility::dieWithError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $attrgrp_id = $post['attrgrp_id'];
@@ -97,7 +97,7 @@ class AttributesController extends ListingBaseController
         $record->assignValues($post);
         
         if (!$record->save()) {
-            FatUtility::dieWithError($record->getError());
+            LibHelper::exitWithError($record->getError(), true);
         }
         
         $this->set('msg', Labels::getLabel('MSG_Attribute_Group_Setup_Successful', $this->siteLangId));
@@ -260,8 +260,7 @@ class AttributesController extends ListingBaseController
         $attrgrp_id = FatUtility::int($post['attrgrp_id']);
         $attrgrp_row = AttributeGroup::getAttributesById($attrgrp_id);
         if (!$attrgrp_row) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Attribute_Group_not_selected', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Attribute_Group_not_selected', $this->siteLangId), true);
         }
         
         $attrgrp_id = $attrgrp_row['attrgrp_id'];
@@ -311,31 +310,29 @@ class AttributesController extends ListingBaseController
         if (!empty($post)) {
             $attrGrpAttrObj = new AttrGroupAttribute();
             if (!$attrGrpAttrObj->updateOrder($post['attributes'])) {
-                FatUtility::dieJsonError($attrGrpAttrObj->getError());
-            } else {
-                FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Order_Updated_Successfully', $this->siteLangId));
+                LibHelper::exitWithError($attrGrpAttrObj->getError(), true);
             }
+            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_Order_Updated_Successfully', $this->siteLangId));
         }
     }
     
-    public function langForm($attr_id, $lang_id)
+    public function langForm($autoFillLangData = 0)
     {
         $this->objPrivilege->canEditAttributes();
-        $attr_id = FatUtility::int($attr_id);
-        $lang_id = FatUtility::int($lang_id);
+        $recordId = FatApp::getPostedData('attr_id', FatUtility::VAR_INT, 0);
+        $lang_id = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         $lang_id = (!$lang_id) ? $this->siteLangId : $lang_id;
-        if ($attr_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+        if ($recordId == 0 || $lang_id == 0) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
-        $attrLangFrm = $this->getAttributeLangForm($attr_id, $lang_id);
+        $attrLangFrm = $this->getAttributeLangForm($recordId, $lang_id);
         
-        $attrLangData = AttrGroupAttribute::getAttributesByLangId($lang_id, $attr_id);
+        $attrLangData = AttrGroupAttribute::getAttributesByLangId($lang_id, $recordId);
         if ($attrLangData) {
             $attrLangFrm->fill($attrLangData);
         }
         $this->set('languages', Language::getAllNames());
-        $this->set('attr_id', $attr_id);
+        $this->set('attr_id', $$recordId);
         $this->set('attr_lang_id', $lang_id);
         $this->set('attrLangFrm', $attrLangFrm);
         $this->set('formLayout', Language::getLayoutDirection($lang_id));
@@ -352,8 +349,7 @@ class AttributesController extends ListingBaseController
         $lang_id = $post['lang_id'];
         
         if ($attr_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
         }
         $frm = $this->getAttributeLangForm($attr_id, $lang_id);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -373,8 +369,7 @@ class AttributesController extends ListingBaseController
         
         $attrGrpAttrObj = new AttrGroupAttribute($attr_id);
         if (!$attrGrpAttrObj->updateLangData($lang_id, $data_to_update)) {
-            Message::addErrorMessage($attrGrpAttrObj->getError());
-            FatUtility::dieJsonError(Message::getHtml());
+            LibHelper::exitWithError($attrGrpAttrObj->getError(), true);
         }
 
         $newTabLangId = 0;
@@ -441,17 +436,7 @@ class AttributesController extends ListingBaseController
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;
     }
-    
-    public function getSearchForm()
-    {
-        $frm = new Form('frmSearch', array('id' => 'frmSearch'));
-        $f1 = $frm->addTextBox(Labels::getLabel('LBL_Attribute_Group_Name', $this->siteLangId), 'attrgrp_name', '', array('class' => 'search-input'));
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
-        $fld_submit->attachField($fld_cancel);
-        return $frm;
-    }
-    
+        
     private function getForm($attrgrp_id = 0)
     {
         $this->objPrivilege->canEditAttributes();
@@ -465,7 +450,6 @@ class AttributesController extends ListingBaseController
         $frm = new Form('frmAttrGroup', array('id' => 'frmAttrGroup'));
         $frm->addHiddenField('', 'attrgrp_id', $attrgrp_id);
         $frm->addRequiredField(Labels::getLabel('LBL_Attribute_Group_Name', $this->siteLangId), 'attrgrp_name');
-        $frm->addSubmitButton('', 'btn_submit', $action);
         return $frm;
     }
 }
