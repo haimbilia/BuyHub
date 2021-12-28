@@ -1,29 +1,43 @@
 (function () {
 
+    getCurrentFrmLangId = function () {
+        return $("#addProductfrm [name='lang_id']").val();
+    };
+
+    getCurrentFrmRecordId = function () {
+        return $("#addProductfrm [name='record_id']").val();
+    };   
+
+    /**  record_id   =  product_id */
     setup = function (frm) {
-        if (!$(frm).validate()) { return; }
+        if (!$(frm).validate()) {            
+            $('html,body').stop().animate({
+                scrollTop: $('.error:first').offset().top - ($('.mainHeaderJs').height() + 50),
+            });
+            return; 
+        }
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setup'), data, function (res) {
             langForm(res.langId, 0, res.productId);
         });
     };
 
-    langForm = function (langId = 0, autoFillLangData = 0, productId = 0) {
-        productId = productId || $("#addProductfrm input[name='product_id']").val();
+    langForm = function (langId = 0, autoFillLangData = 0, recordId = 0) {
+        recordId = recordId || getCurrentFrmRecordId();
         langId = langId || $("#addProductfrm [name='lang_id']").val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Products', 'form', [productId]), { langId, autoFillLangData }, function (res) {
+        fcom.ajax(fcom.makeUrl('CustomProducts', 'form', [recordId]), { langId, autoFillLangData}, function (res) {
             $('.mainJs').replaceWith(res);
             fcom.removeLoader();
         });
     };
 
     productType = function (el) {
-        let productId = $("#addProductfrm input[name='product_id']").val();
+        let recordId = getCurrentFrmRecordId();
         let langId = $("#addProductfrm [name='lang_id']").val();
         let productType = $(el).val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Products', 'form', [productId, productType]), { langId }, function (res) {
+        fcom.ajax(fcom.makeUrl('CustomProducts', 'form', [recordId, productType]), { langId }, function (res) {
             $('.mainJs').replaceWith(res);
             fcom.removeLoader();
         });
@@ -63,13 +77,7 @@
                 return;
             }
         }
-    };
-
-    removeTagData = function (e) {
-        var tag_id = e.detail.tag.id;
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'removeProductTag'), 'product_id=' + product_id + '&tag_id=' + tag_id, function (t) { });
-        tagifyProducts();
-    };
+    };   
 
     getTagsAutoComplete = function (e) {
 
@@ -99,7 +107,7 @@
             whitelist: [],
             delimiters: "#",
             editTags: false,
-        }).on('add', addTagData).on('remove', removeTagData).on('input', getTagsAutoComplete);
+        }).on('add', addTagData).on('input', getTagsAutoComplete);
     };
 
     addSpecification = function () {
@@ -180,9 +188,9 @@
     };
 
     prodSpecifications = function () {
-        var productId = $("#addProductfrm input[name='product_id']").val();
+        var recordId = getCurrentFrmRecordId();
         var langId = $("#addProductfrm [name='lang_id']").val();
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'prodSpecifications'), { product_id: productId, langId }, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'prodSpecifications'), { recordId, langId }, function (res) {
             $.ykmsg.close();
             fcom.removeLoader();
             $('#specificationsListJs').html(res.html);
@@ -215,66 +223,26 @@
             scrollTop: $('#specifications').offset().top - ($('.mainHeaderJs').height() + 50),
         });
     };
-    deleteProdSpec = function (el) {
-        let prodSpecId = $(el).closest('tr').data('id');
-        if (1 > prodSpecId) {
-            $(el).closest('tr').remove();
-            if ($('#specificationsListJs').find('table tbody tr').length == 0) {
-                $('#specificationsListJs').find('table').addClass('hide');
-                $('#specificationsListSeprJs').addClass('hide');
-            }
-            return;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteProdSpec'), { prodSpecId }, function (t) {
-            prodSpecifications();
-        });
-    };
-
-    getShippingProfileOptions = function (userId) {
-        let langId = getCurrentFrmLangId();
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'getShippingProfileOptions'), { userId, langId }, function (t) {
-            if (t.shippingApiActive == 1) {
-                $('#shipping_profile').html('').parent().parent().addClass('hide');
-            } else {
-                $('#shipping_profile').html('').parent().parent().removeClass('hide');
-                $.each(t.shipProfileArr, function (id, name) {
-                    $('#shipping_profile').append(`<option value="${id}">
-                            ${name}
-                    </option>`);
-                });
-            }
-        });
-    };
-
-    getCurrentFrmLangId = function () {
-        return $("#addProductfrm [name='lang_id']").val();
-    };
-
-    getCurrentFrmProductId = function () {
-        return $("#addProductfrm [name='product_id']").val();
-    };
-
-    getCurrentFrmTempProductId = function () {
-        return $("#addProductfrm [name='temp_product_id']").val();
+    deleteProdSpec = function (el) {       
+        $(el).closest('tr').remove();
+        if ($('#specificationsListJs').find('table tbody tr').length == 0) {
+            $('#specificationsListJs').find('table').addClass('hide');
+            $('#specificationsListSeprJs').addClass('hide');
+        }       
     };
 
     imageForm = function () {
-        let productId = getCurrentFrmProductId();
-        let tempProductId = getCurrentFrmTempProductId();
-        if (1 > productId) {
-            if (tempProductId == undefined) {
-                console.warn('temp product id is manatory');
-                return;
-            }
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Products', "imageForm", [productId, tempProductId]), '', function (t) {
+        let recordId = getCurrentFrmRecordId();       
+        if (1 > recordId) {
+            return;
+        }      
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "imageForm", [recordId]), '', function (t) {
             $.ykmodal(t.html);
-            $.ykmsg.close()
+            $.ykmsg.close()           
+            loadImageOptions();           
+            var recordId = $('#image_record_id').val();
+            productImages(recordId);
             fcom.removeLoader();
-            loadImageOptions();
-            var fileType = $('#image_file_type').val();
-            var productId = $('#image_product_id').val();
-            productImages(productId, fileType);
         });
     };
     loadImageOptions = function () {
@@ -302,35 +270,26 @@
         })
     };
 
-    productImagesCallback = function (t) {
-        productImages(t.product_id, t.file_type, t.option_id, t.lang_id)
+    productImagesCallback = function (t) {  
+        productImages(t.recordId, t.option_id, t.lang_id)
         if (t.isDefaultLayout) {
             productDefaultImages();
         }
-
     };
-
-    productImages = function (product_id, file_type, option_id = 0, lang_id = 0) {
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
+    productImages = function (recordId, option_id = 0, lang_id = 0) {
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'images', [recordId, option_id, lang_id]), '', function (t) {
             fcom.removeLoader();
             $.ykmsg.close();
             $('#productImagesJs').html(t.html);
         });
     };
 
-    deleteImage = function (product_id, image_id, file_type) {
+    deleteImage = function (record_id, image_id) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) { return false; }
-        fcom.ajax(fcom.makeUrl('Products', 'deleteImage', [product_id, image_id, file_type]), '', function (t) {
-            var ans = $.parseJSON(t);
-            if (ans.status == 0) {
-                fcom.displayErrorMessage(ans.msg);
-                return;
-            } else {
-                fcom.displaySuccessMessage(ans.msg);
-            }
-            productImages(product_id, file_type, ans.optionId, ans.langId);
-            if (ans.isDefaultLayout) {
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteImage', [record_id, image_id]), '', function (t) {            
+            productImages(record_id, t.optionId, t.langId);
+            if (t.isDefaultLayout) {
                 productDefaultImages();
             }
         });
@@ -380,29 +339,7 @@
                 classname: "tags-look",
             },
             enforceWhitelist: true,
-            skipInvalid: true,
-            hooks: {
-                beforeRemoveTag: function (tags) {
-                    return new Promise((resolve, reject) => {
-                        let productId = getCurrentFrmProductId();
-                        if (0 < productId) {
-                            let optionId = $(element).closest('.rowJs').find('.optionsJs').val()
-                            let optionValueId = tags[0]['data']['id'];
-                            fcom.ajax(fcom.makeUrl('Products', "canDeleteOpValue"), { productId, optionId, optionValueId }, function (t) {
-                                t = $.parseJSON(t);
-                                if (t.status == 0) {
-                                    fcom.displayErrorMessage(t.msg);
-                                    reject();
-                                } else {
-                                    resolve();
-                                }
-                            });
-                        } else {
-                            resolve();
-                        }
-                    })
-                }
-            },
+            skipInvalid: true,           
         })
             .on('input', getOptionValues).on('focus', getOptionValues)
             .on('change', optionValuesChanges);
@@ -418,10 +355,10 @@
 
             $('#variantsListJs').prepend(fcom.getLoader());
             let type = $('.upc_type:checked').val();
-            let productId = getCurrentFrmProductId();
+            let recordId = getCurrentFrmRecordId();
             let langId = getCurrentFrmLangId();
             let productOptions = {};
-            if (type == 1) {
+            if (type == 0) {
                 $('#addProductfrm select.optionsJs').each(function () {
                     let optionData = $(this).select2('data');
                     if (1 < optionData.length) {
@@ -442,7 +379,7 @@
                     });
                 });
             }
-            fcom.updateWithAjax(fcom.makeUrl('Products', "upcListing"), { productId, langId, type, productOptions }, function (t) {
+            fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "upcListing"), { recordId , langId, type, productOptions }, function (t) {
                 $('#variantsListJs').html(t.html);
                 fcom.removeLoader();
                 $('#addProductfrm button[type="submit"]').prop("disabled", false);
@@ -453,7 +390,7 @@
         if (inputBtn.files && inputBtn.files[0]) {
             loadCropperSkeleton(false);
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
-            fcom.ajax(fcom.makeUrl('Products', "imgCropper"), "", function (t) {
+            fcom.ajax(fcom.makeUrl('CustomProducts', "imgCropper"), "", function (t) {
                 t = $.parseJSON(t);
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
@@ -496,7 +433,7 @@
         });
 
         $.ajax({
-            url: fcom.makeUrl('Products', "uploadMedia"),
+            url: fcom.makeUrl('CustomProducts', "uploadMedia"),
             type: "post",
             dataType: "json",
             data: formData,
@@ -526,23 +463,18 @@
     };
 
     productDefaultImages = function () {
-        let productId = getCurrentFrmProductId();
-        fileType = 0;
-        if (1 > productId) {
-            productId = getCurrentFrmTempProductId();
-            fileType = tempImageType;
-        }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [productId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {
+        let recordId = getCurrentFrmRecordId();       
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'images', [recordId, 0, 0]), { isDefaultLayout: 1 }, function (t) {            
             fcom.removeLoader();
             $.ykmsg.close();
             $('#productDefaultImagesJs li').not(":first").remove();
             $('#productDefaultImagesJs').append(t.html);
         });
     };
-
     digitalDownloadsForm = function (type, callback = '') {
-        let productId = getCurrentFrmProductId();
-        fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [productId, type]), "", function (t) {
+        $.ykmodal(fcom.getLoader(),false,'modal-dialog-vertical-md');
+        let productId = getCurrentFrmRecordId();
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "digitalDownloadForm", [productId, type]), "", function (t) {            
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
             $.ykmsg.close();
             fcom.removeLoader();
@@ -568,7 +500,7 @@
 
         $.ykmodal(fcom.getLoader());
         $.ajax({
-            url: fcom.makeUrl('Products', 'setupDigitalDownload'),
+            url: fcom.makeUrl('CustomProducts', 'setupDigitalDownload'),
             type: "POST",
             data: data,
             processData: false,
@@ -591,26 +523,24 @@
             }
         });
     };
-
-    getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {
-        console.log(optionCombi, "<<<");
+    getDigitalDownloads = function (downloadType, recordId, langId = 0 , optionCombi = 0) {      
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
-            fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
+            fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadLinks'), data, function (res) {
+                if(langId == 0   && optionCombi == 0){
+                    $("#digitalLinksDefaultListJs").html(res.html); 
+                }  
                 $.ykmsg.close();
                 fcom.removeLoader();
-                if (langId == 0 && optionCombi == 0) {
-                    $("#digitalLinksDefaultListJs").html(res.html);
-                }
-                $("#digitalFrmListJs").html(res.html);
+                $("#digitalFrmListJs").html(res.html);              
             });
         } else {
-            fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadAttachments'), data, function (res) {
-                $.ykmsg.close();
-                fcom.removeLoader();
-                if (langId == 0 && optionCombi == 0) {
+            fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'getDigitalDownloadAttachments'), data, function (res) {              
+                if(langId == 0   && optionCombi == 0){
                     $("#digitalFilesDefaultListJs").html(res.html);
                 }
+                $.ykmsg.close();
+                fcom.removeLoader();
                 $("#digitalFrmListJs").html(res.html);
             });
         }
@@ -642,8 +572,8 @@
         }
         data += '&frow=' + fullRow;
 
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalFile'), data, function (res) {
-            let productId = getCurrentFrmProductId();
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalFile'), data, function (res) {
+            let productId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalFile, productId);
         });
     };
@@ -653,62 +583,22 @@
         if (!agree) {
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
-            let productId = getCurrentFrmProductId();
+        fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
+            let productId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, productId);
         });
-    };
+    };    
 
 })();
 
 /** on option select/deselect */
-async function resetOptionValuesTag(e) {
-    let productId = getCurrentFrmProductId();
-    if (0 < productId) {
-        let optionId = e.params.args.data.id;
-        if (e.type == 'select2:selecting') {
-            optionId = 0;
-            if ($(e.currentTarget).select2('data').length) {
-                optionId = $(e.currentTarget).select2('data')[0].id || 0;
-            }
-        }
-
-        if (0 < optionId) {
-            e.preventDefault();
-            let response = await $.ajax({
-                url: fcom.makeUrl('Products', 'removeProductOption'),
-                type: 'POST',
-                data: { productId, optionId, fIsAjax: 1 }
-            });
-
-            response = $.parseJSON(response)
-            if (response.status != 1) {
-                fcom.displayErrorMessage(response.msg);
-                return;
-            }
-            if (e.type == 'select2:selecting') {
-                var newOption = new Option(e.params.args.data.text, e.params.args.data.id, true, true);
-                let currentEl = $(e.currentTarget);
-                currentEl.append(newOption).trigger('change');
-                currentEl.select2('close');
-            } else {
-                $(e.currentTarget).val(null).trigger("change");
-            }
-        }
-
-        let index = $(e.target.closest('.rowJs')).find('input.optionValuesJs').data('index');
-        if (index in tagifyObjs) {
-            tagifyObjs[index].settings.whitelist = [];
-            tagifyObjs[index].removeAllTags();
-        }
-    }
+async function resetOptionValuesTag(e) { 
 
     let index = $(e.target.closest('.rowJs')).find('input.optionValuesJs').data('index');
     if (index in tagifyObjs) {
         tagifyObjs[index].settings.whitelist = [];
         tagifyObjs[index].removeAllTags();
     }
-
     if ('deleteRow' in e.params.args.data) {
         $(e.currentTarget).closest('.rowJs').remove();
     }
@@ -740,6 +630,14 @@ $(document).on('click', '.warrantyTypeJs', function () {
     let type = $(this).data('type');
     $(this).closest('div').siblings('.warrantyTypeButtonJs').text($(this).text());
     $("#product_warranty_unit").val(type);
+});
+
+$(document).on('change', '#product_fulfillment_type', function () {    
+    if($(this).val() == fulfilmentTypePickup){
+        $('#shipping_profile').parent().parent().addClass('hide');
+    }else{
+        $('#shipping_profile').parent().parent().removeClass('hide');
+    }
 });
 
 $(document).on('click', '.optionsAddJs', function () {
@@ -783,19 +681,17 @@ $(document).on('click', '.optionsDeleteJs', function () {
 });
 
 $(document).on('change', '#image_option_id', function () {
-    let optionId = $(this).val();
-    let fileType = $('#image_file_type').val();
-    let productId = $('#image_product_id').val();
+    let optionId = $(this).val();  
+    let productId = $('#image_record_id').val();
     let langId = $('#image_lang_id').val();
-    productImages(productId, fileType, optionId, langId);
+    productImages(productId, optionId, langId);
 });
 
 $(document).on('change', '#image_lang_id', function () {
-    let langId = $(this).val();
-    let fileType = $('#image_file_type').val();
-    let productId = $('#image_product_id').val();
+    let langId = $(this).val();  
+    let productId = $('#image_record_id').val();
     let optionId = $('#image_option_id').val();
-    productImages(productId, fileType, optionId, langId);
+    productImages(productId, optionId, langId);
 });
 
 $(document).on('change', '#digitalFrmLangId', function () {
@@ -818,63 +714,4 @@ $('.stock-nav > ul > li a').click(function (e) {
     $(this).closest('li').siblings().removeClass('is-active');
     $(this).closest('li').addClass('is-active');
 });
-
-/*
-
-$(window).on('scroll', (e) => {  
-    var position = $(this).scrollTop() + $('.mainHeaderJs').height() + 50;
-    
-    $('.column-main > .card').each(function () {
-        var target = $(this).offset().top;
-        var id = $(this).attr('id');
-        if (position >= target) {
-            $('.stock-nav > ul > li > a').closest('li').removeClass('is-active');
-            $('.stock-nav > ul > li > a[href="#' + id + '"]').closest('li').addClass('is-active');
-        }
-    });   
-});
-*/
-
-
-/*
-var disabledScroll = false;
-$(window).on('scroll', (e) => {
-
-    if (typeof scrollTriggerEvent != 'undefined') {
-        clearTimeout(scrollTriggerEvent);
-    }
-    scrollTriggerEvent = setTimeout(function () {
-        var position = $(this).scrollTop() + $('.mainHeaderJs').height() + 50;
-        if (disabledScroll) {
-            disabledScroll = false;
-            return;
-        }
-        $('.column-main > .card').each(function () {
-            var target = $(this).offset().top;
-            var id = $(this).attr('id');
-            if (position >= target) {
-                $('.stock-nav > ul > li > a').closest('li').removeClass('is-active');
-                $('.stock-nav > ul > li > a[href="#' + id + '"]').closest('li').addClass('is-active');
-            }
-        });
-    }, 600);
-});
-*/
-
-/*
-$('.stock-nav > ul > li a').click(function (e) {
-    e.preventDefault();
-    tempStopScroll = true;
-    var target = $(this.hash);
-    $('html,body').stop().animate({
-        scrollTop: $($(this).attr("href")).offset().top - ($('.mainHeaderJs').height() + 50),
-    });
-
-    disabledScroll = $(this).parent().index() == $('.stock-nav > ul > li:last').index() || $(this).parent().index() == $('.stock-nav > ul > li:last').index() - 1;
-    if (disabledScroll) {
-        $(this).closest('li').siblings().removeClass('is-active');
-        $(this).closest('li').addClass('is-active');
-    }
-});
-*/
 

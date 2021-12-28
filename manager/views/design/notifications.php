@@ -21,7 +21,6 @@
                     <div class="container">
                         <div class="card card--notification">
                             <div class="card-head">
-
                                 <div class="d-flex justify-content-between flex-grow-1">
                                     <ul class="notification-action">
                                         <li>

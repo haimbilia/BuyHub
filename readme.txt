@@ -445,6 +445,7 @@ Bugs :
     => 060600 - Admin UI: Suggestion to give information, on what basis the search functionality will work under the reports section.
     => 060619 - Admin UI: "No Record Found" is showing after clicking on the Clear button under the sales reports section.
     => 060682 - Admin UI: Heading name is not matched with the title and 1st letter of the heading is not capital under the Import/Export section.
+    => 060732 - Admin UI: Search is not working properly under the permission sections of the admin's sub-users.
 
 ==================TV-9.4.0.20211215====================
     => Dashboard Stats
@@ -455,7 +456,7 @@ Bugs :
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
-
+    => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
 Following is a list of known errors that don’t have a workaround. These issues will be fixed in the subsequent release. 
         => Change in minimum selling price when reconfigured by Admin
         => Safari and IE 11 do not support our CSS. More info can be found at https://developer.microsoft.com/en-us/microsoft-edge/platform/status/csslevel3attrfunction/

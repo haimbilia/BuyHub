@@ -40,9 +40,8 @@ foreach ($arrListing as $sn => $row) {
                     $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 }
                 break;                          
-            case 'preq_status':
-                $statusHtm = Orders::getPaymentStatusHtml($siteLangId, $row[$key]);
-                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);              
+            case 'preq_status':                
+                $td->appendElement('plaintext', $tdAttr, ProductRequest::getPaymentStatusHtml($siteLangId,$row[$key]), true);              
                 break;
             case 'preq_requested_on':    
             case 'preq_added_on':
@@ -53,8 +52,7 @@ foreach ($arrListing as $sn => $row) {
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['preq_id']
                 ];
-
-                if ($canEdit) {
+                if ($canEdit && $row['preq_status'] == ProductRequest::STATUS_PENDING) {
                     $data['otherButtons'][] = [
                         'attr' => [
                             'href' => UrlHelper::generateUrl('CustomProducts', 'form', array($row['preq_id'])),
@@ -66,6 +64,20 @@ foreach ($arrListing as $sn => $row) {
                             </use>
                         </svg>'
                     ];
+
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'requestStatusForm(' . $row['preq_id'] . ')',
+                            'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
+                        ],
+                        'label' => '<svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#form">
+                                        </use>
+                                    </svg>',
+                    ];
+                    
                     $data['deleteButton'] = false;
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);

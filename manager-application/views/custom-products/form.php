@@ -1,12 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $frm->setFormTagAttribute('class', 'form');
-$displayDigitalDwnBtn = false;
-$displayDigitalDownloadList = false;
-if (0 < $productId) {
-    $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 1 > $productData['product_seller_id'];
-    $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
-}
 
+$displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL;
+$displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 ?>
 <main class="main mainJs" dir="<?php echo $formLayout; ?>">
     <div class="container">
@@ -149,14 +145,14 @@ if (0 < $productId) {
             <div class="add-stock-column column-main">
                 <div class="add-stock-column-head">
                     <div class="add-stock-column-head-label">
-                        <h2 class="h2">Add Product</h2>
+                        <h2 class="h2"><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId):Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
                         <span class="text-muted"> <span class="required"></span> required
                             information</span>
                     </div>
 
                     <?php
                     $langFld =  $frm->getField('lang_id');
-                    if (0 < $productId) {
+                    if (0 < $recordId) {
                         $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
                         $langFld->setfieldTagAttribute('onchange', 'langForm()');
                         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
@@ -232,7 +228,7 @@ if (0 < $productId) {
                             echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, [], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_id', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'record_id', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'temp_product_id', 6, ['id' => 'temp_product_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit', 6, ['id' => 'product_warranty_unit']);
                             ?>
@@ -367,7 +363,7 @@ if (0 < $productId) {
                             </div>
                         </div>
                         <div id="specificationsListSeprJs" class="separator separator-dashed my-4 hide"></div>
-                        <div id="specificationsListJs">
+                        <div id="specificationsListJs">                            
                         </div>
                     </div>
                 </div>
@@ -385,7 +381,7 @@ if (0 < $productId) {
                         <div class="row">
                             <?php
                             echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6,['id' => 'product_fulfillment_type']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
@@ -445,7 +441,8 @@ if (0 < $productId) {
                     <div class="card-body">
                         <button type="submit" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>
                         <div class="mt-3">
-                            <?php
+                            <?php                 
+                                                                     
                             $fld = $frm->getField('product_active');
                             if (null !=  $fld) {
                                 HtmlHelper::configureSwitchForCheckbox($fld);
@@ -478,9 +475,9 @@ if (0 < $productId) {
                                 echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>':'<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
                             }
                             
-                            if (null !=  $fld && $codEnabled) {
-                                HtmlHelper::configureSwitchForCheckbox($codEnabled, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));
-                                echo '<li><div class="setting-block">' . $codEnabled->getHtml() . '</div></li>';
+                            if (null !=  $codFld && $codEnabled) {
+                                HtmlHelper::configureSwitchForCheckbox($codFld, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));                           
+                                echo '<li><div class="setting-block">' . $codFld->getHtml() . '</div></li>';
                             }
                             ?>
                         </ul>
@@ -531,10 +528,10 @@ if (0 < $productId) {
         var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';
         var tagifyObjs = {};
         var productOptions = <?php echo json_encode($productOptions); ?>;
-        var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>';
-        var tempImageType = '<?php echo AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP; ?>';
+        var forAllOptionsLbl = '<?php echo Labels::getLabel('FRM_FOR_ALL_OPTIONS', $langId); ?>'; 
         var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
         var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
+        var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';   
 
         $(function() {
             prodSpecifications();
@@ -578,26 +575,28 @@ if (0 < $productId) {
 
             $('#addProductfrm .optionValuesJs').each(function(index) {
                 tagifyOptionValue("#" + $(this).attr('id'));
-            });
+            });    
 
-            getShippingProfileOptions(<?php echo $frm->getField('product_seller_id')->value; ?>);
 
-            <?php if ($isProductAddedByAdmin  && !$isSelProdCreatedBySeller) { ?>
-                select2('product_seller_id', fcom.makeUrl('Users', 'autoComplete'), {
-                    joinShop: 1,
-                    user_is_supplier: 1,
-                    langId
-                }, function(e) {
-                    getShippingProfileOptions(e.params.args.data.id)
-                });
-            <?php } else { ?>
-                $('select[name=\'product_seller_id\']').attr('disabled', true);
-            <?php } ?>
+            <?php             
+            if(isset($isProductAddedByAdmin)  && isset($isSelProdCreatedBySeller)){
+                if ($isProductAddedByAdmin  && !$isSelProdCreatedBySeller) { ?>
+                    select2('product_seller_id', fcom.makeUrl('Users', 'autoComplete'), {
+                        joinShop: 1,
+                        user_is_supplier: 1,
+                        langId
+                    }, function(e) {
+                        getShippingProfileOptions(e.params.args.data.id)
+                    });
+                <?php } else { ?>
+                    $('select[name=\'product_seller_id\']').attr('disabled', true);
+                <?php }
+            } ?>
 
             upcType();
-            <?php if (0 < $productId && $displayDigitalDownloadList) { ?>
-                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $productId; ?>);
-                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $productId; ?>);
+            <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
+                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);
+                getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
             <?php } ?>
         });
     </script>

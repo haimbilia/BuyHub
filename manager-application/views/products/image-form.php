@@ -13,14 +13,16 @@ $fld = $frm->getField('option_id');
 $fld->addFieldTagAttribute('id', "image_option_id");
 
 $fld = $frm->getField('file_type');
-$fld->addFieldTagAttribute('id', "image_file_type");
+if(null != $fld){
+    $fld->addFieldTagAttribute('id', "image_file_type");
+}
 
 $fld = $frm->getField('lang_id');
 $fld->addFieldTagAttribute('id', "image_lang_id");
 
 
-$fld = $frm->getField('product_id');
-$fld->addFieldTagAttribute('id', "image_product_id");
+$fld = $frm->getField('record_id');
+$fld->addFieldTagAttribute('id', "image_record_id");
 
 $fld = $frm->getField('images');
 $fld->value= '<div class="upload__files"><ul class="upload__list" id="productImagesJs"></ul></div>';

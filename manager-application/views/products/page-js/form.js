@@ -1,29 +1,46 @@
 (function () {
 
+    getCurrentFrmLangId = function () {
+        return $("#addProductfrm [name='lang_id']").val();
+    };
+
+    getCurrentFrmRecordId = function () {
+        return $("#addProductfrm [name='record_id']").val();
+    };
+
+    getCurrentFrmTempProductId = function () {
+        return $("#addProductfrm [name='temp_product_id']").val();
+    };
+
     setup = function (frm) {
-        if (!$(frm).validate()) { return; }
+        if (!$(frm).validate()) {            
+            $('html,body').stop().animate({
+                scrollTop: $('.error:first').offset().top - ($('.mainHeaderJs').height() + 50),
+            });            
+            return;
+        }
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl('Products', 'setup'), data, function (res) {
-            langForm(res.langId, 0, res.productId);
+            langForm(res.langId, 0, res.recordId);
         });
     };
 
-    langForm = function (langId = 0, autoFillLangData = 0, productId = 0) {
-        productId = productId || $("#addProductfrm input[name='product_id']").val();
+    langForm = function (langId = 0, autoFillLangData = 0, recordId = 0) {
+        recordId = recordId || getCurrentFrmRecordId();
         langId = langId || $("#addProductfrm [name='lang_id']").val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [productId]), { langId, autoFillLangData }, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId]), { langId, autoFillLangData }, function (res) {
             $('.mainJs').replaceWith(res.html);
             fcom.removeLoader();
         });
     };
 
     productType = function (el) {
-        let productId = $("#addProductfrm input[name='product_id']").val();
+        let recordId = getCurrentFrmRecordId();
         let langId = $("#addProductfrm [name='lang_id']").val();
         let productType = $(el).val();
         $('.mainJs').prepend(fcom.getLoader());
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [productId, productType]), { langId }, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'form', [recordId, productType]), { langId }, function (res) {
             $('.mainJs').replaceWith(res.html);
             fcom.removeLoader();
         });
@@ -180,12 +197,12 @@
     };
 
     prodSpecifications = function () {
-        var productId = $("#addProductfrm input[name='product_id']").val();
+        var recordId = getCurrentFrmRecordId();
         var langId = $("#addProductfrm [name='lang_id']").val();
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'prodSpecifications'), { product_id: productId, langId }, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'prodSpecifications'), { product_id: recordId, langId }, function (res) {
+            $('#specificationsListJs').html(res.html);
             $.ykmsg.close();
             fcom.removeLoader();
-            $('#specificationsListJs').html(res.html);
             if ($('#specificationsListJs').find('table tbody tr').length == 0) {
                 $('#specificationsListJs').find('table').addClass('hide');
                 $('#specificationsListSeprJs').addClass('hide');
@@ -234,8 +251,10 @@
         let langId = getCurrentFrmLangId();
         fcom.updateWithAjax(fcom.makeUrl('Products', 'getShippingProfileOptions'), { userId, langId }, function (t) {
             if (t.shippingApiActive == 1) {
+                $('#shipping_profile').data('shippingApiActive', 1);
                 $('#shipping_profile').html('').parent().parent().addClass('hide');
             } else {
+                $('#shipping_profile').data('shippingApiActive', 0);
                 $('#shipping_profile').html('').parent().parent().removeClass('hide');
                 $.each(t.shipProfileArr, function (id, name) {
                     $('#shipping_profile').append(`<option value="${id}">
@@ -243,38 +262,29 @@
                     </option>`);
                 });
             }
+            $('#product_fulfillment_type').trigger('change');
         });
-    };
-
-    getCurrentFrmLangId = function () {
-        return $("#addProductfrm [name='lang_id']").val();
-    };
-
-    getCurrentFrmProductId = function () {
-        return $("#addProductfrm [name='product_id']").val();
-    };
-
-    getCurrentFrmTempProductId = function () {
-        return $("#addProductfrm [name='temp_product_id']").val();
-    };
+    };  
 
     imageForm = function () {
-        let productId = getCurrentFrmProductId();
+        let recordId = getCurrentFrmRecordId();
         let tempProductId = getCurrentFrmTempProductId();
-        if (1 > productId) {
+        if (1 > recordId) {
             if (tempProductId == undefined) {
                 console.warn('temp product id is manatory');
                 return;
             }
         }
-        fcom.updateWithAjax(fcom.makeUrl('Products', "imageForm", [productId, tempProductId]), '', function (t) {
-            $.ykmodal(t.html);
-            $.ykmsg.close();
-            fcom.removeLoader();
+        $.ykmodal(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl('Products', "imageForm", [recordId, tempProductId]), '', function (t) {
+            $.ykmodal(t.html);  
+            $.ykmsg.close();                   
             loadImageOptions();
             var fileType = $('#image_file_type').val();
-            var productId = $('#image_product_id').val();
-            productImages(productId, fileType);
+            var recordId = $('#image_record_id').val();
+            productImages(recordId, fileType);
+          
+            fcom.removeLoader();
         });
     };
     loadImageOptions = function () {
@@ -313,7 +323,7 @@
     productImages = function (product_id, file_type, option_id = 0, lang_id = 0) {
         fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [product_id, file_type, option_id, lang_id]), '', function (t) {
             fcom.removeLoader();
-            $.ykmsg.close();
+            $.ykmsg.close();        
             $('#productImagesJs').html(t.html);
         });
     };
@@ -384,11 +394,11 @@
             hooks: {
                 beforeRemoveTag: function (tags) {
                     return new Promise((resolve, reject) => {
-                        let productId = getCurrentFrmProductId();
+                        let recordId = getCurrentFrmRecordId();
                         if (0 < productId) {
                             let optionId = $(element).closest('.rowJs').find('.optionsJs').val()
                             let optionValueId = tags[0]['data']['id'];
-                            fcom.ajax(fcom.makeUrl('Products', "canDeleteOpValue"), { productId, optionId, optionValueId }, function (t) {
+                            fcom.ajax(fcom.makeUrl('Products', "canDeleteOpValue"), { recordId, optionId, optionValueId }, function (t) {
                                 t = $.parseJSON(t);
                                 if (t.status == 0) {
                                     fcom.displayErrorMessage(t.msg);
@@ -417,10 +427,10 @@
         upcTypeTriggerEvent = setTimeout(function () {
             $('#variantsListJs').prepend(fcom.getLoader());
             let type = $('.upc_type:checked').val();
-            let productId = getCurrentFrmProductId();
+            let recordId = getCurrentFrmRecordId();
             let langId = getCurrentFrmLangId();
             let productOptions = {};
-            if (type == 1) {
+            if (type == 0) {
                 $('#addProductfrm select.optionsJs').each(function () {
                     let optionData = $(this).select2('data');
                     if (1 < optionData.length) {
@@ -441,7 +451,7 @@
                     });
                 });
             }
-            fcom.updateWithAjax(fcom.makeUrl('Products', "upcListing"), { productId, langId, type, productOptions }, function (t) {
+            fcom.updateWithAjax(fcom.makeUrl('Products', "upcListing"), { recordId, langId, type, productOptions }, function (t) {              
                 fcom.removeLoader();
                 $.ykmsg.close();
                 $('#variantsListJs').html(t.html);
@@ -526,31 +536,29 @@
     };
 
     productDefaultImages = function () {
-        let productId = getCurrentFrmProductId();
+        let recordId = getCurrentFrmRecordId();
         fileType = 0;
-        if (1 > productId) {
-            productId = getCurrentFrmTempProductId();
+        if (1 > recordId) {
+            recordId = getCurrentFrmTempProductId();
             fileType = tempImageType;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [productId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {
-            $.ykmsg.close();
-            fcom.removeLoader();
+        fcom.updateWithAjax(fcom.makeUrl('Products', 'images', [recordId, fileType, 0, 0]), { isDefaultLayout: 1 }, function (t) {
             $('#productDefaultImagesJs li').not(":first").remove();
             $('#productDefaultImagesJs').append(t.html);
         });
     };
 
     digitalDownloadsForm = function (type, callback = '') {
-        let productId = getCurrentFrmProductId();
-        fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [productId, type]), "", function (t) {
+        $.ykmodal(fcom.getLoader(),false,'modal-dialog-vertical-md');
+        let recordId = getCurrentFrmRecordId();
+        fcom.updateWithAjax(fcom.makeUrl('Products', "digitalDownloadForm", [recordId, type]), "", function (t) {            
             $.ykmodal(t.html, false, 'modal-dialog-vertical-md');
-            fcom.removeLoader();
-            $.ykmsg.close();
             if (typeof callback == 'function') {
                 callback();
-            } else {
-                getDigitalDownloads(type, productId);
-            }
+            }else{                
+                getDigitalDownloads(type,recordId); 
+            }            
+            fcom.removeLoader();
         });
     };
 
@@ -592,8 +600,7 @@
         });
     };
 
-    getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {
-        console.log(optionCombi, "<<<");
+    getDigitalDownloads = function (downloadType, recordId, langId = 0, optionCombi = 0) {       
         let data = { recordId, download_type: downloadType, option_comb: optionCombi, langId: langId };
         if (downloadType == 1) {
             fcom.updateWithAjax(fcom.makeUrl('Products', 'getDigitalDownloadLinks'), data, function (res) {
@@ -643,8 +650,8 @@
         data += '&frow=' + fullRow;
 
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalFile'), data, function (res) {
-            let productId = getCurrentFrmProductId();
-            getDigitalDownloads(typeDigitalFile, productId);
+            let recordId = getCurrentFrmRecordId();
+            getDigitalDownloads(typeDigitalFile, recordId);
         });
     };
 
@@ -654,8 +661,8 @@
             return false;
         }
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
-            let productId = getCurrentFrmProductId();
-            getDigitalDownloads(typeDigitalLink, productId);
+            let recordId = getCurrentFrmRecordId();
+            getDigitalDownloads(typeDigitalLink, recordId);
         });
     };
 
@@ -663,8 +670,8 @@
 
 /** on option select/deselect */
 async function resetOptionValuesTag(e) {
-    let productId = getCurrentFrmProductId();
-    if (0 < productId) {
+    let recordId = getCurrentFrmRecordId();
+    if (0 < recordId) {
         let optionId = e.params.args.data.id;
         if (e.type == 'select2:selecting') {
             optionId = 0;
@@ -678,7 +685,7 @@ async function resetOptionValuesTag(e) {
             let response = await $.ajax({
                 url: fcom.makeUrl('Products', 'removeProductOption'),
                 type: 'POST',
-                data: { productId, optionId, fIsAjax: 1 }
+                data: { recordId, optionId, fIsAjax: 1 }
             });
 
             response = $.parseJSON(response)
@@ -742,6 +749,17 @@ $(document).on('click', '.warrantyTypeJs', function () {
     $("#product_warranty_unit").val(type);
 });
 
+$(document).on('change', '#product_fulfillment_type', function () {
+    if($(this).data('shippingApiActive') == 1){
+        return;        
+    }
+    if($(this).val() == fulfilmentTypePickup){
+        $('#shipping_profile').parent().parent().addClass('hide');
+    }else{
+        $('#shipping_profile').parent().parent().removeClass('hide');
+    }
+});
+
 $(document).on('click', '.optionsAddJs', function () {
     let clonedRow = $('#variantCloneJs .rowJs').clone();
     let index = clonedRow.find('.optionValuesJs').data('index');
@@ -785,17 +803,17 @@ $(document).on('click', '.optionsDeleteJs', function () {
 $(document).on('change', '#image_option_id', function () {
     let optionId = $(this).val();
     let fileType = $('#image_file_type').val();
-    let productId = $('#image_product_id').val();
+    let recordId = $('#image_record_id').val();
     let langId = $('#image_lang_id').val();
-    productImages(productId, fileType, optionId, langId);
+    productImages(recordId, fileType, optionId, langId);
 });
 
 $(document).on('change', '#image_lang_id', function () {
     let langId = $(this).val();
     let fileType = $('#image_file_type').val();
-    let productId = $('#image_product_id').val();
+    let recordId = $('#image_record_id').val();
     let optionId = $('#image_option_id').val();
-    productImages(productId, fileType, optionId, langId);
+    productImages(recordId, fileType, optionId, langId);
 });
 
 $(document).on('change', '#digitalFrmLangId', function () {

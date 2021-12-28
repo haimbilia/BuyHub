@@ -3,10 +3,10 @@
 class FormFieldDatePicker
 {
     /**
-*
-* @param FormField   $fld
-* @param HtmlElement $htmlElement
-*/
+     *
+     * @param FormField   $fld
+     * @param HtmlElement $htmlElement
+     */
     public static function addJs($fld, $htmlElement)
     {
 
@@ -17,9 +17,8 @@ class FormFieldDatePicker
             FatDate::FORMAT_JQUERY_UI
         );
 
-        $layoutDirection = CommonHelper::getLayoutDirection();
         $layoutConf = 'isRTL: false,';
-        if ('rtl' == mb_strtolower($layoutDirection)) {
+        if ('rtl' == mb_strtolower(CommonHelper::getLayoutDirection())) {
             $layoutConf = 'isRTL: true,';
         }
 

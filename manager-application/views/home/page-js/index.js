@@ -37,9 +37,9 @@
 		$('.topReferers').html('<li class="list-stats-item">' + fcom.getLoader() + '</li>');
 		data = "rtype=top_referrers&interval=" + interval;
 
-		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
-            $.ykmsg.close();
+			$.ykmsg.close();
 			$('.topReferersJs').html(t.html);
 		});
 	};
@@ -50,18 +50,18 @@
 
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
-            $.ykmsg.close();
+			$.ykmsg.close();
 			$('.topCountriesJs').html(t.html);
 		});
 	};
 
 	topProducts = function (interval) {
-		$('.topProducts').html('<li>' + fcom.getLoader() + '</li>');
+		$('.topProducts').html('<li class="list-stats-item">' + fcom.getLoader() + '</li>');
 		data = "rtype=top_products&interval=" + interval;
 
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
-            $.ykmsg.close();
+			$.ykmsg.close();
 			$('.topProducts').html(t.html);
 		});
 	};
@@ -71,7 +71,7 @@
 		data = "rtype=top_search_keyword&interval=" + interval;
 		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
 			fcom.removeLoader();
-            $.ykmsg.close();
+			$.ykmsg.close();
 			$('.topSearchKeywordJs').html(t.html);
 		});
 	};
@@ -79,16 +79,15 @@
 	traficSource = function (interval) {
 		$('#piechart').html(fcom.getLoader());
 		data = "rtype=traffic_source&interval=" + interval;
-
-		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
-			var ans = parseJsonData(t);
+		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+			var ans = parseJsonData(t.html);
 			if (ans) {
 				var dataTraficSrc = google.visualization.arrayToDataTable(ans);
 				var optionsTraficSrc = { title: '', width: $('#piechart').width(), height: 360, pieHole: 0.4, pieStartAngle: 100, legend: { position: 'bottom', textStyle: { fontSize: 12, alignment: 'center' } } };
 				var trafic = new google.visualization.PieChart(document.getElementById('piechart'));
 				trafic.draw(dataTraficSrc, optionsTraficSrc);
 			} else {
-				$('#piechart').html(t);
+				$('#piechart').html(t.html);
 			}
 		});
 	};
@@ -97,10 +96,8 @@
 		$('#visitsGraph').html(fcom.getLoader());
 		data = "rtype=visitors_stats";
 
-		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
-
-			var ans = parseJsonData(t);
-
+		fcom.updateWithAjax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
+			var ans = parseJsonData(t.html);
 			if (ans) {
 				var dataVisits = google.visualization.arrayToDataTable(ans);
 				var optionVisits = {
@@ -127,7 +124,7 @@
 				var visits = new google.visualization.LineChart(document.getElementById('visitsGraph'));
 				visits.draw(dataVisits, optionVisits);
 			} else {
-				$('#visitsGraph').html(t);
+				$('#visitsGraph').html(t.html);
 			}
 		});
 
@@ -143,7 +140,7 @@
 		$('#' + tab).html(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('home', 'searchStatistics'), data, function (t) {
 			fcom.removeLoader();
-            $.ykmsg.close();
+			$.ykmsg.close();
 			$('#' + tab).html(t.html);
 		});
 	};
@@ -152,7 +149,7 @@
 		$('#latestOrdersJs').html(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('home', 'latestOrders'), '', function (t) {
 			fcom.removeLoader();
-            $.ykmsg.close();
+			$.ykmsg.close();
 			$('#latestOrdersJs').html(t.html);
 		});
 	};
@@ -160,18 +157,18 @@
 	totalSales = function (interval) {
 		data = "interval=" + interval;
 		$('#totalSalesJs').html(fcom.getLoader());
-		fcom.ajax(fcom.makeUrl('home', 'totalSales'), data, function (t) {
+		fcom.updateWithAjax(fcom.makeUrl('home', 'totalSales'), data, function (t) {			
 			fcom.removeLoader();
-            $.ykmsg.close();
+			$.ykmsg.close();
 			$('#totalSalesJs').html(t.html);
 		});
 	};
 
 	topSellingProducts = function () {
 		$('#topSellingProductsJs').html(fcom.getLoader());
-		fcom.ajax(fcom.makeUrl('home', 'topSellingProducts'), '', function (t) {
+		fcom.updateWithAjax(fcom.makeUrl('home', 'topSellingProducts'), '', function (t) {
 			fcom.removeLoader();
-            $.ykmsg.close();
+			$.ykmsg.close();
 			$('#topSellingProductsJs').html(t.html);
 		});
 	};

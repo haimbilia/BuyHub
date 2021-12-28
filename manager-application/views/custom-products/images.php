@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 foreach ($images as $image) {
     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($image['afile_record_id'], "THUMB", 0, $image['afile_id'], $image['afile_lang_id'], $image['afile_type']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'customProduct', array($image['afile_record_id'], "THUMB", $image['afile_id'], $image['afile_lang_id'], $image['afile_type']), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
     if ($isDefaultLayout  == applicationConstants::YES) {
     ?>
         <li class="abc" id="<?php echo $image['afile_id']; ?>">
@@ -67,16 +67,13 @@ if ($isDefaultLayout  == applicationConstants::NO && count($images)) {
 
                     var sort = mysortarr.join('-');
                     var lang_id = $('.language-js').val();
-                    var product_id = $('#image_record_id').val();
-                    var option_id = $('#image_option_id').val();
-                    var option_id = $('#image_option_id').val();
-                    var file_type = $('#image_file_type').val();
-                    fcom.updateWithAjax(fcom.makeUrl('products', 'setImageOrder'), {
-                        product_id,
-                        file_type,
+                    var record_id = $('#image_record_id').val();          
+                    var option_id = $('#image_option_id').val();                   
+                    fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setImageOrder'), {
+                        record_id,                       
                         ids: sort
                     }, function(t) {
-                        productImages(product_id, file_type, option_id, lang_id);
+                        productImages(record_id, option_id, lang_id);
                     });
                 }
             }).disableSelection();
@@ -97,12 +94,9 @@ if ($isDefaultLayout  == applicationConstants::NO && count($images)) {
 
                     var sort = mysortarr.join('-');
                     var lang_id = $('.language-js').val();
-                    var product_id = $('#hiddenMediaFrmJs').find('[name="product_id"]').val();              
-                    var option_id = 0;
-                    var file_type = $('#hiddenMediaFrmJs').find('[name="file_type"]').val();
-                    fcom.updateWithAjax(fcom.makeUrl('products', 'setImageOrder'), {
-                        product_id,
-                        file_type,
+                    var record_id = $('#hiddenMediaFrmJs').find('[name="record_id"]').val();
+                    fcom.updateWithAjax(fcom.makeUrl('CustomProducts', 'setImageOrder'), {
+                        record_id,                      
                         ids: sort
                     });
                 }
