@@ -231,7 +231,7 @@
     max-width: 1000px;
     margin: auto;
     display: grid;
-    grid-gap: 2rem;
+    grid-gap: 4rem;
     grid-template-columns: repeat(4, 1fr);
     .products {
         height: 100%;
@@ -246,6 +246,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
+            min-height: 200px;
+            padding-bottom: 0;
+        }
+
+        .products-img {
+            margin: 0;
         }
     }
     .grid {
