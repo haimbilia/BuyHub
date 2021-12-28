@@ -5290,7 +5290,7 @@ class Importexport extends ImportexportCommon
 
         $languageCodes = Language::getAllCodesAssoc(true);
         $currencyCodes = Currency::getCurrencyAssoc(true);
-
+        
         $useCountryId = false;
         if ($this->settings['CONF_USE_COUNTRY_ID']) {
             $useCountryId = true;
@@ -5308,7 +5308,7 @@ class Importexport extends ImportexportCommon
                 $colValue = array_key_exists($columnKey, $row) ? $row[$columnKey] : '';
 
                 if ('country_currency_code' == $columnKey) {
-                    $colValue = ($row['country_currency_id'] > 0 && array_key_exists($row['country_currency_id'], $currencyCodes)) ? $currencyCodes[$row['country_currency_id']] : FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1);
+                    $colValue = ($row['country_currency_id'] > 0 && array_key_exists($row['country_currency_id'], $currencyCodes)) ? $currencyCodes[$row['country_currency_id']] : $currencyCodes[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)];
                 }
 
                 if ('country_language_code' == $columnKey) {
