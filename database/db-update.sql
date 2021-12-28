@@ -1482,3 +1482,4 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 
 update `tbl_product_requests` set preq_ean_upc_code = Replace(preq_ean_upc_code, '|', ',');
 ALTER TABLE `tbl_product_requests` DROP `preq_specifications`;
+-- -------------------TV-9.4.0.20211228-----------------------

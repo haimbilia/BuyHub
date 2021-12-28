@@ -453,6 +453,10 @@ Bugs :
     => UAT Fixes
 
 ==================TV-9.4.0.20211223===================
+    => Multilingual Sitemap
+    => Add product screen
+    => UAT Fixes
+=============TV-9.4.0.20211228================
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
