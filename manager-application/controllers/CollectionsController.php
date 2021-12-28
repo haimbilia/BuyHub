@@ -243,6 +243,9 @@ class CollectionsController extends ListingBaseController
             case Collections::TYPE_CATEGORY_LAYOUT2:
                 return Collections::LIMIT_CATEGORY_LAYOUT2;
                 break;
+            case Collections::TYPE_CATEGORY_LAYOUT3:
+                return Collections::LIMIT_CATEGORY_LAYOUT3;
+                break;
             case Collections::TYPE_SHOP_LAYOUT1:
                 return Collections::LIMIT_SHOP_LAYOUT1;
                 break;
@@ -311,7 +314,7 @@ class CollectionsController extends ListingBaseController
         $frm->addHiddenField('', 'collection_type', $type);
         // $frm->addHiddenField('', 'collection_layout_type', $layoutType);
         $productTypeLayoutArr = Collections::getTypeSpecificLayouts($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_Collection_Layout_Type', $this->siteLangId), 'collection_layout_type', $productTypeLayoutArr[Collections::COLLECTION_TYPE_PRODUCT], $this->siteLangId, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_Collection_Layout_Type', $this->siteLangId), 'collection_layout_type', $productTypeLayoutArr[$type], $layoutType, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'collection_name');
         if ($type == Collections::COLLECTION_TYPE_BANNER) {
             $frm->addTextBox(Labels::getLabel('FRM_PROMOTION_COST', $this->siteLangId), 'blocation_promotion_cost');

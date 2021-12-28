@@ -207,6 +207,18 @@ class HomeController extends MyAppController
                     }
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout2;
                     break;
+                case Collections::TYPE_CATEGORY_LAYOUT3:
+                    $homePageCatLayout3 = CacheHelper::get('homePageCatLayout3' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageCatLayout3) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $tpl->set('`displayProductNotAvailableLable`', $displayProductNotAvailableLable);
+                        $homePageCatLayout3 = $tpl->render(false, false, '_partial/collection/category-layout-3.php', true, true);
+                        CacheHelper::create('homePageCatLayout3' . $collection['collection_id'] . $cacheKey, $homePageCatLayout3, CacheHelper::TYPE_COLLECTIONS);
+                    }
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout3;
+                    break;
                 case Collections::TYPE_SHOP_LAYOUT1:
                     $homePageShopLayout1 = CacheHelper::get('homePageShopLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageShopLayout1) {
@@ -754,7 +766,7 @@ class HomeController extends MyAppController
                     /* ] */
                     $collections[$ind] = $collection;
                     $counter = 0;
-                    if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT2) {
+                    if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT2 || $collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT3) {
                         while ($catData = $db->fetch($rs)) {
                             /* fetch Sub-Categories[ */
                             $subCategorySrch = clone $productCatSrchObj;
