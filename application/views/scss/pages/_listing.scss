@@ -1,32 +1,33 @@
-.collection-content {
-    flex-basis: 0;
-    flex-grow: 1;
-    max-width: 100%;
-}
-
-.collection-pager {
-    display: flex;
-    flex: 1;
-    margin-top: 4rem;
-    .pagination {
-        margin: 0;
+.collection-search {
+    &-head {
+        margin-bottom: 3rem;
     }
-    .sorting-select {
-        max-width: 120px;
-        margin-#{$start-direction}: auto;
+    &-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
     }
-}
-
-.page-sort-wrap {
-    margin-bottom: 2rem;
+    &-bottom {
+        display: flex;
+        justify-content: space-between;
+    }
+    &-title {
+        .h1 {
+            font-size: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            .total-products {
+                font-size: 0.85rem;
+                color: $txt-gray;
+            }
+        }
+    }
     .page-sort {
         display: flex;
         align-items: center;
         justify-content: flex-end;
         @include media-breakpoint-down(md) {
-            & {
-                justify-content: flex-start;
-            }
+            justify-content: flex-start;
         }
         ul {
             align-items: center;
@@ -38,7 +39,7 @@
                 font-size: 0.8rem;
                 line-height: 1;
                 display: block;
-                margin-#{$end-direction}: 1rem;
+                margin-#{$end-direction}: 0.8rem;
                 &:last-child {
                     margin: 0;
                 }
@@ -58,15 +59,7 @@
                 }
             }
         }
-        .custom-select {
-            border-radius: 3px;
-            padding-top: 8px;
-            padding-bottom: 8px;
-            font-size: 0.8rem;
-            height: auto;
-            border: $border;
-            height: 38px;
-        }
+
         .btn-filters {
             border: $border;
             border-radius: 3px;
@@ -102,12 +95,14 @@
         .page-views {
             a {
                 padding: 10px;
-                border-radius: 3px;
-                background: $bg-brand-light;
-                color: $brand-color;
+                border-radius: 1px;
+                border: $border;
+
+                &:hover,
                 &.active {
                     background: $brand-color;
                     color: $brand-color-inverse;
+                    border-color: transparent;
                 }
                 .svg {
                     width: 18px;
@@ -115,6 +110,34 @@
                 }
             }
         }
+    }
+
+    .custom-select {
+        line-height: 1;
+        border-radius: 1px;
+        font-size: 0.8rem;
+        border: $border;
+        height: 40px;
+        padding-#{$start-direction}: 1rem;
+    }
+}
+
+.collection-content {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+}
+
+.collection-pager {
+    display: flex;
+    flex: 1;
+    margin-top: 4rem;
+    .pagination {
+        margin: 0;
+    }
+    .sorting-select {
+        max-width: 120px;
+        margin-#{$start-direction}: auto;
     }
 }
 
@@ -203,7 +226,7 @@
     color: $brand-color-inverse;
     margin: 0 0 0 3px;
     border-radius: $radius4;
-    -webkit-transition: width 250ms;
+
     transition: width 250ms;
 }
 
@@ -216,13 +239,13 @@
         position: relative;
         list-style-type: none;
         border: none;
-        a.is--active {
-            font-weight: 500;
-        }
+    }
+    .is--active {
+        font-weight: 500;
     }
     ul li a {
         position: relative;
-        margin: 0px 0;
+        margin: 5px 0;
         padding: 0;
         display: inline-block;
         line-height: 1.7;
@@ -246,10 +269,8 @@
 }
 
 .cat-accordion ul ul {
-    background: rgba(0, 0, 0, 0.03);
     margin: 10px 0;
     padding: 10px;
-    border-radius: 5px;
 }
 
 .cat-accordion .acc-trigger {

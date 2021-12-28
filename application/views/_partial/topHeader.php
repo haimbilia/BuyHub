@@ -50,7 +50,32 @@
             <div class="container">
                 <div class="top-bar__inner">
                     <div class="top-bar__left">
-                        <div class="nav-toggle"></div>
+                        <button class="btn btn-mbl-menu" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                            <i class="icn">
+                                <svg class="svg" width="24" height="24">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-menu">
+                                    </use>
+                                </svg>
+                            </i>
+                        </button>
+
+
+
+
+                        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <div>
+                                    Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+                                </div>
+
+                            </div>
+                        </div>
+
+
                         <div class="logo">
                             <a href="<?php echo UrlHelper::generateUrl(); ?>">
                                 <?php

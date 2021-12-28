@@ -8,7 +8,7 @@
                     <div class="section-head section-head-center mb-0">
                         <div class="section__heading">
                             <h1><?php echo Labels::getLabel('Lbl_Testimonials', $siteLangId); ?></h1>
-                            <div class="breadcrumbs  breadcrumbs--center">
+                            <div class="breadcrumb breadcrumb-center">
                                 <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
                             </div>
                         </div>
