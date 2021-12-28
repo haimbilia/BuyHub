@@ -5,7 +5,7 @@
             <div class="section-head section-head-center">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section__heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
 
-                <?php if ($collection['totCategories'] > Collections::LIMIT_CATEGORY_LAYOUT2) { ?>
+                <?php if ($collection['totCategories'] > Collections::LIMIT_CATEGORY_LAYOUT3) { ?>
                     <div class="section__action"> <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link"><?php echo Labels::getLabel('LBL_View_More', $siteLangId); ?></a>
                     </div>
                 <?php }  ?>

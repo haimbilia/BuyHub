@@ -13,7 +13,7 @@
                         <i class="fab fa-<?php echo $row['splatform_icon_class']; ?>"></i>
                     <?php } ?>
 
-                    <span class="footer-social-text">Facebook</span>
+                    <span class="footer-social-text"><?php echo $title; ?></span>
                 </a>
             </li>
         <?php

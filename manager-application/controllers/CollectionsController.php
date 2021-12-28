@@ -252,6 +252,9 @@ class CollectionsController extends ListingBaseController
             case Collections::TYPE_BRAND_LAYOUT1:
                 return Collections::LIMIT_BRAND_LAYOUT1;
                 break;
+            case Collections::TYPE_BRAND_LAYOUT2:
+                return Collections::LIMIT_BRAND_LAYOUT2;
+                break;
             case Collections::TYPE_BLOG_LAYOUT1:
                 return Collections::LIMIT_BLOG_LAYOUT1;
                 break;

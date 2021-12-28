@@ -230,6 +230,17 @@ class HomeController extends MyAppController
                     }
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageShopLayout1;
                     break;
+                case Collections::TYPE_SHOP_LAYOUT2:
+                    $homePageShopLayout2 = CacheHelper::get('homePageShopLayout2' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageShopLayout2) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $homePageShopLayout2 = $tpl->render(false, false, '_partial/collection/shop-layout-2.php', true, true);
+                        CacheHelper::create('homePageShopLayout2' . $collection['collection_id'] . $cacheKey, $homePageShopLayout2, CacheHelper::TYPE_COLLECTIONS);
+                    }
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageShopLayout2;
+                    break;
                 case Collections::TYPE_BRAND_LAYOUT1:
                     $homePageBrandLayout1 = CacheHelper::get('homePageBrandLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageBrandLayout1) {
@@ -240,6 +251,17 @@ class HomeController extends MyAppController
                         CacheHelper::create('homePageBrandLayout1' . $collection['collection_id'] . $cacheKey, $homePageBrandLayout1, CacheHelper::TYPE_COLLECTIONS);
                     }
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageBrandLayout1;
+                    break;
+                case Collections::TYPE_BRAND_LAYOUT2:
+                    $homePageBrandLayout2 = CacheHelper::get('homePageBrandLayout2' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageBrandLayout2) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $homePageBrandLayout2 = $tpl->render(false, false, '_partial/collection/brand-layout-2.php', true, true);
+                        CacheHelper::create('homePageBrandLayout2' . $collection['collection_id'] . $cacheKey, $homePageBrandLayout2, CacheHelper::TYPE_COLLECTIONS);
+                    }
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageBrandLayout2;
                     break;
                 case Collections::TYPE_BLOG_LAYOUT1:
                     $homePageBlogLayout1 = CacheHelper::get('homePageBlogLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');

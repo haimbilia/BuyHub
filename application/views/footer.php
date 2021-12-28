@@ -16,30 +16,13 @@ if (CommonHelper::demoUrl()) { ?>
 <?php if ($controllerName == 'home' && $action == 'index') {
     $this->includeTemplate('_partial/footerTrustBanners.php');
 } ?>
-<section class="section bg-newsletter" style="background-image:url(<?php echo CONF_WEBROOT_URL; ?>images/bg/bg-newsletter.png) ;">
-    <!-- <?php if (FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 0)) { ?>
-    <?php $this->includeTemplate('_partial/footerNewsLetterForm.php');
-            } ?> -->
 
-    <div class="container">
-        <div class="newsletter">
-            <hgroup class="newsletter-head">
-                <h3>SUBSCRIBE</h3>
-                <p>Leave your email here and stay informed about our promotions and new arrivals.</p>
-            </hgroup>
-            <form action="" class="newsletter-form">
-                <input class="newsletter-form-input" type="text" placeholder="Email">
-                <button class="newsletter-form-submit" type="button">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
-                    </svg>
-                </button>
-            </form>
-        </div>
 
-    </div>
-
-</section>
+<?php if (FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 0)) { ?>
+    <section class="section bg-newsletter" style="background-image:url(<?php echo CONF_WEBROOT_URL; ?>images/bg/bg-newsletter.png) ;">
+        <?php $this->includeTemplate('_partial/footerNewsLetterForm.php'); ?>
+    </section>
+<?php  } ?>
 
 <footer class="footer section no-print" id="footer">
     <section class="footer-top">
