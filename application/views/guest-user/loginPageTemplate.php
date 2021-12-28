@@ -177,11 +177,11 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
             <?php echo $loginFrm->getFieldHtml('forgot'); ?>
 
             <?php if (true === $popup) { ?>
-                <a class="" href="<?php echo UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES)); ?>">
+                <a class="" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
                     <?php echo sprintf(Labels::getLabel('LBL_REGISTER_NOW', $siteLangId), FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)); ?>
                 </a>
             <?php } else { ?>
-                <a class="loginRegBtn--js" href="javaScript:void(0)">
+                <a class="loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'RegistrationForm'); ?>">
                     <?php echo Labels::getLabel('LBL_REGISTER_NOW', $siteLangId); ?>
                 </a>
             <?php } ?>

@@ -4,7 +4,7 @@ class GuestUserController extends MyAppController
     private $authToken = '';
     private $username = '';
 
-    public function loginForm($isRegisterForm = 0)
+    public function loginForm()
     {
         /* if(UserAuthentication::doCookieLogin()){
         FatApp::redirectUser(UrlHelper::generateUrl('account'));
@@ -26,12 +26,32 @@ class GuestUserController extends MyAppController
             'siteLangId' => $this->siteLangId,
         );
 
-        $this->registerFormDetail($isRegisterForm);
-
+        //  $this->registerFormDetail($isRegisterForm);
+        $this->set('smsPluginStatus', SmsArchive::canSendSms(SmsTemplate::LOGIN));
         $this->set('loginData', $loginData);
         $this->set('exculdeMainHeaderDiv', true);
         $this->_template->render(true, false);
     }
+
+
+    public function registrationForm()
+    {
+
+        if (UserAuthentication::isGuestUserLogged()) {
+            FatApp::redirectUser(UrlHelper::generateUrl('home'));
+        }
+
+        if (UserAuthentication::isUserLogged()) {
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
+        }
+        $this->set('smsPluginStatus', SmsArchive::canSendSms(SmsTemplate::LOGIN));
+        $this->set('exculdeMainHeaderDiv', true);
+        $this->registerFormDetail(1);
+
+        $this->_template->render(true, false, 'guest-user/registration-form.php');
+    }
+
+
 
     public function registerFormDetail($isRegisterForm, $signUpWithPhone = 0)
     {
@@ -346,14 +366,15 @@ class GuestUserController extends MyAppController
         die(json_encode($json));
     }
 
-    public function registrationForm()
+
+    public function registrationFormOld()
     {
         if (UserAuthentication::isGuestUserLogged()) {
             FatApp::redirectUser(UrlHelper::generateUrl('home'));
         }
 
         if (UserAuthentication::isUserLogged()) {
-            FatApp::redirectUser(UrlHelper::generateUrl('account','', [], CONF_WEBROOT_DASHBOARD));
+            FatApp::redirectUser(UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         $registerFrm = $this->getRegistrationForm();
@@ -396,11 +417,15 @@ class GuestUserController extends MyAppController
             LibHelper::dieJsonResponse($resp);
         }
 
-        $resp = LibHelper::formatResponse(applicationConstants::SUCCESS, 
-            Labels::getLabel('MSG_RESULT_FOUND', $this->siteLangId), [
+        $resp = LibHelper::formatResponse(
+            applicationConstants::SUCCESS,
+            Labels::getLabel('MSG_RESULT_FOUND', $this->siteLangId),
+            [
                 'found' => 1,
                 'verified' => $data['credential_verified'],
-            ], LibHelper::RC_OK);
+            ],
+            LibHelper::RC_OK
+        );
         LibHelper::dieJsonResponse($resp);
     }
 
@@ -415,14 +440,14 @@ class GuestUserController extends MyAppController
         if (empty($userName) || false === ValidateElement::fatbitUsername($userName)) {
             $message = Labels::getLabel("MSG_INVALID_FATBIT_USERNAME", $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES), CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
         }
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if ($post == false) {
             $message = Labels::getLabel(current($frm->getValidationErrors()), $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES), CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
         }
 
         $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
@@ -430,7 +455,7 @@ class GuestUserController extends MyAppController
         if ((0 < $signUpWithPhone && empty($phoneNumber)) && empty($dialCode)) {
             $message = Labels::getLabel("MSG_INVALID_PHONE_NUMBER", $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES), CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
         }
 
         $post['user_phone_dcode'] = $dialCode;
@@ -459,7 +484,7 @@ class GuestUserController extends MyAppController
             }
 
             LibHelper::exitWithError($message, false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', array(applicationConstants::YES), CONF_WEBROOT_FRONTEND));
+            FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'registrationForm', CONF_WEBROOT_FRONTEND));
         }
 
         if (1 > $signUpWithPhone && !FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1)) {
@@ -719,7 +744,7 @@ class GuestUserController extends MyAppController
         $this->set('pageData', $pageData);
         $this->set('frm', $frm);
         $this->set('siteLangId', $this->siteLangId);
-        
+
         if (1 > $withPhone && 0 < $includeHeaderAndFooter) {
             $this->_template->render();
             return;
