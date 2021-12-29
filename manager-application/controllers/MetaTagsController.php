@@ -66,6 +66,7 @@ class MetaTagsController extends ListingBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
         $this->postedData = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+        $this->postedData['metaType'] = $metaType;
 
         $this->controller = FatUtility::convertToType($this->tabsArr[$metaType]['controller'], FatUtility::VAR_STRING);
         $this->action = FatUtility::convertToType($this->tabsArr[$metaType]['action'], FatUtility::VAR_STRING);
