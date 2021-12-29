@@ -644,7 +644,7 @@ class MetaTagsController extends ListingBaseController
     {
         $this->objPrivilege->canEditMetaTags();
 
-        $metaId = FatApp::getPostedData('metaId', FatUtility::VAR_INT, 0);
+        $metaId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($metaId < 1) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
