@@ -407,7 +407,7 @@ class Importexport extends ImportexportCommon
             case Importexport::TYPE_USERS:
                 $sheetName = Labels::getLabel('LBL_Users', $langId) . $sheetName;
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
-                $this->exportUsers($langId);
+                $this->exportUsers($langId, $offset, $noOfRows, $minId, $maxId);
                 break;
             case Importexport::TYPE_TAX_CATEGORY:
                 $sheetName = Labels::getLabel('LBL_Tax_Category', $langId) . $sheetName;
