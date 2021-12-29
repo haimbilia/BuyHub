@@ -11,7 +11,8 @@ if (1 < $languageCount) {
 $imageLangFld = $imageFrm->getField('lang_id');
 $imageLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
 $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
-$imageLangFld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '1350 x 405') . '</span>';
+$imageLangFld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $slideDimensions[ImageDimension::VIEW_DESKTOP]['width'] .
+" x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
 
 $screenFld = $imageFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
@@ -85,30 +86,34 @@ $formTitle = Labels::getLabel('LBL_SLIDE_SETUP', $siteLangId); ?>
     var minWidthBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id'); ?> input[name=min_width]');
     var minHeightBaneerEle = $('#<?php echo $imageFrm->getFormTagAttribute('id'); ?> input[name=min_height]');
 
-    $(minWidthBaneerEle).val(2000);
-    $(minHeightBaneerEle).val(500);
+    $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+    $(minHeightBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
-    var aspectRatio = 4 / 1;
+   
     $(document).on('change', '#slideScreenJs', function() {
         var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
         var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
 
         if ($(this).val() == screenDesktop) {
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '2000 x 500'));
-            $(minWidthBaneerEle).val(2000);
-            $(minHeightBaneerEle).val(500);
-            aspectRatio = 4 / 1;
+          
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['width'] .
+                                        " x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
+            $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
+           
         } else if ($(this).val() == screenIpad) {
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '1024 x 360'));
-            $(minWidthBaneerEle).val(1024);
-            $(minHeightBaneerEle).val(360);
-            aspectRatio = 128 / 45;
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $slideDimensions[ImageDimension::VIEW_TABLET]['width'] .
+                                        " x " . $slideDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
+            $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_TABLET]['width']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
+          
         } else {
-            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '640 x 360'));
-            $(minWidthBaneerEle).val(640);
-            $(minHeightBaneerEle).val(360);
-            aspectRatio = 16 / 9;
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $slideDimensions[ImageDimension::VIEW_MOBILE]['width'] .
+                                        " x " . $slideDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
+            $(minWidthBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
+            $(minHeightBaneerEle).val('<?php echo $slideDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
+           
         }
 
         let slideScreen = $(this).val();

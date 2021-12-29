@@ -55,6 +55,7 @@ class Collections extends MyAppModel
     public const LIMIT_PRODUCT_LAYOUT3 = 12;
     public const LIMIT_PRODUCT_LAYOUT4 = 3;
     public const LIMIT_CATEGORY_LAYOUT1 = 8;
+    public const LIMIT_CATEGORY_LAYOUT1_PRODUCT = 3;
     public const LIMIT_CATEGORY_LAYOUT2 = 4;
     public const LIMIT_CATEGORY_LAYOUT3 = 4;
     public const LIMIT_SHOP_LAYOUT1 = 4;

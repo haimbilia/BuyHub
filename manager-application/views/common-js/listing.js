@@ -1,4 +1,4 @@
-$(document).on("click", ".headerColumnJs", function (e) {
+$(document).on("click", ".headerColumnJs", function(e) {
     if (1 == $('.listingRecordJs tr').length) {
         return;
     }
@@ -43,22 +43,22 @@ $(document).on("click", ".headerColumnJs", function (e) {
     searchRecords(frm);
 });
 
-$(function () {
+$(function() {
     $("#sortable").sortable({
-        stop: function () {
+        stop: function() {
             reloadList();
         }
     }).disableSelection();
 });
 
 /* Reset result on clear(cross) icon on keyword search field. */
-$(document).on("search", "input[name='keyword']", function () {
+$(document).on("search", "input[name='keyword']", function() {
     if ("" == $(this).val()) {
         searchRecords(document.frmRecordSearch);
     }
 });
 
-$(document).on("click", ".resetModalFormJs", function (e) {
+$(document).on("click", ".resetModalFormJs", function(e) {
     if (0 > $(".navTabsJs .nav-link").length) {
         $(".navTabsJs .nav-link.active").click();
     } else {
@@ -67,29 +67,29 @@ $(document).on("click", ".resetModalFormJs", function (e) {
     }
 });
 
-$(document).on("click", ".clearFormJs", function (e) {
+$(document).on("click", ".clearFormJs", function(e) {
     var form = $(this).closest('form');
     form[0].reset();
 });
 
-$(document).on("click", ".submitFormBtnJs", function (e) {
+$(document).on("click", ".submitFormBtnJs", function(e) {
     $(this).closest('form').submit();
 });
 
 /* Sidebar auto open if accidently close modal popup. Retain previous position. */
 var autoOpenSideBar = true;
-$(document).on("hidden.bs.modal", "#modalBoxJs", function () {
+$(document).on("hidden.bs.modal", "#modalBoxJs", function() {
     if (autoOpenSideBar) {
         $.ykmodal.show();
     }
 });
 
-(function () {
+(function() {
     var dv = ".listingRecordJs";
     var paginationDv = ".listingPaginationJs";
     var listingTableJs = ".listingTableJs";
 
-    checkControllerName = function () {
+    checkControllerName = function() {
         if ("undefined" == typeof controllerName || "" == controllerName) {
             $.ykmsg.error(langLbl.controllerNameRequired);
             return false;
@@ -97,7 +97,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         return true;
     };
 
-    goToSearchPage = function (page) {
+    goToSearchPage = function(page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
@@ -109,7 +109,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         searchRecords(frm);
     };
 
-    loadMore = function () {
+    loadMore = function() {
         if (false === checkControllerName()) {
             return false;
         }
@@ -141,7 +141,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             .addClass("rowJs")
             .appendTo(".appendRowsJs")
             .html(fcom.getRowSpinner());
-        fcom.ajax(fcom.makeUrl(controllerName, "getRows"), data, function (rows) {
+        fcom.ajax(fcom.makeUrl(controllerName, "getRows"), data, function(rows) {
             $(".appendRowsJs .rowJs:last").remove();
             $(".appendRowsJs").append(rows);
 
@@ -151,17 +151,17 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
     };
 
-    setPageSize = function (pageSize) {
+    setPageSize = function(pageSize) {
         var frm = document.frmRecordSearchPaging;
         $(frm.pageSize).val(pageSize);
         reloadList();
     };
 
-    redirectBack = function (redirecrt) {
+    redirectBack = function(redirecrt) {
         window.location = redirecrt;
     };
 
-    reloadList = function () {
+    reloadList = function() {
         searchRecords(document.frmRecordSearchPaging);
     };
 
@@ -171,7 +171,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         document.frmRecordSearch.submit();
     } */
 
-    searchRecords = function (frm) {
+    searchRecords = function(frm) {
         if (false === checkControllerName()) {
             return false;
         }
@@ -184,7 +184,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         $(listingTableJs).prepend(fcom.getLoader());
 
-        fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function (res) {
+        fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function(res) {
             var res = JSON.parse(res);
             if (res.headSection) {
                 $('.tableHeadJs').replaceWith(res.headSection);
@@ -201,7 +201,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
     };
 
-    exportRecords = function () {
+    exportRecords = function() {
         if (false === checkControllerName()) {
             return false;
         }
@@ -212,32 +212,32 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         document.frmRecordSearch.submit();
     };
 
-    clearSearch = function (loadRowsOnly = false) {
+    clearSearch = function(loadRowsOnly = false) {
         document.frmRecordSearch.reset();
-        $("input:checkbox[name=listingFld]:checked").each(function () {
+        $("input:checkbox[name=listingFld]:checked").each(function() {
             if ($(this).attr("disabled") != "disabled") {
                 $(this).prop("checked", false);
             }
         });
         $('.select2-hidden-accessible').val('').trigger('change');
         searchRecords(document.frmRecordSearch, loadRowsOnly);
-        
+
     };
 
-    setColumnsData = function (frm) {
+    setColumnsData = function(frm) {
         if ("undefined" == typeof frm) {
             return;
         }
 
         listingColumns = [];
-        $("input:checkbox[name=listingFld]:checked").each(function () {
+        $("input:checkbox[name=listingFld]:checked").each(function() {
             listingColumns.push($(this).val());
         });
 
         $(frm.listingColumns).val(JSON.stringify(listingColumns));
     };
 
-    deleteRecord = function (recordId) {
+    deleteRecord = function(recordId) {
         if (false === checkControllerName()) {
             return false;
         }
@@ -249,13 +249,13 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "deleteRecord"),
             data,
-            function () {
+            function() {
                 reloadList();
             }
         );
     };
 
-    deleteSelected = function () {
+    deleteSelected = function() {
         if (!confirm(langLbl.confirmDelete)) {
             return false;
         }
@@ -264,7 +264,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             .submit();
     };
 
-    addNew = function (displayInPopup = false, dialogClass = '') {
+    addNew = function(displayInPopup = false, dialogClass = '') {
         if (false === checkControllerName()) {
             return false;
         }
@@ -274,26 +274,26 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), "", function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, "form"), "", function(t) {
             $.ykmodal(t, displayInPopup, dialogClass);
             fcom.removeLoader();
         });
     };
 
-    editRecord = function (recordId, displayInPopup = false, dialogClass = '') {
+    editRecord = function(recordId, displayInPopup = false, dialogClass = '') {
         if (false === checkControllerName()) {
             return false;
         }
         fcom.resetEditorInstance();
         $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
         data = "recordId=" + recordId;
-        fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, "form"), data, function(t) {
             $.ykmodal(t, displayInPopup, dialogClass);
             fcom.removeLoader();
         });
     };
 
-    editLangData = function (recordId, langId, autoFillLangData = 0) {
+    editLangData = function(recordId, langId, autoFillLangData = 0) {
         if (false === checkControllerName()) {
             return false;
         }
@@ -303,14 +303,14 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         fcom.ajax(
             fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
             data,
-            function (t) {
+            function(t) {
                 $.ykmodal(t, !$.ykmodal.isSideBarView());
                 fcom.removeLoader();
             }
         );
     };
 
-    updateStatus = function (e, obj, recordId, status, callback = "") {
+    updateStatus = function(e, obj, recordId, status, callback = "") {
         if (false === checkControllerName()) {
             return false;
         }
@@ -333,7 +333,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         data = "recordId=" + recordId + "&status=" + status;
         fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
-            function (res) {
+            function(res) {
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
@@ -351,7 +351,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         );
     };
 
-    saveRecord = function (frm, callback = '') {
+    saveRecord = function(frm, callback = '') {
         if (false === checkControllerName()) {
             return false;
         }
@@ -359,7 +359,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function(res) {
             $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
             fcom.removeLoader();
             var t = JSON.parse(res);
@@ -381,7 +381,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
     };
 
-    saveLangData = function (frm) {
+    saveLangData = function(frm) {
         if (false === checkControllerName()) {
             return false;
         }
@@ -391,7 +391,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, "langSetup"), data, function (res) {
+        fcom.ajax(fcom.makeUrl(controllerName, "langSetup"), data, function(res) {
             fcom.removeLoader();
             var t = JSON.parse(res);
             if (t.status == 0) {
@@ -400,10 +400,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             }
             $.ykmsg.success(t.msg);
 
-            if( t.langId == langLbl.defaultFormLangId){
+            if (t.langId == langLbl.defaultFormLangId) {
                 reloadList();
             }
-            
+
             if (t.langId > 0) {
                 editLangData(t.recordId, t.langId);
             } else if ("openMediaForm" in t) {
@@ -412,7 +412,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
     };
 
-    selectAll = function (element) {
+    selectAll = function(element) {
         var obj = $(element);
         if (1 > $(".listingRecordJs .selectItemJs:not(:disabled)").length) {
             obj.prop("disabled", "disabled");
@@ -423,7 +423,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
 
         var parentForm = obj.closest("form").attr("id");
-        $("#" + parentForm + " .selectItemJs").each(function () {
+        $("#" + parentForm + " .selectItemJs").each(function() {
             var tr = $(this).closest('tr');
             if (obj.prop("checked") == false) {
                 $(this).prop("checked", false);
@@ -437,7 +437,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         showActionsBtns();
     };
 
-    formAction = function (frm, callback) {
+    formAction = function(frm, callback) {
         if (typeof $(".selectItemJs:checked").val() === "undefined") {
             $.ykmsg.error(langLbl.atleastOneRecord);
             return false;
@@ -450,7 +450,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         data = fcom.frmData(frm);
 
         fcom.displayProcessing();
-        fcom.ajax(frm.action, data, function (res) {
+        fcom.ajax(frm.action, data, function(res) {
             fcom.removeLoader();
             $.ykmsg.close();
             $(".selectAllJs").prop("checked", false);
@@ -467,7 +467,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
     };
 
-    toggleBulkStatues = function (status, msg = "") {
+    toggleBulkStatues = function(status, msg = "") {
         var element = "form.actionButtonsJs";
         if (1 > $(element).length) {
             $.ykmsg.error(langLbl.actionButtonsClass);
@@ -482,7 +482,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $(element).submit();
     };
 
-    showActionsBtns = function () {
+    showActionsBtns = function() {
         if (typeof $(".selectItemJs:checked").val() === "undefined") {
             $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
         } else {
@@ -491,7 +491,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     };
 
     /* Media Form & Image Management */
-    loadImages = function (recordId, fileType, slide_screen, langId) {
+    loadImages = function(recordId, fileType, slide_screen, langId) {
         if (false === checkControllerName()) {
             return false;
         }
@@ -504,7 +504,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 slide_screen,
             ]),
             "",
-            function (t) {
+            function(t) {
                 if (fileType == "logo") {
                     $("#logoListingJs").html(t);
                     return;
@@ -515,7 +515,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         );
     };
 
-    mediaForm = function (recordId, langId = 0, slide_screen = 1) {
+    mediaForm = function(recordId, langId = 0, slide_screen = 1) {
         if (false === checkControllerName()) {
             return false;
         }
@@ -524,7 +524,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         fcom.ajax(
             fcom.makeUrl(controllerName, "media", [recordId, langId, slide_screen]),
             "",
-            function (t) {
+            function(t) {
                 fcom.removeLoader();
                 loadImages(recordId, "logo", slide_screen, langId);
                 loadImages(recordId, "image", slide_screen, langId);
@@ -533,7 +533,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         );
     };
 
-    deleteMedia = function (recordId, fileType, afileId, slide_screen = 0, langId = 0) {
+    deleteMedia = function(recordId, fileType, afileId, slide_screen = 0, langId = 0) {
         if (false === checkControllerName()) {
             return false;
         }
@@ -548,14 +548,14 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 afileId,
             ]),
             "",
-            function (t) {
+            function(t) {
                 loadImages(recordId, fileType, slide_screen, langId);
                 reloadList();
             }
         );
     };
 
-    loadCropperSkeleton = function (reopenSideBarOnClose = true) {
+    loadCropperSkeleton = function(reopenSideBarOnClose = true) {
         autoOpenSideBar = reopenSideBarOnClose;
         $("#modalBoxJs").remove();
         $("body").append(fcom.getModalBody());
@@ -563,7 +563,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $.ykmodal.close();
     };
 
-    loadImageCropper = function (inputBtn) {
+    loadImageCropper = function(inputBtn) {
         if (false === checkControllerName()) {
             return false;
         }
@@ -571,7 +571,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (inputBtn.files && inputBtn.files[0]) {
             loadCropperSkeleton();
             $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
-            fcom.ajax(fcom.makeUrl(controllerName, "imgCropper"), "", function (t) {
+            fcom.ajax(fcom.makeUrl(controllerName, "imgCropper"), "", function(t) {
                 t = $.parseJSON(t);
                 $("#modalBoxJs .modal-body").html(t.body);
                 $("#modalBoxJs .modal-footer").html(t.footer);
@@ -581,11 +581,13 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 var minWidth = document[frmName].min_width.value;
                 var minHeight = document[frmName].min_height.value;
 
-                if (minWidth == minHeight) {
-                    var aspectRatio = 1 / 1;
-                } else {
-                    var aspectRatio = 16 / 9;
-                }
+                var aspectRatio = minWidth / minHeight;
+
+                // if (minWidth == minHeight) {
+                //     var aspectRatio = 1 / 1;
+                // } else {
+                //     var aspectRatio = 16 / 9;
+                // }
                 var options = {
                     aspectRatio: aspectRatio,
                     data: {
@@ -599,18 +601,18 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val("");
-                setTimeout(function () { cropImage(file, options, "uploadImages", inputBtn) }, 100);
+                setTimeout(function() { cropImage(file, options, "uploadImages", inputBtn) }, 100);
                 return;
             });
         }
     };
 
-    uploadImages = function (formData) {
+    uploadImages = function(formData) {
         if (false === checkControllerName()) {
             return false;
         }
         var frmName = formData.get("frmName");
-        var frm = document.forms[frmName];    
+        var frm = document.forms[frmName];
         var langId = 0;
         if ('undefined' != typeof frm.lang_id) {
             langId = frm.lang_id.value;
@@ -619,14 +621,14 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if ("undefined" != typeof frm.slide_screen) {
             slideScreen = frm.slide_screen.value;
         }
-        
+
         var action = 'uploadMedia';
         if ("undefined" != typeof frm.dataset.action) {
             action = frm.dataset.action;
         }
 
         var other_data = $('form[name="' + frmName + '"]').serializeArray();
-        $.each(other_data, function (key, input) {
+        $.each(other_data, function(key, input) {
             formData.append(input.name, input.value);
         });
 
@@ -638,23 +640,23 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function () {
+            beforeSend: function() {
                 $.ykmodal(fcom.getLoader());
             },
-            success: function (ans) {
+            success: function(ans) {
                 fcom.removeLoader();
                 if (ans.status == 0) {
                     $.ykmsg.error(ans.msg);
                     return;
                 }
                 $.ykmsg.success(ans.msg);
-                if (true === $.ykmodal.isAdded()) {                   
+                if (true === $.ykmodal.isAdded()) {
                     $.ykmodal.show();
                     $("#modalBoxJs").modal("hide");
                     if ("undefined" != typeof frm.dataset.callback) {
-                        eval(frm.dataset.callback);                     
-                    }else if ("undefined" != typeof frm.dataset.callbackfn) {
-                        window[frm.dataset.callbackfn](ans); /* callback function */                    
+                        eval(frm.dataset.callback);
+                    } else if ("undefined" != typeof frm.dataset.callbackfn) {
+                        window[frm.dataset.callbackfn](ans); /* callback function */
                     } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length) {
                         $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();
                     } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length) {
@@ -668,7 +670,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 reloadList();
                 fcom.removeLoader();
             },
-            error: function (xhr, ajaxOptions, thrownError) {
+            error: function(xhr, ajaxOptions, thrownError) {
                 $.ykmsg.error(
                     thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
                 );
@@ -676,7 +678,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
     };
 
-    isInViewport = function (el) {
+    isInViewport = function(el) {
         const rect = el.getBoundingClientRect();
         return (
             rect.top >= 0 &&
@@ -687,7 +689,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         );
     };
 
-    isElement = function (obj) {
+    isElement = function(obj) {
         try {
             //Using W3 DOM2 (works for FF, Opera and Chrome)
             return obj instanceof HTMLElement;
@@ -704,23 +706,23 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
     };
 
-    closeForm = function () {
+    closeForm = function() {
         $.ykmodal.close();
     }
 
-    editDropZoneImages = function (obj) {
+    editDropZoneImages = function(obj) {
         $(obj).closest(".dropzoneContainerJs").find(".dropzoneInputJs").click();
     }
 
     /* Fix width of table headings. */
-    fixTableColumnWidth = function () {
+    fixTableColumnWidth = function() {
         var thWidthArr = [];
         var autoTableColumWidth = $('.listingTableJs').data('autoColumnWidth');
         if (1 > autoTableColumWidth) {
             return false;
         }
 
-        $('.listingTableJs .tableHeadJs th').each(function () {
+        $('.listingTableJs .tableHeadJs th').each(function() {
             var arr = {
                 'width': $(this).width(),
                 'element': $(this)
@@ -729,9 +731,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
         /* Sort By width */
         thWidthArr.sort((a, b) => (a.width > b.width) ? 1 : -1)
-        /* Sort By width */
+            /* Sort By width */
 
-        $.each(thWidthArr, function (index, value) {
+        $.each(thWidthArr, function(index, value) {
             var width = value.width;
             var element = value.element;
             $(element).css({ 'width': width });
@@ -739,7 +741,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     }
 })();
 
-$(document).on("click", ".selectItemJs", function () {
+$(document).on("click", ".selectItemJs", function() {
     var parentForm = $(this.form).attr("id");
     var tr = $(this).closest('tr');
     if ($(this).prop("checked") == false) {
@@ -761,6 +763,6 @@ $(document).on("click", ".selectItemJs", function () {
     }
 }); */
 
-$(window).on('load', function () {
+$(window).on('load', function() {
     fixTableColumnWidth();
 });
