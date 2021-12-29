@@ -48,31 +48,25 @@
             transition: all 0.2s ease-in-out;
         }
         &-link {
-            display: block;
-            position: relative;
+            display: inline-block;
+
             transition: all 0.2s linear;
-            &:before {
-                visibility: hidden;
-                opacity: 0;
+            position: relative;
+
+            &:after {
+                transition: all 0.5s ease;
                 position: absolute;
-                left: 10px;
-                top: calc(50% - 3px);
-                content: "";
-                display: block;
-                margin: 0;
-                width: 6px;
-                height: 6px;
-                border-top: 1px solid currentColor;
-                border-right: 1px solid currentColor;
-                transform: rotate(45deg);
-                transition: all 0.2s linear;
+                right: -0.5rem;
+                opacity: 0;
+                content: "→";
             }
             &:hover {
-                margin-#{$start-direction}: 10px;
                 color: $brand-color;
-                &:before {
-                    #{$start-direction}: -12px;
-                    visibility: visible;
+                text-decoration: none;
+                &:after {
+                    transition: all 0.5s ease;
+                    right: -1rem;
+                    width: auto;
                     opacity: 1;
                 }
             }
