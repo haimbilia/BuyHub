@@ -20,7 +20,7 @@ $title = (!empty($arrListing) ? current($arrListing)['user_name'] : '');
             </div>
             <?php
             $lastRecord = current(array_reverse($arrListing));
-            $postedData['reference'] = $lastRecord['utxn_date'];
+            $postedData['reference'] = date('Y-m-d', strtotime($lastRecord['utxn_date']));
             $data = [
                 'siteLangId' => $siteLangId,
                 'postedData' => $postedData,

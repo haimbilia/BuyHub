@@ -31,7 +31,11 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 if (count($arrListing) == 0) {
-    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
+    $img = '<div class="not-found">
+                <img width="100" src="' . CONF_WEBROOT_URL . 'images/retina/no-data-cuate.svg" alt="">
+                <h3>' . Labels::getLabel('MSG_SORRY,_NO_RESULT_FOUND_:(') . '</h3>
+                <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae amet </p>
+            </div>';
+    $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds)), $img, true);
 }
 echo $tbl->getHtml();
-?>

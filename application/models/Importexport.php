@@ -407,7 +407,7 @@ class Importexport extends ImportexportCommon
             case Importexport::TYPE_USERS:
                 $sheetName = Labels::getLabel('LBL_Users', $langId) . $sheetName;
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
-                $this->exportUsers($langId);
+                $this->exportUsers($langId, $offset, $noOfRows, $minId, $maxId);
                 break;
             case Importexport::TYPE_TAX_CATEGORY:
                 $sheetName = Labels::getLabel('LBL_Tax_Category', $langId) . $sheetName;
@@ -5290,7 +5290,7 @@ class Importexport extends ImportexportCommon
 
         $languageCodes = Language::getAllCodesAssoc(true);
         $currencyCodes = Currency::getCurrencyAssoc(true);
-
+        
         $useCountryId = false;
         if ($this->settings['CONF_USE_COUNTRY_ID']) {
             $useCountryId = true;
@@ -5308,7 +5308,7 @@ class Importexport extends ImportexportCommon
                 $colValue = array_key_exists($columnKey, $row) ? $row[$columnKey] : '';
 
                 if ('country_currency_code' == $columnKey) {
-                    $colValue = array_key_exists($row['country_currency_id'], $currencyCodes) ? $currencyCodes[$row['country_currency_id']] : 0;
+                    $colValue = ($row['country_currency_id'] > 0 && array_key_exists($row['country_currency_id'], $currencyCodes)) ? $currencyCodes[$row['country_currency_id']] : $currencyCodes[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)];
                 }
 
                 if ('country_language_code' == $columnKey) {
@@ -5433,7 +5433,9 @@ class Importexport extends ImportexportCommon
         $currencyCodes = Currency::getCurrencyAssoc(true);
         $currencyIds = array_flip($currencyCodes);
 
+
         $coloumArr = $this->getCountryColoumArr($langId);
+        
         $this->validateCSVHeaders($csvFilePointer, $coloumArr, $langId);
 
         $errInSheet = false;

@@ -53,7 +53,12 @@ class LibHelper extends FatUtility
             return;
         }
 
-        FatUtility::dieWithError(HtmlHelper::getErrorMessageHtml($message));
+        if (method_exists('HtmlHelper', 'getErrorMessageHtml')) {
+            FatUtility::dieWithError(HtmlHelper::getErrorMessageHtml($message));
+        }
+
+        Message::addErrorMessage($message);
+        FatUtility::dieWithError(Message::getHtml());
     }
 
     public static function exitWithSuccess($message, $json = false, $redirect = false)

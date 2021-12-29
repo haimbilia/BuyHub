@@ -454,6 +454,18 @@ Bugs :
 
 ==================TV-9.4.0.20211223===================
 
+Bugs : 
+    => 060664 - Admin UI: "Alpha-3 Code" column is not showing in the exported file under the countries section.
+    => 061063 - Admin UI: 'Type' text is missing with the 'Select' under the "Image Attributes" section.
+    => 061092 - Admin UI: "Clear" functionality is not working for the "Product details" listing under the 'Meta tags management' section.
+    => 061058 - Admin UI: Getting an error while clicking on the 'edit' option under the Image attributes section.
+    => 061133 - Error coming while editing blogs image attributes in image attributes section.
+    => 061109 - Admin UI: "NEW" button design is not correct for the 'Advanced settings' under the "Meta Tag Management" section.
+    => 061107 - Admin UI: "Clear" design is not correct under the "Meta Tag Management" section.
+    => 061059 - Admin UI: 'Default' option is not selected after editing the records.
+    => 061113 - Admin UI: Not able to delete the records from the "Advanced setting meta tags listing" under the Meta tags section.
+    => 060672 - Admin UI: "Export Data Range" is not working according to 'By Id' and 'By Batches' while exporting the user's file.
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

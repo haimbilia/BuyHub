@@ -311,11 +311,11 @@ class BlogPostsController extends ListingBaseController
     {
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!BlogPost::getAttributesById($recordId)) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $frm = $this->getImagesFrm($recordId);
         $this->set('languages', Language::getAllNames());
@@ -335,11 +335,11 @@ class BlogPostsController extends ListingBaseController
         }
         $recordId = FatUtility::int($recordId);
         if (!$recordId) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
         if (!$row = BlogPost::getAttributesById($recordId)) {
-            LibHelper::exitWithError($this->str_invalid_request_id);
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $post_images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
         $this->set('languages', Language::getAllNames());
