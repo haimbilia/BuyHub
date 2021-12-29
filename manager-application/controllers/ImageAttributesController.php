@@ -185,6 +185,7 @@ class ImageAttributesController extends ListingBaseController
                 $title = $records['post_title'];
                 break;
             default:
+            echo "here";die;
                 $srch = Brand::getListingObj($this->siteLangId, null, true);
                 $srch->addCondition('brand_id', '=', $recordId);
                 $srch->addOrder('brand_id', 'DESC');
@@ -281,7 +282,7 @@ class ImageAttributesController extends ListingBaseController
 
         $attachedFile = new AttachedFile();
         $attachementArr = $attachedFile->getImgAttrTypeArray($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE, [], Labels::getLabel('LBL_SELECT_TYPE', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE,[],'');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'record_name');
