@@ -75,6 +75,27 @@ $danger-color: #fd397a;
         right: auto;
     }
 }
+//Transitions
+@mixin staggered_transitions($nth: 1, $items: 2, $initial: 0, $step: 0.1) {
+    @for $i from $nth through $items {
+        &:nth-of-type(#{$i}) {
+            animation-delay: #{$initial}s;
+        }
+        $initial: $initial + $step;
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
 
 //Pseudo
 @mixin pseudo($display: block, $pos: absolute, $content: "") {

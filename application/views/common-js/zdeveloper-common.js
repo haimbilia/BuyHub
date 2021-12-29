@@ -1008,13 +1008,13 @@ $(document).ready(function () {
                 if (t.html.length > 0) {
                     if (!searchSuggestionsJs.find("div").hasClass("search-suggestions")) {
                         searchSuggestionsJs.html(
-                            '<a href="javascript:void(0)" onClick="removeAutoSuggest()" class="close-layer"></a><div class="search-suggestions" id="tagsSuggetionList"></div>'
+                            '<div class="search-suggestions" id="tagsSuggetionList"></div>'
                         );
                     }
                     $("#tagsSuggetionList").html(t.html);
                 } else {
                     searchSuggestionsJs.html(
-                        '<a href="javascript:void(0)" onClick="removeAutoSuggest()" class="close-layer"></a>'
+                        ''
                     );
                 }
             },

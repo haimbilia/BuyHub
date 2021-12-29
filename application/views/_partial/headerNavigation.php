@@ -273,8 +273,8 @@
     <!-- Start Navigation Bar -->
     <div class="navigation-wrapper">
         <ul class="navigation">
-            <li class="navchild">
-                <a target="_self" href="javascript:void(0);">Women</a>
+            <li class="navigation-item navchild">
+                <a class="navigation-link" target="_self" href="javascript:void(0);">Women</a>
                 <span class="link__mobilenav"></span>
                 <div class="subnav">
                     <div class="subnav__wrapper">
@@ -361,7 +361,8 @@
                     </div>
                 </div>
             </li>
-            <li class="navchild"><a target="_self" href="javascript:void(0);">Men</a> <span class="link__mobilenav"></span>
+            <li class="navigation-item navchild">
+                <a class="navigation-link" target="_self" href="javascript:void(0);">Men</a> <span class="link__mobilenav"></span>
                 <div class="subnav">
                     <div class="subnav__wrapper ">
                         <div class="container">
@@ -452,7 +453,8 @@
                     </div>
                 </div>
             </li>
-            <li class="navchild"><a target="_self" href="/baby-kids">Baby &amp; Kids</a> <span class="link__mobilenav"></span>
+            <li class="navigation-item navchild">
+                <a class="navigation-link" target="_self" href="/baby-kids">Baby &amp; Kids</a> <span class="link__mobilenav"></span>
                 <div class="subnav">
                     <div class="subnav__wrapper ">
                         <div class="container">
@@ -525,7 +527,8 @@
                     </div>
                 </div>
             </li>
-            <li class="navchild"><a target="_self" href="/womens-fashion">Tommy Jeans</a> <span class="link__mobilenav"></span>
+            <li class="navigation-item navchild">
+                <a class="navigation-link" target="_self" href="/womens-fashion">Tommy Jeans</a> <span class="link__mobilenav"></span>
                 <div class="subnav">
                     <div class="subnav__wrapper ">
                         <div class="container">
@@ -583,10 +586,14 @@
                     </div>
                 </div>
             </li>
-            <li class="navchild"><a target="_self" href="javascript:void(0)">Tommy Sport</a></li>
-            <li class="navchild"><a target="_self" href="javascript:void(0)">Gifts </a></li>
-            <li class="navchild more">
-                <a target="_self" href="javascript:void(0)">
+            <li class="navigation-item navchild">
+                <a class="navigation-link" target="_self" href="javascript:void(0)">Tommy Sport</a>
+            </li>
+            <li class="navigation-item navchild">
+                <a class="navigation-link" target="_self" href="javascript:void(0)">Gifts </a>
+            </li>
+            <li class="navigation-item navchild more">
+                <a class="navigation-link" target="_self" href="javascript:void(0)">
                     <span class="d-xl-none">
                         More
                     </span>

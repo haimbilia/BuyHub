@@ -17,17 +17,11 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
 ?>
 
 <div class="mega-search">
-
     <?php echo $headerSrchFrm->getFormTag(); ?>
-    <div class="main-search__field">
-        <?php echo $headerSrchFrm->getFieldHTML('keyword'); ?>
-        <div id="search-suggestions-js">
-        </div>
-    </div>
-
+    <?php echo $headerSrchFrm->getFieldHTML('keyword'); ?>
+    <div id="search-suggestions-js"> </div>
     <?php echo $headerSrchFrm->getFieldHTML('category'); ?>
     <?php /* echo $headerSrchFrm->getFieldHTML('btnSiteSrchSubmit'); */ ?>
     </form>
     <?php echo $headerSrchFrm->getExternalJS(); ?>
-
 </div>
