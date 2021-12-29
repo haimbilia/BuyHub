@@ -25,9 +25,9 @@
     .page-sort {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        margin-#{$start-direction}: auto;
         @include media-breakpoint-down(md) {
-            justify-content: flex-start;
+            margin-#{$start-direction}: 0;
         }
         ul {
             align-items: center;

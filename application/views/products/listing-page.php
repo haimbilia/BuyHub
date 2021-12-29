@@ -48,15 +48,14 @@ if (!empty($category['banner'])) {
                 break;
         } ?>
     <?php } ?>
-    <section class="bg-shop">
-        <div class="shop-banner">
-            <picture>
-                <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($mobile_url, ','); ?>" media="(max-width: 767px)">
-                <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($tablet_url, ','); ?>" media="(max-width: 1024px)">
-                <source data-aspect-ratio="4:1" srcset="<?php echo rtrim($desktop_url, ','); ?>">
-                <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
-            </picture>
-        </div>
+    <section class="bg-shop shop-banner">
+        <picture>
+            <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($mobile_url, ','); ?>" media="(max-width: 767px)">
+            <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($tablet_url, ','); ?>" media="(max-width: 1024px)">
+            <source data-aspect-ratio="4:1" srcset="<?php echo rtrim($desktop_url, ','); ?>">
+            <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
+        </picture>
+
         <?php /* if (!empty($category['prodcat_description']) && array_key_exists('prodcat_description', $category)) { ?>
     <div class="page-category__content">
         <p><?php  echo FatUtility::decodeHtmlEntities($category['prodcat_description']); ?></p>
@@ -84,21 +83,16 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     break;
             }
         } ?>
-        <section class="bg-shop">
-            <div class="shop-banner">
-                <picture>
-                    <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
-                    <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
-                    <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
-                    <img data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
-                </picture>
-
-            </div>
+        <section class="bg-shop shop-banner">
+            <picture>
+                <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
+                <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
+                <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
+                <img data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
+            </picture>
         </section>
     <?php } ?>
 <?php } ?>
-
-
 <?php $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearch' => $frmProductSearch, 'siteLangId' => $siteLangId, 'recordCount' => $recordCount, 'pageTitle' => (isset($pageTitle)) ? $pageTitle : 'Products'), false);  ?>
 <section class="section">
     <div class="container">

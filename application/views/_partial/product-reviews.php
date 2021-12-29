@@ -45,35 +45,41 @@ if (!empty($reviews)) {
         </div>
     </div>
 
-    <div class="rating-layout-1">
-        <div class=""></div>
+    <div class="rating-layout">
+        <div class="rating-layout-start">
+            <div class="rating-wrapper">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-md-4">
+                        <div class="products__rating overall-rating-count">
+                            <svg class="svg">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-icon"></use>
+                            </svg>
+                            <span class="rate"><?php echo round($avgRating, 1); ?><span></span></span>
+                        </div>
+                        <h6 class="rating-based-on small text-center">
+                            <span><?php echo Labels::getLabel('Lbl_Based_on', $siteLangId); ?></span>
+                            <strong><?php echo $totReviews ?></strong>
+                            <?php echo Labels::getLabel('Lbl_ratings', $siteLangId); ?>
+                        </h6>
 
-    </div>
-
-
-    <div class="rating-wrapper">
-        <div class="row justify-content-between align-items-center">
-            <div class="col-md-4">
-                <div class="products__rating overall-rating-count">
-                    <svg class="svg">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-icon"></use>
-                    </svg>
-                    <span class="rate"><?php echo round($avgRating, 1); ?><span></span></span>
+                    </div>
+                    <?php $this->includeTemplate('_partial/product-overall-ratings.php', array('ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product_id), false); ?>
                 </div>
-                <h6 class="rating-based-on small text-center">
-                    <span><?php echo Labels::getLabel('Lbl_Based_on', $siteLangId); ?></span>
-                    <strong><?php echo $totReviews ?></strong>
-                    <?php echo Labels::getLabel('Lbl_ratings', $siteLangId); ?>
-                </h6>
-
             </div>
-            <?php $this->includeTemplate('_partial/product-overall-ratings.php', array('ratingAspects' => $ratingAspects, 'siteLangId' => $siteLangId, 'product_id' => $product_id), false); ?>
+
         </div>
+        <div class="rating-layout-end">
+            <div class="listing__all"></div>
+            <div id="loadMoreReviewsBtnDiv" class="text-center"></div>
+
+        </div>
+
     </div>
+
+
+
 </div>
 
-<div class="listing__all"></div>
-<div id="loadMoreReviewsBtnDiv" class="text-center"></div>
 <script>
     var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
     var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
