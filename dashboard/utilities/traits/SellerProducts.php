@@ -213,14 +213,13 @@ trait SellerProducts
         }
 
         if (0 == $selprod_id && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && SellerProduct::getActiveCount($this->userParentId) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed')) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_You_have_crossed_your_package_limit', $this->siteLangId), false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+            LibHelper::exitWithError(Labels::getLabel('MSG_You_have_crossed_your_package_limit', $this->siteLangId));
         }
 
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_buy_subscription', $this->siteLangId), false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_buy_subscription', $this->siteLangId));
         }
+        
         if ($selprod_id == 0 && !UserPrivilege::canSellerAddProductInCatalog($product_id, $this->userParentId)) {
             LibHelper::exitWithError(Labels::getLabel('LBL_Please_Upgrade_your_package_to_add_new_products', $this->siteLangId), false);
         }

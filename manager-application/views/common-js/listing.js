@@ -318,7 +318,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-
+        fcom.displayProcessing();
         e.stopPropagation();
         /* if (!confirm(langLbl.confirmUpdateStatus)) {
             e.preventDefault();
@@ -338,6 +338,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         data = "recordId=" + recordId + "&status=" + status;
         fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
             function (res) {
+                $.ykmsg.close();
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
@@ -363,14 +364,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
             $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
             fcom.removeLoader();
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-                return false;
-            }
             $.ykmsg.success(t.msg);
 
             reloadList();
@@ -395,13 +391,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, "langSetup"), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.removeLoader();
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-                return false;
-            }
             $.ykmsg.success(t.msg);
 
             if (t.langId == langLbl.defaultFormLangId) {
@@ -452,20 +443,13 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         data = fcom.frmData(frm);
 
-        fcom.displayProcessing();
-        fcom.ajax(frm.action, data, function (res) {
+        fcom.updateWithAjax(frm.action, data, function (t) {
             fcom.removeLoader();
             $.ykmsg.close();
             $(".selectAllJs").prop("checked", false);
             callback();
             showActionsBtns();
-
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-            } else {
-                $.ykmsg.success(t.msg);
-            }
+            $.ykmsg.success(t.msg);
             $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
         });
     };
