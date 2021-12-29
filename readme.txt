@@ -461,6 +461,7 @@ Bugs :
     => 061058 - Admin UI: Getting an error while clicking on the 'edit' option under the Image attributes section.
     => 061133 - Error coming while editing blogs image attributes in image attributes section.
     => 061109 - Admin UI: "NEW" button design is not correct for the 'Advanced settings' under the "Meta Tag Management" section.
+    => 061107 - Admin UI: "Clear" design is not correct under the "Meta Tag Management" section.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
