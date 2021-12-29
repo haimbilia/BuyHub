@@ -62,13 +62,16 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 if (count($arrListing) == 0) {
+    $img = '<div class="not-found">
+                <img width="100" src="' . CONF_WEBROOT_URL . 'images/retina/no-data-cuate.svg" alt="">
+                <h3>' . Labels::getLabel('MSG_SORRY,_NO_RESULT_FOUND_:(') . '</h3>
+                <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae amet </p>
+            </div>';
     $tbl->appendElement('tr')->appendElement('td', array('colspan' => count($arr_flds),
-    'class' => 'noRecordFoundJs'), Labels::getLabel('LBL_No_Records_Found', $siteLangId));
+    'class' => 'noRecordFoundJs'), $img, true);
 }
 echo $tbl->getHtml();
-/* echo FatUtility::createHiddenFormFromData ( $postedData, array (
-        'name' => 'frmUserSearchPaging','id'=>'pretend_search_form'
-) ); */
+
 echo isset($pagination) ? html_entity_decode($pagination) : '';
 ?>
 <script>
