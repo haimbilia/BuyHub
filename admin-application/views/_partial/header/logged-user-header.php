@@ -27,7 +27,7 @@
                              <div class="body" id="notificationList">
 
                              </div>
-                             <div class="foot"><a href="<?php echo UrlHelper::generateUrl('notifications', ''); ?>" class="link redirect--js"><?php echo Labels::getLabel('LBL_View_all', $adminLangId); ?></a></div>
+                             <div class="foot"><a id="notifiListViewAll" href="<?php echo UrlHelper::generateUrl('notifications'); ?>" class="link redirect--js"><?php echo Labels::getLabel('LBL_View_all', $adminLangId); ?></a></div>
                          </div>
                      </li>
                      <?php if (1 < count($languages)) { ?>
