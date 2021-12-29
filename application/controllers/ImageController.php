@@ -157,9 +157,9 @@ class ImageController extends FatController
         }
         /* ] */
         $objectName = 'AttachedFile';
-        if($fileType == $objectName::FILETYPE_PRODUCT_IMAGE_TEMP){
+        if ($fileType == $objectName::FILETYPE_PRODUCT_IMAGE_TEMP) {
             $objectName = 'AttachedFileTemp';
-        }else{
+        } else {
             $fileType =  $objectName::FILETYPE_PRODUCT_IMAGE;
         }
 
@@ -178,8 +178,8 @@ class ImageController extends FatController
         }
 
         $image_name = (isset($file_row['afile_physical_path']) && !empty($file_row['afile_physical_path'])) ? $objectName::FILETYPE_PRODUCT_IMAGE_PATH . $file_row['afile_physical_path'] : '';
-        /* CommonHelper::printArray($image_name); die();  */      
-       
+        /* CommonHelper::printArray($image_name); die();  */
+
         $image_name = $objectName::setNamePrefix($image_name, $sizeType);
 
         switch (strtoupper($sizeType)) {
@@ -476,7 +476,7 @@ class ImageController extends FatController
                 $w = 61;
                 $h = 61;
                 AttachedFile::displayImage($image_name, $w, $h, $default_image);
-                break;    
+                break;
             case 'COLLECTION_PAGE':
                 AttachedFile::displayOriginalImage($image_name, $default_image);
                 break;
@@ -958,6 +958,17 @@ class ImageController extends FatController
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_HOME_PAGE_BANNER, $slide_id, 0, $lang_id, $displayUniversalImage, $screen);
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+
+        $imageDimensions = ImageDimension::getSlideData($sizeType);
+    
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+        } else {
+            AttachedFile::displayOriginalImage($image_name, $default_image);
+        }
+        exit;
+
+
         if ($sizeType) {
             switch (strtoupper($sizeType)) {
                 case 'THUMB':
@@ -975,9 +986,14 @@ class ImageController extends FatController
                     $h = 360;
                     AttachedFile::displayImage($image_name, $w, $h);
                     break;
+                // case 'DESKTOP':
+                //     $w = 1350;
+                //     $h = 405;
+                //     AttachedFile::displayImage($image_name, $w, $h);
+                //     break;
                 case 'DESKTOP':
-                    $w = 1350;
-                    $h = 405;
+                    $w = 2000;
+                    $h = 666;
                     AttachedFile::displayImage($image_name, $w, $h);
                     break;
                 default:
@@ -987,6 +1003,7 @@ class ImageController extends FatController
                     break;
             }
         } else {
+           
             AttachedFile::displayOriginalImage($image_name, $default_image);
         }
     }

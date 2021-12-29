@@ -4,6 +4,7 @@ class HomeController extends MyAppController
 {
     public function index()
     {
+        
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
 
         $productSrchObj = $this->getProductSearchObj($loggedUserId);
@@ -814,6 +815,66 @@ class HomeController extends MyAppController
                                 $collections[$ind]['categories'][$catData['prodcat_id']] = $catData;
                                 $collections[$ind]['categories'][$catData['prodcat_id']]['subCategories'] = $db->fetchAll($Catrs);
                             }
+                            /* ] */
+                            $counter++;
+                        }
+                    }  else if($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT1){
+                        while ($catData = $db->fetch($rs)) {
+                            /* fetch Product data[ */
+                            $productShopSrchTempObj = clone $productSrchObj;
+                            $productShopSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
+                            $productShopSrchTempObj->addCondition('prodcat_id', '=', $catData['prodcat_id']);
+                            $productShopSrchTempObj->addOrder('ctr.ctr_record_id', 'ASC');
+                            //$productShopSrchTempObj->addOrder('in_stock', 'DESC');
+                            $productShopSrchTempObj->addGroupBy('selprod_product_id');
+                            $productShopSrchTempObj->setPageSize(Collections::LIMIT_CATEGORY_LAYOUT1_PRODUCT);
+                            $Prs = $productShopSrchTempObj->getResultSet();
+                            if ($productShopSrchTempObj->recordCount() == 0) {
+                                continue;
+                            }
+
+                            $prodData = $db->fetchAll($Prs);
+
+                            $selProdIdsArr = array_column($prodData, 'selprod_id');
+                            $tLeftRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TLEFT, $selProdIdsArr);
+                            $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
+
+                            $counterInd = (true === MOBILE_APP_API_CALL) ? $counter : $catData['prodcat_id'];
+
+                            if (true === MOBILE_APP_API_CALL) {
+                                $imgUpdatedOn = ProductCategory::getAttributesById($catData['prodcat_id'], 'prodcat_updated_on');
+                                $uploadedTime = AttachedFile::setTimeParam($imgUpdatedOn);
+                                $catData['prodcat_name'] = html_entity_decode($catData['prodcat_name'], ENT_QUOTES, 'utf-8');
+                                $catData['prodcat_description'] = strip_tags(html_entity_decode($catData['prodcat_description'], ENT_QUOTES, 'utf-8'));
+
+                                $catData['category_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'banner', array($catData['prodcat_id'], $this->siteLangId, 'MOBILE', applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+                                $collections[$ind]['categories'][$counter] = $catData;
+
+                                foreach ($prodData as &$product) {
+                                    $selProdRibbons = [];
+                                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
+                                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
+                                    }
+
+                                    if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
+                                        $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
+                                    }
+
+                                    $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
+                                    $product['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($product['product_id'], "CLAYOUT3", $product['selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                    $product['discount'] = ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) ? CommonHelper::showProductDiscountedText($product, $this->siteLangId) : '';
+                                    $product['selprod_price'] = CommonHelper::displayMoneyFormat($product['selprod_price'], false, false, false);
+                                    $product['theprice'] = CommonHelper::displayMoneyFormat($product['theprice'], true, true, true);
+                                    $product['ribbons'] = $selProdRibbons;
+                                }
+                            } else {
+                                $collections[$ind]['categories'][$counterInd]['catData'] = $catData;
+                                $collections[$ind]['categories'][$counterInd]['tLeftRibbons'] = $tLeftRibbons;
+                                $collections[$ind]['categories'][$counterInd]['tRightRibbons'] = $tRightRibbons;
+                            }
+
+                            $collections[$ind]['categories'][$counterInd]['products'] = $prodData;
                             /* ] */
                             $counter++;
                         }
