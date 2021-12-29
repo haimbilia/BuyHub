@@ -96,7 +96,8 @@ class AffiliateCommission extends MyAppModel
                 'tacsh.*',
                 'IFNULL(tpc_l.prodcat_name, tpc.prodcat_identifier) as prodcat_name',
                 'CONCAT(tu.user_name, " (", tuc.credential_username, ")") as vendor',
-                'user_id as vendor_id'
+                'user_id as vendor_id',
+                'user_updated_on'
             )
         );
 

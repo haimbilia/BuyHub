@@ -6,7 +6,7 @@
 </div>
 <div class="modal-body form-edit">
     <div class="form-edit-body">
-        <?php 
+        <?php
         $totalRecords = count($arrListing);
         if ($totalRecords == 0) {
             $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
@@ -14,9 +14,9 @@
             <div class="timeline-v4 appendRowsJs">
                 <?php require_once('get-rows.php'); ?>
             </div>
-            <?php 
+        <?php
             $lastRecord = current(array_reverse($arrListing));
-            $postedData['reference'] = $lastRecord['acsh_added_on'];
+            $postedData['reference'] = date('Y-m-d', strtotime($lastRecord['acsh_added_on']));
             $data = [
                 'siteLangId' => $siteLangId,
                 'postedData' => $postedData,
