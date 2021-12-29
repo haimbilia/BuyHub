@@ -281,7 +281,7 @@ class ImageAttributesController extends ListingBaseController
 
         $attachedFile = new AttachedFile();
         $attachementArr = $attachedFile->getImgAttrTypeArray($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE);
+        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE, [], Labels::getLabel('LBL_SELECT_TYPE', $this->siteLangId));
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'record_name');
