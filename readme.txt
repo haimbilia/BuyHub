@@ -459,6 +459,7 @@ Bugs :
     => 061063 - Admin UI: 'Type' text is missing with the 'Select' under the "Image Attributes" section.
     => 061092 - Admin UI: "Clear" functionality is not working for the "Product details" listing under the 'Meta tags management' section.
     => 061058 - Admin UI: Getting an error while clicking on the 'edit' option under the Image attributes section.
+    => 061133 - Error coming while editing blogs image attributes in image attributes section.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

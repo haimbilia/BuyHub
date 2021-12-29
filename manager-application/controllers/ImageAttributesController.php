@@ -181,11 +181,9 @@ class ImageAttributesController extends ListingBaseController
                 $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
-
-                $title = $records['post_title'];
+                $title = ($records) ? $records['post_title'] : '';
                 break;
             default:
-            echo "here";die;
                 $srch = Brand::getListingObj($this->siteLangId, null, true);
                 $srch->addCondition('brand_id', '=', $recordId);
                 $srch->addOrder('brand_id', 'DESC');
@@ -193,7 +191,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
-                $title = $records['brand_name'];
+                $title = ($records) ? $records['brand_name'] : '';
                 break;
         }
         $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, false, 0, 0, true);
