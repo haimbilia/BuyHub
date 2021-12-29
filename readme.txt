@@ -457,6 +457,7 @@ Bugs :
 Bugs : 
     => 060664 - Admin UI: "Alpha-3 Code" column is not showing in the exported file under the countries section.
     => 061063 - Admin UI: 'Type' text is missing with the 'Select' under the "Image Attributes" section.
+    => 061092 - Admin UI: "Clear" functionality is not working for the "Product details" listing under the 'Meta tags management' section.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

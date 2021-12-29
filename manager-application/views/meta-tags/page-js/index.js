@@ -22,9 +22,6 @@ $(document).on('blur', '.metaUrlJs', function () {
     setTabActive = function (type) {
         $('ul.metaTypesJs li.is-active').removeClass('is-active');
         $('ul.metaTypesJs li.tabJs-' + type).addClass('is-active');
-        $('html, body').animate({
-            scrollTop: $("#metaTagsListing").offset().top
-        }, 800);
     }
 
     searchRecords = function (object, replaceRowsOnly = false) {
@@ -121,5 +118,9 @@ $(document).on('blur', '.metaUrlJs', function () {
                 return;
             }
         });
+    };
+    clearSearch = function (loadRowsOnly = false) {
+        $(':input',document.frmRecordSearch).not(':hidden').val('');
+        searchRecords(document.frmRecordSearch, loadRowsOnly);
     };
 })();
