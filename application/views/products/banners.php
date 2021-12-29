@@ -1,9 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
-<section class="section">
+<section class="">
     <?php if (isset($banners) && isset($banners['blocation_active']) && $banners['blocation_active'] && count($banners['banners'])) { ?>
         <div class="container">
-            <div class="row">
+            <div class="poster-layout-2">
                 <?php
                 foreach ($banners['banners'] as $val) {
                     $desktop_url = '';
@@ -27,16 +27,16 @@
                             }
                         }
                     } ?>
-                    <div class="col-md-6 mb-3 mb-md-0">
-                        <div class="banner-ppc"><a href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>" target="<?php echo $val['banner_target']; ?>" title="<?php echo $val['banner_title']; ?>" class="advertise__block">
-                                <picture>
-                                    <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
-                                    <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
-                                    <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
-                                    <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="">
-                                </picture>
-                            </a>
-                        </div>
+                    <div class="poster">
+                        <a href="<?php echo UrlHelper::generateUrl('Banner', 'url', array($val['banner_id'])); ?>" target="<?php echo $val['banner_target']; ?>" title="<?php echo $val['banner_title']; ?>">
+                            <picture>
+                                <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
+                                <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
+                                <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
+                                <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="">
+                            </picture>
+                        </a>
+
                     </div>
                 <?php } ?>
             </div>

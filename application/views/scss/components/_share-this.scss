@@ -30,13 +30,13 @@
         z-index: 1;
     }
     &:before {
-        content: '';
+        content: "";
         #{$start-direction}: 0;
         justify-content: flex-end;
         background-color: #fff;
     }
     &:after {
-        content: '';
+        content: "";
         #{$end-direction}: 0;
         justify-content: flex-start;
         background-color: #fff;

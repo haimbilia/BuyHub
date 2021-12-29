@@ -1,0 +1,25 @@
+.mbl-menu {
+    &-item {
+        margin-left: 10px;
+    }
+    &-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &-link {
+        font-weight: 600;
+    }
+    &-icon {
+        cursor: pointer;
+        width: 2rem;
+        height: 2rem;
+        display: block;
+        margin-#{$start-direction}: auto;
+        border: $border;
+
+        .dropdown-toggle-custom-arrow {
+            #{$end-direction}: 0;
+        }
+    }
+}

@@ -50,7 +50,7 @@
             <div class="container">
                 <div class="top-bar__inner">
                     <div class="top-bar__left">
-                        <button class="btn btn-mbl-menu" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                        <button class="btn-mbl-menu" data-bs-toggle="offcanvas" href="#mbl-menu" role="button" aria-controls="mbl-menu">
                             <i class="icn">
                                 <svg class="svg" width="24" height="24">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-menu">
@@ -58,24 +58,73 @@
                                 </svg>
                             </i>
                         </button>
-
-
-
-
-                        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas offcanvas-start" tabindex="-1" id="mbl-menu" aria-labelledby="mbl-menuLabel">
                             <div class="offcanvas-header">
-                                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+                                <h5 class="offcanvas-title" id="mbl-menuLabel"></h5>
                                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                             </div>
                             <div class="offcanvas-body">
-                                <div>
-                                    Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+                                <div class="mbl-menu">
+                                    <div class="mbl-menu-item">
+                                        <div class="mbl-menu-head">
+                                            <a class="mbl-menu-link" href="">Women</a>
+                                            <span class="mbl-menu-icon dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                <i class="dropdown-toggle-custom-arrow"></i>
+                                            </span>
+                                        </div>
+                                        <div id="collapseOne" class="collapse">
+                                            <div class="mbl-menu-item">
+                                                <div class="mbl-menu-head">
+                                                    <a class="mbl-menu-link" href="">New In</a>
+                                                    <span class="mbl-menu-icon dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#new" aria-expanded="true" aria-controls="new">
+                                                        <i class="dropdown-toggle-custom-arrow"></i>
+                                                    </span>
+                                                </div>
+
+                                                <div id="new" class="collapse">
+                                                    <ul>
+                                                        <li><a href="womens-party-looks"><span>Party Looks</span></a> </li>
+                                                        <li><a href="womens-tommy-x-rossignol"><span>TOMMYXROSSIGNOL</span></a> </li>
+                                                        <li><a href="tommy-x-zendaya"><span>TOMMYXZENDAYA</span></a> </li>
+                                                        <li><a href="women-hilfiger-collection"><span>Hilfiger Collection</span></a></li>
+                                                        <li><a href="womens-sustainable-evolution"><span>Sustainable style</span></a></li>
+                                                        <li><a href="womens-explore"><span>Explore</span></a></li>
+                                                    </ul>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="mbl-menu-item">
+                                        <div class="mbl-menu-head" id="headingTwo">
+                                            <a class="mbl-menu-link" href="">Men</a>
+                                            <span class="mbl-menu-icon dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                <i class="dropdown-toggle-custom-arrow"></i>
+                                            </span>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse">
+                                            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+
+                                        </div>
+                                    </div>
+                                    <div class="mbl-menu-item">
+                                        <div class="mbl-menu-head" id="headingThree">
+                                            <a class="mbl-menu-link" href="">Baby & Kids</a>
+                                            <span class="mbl-menu-icon dropdown-toggle-custom" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                <i class="dropdown-toggle-custom-arrow"></i>
+                                            </span>
+                                        </div>
+                                        <div id="collapseThree" class="collapse">
+
+                                            <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
                         </div>
-
-
                         <div class="logo">
                             <a href="<?php echo UrlHelper::generateUrl(); ?>">
                                 <?php
@@ -189,8 +238,5 @@
         </div>
     </header>
     <div class="offcanvas offcanvas-mega-search" id="mega-nav-search" aria-labelledby="mega-nav-searchLabel">
-        <div class="mega-search">
         <?php $this->includeTemplate('_partial/headerSearchFormArea.php'); ?>
-            
-        </div>
     </div>

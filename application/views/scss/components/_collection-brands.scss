@@ -1,19 +1,23 @@
 .brand-layout-1 {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-gap: 1rem;
+    @include media-breakpoint-down(sm) {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
     .brand {
         &-logo {
-            width: 160px;
-            height: 90px;
+            // width: 160px;
+            // height: 90px;
+            height: 100%;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-items: center;
-            padding: 0 0.5rem;
-            margin: 0 1rem;
+            padding: 1rem;
+            margin: 0;
             background-color: #fff;
-            box-shadow: 0 0.25rem 0.25rem rgba(17, 17, 17, 0.03);
+            box-shadow: $shadow4;
             border-radius: $radius2;
             img {
                 margin: auto;
@@ -37,6 +41,7 @@
     .brand {
         display: flex;
         flex-direction: column;
+        justify-content: start;
         &:nth-child(even) {
             flex-direction: column-reverse;
         }
@@ -45,7 +50,7 @@
             display: flex;
             align-items: center;
             justify-items: center;
-            padding: 1rem;
+            padding: 0;
             margin: 0;
             box-shadow: $shadow4;
 

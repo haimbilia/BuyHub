@@ -269,8 +269,7 @@
 }
 
 .cat-accordion ul ul {
-    margin: 10px 0;
-    padding: 10px;
+    margin-#{$start-direction}: 10px;
 }
 
 .cat-accordion .acc-trigger {
@@ -619,12 +618,15 @@
             font-size: 12px;
             vertical-align: top;
             height: 2rem;
+            border-radius: $radius-common;
         }
         .input-group-text {
             font-size: 0.8rem;
             font-weight: 500;
             background: $bg-white;
-            padding: 0 5px;
+            padding: 0 0.5rem;
+            border-radius: $radius-common;
+            height: 100%;
         }
     }
     .rsText {

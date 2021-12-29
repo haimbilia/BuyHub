@@ -28,7 +28,7 @@ $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'sit
                     <?php } ?>
                 <?php } ?>
 
-                <a class="loginRegBtn--js" href="javaScript:void(0)">
+                <a class="loginRegBtn--js" href="<?php echo UrlHelper::generateUrl('GuestUser', 'LoginForm'); ?>">
                     <?php echo Labels::getLabel('LBL_SIGN_IN_NOW', $siteLangId); ?>
                 </a>
             </p>

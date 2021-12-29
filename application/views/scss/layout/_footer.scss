@@ -2,7 +2,6 @@
     color: $txt-gray;
     background: $bg-white;
     padding-bottom: 1rem !important;
-
     &-logo {
         max-width: 120px;
         margin-bottom: 1.5rem;
@@ -214,7 +213,7 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
 
         &-item {
             margin: 0.5rem 0;
@@ -223,11 +222,15 @@
             display: flex;
             color: $txt-body;
             font-weight: 600;
+            &:hover {
+                color: $brand-color;
+            }
         }
         &-icon {
             width: 20px;
             height: 20px;
             margin-#{$end-direction}: 8px;
+            border-radius: 50%;
         }
     }
 }
