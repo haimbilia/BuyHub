@@ -102,17 +102,16 @@ if (1 > $loadRows) {
                         [
                             'attr' => [
                                 'href' => 'javascript:void(0)',
-                                'class' => 'btn btn-icon btn-light btn-add',
+                                'class' => 'btn btn-icon btn-outline-brand btn-add',
                                 'title' => Labels::getLabel('BTN_ADD_META_TAG', $siteLangId),
                                 'onclick' => "metaTagForm(0,'" . $metaType . "',0)",
                             ],
-                            'label' => '<i class="icn">
-                                            <svg class="svg">
-                                                <use
-                                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
-                                                </use>
-                                            </svg>
-                                        </i><span> ' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
+                            'label' => '<svg class="svg" width="18" height="18">
+                                            <use 
+                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                            </use>
+                                        </svg>
+                                        <span> ' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>'
                         ]
                     ]
                 ];
