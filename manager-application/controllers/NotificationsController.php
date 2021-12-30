@@ -165,6 +165,7 @@ class NotificationsController extends ListingBaseController
         $srch->addOrder('n.notification_added_on', 'DESC');
         $srch->addCondition('n.notification_deleted', '=', applicationConstants::NO);
         $srch->addCondition('n.notification_marked_read', '=', applicationConstants::NO);
+        $srch->setPageSize(20);
 
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('labelArr', Notification::getLabelKeyString($this->siteLangId));

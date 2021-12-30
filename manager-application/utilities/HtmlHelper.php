@@ -103,6 +103,91 @@ class HtmlHelper
         }
     }
 
+    private static function normalizeDatetimeValue($value)
+    {
+        try {
+
+            if (
+                ($timestamp = DateTime::createFromFormat(
+                    'Y-m-d|',
+                    $value
+                )
+                ) !== false
+            ) {
+                // try Y-m-d format (support invalid dates like 2012-13-01)
+                return  $timestamp;
+            }
+            if (
+                ($timestamp = DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $value
+                )
+                ) !== false
+            ) {
+                // try Y-m-d H:i:s format (support invalid dates like 2012-13-01 12:63:12)
+                return  $timestamp;
+            }
+
+            return new DateTime($value);
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException("'$value' is not a valid date time value: " . $e->getMessage()
+                . "\n" . print_r(DateTime::getLastErrors(), true), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Formats the value as the time interval between a date and now in human readable form. 
+     * @return string the formatted result.
+     * @throws InvalidArgumentException if the input value can not be evaluated as a date value.
+     */
+
+    public static function getRelativeTime($datetime, $langId)
+    {
+        $timestamp = self::normalizeDatetimeValue($datetime);
+        $dateNow = new DateTime('now');
+        $interval = $timestamp->diff($dateNow);
+
+        if ($interval->y >= 1 || $interval->m >= 1 || $interval->d >= 1) {
+            return FatDate::format($datetime);
+        }
+        if ($interval->invert) {
+            if ($interval->h >= 1) {
+                $str =  $interval->h == 1 ? Labels::getLabel('LBL_IN_AN_HOUR', $langId) :  Labels::getLabel('LBL_IN_{INTERVAL}_HOURS', $langId);
+                return str_replace("{interval}", $interval->h, $str);
+            }
+            if ($interval->i >= 1) {
+                $str =  $interval->i == 1 ? Labels::getLabel('LBL_IN_A_MINUTE', $langId) :  Labels::getLabel('LBL_IN_{INTERVAL}_MINUTES', $langId);
+                return str_replace("{interval}", $interval->i, $str);
+            }
+
+            if ($interval->s == 0) {
+                return Labels::getLabel('LBL_JUST_NOW', $langId);
+            }
+            
+            $str =  $interval->i == 1 ? Labels::getLabel('LBL_IN_A_SECOND', $langId) :  Labels::getLabel('LBL_IN_{INTERVAL}_SECONDS', $langId);
+            return str_replace("{interval}", $interval->i, $str);
+            
+        } else {
+
+            if ($interval->h >= 1) {
+                $str =  $interval->h == 1 ? Labels::getLabel('LBL_AN_HOUR_AGO', $langId) :  Labels::getLabel('LBL_{INTERVAL}_HOURS_AGO', $langId);
+                return str_replace("{interval}", $interval->h, $str);
+            }
+            if ($interval->i >= 1) {
+                $str =  $interval->i == 1 ? Labels::getLabel('LBL_A_MINUTE_AGO', $langId) :  Labels::getLabel('LBL_{INTERVAL}_MINUTES_AGO', $langId);
+                return str_replace("{interval}", $interval->i, $str);
+            }
+            if ($interval->s == 0) {
+                return Labels::getLabel('LBL_JUST_NOW', $langId);
+            }
+           
+            $str =  $interval->i == 1 ? Labels::getLabel('LBL_IN_A_SECOND', $langId) :  Labels::getLabel('LBL_IN_{INTERVAL}_SECONDS_AGO', $langId);
+            return str_replace("{interval}", $interval->i, $str);
+            
+        }
+        
+    }
+
     public static function getStatusHtml(int $status, string $msg): string
     {
         switch ($status) {

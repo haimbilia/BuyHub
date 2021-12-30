@@ -1659,6 +1659,11 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_SYSTEMLOG, static::PRIVILEGE_READ, $returnResult);
     }
+
+    public function canEditSystemLog($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SYSTEMLOG, static::PRIVILEGE_WRITE, $returnResult);
+    }
     
     public function canViewSettings($adminId = 0, $returnResult = false)
     {
