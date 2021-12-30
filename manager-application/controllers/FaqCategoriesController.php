@@ -174,22 +174,21 @@ class FaqCategoriesController extends ListingBaseController
         if (!$record->save()) {
             LibHelper::exitWithError($record->getError(), true);
         }
+        $recordId = $record->getMainTableRecordId();
         $epageObj = new Extrapage($recordId);
         if (!$record->updateLangData($newTabLangId, $data)) {
             LibHelper::exitWithError($epageObj->getError(), true);
         }
 
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
+        $newTabLangId = 0;
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!$row = FaqCategory::getAttributesByLangId($langId, $recordId)) {
+                if (!Brand::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
-        } else {
-            $recordId = $record->getMainTableRecordId();
-            $newTabLangId = $this->siteLangId;
         }
 
         $this->set('recordId', $recordId);
