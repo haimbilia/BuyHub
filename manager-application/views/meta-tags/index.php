@@ -30,7 +30,7 @@
                                     $tabsId = 'tabJs-' . $tabMetaType; ?>
 
                                     <li class="settings-inner-item <?php echo $tabsId; ?> <?php echo ($activeTab == $tabMetaType) ? 'is-active' : '' ?>">
-                                        <a class="settings-inner-link" href="javascript:void(0)" onclick='searchRecords("<?php echo $tabMetaType; ?>")'>
+                                        <a class="settings-inner-link" href="javascript:void(0)" onclick='tabSearchRecords("<?php echo $tabMetaType; ?>")'>
                                             <i class="settings-inner-icn">
                                                 <svg class="svg" width="20" height="20">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-extension">
