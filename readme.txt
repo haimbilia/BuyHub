@@ -465,6 +465,7 @@ Bugs :
     => 061059 - Admin UI: 'Default' option is not selected after editing the records.
     => 061113 - Admin UI: Not able to delete the records from the "Advanced setting meta tags listing" under the Meta tags section.
     => 060672 - Admin UI: "Export Data Range" is not working according to 'By Id' and 'By Batches' while exporting the user's file.
+    => 061106 - Admin UI: Admin navigates to the "English" page while clicking on the RESET button on the Arabic page under the "Meta Tag Management" section.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
