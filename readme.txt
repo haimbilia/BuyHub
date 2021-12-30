@@ -468,6 +468,7 @@ Bugs :
     => 061106 - Admin UI: Admin navigates to the "English" page while clicking on the RESET button on the Arabic page under the "Meta Tag Management" section.
     => 061024 - Admin UI: 'Language data' is also updated while adding the 'General Data' and language data' title is also not the same under the Testimonial section.
     => 061101 - Admin UI: Search(Keyword and Dropdown) is not working properly under the "Meta tags Management" section.
+    => 061018 - Admin UI: 'Language data' is also updated while updating the 'General Data' under the FAQ section.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
