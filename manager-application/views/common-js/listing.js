@@ -303,6 +303,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
         fcom.resetEditorInstance();
         data = "recordId=" + recordId + "&langId=" + langId;
+        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
         fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
             data,

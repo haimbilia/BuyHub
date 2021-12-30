@@ -17,8 +17,7 @@ class SupplierFormFields extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'sf');
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'sf');
     }
 
     public function getMaxOrder()
