@@ -339,6 +339,6 @@ class OrderStatusController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'orderstatus_name', 'orderstatus_is_active'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop'], Common::excludeKeysForSort());
     }
 }

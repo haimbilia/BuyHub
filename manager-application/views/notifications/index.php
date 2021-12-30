@@ -81,7 +81,7 @@ $actionItemsData =  [
                     <div class="card-body">
                         <div class="table-responsive table-scrollable js-scrollable listingTableJs" data-auto-column-width="0">
                             <?php
-                            $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-dashed', 'id' => 'orderStatuses'));
+                            $tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table table-dashed', 'id' => 'listingTableJs'));
 
                             $tbody = $tbl->appendElement('tbody', ['class' => 'listingRecordJs']);
                             require_once(CONF_THEME_PATH . 'notifications/search.php');

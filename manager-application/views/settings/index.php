@@ -354,6 +354,22 @@
                             </a>
                         <?php } ?>
 
+                        <?php if ($objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('ShopReportReasons'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_FORM', $siteLangId); ?></h6>
+                                    <span>Seller Approval Form Settings</span>
+                                </div>
+                            </a>
+                        <?php } ?>
                     </div>
                 <?php } ?>
             </div>

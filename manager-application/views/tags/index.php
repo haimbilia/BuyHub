@@ -15,7 +15,7 @@ $actionItemsData = $actionItemsData + [
                     <div class="card-body">
                         <div class="table-responsive table-scrollable js-scrollable listingTableJs">
                             <?php
-                            $tableId = "orderStatuses";
+                            $tableId = "listingTableJs";
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
                             require_once(CONF_THEME_PATH . $actionItemsData['searchListingPage']);
                             $actionItemsData = $actionItemsData + ['tbl' => $tbl /* Received from listing-column-head.php file. */];
