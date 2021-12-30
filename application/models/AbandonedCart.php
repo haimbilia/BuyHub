@@ -349,4 +349,26 @@ class AbandonedCart extends MyAppModel
     {
         return FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
     }
+
+    public static function getActionLabelHtml(int $langId, int $status): string
+    {
+        $arr = self::getActionArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::ACTION_ADDED:
+                $status = HtmlHelper::DANGER;
+                break;
+            case static::ACTION_DELETED:
+                $status = HtmlHelper::INFO;
+                break;
+            case static::ACTION_PURCHASED:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
 }

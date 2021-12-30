@@ -38,7 +38,11 @@
         $href = "javascript:void(0)";
         $onclick = "addNew()";
         $title = Labels::getLabel('BTN_NEW_RECORD', $siteLangId);
-        $label = Labels::getLabel('BTN_NEW', $siteLangId);
+        $icon = '<svg class="svg" width="18" height="18">
+                        <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#add">
+                        </use>
+                    </svg>';
+        $label =  $icon . '<span>' . Labels::getLabel('BTN_NEW', $siteLangId) . '</span>';
         if (isset($newRecordBtnAttrs) && 0 < count($newRecordBtnAttrs)) {
             $href = $newRecordBtnAttrs['attr']['href'] ?? $href;
             $onclick = $newRecordBtnAttrs['attr']['onclick'] ?? $onclick;
@@ -47,11 +51,7 @@
         }
     ?>
         <a href="<?php echo $href; ?>" class="btn btn-icon btn-outline-brand btn-add" onclick="<?php echo $onclick; ?>" title="<?php echo $title; ?>" data-bs-toggle='tooltip' data-placement='top'>
-            <svg class="svg" width="18" height="18">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>/images/retina/sprite-actions.svg#add">
-                </use>
-            </svg>
-            <span><?php echo $label; ?></span>
+            <?php echo $label; ?>
         </a>
     <?php
     }

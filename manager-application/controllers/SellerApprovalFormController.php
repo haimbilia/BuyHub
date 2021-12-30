@@ -4,6 +4,7 @@ class SellerApprovalFormController extends ListingBaseController
 {
     protected string $pageKey = 'MANAGE_SELLER_APPROVAL_FORM';
     protected string $modelClass = 'SupplierFormFields';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -126,9 +127,9 @@ class SellerApprovalFormController extends ListingBaseController
     {
         $frm = new Form('frmSuppiler');
         $frm->addHiddenField('', 'sformfield_id', 0);
-        $frm->addRequiredField(Labels::getLabel('LBL_CAPTION', $this->siteLangId), 'sformfield_caption');
-        $frm->addSelectBox(Labels::getLabel('LBL_Required', $this->siteLangId), 'sformfield_required', applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('LBL_Field_Type', $this->siteLangId), 'sformfield_type', User::getFieldTypes($this->siteLangId), -1, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_CAPTION', $this->siteLangId), 'sformfield_caption');
+        $frm->addSelectBox(Labels::getLabel('FRM_REQUIRED', $this->siteLangId), 'sformfield_required', applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_FIELD_TYPE', $this->siteLangId), 'sformfield_type', User::getFieldTypes($this->siteLangId), -1, array(), '');
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
