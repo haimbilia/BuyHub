@@ -240,7 +240,7 @@
     position: relative;
     z-index: 1;
     margin-bottom: 1.5rem;
-    border-radius: $radius4;
+    border-radius: $radius-common;
     ul {
         display: flex;
         justify-content: space-between;
@@ -258,7 +258,7 @@
     }
     .control-label {
         border: solid 1px $border-color;
-        border-radius: 4px;
+        border-radius: $radius-common;
         background: $bg-white;
         color: $txt-gray;
         padding: 1rem 1rem;

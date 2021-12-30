@@ -55,10 +55,10 @@
             margin: 0 3px;
             width: 13px;
             height: 3px;
+            box-shadow: $shadow2;
             border-radius: $radius1;
             cursor: pointer;
             background: rgba(255, 255, 255, 0.5);
-            -webkit-transition: all 0.5s ease-in-out;
             transition: all 0.5s ease-in-out;
             button {
                 background: none;

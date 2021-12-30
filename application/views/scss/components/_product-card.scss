@@ -373,52 +373,6 @@
     align-items: center;
 }
 
-.products__rating {
-    padding: 5px 0;
-    margin: 5px 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    font-size: 0.85rem;
-    a {
-        color: inherit;
-        font-size: inherit;
-    }
-    &.left--align {
-        justify-content: flex-start;
-    }
-    .icn {
-        margin-#{$end-direction}: 0.5rem;
-        width: 1rem;
-        height: 1rem;
-        .svg {
-            width: 1rem;
-            height: 1rem;
-            vertical-align: baseline;
-        }
-    }
-    .rate {
-        margin: 0 !important;
-        padding: 0;
-        line-height: inherit;
-        //height: 1rem;
-        span {
-            color: $txt-gray;
-        }
-        a {
-            color: $brand-color;
-        }
-    }
-    .be-first {
-        line-height: 1;
-        font-size: 0.9em;
-        font-weight: 300;
-        display: inline-block;
-        vertical-align: top;
-        color: $secondary-color;
-    }
-}
-
 .products-reviews {
     display: inline-block;
     vertical-align: middle;
@@ -474,10 +428,10 @@
     display: flex;
     align-items: flex-start;
     &__pic {
-        flex: 0 0 50px;
-        max-width: 50px;
+        flex: 0 0 80px;
+        max-width: 80px;
         border: $border;
-        border-radius: $radius4;
+        border-radius: $radius-common;
         margin: 0;
         margin-#{$end-direction}: 10px;
         display: flex;
@@ -487,7 +441,7 @@
         &-seller {
             flex: 0 0 100px;
             max-width: 100px;
-            padding: 16px;
+            padding: 1rem;
         }
     }
     &__description {
