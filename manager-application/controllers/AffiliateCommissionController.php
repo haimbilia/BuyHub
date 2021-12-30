@@ -323,20 +323,6 @@ class AffiliateCommissionController extends ListingBaseController
         return $frm;
     }
 
-    public function getBreadcrumbNodes($action)
-    {
-        switch ($action) {
-            case 'index':
-                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-                $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
-                    ['title' => $pageTitle]
-                ];
-        }
-        return $this->nodes;
-    }
-
     protected function getFormColumns(): array
     {
         $affCommissionTblHeadingCols = CacheHelper::get('affCommissionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -371,5 +357,19 @@ class AffiliateCommissionController extends ListingBaseController
     protected function excludeKeysForSort($fields = []): array
     {
         return array_diff($fields, Common::excludeKeysForSort());
+    }
+
+    public function getBreadcrumbNodes($action)
+    {
+        switch ($action) {
+            case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => $pageTitle]
+                ];
+        }
+        return $this->nodes;
     }
 }

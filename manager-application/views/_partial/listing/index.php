@@ -18,7 +18,7 @@ $autoTableColumWidth = FatUtility::int(($autoTableColumWidth ?? 1));
                     <div class="card-body">
                         <div class="table-responsive table-scrollable js-scrollable listingTableJs" data-auto-column-width="<?php echo $autoTableColumWidth; ?>">
                             <?php
-                            $tableId = "orderStatuses";
+                            $tableId = "listingTableJs";
                             require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
                             require_once(CONF_THEME_PATH . $actionItemsData['searchListingPage']);
                             /* "$tbl" Received from listing-column-head.php file. */

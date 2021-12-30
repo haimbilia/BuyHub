@@ -208,6 +208,8 @@ class SlidesController extends ListingBaseController
             LibHelper::exitWithError($slideObj->getError(), true);
         }
 
+        $recordId = $slideObj->getMainTableRecordId();
+
         if (!$slideObj->updateLangData($this->siteLangId, $langData)) {
             LibHelper::exitWithError($slideObj->getError(), true);
         }
@@ -221,18 +223,16 @@ class SlidesController extends ListingBaseController
         }
 
         $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!Slides::getAttributesByLangId($langId, $recordId)) {
+                if (!Brand::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
-        } else {
-            $recordId = $slideObj->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
+        
         if ($newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
             $this->set('openMediaForm', true);
         }

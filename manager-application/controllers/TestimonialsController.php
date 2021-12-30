@@ -199,6 +199,8 @@ class TestimonialsController extends ListingBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
+        $recordId = $record->getMainTableRecordId();
+
         if (!$record->updateLangData($this->siteLangId, $LangdataArray)) {
             LibHelper::exitWithError($record->getError(), true);
         }
@@ -212,18 +214,16 @@ class TestimonialsController extends ListingBaseController
         }
 
         $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!$row = Testimonial::getAttributesByLangId($langId, $recordId)) {
+                if (!Brand::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
-        } else {
-            $recordId = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
+        
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
