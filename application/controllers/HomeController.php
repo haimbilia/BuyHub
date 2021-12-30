@@ -123,6 +123,7 @@ class HomeController extends MyAppController
                         $tpl = new FatTemplate('', '');
                         $tpl->set('siteLangId', $this->siteLangId);
                         $tpl->set('bannerLayout1', $collection['banners']);
+                       
                         $bannerFirstLayout = $tpl->render(false, false, '_partial/banners/home-banner-first-layout.php', true, true);
                         $collectionTemplates[$collection['collection_id']]['html'] = $bannerFirstLayout;
                     }
@@ -699,8 +700,10 @@ class HomeController extends MyAppController
                             }
                         }
                     }
+                    
 
                     $collections[$ind]['banners'] = empty($banners) && (true === MOBILE_APP_API_CALL) ? (object) [] : $banners;
+                    
                     break;
                 case Collections::COLLECTION_TYPE_PRODUCT:
                     $tempObj = clone $collectionObj;

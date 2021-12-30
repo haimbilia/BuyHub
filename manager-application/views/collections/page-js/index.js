@@ -1,12 +1,12 @@
-$(window).on('load', function () {
+$(window).on('load', function() {
     bindSortable();
 });
 
-$(document).ajaxComplete(function () {
+$(document).ajaxComplete(function() {
     bindSortable();
 });
 
-$(document).on('change', '.prefDimensionsJs', function () {
+$(document).on('change', '.prefDimensionsJs', function() {
     var banner_screen = $(this).val();
     var banner_id = $("input[name='banner_id']").val();
     var collection_id = $("input[name='collection_id']").val();
@@ -14,13 +14,13 @@ $(document).on('change', '.prefDimensionsJs', function () {
     loadBannerImages(collection_id, banner_id, lang_id, banner_screen);
 });
 
-(function () {
-    bindSortable = function () {
+(function() {
+    bindSortable = function() {
         if (1 > $('[data-field="dragdrop"]').length) {
             return;
         }
         $(".listingTableJs tbody.listingRecordJs").sortable({
-            update: function (event, ui) {
+            update: function(event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
                 var order = $(this).sortable('toArray');
@@ -35,8 +35,8 @@ $(document).on('change', '.prefDimensionsJs', function () {
                     resolve(data);
                 });
                 bindData.then(
-                    function (value) {
-                        fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function (res) {
+                    function(value) {
+                        fcom.ajax(fcom.makeUrl(controllerName, 'updateOrder'), value, function(res) {
                             $.ykmsg.close();
                             fcom.removeLoader();
                             var ans = JSON.parse(res);
@@ -48,7 +48,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
                             reloadList();
                         });
                     },
-                    function (error) {
+                    function(error) {
                         fcom.removeLoader();
                         $.ykmsg.close();
                     }
@@ -57,39 +57,39 @@ $(document).on('change', '.prefDimensionsJs', function () {
         }).disableSelection();
     };
 
-    layoutSelectorForm = function () {
+    layoutSelectorForm = function() {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl(controllerName, "layoutSelectorForm"), "", function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, "layoutSelectorForm"), "", function(t) {
             $.ykmodal(t, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
     }
 
-    collectionForm = function (type, layoutType, collection_id = 0) {
+    collectionForm = function(type, layoutType, collection_id = 0) {
         fcom.resetEditorInstance();
 
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl(controllerName, "form", [type, layoutType]), "recordId=" + collection_id, function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, "form", [type, layoutType]), "recordId=" + collection_id, function(t) {
             $.ykmodal(t, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
     };
 
-    recordForm = function (id, type) {
+    recordForm = function(id, type) {
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl('Collections', 'recordForm', [id, type]), '', function (t) {
+        fcom.ajax(fcom.makeUrl('Collections', 'recordForm', [id, type]), '', function(t) {
             $.ykmodal(t, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
     };
 
-    updateRecord = async function (e, collection_id) {
+    updateRecord = async function(e, collection_id) {
         var record_id = e.params.args.data.id;
         let response = await $.ajax({
             url: fcom.makeUrl(controllerName, 'updateCollectionRecords'),
@@ -109,17 +109,17 @@ $(document).on('change', '.prefDimensionsJs', function () {
         currentEl.select2('close');
     };
 
-    removeCollectionRecord = function (collection_id, recordId) {
+    removeCollectionRecord = function(collection_id, recordId) {
         if (!confirm(langLbl.confirmRemoveProduct)) {
             return false;
         }
-        fcom.ajax(fcom.makeUrl(controllerName, 'removeCollectionRecord'), 'collection_id=' + collection_id + '&record_id=' + recordId, function (t) { });
+        fcom.ajax(fcom.makeUrl(controllerName, 'removeCollectionRecord'), 'collection_id=' + collection_id + '&record_id=' + recordId, function(t) {});
     };
 
-    collectionMediaForm = function (collection_id, type) {
+    collectionMediaForm = function(collection_id, type) {
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
         fcom.ajax(fcom.makeUrl(controllerName, "media", [collection_id, type]), "",
-            function (t) {
+            function(t) {
                 fcom.removeLoader();
                 $.ykmodal(t, false, "modal-dialog-vertical-md");
                 if (0 < $(".displayMediaOnlyJs:checked").val()) {
@@ -132,8 +132,8 @@ $(document).on('change', '.prefDimensionsJs', function () {
         );
     };
 
-    loadImages = function (recordId, langId = 0) {
-        fcom.ajax(fcom.makeUrl(controllerName, 'images', [recordId, langId]), '', function (t) {
+    loadImages = function(recordId, langId = 0) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'images', [recordId, langId]), '', function(t) {
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();
@@ -148,10 +148,10 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     };
 
-    displayMediaOnly = function (collectionId, obj) {
+    displayMediaOnly = function(collectionId, obj) {
         var value = (obj.checked) ? 1 : 0;
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl(controllerName, 'displayMediaOnly', [collectionId, value]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'displayMediaOnly', [collectionId, value]), '', function(t) {
             fcom.removeLoader();
             var ans = $.parseJSON(t);
             if (0 == ans.status) {
@@ -159,17 +159,17 @@ $(document).on('change', '.prefDimensionsJs', function () {
                 $(obj).prop('checked', false);
                 return false
             } else {
-                (0 < value) ? $('.mediaElementsJs').show() : $('.mediaElementsJs').hide();
+                (0 < value) ? $('.mediaElementsJs').show(): $('.mediaElementsJs').hide();
             }
         });
     };
 
-    deleteImage = function (recordId, afile_id, lang_id, slide_screen) {
+    deleteImage = function(recordId, afile_id, lang_id, slide_screen) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) {
             return false;
         }
-        fcom.ajax(fcom.makeUrl(controllerName, 'deleteImage', [recordId, afile_id, lang_id, slide_screen]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'deleteImage', [recordId, afile_id, lang_id, slide_screen]), '', function(t) {
             var ans = $.parseJSON(t);
             if (ans.status == 0) {
                 $.ykmsg.error(ans.msg);
@@ -181,38 +181,38 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     }
 
-    bannerForm = function (collection_id, banner_id = 0) {
+    bannerForm = function(collection_id, banner_id = 0) {
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl(controllerName, 'bannerForm', [collection_id, banner_id]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'bannerForm', [collection_id, banner_id]), '', function(t) {
             $.ykmodal(t, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
     };
 
-    bannerLangForm = function (collection_id, banner_id, langId, autoFillLangData = 0) {
+    bannerLangForm = function(collection_id, banner_id, langId, autoFillLangData = 0) {
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
 
         var data = "collection_id=" + collection_id + "&banner_id=" + banner_id + "&langId=" + langId;
-        fcom.ajax(fcom.makeUrl(controllerName, 'bannerLangForm', [autoFillLangData]), data, function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'bannerLangForm', [autoFillLangData]), data, function(t) {
             $.ykmodal(t, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
     };
 
-    banners = function (collection_id) {
+    banners = function(collection_id) {
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
-        fcom.ajax(fcom.makeUrl(controllerName, 'searchBanners', [collection_id]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'searchBanners', [collection_id]), '', function(t) {
             $.ykmodal(t, false, "modal-dialog-vertical-md");
             fcom.removeLoader();
         });
     };
 
-    setupBanners = function (frm) {
+    setupBanners = function(frm) {
         if (!$(frm).validate()) { return; }
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, 'setupBanner'), data, function (res) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'setupBanner'), data, function(res) {
             $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
             fcom.removeLoader();
             var t = JSON.parse(res);
@@ -231,14 +231,14 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     };
 
-    saveBannerLangData = function (frm) {
+    saveBannerLangData = function(frm) {
         if (!$(frm).validate()) {
             return;
         }
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, "bannerLangSetup"), data, function (res) {
+        fcom.ajax(fcom.makeUrl(controllerName, "bannerLangSetup"), data, function(res) {
             fcom.removeLoader();
             var t = JSON.parse(res);
             if (t.status == 0) {
@@ -255,12 +255,12 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     };
 
-    bannerMediaForm = function (collectionId, bannerId, langId = 0, slide_screen = 1) {
+    bannerMediaForm = function(collectionId, bannerId, langId = 0, slide_screen = 1) {
         $.ykmodal(fcom.getLoader(), false, "modal-dialog-vertical-md");
         fcom.ajax(
             fcom.makeUrl(controllerName, "bannerMedia", [collectionId, bannerId, langId, slide_screen]),
             "",
-            function (t) {
+            function(t) {
                 fcom.removeLoader();
                 loadBannerImages(collectionId, bannerId, langId, slide_screen);
                 $.ykmodal(t, false, "modal-dialog-vertical-md");
@@ -268,15 +268,15 @@ $(document).on('change', '.prefDimensionsJs', function () {
         );
     };
 
-    loadBannerImagesCallback = function (res) {
+    loadBannerImagesCallback = function(res) {
         loadBannerImages(res.collection_id, res.banner_id, res.lang_id, res.slide_screen);
     };
 
-    loadBannerImages = function (collectionId, bannerId = 0, langId = 0, screen = 1) {
+    loadBannerImages = function(collectionId, bannerId = 0, langId = 0, screen = 1) {
         if (1 > screen || 'undefined' == typeof screen) {
             screen = $('.prefDimensionsJs').val();
         }
-        fcom.ajax(fcom.makeUrl(controllerName, 'bannerImages', [collectionId, bannerId, langId, screen]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'bannerImages', [collectionId, bannerId, langId, screen]), '', function(t) {
             var uploadedContentEle = $(".dropzoneContainerJs .dropzoneUploadedJs");
             if (0 < uploadedContentEle.length) {
                 uploadedContentEle.remove();
@@ -291,12 +291,15 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     };
 
-    removeBannerImage = function (recordId, afile_id, lang_id, slide_screen) {
+
+
+
+    removeBannerImage = function(recordId, afile_id, lang_id, slide_screen) {
         var agree = confirm(langLbl.confirmDelete);
         if (!agree) {
             return false;
         }
-        fcom.ajax(fcom.makeUrl(controllerName, 'removeBanner', [recordId, afile_id, lang_id, slide_screen]), '', function (t) {
+        fcom.ajax(fcom.makeUrl(controllerName, 'removeBanner', [recordId, afile_id, lang_id, slide_screen]), '', function(t) {
             var ans = $.parseJSON(t);
             if (ans.status == 0) {
                 $.ykmsg.error(ans.msg);
@@ -308,7 +311,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
         });
     }
 
-    toggleBannerStatus = function (e, obj, recordId, status, callback = "") {
+    toggleBannerStatus = function(e, obj, recordId, status, callback = "") {
         e.stopPropagation();
 
         var oldStatus = $(obj).attr("data-old-status");
@@ -321,7 +324,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
 
         data = "bannerId=" + recordId + "&status=" + status;
         fcom.ajax(fcom.makeUrl('Banners', "updateStatus"), data,
-            function (res) {
+            function(res) {
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {

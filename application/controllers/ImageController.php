@@ -969,7 +969,7 @@ class ImageController extends FatController
         exit;
 
 
-        if ($sizeType) {
+      /*   if ($sizeType) {
             switch (strtoupper($sizeType)) {
                 case 'THUMB':
                     $w = 200;
@@ -986,11 +986,7 @@ class ImageController extends FatController
                     $h = 360;
                     AttachedFile::displayImage($image_name, $w, $h);
                     break;
-                // case 'DESKTOP':
-                //     $w = 1350;
-                //     $h = 405;
-                //     AttachedFile::displayImage($image_name, $w, $h);
-                //     break;
+             
                 case 'DESKTOP':
                     $w = 2000;
                     $h = 666;
@@ -1005,8 +1001,32 @@ class ImageController extends FatController
         } else {
            
             AttachedFile::displayOriginalImage($image_name, $default_image);
-        }
+        } */
     }
+
+
+    public function banner($banner_id, $collectionLayoutType, $lang_id, $screen = 0,  $sizeType = '', $displayUniversalImage = true)
+    {
+        
+        $default_image = 'brand_deafult_image.jpg';
+        $banner_id = FatUtility::int($banner_id);
+
+        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $banner_id, 0, $lang_id, $displayUniversalImage, $screen);
+        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+    
+        $imageDimensions = ImageDimension::getBannerData($sizeType,$collectionLayoutType);
+    
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height']);
+        } else {
+            AttachedFile::displayOriginalImage($image_name, $default_image);
+        }
+        exit;
+
+
+    }
+
 
     /* Moved in banner controller
     function banner( $banner_id, $sizeType = ''){

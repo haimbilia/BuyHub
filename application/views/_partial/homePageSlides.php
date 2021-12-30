@@ -42,8 +42,10 @@
             if ($desktopUrl == '') {
                 $desktopUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'slide', array($slide['slide_id'], applicationConstants::SCREEN_DESKTOP, $siteLangId, 'DESKTOP')), CONF_IMG_CACHE_TIME, '.jpg');
             }
+
             $imageDimension = ImageDimension::getData(ImageDimension::TYPE_SLIDE);
-         
+
+
             $out = '<div class="hero-slider-item">';
             if ($haveUrl) {
                 if ($slide['promotion_id'] > 0) {
@@ -59,11 +61,11 @@
 				<picture>
 					<source type="image/webp" srcset="' . $mobileWebpUrl . $tabletWebpUrl  . $desktopWebpUrl . '" media="(max-width: 767px),(max-width: 1024px)">
 					<source type="image/jpeg" srcset="' . $mobileUrl . $tabletUrl  . $desktopUrl . '" media="(max-width: 767px),(max-width: 1024px)">
-					<img data-aspect-ratio="'.$imageDimension['aspectRatio'].'" src="' . $desktopUrl . '" alt="" loading="lazy">
+					<img data-aspect-ratio="' . $imageDimension['aspectRatio'] . '" src="' . $desktopUrl . '" alt="" loading="lazy">
 				</picture>
 			</div>';
             if ($haveUrl) {
-                $out .= '</a>'; 
+                $out .= '</a>';
             }
             $out .= '</div>';
             echo $out;

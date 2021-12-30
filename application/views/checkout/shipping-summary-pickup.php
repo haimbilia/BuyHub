@@ -126,6 +126,7 @@
                                                 $pictureAttr = [
                                                     'webpImageUrl' => $imageWebpUrl,
                                                     'jpgImageUrl' => $imageUrl,
+                                                    'imageUrl' => $imageUrl,
                                                     'ratio' => '3:4',
                                                     'alt' => $product['product_name'],
                                                     'siteLangId' => $siteLangId,

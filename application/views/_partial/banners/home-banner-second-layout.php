@@ -60,6 +60,7 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                             $pictureAttr = [
                                 'webpImageUrl' => $mobileWebpUrl . $tabletWebpUrl . $desktopWebpUrl,
                                 'jpgImageUrl' => $mobileUrl . $tabletUrl . $desktopUrl,
+                                'imageUrl' => $desktopUrl,
                                 'ratio' => '10:3',
                                 'alt' => $val['banner_title'],
                                 'siteLangId' => $siteLangId,

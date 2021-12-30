@@ -24,6 +24,7 @@
                                 'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'WEBPMEDIUM', applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
                                 'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                 'ratio' => '4:1',
+                                'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Category', 'banner', array($category['prodcat_id'], $siteLangId, 'MEDIUM', applicationConstants::SCREEN_DESKTOP)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                 'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $category['prodcat_name'],
                                 'siteLangId' => $siteLangId,
                             ];

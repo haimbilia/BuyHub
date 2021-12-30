@@ -63,6 +63,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                         $pictureAttr = [
                                             'webpImageUrl' => $imageWebpUrl,
                                             'jpgImageUrl' => $imageUrl,
+                                            'imageUrl' => $imageUrl,
                                             'ratio' => '1:1',
                                             'alt' => $productTitle,
                                             'siteLangId' => $siteLangId,
@@ -136,6 +137,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 $pictureAttr = [
                                     'webpImageUrl' => $imageWebpUrl,
                                     'jpgImageUrl' => $imageUrl,
+                                    'imageUrl' => $imageUrl,
                                     'ratio' => '1:1',
                                     'alt' => $productTitle,
                                     'siteLangId' => $siteLangId,
@@ -297,6 +299,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     $pictureAttr = [
                                         'webpImageUrl' => $imageWebpUrl,
                                         'jpgImageUrl' => $imageUrl,
+                                        'imageUrl' => $imageUrl,
                                         'ratio' => '1:1',
                                         'alt' => $productTitle,
                                         'siteLangId' => $siteLangId,

@@ -11,12 +11,12 @@ if (1 < $languageCount) {
 $imageLangFld = $imageFrm->getField('lang_id');
 $imageLangFld->developerTags['colWidthValues'] = [null, '6', null, null];
 $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
-$imageLangFld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $slideDimensions[ImageDimension::VIEW_DESKTOP]['width'] .
-" x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
+
 
 $screenFld = $imageFrm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
-
+$screenFld->htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $slideDimensions[ImageDimension::VIEW_DESKTOP]['width'] .
+" x " . $slideDimensions[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
 
 $imgArr = [];
 $imageRecordId = $image['afile_record_id'];

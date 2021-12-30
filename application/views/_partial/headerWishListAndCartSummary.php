@@ -52,6 +52,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                                                         'siteLangId' => $siteLangId,
                                                         'webpImageUrl' => $imageWebpUrl,
                                                         'jpgImageUrl' => $imageUrl,
+                                                        'imageUrl' => $imageUrl,
                                                         'alt' => $product['product_name'],
                                                     ];
 

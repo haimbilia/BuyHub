@@ -1074,9 +1074,10 @@ class CollectionsController extends ListingBaseController
         $type = $this->collectionDetails['collection_type'];
         $layoutType = $this->collectionDetails['collection_layout_type'];
         $this->setFormTitle($type, $layoutType, 'collectionForm(' . $type . ', ' . $layoutType . ', ' . $collectionId . ');');
-
+        $bannerDimensiomns = ImageDimension::getBannerData('',$layoutType);
         $frm = $this->getBannerMediaForm($recordId);
         $frm->fill(['collection_id' => $collectionId]);
+        $this->set('bannerDimensiomns', $bannerDimensiomns);
         $this->set('collectionId', $collectionId);
         $this->set('recordId', $recordId);
         $this->set('collection_type', $type);
@@ -1173,7 +1174,10 @@ class CollectionsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id);
         }
 
+        
+
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BANNER, $recordId, 0, $lang_id, (1 == count($languages)), $screen, 1);
+        $this->set('collection_layout_type',$collectionDetails['collection_layout_type']);
         $this->set('images', $images);
         $this->set('languages', Language::getAllNames());
         $this->set('screenTypeArr', $this->getDisplayScreenName());

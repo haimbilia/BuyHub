@@ -37,6 +37,7 @@
                                     $pictureAttr = [
                                         'webpImageUrl' => $imageWebpUrl,
                                         'jpgImageUrl' => $imageUrl,
+                                        'imageUrl' => $imageUrl,
                                         'ratio' => '1:1',
                                         'alt' => $product['product_name'],
                                         'siteLangId' => $siteLangId,

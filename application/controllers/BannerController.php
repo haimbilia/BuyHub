@@ -169,6 +169,7 @@ class BannerController extends MyAppController
         AttachedFile::displayImage($image_name, $w, $h, 'banner-default-image.png', '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, false, true, false);
     }
 
+    
     public function showOriginalBanner($bannerId, $langId, $screen = 0, $sizeType = '')
     {
         $bannerId = FatUtility::int($bannerId);

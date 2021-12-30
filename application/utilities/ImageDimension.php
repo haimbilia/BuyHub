@@ -3,6 +3,8 @@ class ImageDimension extends FatUtility
 {
     public const TYPE_SLIDE = 1;
     public const TYPE_BANNER = 2;
+
+
     public const VIEW_DESKTOP = 'DESKTOP';
     public const VIEW_MOBILE = 'MOBILE';
     public const VIEW_TABLET = 'TABLET';
@@ -10,23 +12,20 @@ class ImageDimension extends FatUtility
 
     public static function getData(int $type): array
     {
+      
         $imageDimensions = [];
         switch ($type) {
             case self::TYPE_SLIDE:
                 $imageDimensions = self::getSlideData($type);
                 break;
         }
-        switch ($type) {
-            case self::TYPE_BANNER:
-                $imageDimensions = self::getBannerData($type);
-                break;
-        }
+        
         $imageDimensions['aspectRatio'] = self::getAspectRatio($imageDimensions['width'], $imageDimensions['height']);
         return $imageDimensions;
     }
 
 
-    public static function getSlideData($type = '')
+    public static function getSlideData($type = ''): array
     {
         if (substr($type, 0, 4) == 'webp') {
             $type = substr($type, 4);
@@ -49,29 +48,48 @@ class ImageDimension extends FatUtility
         return $arr;
     }
 
-    public static function getBannerData($type = '')
+    public static function getBannerData($type = '', $layout): array
     {
         if (substr($type, 0, 4) == 'webp') {
             $type = substr($type, 4);
         }
 
-        $arr =  [
-            self::VIEW_DESKTOP => ['width' => 2000, 'height' => 666],
-            self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
-            self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
-            self::VIEW_THUMB => ['width' => 200, 'height' => 100],
-        ];
+
+        if ($layout == Collections::TYPE_BANNER_LAYOUT1) {
+            $arr =  [
+                self::VIEW_DESKTOP => ['width' => 2000, 'height' => 666],
+                self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
+                self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
+                self::VIEW_THUMB => ['width' => 200, 'height' => 66],
+            ];
+        }
+
+        if ($layout == Collections::TYPE_BANNER_LAYOUT2) {
+            $arr =  [
+                self::VIEW_DESKTOP => ['width' => 2000, 'height' => 666],
+                self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
+                self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
+                self::VIEW_THUMB => ['width' => 200, 'height' => 66],
+            ];
+        }
+
 
         if (!empty($type)) {
             if (!array_key_exists($type, $arr)) {
+              
+                $arr['aspectRatio'] = self::getAspectRatio($arr[self::VIEW_DESKTOP]['width'], $arr[self::VIEW_DESKTOP]['height']);
                 return $arr[self::VIEW_DESKTOP];
             }
+            $arr['aspectRatio'] = self::getAspectRatio($arr[$type]['width'], $arr[$type]['height']);
             return $arr[$type];
-        }
-
-        return $arr;
-    }
+        } 
+        $arr['aspectRatio'] = self::getAspectRatio($arr[self::VIEW_DESKTOP]['width'], $arr[self::VIEW_DESKTOP]['height']);
     
+      
+     
+        return $arr;
+    }
+
 
 
     public static function getAspectRatio(int $width, int $height)

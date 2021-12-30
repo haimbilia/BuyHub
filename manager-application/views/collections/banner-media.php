@@ -11,8 +11,13 @@ $frm->setFormTagAttribute('data-callbackfn', 'loadBannerImagesCallback');
 $frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
 
 $fld = $frm->getField('banner_screen');
-$fld->setFieldTagAttribute('class', 'prefDimensionsJs');
+$fld->addFieldTagAttribute('id', 'slideScreenJs');
+
 if (!empty($languages)) {
+    $imageLangFld = $frm->getField('lang_id');
+
+    $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
+
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
@@ -31,7 +36,8 @@ $fld->value = HtmlHelper::getfileInputHtml(
     'dropzone-custom dropzoneContainerJs'
 );
 
-$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_PREFERRED_DIMENSIONS', $siteLangId), '1350*405') . '</span>';
+$htmlAfterField = '<span class="form-text text-muted prefDimensionsJs">' . sprintf(Labels::getLabel('LBL_PREFERRED_DIMENSIONS', $siteLangId), $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['width'] .
+" x " . $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']) . '</span>';
 $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
 
@@ -89,7 +95,43 @@ $includeTabs = ($collection_layout_type != Collections::TYPE_PENDING_REVIEWS1);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 
 <script type="text/javascript">
-    $('input[name=min_width]').val(1350);
-    $('input[name=min_height]').val(405);
-    var aspectRatio = 10 / 3;
+    $('input[name=min_width]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+    $('input[name=min_height]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']; ?>');
+    
+
+
+    $(document).on('change', '#slideScreenJs', function() {
+        var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
+        var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
+
+        if ($(this).val() == screenDesktop) {
+          
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['width'] .
+                                        " x " . $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
+            $('input[name=min_width]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+            $('input[name=min_height]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_DESKTOP]['height']; ?>');
+           
+        } else if ($(this).val() == screenIpad) {
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $bannerDimensiomns[ImageDimension::VIEW_TABLET]['width'] .
+                                        " x " . $bannerDimensiomns[ImageDimension::VIEW_TABLET]['height']; ?>'));
+            $('input[name=min_width]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_TABLET]['width']; ?>');
+            $('input[name=min_height]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_TABLET]['height']; ?>');
+          
+        } else {
+            $('.prefDimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['width'] .
+                                        " x " . $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['height']; ?>'));
+            $('input[name=min_width]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['height']; ?>');
+            $('input[name=min_height]').val('<?php echo $bannerDimensiomns[ImageDimension::VIEW_MOBILE]['height']; ?>');
+           
+        }
+
+        let slideScreen = $(this).val();
+        let recordId = $(this).closest("form").find('input[name="banner_id"]').val();
+        let langId = $("#imageLanguageJs").val();
+        let collectionId = '<?php echo $collectionId; ?>';
+        loadBannerImages(collectionId, recordId, 'THUMB', slideScreen, langId);
+    });
+
+
+
 </script>
