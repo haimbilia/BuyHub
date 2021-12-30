@@ -8,16 +8,32 @@ function setSiteDefaultLang(langId) {
     );
 }
 
-function getNotifications() {
+function getNotifications(type,obj) {
+
     $("#notificationList").prepend(fcom.getLoader());
+    let url = fcom.makeUrl("Notifications", "notificationList");
+    let viewAllUrl =  fcom.makeUrl("Notifications");
+    if(type == 1 ){
+        url = fcom.makeUrl("Notifications", "notificationList");
+        viewAllUrl =  fcom.makeUrl("Notifications");
+    }
+    if(typeof obj != undefined){
+        $(obj).siblings().removeClass('is-current');
+        $(obj).addClass('is-current');
+    }
 
     fcom.updateWithAjax(
-        fcom.makeUrl("Notifications", "notificationList"),
+        url,
         "",
         function (res) {
             $.ykmsg.close();
             fcom.removeLoader();
             $("#notificationList").html(res.html);
+            $('#notifiLinkViewAll').attr('href',viewAllUrl);
+            $('#notifiLinkCount').addClass('hide');
+            if(type == 0 ){
+                $('#notifiLinkCount').removeClass('hide').text(res.notifyCount + " " + langLbl.unread);
+            }            
         }
     );
 }
@@ -381,6 +397,10 @@ $(document).ready(function () {
         } else {
             $(".alertWarningJs").remove();
         }
+    });
+
+    $('.dropdown-menu.notificationDropMenuJs').on('click',function(e) {
+        e.stopPropagation();
     });
 
     /* Sidebar menu open on hover. */

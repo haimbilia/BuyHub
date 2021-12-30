@@ -174,6 +174,7 @@ class AdminBaseController extends FatController
                     'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                     'confirmSellerAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MAKE_SELLER_AS_BUYER', $this->siteLangId),
                     'maxLengthValidator' => Labels::getLabel('FRM_USED_%charsTyped%_of_%charsTotal%_CHARS_JS.', $this->siteLangId), /* Used By Maxlength bootstrap validator. */
+                    'unread' => Labels::getLabel('LBL_UNREAD', $this->siteLangId),
                 );
                 foreach ($languages as $val) {
                     if (empty($val)) {
@@ -188,23 +189,7 @@ class AdminBaseController extends FatController
                 $jsVariables =  unserialize($jsAdminVariablesCache);
             }
 
-            $this->set('jsVariables', $jsVariables);
-
-            //get notifications count
-            $db = FatApp::getDb();
-            $notifyObject = Notification::getSearchObject();
-            if (!AdminPrivilege::isAdminSuperAdmin($this->admin_id)) {
-                $recordTypeArr = Notification::getAllowedRecordTypeArr($this->admin_id);
-                $notifyObject->addCondition('notification_record_type', 'IN', $recordTypeArr);
-            }
-            $notifyObject->addCondition('n.' . Notification::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
-            $notifyObject->addCondition('n.' . Notification::DB_TBL_PREFIX . 'marked_read', '=', applicationConstants::NO);
-            $notifyObject->addMultipleFields(array('count(notification_id) as countOfRec'));
-            $notifyObject->doNotCalculateRecords();
-            $notifyObject->setPageSize(1);
-            $notifyCountResult = $db->fetch($notifyObject->getResultset());
-            $notifyCount = FatUtility::int($notifyCountResult['countOfRec']);
-            $this->set('notifyCount', $notifyCount);
+            $this->set('jsVariables', $jsVariables);          
 
             $this->includeDatePickerLangJs();
 
