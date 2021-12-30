@@ -687,7 +687,7 @@ class CustomProductsController extends ListingBaseController
 
     public function digitalDownloadForm($recordId, $type)
     {
-        $this->objPrivilege->canEditProducts();
+        $this->checkEditPrivilege();
         $recordId = FatUtility::int($recordId);
         if (1 > $recordId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
@@ -802,7 +802,7 @@ class CustomProductsController extends ListingBaseController
         $this->set('images', $images);
         $this->set('record_id', $recordId);
         $this->set('isDefaultLayout', FatApp::getPostedData('isDefaultLayout', FatUtility::VAR_INT, 0));
-        $this->set('canEdit', $this->objPrivilege->canEditProducts(0, true));
+        $this->checkEditPrivilege(true);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);        
     }
@@ -935,7 +935,7 @@ class CustomProductsController extends ListingBaseController
 
     public function uploadMedia()
     {
-        $this->objPrivilege->canEditProducts();
+        $this->checkEditPrivilege();
         $post = FatApp::getPostedData();
         if (empty($post)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_FILE_NOT_SUPPORTED', $this->siteLangId), true);
@@ -977,7 +977,7 @@ class CustomProductsController extends ListingBaseController
 
     public function deleteImage($productId, $imageId)
     {
-        $this->objPrivilege->canEditProducts();
+        $this->checkEditPrivilege();
         $productId = FatUtility::int($productId);
         $imageId = FatUtility::int($imageId);
 
@@ -1184,7 +1184,7 @@ class CustomProductsController extends ListingBaseController
 
     public function deleteDigitalLink($linkId, $refId)
     {
-        $this->objPrivilege->canEditProducts();
+        $this->checkEditPrivilege();
 
         $this->objPrivilege->canEditCustomProductRequests($this->admin_id, true);
 

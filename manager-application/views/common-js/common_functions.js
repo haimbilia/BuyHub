@@ -14,8 +14,8 @@ function getNotifications(type,obj) {
     let url = fcom.makeUrl("Notifications", "notificationList");
     let viewAllUrl =  fcom.makeUrl("Notifications");
     if(type == 1 ){
-        url = fcom.makeUrl("Notifications", "notificationList");
-        viewAllUrl =  fcom.makeUrl("Notifications");
+        url = fcom.makeUrl("SystemLog", "notificationList");
+        viewAllUrl =  fcom.makeUrl("SystemLog");
     }
     if(typeof obj != undefined){
         $(obj).siblings().removeClass('is-current');
