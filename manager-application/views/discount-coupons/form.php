@@ -1,4 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+if (!empty($onClear)) {
+    $frm->setFormTagAttribute('data-onclear', $onClear);
+}
+
 $fld = $frm->getField('coupon_title');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 

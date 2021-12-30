@@ -1484,3 +1484,5 @@ update `tbl_product_requests` set preq_ean_upc_code = Replace(preq_ean_upc_code,
 ALTER TABLE `tbl_product_requests` DROP `preq_specifications`;
 
 UPDATE `tbl_countries` SET `country_language_id`=1 WHERE 1;
+
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_ACTION";
