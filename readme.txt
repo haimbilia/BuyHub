@@ -294,7 +294,8 @@ Updates/Fixes :
     => 060772 - Admin UI: Admin is not able to edit the 'Minimum Purchase Quantity' and 'Discount (%)' fields under the Volume Discount section
     => 060775 - Admin UI: Product's listing is not showing while adding the 'related products and facing some UI issue under the "Related Products" section
     => 061094 - Admin UI: Titles are not showing in the table and it is a mandatory field
-    
+    => 061073 - Admin UI: Heading is missing for the search's dropdown under the "meta tags management" section 
+
 New Features:  
     => Admin shipped products listing page
     => task-84719 Preview module for digital files

@@ -389,7 +389,7 @@ class MetaTagsController extends ListingBaseController
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-        $frm->addSelectBox(Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId), 'hasTagsAssociated', applicationConstants::getYesNoArr($this->siteLangId), false, array(), Labels::getLabel('FRM_DOESN\'T_MATTER', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId), 'hasTagsAssociated', applicationConstants::getYesNoArr($this->siteLangId), false, array(), Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId));
 
         HtmlHelper::addSearchButton($frm);
 
