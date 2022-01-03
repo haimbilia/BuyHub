@@ -1501,3 +1501,7 @@ VALUES ('LBL_PURCHASE', 1, 'Purchase', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_PURCHAHSE';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_SR._NO', 1, 'Sr. No', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
