@@ -140,9 +140,10 @@ class RelatedProductsController extends ListingBaseController
         $frm = new Form('frmRelatedProduct');
 
         $frm->addHiddenField('', 'selprod_id', 0);
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_Product', $this->siteLangId), 'product_name', []);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT', $this->siteLangId), 'product_name', []);
         $fld->requirement->setRequired(true);
-        $frm->addSelectBox(Labels::getLabel('FRM_Product', $this->siteLangId), 'products_related[]', [], '');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_REATED_PRODUCTS', $this->siteLangId), 'products_related[]', [], '');
+        $fld->requirement->setRequired(true);
         return $frm;
     }
 
