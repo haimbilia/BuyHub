@@ -4,6 +4,8 @@ class CustomProductsController extends ListingBaseController
 {
     use Catalog;
     protected string $modelClass = 'ProductRequest';
+    protected $pageKey = 'CUSTOM_PRODUCT_REQUEST';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -30,7 +32,7 @@ class CustomProductsController extends ListingBaseController
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
-        $pageData = PageLanguageData::getAttributesByKey('MANAGE_PRODUCTS', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->setModel();
@@ -1520,7 +1522,7 @@ class CustomProductsController extends ListingBaseController
     {
         switch ($action) {
             case 'index':
-                $pageData = PageLanguageData::getAttributesByKey('MANAGE_CATALOG_REQUEST', $this->siteLangId);
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
                     ['title' => $pageTitle]

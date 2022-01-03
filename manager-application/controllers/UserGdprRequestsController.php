@@ -4,7 +4,7 @@ class UserGdprRequestsController extends ListingBaseController
 {
 
     protected string $modelClass = 'UserGdprRequest';
-    protected $pageKey = 'MANAGE_USER_REQUEST';
+    protected $pageKey = 'MANAGE_USER_GDPR_REQUEST';
 
     public function __construct($action)
     {

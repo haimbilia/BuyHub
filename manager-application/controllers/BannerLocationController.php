@@ -3,7 +3,7 @@
 class BannerLocationController extends ListingBaseController
 {
     protected $modelClass = 'BannerLocation';
-    protected $pageKey = 'MANAGE_BANNER_LOCATION_BLOCK';
+    protected $pageKey = 'MANAGE_BANNER_LOCATIONS';
    
     public function __construct($action)
     {

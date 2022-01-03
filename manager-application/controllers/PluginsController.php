@@ -2,6 +2,8 @@
 
 class PluginsController extends ListingBaseController
 {
+    protected $pageKey = 'MANAGE_PLUGINS';
+
     public function __construct($action)
     {
         parent::__construct($action);
@@ -41,10 +43,16 @@ class PluginsController extends ListingBaseController
         $frmSearch = $this->getSearchForm($fields);
         $frmSearch->fill(['type' => Plugin::TYPE_CURRENCY_CONVERTER]);
 
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
         $this->set('frmSearch', $frmSearch);
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
         $this->set('svgIconNames', Plugin::getSvgIconNames());
         $this->set('activeTab', Plugin::TYPE_CURRENCY_CONVERTER);
         $this->set('includeEditor', true);
+        $this->set('labels', Plugin::getLabels($this->siteLangId));
         $this->getListingData();
 
         $this->_template->render();

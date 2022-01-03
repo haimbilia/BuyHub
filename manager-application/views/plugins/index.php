@@ -44,9 +44,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                                             </i>
                                             <div>
                                                 <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
-                                                <span class="settings-inner-desc">Lorem ipsum dolor sit amet
-                                                    consectetur adipisicing
-                                                    elit. Suscipit est quos </span>
+                                                <span class="settings-inner-desc"><?PHP echo $labels[$formType]?> </span>
                                             </div>
                                         </a>
                                     </li>
