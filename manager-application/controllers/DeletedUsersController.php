@@ -181,7 +181,7 @@ class DeletedUsersController extends ListingBaseController
     {
         $deletedUsersTblHeadingCols = CacheHelper::get('deletedUsersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($deletedUsersTblHeadingCols) {
-            return json_decode($deletedUsersTblHeadingCols);
+            return json_decode($deletedUsersTblHeadingCols, true);
         }
 
         $arr = [

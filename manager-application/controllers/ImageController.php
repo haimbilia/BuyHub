@@ -99,11 +99,11 @@ class ImageController extends FatController
         }
     }
 
-    public function badgeRequest($recordId)
+    public function badgeRequest($recordId, $w = 0, $h = 0)
     {
         $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $recordId);
         $image_name = isset($res['afile_physical_path']) ? AttachedFile::FILETYPE_BADGE_REQUEST_IMAGE_PATH . $res['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
-        AttachedFile::displayImage($image_name, 0, 0, '', '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
+        AttachedFile::displayImage($image_name, $w, $h, '', '', ImageResize::IMG_RESIZE_RESET_DIMENSIONS);
     }
 }

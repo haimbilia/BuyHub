@@ -312,7 +312,7 @@ class CountriesController extends ListingBaseController
     {
         $countriesTblHeadingCols = CacheHelper::get('countriesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($countriesTblHeadingCols) {
-            return json_decode($countriesTblHeadingCols);
+            return json_decode($countriesTblHeadingCols, true);
         }
 
         $arr = [

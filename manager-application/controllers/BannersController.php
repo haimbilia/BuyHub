@@ -625,7 +625,7 @@ class BannersController extends ListingBaseController
     {
         $bannersTblHeadingCols = CacheHelper::get('bannersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($bannersTblHeadingCols) {
-            return json_decode($bannersTblHeadingCols);
+            return json_decode($bannersTblHeadingCols, true);
         }
 
         $arr = [

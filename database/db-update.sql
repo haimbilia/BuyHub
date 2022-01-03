@@ -1535,3 +1535,17 @@ VALUES
 ('MSG_MANAGE_METATAGS_FOR_BLOG_CATEGORIES_DETAIL_PAGE',1,'Create and manage metatags for blog categories\' detail page.',1),
 ('MSG_MANAGE_METATAGS_FOR_EACH_BLOG_POSTS',1,'Create and manage metatags for each blog posts',1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_SR._NO', 1, 'Sr. No', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_RECOMENDED_TAG_PRODUCTS'; 
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_SMART_RECOMENDED_WEIGHTAGES';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_RECOMMENDED_TAG_PRODUCTS', 1, 'Recommended Tag Products', 1),
+('LBL_SMART_RECOMMENDED_WEIGHTAGES', 1, 'Smart Recommended Weightages', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_badges` ADD `badge_added_on` DATETIME NOT NULL AFTER `badge_updated_on`;

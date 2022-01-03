@@ -250,7 +250,7 @@ class OrderCancelReasonsController extends ListingBaseController
     {
         $ordercancelReasonTblHeadingCols = CacheHelper::get('ordercancelReasonTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($ordercancelReasonTblHeadingCols) {
-            return json_decode($ordercancelReasonTblHeadingCols);
+            return json_decode($ordercancelReasonTblHeadingCols, true);
         }
 
         $arr = [

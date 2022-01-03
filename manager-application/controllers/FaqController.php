@@ -496,7 +496,7 @@ class FaqController extends ListingBaseController
     {
         $faqTblHeadingCols = CacheHelper::get('faqTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($faqTblHeadingCols) {
-            return json_decode($faqTblHeadingCols);
+            return json_decode($faqTblHeadingCols, true);
         }
 
         $arr = [

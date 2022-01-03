@@ -26,10 +26,10 @@ HtmlHelper::renderHiddenFields($frmSearch);
 <div class="card-head">
     <div class="card-head-label">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <?php echo $frmSearch->getFieldHtml('keyword'); ?>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <?php echo $frmSearch->getFieldHtml('bcontributions_status'); ?>
             </div>
             <div class="col-md-2">

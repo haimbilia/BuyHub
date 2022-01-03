@@ -23,6 +23,7 @@ class BlogContributionsController extends ListingBaseController
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['searchFrmTemplate'] = 'blog-contributions/search-form.php';
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -271,7 +272,7 @@ class BlogContributionsController extends ListingBaseController
     {
         $blogContributionTblHeadingCols = CacheHelper::get('blogContributionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($blogContributionTblHeadingCols) {
-            return json_decode($blogContributionTblHeadingCols);
+            return json_decode($blogContributionTblHeadingCols, true);
         }
 
         $arr = [

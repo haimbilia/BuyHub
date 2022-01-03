@@ -305,7 +305,7 @@ class CurrencyManagementController extends ListingBaseController
     {
         $currencyTblHeadingCols = CacheHelper::get('currencyTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($currencyTblHeadingCols) {
-            return json_decode($currencyTblHeadingCols);
+            return json_decode($currencyTblHeadingCols, true);
         }
 
         $arr = [

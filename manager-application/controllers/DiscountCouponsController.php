@@ -155,7 +155,7 @@ class DiscountCouponsController extends ListingBaseController
         $includeTabs = FatApp::getPostedData('includeTabs', FatUtility::VAR_INT, 1);
         $onClear = FatApp::getPostedData('onClear', FatUtility::VAR_STRING, '');
 
-        $frm = $this->getForm();
+        $frm = $this->getForm($recordId, $includeTabs);
 
         if (0 < $recordId) {
             $data = DiscountCoupons::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, null, true);
@@ -287,7 +287,7 @@ class DiscountCouponsController extends ListingBaseController
         return $frm;
     }
 
-    private function getForm($recordId = 0)
+    private function getForm($recordId = 0, $updateOtherLangDataEle = 1)
     {
         $recordId = FatUtility::int($recordId);
 
@@ -350,10 +350,12 @@ class DiscountCouponsController extends ListingBaseController
         $coupon_discount_in_percent_fld->requirements()->addOnChangerequirementUpdate(applicationConstants::PERCENTAGE, 'eq', 'coupon_max_discount_value', $couponMaxDiscountValueReqTrue);
         $coupon_discount_in_percent_fld->requirements()->addOnChangerequirementUpdate(applicationConstants::FLAT, 'eq', 'coupon_max_discount_value', $couponMaxDiscountValueReqFalse);
 
-        $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
-        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        if (!empty($translatorSubscriptionKey) && 0 < count($languageArr)) {
-            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+        if (applicationConstants::YES == $updateOtherLangDataEle) {
+            $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+            $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+            if (!empty($translatorSubscriptionKey) && 0 < count($languageArr)) {
+                $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            }
         }
 
         return $frm;
@@ -773,7 +775,7 @@ class DiscountCouponsController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('discountCouponsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

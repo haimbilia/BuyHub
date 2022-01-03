@@ -360,7 +360,7 @@ class TaxCategoriesRuleController extends ListingBaseController
     {
         $taxTblHeadingCols = CacheHelper::get('taxTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($taxTblHeadingCols) {
-            return json_decode($taxTblHeadingCols);
+            return json_decode($taxTblHeadingCols, true);
         }
 
         $arr = [

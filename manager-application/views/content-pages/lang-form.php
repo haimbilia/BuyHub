@@ -9,6 +9,7 @@ if ($fld != null) {
     $fld->developerTags['noCaptionTag'] = true;
 }
 
+unset($languages[CommonHelper::getDefaultFormLangId()]);
 $otherButtons = [
     [
        'attr' => [
@@ -25,7 +26,6 @@ if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
     $fld = $langFrm->getField('cpage_bg_image');
     $fld->value = '<span id="imageListingJs"></span>';
     $imgArr = [];
-    $recordId = $image['afile_record_id'];
     if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
         $imgArr = [
@@ -34,7 +34,7 @@ if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
                     'Image', 
                     'cpageBackgroundImage', 
                     array(
-                        $recordId, 
+                        $image['afile_record_id'], 
                         $image['afile_lang_id'], 
                         "THUMB", 
                         $image['afile_type']
@@ -53,7 +53,7 @@ if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
             'data-name' => Labels::getLabel("FRM_BACKGROUND_IMAGE", $siteLangId)
         ],
         $siteLangId,
-        ($canEdit ? 'deleteBackgroundImage(' . $recordId . ',' . $image['afile_id'] .',' . $image['afile_type'].','.$image['afile_lang_id'].')' :''),
+        ($canEdit ? 'deleteBackgroundImage(' . $image['afile_record_id'] . ',' . $image['afile_id'] .',' . $image['afile_type'].','.$image['afile_lang_id'].')' :''),
         ($canEdit ? 'editDropZoneImages(this)': ''),
         $imgArr,
         'mt-3 dropzone-custom dropzoneContainerJs'

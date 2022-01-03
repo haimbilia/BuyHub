@@ -323,7 +323,7 @@ class BannerLocationController extends ListingBaseController
     {
         $bannerLocationTblHeadingCols = CacheHelper::get('bannerLocationTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($bannerLocationTblHeadingCols) {
-            return json_decode($bannerLocationTblHeadingCols);
+            return json_decode($bannerLocationTblHeadingCols, true);
         }
 
         $arr = [

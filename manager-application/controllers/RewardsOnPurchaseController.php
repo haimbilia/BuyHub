@@ -253,7 +253,7 @@ class RewardsOnPurchaseController extends ListingBaseController
     {
         $rewardsOnPurchaseTblHeadingCols = CacheHelper::get('rewardsOnPurchaseTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($rewardsOnPurchaseTblHeadingCols) {
-            return json_decode($rewardsOnPurchaseTblHeadingCols);
+            return json_decode($rewardsOnPurchaseTblHeadingCols, true);
         }
 
         $arr = [

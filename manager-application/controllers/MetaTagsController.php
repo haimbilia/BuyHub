@@ -56,7 +56,7 @@ class MetaTagsController extends ListingBaseController
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
         if (empty($sortBy)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = $allowedKeysForSorting[2] ?? current($allowedKeysForSorting);
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
@@ -389,7 +389,7 @@ class MetaTagsController extends ListingBaseController
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-        $frm->addSelectBox(Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId), 'hasTagsAssociated', applicationConstants::getYesNoArr($this->siteLangId), false, array(), Labels::getLabel('FRM_DOESN\'T_MATTER', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId), 'hasTagsAssociated', applicationConstants::getYesNoArr($this->siteLangId), false, array(), Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId));
 
         HtmlHelper::addSearchButton($frm);
 
@@ -520,9 +520,12 @@ class MetaTagsController extends ListingBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
+           
             LibHelper::exitWithError($record->getError(), true);
         }
 
+        CacheHelper::clear(CacheHelper::TYPE_META_TAGS);
+        
         $newTabLangId = 0;
         if ($metaId > 0) {
             $languages = Language::getAllNames();
@@ -729,7 +732,7 @@ class MetaTagsController extends ListingBaseController
     {
         $metaTagsTblHeadingCols = CacheHelper::get('metaTagsTblHeadingCols' . $metaType . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($metaTagsTblHeadingCols) {
-            return json_decode($metaTagsTblHeadingCols);
+            return json_decode($metaTagsTblHeadingCols, true);
         }
 
         $arr = [

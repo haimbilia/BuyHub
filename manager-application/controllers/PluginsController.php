@@ -478,7 +478,7 @@ class PluginsController extends ListingBaseController
     {
         $pluginsTblHeadingCols = CacheHelper::get('pluginsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($pluginsTblHeadingCols) {
-            return json_decode($pluginsTblHeadingCols);
+            return json_decode($pluginsTblHeadingCols, true);
         }
 
         $arr = [

@@ -405,7 +405,7 @@ class CommonHelper extends FatUtility
             $commissionCostValue = $commissionCostValue + $taxPerQty;
         }
 
-        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost && FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', FatUtility::VAR_INT, 0)) {
+        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost && FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', FatUtility::VAR_INT, 0) && CommonHelper::canAvailShippingChargesBySeller($requestRow['op_selprod_user_id'], $requestRow['opshipping_by_seller_user_id'])) {
             $commissionCostValue = $commissionCostValue + $perUnitShippingCost;
         }
 
