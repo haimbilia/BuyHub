@@ -581,7 +581,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val("");
-                setTimeout(function () { cropImage(file, options, "uploadImages", inputBtn) }, 100);
+                setTimeout(function () { cropImage(file, options, "uploadImages", inputBtn);
+             }, 100);
                 return;
             });
         }
@@ -590,7 +591,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     uploadImages = function (formData) {
         if (false === checkControllerName()) {
             return false;
-        }
+        }                
+
         var frmName = formData.get("frmName");
         var frm = document.forms[frmName];
         var langId = 0;
@@ -621,8 +623,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function () {
-                $.ykmodal(fcom.getLoader());
+            beforeSend: function () {               
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());               
             },
             success: function (ans) {
                 fcom.removeLoader();

@@ -297,6 +297,7 @@ Updates/Fixes :
     => 061073 - Admin UI: Heading is missing for the search's dropdown under the "meta tags management" section 
     => 061115 - commission going negative when refund the product [RV-9.3.1]
     => 061057 - Admin UI: 'URL Rewriting' is not working for the SEARCH
+    => 061025 - Admin UI: Loader is not showing while uploading the media on the whole system 
 
 New Features:  
     => Admin shipped products listing page
