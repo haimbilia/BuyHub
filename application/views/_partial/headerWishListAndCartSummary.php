@@ -43,7 +43,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                                 <li class="<?php echo (!$product['in_stock']) ? 'disabled' : '';
                                             echo ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>">
 
-                                    <div class="cell cell_product">
+                                    <div class="block-img">
                                         <div class="item">
                                             <div class="item__pic">
                                                 <a href="<?php echo $productUrl; ?>">
@@ -76,8 +76,13 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                                                                                     } ?>
                                                     | <?php echo Labels::getLabel('LBL_Quantity:', $siteLangId) ?>
                                                     <?php echo $product['quantity']; ?> </div>
+
+                                                <a href="javascript:void(0)" class="remove" onclick="cart.remove('<?php echo md5($product['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                                    Remove
+                                                </a>
                                             </div>
                                         </div>
+
                                     </div>
 
 
@@ -92,19 +97,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                                         </div>
                                     </div>
 
-                                    <div class="cell cell_action">
-                                        <ul class="actions">
-                                            <li>
-                                                <a href="javascript:void(0)" class="" onclick="cart.remove('<?php echo md5($product['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                                    <svg class="svg" width="18" height="18" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#bin">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
 
-                                    </div>
                                 </li>
                         <?php
                             }
@@ -129,7 +122,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                         <?php } ?>
                         <?php ?>
                         <?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0); ?>
-                        <li class="hightlighted">
+                        <li class="highlighted">
                             <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
                             <span class="value"><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></span>
                         </li>
@@ -149,39 +142,3 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
         <?php } ?>
     </div>
 <?php } ?>
-
-<script>
-    $(document).ready(function() {
-
-        $('body').find('*[data-trigger-cart]').click(function() {
-            var targetElmId = $(this).data('trigger-cart');
-            var elmToggleClass = targetElmId + '--on';
-            if ($('body').hasClass(elmToggleClass)) {
-                $('body').removeClass(elmToggleClass);
-            } else {
-                $('body').addClass(elmToggleClass);
-            }
-        });
-
-        $('body').find('*[data-bs-target-close-cart]').click(function() {
-            var targetElmId = $(this).data('target-close-cart');
-            $('body').toggleClass(targetElmId + '--on');
-        });
-
-        $('body').mouseup(function(event) {
-            if ($(event.target).data('triggerCart') != '' && typeof $(event.target).data('triggerCart') !==
-                typeof undefined) {
-                event.preventDefault();
-                return;
-            }
-
-            $('body').find('*[data-close-on-click-outside-cart]').each(function(idx, elm) {
-                var slctr = $(elm);
-                if (!slctr.is(event.target) && !$.contains(slctr[0], event.target)) {
-                    $('body').removeClass(slctr.data('close-on-click-outside-cart') + '--on');
-                }
-            });
-        });
-
-    });
-</script>

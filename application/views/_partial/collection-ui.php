@@ -91,10 +91,13 @@ if ($showAddToFavorite) {
         <div class="modal fade" id="shareIcon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-
-                    <div class="modal-body"> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
+                    <div class="modal-header border-bottom-0">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
+                    </div>
+                    <div class="modal-body">
+
                         <div class="share-wrap">
                             <h6><?php echo Labels::getLabel('Lbl_Share_this_via', $siteLangId); ?></h6>
                             <ul class="social-sharing">

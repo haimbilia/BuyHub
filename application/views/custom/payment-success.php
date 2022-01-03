@@ -206,7 +206,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                             <div class="col-md-7">
                                                 <div class="bg-gray h-100 rounded p-4">
                                                     <h5><?php echo Labels::getLabel('LBL_ORDER_DETAIL', $siteLangId); ?></h5>
-                                                    <ul class="list-cart list-cart-page">
+                                                    <ul class="list-cart">
                                                         <?php
                                                         $shippingCharges = $subTotal = 0;
                                                         $selProdTotalSpecialPrice = 0;
@@ -220,8 +220,8 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                                     $selProdTotalSpecialPrice += $product['op_special_price'] * $product["op_qty"];
                                                                 }
                                                         ?>
-                                                                <li>
-                                                                    <div class="cell cell_product">
+                                                                <li class="list-cart-item">
+                                                                    <div class="block-img">
                                                                         <div class="product-profile">
                                                                             <div class="product-profile__thumbnail">
                                                                                 <a href="<?php echo $productUrl; ?>">
@@ -315,7 +315,7 @@ array_walk($orderFulFillmentTypeArr, function ($row) use (&$fulfillmentType) {
                                                                     <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_rounding_off']); ?></span>
                                                                 </li>
                                                             <?php } ?>
-                                                            <li class="hightlighted">
+                                                            <li class="highlighted">
                                                                 <span class="label"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId); ?></span>
                                                                 <span class="value"><?php echo CommonHelper::displayMoneyFormat($orderInfo['order_net_amount']); ?></span>
                                                             </li>

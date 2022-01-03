@@ -1,5 +1,5 @@
 <ul class="list-cart list-cart-page list-shippings">
-    <li class="shipping-select">
+    <li class="list-cart-item shipping-select">
         <div class="shop-name">
             <h6>
                 <i class="icn">
@@ -49,21 +49,21 @@
         $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
         $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPTHUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.webp');
     ?>
-        <li>
-            <div class="cell cell_product">
+        <li class="list-cart-item">
+            <div class="block-img">
                 <div class="product-profile">
                     <div class="product-profile__thumbnail">
                         <a href="<?php echo $productUrl; ?>">
                             <?php
-                                $pictureAttr = [
-                                    'webpImageUrl' => $imageWebpUrl,
-                                    'jpgImageUrl' => $imageUrl,
-                                    'ratio' => '3:4',
-                                    'alt' => $product['product_name'],
-                                    'siteLangId' => $siteLangId,
-                                ];
+                            $pictureAttr = [
+                                'webpImageUrl' => $imageWebpUrl,
+                                'jpgImageUrl' => $imageUrl,
+                                'ratio' => '3:4',
+                                'alt' => $product['product_name'],
+                                'siteLangId' => $siteLangId,
+                            ];
 
-                                $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
+                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                             ?>
                         </a>
                     </div>

@@ -43,7 +43,7 @@ if (!empty($allShops)) {
                                 <p class="location"> <?php echo $shop['state_name']; ?><?php echo ($shop['country_name'] && $shop['state_name']) ? ', ' : ''; ?><?php echo $shop['country_name']; ?> </p>
                                 <div class="store__detail-foot">
                                     <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && round($shop['shopRating']) > 0) { ?>
-                                        <div class="products__rating">
+                                        <div class="product-ratings">
                                             <i class="icn"><svg class="svg">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
                                                 </svg></i> <span class="rate"><?php echo  round($shop['shopRating'], 1); ?><span></span></span>

@@ -600,55 +600,6 @@
     margin: 5px 10px;
 }
 
-.remove {
-    margin: 5px;
-    color: red;
-}
-
-.shop-btn-group {
-    max-width: 350px;
-    a.btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 42px;
-        height: 42px;
-        border-radius: $radius-common;
-        margin: 2px;
-        padding: 0;
-        min-width: 1%;
-        background-color: #fff !important;
-        border: $border !important;
-        color: $txt-gray;
-        .icn {
-            svg {
-                width: 18px;
-                height: 18px;
-            }
-        }
-        &.is-active {
-            background: $brand-color !important;
-            color: $brand-color-inverse !important;
-            border-color: $brand-color !important;
-        }
-        &:hover {
-            background: $brand-color !important;
-            color: $brand-color-inverse !important;
-            border-color: $brand-color !important;
-        }
-    }
-    .share-icon {
-        .icn {
-            svg {
-                margin: -2px auto 0;
-                width: 16px;
-                height: 16px;
-                fill: $brand-color;
-            }
-        }
-    }
-}
-
 .shop-profile {
     border-radius: $radius-common;
     border: $border;

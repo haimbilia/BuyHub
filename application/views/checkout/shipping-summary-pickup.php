@@ -59,7 +59,7 @@
                             $seletedAddrId = $address['addr_id'];
                         } ?>
                         <!-- Header Shop Name-->
-                        <li class="shipping-select">
+                        <li class="list-cart-item shipping-select">
                             <div class="shop-name">
                                 <h6> <i class="icn">
                                         <svg class="svg" width="20px" height="20px">
@@ -117,8 +117,8 @@
                             $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
                             $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                             $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPTHUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'); ?>
-                            <li>
-                                <div class="cell cell_product">
+                            <li class="list-cart-item">
+                                <div class="block-img">
                                     <div class="product-profile">
                                         <div class="product-profile__thumbnail">
                                             <a href="<?php echo $productUrl; ?>">
@@ -204,7 +204,7 @@
                     $digiProductData = current($levelItems['digital_products']); ?>
                     <ul class="list-cart list-cart-page list-shippings">
                         <!-- Header Shop Name-->
-                        <li class="shipping-select">
+                        <li class="list-cart-item shipping-select">
                             <div class="shop-name">
                                 <h6> <i class="icn">
                                         <svg class="svg" width="20px" height="20px">
@@ -223,8 +223,8 @@
                             $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
                             $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                         ?>
-                            <li>
-                                <div class="cell cell_product">
+                            <li class="list-cart-item">
+                                <div class="block-img">
                                     <div class="product-profile">
                                         <div class="product-profile__thumbnail">
                                             <a href="<?php echo $productUrl; ?>">

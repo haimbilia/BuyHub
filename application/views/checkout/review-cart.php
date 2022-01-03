@@ -105,8 +105,8 @@
                     </tr>
                 <?php } ?>
                 <tr>
-                    <td class="hightlighted"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></td>
-                    <td class="hightlighted"><?php echo CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount']); ?></td>
+                    <td class="highlighted"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></td>
+                    <td class="highlighted"><?php echo CommonHelper::displayMoneyFormat($cartSummary['orderNetAmount']); ?></td>
                 </tr>
                 <tr>
                     <td></td>

@@ -21,9 +21,9 @@
                 text-align: #{$end-direction};
                 margin-#{$start-direction}: auto;
             }
-            &.hightlighted {
-                font-weight: 500;
-                border-top: $border;
+            &.highlighted {
+                font-weight: 600;
+                border-top: dotted 1px $border-color;
             }
             &.text-success {
                 color: $success-color;

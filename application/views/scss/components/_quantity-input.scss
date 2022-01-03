@@ -1,14 +1,18 @@
+$quantity-height: 40px;
+
 .quantity {
     background: $bg-white;
     border: $border;
     //height: 38px;
-    height: auto;
+    height: $quantity-height;
     display: flex;
     align-items: center;
     max-width: 130px;
     border-radius: $radius-common;
-    padding: 0.6rem 0rem;
-    span {
+    padding: 0;
+    font-size: 0.7rem;
+    .decrease,
+    .increase {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -17,23 +21,17 @@
         flex: 0 0 32px;
         width: 32px;
         height: 100%;
-        font-size: 0.7rem;
+
         color: $txt-gray;
         &:hover {
             color: $body-color;
-        }
-        .icn {
-            .svg {
-                width: 11px;
-                height: 11px;
-            }
         }
         &.not-allowed {
             background: none;
             opacity: 0.5;
         }
     }
-    input {
+    .qty-input {
         border: none;
         text-align: center;
         padding: 0 8px;
@@ -41,6 +39,10 @@
         height: 100%;
         font-size: 0.85rem;
         min-width: 35px;
+    }
+    &-sm {
+        max-width: 100px;
+        height: $quantity-height - 10px;
     }
     &-2 {
         max-width: 90px;

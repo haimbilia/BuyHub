@@ -15,11 +15,9 @@
     transition: all 0.5s ease;
     &--on & {
         transform: translateX(0% * $transform-direction);
-        box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.20);
+        box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
         @include media-breakpoint-down(sm) {
-            & {
-                width: 100%;
-            }
+            width: 100%;
         }
     }
     &_head {
@@ -38,12 +36,15 @@
         width: 100%;
         background: $bg-white;
         flex: 1;
+        padding: 0;
         border-bottom: $border;
         overflow-y: auto;
         .list-cart {
             border: none;
-            >li {
-                padding-#{$end-direction}: 0;
+            > li {
+                &:last-child {
+                    border: none;
+                }
             }
         }
     }
@@ -66,7 +67,7 @@
 }
 
 .side-cart--on {
-    .cart>a:after {
+    .cart > a:after {
         content: "";
         position: fixed;
         left: 0;

@@ -271,11 +271,9 @@
         }
     }
     @include media-breakpoint-down(sm) {
-        & {
-            grid-gap: 1px;
-            .products {
-                border-radius: 0px;
-            }
+        grid-gap: 1px;
+        .products {
+            border-radius: 0px;
         }
     }
     .products {
@@ -430,18 +428,23 @@
     &__pic {
         flex: 0 0 80px;
         max-width: 80px;
-        border: $border;
-        border-radius: $radius-common;
+        //border: $border;
+        //border-radius: $radius-common;
         margin: 0;
         margin-#{$end-direction}: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
         overflow: hidden;
+        background-color: $bg-gray;
         &-seller {
             flex: 0 0 100px;
             max-width: 100px;
             padding: 1rem;
+        }
+        img {
+            mix-blend-mode: multiply;
+            object-fit: cover;
         }
     }
     &__description {

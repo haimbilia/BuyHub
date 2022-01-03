@@ -73,7 +73,7 @@ foreach ($sellers as $sellerDetail) {
                         <?php echo $sellerDetail['shop_state_name'] . "," . $sellerDetail['shop_country_name']; ?>
                     </div>
 
-                    <div class="products__rating">
+                    <div class="product-ratings">
                         <i class="icn">
                             <svg class="svg">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">

@@ -5,11 +5,11 @@ $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product[
 $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPTHUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
 ?>
-<ul class="list-cart list-cart-page list-shippings">
-    <li class="shipping-select">
+<ul class="list-cart list-shippings">
+    <li class="list-cart-item shipping-select">
         <div class="shop-name">
-
-            <h6> <i class="icn">
+            <h6>
+                <i class="icn">
                     <svg class="svg" width="20px" height="20px">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#manage-shop">
                         </use>
@@ -46,22 +46,22 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
         </div>
 
     </li>
-    <li>
-        <div class="cell cell_product">
+    <li class="list-cart-item">
+        <div class="block-img">
             <div class="product-profile">
                 <div class="product-profile__thumbnail">
                     <a href="<?php echo $productUrl; ?>">
                         <?php
-                            $pictureAttr = [
-                                'webpImageUrl' => $imageWebpUrl,
-                                'jpgImageUrl' => $imageUrl,
-                                'ratio' => '3:4',
-                                'alt' => $product['product_name'],
-                                'siteLangId' => $siteLangId,
-                            ];
+                        $pictureAttr = [
+                            'webpImageUrl' => $imageWebpUrl,
+                            'jpgImageUrl' => $imageUrl,
+                            'ratio' => '3:4',
+                            'alt' => $product['product_name'],
+                            'siteLangId' => $siteLangId,
+                        ];
 
-                            $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); 
-                        ?>                     
+                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                        ?>
                     </a>
                 </div>
                 <div class="product-profile__data">
