@@ -184,7 +184,7 @@ class SystemLogController extends ListingBaseController
     {
         $systemLogTblHeadingCols = CacheHelper::get('systemLogTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($systemLogTblHeadingCols) {
-            return json_decode($systemLogTblHeadingCols);
+            return json_decode($systemLogTblHeadingCols, true);
         }
 
         $arr = [

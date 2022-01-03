@@ -292,6 +292,11 @@ Updates/Fixes :
     => 059913 - on home page favorite icon not updating
     => 060820 - On order subscription getting error
     => 060772 - Admin UI: Admin is not able to edit the 'Minimum Purchase Quantity' and 'Discount (%)' fields under the Volume Discount section
+    => 060775 - Admin UI: Product's listing is not showing while adding the 'related products and facing some UI issue under the "Related Products" section
+    => 061094 - Admin UI: Titles are not showing in the table and it is a mandatory field
+    => 061073 - Admin UI: Heading is missing for the search's dropdown under the "meta tags management" section 
+    => 061115 - commission going negative when refund the product [RV-9.3.1]
+    => 061057 - Admin UI: 'URL Rewriting' is not working for the SEARCH
 
 New Features:  
     => Admin shipped products listing page
@@ -474,6 +479,10 @@ Bugs :
     => 061101 - Admin UI: Search(Keyword and Dropdown) is not working properly under the "Meta tags Management" section.
     => 061018 - Admin UI: 'Language data' is also updated while updating the 'General Data' under the FAQ section.
     => 060822 - Admin UI: 'cpc' and 'ppc' is not capital under the promotion section.
+    => 060825 - Admin UI: Getting multiple issues under the 'rewards on purchase' section.
+    => 060830 - Admin UI: In the table, "N" is not capital for the serial number's abbreviation on the whole system.
+    => 060833 - Admin UI: "recomended" spelling is not correct under the Manage weightages section.
+    => 060861 - Admin UI: Watermark's text is not showing completely in the search fields under the "Blog Contributions" section.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

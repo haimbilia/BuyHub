@@ -254,7 +254,7 @@ class ShopReportReasonsController extends ListingBaseController
     {
         $shopReportReasonTblHeadingCols = CacheHelper::get('shopReportReasonTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($shopReportReasonTblHeadingCols) {
-            return json_decode($shopReportReasonTblHeadingCols);
+            return json_decode($shopReportReasonTblHeadingCols, true);
         }
 
         $arr = [

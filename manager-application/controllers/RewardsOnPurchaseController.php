@@ -253,13 +253,13 @@ class RewardsOnPurchaseController extends ListingBaseController
     {
         $rewardsOnPurchaseTblHeadingCols = CacheHelper::get('rewardsOnPurchaseTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($rewardsOnPurchaseTblHeadingCols) {
-            return json_decode($rewardsOnPurchaseTblHeadingCols);
+            return json_decode($rewardsOnPurchaseTblHeadingCols, true);
         }
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'rop_purchase_upto' => Labels::getLabel('LBL_PURCHAHSE', $this->siteLangId),
+            'rop_purchase_upto' => Labels::getLabel('LBL_PURCHASE', $this->siteLangId),
             'rop_reward_point' => Labels::getLabel('LBL_REWARD_POINT', $this->siteLangId),            
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];

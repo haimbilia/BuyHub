@@ -271,7 +271,7 @@ class LanguagesController extends ListingBaseController
     {
         $languagesTblHeadingCols = CacheHelper::get('languagesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($languagesTblHeadingCols) {
-            return json_decode($languagesTblHeadingCols);
+            return json_decode($languagesTblHeadingCols, true);
         }
 
         $arr = [

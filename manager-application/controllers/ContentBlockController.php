@@ -662,7 +662,7 @@ class ContentBlockController extends ListingBaseController
     {
         $ContentBlokTblHeadingCols = CacheHelper::get('ContentBlokTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($ContentBlokTblHeadingCols) {
-            return json_decode($ContentBlokTblHeadingCols);
+            return json_decode($ContentBlokTblHeadingCols, true);
         }
 
         $arr = [

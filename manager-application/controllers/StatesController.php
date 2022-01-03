@@ -290,7 +290,7 @@ class StatesController extends ListingBaseController
     {
         $statesTblHeadingCols = CacheHelper::get('statesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($statesTblHeadingCols) {
-            return json_decode($statesTblHeadingCols);
+            return json_decode($statesTblHeadingCols, true);
         }
 
         $arr = [

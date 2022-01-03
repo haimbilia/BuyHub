@@ -469,7 +469,7 @@ class AdminUsersController extends ListingBaseController
     {
         $adminUsersTblHeadingCols = CacheHelper::get('adminUsersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($adminUsersTblHeadingCols) {
-            return json_decode($adminUsersTblHeadingCols);
+            return json_decode($adminUsersTblHeadingCols, true);
         }
 
         $arr = [

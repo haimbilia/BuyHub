@@ -435,7 +435,7 @@ class VolumeDiscountController extends ListingBaseController
     {
         $volumeDiscountTblHeadingCols = CacheHelper::get('volumeDiscountTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($volumeDiscountTblHeadingCols) {
-            return json_decode($volumeDiscountTblHeadingCols);
+            return json_decode($volumeDiscountTblHeadingCols, true);
         }
 
         $arr = [

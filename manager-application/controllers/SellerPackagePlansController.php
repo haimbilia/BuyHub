@@ -261,7 +261,7 @@ class SellerPackagePlansController extends ListingBaseController
     {
         $subsPkgTblHeadingCols = CacheHelper::get('subsPkgPlanTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($subsPkgTblHeadingCols) {
-            return json_decode($subsPkgTblHeadingCols);
+            return json_decode($subsPkgTblHeadingCols, true);
         }
 
         $arr = [

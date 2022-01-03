@@ -586,7 +586,7 @@ class BlogPostsController extends ListingBaseController
     {
         $blogPostsItemsTblHeadingCols = CacheHelper::get('blogPostsItemsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($blogPostsItemsTblHeadingCols) {
-            return json_decode($blogPostsItemsTblHeadingCols);
+            return json_decode($blogPostsItemsTblHeadingCols, true);
         }
 
         $arr = [
