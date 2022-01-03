@@ -9,7 +9,6 @@ if ($fld != null) {
     $fld->developerTags['noCaptionTag'] = true;
 }
 
-unset($languages[CommonHelper::getDefaultFormLangId()]);
 $otherButtons = [
     [
        'attr' => [
