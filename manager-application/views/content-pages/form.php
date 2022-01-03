@@ -7,7 +7,6 @@ $fld = $frm->getField('urlrewrite_custom');
 $fld->setFieldTagAttribute('id', "urlrewrite_custom");
 $fld->htmlAfterField = '<span class="form-text text-muted">' . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Cms', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</span>';
 $fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
-unset($languages[CommonHelper::getDefaultFormLangId()]);
 
 $displayLangTab = false;
 $otherButtons = [
