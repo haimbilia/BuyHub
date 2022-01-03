@@ -295,6 +295,7 @@ Updates/Fixes :
     => 060775 - Admin UI: Product's listing is not showing while adding the 'related products and facing some UI issue under the "Related Products" section
     => 061094 - Admin UI: Titles are not showing in the table and it is a mandatory field
     => 061073 - Admin UI: Heading is missing for the search's dropdown under the "meta tags management" section 
+    => 061115 - commission going negative when refund the product [RV-9.3.1]
 
 New Features:  
     => Admin shipped products listing page
