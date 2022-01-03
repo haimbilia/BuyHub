@@ -22,6 +22,7 @@ class Badge extends MyAppModel
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'type',
         self::DB_TBL_PREFIX . 'condition_type',
+        self::DB_TBL_PREFIX . 'trigger_type',
         self::DB_TBL_PREFIX . 'shape_type',
         self::DB_TBL_PREFIX . 'display_inside',
         self::DB_TBL_PREFIX . 'color',
@@ -29,6 +30,7 @@ class Badge extends MyAppModel
         self::DB_TBL_PREFIX . 'required_approval',
         self::DB_TBL_PREFIX . 'active',
         self::DB_TBL_PREFIX . 'added_on',
+        self::DB_TBL_PREFIX . 'updated_on',
     ];
 
     public const LANG_ATTR = [

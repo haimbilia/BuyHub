@@ -1486,3 +1486,4 @@ ALTER TABLE `tbl_product_requests` DROP `preq_specifications`;
 UPDATE `tbl_countries` SET `country_language_id`=1 WHERE 1;
 
 DELETE FROM tbl_language_labels WHERE label_key = "LBL_ACTION";
+ALTER TABLE `tbl_badges` ADD `badge_added_on` DATETIME NOT NULL AFTER `badge_updated_on`;

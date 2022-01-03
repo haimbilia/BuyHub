@@ -355,7 +355,7 @@
                         <?php } ?>
 
                         <?php if ($objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                            <a class="setting" href="<?php echo UrlHelper::generateUrl('ShopReportReasons'); ?>">
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('sellerApprovalForm'); ?>">
                                 <div class="setting__icon">
                                     <span class="icon">
                                         <svg class="icon" width="40" height="40">

@@ -302,7 +302,7 @@ class PushNotificationsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_DEVICE_TYPE', $this->siteLangId), 'pnotification_device_os', $deviceTypeArr, '', array(), '');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 

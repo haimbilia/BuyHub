@@ -105,20 +105,8 @@ foreach ($arrListing as $sn => $row) {
                         }
 
                     } else if (0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
-                        $li = $ul->appendElement("li"); 
-                        $li->appendElement(
-                            'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ", " . $row['badge_id'] . ")", 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
-                            '<i class="fa fa-edit"></i>',
-                            true
-                        );
-                        $li = $ul->appendElement("li"); 
-                        $li->appendElement(
-                            'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'title' => Labels::getLabel('LBL_DELETE_REQUEST', $siteLangId)),
-                            '<i class="fa fa-trash"></i>',
-                            true
-                        );
+                        $htm = ' <span class="label label-inline label-danger rounded-pill">' . Labels::getLabel('LBL_N/A', $siteLangId) . '</span>';
+                        $td->appendElement('plaintext', [], $htm, true);
                     } else {
                         $icon = '<i class="icn shop">
                                     <svg class="svg">

@@ -1468,10 +1468,10 @@ class ImageController extends FatController
                 AttachedFile::displayImage($image_name, $w, $h, '', $filePath);
                 break;
             default:
+            AttachedFile::displayOriginalImage($image_name, '', $filePath);
                 if (is_numeric($sizeType)) {
                     AttachedFile::displayImage($image_name, $sizeType, $sizeType, '', $filePath);
                 } else {
-                    AttachedFile::displayOriginalImage($image_name, '', $filePath);
                 }
                 break;
         }

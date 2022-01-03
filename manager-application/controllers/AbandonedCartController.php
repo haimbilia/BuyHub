@@ -148,11 +148,11 @@ class AbandonedCartController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_SELLER_PRODUCT', $this->siteLangId), 'abandonedcart_selprod_id', [], '', ['placeholder' => Labels::getLabel('FRM_SELECT', $this->siteLangId)]);
 
         $frm->addSelectBox(Labels::getLabel('FRM_CART_ACTION', $this->siteLangId), 'abandonedcart_action', AbandonedCart::getActionArr($this->siteLangId));
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
     
