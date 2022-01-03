@@ -181,8 +181,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
-
-                $title = $records['post_title'];
+                $title = ($records) ? $records['post_title'] : '';
                 break;
             default:
                 $srch = Brand::getListingObj($this->siteLangId, null, true);
@@ -192,7 +191,7 @@ class ImageAttributesController extends ListingBaseController
                 $srch->setPageSize(1);
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
-                $title = $records['brand_name'];
+                $title = ($records) ? $records['brand_name'] : '';
                 break;
         }
         $images = AttachedFile::getMultipleAttachments($moduleType, $recordId, $optionId, $langId, false, 0, 0, true);
@@ -281,7 +280,7 @@ class ImageAttributesController extends ListingBaseController
 
         $attachedFile = new AttachedFile();
         $attachementArr = $attachedFile->getImgAttrTypeArray($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE);
+        $frm->addSelectBox(Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId), 'select_module', $attachementArr, AttachedFile::FILETYPE_PRODUCT_IMAGE,[],'');
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'record_name');

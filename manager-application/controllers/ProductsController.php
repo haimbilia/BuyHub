@@ -788,7 +788,7 @@ class ProductsController extends ListingBaseController
         $this->set('images', $images);
         $this->set('recordId', $recordId);
         $this->set('isDefaultLayout', FatApp::getPostedData('isDefaultLayout', FatUtility::VAR_INT, 0));
-        $this->set('canEdit', $this->objPrivilege->canEditProducts(0, true));
+        $this->checkEditPrivilege(true);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

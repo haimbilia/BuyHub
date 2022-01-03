@@ -39,7 +39,9 @@
                     $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canEditPagesLanguageData(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true) ||
-                    $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewSmsTemplate(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true)
 
                 ) { ?>
                     <div class="setting-search">
@@ -335,7 +337,39 @@
                                 </div>
                             </a>
                         <?php } ?>
+                        <?php if ($objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true) && SmsArchive::canSendSms()) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('EmailTemplates'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#email">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_EMAIL_TEMPLATES', $siteLangId); ?></h6>
+                                    <span>Can be used while sending sms</span>
+                                </div>
+                            </a>
+                        <?php } ?>
 
+                        <?php if ($objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('ShopReportReasons'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_FORM', $siteLangId); ?></h6>
+                                    <span>Seller Approval Form Settings</span>
+                                </div>
+                            </a>
+                        <?php } ?>
                     </div>
                 <?php } ?>
             </div>

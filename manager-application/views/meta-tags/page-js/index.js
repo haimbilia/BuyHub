@@ -15,16 +15,14 @@ $(document).on('blur', '.metaUrlJs', function () {
     var dv = '#metaTagsListing';
     var listingTableJs = '.listingTableJs';
 
-    reloadList = function () {
-        searchRecords(document.frmRecordSearchPaging);
+    tabSearchRecords = function (object) {
+        $(':input', document.frmRecordSearch).not(':hidden').val('');
+        searchRecords(object);
     };
 
     setTabActive = function (type) {
         $('ul.metaTypesJs li.is-active').removeClass('is-active');
         $('ul.metaTypesJs li.tabJs-' + type).addClass('is-active');
-        $('html, body').animate({
-            scrollTop: $("#metaTagsListing").offset().top
-        }, 800);
     }
 
     searchRecords = function (object, replaceRowsOnly = false) {

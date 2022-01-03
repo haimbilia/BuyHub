@@ -91,9 +91,9 @@ class DiscountCouponsController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'coupon_active');
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'coupon_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = 'coupon_active';
+            $sortBy = 'coupon_id';
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
@@ -152,6 +152,9 @@ class DiscountCouponsController extends ListingBaseController
         $this->objPrivilege->canEditDiscountCoupons();
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $includeTabs = FatApp::getPostedData('includeTabs', FatUtility::VAR_INT, 1);
+        $onClear = FatApp::getPostedData('onClear', FatUtility::VAR_STRING, '');
+
         $frm = $this->getForm();
 
         if (0 < $recordId) {
@@ -169,6 +172,10 @@ class DiscountCouponsController extends ListingBaseController
         $this->set('coupon_type', (isset($data['coupon_type']) ? $data['coupon_type'] : DiscountCoupons::TYPE_DISCOUNT));
         $this->set('couponDiscountIn', isset($data['coupon_discount_in_percent']) ? $data['coupon_discount_in_percent'] : applicationConstants::PERCENTAGE);
         $this->set('formTitle', Labels::getLabel('LBL_DISCOUNT_COUPON_SETUP', $this->siteLangId));
+        $this->set('onClear', $onClear);
+        if (1 > $includeTabs) {
+            $this->set('includeTabs', false);
+        }
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -269,7 +276,7 @@ class DiscountCouponsController extends ListingBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'coupon_active', applicationConstants::SORT_DESC);
+            $this->addSortingElements($frm, 'coupon_id', applicationConstants::SORT_DESC);
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');

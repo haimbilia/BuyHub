@@ -37,7 +37,7 @@ if (!empty($repVarArr))  {
         $repVarHtml .= '<li title="' . Labels::getLabel('LBL_CLICK_TO_COPY', $siteLangId) . '" onclick="copyText(this, true);" data-bs-toggle="tooltip" data-placement="top">
             <div class="text">
                 <span>' . $val['title'] . '</span>
-                <span class="badge badge-info" data-container="body" data-bs-toggle="tooltip" data-placement="top">
+                <span class="badge badge-info">
                 ' . $val['variable'] . '
                 </span>
             </div>

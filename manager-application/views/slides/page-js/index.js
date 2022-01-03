@@ -9,7 +9,7 @@ bindSortable = function() {
     if (1 > $('[data-field="dragdrop"]').length) {
         return;
     }
-    $("#orderStatuses > tbody").sortable({
+    $("#listingTableJs > tbody").sortable({
         update: function(event, ui) {
             fcom.displayProcessing();
             $('.listingTableJs').prepend(fcom.getLoader());

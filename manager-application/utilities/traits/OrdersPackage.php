@@ -169,7 +169,12 @@ trait OrdersPackage
         $this->initVariables();
 
         $this->orderData($orderId);
-        $str = Labels::getLabel('LBL_ORDER_#{ORDER-NUMBER}', $this->siteLangId);
+        if ($this->ordersType == Orders::ORDER_SUBSCRIPTION) {
+            $str = Labels::getLabel('LBL_SUBSCRIPTION_ORDER_#{ORDER-NUMBER}', $this->siteLangId);
+        } else {
+            $str = Labels::getLabel('LBL_ORDER_#{ORDER-NUMBER}', $this->siteLangId);
+        }
+
         $pageData = PageLanguageData::getAttributesByKey($this->viewPageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? CommonHelper::replaceStringData($str, ['{ORDER-NUMBER}' =>  $this->order['order_number']]);
         $this->set('pageTitle', $pageTitle);
@@ -330,8 +335,9 @@ trait OrdersPackage
     {
         switch ($action) {
             case 'view':
+                $lbl = $this->ordersType == Orders::ORDER_SUBSCRIPTION ? Labels::getLabel('LBL_SUBSCRIPTION_ORDER', $this->siteLangId) : Labels::getLabel('LBL_ORDER', $this->siteLangId);
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
-                $pageTitle = $pageData['plang_title'] ?? Labels::getLabel('LBL_ORDERS', $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? $lbl;
 
                 $url = FatApp::getQueryStringData('url');
                 $urlParts = explode('/', $url);

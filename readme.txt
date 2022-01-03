@@ -458,6 +458,23 @@ Bugs :
     => UAT Fixes
 =============TV-9.4.0.20211228================
 
+Bugs : 
+    => 060664 - Admin UI: "Alpha-3 Code" column is not showing in the exported file under the countries section.
+    => 061063 - Admin UI: 'Type' text is missing with the 'Select' under the "Image Attributes" section.
+    => 061092 - Admin UI: "Clear" functionality is not working for the "Product details" listing under the 'Meta tags management' section.
+    => 061058 - Admin UI: Getting an error while clicking on the 'edit' option under the Image attributes section.
+    => 061133 - Error coming while editing blogs image attributes in image attributes section.
+    => 061109 - Admin UI: "NEW" button design is not correct for the 'Advanced settings' under the "Meta Tag Management" section.
+    => 061107 - Admin UI: "Clear" design is not correct under the "Meta Tag Management" section.
+    => 061059 - Admin UI: 'Default' option is not selected after editing the records.
+    => 061113 - Admin UI: Not able to delete the records from the "Advanced setting meta tags listing" under the Meta tags section.
+    => 060672 - Admin UI: "Export Data Range" is not working according to 'By Id' and 'By Batches' while exporting the user's file.
+    => 061106 - Admin UI: Admin navigates to the "English" page while clicking on the RESET button on the Arabic page under the "Meta Tag Management" section.
+    => 061024 - Admin UI: 'Language data' is also updated while adding the 'General Data' and language data' title is also not the same under the Testimonial section.
+    => 061101 - Admin UI: Search(Keyword and Dropdown) is not working properly under the "Meta tags Management" section.
+    => 061018 - Admin UI: 'Language data' is also updated while updating the 'General Data' under the FAQ section.
+    => 060822 - Admin UI: 'cpc' and 'ppc' is not capital under the promotion section.
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

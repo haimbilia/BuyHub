@@ -119,34 +119,34 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         var frm = document.frmLoadMoreRecordsPaging;
         var page = 1;
-        if (
-            "undefined" != typeof frm.page.value &&
-            "" != frm.page.value &&
-            0 < frm.page.value
-        ) {
+        if ("undefined" != typeof frm.page.value && "" != frm.page.value && 0 < frm.page.value) {
             page += parseInt(frm.page.value);
         }
 
         $(frm.page).val(page);
         var reference = $(".appendRowsJs .rowJs:last").data("reference");
-        if (
-            "undefined" != typeof reference &&
-            "undefined" != typeof frm.reference
-        ) {
+        if ("undefined" != typeof reference && "undefined" != typeof frm.reference) {
             $(frm.reference).val(reference);
         }
 
         var data = fcom.frmData(frm);
 
-        $(".appendRowsJs .rowJs:last")
-            .clone()
-            .removeAttr("class")
-            .addClass("rowJs")
-            .appendTo(".appendRowsJs")
-            .html(fcom.getRowSpinner());
-        fcom.ajax(fcom.makeUrl(controllerName, "getRows"), data, function (rows) {
-            $(".appendRowsJs .rowJs:last").remove();
-            $(".appendRowsJs").append(rows);
+        var loadMoreBtn = $('.loadMoreBtnJs');
+        var btnText = loadMoreBtn.text();
+        loadMoreBtn.html(fcom.getRowSpinner());
+
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "getRows"), data, function (rows) {
+            $.ykmsg.close();
+            $(".appendRowsJs").append(rows.html);
+            loadMoreBtn.html(btnText);
+
+            var similarElement = '.appendRowsJs [data-reference="' + reference + '"]';
+            var lastSimilar = $(similarElement + ':last');
+            if (1 < $(similarElement).length) {
+                var li = lastSimilar.find('.ulJs').html();
+                lastSimilar.remove();
+                $(similarElement + ':last ul.ulJs').append(li);
+            }
 
             if (page == frm.pageCount.value) {
                 $(".loadMorePaginationJs").remove();
@@ -217,6 +217,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
     clearSearch = function (loadRowsOnly = false) {
         document.frmRecordSearch.reset();
+        $(':input', document.frmRecordSearch).not(':hidden').val('');
         $("input:checkbox[name=listingFld]:checked").each(function () {
             if ($(this).attr("disabled") != "disabled") {
                 $(this).prop("checked", false);
@@ -303,6 +304,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
         fcom.resetEditorInstance();
         data = "recordId=" + recordId + "&langId=" + langId;
+        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
         fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
             data,
@@ -318,7 +320,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (false === checkControllerName()) {
             return false;
         }
-
+        fcom.displayProcessing();
         e.stopPropagation();
         /* if (!confirm(langLbl.confirmUpdateStatus)) {
             e.preventDefault();
@@ -338,6 +340,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         data = "recordId=" + recordId + "&status=" + status;
         fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
             function (res) {
+                $.ykmsg.close();
                 $(obj).prop("checked", 1 == status);
                 var ans = JSON.parse(res);
                 if (ans.status == 1) {
@@ -363,14 +366,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, 'setup'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
             $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
             fcom.removeLoader();
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-                return false;
-            }
             $.ykmsg.success(t.msg);
 
             reloadList();
@@ -395,13 +393,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
         var data = fcom.frmData(frm);
-        fcom.ajax(fcom.makeUrl(controllerName, "langSetup"), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.removeLoader();
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-                return false;
-            }
             $.ykmsg.success(t.msg);
 
             if (t.langId == langLbl.defaultFormLangId) {
@@ -426,8 +419,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             obj.removeAttr("disabled");
         }
 
-        var parentForm = obj.closest("form").attr("id");
-        $("#" + parentForm + " .selectItemJs").each(function () {
+        $(".listingRecordJs .selectItemJs").each(function () {
             var tr = $(this).closest('tr');
             if (obj.prop("checked") == false) {
                 $(this).prop("checked", false);
@@ -453,20 +445,13 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         data = fcom.frmData(frm);
 
-        fcom.displayProcessing();
-        fcom.ajax(frm.action, data, function (res) {
+        fcom.updateWithAjax(frm.action, data, function (t) {
             fcom.removeLoader();
             $.ykmsg.close();
             $(".selectAllJs").prop("checked", false);
             callback();
             showActionsBtns();
-
-            var t = JSON.parse(res);
-            if (t.status == 0) {
-                $.ykmsg.error(t.msg);
-            } else {
-                $.ykmsg.success(t.msg);
-            }
+            $.ykmsg.success(t.msg);
             $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
         });
     };

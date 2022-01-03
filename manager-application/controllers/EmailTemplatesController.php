@@ -2,6 +2,7 @@
 
 class EmailTemplatesController extends ListingBaseController
 {
+    protected string $pageKey = 'MANAGE_SMS_TEMPLATES';
     public function __construct($action)
     {
         parent::__construct($action);
@@ -12,7 +13,7 @@ class EmailTemplatesController extends ListingBaseController
     {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $pageData = PageLanguageData::getAttributesByKey('EMAIL_TEMPLATES', $this->siteLangId);
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $this->set('pageData', $pageData);
@@ -20,8 +21,6 @@ class EmailTemplatesController extends ListingBaseController
         $this->set("frmSearch", $frmSearch);
         $this->getListingData();
         $this->set('includeEditor', true);
-        // $this->_template->addCss('css/cropper.css');
-        //$this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/jscolor.js'));
 
         $this->_template->render();
     }
@@ -58,8 +57,7 @@ class EmailTemplatesController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
 
-        $srch = EmailTemplates::getSearchObject();
-        $srch->addOrder(EmailTemplates::DB_TBL_PREFIX . 'lang_id', 'ASC');
+        $srch = EmailTemplates::getSearchObject(0, false);
         $srch->addGroupBy(EmailTemplates::DB_TBL_PREFIX . 'code');
 
         if (!empty($post['keyword'])) {
@@ -149,7 +147,6 @@ class EmailTemplatesController extends ListingBaseController
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
-
         $this->set('msg', $this->str_setup_successful);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -206,7 +203,7 @@ class EmailTemplatesController extends ListingBaseController
             $etplObj = new EmailTemplates($etplCode);
             $langData = $etplObj->getEtpl($etplCode, $lang_id);
         }
-
+        
         if ($langData) {
             $langFrm->fill($langData);
         }
@@ -434,20 +431,19 @@ class EmailTemplatesController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['etpl_status'], Common::excludeKeysForSort());
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)
     {
         switch ($action) {
             case 'index':
+                $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
-                    ['title' => Labels::getLabel('LBL_EMAIL_TEMPLATES', $this->siteLangId)]
+                    ['title' => Labels::getLabel('LBL_SETTINGS', $this->siteLangId), 'href' => UrlHelper::generateUrl('Settings')],
+                    ['title' => $pageTitle]
                 ];
-                break;
-            default:
-                parent::getBreadcrumbNodes($action);
-                break;
         }
         return $this->nodes;
     }

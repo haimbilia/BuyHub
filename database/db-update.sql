@@ -1483,3 +1483,15 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 update `tbl_product_requests` set preq_ean_upc_code = Replace(preq_ean_upc_code, '|', ',');
 ALTER TABLE `tbl_product_requests` DROP `preq_specifications`;
 -- -------------------TV-9.4.0.20211228-----------------------
+
+UPDATE `tbl_countries` SET `country_language_id`=1 WHERE 1;
+
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_ACTION";
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_CPC', 1, 'CPC', 1),
+('FRM_CPC', 1, 'CPC', 1),
+('LBL_PPC_cost_per_click_for_Product',1,'PPC cost per click for product',1),
+('LBL_PPC_COST_PER_CLICK_FOR_SHOP',1,'PPC cost per click for shop',1),
+('LBL_PPC_COST_PER_CLICK_FOR_SLIDES',1,'PPC cost per click for slides',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($langFrm);
-$langFrm->setFormTagAttribute('data-onclear', 'editMetaTagLangForm(' . $metaId . ',' . array_key_first($languages) . ', "' . $metaType . '", ' . $metaTagRecordId . ')');
+$langFrm->setFormTagAttribute('data-onclear', 'editMetaTagLangForm(' . $metaId . ',' . $lang_id . ', "' . $metaType . '", ' . $metaTagRecordId . ')');
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
 $langFrm->setFormTagAttribute('dir', $formLayout);
 $langFrm->setFormTagAttribute('onsubmit', 'setupLangMetaTag(this, "' . $metaType . '"); return(false);');

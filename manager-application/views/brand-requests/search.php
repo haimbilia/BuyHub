@@ -25,10 +25,10 @@ foreach ($arrListing as $sn => $row) {
             case 'brand_logo':
                 $uploadedTime = AttachedFile::setTimeParam($row['brand_updated_on']);
                 $td->appendElement(
-                        'plaintext',
-                        array('style' => 'text-align:center'),
-                        '<img  class="max-img"  src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">',
-                        true
+                    'plaintext',
+                    array('style' => 'text-align:center'),
+                    '<img  class="max-img"  src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($row['brand_id'], $siteLangId, 'MINITHUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg') . '">',
+                    true
                 );
                 break;
             case 'action':
@@ -36,7 +36,7 @@ foreach ($arrListing as $sn => $row) {
                     'siteLangId' => $siteLangId,
                     'recordId' => $row['brand_id']
                 ];
-            
+
                 if ($canEdit) {
                     $data['editButton'] = [];
                 }
@@ -51,16 +51,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-if (count($arrListing) == 0) {
-    $tbody->appendElement('tr')->appendElement(
-            'td',
-            array(
-                'colspan' => count($fields),
-                'class' => 'noRecordFoundJs'
-            ),
-            Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId)
-    );
-}
+include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

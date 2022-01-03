@@ -66,6 +66,7 @@ class MetaTagsController extends ListingBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
         $this->postedData = $searchForm->getFormDataFromArray(FatApp::getPostedData());
+        $this->postedData['metaType'] = $metaType;
 
         $this->controller = FatUtility::convertToType($this->tabsArr[$metaType]['controller'], FatUtility::VAR_STRING);
         $this->action = FatUtility::convertToType($this->tabsArr[$metaType]['action'], FatUtility::VAR_STRING);
@@ -392,7 +393,7 @@ class MetaTagsController extends ListingBaseController
 
         HtmlHelper::addSearchButton($frm);
 
-        $clearBtnHtm = HtmlHelper::addButtonHtml(Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-light', 'clearSearch(true)');
+        $clearBtnHtm = HtmlHelper::addButtonHtml(Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-link', 'clearSearch(true)');
         $frm->addHtml('', 'btn_clear', $clearBtnHtm);
         return $frm;
     }
@@ -643,7 +644,7 @@ class MetaTagsController extends ListingBaseController
     {
         $this->objPrivilege->canEditMetaTags();
 
-        $metaId = FatApp::getPostedData('metaId', FatUtility::VAR_INT, 0);
+        $metaId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if ($metaId < 1) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }

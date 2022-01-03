@@ -88,7 +88,6 @@ var defaultController = controllerName;
         $.systemMessage.close();
     };
 
-
     loadMore = function () {
         if (false === checkControllerName()) {
             return false;
@@ -96,34 +95,34 @@ var defaultController = controllerName;
 
         var frm = document.frmLoadMoreRecordsPaging;
         var page = 1;
-        if (
-            "undefined" != typeof frm.page.value &&
-            "" != frm.page.value &&
-            0 < frm.page.value
-        ) {
+        if ("undefined" != typeof frm.page.value && "" != frm.page.value && 0 < frm.page.value) {
             page += parseInt(frm.page.value);
         }
 
         $(frm.page).val(page);
         var reference = $(".appendRowsJs .rowJs:last").data("reference");
-        if (
-            "undefined" != typeof reference &&
-            "undefined" != typeof frm.reference
-        ) {
+        if ("undefined" != typeof reference && "undefined" != typeof frm.reference) {
             $(frm.reference).val(reference);
         }
 
         var data = fcom.frmData(frm);
 
-        $(".appendRowsJs .rowJs:last")
-            .clone()
-            .removeAttr("class")
-            .addClass("rowJs")
-            .appendTo(".appendRowsJs")
-            .html(fcom.getRowSpinner());
-        fcom.ajax(fcom.makeUrl('transactions', "getRows"), data, function (rows) {
-            $(".appendRowsJs .rowJs:last").remove();
-            $(".appendRowsJs").append(rows);
+        var loadMoreBtn = $('.loadMoreBtnJs');
+        var btnText = loadMoreBtn.text();
+        loadMoreBtn.html(fcom.getRowSpinner());
+
+        fcom.updateWithAjax(fcom.makeUrl('transactions', "getRows"), data, function (rows) {
+            $.ykmsg.close();
+            $(".appendRowsJs").append(rows.html);
+            loadMoreBtn.html(btnText);
+
+            var similarElement = '.appendRowsJs [data-reference="' + reference + '"]';
+            var lastSimilar = $(similarElement + ':last');
+            if (1 < $(similarElement).length) {
+                var li = lastSimilar.find('.ulJs').html();
+                lastSimilar.remove();
+                $(similarElement + ':last ul.ulJs').append(li);
+            }
 
             if (page == frm.pageCount.value) {
                 $(".loadMorePaginationJs").remove();

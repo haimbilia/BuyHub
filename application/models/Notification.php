@@ -144,6 +144,9 @@ class Notification extends MyAppModel
     public function changeNotifyStatus($status, $recordId)
     {
         $db = FatApp::getDb();
+        if(is_array($recordId)){
+            $recordId = implode(",",$recordId);
+        }     
         if (!$db->query("UPDATE tbl_notifications SET notification_marked_read = " . $status . " WHERE notification_id in (" . $recordId . ")")) {
             return false;
         }
