@@ -335,7 +335,7 @@ class WithdrawalRequestsController extends ListingBaseController
     {
         $withdrawalRequestsTblHeadingCols = CacheHelper::get('withdrawalRequestsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($withdrawalRequestsTblHeadingCols) {
-            return json_decode($withdrawalRequestsTblHeadingCols);
+            return json_decode($withdrawalRequestsTblHeadingCols, true);
         }
 
         $arr = [

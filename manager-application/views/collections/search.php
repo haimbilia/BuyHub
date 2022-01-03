@@ -30,7 +30,12 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, Collections::getTypeArr($siteLangId)[$row[$key]]);
                 break;
             case 'collection_layout_type':
-                $td->appendElement('plaintext', $tdAttr, Collections::getLayoutTypeArr($siteLangId)[$row[$key]]);
+                $td->appendElement('plaintext', $tdAttr, '<div class="layout-type"><svg class="svg" width="50" height="30">
+                <use
+                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-layout.svg#collection-layout-'.$row[$key].'">
+                </use>
+            </svg></div>', true);
+                //$td->appendElement('plaintext', $tdAttr, Collections::getLayoutTypeArr($siteLangId)[$row[$key]]);
                 break;
 
             case 'collection_active':

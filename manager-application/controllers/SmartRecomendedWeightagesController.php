@@ -131,7 +131,7 @@ class SmartRecomendedWeightagesController extends ListingBaseController
     {
         $smartRecWeightagesTblHeadingCols = CacheHelper::get('smartRecWeightagesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($smartRecWeightagesTblHeadingCols) {
-            return json_decode($smartRecWeightagesTblHeadingCols);
+            return json_decode($smartRecWeightagesTblHeadingCols, true);
         }
 
         $arr = [

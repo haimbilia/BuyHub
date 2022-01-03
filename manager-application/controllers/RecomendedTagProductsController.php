@@ -131,7 +131,7 @@ class RecomendedTagProductsController extends ListingBaseController
     {
         $recTagProdsTblHeadingCols = CacheHelper::get('recTagProdsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($recTagProdsTblHeadingCols) {
-            return json_decode($recTagProdsTblHeadingCols);
+            return json_decode($recTagProdsTblHeadingCols, true);
         }
 
         $arr = [

@@ -555,7 +555,8 @@ class BadgeLinkConditionsController extends ListingBaseController
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        $class = (Badge::COND_MANUAL == $this->badgeData['badge_trigger_type']) ? 'btn-link' : 'btn-outline-brand';
+        HtmlHelper::addClearButton($frm, 'btn ' . $class);
         return $frm;
     }
 
@@ -648,7 +649,7 @@ class BadgeLinkConditionsController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('badgesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

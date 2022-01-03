@@ -619,6 +619,7 @@ class AttachedFile extends MyAppModel
             $imageName = substr($imageName, 5);
             self::displayWebpImage($imageName, $w, $h, $noImage, $uploadedFilePath, $resizeType, $apply_watermark, $cache, $imageCompression);
         }
+        
         ob_end_clean();
         ini_set('memory_limit', '-1');
         $noImage = 'images/defaults/' . $noImage;

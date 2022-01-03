@@ -302,7 +302,7 @@ class PushNotificationsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_DEVICE_TYPE', $this->siteLangId), 'pnotification_device_os', $deviceTypeArr, '', array(), '');
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -503,7 +503,7 @@ class PushNotificationsController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('pushNotificationsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

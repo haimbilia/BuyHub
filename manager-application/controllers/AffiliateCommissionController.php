@@ -327,7 +327,7 @@ class AffiliateCommissionController extends ListingBaseController
     {
         $affCommissionTblHeadingCols = CacheHelper::get('affCommissionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($affCommissionTblHeadingCols) {
-            return json_decode($affCommissionTblHeadingCols);
+            return json_decode($affCommissionTblHeadingCols, true);
         }
 
         $arr = [

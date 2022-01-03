@@ -451,7 +451,7 @@ class SpecialPriceController extends ListingBaseController
     {
         $splPriceTblHeadingCols = CacheHelper::get('splPriceTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($splPriceTblHeadingCols) {
-            return json_decode($splPriceTblHeadingCols);
+            return json_decode($splPriceTblHeadingCols, true);
         }
 
         $arr = [

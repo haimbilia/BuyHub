@@ -423,7 +423,7 @@ class OptionValuesController extends ListingBaseController
     {
         $optionsTblHeadingCols = CacheHelper::get('optionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($optionsTblHeadingCols) {
-            return json_decode($optionsTblHeadingCols);
+            return json_decode($optionsTblHeadingCols, true);
         }
 
         $arr = [

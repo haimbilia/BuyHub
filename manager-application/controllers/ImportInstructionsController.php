@@ -218,7 +218,7 @@ class ImportInstructionsController extends ListingBaseController
     {
         $importInstructionsTblHeadingCols = CacheHelper::get('importInstructionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($importInstructionsTblHeadingCols) {
-            return json_decode($importInstructionsTblHeadingCols);
+            return json_decode($importInstructionsTblHeadingCols, true);
         }
 
         $arr = [

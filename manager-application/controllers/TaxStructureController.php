@@ -325,7 +325,7 @@ class TaxStructureController extends ListingBaseController {
     protected function getFormColumns(): array {
         $taxStructureTblHeadingCols = CacheHelper::get('taxStructureTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($taxStructureTblHeadingCols) {
-            return json_decode($taxStructureTblHeadingCols);
+            return json_decode($taxStructureTblHeadingCols, true);
         }
 
         $arr = [

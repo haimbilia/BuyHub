@@ -272,7 +272,7 @@ class BlogContributionsController extends ListingBaseController
     {
         $blogContributionTblHeadingCols = CacheHelper::get('blogContributionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($blogContributionTblHeadingCols) {
-            return json_decode($blogContributionTblHeadingCols);
+            return json_decode($blogContributionTblHeadingCols, true);
         }
 
         $arr = [

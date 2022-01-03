@@ -262,7 +262,7 @@ class BlogCommentsController extends ListingBaseController
     {
         $blogCommentsTblHeadingCols = CacheHelper::get('blogCommentsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($blogCommentsTblHeadingCols) {
-            return json_decode($blogCommentsTblHeadingCols);
+            return json_decode($blogCommentsTblHeadingCols, true);
         }
 
         $arr = [

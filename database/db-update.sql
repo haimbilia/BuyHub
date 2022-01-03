@@ -1517,3 +1517,5 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 INSERT INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`, `plang_helping_text`) VALUES (NULL, 'MANAGE_WEIGHTAGES', '-1', 'Smart recommended weightages', '', '', '', '', '');
 
 INSERT INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`, `plang_helping_text`) VALUES (NULL, 'RECOMMENDED_TAG_PRODUCTS_WEIGHTAGES', '-1', 'Recommended tag products', '', '', '', '', '');
+
+ALTER TABLE `tbl_badges` ADD `badge_added_on` DATETIME NOT NULL AFTER `badge_updated_on`;

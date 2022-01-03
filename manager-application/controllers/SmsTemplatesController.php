@@ -255,7 +255,7 @@ class SmsTemplatesController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('smsTemplatesTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [

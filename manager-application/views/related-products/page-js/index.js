@@ -44,12 +44,14 @@
             var parentForm = $(this).closest('form').attr('id');
             $("#" + parentForm + " input[name='selprod_id']").val('');
         });
+        $("select[name='product_name']").data("select2").$container.addClass("w-100")
         $("." + $.ykmodal.element).removeAttr('tabindex');
     };
 
     bindlRelatedProdSelect2 = function () {
         var element = $("select.relatedProductsJs");
         element.select2({
+            dropdownParent:  element.closest('.modal'),
             closeOnSelect: true,
             dir: layoutDirection,
             allowClear: true,
@@ -94,6 +96,7 @@
             },
             minimumInputLength: 0
         });
+        element.data("select2").$container.addClass("w-100")
         setTimeout(() => {
             element.siblings('.select2').find('.select2-search__field').attr('name', element.attr('name') + '_search');
         }, 200);

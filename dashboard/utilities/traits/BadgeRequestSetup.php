@@ -42,10 +42,6 @@ trait BadgeRequestSetup
 
         if (0 < $badgeReqId || 0 < $badgeId) {
             $frm->addHiddenField('', 'badge_id', $badgeId);
-         
-            if (0 < $badgeReqId) {
-            }
-
             $frm->addDateTimeField(Labels::getLabel('LBL_FROM_DATE', $this->siteLangId), 'blinkcond_from_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
             $frm->addDateTimeField(Labels::getLabel('LBL_TO_DATE', $this->siteLangId), 'blinkcond_to_date', '', ['readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender date_js']);
         } else {
@@ -57,7 +53,7 @@ trait BadgeRequestSetup
         if (0 < $badgeReqId) {
             $frm->addHiddenField('', 'breq_record_type', );
         } else {
-            $frm->addSelectBox(Labels::getLabel('LBL_LINK_TYPE', $this->siteLangId), 'breq_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_RECORD_TYPE', $this->siteLangId), 'breq_record_type', BadgeLinkCondition::getRecordTypeArr($this->siteLangId), '', [], '');
         }
 
         $frm->addFileUpload(Labels::getLabel('LBL_REFERENCE', $this->siteLangId), 'breq_file');
