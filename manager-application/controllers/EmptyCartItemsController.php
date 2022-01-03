@@ -296,7 +296,7 @@ class EmptyCartItemsController extends ListingBaseController
     {
         $emptyCartItemsTblHeadingCols = CacheHelper::get('emptyCartItemsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($emptyCartItemsTblHeadingCols) {
-            return json_decode($emptyCartItemsTblHeadingCols);
+            return json_decode($emptyCartItemsTblHeadingCols, true);
         }
 
         $arr = [

@@ -1,7 +1,7 @@
 <?php
 class RecomendedTagProductsController extends ListingBaseController
 {
-    protected $pageKey = 'RECOMENDED_TAG_PRODUCTS_WEIGHTAGES';
+    protected $pageKey = 'RECOMMENDED_TAG_PRODUCTS_WEIGHTAGES';
 
     public function __construct($action)
     {
@@ -131,7 +131,7 @@ class RecomendedTagProductsController extends ListingBaseController
     {
         $recTagProdsTblHeadingCols = CacheHelper::get('recTagProdsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($recTagProdsTblHeadingCols) {
-            return json_decode($recTagProdsTblHeadingCols);
+            return json_decode($recTagProdsTblHeadingCols, true);
         }
 
         $arr = [

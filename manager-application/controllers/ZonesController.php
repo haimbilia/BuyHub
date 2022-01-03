@@ -237,7 +237,7 @@ class ZonesController extends ListingBaseController
     {
         $zoneTblHeadingCols = CacheHelper::get('zoneTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($zoneTblHeadingCols) {
-            return json_decode($zoneTblHeadingCols);
+            return json_decode($zoneTblHeadingCols, true);
         }
 
         $arr = [

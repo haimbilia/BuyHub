@@ -58,6 +58,7 @@ if ($printData) {
 <script>
     bindProduct = function(e) {
         var mainRecordId = e.detail.data.mainRecord;
+        console.log( e);
         if ('undefined' == typeof mainRecordId) {
             return;
         }
@@ -109,13 +110,16 @@ if ($printData) {
     var isDeletedConfirmed = false;
     bindTagify = function() {
         var input = document.querySelectorAll('.tagifyJs');
+      
         input.forEach(function(element) {
             tagify = new Tagify(element, {
-                whitelist: [],
+                whitelist: JSON.parse(element.value),
                 dropdown: {
                     position: 'text',
                     enabled: 1 // show suggestions dropdown after 1 typed character
-                },
+                },  
+                enforceWhitelist: true,
+                skipInvalid: true,            
                 hooks: {
                     beforeRemoveTag: function(tags) {
                         return new Promise((resolve, reject) => {

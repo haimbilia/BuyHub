@@ -1390,6 +1390,7 @@ class BuyerController extends BuyerBaseController
         $srch->joinOrderProducts();
         $srch->joinOrderProductSettings();
         $srch->joinOrders();
+        $srch->joinShippingCharges();
         $srch->joinSellerProducts();
         $srch->joinOrderReturnReasons();
         $srch->addOrderProductCharges();
@@ -1403,7 +1404,7 @@ class BuyerController extends BuyerBaseController
                 'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title',
                 'op_shop_id', 'op_shop_name', 'op_shop_owner_name', 'order_tax_charged', 'op_other_charges', 'op_refund_amount', 'op_commission_percentage',
                 'op_affiliate_commission_percentage', 'op_commission_include_tax', 'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges',
-                'op_rounding_off','op_selprod_id','selprod_product_id'
+                'op_rounding_off','op_selprod_id','selprod_product_id','opshipping_by_seller_user_id'
             )
         );
         $rs = $srch->getResultSet();

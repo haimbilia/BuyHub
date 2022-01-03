@@ -660,7 +660,7 @@ class BrandsController extends ListingBaseController
     {
         $brandsTblHeadingCols = CacheHelper::get('brandsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($brandsTblHeadingCols) {
-            return json_decode($brandsTblHeadingCols);
+            return json_decode($brandsTblHeadingCols, true);
         }
 
         $arr = [

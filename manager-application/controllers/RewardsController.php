@@ -186,7 +186,7 @@ class RewardsController extends ListingBaseController
     {
         $rewardsTblHeadingCols = CacheHelper::get('rewardsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($rewardsTblHeadingCols) {
-            return json_decode($rewardsTblHeadingCols);
+            return json_decode($rewardsTblHeadingCols, true);
         }
 
         $arr = [

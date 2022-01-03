@@ -245,7 +245,7 @@ class OrderReturnReasonsController extends ListingBaseController
     {
         $orderRetReasonTblHeadingCols = CacheHelper::get('orderRetReasonTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($orderRetReasonTblHeadingCols) {
-            return json_decode($orderRetReasonTblHeadingCols);
+            return json_decode($orderRetReasonTblHeadingCols, true);
         }
 
         $arr = [

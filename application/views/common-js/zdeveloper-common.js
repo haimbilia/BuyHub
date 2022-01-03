@@ -489,7 +489,7 @@ function submitSiteSearch(frm, page) {
             "category-" +
             $(frm).find('input[name="category"]').val();
     }
-    url = fcom.makeUrl("Products", "search", []) + urlString;
+    url = productSearchUrl + urlString;
     document.location.href = url;
 }
 

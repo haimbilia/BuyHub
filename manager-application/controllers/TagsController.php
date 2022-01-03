@@ -221,7 +221,7 @@ class TagsController extends ListingBaseController
 
         $relatedProdsTblHeadingCols = CacheHelper::get('tagsTblHeadingCols' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if ($relatedProdsTblHeadingCols) {
-            return json_decode($relatedProdsTblHeadingCols);
+            return json_decode($relatedProdsTblHeadingCols, true);
         }
 
         $arr = [

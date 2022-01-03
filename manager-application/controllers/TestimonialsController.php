@@ -498,7 +498,7 @@ class TestimonialsController extends ListingBaseController
     {
         $testimonialTblHeadingCols = CacheHelper::get('testimonialTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($testimonialTblHeadingCols) {
-            return json_decode($testimonialTblHeadingCols);
+            return json_decode($testimonialTblHeadingCols, true);
         }
 
         $arr = [

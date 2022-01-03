@@ -605,7 +605,7 @@ class ContentPagesController extends ListingBaseController
     {
         $ContentPageTblHeadingCols = CacheHelper::get('ContentPageTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($ContentPageTblHeadingCols) {
-            return json_decode($ContentPageTblHeadingCols);
+            return json_decode($ContentPageTblHeadingCols, true);
         }
 
         $arr = [

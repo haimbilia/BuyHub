@@ -503,7 +503,7 @@ class PushNotificationsController extends ListingBaseController
     {
         $tblHeadingCols = CacheHelper::get('pushNotificationsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
-            return json_decode($tblHeadingCols);
+            return json_decode($tblHeadingCols, true);
         }
 
         $arr = [
