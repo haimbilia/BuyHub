@@ -469,6 +469,7 @@ Bugs :
     => 061024 - Admin UI: 'Language data' is also updated while adding the 'General Data' and language data' title is also not the same under the Testimonial section.
     => 061101 - Admin UI: Search(Keyword and Dropdown) is not working properly under the "Meta tags Management" section.
     => 061018 - Admin UI: 'Language data' is also updated while updating the 'General Data' under the FAQ section.
+    => 060822 - Admin UI: 'cpc' and 'ppc' is not capital under the promotion section.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
