@@ -56,7 +56,7 @@ class MetaTagsController extends ListingBaseController
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
         if (empty($sortBy)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = $allowedKeysForSorting[2] ?? current($allowedKeysForSorting);
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));

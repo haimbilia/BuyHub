@@ -293,6 +293,7 @@ Updates/Fixes :
     => 060820 - On order subscription getting error
     => 060772 - Admin UI: Admin is not able to edit the 'Minimum Purchase Quantity' and 'Discount (%)' fields under the Volume Discount section
     => 060775 - Admin UI: Product's listing is not showing while adding the 'related products and facing some UI issue under the "Related Products" section
+    => 061094 - Admin UI: Titles are not showing in the table and it is a mandatory field
     
 New Features:  
     => Admin shipped products listing page
