@@ -476,6 +476,7 @@ Bugs :
     => 060822 - Admin UI: 'cpc' and 'ppc' is not capital under the promotion section.
     => 060825 - Admin UI: Getting multiple issues under the 'rewards on purchase' section.
     => 060830 - Admin UI: In the table, "N" is not capital for the serial number's abbreviation on the whole system.
+    => 060833 - Admin UI: "recomended" spelling is not correct under the Manage weightages section.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
