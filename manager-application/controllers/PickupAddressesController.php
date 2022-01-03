@@ -292,7 +292,7 @@ class PickupAddressesController extends ListingBaseController
     {
         $pickupTblHeadingCols = CacheHelper::get('pickupAddressTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($pickupTblHeadingCols) {
-            return json_decode($pickupTblHeadingCols);
+            return json_decode($pickupTblHeadingCols, true);
         }
 
         $arr = [

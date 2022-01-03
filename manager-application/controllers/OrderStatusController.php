@@ -307,7 +307,7 @@ class OrderStatusController extends ListingBaseController
     {
         $orderStatusTblHeadingCols = CacheHelper::get('orderStatusTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($orderStatusTblHeadingCols) {
-            return json_decode($orderStatusTblHeadingCols);
+            return json_decode($orderStatusTblHeadingCols, true);
         }
 
         $arr = [

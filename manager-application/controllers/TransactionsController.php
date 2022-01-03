@@ -211,7 +211,7 @@ class TransactionsController extends ListingBaseController {
     protected function getFormColumns(): array {
         $transactionsTblHeadingCols = CacheHelper::get('transactionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($transactionsTblHeadingCols) {
-            return json_decode($transactionsTblHeadingCols);
+            return json_decode($transactionsTblHeadingCols, true);
         }
 
         $arr = [

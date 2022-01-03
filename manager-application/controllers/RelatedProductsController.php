@@ -305,7 +305,7 @@ class RelatedProductsController extends ListingBaseController
     {
         $relatedProdsTblHeadingCols = CacheHelper::get('relatedProdsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($relatedProdsTblHeadingCols) {
-            return json_decode($relatedProdsTblHeadingCols);
+            return json_decode($relatedProdsTblHeadingCols, true);
         }
 
         $arr = [

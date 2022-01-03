@@ -237,7 +237,7 @@ class PageLanguageDataController extends ListingBaseController
     {
         $pagesLanguageDataTblHeadingCols = CacheHelper::get('pagesLanguageDataTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($pagesLanguageDataTblHeadingCols) {
-            return json_decode($pagesLanguageDataTblHeadingCols);
+            return json_decode($pagesLanguageDataTblHeadingCols, true);
         }
 
         $arr = [

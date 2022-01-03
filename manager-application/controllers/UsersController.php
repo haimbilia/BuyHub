@@ -910,7 +910,7 @@ class UsersController extends ListingBaseController
     {
         $usersTblHeadingCols = CacheHelper::get('usersTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($usersTblHeadingCols) {
-            return json_decode($usersTblHeadingCols);
+            return json_decode($usersTblHeadingCols, true);
         }
 
         $arr = [

@@ -732,7 +732,7 @@ class MetaTagsController extends ListingBaseController
     {
         $metaTagsTblHeadingCols = CacheHelper::get('metaTagsTblHeadingCols' . $metaType . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($metaTagsTblHeadingCols) {
-            return json_decode($metaTagsTblHeadingCols);
+            return json_decode($metaTagsTblHeadingCols, true);
         }
 
         $arr = [

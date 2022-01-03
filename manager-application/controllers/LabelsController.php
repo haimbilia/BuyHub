@@ -322,7 +322,7 @@ class LabelsController extends ListingBaseController
     {
         $labelsTblHeadingCols = CacheHelper::get('labelsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($labelsTblHeadingCols) {
-            return json_decode($labelsTblHeadingCols);
+            return json_decode($labelsTblHeadingCols, true);
         }
 
         $arr = [

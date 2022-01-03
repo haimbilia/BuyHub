@@ -1479,7 +1479,7 @@ class CustomProductsController extends ListingBaseController
     {
         $emptyCartItemsTblHeadingCols = CacheHelper::get('cProductsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($emptyCartItemsTblHeadingCols) {
-            return json_decode($emptyCartItemsTblHeadingCols);
+            return json_decode($emptyCartItemsTblHeadingCols, true);
         }
 
         $arr = [

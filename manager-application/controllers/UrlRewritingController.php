@@ -312,7 +312,7 @@ class UrlRewritingController extends ListingBaseController
     {
         $urlRewritingTblHeadingCols = CacheHelper::get('urlRewritingTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($urlRewritingTblHeadingCols) {
-            return json_decode($urlRewritingTblHeadingCols);
+            return json_decode($urlRewritingTblHeadingCols, true);
         }
 
         $arr = [

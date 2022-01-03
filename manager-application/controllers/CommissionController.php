@@ -364,7 +364,7 @@ class CommissionController extends ListingBaseController
     {
         $commissionTblHeadingCols = CacheHelper::get('commissionTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($commissionTblHeadingCols) {
-            return json_decode($commissionTblHeadingCols);
+            return json_decode($commissionTblHeadingCols, true);
         }
 
         $arr = [

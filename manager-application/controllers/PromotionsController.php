@@ -1065,7 +1065,7 @@ class PromotionsController extends ListingBaseController
     {
         $promotionsTblHeadingCols = CacheHelper::get('promotionsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($promotionsTblHeadingCols) {
-            return json_decode($promotionsTblHeadingCols);
+            return json_decode($promotionsTblHeadingCols, true);
         }
 
         $arr = [

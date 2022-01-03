@@ -541,7 +541,7 @@ class SlidesController extends ListingBaseController
     {
         $slideTblHeadingCols = CacheHelper::get('slideTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($slideTblHeadingCols) {
-            return json_decode($slideTblHeadingCols);
+            return json_decode($slideTblHeadingCols, true);
         }
 
         $arr = [

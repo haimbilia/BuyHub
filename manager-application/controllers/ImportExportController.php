@@ -1136,7 +1136,7 @@ class ImportExportController extends ListingBaseController
     {
         $bulkMediaTblHeadingCols = CacheHelper::get('bulkMediaTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($bulkMediaTblHeadingCols) {
-            return json_decode($bulkMediaTblHeadingCols);
+            return json_decode($bulkMediaTblHeadingCols, true);
         }
 
         $arr = [
