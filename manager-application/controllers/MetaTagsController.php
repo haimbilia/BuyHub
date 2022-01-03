@@ -520,9 +520,12 @@ class MetaTagsController extends ListingBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
+           
             LibHelper::exitWithError($record->getError(), true);
         }
 
+        CacheHelper::clear(CacheHelper::TYPE_META_TAGS);
+        
         $newTabLangId = 0;
         if ($metaId > 0) {
             $languages = Language::getAllNames();
