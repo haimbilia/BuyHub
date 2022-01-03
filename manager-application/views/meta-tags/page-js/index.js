@@ -15,8 +15,9 @@ $(document).on('blur', '.metaUrlJs', function () {
     var dv = '#metaTagsListing';
     var listingTableJs = '.listingTableJs';
 
-    reloadList = function () {
-        searchRecords(document.frmRecordSearchPaging);
+    tabSearchRecords = function (object) {
+        $(':input', document.frmRecordSearch).not(':hidden').val('');
+        searchRecords(object);
     };
 
     setTabActive = function (type) {
@@ -118,9 +119,5 @@ $(document).on('blur', '.metaUrlJs', function () {
                 return;
             }
         });
-    };
-    clearSearch = function (loadRowsOnly = false) {
-        $(':input',document.frmRecordSearch).not(':hidden').val('');
-        searchRecords(document.frmRecordSearch, loadRowsOnly);
     };
 })();

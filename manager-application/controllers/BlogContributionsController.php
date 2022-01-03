@@ -23,6 +23,7 @@ class BlogContributionsController extends ListingBaseController
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
+        $actionItemsData['searchFrmTemplate'] = 'blog-contributions/search-form.php';
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);

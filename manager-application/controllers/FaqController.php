@@ -260,27 +260,26 @@ class FaqController extends ListingBaseController
         if (!$record->save()) {
             LibHelper::exitWithError($record->getError(), true);
         }
+        $recordId = $record->getMainTableRecordId();
+
 
         if (!$record->updateLangData($langId, $langData)) {
             LibHelper::exitWithError($record->getError(), true);
         }
 
-        $newTabLangId = $this->siteLangId;
-        if ($recordId > 0) {
-            $faqId = $recordId;
-        } else {
-            $faqId = $record->getMainTableRecordId();
-        }
-        $languages = (array)Language::getDropDownList(CommonHelper::getDefaultFormLangId());
-        foreach ($languages as $langId => $langName) {
-            if (!$row = Faq::getAttributesByLangId($langId, $faqId)) {
-                $newTabLangId = $langId;
-                break;
+        $newTabLangId = 0;
+        $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
+        if (0 < count($languages)) {
+            foreach ($languages as $langId => $langName) {
+                if (!Brand::getAttributesByLangId($langId, $recordId)) {
+                    $newTabLangId = $langId;
+                    break;
+                }
             }
         }
 
         $this->set('msg', Labels::getLabel('MSG_CATEGORY_SETUP_SUCCESSFUL', $this->siteLangId));
-        $this->set('recordId', $faqId);
+        $this->set('recordId', $recordId);
         $this->set('faqCatId', $faqCatId);
         $this->set('langId', $newTabLangId);
         $this->_template->render(false, false, 'json-success.php');

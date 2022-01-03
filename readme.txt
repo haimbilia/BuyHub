@@ -458,6 +458,10 @@ Bugs :
     => UAT Fixes
 
 ==================TV-9.4.0.20211223===================
+    => Multilingual Sitemap
+    => Add product screen
+    => UAT Fixes
+=============TV-9.4.0.20211228================
 
 Bugs : 
     => 060664 - Admin UI: "Alpha-3 Code" column is not showing in the exported file under the countries section.
@@ -472,6 +476,13 @@ Bugs :
     => 060672 - Admin UI: "Export Data Range" is not working according to 'By Id' and 'By Batches' while exporting the user's file.
     => 061106 - Admin UI: Admin navigates to the "English" page while clicking on the RESET button on the Arabic page under the "Meta Tag Management" section.
     => 061024 - Admin UI: 'Language data' is also updated while adding the 'General Data' and language data' title is also not the same under the Testimonial section.
+    => 061101 - Admin UI: Search(Keyword and Dropdown) is not working properly under the "Meta tags Management" section.
+    => 061018 - Admin UI: 'Language data' is also updated while updating the 'General Data' under the FAQ section.
+    => 060822 - Admin UI: 'cpc' and 'ppc' is not capital under the promotion section.
+    => 060825 - Admin UI: Getting multiple issues under the 'rewards on purchase' section.
+    => 060830 - Admin UI: In the table, "N" is not capital for the serial number's abbreviation on the whole system.
+    => 060833 - Admin UI: "recomended" spelling is not correct under the Manage weightages section.
+    => 060861 - Admin UI: Watermark's text is not showing completely in the search fields under the "Blog Contributions" section.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

@@ -1482,5 +1482,38 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 
 update `tbl_product_requests` set preq_ean_upc_code = Replace(preq_ean_upc_code, '|', ',');
 ALTER TABLE `tbl_product_requests` DROP `preq_specifications`;
+-- -------------------TV-9.4.0.20211228-----------------------
 
 UPDATE `tbl_countries` SET `country_language_id`=1 WHERE 1;
+
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_ACTION";
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_CPC', 1, 'CPC', 1),
+('FRM_CPC', 1, 'CPC', 1),
+('LBL_PPC_cost_per_click_for_Product',1,'PPC cost per click for product',1),
+('LBL_PPC_COST_PER_CLICK_FOR_SHOP',1,'PPC cost per click for shop',1),
+('LBL_PPC_COST_PER_CLICK_FOR_SLIDES',1,'PPC cost per click for slides',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_PURCHASE', 1, 'Purchase', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_PURCHAHSE';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_SR._NO', 1, 'Sr. No', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_RECOMENDED_TAG_PRODUCTS'; 
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_SMART_RECOMENDED_WEIGHTAGES';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_RECOMMENDED_TAG_PRODUCTS', 1, 'Recommended Tag Products', 1),
+('LBL_SMART_RECOMMENDED_WEIGHTAGES', 1, 'Smart Recommended Weightages', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`, `plang_helping_text`) VALUES (NULL, 'MANAGE_WEIGHTAGES', '-1', 'Smart recommended weightages', '', '', '', '', '');
+
+INSERT INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`, `plang_helping_text`) VALUES (NULL, 'RECOMMENDED_TAG_PRODUCTS_WEIGHTAGES', '-1', 'Recommended tag products', '', '', '', '', '');

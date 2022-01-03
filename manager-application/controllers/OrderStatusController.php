@@ -229,7 +229,7 @@ class OrderStatusController extends ListingBaseController
         $frm = new Form('frmorderstatuslang');
         $frm->addHiddenField('', 'orderstatus_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_ORDERSTATUS_NAME', $langId), 'orderstatus_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_ORDER_STATUS_NAME', $langId), 'orderstatus_name');
         return $frm;
     }
 
