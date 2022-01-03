@@ -246,7 +246,7 @@ class ContentPagesController extends ListingBaseController
 
         $frm = new Form('frmContentPageLang', array('id' => 'frmContentPageLang'));
         $frm->addHiddenField('', 'cpage_id', $recordId);
-        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $frm->addRequiredField(Labels::getLabel('FRM_PAGE_TITLE', $langId), 'cpage_title');
         $frm->addHiddenField('', 'cpage_layout', $cpage_layout);
         if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
