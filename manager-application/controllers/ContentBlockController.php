@@ -217,7 +217,6 @@ class ContentBlockController extends ListingBaseController
             } else {
                 $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
             }
-            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId));
             $frm->addHTML('', 'cblock_bg_image', '');
             $frm->addHiddenField('', 'file_type', $fileType);
             $frm->addHiddenField('', 'min_width', 1300);
@@ -253,7 +252,7 @@ class ContentBlockController extends ListingBaseController
             } else {
                 $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
             }
-            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId));
+            
             $frm->addHTML('', 'cblock_bg_image', '');
             $frm->addHiddenField('', 'file_type', $fileType);
             $frm->addHiddenField('', 'min_width', 1300);

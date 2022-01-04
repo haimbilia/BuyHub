@@ -487,6 +487,8 @@ Bugs :
     => 060874 - Admin UI: Added data is not showing under the 'language data' section while editing the records under the content pages section.
     => 061017 - Admin UI: Design is not aligned when the session is expired under the FAQ section
     => 061013 - Admin UI: Status is 'in-active' by default while adding the record on the whole system
+    => 060886 - Admin UI: 'Background Image' title design is not matched with the other titles under the content blocks section
+    => 060877 - Admin UI: Layout Instruction is not showing under the content pages section
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

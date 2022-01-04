@@ -33,7 +33,7 @@ if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId)
     } 
     
     $fld = $langFrm->getField('cblock_bg_image');
-    $fld->value =  HtmlHelper::getfileInputHtml(
+    $dropZone =  HtmlHelper::getfileInputHtml(
         [
             'onChange' => 'loadImageCropper(this)', 
             'accept' => 'image/*', 
@@ -43,7 +43,14 @@ if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId)
         ($canEdit ? 'deleteBackgroundImage(' . $recordId . ',' . $image['afile_id'] .',' . $image['afile_type'].','.$image['afile_lang_id'].')' :''),
         ($canEdit ? 'editDropZoneImages(this)': ''),
         $imgArr,
-        'mt-3 dropzone-custom dropzoneContainerJs'
+        'dropzone-custom dropzoneContainerJs'
     );
+    $htm = '<div class="col-md-12">
+                <div class="form-group">
+                    <label class="label">' . Labels::getLabel('FRM_BACKGROUND_IMAGE', $siteLangId) . '</label>
+                    ' . $dropZone . '
+                </div>
+            </div>';
+    $fld->value = $htm;
 }
 require_once(CONF_THEME_PATH . '_partial/listing/lang-form.php'); 
