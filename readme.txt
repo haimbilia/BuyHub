@@ -484,8 +484,11 @@ Bugs :
     => 060830 - Admin UI: In the table, "N" is not capital for the serial number's abbreviation on the whole system.
     => 060833 - Admin UI: "recomended" spelling is not correct under the Manage weightages section.
     => 060861 - Admin UI: Watermark's text is not showing completely in the search fields under the "Blog Contributions" section.
+    => 060873 - Admin UI: Different data is showing under the 'Language data' section while editing and adding the pages under the content pages section.
+    => 060874 - Admin UI: Added data is not showing under the 'language data' section while editing the records under the content pages section.
+    => 060885 - Admin UI: Getting multiple issues while editing the content blocks section.
     => 061020 - Admin UI: Admin is not able to 'copy' the text in the table if there is re-arrange functionality on the whole system
-    
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
     => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect

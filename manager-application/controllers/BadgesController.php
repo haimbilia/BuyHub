@@ -89,9 +89,9 @@ class BadgesController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'badge_id');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'badge_id';
         }
 
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
@@ -194,6 +194,8 @@ class BadgesController extends ListingBaseController
         }
 
         $recordId = FatApp::getPostedData('badge_id', FatUtility::VAR_INT, 0);
+        $dateCol = (1 > $recordId) ? 'badge_added_on' : 'badge_updated_on';
+        $post[$dateCol] = date('Y-m-d H:i:s');
 
         $record = new Badge($recordId);
         $record->setFldValue(Badge::DB_TBL_PREFIX . 'identifier', $post['badge_name']);
@@ -230,7 +232,7 @@ class BadgesController extends ListingBaseController
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'badge_name');
+            $this->addSortingElements($frm, 'badge_id', applicationConstants::SORT_DESC);
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
         $fld->overrideFldType('search');
@@ -242,7 +244,7 @@ class BadgesController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr);
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
 
@@ -322,6 +324,7 @@ class BadgesController extends ListingBaseController
         }
 
         $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BADGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1);
+
         $this->set('languages', Language::getAllNames());
         $this->set('images', $images);
         $this->set('recordId', $recordId);

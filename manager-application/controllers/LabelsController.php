@@ -283,8 +283,6 @@ class LabelsController extends ListingBaseController
 
         $frm->addSelectBox(Labels::getLabel('FRM_PLATFORM', $this->siteLangId), 'label_type', array('-1' => Labels::getLabel('FRM_SELECT_PLATFORM', $this->siteLangId)) + Labels::getTypeArr($this->siteLangId), -1, array(), '');
 
-        /* $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'label_key', array('' => Labels::getLabel('FRM_SELECT_TYPE', $this->siteLangId)) + Labels::getPrefixTypes($this->siteLangId), '', array(), ''); */
-
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
 

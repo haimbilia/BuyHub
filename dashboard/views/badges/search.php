@@ -5,7 +5,7 @@ $arr_flds = array(
     Badge::DB_TBL_PREFIX . 'name' => (Badge::TYPE_RIBBON == $badgeType) ? Labels::getLabel('LBL_RIBBON_NAME', $siteLangId) : Labels::getLabel('LBL_BADGE_NAME', $siteLangId),
     Badge::DB_TBL_PREFIX . 'trigger_type' => Labels::getLabel('LBL_CONDITION_TYPE', $siteLangId),
     Badge::DB_TBL_PREFIX . 'required_approval' => Labels::getLabel('LBL_APPROVAL', $siteLangId),
-    'action' => '',
+    'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId),
 );
 
 if (!$canEdit) {
@@ -105,20 +105,8 @@ foreach ($arrListing as $sn => $row) {
                         }
 
                     } else if (0 < (int) $row['breq_id'] && BadgeRequest::REQUEST_PENDING == (int) $row['breq_status']) {
-                        $li = $ul->appendElement("li"); 
-                        $li->appendElement(
-                            'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "addBadgeReqForm(" . $row['breq_id'] . ", " . $row['badge_id'] . ")", 'title' => Labels::getLabel('LBL_Edit', $siteLangId)),
-                            '<i class="fa fa-edit"></i>',
-                            true
-                        );
-                        $li = $ul->appendElement("li"); 
-                        $li->appendElement(
-                            'a',
-                            array('href' => 'javascript:void(0)', 'onclick' => "deleteBadgeRequest(" . $row['breq_id'] . ")", 'title' => Labels::getLabel('LBL_DELETE_REQUEST', $siteLangId)),
-                            '<i class="fa fa-trash"></i>',
-                            true
-                        );
+                        $htm = ' <span class="label label-inline label-danger rounded-pill">' . Labels::getLabel('LBL_N/A', $siteLangId) . '</span>';
+                        $td->appendElement('plaintext', [], $htm, true);
                     } else {
                         $icon = '<i class="icn shop">
                                     <svg class="svg">

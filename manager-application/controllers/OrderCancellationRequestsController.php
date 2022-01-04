@@ -2,7 +2,7 @@
 class OrderCancellationRequestsController extends ListingBaseController
 {
     protected $modelClass = 'OrderCancelRequest';
-    protected $pageKey = 'MANAGE_ORDER_CANCELLATION_REQUESTS';
+    protected $pageKey = 'ORDER_CANCELLATION_REQUESTS';
 
     public function __construct($action)
     {

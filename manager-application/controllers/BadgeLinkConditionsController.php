@@ -555,7 +555,8 @@ class BadgeLinkConditionsController extends ListingBaseController
         }
 
         HtmlHelper::addSearchButton($frm);
-        HtmlHelper::addClearButton($frm);
+        $class = (Badge::COND_MANUAL == $this->badgeData['badge_trigger_type']) ? 'btn-link' : 'btn-outline-brand';
+        HtmlHelper::addClearButton($frm, 'btn ' . $class);
         return $frm;
     }
 

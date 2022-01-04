@@ -138,7 +138,6 @@ $(document).on('change', '#conditionTypeJs', function () {
         } else if (RECORD_TYPE_SHOP == recordType) {
             return fcom.makeUrl('Shops', 'autoComplete');
         } else {
-            alert(recordType);
             console.error(langLbl.invalidRequest);
             return false;
         }

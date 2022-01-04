@@ -21,7 +21,7 @@
                 uploadedContentEle.remove();
             }
 
-            if ('' != t) {
+            if ('' != t.html) {
                 $(".dropzoneContainerJs").append(t.html);
                 $(".dropzoneUploadJs").hide();
             } else {

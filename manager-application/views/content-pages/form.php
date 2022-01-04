@@ -1,7 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $formOnSubmit = 'saveRecord($("#frmCMSPage")); return(false);';
 $fld = $frm->getField('cpage_title');
-$fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','cpage_id');getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val())");
 
 $fld = $frm->getField('urlrewrite_custom');
 $fld->setFieldTagAttribute('id', "urlrewrite_custom");

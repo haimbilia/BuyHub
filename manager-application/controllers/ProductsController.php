@@ -189,6 +189,12 @@ class ProductsController extends ListingBaseController
     {
         $this->checkEditPrivilege();
 
+        $pageData = PageLanguageData::getAttributesByKey('ADD_PRODUCT', $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+
         $recordId = FatUtility::int($recordId);
         $productType = FatUtility::int($productType);
 
@@ -1446,6 +1452,13 @@ class ProductsController extends ListingBaseController
         switch ($action) {
             case 'index':
                 $pageData = PageLanguageData::getAttributesByKey('MANAGE_PRODUCTS', $this->siteLangId);
+                $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+                $this->nodes = [
+                    ['title' => $pageTitle]
+                ];
+                break;
+            case 'form':
+                $pageData = PageLanguageData::getAttributesByKey('ADD_PRODUCT', $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
                 $this->nodes = [
                     ['title' => $pageTitle]

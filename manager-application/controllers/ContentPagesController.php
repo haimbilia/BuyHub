@@ -205,17 +205,14 @@ class ContentPagesController extends ListingBaseController
         /* ] */
 
         $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
+        $languages = Language::getDropDownList();
+        if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!ContentPage::getAttributesByLangId($langId, $recordId)) {
+                if (!Brand::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
-        } else {
-            $recordId = $contentPage->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
@@ -414,7 +411,7 @@ class ContentPagesController extends ListingBaseController
         }
 
         $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $lang_id));
-        $this->set('pageId', $recordId);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->set('cpage_layout', $cpage_layout);
         $this->_template->render(false, false, 'json-success.php');
@@ -431,23 +428,19 @@ class ContentPagesController extends ListingBaseController
      * @param integer $lang_id
      * @return void
      */
-    public function images($recordId, $file_type = 'THUMB', $lang_id = 0)
+    public function images($recordId, $lang_id = 0)
     {
         $languages = Language::getAllNames();
         $recordId = FatUtility::int($recordId);
         if (count($languages) > 1) {
-            $universalImage = true;
             $lang_id = FatUtility::int($lang_id);
         } else {
-            $universalImage = false;
             $lang_id = array_key_first($languages);
         }
-        $lang_id = $lang_id == 0 ?  $this->siteLangId : $lang_id;
 
-        $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $recordId, 0, $lang_id, $universalImage);
+        $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $recordId, 0, $lang_id,false);
         $this->set('image', $cbgImage);
         $this->set('imageFunction', 'cpageBackgroundImage');
-        $this->set('file_type', $file_type);
         $this->set('recordId', $recordId);
         $this->checkEditPrivilege(true);
 
@@ -510,10 +503,11 @@ class ContentPagesController extends ListingBaseController
     }
 
 
-    public function removeMedia($recordId, $afileId = 0)
+    public function removeMedia($recordId, $afileId)
     {
         $recordId = FatUtility::int($recordId);
-        if (!$recordId) {
+        $afileId = FatUtility::int($afileId);
+        if (!$recordId || !$afileId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $fileHandlerObj = new AttachedFile();
