@@ -226,7 +226,7 @@ class ContentBlockController extends ListingBaseController
         $frm->addHtmlEditor(Labels::getLabel('FRM_Page_Content', $this->siteLangId), 'epage_content');
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'epage_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'epage_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }

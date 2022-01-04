@@ -272,7 +272,7 @@ class EmptyCartItemsController extends ListingBaseController
         $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_PREFIX_WITH_{SITEROOT},_if_needs_to_generate_system\'s_url.', $this->siteLangId) . '</small>';
         $frm->addSelectBox(Labels::getLabel('FRM_OPEN_LINK_IN_NEW_TAB', $this->siteLangId), 'emptycartitem_url_is_newtab', applicationConstants::getYesNoArr($this->siteLangId), applicationConstants::NO, array(), '');
         $frm->addIntegerField(Labels::getLabel('FRM_DISPLAY_ORDER', $this->siteLangId), 'emptycartitem_display_order');
-        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'emptycartitem_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);        
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'emptycartitem_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);        
         $languageArr = Language::getDropDownList();
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');

@@ -212,7 +212,7 @@ class OrderStatusController extends ListingBaseController
 
         $frm->addCheckBox(Labels::getLabel('FRM_FOR_DIGITAL_ORDERS', $this->siteLangId), 'orderstatus_is_digital', applicationConstants::YES, [], false, applicationConstants::NO);
 
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'orderstatus_is_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'orderstatus_is_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');

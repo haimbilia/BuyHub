@@ -208,7 +208,7 @@ class SellerPackagesController extends ListingBaseController
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PACKAGE_DISPLAY_ORDER', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'display_order');
         $fld->requirements()->setIntPositive();
 
-        $frm->addCheckBox(Labels::getLabel('FRM_PACKAGE_STATUS', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_PACKAGE_STATUS', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');

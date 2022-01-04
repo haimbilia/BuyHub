@@ -228,7 +228,7 @@ class BlogPostCategoriesController extends ListingBaseController
         $fld->requirements()->setRequired();
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY_PARENT', $this->siteLangId), 'bpcategory_parent', array(0 => Labels::getLabel('LBL_ROOT_CATEGORY', $this->siteLangId)) + $categories, '', array(), '');
 
-        $frm->addCheckBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'bpcategory_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'bpcategory_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'bpcategory_featured', 1, [], false, 0);
 
         $languageArr = Language::getDropDownList();

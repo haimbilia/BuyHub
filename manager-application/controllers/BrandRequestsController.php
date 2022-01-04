@@ -226,7 +226,7 @@ class BrandRequestsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_BRAND_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
 
-        $frm->addCheckBox(Labels::getLabel('FRM_BRAND_STATUS', $this->siteLangId), 'brand_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_BRAND_STATUS', $this->siteLangId), 'brand_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $frm->addCheckBox(Labels::getLabel('FRM_BRAND_APPROVAL', $this->siteLangId), 'brand_status', applicationConstants::YES, [], false, applicationConstants::NO);
 
         $languageArr = Language::getDropDownList();
