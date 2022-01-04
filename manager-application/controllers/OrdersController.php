@@ -62,7 +62,7 @@ class OrdersController extends ListingBaseController
                 'op_qty', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
                 'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
                 'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'ts.state_code', 'tc.country_code', 'op_rounding_off',
-                'op_shop_owner_phone_dcode', 'op_selprod_price', 'op_special_price', 'opshipping_by_seller_user_id', 'selprod_product_id', 'orderstatus_color_class', 'op_product_type', 'order_payment_status', 'plugin_code', 'opshipping_fulfillment_type'
+                'op_shop_owner_phone_dcode', 'op_selprod_price', 'op_special_price', 'opshipping_by_seller_user_id', 'selprod_product_id', 'orderstatus_color_class', 'op_product_type', 'order_payment_status', 'plugin_code', 'opshipping_fulfillment_type','orderstatus_id'
             )
         );
 
@@ -338,7 +338,7 @@ class OrdersController extends ListingBaseController
                 $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'oshistory_courier', $trackCarrierFldUnReqObj);
             }
         }
-
+        $frm->addHiddenField('', 'shipped_by_plugin', 0, ['id' => 'shippedByPluginJs']);
         $frm->addHiddenField('', 'op_id', 0);
         return $frm;
     }
@@ -730,7 +730,7 @@ class OrdersController extends ListingBaseController
         $post = FatApp::getPostedData();
         if (!isset($post['op_id'])) {
             LibHelper::exitWithError($this->str_invalid_request, true);
-        }
+        }        
 
         $opId = FatUtility::int($post['op_id']);
         if (1 > $opId) {
@@ -745,6 +745,8 @@ class OrdersController extends ListingBaseController
         if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && empty($shippingApiObj)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId), true);
         }
+
+        $shippedByPlugin = FatApp::getPostedData('shipped_by_plugin', FatUtility::VAR_INT, 0);
 
         $oCancelRequestSrch = new OrderCancelRequestSearch();
         $oCancelRequestSrch->doNotCalculateRecords();
@@ -788,8 +790,11 @@ class OrdersController extends ListingBaseController
             $processingStatuses = $orderObj->getAdminAllowedUpdateOrderStatuses(false, $orderDetail['op_product_type']);
         }
         $frm = $this->getOrderCommentsForm($orderDetail, $processingStatuses);
+        if(1 == $shippedByPlugin){
+            $fld = $frm->getField('op_status_id');       
+            $fld->requirements()->removeOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT), 'eq');
+        }  
         $post = $frm->getFormDataFromArray($post);
-
         if (!false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }

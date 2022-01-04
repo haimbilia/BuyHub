@@ -65,6 +65,7 @@ $(document).ready(function () {
             if (0 < $(form).length) {
                 $(form + " .status-js").val(orderShippedStatus).change();
                 $(form + " .notifyCustomer-js").val(1);
+                $(form + " #shippedByPluginJs").val(1);
                 $(form + " input[name='tracking_number']").val(t.tracking_number);
                 canShipByPlugin = 0;
                 if ('' != t.tracking_number) {

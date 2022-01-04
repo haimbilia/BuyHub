@@ -415,15 +415,14 @@ class Shipping
                         CacheHelper::create($cacheKey, serialize($shippingRates), CacheHelper::TYPE_SHIPING_API);
                     }
                 }
-
+                unset($physicalSelProdIdArr[$product['selprod_id']]);
                 if ((false == $shippingRates || empty($shippingRates))) {
                     $msg = (string) $shippingApiObj->getError();
                     if (!empty($msg)) {
                         SystemLog::system($msg, 'SelProd ID-' . $product['selprod_id']);
                     }
                     continue;
-                }
-                unset($physicalSelProdIdArr[$product['selprod_id']]);
+                }                
                 foreach ($shippingRates as $key => $value) {
                     $shippingCost = [
                         'id' => $value['serviceCode'],

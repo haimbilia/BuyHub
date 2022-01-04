@@ -768,7 +768,8 @@ class SellerController extends SellerBaseController
         $status = FatApp::getPostedData('op_status_id', FatUtility::VAR_INT, 0);
         $manualShipping = FatApp::getPostedData('manual_shipping', FatUtility::VAR_INT, 0);
         $trackingNumber = FatApp::getPostedData('tracking_number', FatUtility::VAR_STRING, '');
-        
+        $shippedByPlugin = FatApp::getPostedData('shipped_by_plugin', FatUtility::VAR_INT, 0);
+
         $db = FatApp::getDb();
         $db->startTransaction();
 
@@ -812,7 +813,7 @@ class SellerController extends SellerBaseController
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_VENDOR_ORDER_STATUS")));
         $srch->addCondition('op_selprod_user_id', '=', $loggedUserId);
         $srch->addCondition('op_id', '=', $op_id);
-        $srch->addMultipleFields(['op.*','pm.*','opshipping_by_seller_user_id','ocrequest_status','opshipping_fulfillment_type','order_language_id','ops_plugin.plugin_code as opshipping_plugin_code', 'opship_tracking_number', 'orderstatus_id']);
+        $srch->addMultipleFields(['op.*','pm.*','opshipping_by_seller_user_id','ocrequest_status','opshipping_fulfillment_type','order_language_id','ops_plugin.plugin_code as opshipping_plugin_code', 'opship_tracking_number', 'orderstatus_id','opshipping_carrier_code']);
         $rs = $srch->getResultSet();
 
         $orderDetail = FatApp::getDb()->fetch($rs);
@@ -867,9 +868,15 @@ class SellerController extends SellerBaseController
         }
         
         $frm = $this->getOrderCommentsForm($orderDetail, $processingStatuses);
+
+        if(1 == $shippedByPlugin){
+            $fld = $frm->getField('op_status_id');       
+            $fld->requirements()->removeOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT), 'eq');
+        }       
+
         $post = $frm->getFormDataFromArray($post);
         
-        if (false == $post) {
+        if (false == $post) {           
             Message::addErrorMessage(current($frm->getValidationErrors()));
             FatUtility::dieJsonError(Message::getHtml());
         }
@@ -897,6 +904,7 @@ class SellerController extends SellerBaseController
                     }
                     
                 } else {
+                   
                     $trackingRelation = new TrackingCourierCodeRelation();
                     $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
                     $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
@@ -3988,8 +3996,8 @@ class SellerController extends SellerBaseController
             $manualShipReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('LBL_SELF_SHIPPING', $this->siteLangId));
             $manualShipReqObj->setRequired(true);
 
-            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")), 'eq', 'manual_shipping', $manualShipReqObj);
-            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT, FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")), 'ne', 'manual_shipping', $manualShipUnReqObj);
+            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT), 'eq', 'manual_shipping', $manualShipReqObj);
+            $fld->requirements()->addOnChangerequirementUpdate(FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS", FatUtility::VAR_INT), 'ne', 'manual_shipping', $manualShipUnReqObj);
 
 
             $frm->addTextBox(Labels::getLabel('LBL_Tracking_Number', $this->siteLangId), 'tracking_number');
@@ -4027,9 +4035,10 @@ class SellerController extends SellerBaseController
 
                 $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'oshistory_courier', $trackCarrierFldReqObj);
                 $manualFld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'oshistory_courier', $trackCarrierFldUnReqObj);
-            }
+            }           
         }
 
+        $frm->addHiddenField('', 'shipped_by_plugin', 0, ['id' => 'shippedByPluginJs']);
         $frm->addHiddenField('', 'op_id', 0);
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
         return $frm;

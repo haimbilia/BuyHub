@@ -65,7 +65,7 @@ trait ShippingServices
             LibHelper::dieJsonError($opObj->getError());
         }
 
-        LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
     }
 
     /**
@@ -288,7 +288,7 @@ trait ShippingServices
             'tracking_number' => $trackingNumber
         ];
 
-        LibHelper::dieJsonSuccess($json);
+        FatUtility::dieJsonSuccess($json);
     }
 
     /**
@@ -510,7 +510,7 @@ trait ShippingServices
             LibHelper::dieJsonError(FatApp::getDb()->getError());
         }
 
-        LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
     }
 
     public function cancelPickup(int $opId)
@@ -534,7 +534,7 @@ trait ShippingServices
         if (!FatApp::getDb()->updateFromArray(OrderProduct::DB_TBL_SHIPMENT_PICKUP, ['opsp_scheduled' => applicationConstants::INACTIVE], array('smt' => 'opsp_op_id = ?', 'vals' => array($opId)))) {
             LibHelper::dieJsonError(FatApp::getDb()->getError());
         }
-        LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
     }
 
     public function shippingRatesForm(int $opId)
@@ -733,7 +733,7 @@ trait ShippingServices
         if (!FatApp::getDb()->updateFromArray(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, $dataToUpdate, array('smt' => 'opshipping_op_id = ?', 'vals' => array($opId)))) {
             LibHelper::dieJsonError(FatApp::getDb()->getError());
         }
-        LibHelper::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->langId));
     }
 
     private function loadShippingService($orderData, $href = '')
