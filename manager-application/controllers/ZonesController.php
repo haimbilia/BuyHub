@@ -163,7 +163,7 @@ class ZonesController extends ListingBaseController
         //$frm->addRequiredField(Labels::getLabel('LBL_Zone_Identifier', $this->siteLangId), 'zone_identifier');
         $frm->addRequiredField(Labels::getLabel('FRM_ZONE_NAME', $this->siteLangId), 'zone_name');
 
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'zone_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'zone_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $languageArr = Language::getAllNames(true);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');

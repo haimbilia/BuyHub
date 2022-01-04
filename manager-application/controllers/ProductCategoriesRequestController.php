@@ -197,7 +197,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         $categories = array(0 => Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId)) + $prodCat->makeAssociativeArray($categoriesArr);
         $frm->addSelectBox(Labels::getLabel('FRM_PARENT_CATEGORY', $this->siteLangId), 'prodcat_parent', $categories, '', array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId), 'prodcat_status', ProductCategory::getStatusArr($this->siteLangId), '', array(), '');
-        $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH', $this->siteLangId), 'prodcat_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH', $this->siteLangId), 'prodcat_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {

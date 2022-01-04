@@ -396,7 +396,7 @@ class AdminUsersController extends ListingBaseController
         }
 
         if ($recordId != 1) {
-            $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'admin_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+            $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'admin_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
             HtmlHelper::configureSwitchForCheckbox($fld);
             $fld->developerTags['noCaptionTag'] = true;
         }

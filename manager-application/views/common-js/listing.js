@@ -289,7 +289,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             return false;
         }
         fcom.resetEditorInstance();
-        $.ykmodal(fcom.getLoader(), displayInPopup, dialogClass);
         data = "recordId=" + recordId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
             $.ykmodal(t.html, displayInPopup, dialogClass);

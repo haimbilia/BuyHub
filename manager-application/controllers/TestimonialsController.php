@@ -137,7 +137,7 @@ class TestimonialsController extends ListingBaseController
 
         $fld = $frm->addTextarea(Labels::getLabel('FRM_TESTIMONIAL_TEXT', $this->siteLangId), 'testimonial_text');
         $fld->requirements()->setRequired();
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'testimonial_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'testimonial_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {

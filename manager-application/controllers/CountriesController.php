@@ -199,7 +199,7 @@ class CountriesController extends ListingBaseController
             $frm->addHiddenField('', 'country_language_id', FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
         }
 
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'country_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'country_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {

@@ -169,6 +169,7 @@ class OrderReturnRequest extends MyAppModel
         $srch = new OrderReturnRequestSearch();
         $srch->joinOrderProducts();
         $srch->joinOrderProductSettings();
+        $srch->joinShippingCharges();
         $srch->joinOrders();
         $srch->addOrderProductCharges();
         $srch->doNotCalculateRecords();

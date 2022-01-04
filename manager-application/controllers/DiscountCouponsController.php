@@ -316,7 +316,7 @@ class DiscountCouponsController extends ListingBaseController
         $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'coupon_end_date', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $fld->requirements()->setCompareWith('coupon_start_date', 'ge', Labels::getLabel('FRM_DATE_TO', $this->siteLangId));
 
-        $frm->addCheckBox(Labels::getLabel('FRM_COUPON_STATUS', $this->siteLangId), 'coupon_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_COUPON_STATUS', $this->siteLangId), 'coupon_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $flatDiscountVal = new FormFieldRequirement('coupon_discount_value', Labels::getLabel('FRM_DISCOUNT_VALUE', $this->siteLangId));
         $flatDiscountVal->setRequired(true);

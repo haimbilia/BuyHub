@@ -18,7 +18,7 @@ class AdminBaseController extends FatController
     {
         parent::__construct($action);
 
-        if (get_class($this) != 'AdminGuestController') {
+        if (get_class($this) != 'AdminGuestController' && !FatUtility::isAjaxCall()) {
             $_SESSION['admin_referer_page_url'] = UrlHelper::getCurrUrl();
         }
 

@@ -210,7 +210,7 @@ class StatesController extends ListingBaseController
 
         $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'state_country_id', $countriesArr, '', array(), '');
 
-        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'state_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'state_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         HtmlHelper::configureSwitchForCheckbox($fld);
         $fld->developerTags['noCaptionTag'] = true;
 
