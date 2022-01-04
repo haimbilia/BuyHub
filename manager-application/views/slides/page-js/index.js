@@ -10,6 +10,7 @@ bindSortable = function() {
         return;
     }
     $("#listingTableJs > tbody").sortable({
+        handle: '.handleJs',
         update: function(event, ui) {
             fcom.displayProcessing();
             $('.listingTableJs').prepend(fcom.getLoader());
@@ -44,7 +45,7 @@ bindSortable = function() {
                 }
             );
         },
-    }).disableSelection();
+    });
 }
 
 

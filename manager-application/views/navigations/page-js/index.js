@@ -169,6 +169,7 @@
 
     bindSortable = function () {
         $(".childrensJs").sortable({
+            handle: '.handleJs',
             update: function (event, ui) {
                 fcom.displayProcessing();
                 $(dv).prepend(fcom.getLoader());
@@ -203,6 +204,6 @@
                     }
                 );
             },
-        }).disableSelection();
+        });
     };
 })();

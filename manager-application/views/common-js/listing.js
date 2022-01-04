@@ -716,10 +716,15 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         thWidthArr.sort((a, b) => (a.width > b.width) ? 1 : -1)
         /* Sort By width */
 
-        $.each(thWidthArr, function (index, value) {
+        let isSortableTable = 0 < $(".listingTableJs .listingRecordJs .handleJs").length; 
+        
+        $.each(thWidthArr, function (index, value) {            
             var width = value.width;
-            var element = value.element;
-            $(element).css({ 'width': width });
+            var element = value.element;       
+            $(element).attr('width', width);
+            if(isSortableTable){
+                $(".listingTableJs .listingRecordJs tr td:nth-child(" + (value.element.index() + 1)  + ")").attr('width', width);
+            }            
         });
     }
 })();

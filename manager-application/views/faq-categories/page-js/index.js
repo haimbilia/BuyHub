@@ -12,6 +12,7 @@ $(document).ajaxComplete(function() {
         }
     
         $("#listingTableJs > tbody").sortable({
+            handle: '.handleJs',
             update: function(event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
@@ -46,7 +47,7 @@ $(document).ajaxComplete(function() {
                     }
                 );
             },
-        }).disableSelection();
+        });
     }
 
     redirectToList = function (faqCatId) {
