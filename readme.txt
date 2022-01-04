@@ -491,6 +491,7 @@ Bugs :
     => 060877 - Admin UI: Layout Instruction is not showing under the content pages section
     => 060876 - Admin UI: Session is expired message is not showing on some of the pages on the whole system
     => 060871 - Admin UI: Reset and Save buttons position is not aligned on the slide pages
+    => 060750 - Admin UI: Double validations messages for the "confirm password" field is showing while changing the password under the admin user section
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
