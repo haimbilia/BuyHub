@@ -21,7 +21,6 @@ $quantity-height: 40px;
         flex: 0 0 32px;
         width: 32px;
         height: 100%;
-
         color: $txt-gray;
         &:hover {
             color: $body-color;
@@ -43,6 +42,11 @@ $quantity-height: 40px;
     &-sm {
         max-width: 100px;
         height: $quantity-height - 10px;
+
+        .svg {
+            width: 10px;
+            height: 10px;
+        }
     }
     &-2 {
         max-width: 90px;

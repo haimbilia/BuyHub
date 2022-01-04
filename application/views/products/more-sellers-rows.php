@@ -43,14 +43,14 @@ foreach ($sellers as $sellerDetail) {
     } ?>
     <li class="table-row <?php echo (array_key_exists('isActive', $sellerDetail) && true === $sellerDetail['isActive'] ? 'is-active' : ''); ?>">
         <div class="cell cell-1" data-label="<?php echo Labels::getLabel('LBL_SELLER', $siteLangId); ?>">
-            <div class="item">
+            <div class="product-profile">
                 <div class="item__pic item__pic-seller">
                     <a href="<?php echo UrlHelper::generateUrl('shops', 'view', array($sellerDetail['shop_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
                         <img src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($sellerDetail['shop_id'], $siteLangId, 'SMALL')); ?>" alt="<?php echo $sellerDetail['shop_name']; ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
                     </a>
                 </div>
-                <div class="item__description">
-                    <div class="item__title">
+                <div class="product-profile-data">
+                    <div class="title">
                         <a href="<?php echo UrlHelper::generateUrl('shops', 'View', array($sellerDetail['shop_id'])); ?>">
                             <?php echo $sellerDetail['shop_name']; ?>
                         </a>
@@ -65,7 +65,7 @@ foreach ($sellers as $sellerDetail) {
 
                     <div class="item__location">
                         <i class="icn">
-                            <svg class="svg" width="16px" height="16px">
+                            <svg class="svg" width="16" height="16">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#location">
                                 </use>
                             </svg>
@@ -94,14 +94,15 @@ foreach ($sellers as $sellerDetail) {
             </div>
         </div>
         <div class="cell cell-2" data-label="<?php echo Labels::getLabel('LBL_PRICE', $siteLangId); ?>">
-            <div class="product-price">
-                <span class="new_price">
+            <div class="products-price">
+                <span class="products-price-new">
                     <?php echo CommonHelper::displayMoneyFormat($sellerDetail['theprice']); ?>
                     <?php if ($sellerDetail['special_price_found'] && $sellerDetail['selprod_price'] > $sellerDetail['theprice']) { ?>
-                        <del><?php echo CommonHelper::displayMoneyFormat($sellerDetail['selprod_price']); ?></del>
+                        <del>
+                            <?php echo CommonHelper::displayMoneyFormat($sellerDetail['selprod_price']); ?></del>
                 </span>
                 <br>
-                <span class="off_price text-success">
+                <span class="products-price-off">
                     <?php echo CommonHelper::showProductDiscountedText($sellerDetail, $siteLangId); ?>
                 <?php } ?>
                 </span>

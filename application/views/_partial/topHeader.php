@@ -59,12 +59,17 @@
                                 </svg>
                             </i>
                         </button>
-                        <div class="offcanvas offcanvas-start" tabindex="-1" id="mbl-menu" aria-labelledby="mbl-menuLabel">
-                            <div class="offcanvas-header">
-                                <h5 class="offcanvas-title" id="mbl-menuLabel"></h5>
+                        <div class="offcanvas offcanvas-mbl offcanvas-start" tabindex="-1" id="mbl-menu" aria-labelledby="mbl-menuLabel">
+                            <div class="offcanvas-body ">
                                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                            </div>
-                            <div class="offcanvas-body">
+                                <div class="profile">
+                                    <div class="profile-image">
+                                        <img class="profile-avatar" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg" alt="">
+                                    </div>
+                                    <div class="profile-data">
+                                        <h6 class="profile-name">Hi, Michael Williams </h6>
+                                    </div>
+                                </div>
                                 <div class="mbl-menu">
                                     <div class="mbl-menu-item">
                                         <div class="mbl-menu-head">
@@ -124,6 +129,17 @@
                                     </div>
                                 </div>
 
+                            </div>
+
+                            <div class="offcanvas-foot">
+                                <button class="btn btn-black btn-logout" type="button">
+                                    <i class="icn">
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#logout">
+                                            </use>
+                                        </svg>
+                                    </i>
+                                    logout</button>
                             </div>
                         </div>
                         <div class="logo">

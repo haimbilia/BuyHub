@@ -93,8 +93,8 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                         )) . '" alt="' . $moresellers['shop_name'] . '">
                                                             </a>
                                                         </figure>
-                                                        <div class="item__description">
-                                                            <div class="item__title">
+                                                         <div class="product-profile-data">
+                                                            <div class="title" >
                                                                 <a title="' . $moresellers[$key] . '" href="' . UrlHelper::generateUrl('shops', 'view', array(
                                             $moresellers['shop_id']
                                         )) . '">

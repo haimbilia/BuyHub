@@ -73,12 +73,10 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         </div>
                         <div class="block-detail">
                             <div class="block-detail-top">
-                                <div class="item">
-                                    <div class="item__description">
-                                        <h6 class="item__title">
-                                            <a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
-                                        </h6>
-                                        <div class="item__specification">
+                                <div class="product-profile">
+                                    <div class="product-profile-data">
+                                        <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
+                                        <div class="options">
                                             <?php
                                             if (isset($product['options']) && count($product['options'])) {
                                                 foreach ($product['options'] as $key => $option) {
@@ -154,7 +152,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                 </div>
                 <div class="block-detail">
                     <div class="block-detail-top">
-                        <div class="product-profile__data">
+                        <div class="product-profile-data">
                             <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a> </div>
                             <div class="options">
                                 <p class=""> <?php
@@ -228,6 +226,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     </div>
                     <div class="block-detail-bottom">
                         <div class="product-quantity">
+                            <label class="form-label" for=""><?php echo Labels::getLabel('LBL_QTY', $siteLangId); ?></label>
                             <div class="quantity quantity-sm" data-stock="<?php echo $product['selprod_stock']; ?>">
                                 <span class="decrease decrease-js shipProductsCount <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'not-allowed' : ''; ?>">
                                     <i class="icn">
@@ -250,7 +249,9 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </span>
                             </div>
                         </div>
-                        <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
+                        <div class="products-price">
+                            <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -291,10 +292,10 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     </div>
                     <div class="block-detail">
                         <div class="block-detail-top">
-                            <div class="item">
-                                <div class="item__description">
-                                    <h6 class="item__title"><a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a></h6>
-                                    <div class="item__specification">
+                            <div class="product-profile">
+                                <div class="product-profile-data">
+                                    <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
+                                    <div class="options">
                                         <?php
                                         if (isset($product['options']) && count($product['options'])) {
                                             foreach ($product['options'] as $key => $option) {
@@ -322,7 +323,8 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             </div>
                         </div>
                         <div class="block-detail-bottom">
-                            <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
+                            <div class="products-price">
+                                <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
                         </div>
                     </div>
                 </li>

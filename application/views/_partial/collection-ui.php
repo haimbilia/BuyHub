@@ -59,7 +59,7 @@ if ($showAddToFavorite) {
                         ?>
                             <a class="favourite <?php echo ($product['ufp_id']) ? 'is-active' : ''; ?>" onclick="<?php echo $jsFunc; ?>" data-id="<?php echo $product['selprod_id']; ?>" href="javascript:void(0)" title="<?php echo ($product['ufp_id']) ? Labels::getLabel('LBL_Remove_product_from_favourite_list', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_favourite_list', $siteLangId); ?>">
                                 <i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
+                                    <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
                                         </use>
                                     </svg>
@@ -68,7 +68,7 @@ if ($showAddToFavorite) {
                         <?php } else { ?>
                             <a class="favourite wishListLink-Js <?php echo ($product['is_in_any_wishlist']) ? 'is-active' : ''; ?>" data-id="<?php echo $product['selprod_id']; ?>" href="javascript:void(0)" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo ($product['is_in_any_wishlist']) ? Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId) : Labels::getLabel('LBL_Add_Product_to_your_wishlist', $siteLangId); ?>">
                                 <i class="icn">
-                                    <svg class="svg" width="16px" height="16px">
+                                    <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
                                         </use>
                                     </svg>
@@ -80,7 +80,7 @@ if ($showAddToFavorite) {
                 <li>
                     <a class="" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#shareIcon">
                         <i class="icn">
-                            <svg class="svg" width="16px" height="16px">
+                            <svg class="svg" width="16" height="16">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#share">
                                 </use>
                             </svg>

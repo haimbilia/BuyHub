@@ -255,14 +255,15 @@
                             $uncheckBoxClass = 'remove-add-on';
                         } ?>
                         <li class="addon--js <?php echo $cancelClass; ?>">
-                            <div class="item">
-                                <figure class="item__pic"><a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], 'MINI', $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>">
+                            <div class="product-profile">
+                                <figure class="item__pic">
+                                    <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], 'MINI', $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>">
                                     </a>
                                 </figure>
-                                <div class="item__description">
-                                    <div class="item__title"><a href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
-                                    </div>
-                                    <div class="item__price">
+                                <div class="product-profile-data">
+                                    <a class="title" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
+
+                                    <div class="products-price">
                                         <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice']); ?>
                                     </div>
                                 </div>

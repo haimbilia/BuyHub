@@ -348,7 +348,6 @@
     }
 }
 
-
 /*post detail*/
 
 .post__detail {
@@ -583,7 +582,8 @@
     padding: 2rem;
 }
 
-.right-side-bar {}
+.right-side-bar {
+}
 
 .blog-subscribers-inner {
     background: $brand-color;
@@ -653,16 +653,16 @@
     display: none;
 }
 
-.content-data>ul>li {
-    margin-bottom: 1rem
+.content-data > ul > li {
+    margin-bottom: 1rem;
 }
 
-.content-data-blog>ul>li {
+.content-data-blog > ul > li {
     border-bottom: $border;
     margin-bottom: 1rem;
 }
 
-.content-data-blog>ul>li:last-child {
+.content-data-blog > ul > li:last-child {
     border-bottom: none;
 }
 

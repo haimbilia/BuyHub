@@ -65,21 +65,20 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         </div>
                         <div class="block-detail">
                             <div class="block-detail-top">
-                                <div class="item">
-                                    <div class="item__description">
-                                        <h6 class="item__title">
-                                            <a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
-                                        </h6>
-                                        <div class="item__specification">
-                                            <p class=""> <?php
-                                                            if (isset($product['options']) && count($product['options'])) {
-                                                                foreach ($product['options'] as $key => $option) {
-                                                                    if (0 < $key) {
-                                                                        echo ' | ';
-                                                                    }
-                                                                    echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
+                                <div class="product-profile">
+                                    <div class="product-profile-data">
+                                        <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
+                                        <div class="options">
+                                            <p class="">
+                                                <?php
+                                                if (isset($product['options']) && count($product['options'])) {
+                                                    foreach ($product['options'] as $key => $option) {
+                                                        if (0 < $key) {
+                                                            echo ' | ';
+                                                        }
+                                                        echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
                                                 <?php }
-                                                            } ?></p>
+                                                } ?></p>
                                         </div>
                                         <p class="text-danger pt-2">
                                             <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_SHIPPING', $siteLangId); ?></p>
@@ -147,11 +146,11 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                 <div class="block-detail">
                     <div class="block-detail-top">
                         <div class="item">
-                            <div class="item__description">
-                                <h6 class="item__title">
-                                    <a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
-                                </h6>
-                                <div class="item__specification">
+                            <div class="product-profile-data">
+
+                                <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
+
+                                <div class="options">
 
                                     <?php
                                     if (isset($product['options']) && count($product['options'])) {
@@ -181,7 +180,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                             <?php } else { ?>
                                                 <a href="javascript:void(0)" class="is-active" title="<?php echo Labels::getLabel('LBL_Already_marked_as_favourites.', $siteLangId); ?>">
                                                     <i class="icn">
-                                                        <svg class="svg" width="16px" height="16px">
+                                                        <svg class="svg" width="16" height="16">
                                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
                                                             </use>
                                                         </svg>
@@ -200,7 +199,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                             <?php  } else { ?>
                                                 <a class="favourite wishListLink-Js is-active" data-id="<?php echo $product['selprod_id']; ?>" href="javascript:void(0)" onClick="viewWishList(<?php echo $product['selprod_id']; ?>,this,event);" title="<?php echo Labels::getLabel('LBL_Remove_product_from_your_wishlist', $siteLangId); ?>">
                                                     <i class="icn">
-                                                        <svg class="svg" width="16px" height="16px">
+                                                        <svg class="svg" width="16" height="16">
                                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#heart">
                                                             </use>
                                                         </svg>
@@ -225,7 +224,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     </div>
                     <div class="block-detail-bottom">
                         <div class="product-quantity">
-                            <label class="form-label" for="">QTY</label>
+                            <label class="form-label" for=""><?php echo Labels::getLabel('LBL_QTY', $siteLangId); ?></label>
                             <div class="quantity quantity-sm" data-stock="<?php echo $product['selprod_stock']; ?>">
                                 <span class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'not-allowed' : ''; ?>">
                                     <i class="icn">
@@ -247,7 +246,8 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </span>
                             </div>
                         </div>
-                        <div class="product-price"><?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
+                        <div class="products-price">
+                            <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
                     </div>
                 </div>
             </li>
@@ -289,12 +289,10 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     </div>
                     <div class="block-detail">
                         <div class="block-detail-top">
-                            <div class="item">
-                                <div class="item__description">
-                                    <h6 class="item__title">
-                                        <a class="" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
-                                    </h6>
-                                    <div class="item__specification">
+                            <div class="product-profile">
+                                <div class="product-profile-data">
+                                    <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
+                                    <div class="options">
                                         <?php
                                         if (isset($product['options']) && count($product['options'])) {
                                             foreach ($product['options'] as $key => $option) {
@@ -323,7 +321,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             </div>
                         </div>
                         <div class="block-detail-bottom">
-                            <div class="product-price">
+                            <div class="products-price">
                                 <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></div>
                         </div>
 

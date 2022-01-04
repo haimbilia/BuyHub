@@ -9,14 +9,14 @@
         </div>
 
         <div class="shop-info">
-            <div class="shop-name">
-                <h5>
+            <div class="shop-detail">
+                <h6 class="shop-title">
                     <?php echo $shop['shop_name']; ?>
                     <span class="blk-txt"><?php echo Labels::getLabel('LBL_Shop_Opened_On', $siteLangId); ?> <strong>
                             <?php $date = new DateTime($shop['user_regdate']);
                             echo $date->format('M d, Y'); ?>
                         </strong></span>
-                </h5>
+                </h6>
                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
                     <div class="product-ratings"> <i class="icn"><svg class="svg">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>

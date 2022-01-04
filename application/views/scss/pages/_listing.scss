@@ -437,9 +437,7 @@
     letter-spacing: 3px;
     text-align: center;
     text-transform: uppercase;
-    -webkit-transition: all 0.15s ease;
     transition: all 0.15s ease;
-
     user-select: none;
     background: #fff;
     display: flex;
@@ -457,7 +455,6 @@
             height: 3px;
             margin: 0 auto 3px auto;
             background: $body-color;
-            -webkit-transition: all 0.15s ease;
             transition: all 0.15s ease;
             &:before,
             &:after {
@@ -468,7 +465,7 @@
                 background: $body-color;
                 content: "";
                 opacity: 0;
-                -webkit-transition: all 0.15s ease;
+
                 transition: all 0.15s ease;
             }
             &:before {
@@ -491,7 +488,6 @@
                 }
                 &:before {
                     #{$start-direction}: 7px;
-
                     transform: translateX(-15px * $transform-direction);
                 }
             }

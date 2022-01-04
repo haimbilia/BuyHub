@@ -32,7 +32,7 @@
                                                                                                                                                                                     } ?>>
 
                                                 <svg class="svg" width="18" height="18">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#pickup">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#store">
                                                     </use>
                                                 </svg>
 

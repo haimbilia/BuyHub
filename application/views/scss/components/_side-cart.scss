@@ -39,23 +39,15 @@
         padding: 0;
         border-bottom: $border;
         overflow-y: auto;
-        .list-cart {
-            border: none;
-            > li {
-                &:last-child {
-                    border: none;
-                }
-            }
+        .list-cart-item {
+            padding: 1rem;
         }
     }
     &_foot {
-        .cart-summary {
-            li {
-                padding: 1rem;
-            }
-        }
+        padding: 1rem;
+
         .buttons-group {
-            padding: 1.5rem 1rem;
+            padding-top: 1rem;
             flex: 1;
         }
     }

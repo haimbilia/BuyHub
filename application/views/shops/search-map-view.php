@@ -17,8 +17,8 @@ if (!empty($allShops)) {
                 <ul class="gmap-list">
                     <li>
                         <div class="product-profile">
-                            <div class="product-profile__thumbnail"><img class="product-img" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" alt="' . $shop['shop_name'] . '"></div>
-                            <div class="product-profile__data"><div class="title"><a href="' . UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true) . '"><strong>' . $shop['shop_name'] . '</strong></a></div></div>
+                            <div class="product-profile-thumbnail"><img class="product-img" src="' . UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shop_id'], $siteLangId, "THUMB", 0, false), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg') . '" alt="' . $shop['shop_name'] . '"></div>
+                            <div class="product-profile-data"><div class="title"><a href="' . UrlHelper::generateUrl('shops', 'view', array($shop['shop_id']), '', null, false, false, true, true) . '"><strong>' . $shop['shop_name'] . '</strong></a></div></div>
                         </div>
                     </li>
                 </ul>';
