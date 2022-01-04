@@ -300,8 +300,9 @@ class UsersAddressesController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
-            'addr_title' => Labels::getLabel('LBL_Address_Title', $this->siteLangId),
+            'addr_title' => Labels::getLabel('LBL_Address_Label', $this->siteLangId),
             'user_address' => Labels::getLabel('LBL_Address', $this->siteLangId),
+            'addr_phone' => Labels::getLabel('LBL_Phone', $this->siteLangId),
             'addr_is_default' => Labels::getLabel('LBL_Default', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -318,6 +319,7 @@ class UsersAddressesController extends ListingBaseController
             'user_name',
             'addr_title',
             'user_address',
+            'addr_phone',
             'addr_is_default',
             'action',
         ];
@@ -325,7 +327,7 @@ class UsersAddressesController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['user_address'], Common::excludeKeysForSort());
+        return array_diff($fields, ['user_address','addr_phone'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)

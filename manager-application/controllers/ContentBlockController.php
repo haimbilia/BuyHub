@@ -69,7 +69,7 @@ class ContentBlockController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TITLE', $this->siteLangId));
         $this->getListingData();
         $this->_template->addCss('css/cropper.css');
-        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js']);
+        $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'content-block/page-js/index.js']);
         $this->set('includeEditor', true);
         $this->_template->render(true, true, '_partial/listing/index.php');
     }

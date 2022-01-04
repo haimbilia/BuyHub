@@ -37,7 +37,7 @@ $(document).on('change', '#imageLanguageJs', function () {
      * cONTENT pAGE cHANGE
      */
     backgroundImage = function (recordId, langId) {
-        fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'images', [recordId, 'IMAGE', langId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'images', [recordId, langId]), '', function (t) {
             fcom.removeLoader();
             $.ykmsg.close();
             $('#imageListingJs').html(t.html);
@@ -47,9 +47,10 @@ $(document).on('change', '#imageLanguageJs', function () {
 
     deleteBackgroundImage = function (recordId, afileId, langId) {
         if (!confirm(langLbl.confirmDelete)) { return; }
-        fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'removeMedia', [recordId, 'THUMB', afileId]), '', function (t) {
+        fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'removeMedia', [recordId, afileId]), '', function (t) {
             backgroundImage(recordId, langId);
             reloadList();
+            $('.resetModalFormJs').click();
         });
     };
 

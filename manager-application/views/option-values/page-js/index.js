@@ -13,6 +13,7 @@ $(document).ajaxComplete(function () {
         }
 
         $(".listingTableJs tbody.listingRecordJs").sortable({
+            handle: '.handleJs',
             update: function (event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
@@ -48,7 +49,7 @@ $(document).ajaxComplete(function () {
                     }
                 );
             },
-        }).disableSelection();
+        });
     };
 
     optionValueForm = function (optionId, id = 0) {

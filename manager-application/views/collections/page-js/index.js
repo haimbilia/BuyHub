@@ -20,6 +20,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
             return;
         }
         $(".listingTableJs tbody.listingRecordJs").sortable({
+            handle: '.handleJs',
             update: function (event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
@@ -54,7 +55,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
                     }
                 );
             },
-        }).disableSelection();
+        });
     };
 
     layoutSelectorForm = function () {

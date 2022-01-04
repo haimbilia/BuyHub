@@ -297,6 +297,7 @@ Updates/Fixes :
     => 061073 - Admin UI: Heading is missing for the search's dropdown under the "meta tags management" section 
     => 061115 - commission going negative when refund the product [RV-9.3.1]
     => 061057 - Admin UI: 'URL Rewriting' is not working for the SEARCH
+    => 061025 - Admin UI: Loader is not showing while uploading the media on the whole system 
 
 New Features:  
     => Admin shipped products listing page
@@ -485,6 +486,8 @@ Bugs :
     => 060861 - Admin UI: Watermark's text is not showing completely in the search fields under the "Blog Contributions" section.
     => 060873 - Admin UI: Different data is showing under the 'Language data' section while editing and adding the pages under the content pages section.
     => 060874 - Admin UI: Added data is not showing under the 'language data' section while editing the records under the content pages section.
+    => 060885 - Admin UI: Getting multiple issues while editing the content blocks section.
+    => 061020 - Admin UI: Admin is not able to 'copy' the text in the table if there is re-arrange functionality on the whole system
     => 061017 - Admin UI: Design is not aligned when the session is expired under the FAQ section
     => 061013 - Admin UI: Status is 'in-active' by default while adding the record on the whole system
     => 060886 - Admin UI: 'Background Image' title design is not matched with the other titles under the content blocks section

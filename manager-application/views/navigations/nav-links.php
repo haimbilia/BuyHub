@@ -33,13 +33,15 @@ if ($includeWrapper) { ?>
                         </div>
                     </div>
                 </div>
-                <span class="sortableListsOpener">
+                <span class="sortableListsOpener ">
+                    <div class="handleJs">
                     <i class="clickable sort-icon" data-nav-id="<?php echo $row['nlink_nav_id']; ?>" data-nlink-id="<?php echo $row['nlink_id']; ?>">
                         <svg class="svg" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#drag">
                             </use>
                         </svg>
                     </i>
+                            </div>
                 </span>
             </div>
         </li>

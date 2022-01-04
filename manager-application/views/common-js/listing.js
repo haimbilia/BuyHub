@@ -580,7 +580,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val("");
-                setTimeout(function () { cropImage(file, options, "uploadImages", inputBtn) }, 100);
+                setTimeout(function () { cropImage(file, options, "uploadImages", inputBtn);
+             }, 100);
                 return;
             });
         }
@@ -589,7 +590,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     uploadImages = function (formData) {
         if (false === checkControllerName()) {
             return false;
-        }
+        }                
+
         var frmName = formData.get("frmName");
         var frm = document.forms[frmName];
         var langId = 0;
@@ -620,8 +622,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function () {
-                $.ykmodal(fcom.getLoader());
+            beforeSend: function () {               
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());               
             },
             success: function (ans) {
                 fcom.removeLoader();
@@ -713,10 +715,15 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         thWidthArr.sort((a, b) => (a.width > b.width) ? 1 : -1)
         /* Sort By width */
 
-        $.each(thWidthArr, function (index, value) {
+        let isSortableTable = 0 < $(".listingTableJs .listingRecordJs .handleJs").length; 
+        
+        $.each(thWidthArr, function (index, value) {            
             var width = value.width;
-            var element = value.element;
-            $(element).css({ 'width': width });
+            var element = value.element;       
+            $(element).attr('width', width);
+            if(isSortableTable){
+                $(".listingTableJs .listingRecordJs tr td:nth-child(" + (value.element.index() + 1)  + ")").attr('width', width);
+            }            
         });
     }
 })();

@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $imgArr = [];
 $recordId = $image['afile_record_id'];
-if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
+if ($recordId > 0) {
     $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
     $imgArr = [
         'url' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', $imageFunction, array($recordId, $image['afile_lang_id'], "THUMB", $image['afile_id'], $image['afile_screen']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
