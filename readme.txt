@@ -485,6 +485,7 @@ Bugs :
     => 060861 - Admin UI: Watermark's text is not showing completely in the search fields under the "Blog Contributions" section.
     => 060873 - Admin UI: Different data is showing under the 'Language data' section while editing and adding the pages under the content pages section.
     => 060874 - Admin UI: Added data is not showing under the 'language data' section while editing the records under the content pages section.
+    => 060885 - Admin UI: Getting multiple issues while editing the content blocks section.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

@@ -428,23 +428,19 @@ class ContentPagesController extends ListingBaseController
      * @param integer $lang_id
      * @return void
      */
-    public function images($recordId, $file_type = 'THUMB', $lang_id = 0)
+    public function images($recordId, $lang_id = 0)
     {
         $languages = Language::getAllNames();
         $recordId = FatUtility::int($recordId);
         if (count($languages) > 1) {
-            $universalImage = true;
             $lang_id = FatUtility::int($lang_id);
         } else {
-            $universalImage = false;
             $lang_id = array_key_first($languages);
         }
-        $lang_id = $lang_id == 0 ?  $this->siteLangId : $lang_id;
 
-        $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $recordId, 0, $lang_id, $universalImage);
+        $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $recordId, 0, $lang_id,false);
         $this->set('image', $cbgImage);
         $this->set('imageFunction', 'cpageBackgroundImage');
-        $this->set('file_type', $file_type);
         $this->set('recordId', $recordId);
         $this->checkEditPrivilege(true);
 
@@ -507,10 +503,11 @@ class ContentPagesController extends ListingBaseController
     }
 
 
-    public function removeMedia($recordId, $afileId = 0)
+    public function removeMedia($recordId, $afileId)
     {
         $recordId = FatUtility::int($recordId);
-        if (!$recordId) {
+        $afileId = FatUtility::int($afileId);
+        if (!$recordId || !$afileId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
         $fileHandlerObj = new AttachedFile();

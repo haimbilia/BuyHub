@@ -52,7 +52,7 @@ if ($cpage_layout == ContentPage::CONTENT_PAGE_LAYOUT1_TYPE) {
             'data-name' => Labels::getLabel("FRM_BACKGROUND_IMAGE", $siteLangId)
         ],
         $siteLangId,
-        ($canEdit ? 'deleteBackgroundImage(' . $image['afile_record_id'] . ',' . $image['afile_id'] .',' . $image['afile_type'].','.$image['afile_lang_id'].')' :''),
+        ($canEdit ? 'deleteBackgroundImage(' . $image['afile_record_id'] . ',' . $image['afile_id'] .','.$image['afile_lang_id'].')' :''),
         ($canEdit ? 'editDropZoneImages(this)': ''),
         $imgArr,
         'mt-3 dropzone-custom dropzoneContainerJs'
