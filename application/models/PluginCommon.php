@@ -187,7 +187,7 @@ class PluginCommon extends MyAppModel
     /**
      * getKingpinTypeArr
      *
-     * @return void
+     * @return array
      */
     public static function getKingpinTypeArr(): array
     {
