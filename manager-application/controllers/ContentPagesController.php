@@ -205,17 +205,14 @@ class ContentPagesController extends ListingBaseController
         /* ] */
 
         $newTabLangId = 0;
-        if ($recordId > 0) {
-            $languages = Language::getAllNames();
+        $languages = Language::getDropDownList();
+        if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!ContentPage::getAttributesByLangId($langId, $recordId)) {
+                if (!Brand::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
             }
-        } else {
-            $recordId = $contentPage->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
         }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
@@ -414,7 +411,7 @@ class ContentPagesController extends ListingBaseController
         }
 
         $this->set('msg', Labels::getLabel('MSG_Setup_Successful', $lang_id));
-        $this->set('pageId', $recordId);
+        $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->set('cpage_layout', $cpage_layout);
         $this->_template->render(false, false, 'json-success.php');

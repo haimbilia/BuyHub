@@ -1503,6 +1503,40 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_PURCHAHSE';
 
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES 
+('MSG_SETUP_REAL-TIME_CURRENCY_EXCHANGE_RATES', 1, 'Setup real-time currency exchange rates', 1),
+('MSG_SETUP_SOCIAL_LOGIN_FOR_FASTER_LOGIN/REGISTRATION',1,'Setup social login such as Facebook, Google, Instagram, Apple for faster login or easy registration. ',1),
+('MSG_SETUP_CLOUD_MESSAGING_NOTIFICATION',1,'Setup default Firebase Cloud Messaging push notifications to drive user re-engagement and retention.',1),
+('MSG_SETUP_GOOGLE_FEED_TO_ADD_PRODUCT',1,'Setup google feed to add your products to Google Shopping.',1),
+('MSG_SETUP_SMS_NOTIFICATIONS_FOR_YOUR_CUSTOMERS',1,'Setup Twilio SMS Notifications to reach your customers over SMS.',1),
+('MSG_SETUP_PAYMENT_METHOD_TO_WITHDRAW_MONEY',1,'Setup payment method for seller to withdraw money.',1),
+('MSG_SETUP_API_FOR_AUTOMATIC_TAX_CALCULATIONS',1,'Setup Avalara or TaxJar for automatic tax calculations.',1),
+('MSG_SETUP_TO_SPLIT_PAYMENT_BETWEEN_SELLERS',1,'Setup the Stripe Connect to split payment between you and seller at checkout.',1),
+('MSG_SETUP_MULTI_CHANNEL_INVENTORY',1,'Setup EasyEcom for easy management of multi-channel inventory.',1),
+('MSG_SETUP_REGULAR_PAYMENT_METHODS',1,'Setup the Stripe Connect to split payment between you and seller at checkout.',1),
+('MSG_SETUP_SHIPPING_API_FOR_SHIPPING_SERVICES',1,'Setup shipping API to integrate USPS, UPS, FedEx, DHL and many more.',1),
+('MSG_SETUP_AUTOMATIC_SHIPMENT_TRACKING',1,'Setup automatic shipment tracking using AfterShip.',1),
+('MSG_MIGRATE_DATA_FROM_THIRD-PARTIES',1,'Migrate data from Shopify.',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES 
+('MSG_MANAGE_META_TAGS_FOR_PRODUCTS_LISTING_PAGE', 1, 'Create and manage meta tags for products\' catalog listing page.', 1),
+('MSG_MANAGE_META_TAGS_FOR_PRODUCTS_DETAIL_PAGE',1,'Create and manage meta tags for each product\'s detail page. ',1),
+('MSG_MANAGE_META_TAGS_FOR_SHOPS_LISTING_PAGE',1,'Create and manage meta tags for \'All Shops\'  listing page.',1),
+('MSG_MANAGE_METATAGS_FOR_SHOP_DETAIL_PAGE',1,'Create and manage metatags for each shop detail page.',1),
+('MSG_MANAGE_META_TAGS_FOR_ALL_THE_CMS_CONTENT_PAGES',1,'Create and manage meta tags for all the cms content pages.',1),
+('MSG_MANAGE_META_TAGS_FOR_DEFAULT_PAGE',1,'Create and manage meta tags for the default page title bar located at the top left of your browser window.',1),
+('MSG_MANAGE_METATAGS_FOR_EXTERNAL_PAGES_CREATED_IF_ANY',1,'Create and manage metatags for external pages created if any.',1),
+('MSG_MANAGE_META_TAGS_FOR_BRANDS_LISTING_PAGE',1,'Create and manage meta tags for all brands listing detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_EACH_BRAND_DETAIL_PAGE',1,'Create and manage metatags for each brand detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_PRODUCT_CATEGORY_DETAIL_PAGE',1,'Create and manage metatags for product category detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_BLOGS_DETAIL_PAGE',1,'Create and manage metatags for blogs\' detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_BLOG_CATEGORIES_DETAIL_PAGE',1,'Create and manage metatags for blog categories\' detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_EACH_BLOG_POSTS',1,'Create and manage metatags for each blog posts',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
 VALUES ('LBL_SR._NO', 1, 'Sr. No', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
@@ -1513,9 +1547,5 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 VALUES ('LBL_RECOMMENDED_TAG_PRODUCTS', 1, 'Recommended Tag Products', 1),
 ('LBL_SMART_RECOMMENDED_WEIGHTAGES', 1, 'Smart Recommended Weightages', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
-
-INSERT INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`, `plang_helping_text`) VALUES (NULL, 'MANAGE_WEIGHTAGES', '-1', 'Smart recommended weightages', '', '', '', '', '');
-
-INSERT INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`, `plang_helping_text`) VALUES (NULL, 'RECOMMENDED_TAG_PRODUCTS_WEIGHTAGES', '-1', 'Recommended tag products', '', '', '', '', '');
 
 ALTER TABLE `tbl_badges` ADD `badge_added_on` DATETIME NOT NULL AFTER `badge_updated_on`;

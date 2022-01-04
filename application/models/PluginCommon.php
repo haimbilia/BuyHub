@@ -301,4 +301,32 @@ class PluginCommon extends MyAppModel
             self::TYPE_DATA_MIGRATION => "data-migration",
         ];
     }
+
+    public static function getLabels(int $langId): array
+    {
+        $pluginLabels = CacheHelper::get('pluginLabels' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($pluginLabels) {
+            return json_decode($pluginLabels);
+        }
+
+        $arr = [
+            self::TYPE_CURRENCY_CONVERTER => Labels::getLabel('MSG_SETUP_REAL-TIME_CURRENCY_EXCHANGE_RATES', $langId),
+            self::TYPE_SOCIAL_LOGIN => Labels::getLabel('MSG_SETUP_SOCIAL_LOGIN_FOR_FASTER_LOGIN/REGISTRATION', $langId),
+            self::TYPE_PUSH_NOTIFICATION => Labels::getLabel('MSG_SETUP_CLOUD_MESSAGING_NOTIFICATION', $langId),
+            self::TYPE_ADVERTISEMENT_FEED => Labels::getLabel('MSG_SETUP_GOOGLE_FEED_TO_ADD_PRODUCT', $langId),
+            self::TYPE_SMS_NOTIFICATION => Labels::getLabel('MSG_SETUP_SMS_NOTIFICATIONS_FOR_YOUR_CUSTOMERS', $langId),
+            self::TYPE_PAYOUTS => Labels::getLabel('MSG_SETUP_PAYMENT_METHOD_TO_WITHDRAW_MONEY', $langId),
+            // self::TYPE_FULL_TEXT_SEARCH => "fullLabels::getLabel('MSG_POST_TITLE', $langId), /* NOT IN USE */
+            self::TYPE_TAX_SERVICES => Labels::getLabel('MSG_SETUP_API_FOR_AUTOMATIC_TAX_CALCULATIONS', $langId),
+            self::TYPE_SPLIT_PAYMENT_METHOD => Labels::getLabel('MSG_SETUP_TO_SPLIT_PAYMENT_BETWEEN_SELLERS', $langId),
+            self::TYPE_MARKETPLACE_CHANNELS => Labels::getLabel('MSG_SETUP_MULTI_CHANNEL_INVENTORY', $langId),
+            self::TYPE_REGULAR_PAYMENT_METHOD => Labels::getLabel('MSG_SETUP_REGULAR_PAYMENT_METHODS', $langId),
+            self::TYPE_SHIPPING_SERVICES => Labels::getLabel('MSG_SETUP_SHIPPING_API_FOR_SHIPPING_SERVICES', $langId),
+            self::TYPE_SHIPMENT_TRACKING => Labels::getLabel('MSG_SETUP_AUTOMATIC_SHIPMENT_TRACKING', $langId),
+            self::TYPE_DATA_MIGRATION => Labels::getLabel('MSG_MIGRATE_DATA_FROM_THIRD-PARTIES', $langId),
+        ];
+
+        CacheHelper::create('pluginLabels' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
 }

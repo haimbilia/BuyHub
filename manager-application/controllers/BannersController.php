@@ -2,7 +2,7 @@
 class BannersController extends ListingBaseController
 {
     protected string $modelClass = 'Banner';
-    protected $pageKey = 'MANAGE_BANNER';
+    protected $pageKey = 'MANAGE_BANNERS';
     protected $bannerLocationId;
 
 
