@@ -1,7 +1,7 @@
 $header-height: 138px;
 .header {
     position: sticky;
-    z-index: $zindex-sticky;
+    z-index: $zindex-fixed;
     top: 0;
     width: 100%;
     font-weight: 300;
@@ -148,4 +148,7 @@ $header-height: 138px;
 .btn-mega-search {
     background: transparent;
     border: none;
+    .svg {
+        color: $secondary-color;
+    }
 }

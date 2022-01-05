@@ -28,49 +28,6 @@
             color: $brand-color;
         }
     }
-    .list-options {
-        font-size: 0.8rem;
-        font-weight: 300;
-        display: flex;
-        align-items: center;
-        > li {
-            text-align: center;
-            margin-#{$end-direction}: 6px;
-            // width: 20px;
-            // height: 20px;
-            display: flex;
-            align-items: center;
-            color: $txt-gray;
-            &.label {
-                color: currentColor;
-                font-weight: 500;
-                padding: 0;
-                margin: 0;
-                margin-#{$end-direction}: 10px;
-            }
-            &.more {
-                width: auto;
-                height: auto;
-            }
-            .colors-dot {
-                margin: 0 auto;
-                width: 12px;
-                height: 12px;
-                display: block;
-                border-radius: 50%;
-                box-shadow: $shadow1;
-            }
-            .sizes-dot {
-                font-weight: 600;
-            }
-            .ellipsis {
-                display: block;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-            }
-        }
-    }
 }
 
 .responsive-table {
@@ -164,6 +121,109 @@
         }
         &-5 {
             flex-basis: 20%;
+        }
+    }
+}
+
+.more-sellers {
+    &-item {
+        margin: 2rem 0;
+        &:first-child {
+            margin-top: 0;
+        }
+        &:last-child {
+            margin-bottom: 0;
+        }
+        &.is-active {
+            border-bottom: $border;
+        }
+    }
+    .sold-by {
+        font-size: 0.8rem;
+        display: inline-flex;
+        flex-direction: column;
+        .sold-price {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+    }
+
+    .shop-wrap {
+        color: $secondary-color;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        line-height: 1;
+        .shop-rating {
+            margin: 0;
+            padding: 0;
+            .icn {
+                width: auto;
+                height: auto;
+                background: none;
+                margin: 0 5px;
+                padding: 0;
+
+                .svg {
+                    fill: $secondary-color;
+                }
+            }
+            .rate {
+                font-size: inherit;
+                font-weight: inherit;
+            }
+        }
+    }
+
+    .list-options {
+        font-size: 0.8rem;
+        font-weight: 300;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 0.5rem 0;
+        &-item {
+            padding: 5px 0;
+            margin-#{$end-direction}: 10px;
+            // width: 20px;
+            // height: 20px;
+            display: flex;
+            align-items: center;
+            color: $txt-gray;
+            &.label {
+                max-width: 100%;
+                flex: 100%;
+                color: currentColor;
+                font-weight: 500;
+                padding: 0;
+                margin: 0;
+            }
+        }
+
+        &.more {
+            width: auto;
+            height: auto;
+        }
+        .colors-dot {
+            margin: 0 auto;
+            width: 12px;
+            height: 12px;
+            display: block;
+            border-radius: 50%;
+            box-shadow: $shadow1;
+        }
+        .sizes-dot {
+            font-weight: 600;
+        }
+        .ellipsis {
+            padding: 4px;
+            border: $border;
+            border-radius: $radius-common;
+            display: block;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
         }
     }
 }

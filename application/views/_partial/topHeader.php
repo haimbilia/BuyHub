@@ -35,7 +35,8 @@
 <div class="wrapper">
     <?php if (FatApp::getConfig('CONF_LOADER', FatUtility::VAR_INT, 0)) { ?>
         <div id="loader-wrapper">
-            <div class="yokart-loader"><img alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/yokart-loader.svg">
+            <div class="yokart-loader">
+                <img alt="" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/yokart-loader.svg">
             </div>
             <div class="loader-section section-left"></div>
             <div class="loader-section section-right"></div>
@@ -58,12 +59,17 @@
                                 </svg>
                             </i>
                         </button>
-                        <div class="offcanvas offcanvas-start" tabindex="-1" id="mbl-menu" aria-labelledby="mbl-menuLabel">
-                            <div class="offcanvas-header">
-                                <h5 class="offcanvas-title" id="mbl-menuLabel"></h5>
+                        <div class="offcanvas offcanvas-mbl offcanvas-start" tabindex="-1" id="mbl-menu" aria-labelledby="mbl-menuLabel">
+                            <div class="offcanvas-body ">
                                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                            </div>
-                            <div class="offcanvas-body">
+                                <div class="profile">
+                                    <div class="profile-image">
+                                        <img class="profile-avatar" src="<?php echo CONF_WEBROOT_URL; ?>images/users/100_2.jpg" alt="">
+                                    </div>
+                                    <div class="profile-data">
+                                        <h6 class="profile-name">Hi, Michael Williams </h6>
+                                    </div>
+                                </div>
                                 <div class="mbl-menu">
                                     <div class="mbl-menu-item">
                                         <div class="mbl-menu-head">
@@ -123,6 +129,17 @@
                                     </div>
                                 </div>
 
+                            </div>
+
+                            <div class="offcanvas-foot">
+                                <button class="btn btn-black btn-logout" type="button">
+                                    <i class="icn">
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#logout">
+                                            </use>
+                                        </svg>
+                                    </i>
+                                    logout</button>
                             </div>
                         </div>
                         <div class="logo">
@@ -197,25 +214,20 @@
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#store">
                                             </use>
                                         </svg>
-
                                     </i>
                                     <span class="txt">Open A Store</span>
                                 </button>
                             </li>
                             <!-- <?php $this->includeTemplate('_partial/headerTopNavigation.php'); ?> -->
-
                             <?php $this->includeTemplate('_partial/headerUserArea.php'); ?>
                             <li class="quick-nav-item">
                                 <div id="cartSummary">
                                     <?php if ($controllerName != 'Cart') { ?>
                                         <?php $this->includeTemplate('_partial/headerWishListAndCartSummary.php'); ?>
-
                                     <?php } ?>
                                 </div>
-
                             </li>
                         </ul>
-
                     </div>
                 </div>
             </div>
@@ -226,9 +238,12 @@
                     <?php $this->includeTemplate('_partial/headerNavigation.php'); ?>
                     <div class="main-search">
                         <button class="btn-mega-search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-controls="offcanvas-mega-search">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                            </svg>
+                            <i class="icn">
+                                <svg class="svg" width="20" height="20">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
+                                    </use>
+                                </svg>
+                            </i>
                         </button>
                     </div>
                     <?php //$this->includeTemplate('_partial/headerSearchFormArea.php'); 

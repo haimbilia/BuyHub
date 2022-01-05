@@ -1,4 +1,44 @@
+.offcanvas-mbl {
+    .offcanvas-body {
+        position: relative;
+        padding: 0;
+    }
+    .offcanvas-foot {
+        padding: 1rem;
+    }
+    .btn-close {
+        position: absolute;
+        #{$end-direction}: 0;
+        top: 0;
+        margin: 1rem;
+    }
+}
+.profile {
+    background-color: $brand-color;
+    color: $brand-color-inverse;
+    padding: 3rem 1rem;
+    display: flex;
+    align-items: center;
+    &-image {
+        margin-#{$end-direction}: 1rem;
+    }
+    &-avatar {
+        border-radius: 50%;
+        max-width: 50px;
+        box-shadow: $shadow1;
+    }
+    &-name {
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    &-menu {
+        display: flex;
+        flex-direction: column;
+    }
+}
 .mbl-menu {
+    padding: 1rem;
     &-item {
         margin-left: 10px;
     }
@@ -22,4 +62,11 @@
             #{$end-direction}: 0;
         }
     }
+}
+
+.btn-logout {
+    display: block;
+    width: 100%;
+    background-color: rgba(var(--secondary-color-alpha), 0.1);
+    border-radius: $radius-common;
 }

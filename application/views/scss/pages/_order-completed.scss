@@ -11,7 +11,7 @@
     stroke: #4bb71b;
     stroke-miterlimit: 10;
     box-shadow: inset 0px 0px 0px #4bb71b;
-    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+    animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
     position: relative;
     top: 5px;
     right: 5px;
@@ -96,7 +96,7 @@
     display: flex;
     flex-wrap: wrap;
     margin-top: 2rem;
-    >li {
+    > li {
         /*flex: 0 0 50%;
         max-width: 50%;*/
         flex: 1;
@@ -144,7 +144,7 @@
 .completed-cart {
     margin-top: 2rem;
     .list-cart {
-        >li {
+        > li {
             padding: 1rem 1rem;
         }
     }

@@ -52,10 +52,12 @@
         margin: 1.5rem 0;
     }
     &_input {
+        border: $border;
+        border-radius: $radius-common;
         background: none;
         //border: none;
         min-height: 36px;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
     }
 }
 .location-popup-width {

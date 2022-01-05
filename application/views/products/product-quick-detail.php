@@ -36,7 +36,7 @@
                                 <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
                             <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
                                 <del class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['selprod_price']); ?></del>
-                                <span class="product_off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                                <span class="products-price-off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
                             <?php } ?>
                         </div>
                         <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
@@ -141,7 +141,7 @@
                                 <div class="qty-wrapper">
                                     <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
                                         <span class="decrease decrease-js not-allowed"><i class="icn">
-                                                <svg class="svg" width="16px" height="16px">
+                                                <svg class="svg" width="16" height="16">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
                                                     </use>
                                                 </svg>
@@ -150,7 +150,7 @@
                                             <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                                         </div>
                                         <span class="increase increase-js"><i class="icn">
-                                                <svg class="svg" width="16px" height="16px">
+                                                <svg class="svg" width="16" height="16">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                                                     </use>
                                                 </svg>

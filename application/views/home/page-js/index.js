@@ -34,7 +34,7 @@ $(document).ready(function () {
                     breakpoint: 768,
                     settings: {
                         arrows: false,
-                        
+
                         slidesToShow: 3
                     }
                 },
@@ -43,7 +43,7 @@ $(document).ready(function () {
                     breakpoint: 500,
                     settings: {
                         arrows: false,
-                        
+
                         slidesToShow: 1
 
                     }
@@ -84,7 +84,7 @@ $(document).ready(function () {
             arrows: false,
             dots: true,
             autoplay: true,
-            
+
         }
 
         if ($('.js-hero-slider .hero-slider-item').length > 1) {
@@ -92,19 +92,18 @@ $(document).ready(function () {
         }
 
         $('.featured-item-js').slick({
-            
             slidesToShow: 1,
             responsive: [{
                 breakpoint: 768,
                 settings: {
-                    arrows: false,                   
+                    arrows: false,
                     slidesToShow: 3
                 }
             },
             {
                 breakpoint: 500,
                 settings: {
-                    arrows: false,                    
+                    arrows: false,
                     slidesToShow: 1
                 }
             }

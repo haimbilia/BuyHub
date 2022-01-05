@@ -2,7 +2,7 @@
 
 <div id="shipping-summary" class="step">
     <ul class="review-block">
-        <li>
+        <li class="review-block-item">
             <div class="review-block__label">
                 <?php echo Labels::getLabel('LBL_Billing_to:', $siteLangId); ?>
                 <div class="review-block__link">
@@ -24,7 +24,6 @@
                     <p class="phone-txt"><i class="fas fa-mobile-alt"></i><?php echo $addrPhone; ?></p>
                 <?php } ?>
             </div>
-
         </li>
     </ul>
 
@@ -59,13 +58,15 @@
                             $seletedAddrId = $address['addr_id'];
                         } ?>
                         <!-- Header Shop Name-->
-                        <li class="shipping-select">
-                            <div class="shop-name">
-                                <h6> <i class="icn">
-                                        <svg class="svg" width="20px" height="20px">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#manage-shop">
+                        <li class="list-cart-item shipping-select">
+                            <div class="shop-detail">
+                                <h6 class="shop-title">
+                                    <i class="icn">
+                                        <svg class="svg" width="16" height="16">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#store">
                                             </use>
-                                        </svg></i>
+                                        </svg>
+                                    </i>
                                     <?php echo 0 < $pickUpBy ? $productData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
                                 </h6>
                             </div>
@@ -117,10 +118,10 @@
                             $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
                             $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                             $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPTHUMB", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'); ?>
-                            <li>
-                                <div class="cell cell_product">
+                            <li class="list-cart-item">
+                                <div class="block-img">
                                     <div class="product-profile">
-                                        <div class="product-profile__thumbnail">
+                                        <div class="products-img">
                                             <a href="<?php echo $productUrl; ?>">
                                                 <?php
                                                 $pictureAttr = [
@@ -136,14 +137,20 @@
                                                 ?>
                                             </a>
                                         </div>
-                                        <div class="product-profile__data">
-                                            <div class="title">
-                                                <a class="" href="<?php echo $productUrl; ?>">
+
+                                    </div>
+                                    <button class="btn-remove" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                                        <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
+                                    </button>
+                                </div>
+                                <div class="block-detail">
+                                    <div class="block-detail-top">
+                                        <div class="product-profile">
+                                            <div class="product-profile-data">
+                                                <a class="title" href="<?php echo $productUrl; ?>">
                                                     <?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?>
                                                 </a>
-                                            </div>
-                                            <div class="options">
-                                                <p class="">
+                                                <div class="options">
                                                     <?php if (isset($product['options']) && count($product['options'])) {
                                                         $optionStr = '';
                                                         foreach ($product['options'] as $option) {
@@ -151,48 +158,42 @@
                                                         }
                                                         echo rtrim($optionStr, '|');
                                                     } ?>
-                                                </p>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="cell cell_qty">
-                                    <div class="quantity quantity-2">
-                                        <span class="decrease decrease-js"><i class="icn">
-                                                <svg class="svg" width="16px" height="16px">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                                    </use>
-                                                </svg>
-                                            </i></span>
-                                        <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                                        <span class="increase increase-js"> <i class="icn">
-                                                <svg class="svg" width="16px" height="16px">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                    </use>
-                                                </svg>
-                                            </i></span>
+                                    <div class="block-detail-bottom">
+                                        <div class="product-quantity"> <label class="form-label" for=""><?php echo Labels::getLabel('LBL_QTY', $siteLangId); ?></label>
+                                            <div class="quantity quantity-sm">
+
+                                                <span class="decrease decrease-js"><i class="icn">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                            </use>
+                                                        </svg>
+                                                    </i></span>
+                                                <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
+                                                <span class="increase increase-js"> <i class="icn">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                            </use>
+                                                        </svg>
+                                                    </i></span>
+                                            </div>
+                                        </div>
+                                        <div class="products-price">
+                                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                                                <span class="products-price-off">
+                                                    <?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?>
+                                                </span>
+                                            <?php } ?>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="cell cell_price">
-                                    <div class="product-price">
-                                        <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                                        <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                            <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
-                                        <?php } ?>
-                                    </div>
-                                </div>
-                                <div class="cell cell_action">
-                                    <ul class="actions">
-                                        <li>
-                                            <a href="javascript:void(0);" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
-                                                <svg class="svg" width="20px" height="20px">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
-                                                    </use>
-                                                </svg>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+
+
                             </li>
                         <?php } ?>
                         <!-- Items Body-->
@@ -205,13 +206,15 @@
                     $digiProductData = current($levelItems['digital_products']); ?>
                     <ul class="list-cart list-cart-page list-shippings">
                         <!-- Header Shop Name-->
-                        <li class="shipping-select">
-                            <div class="shop-name">
-                                <h6> <i class="icn">
-                                        <svg class="svg" width="20px" height="20px">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#manage-shop">
+                        <li class="list-cart-item shipping-select">
+                            <div class="shop-detail">
+                                <h6 class="shop-title">
+                                    <i class="icn">
+                                        <svg class="svg" width="16" height="16">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#store">
                                             </use>
-                                        </svg></i>
+                                        </svg>
+                                    </i>
                                     <?php echo (0 < $pickUpBy) ? $digiProductData['shop_name'] : FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, null, ''); ?>
                                 </h6>
                             </div>
@@ -224,71 +227,69 @@
                             $shopUrl = !$isAppUser ? UrlHelper::generateUrl('Shops', 'View', array($product['shop_id'])) : 'javascript:void(0)';
                             $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "THUMB", $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                         ?>
-                            <li>
-                                <div class="cell cell_product">
+                            <li class="list-cart-item">
+                                <div class="block-img">
                                     <div class="product-profile">
-                                        <div class="product-profile__thumbnail">
+                                        <div class="product-profile-thumbnail">
                                             <a href="<?php echo $productUrl; ?>">
                                                 <img class="img-fluid" data-ratio="3:4" src="<?php echo $imageUrl; ?>" alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>">
                                             </a>
                                         </div>
-                                        <div class="product-profile__data">
-                                            <div class="title"><a class="" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
-                                            </div>
-                                            <div class="options">
-                                                <p class=""> <?php if (isset($product['options']) && count($product['options'])) {
-                                                                    $optionStr = '';
-                                                                    foreach ($product['options'] as $option) {
-                                                                        $optionStr .= $option['optionvalue_name'] . '|';
-                                                                    }
-                                                                    echo rtrim($optionStr, '|');
-                                                                } ?></p>
-                                            </div>
 
+                                    </div>
+                                    <button class="btn-remove" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                                        Remove
+                                    </button>
+
+                                </div>
+
+                                <div class="block-detail">
+                                    <div class="block-detail-top">
+                                        <div class="product-profile">
+                                            <div class="product-profile-data">
+                                                <a class="title" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                                                <div class="options">
+                                                    <?php if (isset($product['options']) && count($product['options'])) {
+                                                        $optionStr = '';
+                                                        foreach ($product['options'] as $option) {
+                                                            $optionStr .= $option['optionvalue_name'] . '|';
+                                                        }
+                                                        echo rtrim($optionStr, '|');
+                                                    } ?>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="cell cell_qty">
-                                    <div class="wrap-qty-price">
-                                        <div class="quantity quantity-2">
-                                            <span class="decrease decrease-js">
-                                                <i class="icn">
-                                                    <svg class="svg" width="16px" height="16px">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                                        </use>
-                                                    </svg>
-                                                </i></span>
-                                            <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                                            <span class="increase increase-js">
-                                                <i class="icn">
-                                                    <svg class="svg" width="16px" height="16px">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                        </use>
-                                                    </svg>
-                                                </i></span>
+                                    <div class="block-detail-bottom">
+                                        <div class="product-quantity">
+                                            <label class="form-label" for=""><?php echo Labels::getLabel('LBL_QTY', $siteLangId); ?></label>
+                                            <div class="quantity quantity-sm">
+                                                <span class="decrease decrease-js">
+                                                    <i class="icn">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                            </use>
+                                                        </svg>
+                                                    </i></span>
+                                                <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
+                                                <span class="increase increase-js">
+                                                    <i class="icn">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                            </use>
+                                                        </svg>
+                                                    </i></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="cell cell_price">
-                                    <div class="product-price">
-                                        <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                                        <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                            <del><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></del>
-                                        <?php } ?>
-                                    </div>
-                                </div>
-                                <div class="cell cell_action">
-                                    <div class="product-action">
-                                        <ul class="actions">
-                                            <li>
-                                                <a href="javascript:void(0);" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
-                                                    <svg class="svg" width="24px" height="24px">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#bin">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
+
+
+                                        <div class="products-price">
+                                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
+                                                <span class="products-price-off">
+                                                    <?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                                            <?php } ?>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
