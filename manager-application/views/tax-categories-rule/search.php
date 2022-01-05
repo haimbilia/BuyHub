@@ -21,6 +21,16 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
+
+            case 'taxcat_identifier':
+                if ($row['taxcat_name'] != '') {
+                    $td->appendElement('plaintext', array(), $row['taxcat_name'], true);
+                    $td->appendElement('br', array());
+                    $td->appendElement('plaintext', array(), '(' . $row[$key] . ')', true);
+                } else {
+                    $td->appendElement('plaintext', array(), $row[$key], true);
+                }
+                break;
             case 'trr_rate':
                 $td->appendElement('plaintext', array(), CommonHelper::numberFormat($row[$key]), true);
             break;

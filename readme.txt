@@ -497,6 +497,7 @@ Bugs :
     => 060750 - Admin UI: Double validations messages for the "confirm password" field is showing while changing the password under the admin user section
     => 060543 - Admin UI: In the pagination, the extreme right and left arrows icon is not showing on the whole system
     => 060536 - Admin UI: View comments moved in popup view from listing.
+    => 060594 - Admin UI: Suggestion to show the "tax category" of the rules for the better understanding.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
