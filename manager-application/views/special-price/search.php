@@ -39,6 +39,7 @@ foreach ($arrListing as $sn => $row) {
                 $onclick = 'redirectUser(' . $row['user_id'] . ')';
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', [
                     'user' => $row,
+                    'extraClass' => 'user-profile-sm',
                     'displayEmail' => false,
                     'userTitleClass' => 'text-muted',
                     'siteLangId' => $siteLangId,
