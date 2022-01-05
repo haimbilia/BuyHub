@@ -63,8 +63,9 @@ if(null != $fld){
 }
 
 $fld = $frm->getField('use_shop_policy');
+HtmlHelper::configureSwitchForCheckbox($fld);
 if(null != $fld){
-    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
 
 $fld = $frm->getField('selprod_cod_enabled');
@@ -79,13 +80,14 @@ if(null != $fld){
 }
 
 $fld = $frm->getField('selprod_subtract_stock');
-if(null != $fld){
-    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
-}
+HtmlHelper::configureSwitchForCheckbox($fld);
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+$fld->developerTags['noCaptionTag'] = true;
 
 $fld = $frm->getField('selprod_track_inventory');
+HtmlHelper::configureSwitchForCheckbox($fld);
 if(null != $fld){
-    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
     $fld->addFieldtagAttribute('onchange', 'trackInventory(this)');
     $fld->addFieldtagAttribute('id', 'selprod_track_inventory');    
 }
