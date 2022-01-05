@@ -16,15 +16,17 @@
 .profile {
     background-color: $brand-color;
     color: $brand-color-inverse;
-    padding: 3rem 1rem;
+    padding: 2rem 1rem;
     display: flex;
     align-items: center;
+    flex-direction: column;
     &-image {
         margin-#{$end-direction}: 1rem;
+        margin-bottom: 1rem;
     }
     &-avatar {
         border-radius: 50%;
-        max-width: 50px;
+        max-width: 80px;
         box-shadow: $shadow1;
     }
     &-name {
@@ -38,9 +40,11 @@
     }
 }
 .mbl-menu {
+    font-size: 1rem;
     padding: 1rem;
     &-item {
-        margin-left: 10px;
+        padding: 0.5rem 0;
+        margin-#{$start-direction}: 10px;
     }
     &-head {
         display: flex;
@@ -67,6 +71,7 @@
 .btn-logout {
     display: block;
     width: 100%;
-    background-color: rgba(var(--secondary-color-alpha), 0.1);
+    background-color: $brand-color;
+    color: $brand-color-inverse;
     border-radius: $radius-common;
 }
