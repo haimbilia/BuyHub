@@ -1,5 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (isset($collection['categories']) && count($collection['categories'])) { ?>
+<?php if (isset($collection['categories']) && count($collection['categories'])) { 
+ 
+    ?>
     <section class="section">
         <div class="container">
             <div class="section-head section-head-center">

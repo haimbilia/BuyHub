@@ -784,6 +784,7 @@ class HomeController extends MyAppController
                     //$productCatSrchTempObj->addCondition('prodcat_id', 'IN', array_keys($categoryIds));
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
                     $productCatSrchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
+                    $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
                     $rs = $productCatSrchTempObj->getResultSet();
                     $recordCount = $productCatSrchTempObj->recordCount();
                     if (empty($recordCount)) {

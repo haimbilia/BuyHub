@@ -66,10 +66,10 @@ class ImageDimension extends FatUtility
 
         if ($layout == Collections::TYPE_BANNER_LAYOUT2) {
             $arr =  [
-                self::VIEW_DESKTOP => ['width' => 2000, 'height' => 666],
-                self::VIEW_MOBILE => ['width' => 640, 'height' => 360],
-                self::VIEW_TABLET => ['width' => 1024, 'height' => 360],
-                self::VIEW_THUMB => ['width' => 200, 'height' => 66],
+                self::VIEW_DESKTOP => ['width' => 800, 'height' => 600],
+                self::VIEW_MOBILE => ['width' => 800, 'height' => 600],
+                self::VIEW_TABLET => ['width' => 800, 'height' => 600],
+                self::VIEW_THUMB => ['width' => 200, 'height' => 150],
             ];
         }
 
