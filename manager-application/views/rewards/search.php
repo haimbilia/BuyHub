@@ -31,8 +31,25 @@ foreach ($arrListing as $sn => $row) {
             case 'urp_date_expiry':
                 $td->appendElement('plaintext', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
                 break;
-            case 'urp_comments':
-                $td->appendElement('plaintext', $tdAttr, nl2br($row[$key]), true);
+            case 'action':
+                $data = [
+                    'siteLangId' => $siteLangId,
+                ];
+
+                $data['otherButtons'][] = [
+                    'attr' => [
+                        'href' => 'javascript:void(0);',
+                        'title' => Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId),
+                        'onclick' => 'getComments(' . $row['urp_id'] . ')'
+                    ],
+                    'label' => '<svg class="svg" width="18" height="18">
+                                    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#comment">
+                                    </use>
+                                </svg>',
+                ];
+
+                $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
