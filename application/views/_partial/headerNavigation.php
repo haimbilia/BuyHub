@@ -271,568 +271,109 @@
 
     </div> -->
     <!-- Start Navigation Bar -->
+
     <div class="navigation-wrapper">
         <ul class="navigation">
-            <li class="navigation-item navchild">
-                <a class="navigation-link" target="_self" href="javascript:void(0);">Women</a>
-                <span class="link__mobilenav"></span>
-                <div class="subnav">
-                    <div class="subnav-inner">
-                        <div class="container">
-                            <div class="categories-block">
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">NEW IN</a>
-                                        </li>
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link" href="womens-party-looks">
-                                                <span>Party Looks</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-tommy-x-rossignol"><span>TOMMYXROSSIGNOL</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="tommy-x-zendaya"><span>TOMMYXZENDAYA</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="women-hilfiger-collection"><span>Hilfiger
-                                                    Collection</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sustainable-evolution"><span>Sustainable
-                                                    style</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-explore"><span>Explore</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">Clothing</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-coats-jackets"><span>Coats &amp;
-                                                    Jackets</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-hoodies-sweatshirts"><span>Sweatshirts
-                                                    &amp;
-                                                    Hoodies</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-knitwear"><span>Knitwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-dresses-jumpsuits"><span>Dresses &amp;
-                                                    Jumpsuits</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-blazers"><span>Blazers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-t-shirts"><span>T-Shirts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-tops"><span>Tops</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-shirts-blouses"><span>Shirts &amp;
-                                                    Blouses</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-polo-shirts"><span>Polo Shirts</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-jeans"><span>Jeans</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-trending"><span>Trending</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-trousers"><span>Trousers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-skirts"><span>Skirts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-shorts"><span>Shorts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-basics"><span>Basics</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-swimwear"><span>Swimwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-lingerie"><span>Lingerie</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-lounge-sleepwear"><span>Lounge &amp;
-                                                    Nightwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-socks-tights"><span>Socks &amp;
-                                                    Hosiery</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">Bags &amp; Accessories</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-bags"><span>Bags</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-watches"><span>Watches</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-hats-gloves-scarves"><span>Hats, Gloves
-                                                    &amp;
-                                                    Scarves</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-purses-keyrings"><span>Wallets &amp;
-                                                    Keyrings</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-belts"><span>Belts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-jewelry"><span>Jewellery</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sunglasses"><span>Sunglasses</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-fragrances"><span>Fragrances</span></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">SHOES</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-new-arrivals-shoes"><span>NEW IN</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-boots"><span>Boots</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-trainers"><span>Trainers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-flats"><span>Flat Shoes</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-pumps"><span>Pumps</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sandals"><span>Sandals</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols categories-cols-media">
-                                    <a href="">
-                                        <figure class="category-media">
-                                            <img src="https://source.unsplash.com/vYpbBtkDhNE/500x500" alt="Profile shot of Janae Randolph" />
-                                            <figcaption>Cold Weather Accessories </figcaption>
-                                        </figure>
-                                    </a>
+            <?php
+            if (count($headerNavigation)) {
+                foreach ($headerNavigation as $nav) {
+                    if ($nav['pages']) {
+                        $mainNavigation = array_slice($nav['pages'], 0, $navLinkCount);
+                        foreach ($mainNavigation as $link) {
+                            $navUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id']);
+                            $OrgnavUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id'], $getOrgUrl);
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="navigation-item navchild">
-                <a class="navigation-link" target="_self" href="javascript:void(0);">Men</a> <span class="link__mobilenav"></span>
-                <div class="subnav">
-                    <div class="subnav-inner">
-                        <div class="container">
-                            <div class="categories-block">
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">NEW IN</a>
-                                        </li>
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link" href="womens-party-looks">
-                                                <span>Party Looks</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-tommy-x-rossignol"><span>TOMMYXROSSIGNOL</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="tommy-x-zendaya"><span>TOMMYXZENDAYA</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="women-hilfiger-collection"><span>Hilfiger
-                                                    Collection</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sustainable-evolution"><span>Sustainable
-                                                    style</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-explore"><span>Explore</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">Clothing</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-coats-jackets"><span>Coats &amp;
-                                                    Jackets</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-hoodies-sweatshirts"><span>Sweatshirts
-                                                    &amp;
-                                                    Hoodies</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-knitwear"><span>Knitwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-dresses-jumpsuits"><span>Dresses &amp;
-                                                    Jumpsuits</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-blazers"><span>Blazers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-t-shirts"><span>T-Shirts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-tops"><span>Tops</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-shirts-blouses"><span>Shirts &amp;
-                                                    Blouses</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-polo-shirts"><span>Polo Shirts</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-jeans"><span>Jeans</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-trending"><span>Trending</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-trousers"><span>Trousers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-skirts"><span>Skirts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-shorts"><span>Shorts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-basics"><span>Basics</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-swimwear"><span>Swimwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-lingerie"><span>Lingerie</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-lounge-sleepwear"><span>Lounge &amp;
-                                                    Nightwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-socks-tights"><span>Socks &amp;
-                                                    Hosiery</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">Bags &amp; Accessories</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-bags"><span>Bags</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-watches"><span>Watches</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-hats-gloves-scarves"><span>Hats, Gloves
-                                                    &amp;
-                                                    Scarves</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-purses-keyrings"><span>Wallets &amp;
-                                                    Keyrings</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-belts"><span>Belts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-jewelry"><span>Jewellery</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sunglasses"><span>Sunglasses</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-fragrances"><span>Fragrances</span></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">SHOES</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-new-arrivals-shoes"><span>NEW IN</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-boots"><span>Boots</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-trainers"><span>Trainers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-flats"><span>Flat Shoes</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-pumps"><span>Pumps</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sandals"><span>Sandals</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols categories-cols-media">
-                                    <a href="">
-                                        <figure class="category-media">
-                                            <img src="https://source.unsplash.com/vYpbBtkDhNE/500x500" alt="Profile shot of Janae Randolph" />
-                                            <figcaption>Cold Weather Accessories </figcaption>
-                                        </figure>
-                                    </a>
+                            $href = $navUrl;
+                            $navchild = '';
+                            $target = $link['nlink_target'];
+                            if (0 < count($link['children'])) {
+                                $href = 'javascript:void(0)';
+                                $navchild = 'navchild';
+                                $target = '_self';
+                            }
+            ?>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="navigation-item navchild">
-                <a class="navigation-link" target="_self" href="/baby-kids">Baby &amp; Kids</a> <span class="link__mobilenav"></span>
-                <div class="subnav">
-                    <div class="subnav-inner">
-                        <div class="container">
-                            <div class="categories-block">
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">NEW IN</a>
-                                        </li>
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link" href="womens-party-looks">
-                                                <span>Party Looks</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-tommy-x-rossignol"><span>TOMMYXROSSIGNOL</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="tommy-x-zendaya"><span>TOMMYXZENDAYA</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="women-hilfiger-collection"><span>Hilfiger
-                                                    Collection</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sustainable-evolution"><span>Sustainable
-                                                    style</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-explore"><span>Explore</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">Clothing</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-coats-jackets"><span>Coats &amp;
-                                                    Jackets</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-hoodies-sweatshirts"><span>Sweatshirts
-                                                    &amp;
-                                                    Hoodies</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-knitwear"><span>Knitwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-dresses-jumpsuits"><span>Dresses &amp;
-                                                    Jumpsuits</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-blazers"><span>Blazers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-t-shirts"><span>T-Shirts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-tops"><span>Tops</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-shirts-blouses"><span>Shirts &amp;
-                                                    Blouses</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-polo-shirts"><span>Polo Shirts</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-jeans"><span>Jeans</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-trending"><span>Trending</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-trousers"><span>Trousers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-skirts"><span>Skirts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-shorts"><span>Shorts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-basics"><span>Basics</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-swimwear"><span>Swimwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-lingerie"><span>Lingerie</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-lounge-sleepwear"><span>Lounge &amp;
-                                                    Nightwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-socks-tights"><span>Socks &amp;
-                                                    Hosiery</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">Bags &amp; Accessories</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-bags"><span>Bags</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-watches"><span>Watches</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-hats-gloves-scarves"><span>Hats, Gloves
-                                                    &amp;
-                                                    Scarves</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-purses-keyrings"><span>Wallets &amp;
-                                                    Keyrings</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-belts"><span>Belts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-jewelry"><span>Jewellery</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sunglasses"><span>Sunglasses</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-fragrances"><span>Fragrances</span></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">SHOES</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-new-arrivals-shoes"><span>NEW IN</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-boots"><span>Boots</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-trainers"><span>Trainers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-flats"><span>Flat Shoes</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-pumps"><span>Pumps</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sandals"><span>Sandals</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols categories-cols-media">
-                                    <a href="">
-                                        <figure class="category-media">
-                                            <img src="https://source.unsplash.com/vYpbBtkDhNE/500x500" alt="Profile shot of Janae Randolph" />
-                                            <figcaption>Cold Weather Accessories </figcaption>
-                                        </figure>
-                                    </a>
+                            <li class="navigation-item <?php echo $navchild; ?>">
+                                <a class="navigation-link" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>" href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
+                                <?php if (isset($link['children']) && count($link['children']) > 0) { ?>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="navigation-item navchild">
-                <a class="navigation-link" target="_self" href="/womens-fashion">Tommy Jeans</a> <span class="link__mobilenav"></span>
-                <div class="subnav">
-                    <div class="subnav-inner">
-                        <div class="container">
-                            <div class="categories-block">
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">NEW IN</a>
-                                        </li>
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link" href="womens-party-looks">
-                                                <span>Party Looks</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-tommy-x-rossignol"><span>TOMMYXROSSIGNOL</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="tommy-x-zendaya"><span>TOMMYXZENDAYA</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="women-hilfiger-collection"><span>Hilfiger
-                                                    Collection</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sustainable-evolution"><span>Sustainable
-                                                    style</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-explore"><span>Explore</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">Clothing</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-coats-jackets"><span>Coats &amp;
-                                                    Jackets</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-hoodies-sweatshirts"><span>Sweatshirts
-                                                    &amp;
-                                                    Hoodies</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-knitwear"><span>Knitwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-dresses-jumpsuits"><span>Dresses &amp;
-                                                    Jumpsuits</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-blazers"><span>Blazers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-t-shirts"><span>T-Shirts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-tops"><span>Tops</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-shirts-blouses"><span>Shirts &amp;
-                                                    Blouses</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-polo-shirts"><span>Polo Shirts</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-jeans"><span>Jeans</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-trending"><span>Trending</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-trousers"><span>Trousers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-skirts"><span>Skirts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-shorts"><span>Shorts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-basics"><span>Basics</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-swimwear"><span>Swimwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-lingerie"><span>Lingerie</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-lounge-sleepwear"><span>Lounge &amp;
-                                                    Nightwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-socks-tights"><span>Socks &amp;
-                                                    Hosiery</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">Bags &amp; Accessories</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-bags"><span>Bags</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-watches"><span>Watches</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-hats-gloves-scarves"><span>Hats, Gloves
-                                                    &amp;
-                                                    Scarves</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-purses-keyrings"><span>Wallets &amp;
-                                                    Keyrings</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-belts"><span>Belts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-jewelry"><span>Jewellery</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sunglasses"><span>Sunglasses</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-fragrances"><span>Fragrances</span></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">SHOES</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-new-arrivals-shoes"><span>NEW IN</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-boots"><span>Boots</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-trainers"><span>Trainers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-flats"><span>Flat Shoes</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-pumps"><span>Pumps</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sandals"><span>Sandals</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols categories-cols-media">
-                                    <a href="">
-                                        <figure class="category-media">
-                                            <img src="https://source.unsplash.com/vYpbBtkDhNE/500x500" alt="Profile shot of Janae Randolph" />
-                                            <figcaption>Cold Weather Accessories </figcaption>
-                                        </figure>
-                                    </a>
+                                    <span class="link__mobilenav"></span>
+                                    <div class="subnav">
+                                        <div class="subnav-inner">
+                                            <div class="container">
+                                                <div class="categories-block">
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="navigation-item navchild">
-                <a class="navigation-link" target="_self" href="javascript:void(0)">Tommy Sport</a>
-            </li>
-            <li class="navigation-item navchild">
-                <a class="navigation-link" target="_self" href="javascript:void(0)">Gifts </a>
-            </li>
-            <li class="navigation-item navchild more">
-                <a class="navigation-link" target="_self" href="javascript:void(0)">
-                    <span class="d-xl-none">
-                        More
-                    </span>
-                    <span class="d-none d-xl-block">
-                        <svg class="svg" width="24" height="24">
-                            <use xlink:href="media/retina/sprite.svg#hemburger" href="media/retina/sprite.svg#hemburger">
-                            </use>
-                        </svg>
-                    </span>
-                </a>
-                <span class="link__mobilenav"></span>
-                <div class="subnav">
-                    <div class="subnav-inner">
-                        <div class="container">
-                            <div class="categories-block">
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">NEW IN</a>
-                                        </li>
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link" href="womens-party-looks">
-                                                <span>Party Looks</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-tommy-x-rossignol"><span>TOMMYXROSSIGNOL</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="tommy-x-zendaya"><span>TOMMYXZENDAYA</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="women-hilfiger-collection"><span>Hilfiger
-                                                    Collection</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sustainable-evolution"><span>Sustainable
-                                                    style</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-explore"><span>Explore</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">Clothing</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-coats-jackets"><span>Coats &amp;
-                                                    Jackets</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-hoodies-sweatshirts"><span>Sweatshirts
-                                                    &amp;
-                                                    Hoodies</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-knitwear"><span>Knitwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-dresses-jumpsuits"><span>Dresses &amp;
-                                                    Jumpsuits</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-blazers"><span>Blazers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-t-shirts"><span>T-Shirts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-tops"><span>Tops</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-shirts-blouses"><span>Shirts &amp;
-                                                    Blouses</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-polo-shirts"><span>Polo Shirts</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-jeans"><span>Jeans</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-trending"><span>Trending</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-trousers"><span>Trousers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-skirts"><span>Skirts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-shorts"><span>Shorts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-basics"><span>Basics</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-swimwear"><span>Swimwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-lingerie"><span>Lingerie</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-lounge-sleepwear"><span>Lounge &amp;
-                                                    Nightwear</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-socks-tights"><span>Socks &amp;
-                                                    Hosiery</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">Bags &amp; Accessories</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-bags"><span>Bags</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="ladies-watches"><span>Watches</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-hats-gloves-scarves"><span>Hats, Gloves
-                                                    &amp;
-                                                    Scarves</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-purses-keyrings"><span>Wallets &amp;
-                                                    Keyrings</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-belts"><span>Belts</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-jewelry"><span>Jewellery</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sunglasses"><span>Sunglasses</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-fragrances"><span>Fragrances</span></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols">
-                                    <ul class="categories-list">
-                                        <li class="categories-list-item">
-                                            <a class="categories-list-link categories-list-head" href="womens-new-arrivals">SHOES</a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-new-arrivals-shoes"><span>NEW IN</span></a>
-                                        </li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-boots"><span>Boots</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-trainers"><span>Trainers</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-flats"><span>Flat Shoes</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-pumps"><span>Pumps</span></a></li>
-                                        <li class="categories-list-item"><a class="categories-list-link" href="womens-sandals"><span>Sandals</span></a></li>
-                                    </ul>
-                                </div>
-                                <div class="categories-cols categories-cols-media">
-                                    <a href="">
-                                        <figure class="category-media">
-                                            <img src="https://source.unsplash.com/vYpbBtkDhNE/500x500" alt="Profile shot of Janae Randolph" />
-                                            <figcaption>Cold Weather Accessories </figcaption>
-                                        </figure>
-                                    </a>
+                                                    <?php $subyChild = 0;
+                                                    foreach ($link['children'] as $children) {
+                                                        $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
+                                                        $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                                    ?>
+                                                        <div class="categories-cols">
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
+                                                            <ul class="categories-list">
+
+                                                                <li class="categories-list-item">
+                                                                    <a class="categories-list-link categories-list-head" data-org-url="<?php echo $subCatOrgUrl; ?>" href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
+
+                                                                </li>
+                                                                <?php $subChild = 0;
+                                                                foreach ($children['children'] as $childCat) {
+                                                                    $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
+                                                                    $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
+                                                                ?>
+
+                                                                    <li class="categories-list-item">
+                                                                        <a class="categories-list-link" data-org-url="<?php echo $catOrgUrl; ?>" href="<?php echo $catUrl; ?>">
+                                                                            <span><?php echo $childCat['prodcat_name']; ?></span></a>
+                                                                    </li>
+
+
+                                                                <?php
+                                                                    if ($subChild++ == 4) {
+                                                                        break;
+                                                                    }
+                                                                }
+
+                                                                if ($subyChild++ == 7) {
+                                                                    break;
+                                                                } ?>
+                                                            </ul>
+
+                                                        </div>
+
+                                                    <?php
+                                                    } ?>
+
+
+                                                    <div class="categories-cols categories-cols-media">
+                                                        <a href="">
+                                                            <figure class="category-media">
+                                                                <img src="https://source.unsplash.com/vYpbBtkDhNE/500x500" alt="Profile shot of Janae Randolph" />
+                                                                <figcaption>Cold Weather Accessories </figcaption>
+                                                            </figure>
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+
+                            </li>
+
+
+
+
+            <?php
+                        }
+                    }
+                }
+            } ?>
         </ul>
     </div>
+
     <!-- End Navigation Bar -->
 
 
