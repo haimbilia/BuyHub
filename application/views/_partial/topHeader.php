@@ -128,11 +128,10 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="offcanvas-foot">
-                                <button class="btn btn-black btn-logout" type="button">
+                                <button class="btn btn-logout" type="button">
                                     <i class="icn">
                                         <svg class="svg" width="20" height="20">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#logout">

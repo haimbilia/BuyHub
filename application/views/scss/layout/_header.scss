@@ -128,7 +128,10 @@ $header-height: 138px;
     &-link {
         background: none;
         border: none;
-        font-weight: inherit;
+        font-weight: 400;
+        line-height: 1;
+        display: flex;
+        align-items: center;
         &:hover {
             color: $secondary-color;
         }
@@ -136,7 +139,7 @@ $header-height: 138px;
     .icn {
         .svg {
             color: $secondary-color;
-            margin-#{$end-direction}: 5px;
+            margin-#{$end-direction}: 8px;
         }
     }
 }
