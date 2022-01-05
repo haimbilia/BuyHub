@@ -16,7 +16,7 @@
                         <?php if (isset($pageData['plang_summary'])) { ?>
                             <span class="page-title-sub"> <?php echo $pageData['plang_summary']; ?> <a href="javascript:void(0)" class="openAlertJs" data-pageid="<?php echo $pageData['plang_id']; ?>" data-name="<?php echo 'alert_' . $pageData['plang_id']; ?>">
                                     <?php if (!empty($pageData['plang_warring_msg']) /* && CommonHelper::isSetCookie('alert_' . $pageData['plang_id']) */) { ?>
-                                        <i class="fas fa-lightbulb"></i></a></span>
+                                        <i class="fas fa-exclamation-triangle"></i></a></span>
                         <?php } ?>
                     <?php } ?>
 
