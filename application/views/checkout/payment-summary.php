@@ -195,7 +195,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
                         <div class="info">
                             <span>
                                 <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info"></use>
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info"></use>
                                 </svg>
                                 <?php
                                 $cartTotal = isset($cartSummary['cartTotal']) ? $cartSummary['cartTotal'] : 0;
@@ -224,7 +224,7 @@ $rewardPoints = UserRewardBreakup::rewardPointBalance(UserAuthentication::getLog
             <?php } else { ?>
                 <div class="info">
                     <span> <svg class="svg">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                             </use>
                         </svg> <?php echo Labels::getLabel('LBL_Reward_Points', $siteLangId); ?>
                         <strong><?php echo $cartSummary['cartRewardPoints']; ?>

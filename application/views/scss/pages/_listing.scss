@@ -9,17 +9,20 @@
     }
     &-bottom {
         display: flex;
-        justify-content: space-between;
+        flex-direction: row;
+        align-items: flex-start;
+        //justify-content: space-between;
     }
     &-title {
+        display: flex;
+        flex-direction: column;
         .h1 {
             font-size: 1.8rem;
-            display: flex;
-            flex-direction: column;
-            .total-products {
-                font-size: 0.85rem;
-                color: $txt-gray;
-            }
+            margin: 0;
+        }
+        .total-products {
+            font-size: 0.85rem;
+            color: $txt-gray;
         }
     }
     .page-sort {
