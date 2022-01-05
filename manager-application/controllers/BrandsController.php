@@ -85,9 +85,9 @@ class BrandsController extends ListingBaseController
         $srch->setPageSize($pageSize);
 
         $srch->addMultipleFields(array("b_l.brand_name"));
-        $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);
+        $srch->addCondition('brand_status', '=', 'mysql_func_' . Brand::BRAND_REQUEST_APPROVED, 'AND', true);
         if (!empty($post['brand_id'])) {
-            $srch->addCondition('b.brand_id', '=', $post['brand_id']);
+            $srch->addCondition('b.brand_id', '=', 'mysql_func_' . $post['brand_id'], 'AND', true);
         }
         $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
