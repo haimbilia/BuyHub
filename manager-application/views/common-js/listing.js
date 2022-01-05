@@ -303,12 +303,14 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
         fcom.resetEditorInstance();
         data = "recordId=" + recordId + "&langId=" + langId;
-        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
+        var isPopupView = ($.ykmodal.isAdded() && !$.ykmodal.isSideBarView());
+        
+        $.ykmodal(fcom.getLoader(), isPopupView);
         fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
             data,
             function (t) {
-                $.ykmodal(t.html, !$.ykmodal.isSideBarView());
+                $.ykmodal(t.html, isPopupView);
                 fcom.removeLoader();
                 $.ykmsg.close();
             }
