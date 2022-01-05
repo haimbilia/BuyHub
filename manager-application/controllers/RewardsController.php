@@ -51,12 +51,12 @@ class RewardsController extends ListingBaseController
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'urp_date_added');
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current($allowedKeysForSorting);
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $userId = FatApp::getPostedData('urp_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
@@ -105,7 +105,7 @@ class RewardsController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'user_name');
+            $this->addSortingElements($frm, 'urp_date_added', applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
@@ -182,6 +182,14 @@ class RewardsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
+    public function getComments()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $this->set('comments', UserRewards::getAttributesById($recordId, 'urp_comments'));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
     protected function getFormColumns(): array
     {
         $rewardsTblHeadingCols = CacheHelper::get('rewardsTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
@@ -195,7 +203,7 @@ class RewardsController extends ListingBaseController
             'urp_date_added' => Labels::getLabel('LBL_Valid_from', $this->siteLangId),
             'urp_date_expiry' => Labels::getLabel('LBL_Valid_till', $this->siteLangId),
             'urp_points' => Labels::getLabel('LBL_Points', $this->siteLangId),
-            'urp_comments' => Labels::getLabel('LBL_Comments', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 
         CacheHelper::create('rewardsTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -210,7 +218,7 @@ class RewardsController extends ListingBaseController
             'urp_date_added',
             'urp_date_expiry',
             'urp_points',
-            'urp_comments',
+            'action',
         ];
     }
 

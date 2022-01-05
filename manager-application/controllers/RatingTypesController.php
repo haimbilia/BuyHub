@@ -179,7 +179,7 @@ class RatingTypesController extends ListingBaseController
         $frm = new Form('frmRating', array('id' => 'frmRating'));
         $frm->addHiddenField('', 'ratingtype_id', $recordId);
         $frm->addRequiredField(Labels::getLabel('FRM_RATING_TYPE', $this->siteLangId), 'ratingtype_name');
-        $fld = $frm->addCheckBox(Labels::getLabel('FRM_RATING_STATUS', $this->siteLangId), 'ratingtype_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $fld = $frm->addCheckBox(Labels::getLabel('FRM_RATING_STATUS', $this->siteLangId), 'ratingtype_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         HtmlHelper::configureSwitchForCheckbox($fld);
         $fld->developerTags['noCaptionTag'] = true;
 

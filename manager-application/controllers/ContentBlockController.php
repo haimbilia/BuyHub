@@ -217,7 +217,6 @@ class ContentBlockController extends ListingBaseController
             } else {
                 $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
             }
-            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId));
             $frm->addHTML('', 'cblock_bg_image', '');
             $frm->addHiddenField('', 'file_type', $fileType);
             $frm->addHiddenField('', 'min_width', 1300);
@@ -226,7 +225,7 @@ class ContentBlockController extends ListingBaseController
         $frm->addHtmlEditor(Labels::getLabel('FRM_Page_Content', $this->siteLangId), 'epage_content');
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'epage_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'epage_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
             $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
@@ -253,7 +252,7 @@ class ContentBlockController extends ListingBaseController
             } else {
                 $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
             }
-            $frm->addHTML('', Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId), Labels::getLabel('FRM_BACKGROUND_IMAGE', $this->siteLangId));
+            
             $frm->addHTML('', 'cblock_bg_image', '');
             $frm->addHiddenField('', 'file_type', $fileType);
             $frm->addHiddenField('', 'min_width', 1300);

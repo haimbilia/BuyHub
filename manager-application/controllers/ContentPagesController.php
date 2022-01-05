@@ -23,6 +23,21 @@ class ContentPagesController extends ListingBaseController
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['deleteButton'] = true;
+        $actionItemsData['otherButtons'] = [
+            [
+                'attr' => [
+                    'href' => 'javascript:void(0)',
+                    'class' => 'btn btn-outline-brand btn-icon',
+                    'onclick' => "pagesLayouts()",
+                    'title' => Labels::getLabel('LBL_LAYOUTS_INSTRUCTIONS', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-aside-menu.svg#icon-dashboard">
+                                </use>
+                            </svg><span>' . Labels::getLabel('BTN_LAYOUTS', $this->siteLangId) . '</span>',
+            ]
+        ];
 
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
@@ -588,6 +603,12 @@ class ContentPagesController extends ListingBaseController
             ContentPage::CONTENT_PAGE_LAYOUT2_TYPE => Labels::getLabel('LBL_Content_Page_Layout2', $this->siteLangId),
         );
         return $collectionLayouts;
+    }
+
+    public function layouts()
+    {
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     /**

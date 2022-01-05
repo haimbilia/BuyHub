@@ -224,7 +224,7 @@ class CurrencyManagementController extends ListingBaseController
             $fld->htmlAfterField = '<small>' . Labels::getLabel('FRM_THIS_IS_YOUR_DEFAULT_CURRENCY', $this->siteLangId) . '</small>';
         }
 
-        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'currency_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        $frm->addCheckBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'currency_active', applicationConstants::ACTIVE, [], true, applicationConstants::INACTIVE);
 
         $languageArr = Language::getDropDownList();
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');

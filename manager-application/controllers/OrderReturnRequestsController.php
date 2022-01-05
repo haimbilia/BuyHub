@@ -442,26 +442,28 @@ class OrderReturnRequestsController extends ListingBaseController
         if (false == $post) {
             LibHelper::exitWithError($frm->getValidationErrors(), true);
         }
-
+        
         $srch = new OrderReturnRequestSearch($this->siteLangId);
         $srch->joinOrderProducts();
         $srch->joinOrders();
+        $srch->joinShippingCharges();
+        
         $srch->addCondition('orrequest_id', '=', $recordId);
-        $cnd = $srch->addCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING);
-        $cnd->attachCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_ESCALATED);
+        /* $cnd = $srch->addCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING);
+        $cnd->attachCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_ESCALATED); */
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addMultipleFields(array('orrequest_id', 'op_id', 'orrequest_qty', 'order_language_id', 'orrequest_user_id', 'order_pmethod_id'));
+        $srch->addMultipleFields(array('orrequest_id', 'op_id', 'orrequest_qty', 'order_language_id', 'orrequest_user_id', 'order_pmethod_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id'));
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
-
-        if (!$row) {
+        
+        /* if (!$row) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_OR_STATUS_IS_ALREADY_APPROVED_OR_DECLINED!', $this->siteLangId), true);
-        }
+        } */
 
         $transferTo = isset($post['orrequest_refund_in_wallet']) ? $post['orrequest_refund_in_wallet'] : '';
         $pluginKey = Plugin::getAttributesById($row['order_pmethod_id'], 'plugin_code');
-
+  
         $paymentMethodObj = new PaymentMethods();
         if (true === $paymentMethodObj->canRefundToCard($pluginKey, $this->siteLangId)) {
             $transferTo = FatApp::getPostedData('orrequest_refund_in_wallet', FatUtility::VAR_INT, 0);
@@ -475,10 +477,13 @@ class OrderReturnRequestsController extends ListingBaseController
                 if (!$orrObj->approveRequest($row['orrequest_id'], $user_id, $this->siteLangId, $transferTo, $post['orrequest_admin_comment'])) {
                     LibHelper::exitWithError($orrObj->getError(), true);
                 }
-
                 /* Update To Shipping Service */
                 $this->langId = $this->siteLangId;
-                $this->returnShipment($row['op_id'], $row['orrequest_qty']);
+                
+                $this->loadShippingService($row);
+                if (false != $this->shippingService) {
+                    $this->returnShipment($row['op_id'], $row['orrequest_qty']);
+                }
                 /* Update To Shipping Service */
 
                 $successMsg = Labels::getLabel('LBL_Return_request_has_been_refunded_successfully.', $this->siteLangId);
@@ -491,7 +496,6 @@ class OrderReturnRequestsController extends ListingBaseController
                 $successMsg = Labels::getLabel('LBL_Return_request_has_been_withdrawn_successfully.', $this->siteLangId);
                 break;
         }
-
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->sendOrderReturnRequestStatusChangeNotification($row['orrequest_id'], $this->siteLangId)) {
             LibHelper::exitWithError($emailNotificationObj->getError(), true);
@@ -505,7 +509,6 @@ class OrderReturnRequestsController extends ListingBaseController
             'notification_label_key' => Notification::RETURN_REQUEST_STATUS_CHANGE_NOTIFICATION,
             'notification_added_on' => date('Y-m-d H:i:s'),
         );
-
         if (!Notification::saveNotifications($notificationData)) {
             LibHelper::exitWithError(Labels::getLabel("ERR_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId), true);
         }

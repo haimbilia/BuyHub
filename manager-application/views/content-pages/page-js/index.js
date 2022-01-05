@@ -3,11 +3,13 @@ $(document).on('change', '#logoLanguageJs', function () {
     var recordId = $(this).closest("form").find('input[name="cpage_id"]').val();
     backgroundImage(recordId, 'image', lang_id);
 });
+
 $(document).on('change', '#imageLanguageJs', function () {
     var lang_id = $(this).val();
     var recordId = $(this).closest("form").find('input[name="cpage_id"]').val();
     backgroundImage(recordId, lang_id);
 });
+
 (function () {
     saveContentPageLangData = (frm, callback = '') => {
         if (!$(frm).validate()) {
@@ -49,6 +51,12 @@ $(document).on('change', '#imageLanguageJs', function () {
             backgroundImage(recordId, langId);
             reloadList();
             $('.resetModalFormJs').click();
+        });
+    };
+
+    pagesLayouts = function () {
+        fcom.updateWithAjax(fcom.makeUrl('ContentPages', 'layouts'), '', function (t) {
+            $.ykmodal(t.html);
         });
     };
 })();

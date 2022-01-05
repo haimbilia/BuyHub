@@ -488,6 +488,15 @@ Bugs :
     => 060874 - Admin UI: Added data is not showing under the 'language data' section while editing the records under the content pages section.
     => 060885 - Admin UI: Getting multiple issues while editing the content blocks section.
     => 061020 - Admin UI: Admin is not able to 'copy' the text in the table if there is re-arrange functionality on the whole system
+    => 061017 - Admin UI: Design is not aligned when the session is expired under the FAQ section
+    => 061013 - Admin UI: Status is 'in-active' by default while adding the record on the whole system
+    => 060886 - Admin UI: 'Background Image' title design is not matched with the other titles under the content blocks section
+    => 060877 - Admin UI: Layout Instruction is not showing under the content pages section
+    => 060876 - Admin UI: Session is expired message is not showing on some of the pages on the whole system
+    => 060871 - Admin UI: Reset and Save buttons position is not aligned on the slide pages
+    => 060750 - Admin UI: Double validations messages for the "confirm password" field is showing while changing the password under the admin user section
+    => 060543 - Admin UI: In the pagination, the extreme right and left arrows icon is not showing on the whole system
+    => 060536 - Admin UI: View comments moved in popup view from listing.
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

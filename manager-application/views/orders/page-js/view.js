@@ -135,7 +135,7 @@
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) { });
         }
-    };
+    };   
 
     updateShippingUser = function (frm) {
         var data = fcom.frmData(frm);
@@ -168,19 +168,11 @@
             }
             $.ykmsg.success(t.msg);
 
-            var form = "form.markAsShippedJs";
-            if (0 < $(form).length) {
-                $(form + " .statusJs").val(orderShippedStatus).change();
-                $(form + " .notifyCustomerJs").val(1);
-                $(form + " input[name='tracking_number']").val(t.tracking_number);
-                canShipByPlugin = 0;
-                if ('' != t.tracking_number) {
-                    $(form + ' .manualShippingJs').attr('data-fatreq', '{"required":false}');
-                }
-                updateStatus($(form)[0]);
-            } else {
+            let data = { op_id: opId, op_status_id: orderShippedStatus, customer_notified: 1, tracking_number: t.tracking_number,shipped_by_plugin:1 };
+            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) {
                 window.location.reload();
-            }
+            });
+            canShipByPlugin = 0;
         });
     }
 
