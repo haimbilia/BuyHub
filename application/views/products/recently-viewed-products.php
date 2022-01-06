@@ -36,7 +36,7 @@ if ($recentViewedProducts) {
                                 <div class="not-available"><svg class="svg">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                         </use>
-                                    </svg> <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?></div>
+                                    </svg> <?php echo Labels::getLabel('LBL_NOT_SERVICEABLE', $siteLangId); ?></div>
                             <?php } ?>
                             <?php $this->includeTemplate('_partial/collection-ui.php', array('product' => $rProduct, 'siteLangId' => $siteLangId, 'selProdRibbons' => $selProdRibbons), false); ?>
                             <div class="products_img">

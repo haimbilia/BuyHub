@@ -167,7 +167,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0))
                                     case 'Action':
                                         if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation'])
                                         {
-                                            $txt = '<span class="text-danger">' . Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId) . '</span>';
+                                            $txt = '<span class="text-danger">' . Labels::getLabel('LBL_NOT_SERVICEABLE', $siteLangId) . '</span>';
                                         }
                                         else
                                         {

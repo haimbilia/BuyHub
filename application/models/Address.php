@@ -85,7 +85,7 @@ class Address extends MyAppModel
         $srch->addCondition(self::tblFld('type'), '=', $type);
         $srch->addCondition(self::tblFld('record_id'), '=', $recordId);
 
-        if (0 > $isDefault) {
+        if (0 < $isDefault) {
             $srch->addCondition(self::tblFld('is_default'), '=', $isDefault);
         }
         if ($recordId == 0) {

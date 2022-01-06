@@ -57,11 +57,11 @@ $(document).on('blur', '.metaUrlJs', function () {
             data += '&loadRows=' + 1;
         }
 
-        fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+            $.ykmsg.close();
             fcom.removeLoader();
             setTabActive(type);
 
-            var res = JSON.parse(res);
             if (true === replaceRowsOnly) {
                 $(listingTableJs).html(res.listingHtml);
             } else {

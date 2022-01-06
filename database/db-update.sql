@@ -1540,7 +1540,7 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 VALUES ('LBL_SR._NO', 1, 'Sr. No', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
-DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_RECOMENDED_TAG_PRODUCTS'; 
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_RECOMENDED_TAG_PRODUCTS';
 DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_SMART_RECOMENDED_WEIGHTAGES';
 
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
@@ -1549,3 +1549,10 @@ VALUES ('LBL_RECOMMENDED_TAG_PRODUCTS', 1, 'Recommended Tag Products', 1),
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 ALTER TABLE `tbl_badges` ADD `badge_added_on` DATETIME NOT NULL AFTER `badge_updated_on`;
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_NOT_AVAILABLE';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_NOT_SERVICEABLE', 1, 'Not serviceable at your location', 1),
+('LBL_NOT_AVAILABLE', 1, 'Not Available', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

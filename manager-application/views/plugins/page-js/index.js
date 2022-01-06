@@ -34,11 +34,11 @@
         }
         data = fcom.frmData(frm);
 
-        fcom.ajax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'search'), data, function (res) {
+            $.ykmsg.close();
             fcom.removeLoader();
             setTabActive(type);
 
-            var res = JSON.parse(res);
             $(dv).html(res.listingHtml);
             fixTableColumnWidth();
         });
