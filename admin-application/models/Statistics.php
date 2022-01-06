@@ -16,7 +16,7 @@ class Statistics extends MyAppModel
                 $srch = $userObj->getUserSearchObj();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
-                $srch->addCondition('u.user_is_shipping_company', '=', applicationConstants::NO);
+                $srch->addCondition('u.user_is_shipping_company', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
                 $srch->addMultipleFields(array('count(user_id) as total_users'));
                 $rs = $srch->getResultSet();
                 return  $this->db->fetch($rs);
@@ -45,7 +45,7 @@ class Statistics extends MyAppModel
                 $srch->joinOrderPaymentMethod();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
-                $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
+                $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
                 $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
                 $cnd->attachCondition('plugin_code', '=', 'payatstore');
                 $srch->addMultipleFields(array('avg(order_net_amount) AS avg_order,count(order_id) as total_orders'));
@@ -59,7 +59,7 @@ class Statistics extends MyAppModel
                 $srch->addOrderProductCharges();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
-                $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
+                $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
                 $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
                 $cnd->attachCondition('plugin_code', '=', 'payatstore');
                 $completedOrderStatus = unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"));
@@ -121,23 +121,23 @@ class Statistics extends MyAppModel
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $srch->addMultipleFields(array('count(user_id) AS Registrations'));
-                $srch->addCondition('u.user_is_shipping_company', '=', applicationConstants::NO);
+                $srch->addCondition('u.user_is_shipping_company', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
                 foreach ($last12Months as $key => $val) {
                     $srchObj = clone $srch;
                     $srchObj->addDirectCondition("month(`user_regdate` ) = $val[monthCount] and year(`user_regdate` ) = $val[year]");
 
                     if ((isset($userTypeArr['user_is_buyer']) && FatUtility::int($userTypeArr['user_is_buyer']) > 0) || (isset($userTypeArr['user_is_supplier']) && FatUtility::int($userTypeArr['user_is_supplier']) > 0)) {
-                        $cnd = $srchObj->addCondition('u.user_is_buyer', '=', applicationConstants::YES);
-                        $cnd->attachCondition('u.user_is_supplier', '=', applicationConstants::YES);
+                        $cnd = $srchObj->addCondition('u.user_is_buyer', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+                        $cnd->attachCondition('u.user_is_supplier', '=', 'mysql_func_' . applicationConstants::YES, 'OR', true);
                     }
 
                     if (isset($userTypeArr['user_is_affiliate']) && FatUtility::int($userTypeArr['user_is_affiliate']) > 0) {
-                        $srchObj->addCondition('u.user_is_affiliate', '=', applicationConstants::YES);
+                        $srchObj->addCondition('u.user_is_affiliate', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                     }
 
                     if (isset($userTypeArr['user_is_advertiser']) && FatUtility::int($userTypeArr['user_is_advertiser']) > 0) {
-                        $srchObj->addCondition('u.user_is_advertiser', '=', applicationConstants::YES);
+                        $srchObj->addCondition('u.user_is_advertiser', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                     }
                     $rs = $srchObj->getResultSet();
                     $row = $this->db->fetch($rs);
@@ -148,10 +148,10 @@ class Statistics extends MyAppModel
             case 'products':
                 $srch = SellerProduct::getSearchObject();
                 $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
-                $srch->addCondition('sp.selprod_active', '=', applicationConstants::ACTIVE);
-                $srch->addCondition('sp.selprod_deleted', '=', applicationConstants::NO);
-                $srch->addCondition('p.product_active', '=', applicationConstants::ACTIVE);
-                $srch->addCondition('p.product_approved', '=', Product::APPROVED);
+                $srch->addCondition('sp.selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+                $srch->addCondition('sp.selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+                $srch->addCondition('p.product_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+                $srch->addCondition('p.product_approved', '=', 'mysql_func_' . Product::APPROVED, 'AND', true);
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $srch->addMultipleFields(array('count(selprod_id) AS sellerProducts'));
@@ -263,7 +263,7 @@ class Statistics extends MyAppModel
                 $srch->joinOrderPaymentMethod();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
-                $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
+                $srch->addCondition('order_type', '=', 'mysql_func_' . Orders::ORDER_PRODUCT, 'AND', true);
                 $srch->addMultipleFields(array('1 AS num_days,count(distinct order_id) as totalorders', 'IFNULL(SUM(order_net_amount), 0) as totalsales', 'IFNULL(AVG(order_net_amount),0) avgorder'));
 
                 $srchObj1 = clone $srch;
@@ -298,11 +298,11 @@ class Statistics extends MyAppModel
                 $srch->addOrderProductCharges();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
-                $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
+                $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
                 $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
                 $cnd->attachCondition('plugin_code', '=', 'payatstore');
                 $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-                $srch->addCondition('order_deleted', '=', applicationConstants::NO);
+                $srch->addCondition('order_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
                 $srch->addMultipleFields(array('SUM((op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0) - IFNULL(op_refund_amount,0)) AS totalsales,SUM(op_commission_charged - op_refund_commission) totalcommission'));
 
                 $srchObj1 = clone $srch;
@@ -438,7 +438,7 @@ class Statistics extends MyAppModel
                 $srch->joinUsers(true);
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
-                $srch->addCondition('user_is_affiliate', '=', applicationConstants::YES);
+                $srch->addCondition('user_is_affiliate', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                 $srchObj1 = clone $srch;
                 $srchObj1->addFld(array('1 AS num_days', 'count(withdrawal_id)'));
                 $srchObj1->addDirectCondition('DATE(withdrawal_request_date) = DATE(NOW())');
@@ -497,7 +497,7 @@ class Statistics extends MyAppModel
             $srch->doNotLimitRecords();
         }
 
-        $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
+        $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore');
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
@@ -572,10 +572,10 @@ class Statistics extends MyAppModel
                 $srch->addStatusCondition($cancelAndRefundedStatusArr);
                 break;
             case 'REACHED_CHECKOUT':
-                $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
+                $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
                 break;
             case 'PURCHASED':
-                $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
+                $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
                 $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
                 $cnd->attachCondition('plugin_code', '=', 'payatstore');
                 break;

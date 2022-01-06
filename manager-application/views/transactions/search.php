@@ -16,19 +16,21 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
+            case 'utxn_id':
+                $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionNumber($row[$key]));
+                break;
             case 'user_name':
                 $href = "javascript:void(0)";
                 $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', [
                     'user' => $row,
+                    'extraClass'=>'user-profile-sm',
                     'siteLangId' => $siteLangId,
                     'href' => $href,
                     'onclick' => $onclick,
+                    'displayEmail'=>false
                 ], false, true);
-                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
-                break;
-            case 'utxn_id':
-                $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionNumber($row[$key]));
+                $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'utxn_date':
                 $td->appendElement('html', $tdAttr, HtmlHelper::formatDateTime($row[$key]), true);
@@ -39,6 +41,16 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, CommonHelper::displayMoneyFormat($row[$key]));
                 break;
             case 'utxn_comments':
+                $body = $row[$key];
+                if(strlen($body) > 25){
+                    $htm = strlen($body) > 25 ? substr($body, 0, 22) . "..." : $body;
+                    $td->appendElement('plaintext', $tdAttr, $htm.' <button onclick="getDescription(' . $row['utxn_id'] .')">'.Labels::getLabel('LBL_VIEW', $siteLangId).'</button>', true);
+                }else{
+                    $td->appendElement('plaintext', $tdAttr, $body, true);
+                }
+                break;
+                
+                
                 $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionComments($row[$key]), true);
                 break;
             case 'utxn_status':

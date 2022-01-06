@@ -27,8 +27,8 @@ class PageLanguageData extends MyAppModel
             $srch->setPageSize(1);
             $srch->addOrder('plang_lang_id', 'DESC');
 
-            $cnd = $srch->addCondition(static::tblFld('lang_id'), '=', $langId);
-            $cnd->attachCondition(static::tblFld('lang_id'), '=', -1);
+            $cnd = $srch->addCondition(static::tblFld('lang_id'), '=', 'mysql_func_' . $langId, 'AND', true);
+            $cnd->attachCondition(static::tblFld('lang_id'), '=', 'mysql_func_-1', 'OR', true);
         }
 
         $srch->addCondition(static::tblFld('key'), '=', $key);

@@ -344,10 +344,10 @@ class AdminPrivilege
         /* ] */
 
         $srch = new SearchBase('tbl_admin_permissions');
-        $srch->addCondition('admperm_admin_id', '=', $adminId);
+        $srch->addCondition('admperm_admin_id', '=', 'mysql_func_' . $adminId, 'AND', true);
         $srch->doNotCalculateRecords();
         if (0 < $sectionId) {
-            $srch->addCondition('admperm_section_id', '=', $sectionId);
+            $srch->addCondition('admperm_section_id', '=', 'mysql_func_' . $sectionId, 'AND', true);
         }
 
         $srch->addMultipleFields(array('admperm_section_id', 'admperm_value'));
@@ -1654,7 +1654,7 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_BADGE_REQUESTS, static::PRIVILEGE_WRITE, $returnResult);
     }
-    
+
     public function canViewSystemLog($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_SYSTEMLOG, static::PRIVILEGE_READ, $returnResult);
@@ -1664,7 +1664,7 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_SYSTEMLOG, static::PRIVILEGE_WRITE, $returnResult);
     }
-    
+
     public function canViewSettings($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_SETTINGS, static::PRIVILEGE_READ, $returnResult);
