@@ -380,7 +380,6 @@ $(document).ready(function () {
             markNavActive($(this));
         } else {
             var selectors = $(this).data("selector");
-            console.log(selectors);
             if ('undefined' != typeof selectors && -1 != jQuery.inArray(controllerName, selectors)) {
                 markNavActive($(this));
             }
