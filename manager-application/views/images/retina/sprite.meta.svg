@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
+    <defs>
+        <symbol id="icon_advanced_setting" viewBox="0 0 16 16.021">
+            <g transform="translate(0 -0.338)">
+                <g transform="translate(4.749 5.125)">
+                    <path d="M-88.017,155.288a3.254,3.254,0,0,1-3.25-3.25,3.254,3.254,0,0,1,3.25-3.25,3.254,3.254,0,0,1,3.25,3.25A3.254,3.254,0,0,1-88.017,155.288Zm0-5a1.753,1.753,0,0,0-1.75,1.75,1.753,1.753,0,0,0,1.75,1.75,1.752,1.752,0,0,0,1.75-1.75A1.752,1.752,0,0,0-88.017,150.288Z" transform="translate(91.267 -148.788)"/>
+                </g>
+                <g transform="translate(0.346 0.392)">
+                    <path d="M-87.015,160.021h-2a1.8,1.8,0,0,1-1.745-1.4l-.172-.766a6.79,6.79,0,0,1-.657-.382l-.743.234a1.8,1.8,0,0,1-2.1-.824l-.994-1.719a1.8,1.8,0,0,1,.329-2.207l.588-.541c-.007-.127-.011-.253-.011-.377s0-.25.011-.377l-.578-.531a1.8,1.8,0,0,1-.346-2.2l1.009-1.747a1.791,1.791,0,0,1,2.085-.814l.752.238a6.285,6.285,0,0,1,.656-.382l.173-.769a1.8,1.8,0,0,1,1.744-1.4h2a1.8,1.8,0,0,1,1.746,1.4l.172.766a6.467,6.467,0,0,1,.657.381l.744-.234a1.8,1.8,0,0,1,2.1.824l.994,1.718a1.807,1.807,0,0,1-.329,2.208l-.588.542c.007.126.01.252.01.376s0,.25-.01.376l.588.541,0,0,.043.043a1.8,1.8,0,0,1,.291,2.148L-81.6,156.9a1.787,1.787,0,0,1-2.089.811l-.748-.236a6.434,6.434,0,0,1-.656.382l-.174.77A1.8,1.8,0,0,1-87.015,160.021Zm-4.306-4.208.308.233a4.859,4.859,0,0,0,1.019.592l.355.149.338,1.506a.294.294,0,0,0,.281.228h2a.3.3,0,0,0,.28-.224l.339-1.509.354-.15a4.789,4.789,0,0,0,1.019-.592l.309-.234,1.47.464a.3.3,0,0,0,.336-.122l1.01-1.748a.3.3,0,0,0-.011-.3l-.1-.1-1.077-.989.041-.377a5.566,5.566,0,0,0,.033-.6,5.579,5.579,0,0,0-.033-.6l-.041-.376,1.13-1.04a.3.3,0,0,0,.047-.368l-.994-1.717a.3.3,0,0,0-.35-.135l-1.463.462-.308-.234a4.839,4.839,0,0,0-1.02-.592l-.354-.151-.338-1.5a.294.294,0,0,0-.282-.229h-2a.3.3,0,0,0-.28.225l-.339,1.508-.355.15a4.81,4.81,0,0,0-1.019.591l-.308.234-1.47-.465a.3.3,0,0,0-.335.123l-1.01,1.748a.3.3,0,0,0,.065.363l1.12,1.031-.041.376a5.333,5.333,0,0,0-.034.6,5.272,5.272,0,0,0,.034.6l.043.378-1.132,1.041a.3.3,0,0,0-.047.367l.994,1.72a.3.3,0,0,0,.348.134Z" transform="translate(95.67 -144.055)"/>
+                </g>
+            </g>
+        </symbol>
+        <symbol id="icon_all_brand" viewBox="0 0 13.05 16.089">
+            <g transform="translate(0.874 0.75)">
+                <circle cx="1.024" cy="1.024" r="1.024" transform="translate(4.619 6.563)"/>
+                <g transform="translate(5.093 0.174)">
+                    <rect width="1.1" height="6.609"/>
+                </g>
+                <g transform="translate(2.167 10.935)">
+                    <rect width="6.609" height="1.1"/>
+                </g>
+                <path d="M-83.413,276.09l-2.092-4.255s2.167-2.955,5.5-7.155h.22s2.626,3.04,5.573,7.24l-2.308,4.17.563,3.179h-7.972Z" transform="translate(85.505 -264.68)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </g>
+        </symbol>
+        <symbol id="icon_all_product" viewBox="0 0 16.001 16.338">
+            <g transform="translate(0.001 0)">
+                <g transform="translate(0)">
+                    <rect width="16" height="16" transform="translate(-0.001 0.339)" fill="none"/>
+                </g>
+                <g transform="translate(0 0)">
+                    <path d="M-47.749,191.891h-16v-16h16Zm-14.5-1.5h13v-13h-13Z" transform="translate(63.749 -175.891)"/>
+                </g>
+                <g transform="translate(4.75 0)">
+                    <path d="M-52.5,182.391H-59v-6.5h6.5Zm-5-1.5H-54v-3.5h-3.5Z" transform="translate(58.999 -175.891)"/>
+                </g>
+            </g>
+        </symbol>
+        <symbol id="icon_Blog_Category" viewBox="0 0 15.552 15.431">
+            <g transform="translate(0)">
+                <g transform="translate(0)">
+                    <path d="M-155.929,279.823a3.676,3.676,0,0,1-3.672-3.672,3.676,3.676,0,0,1,3.672-3.672,3.676,3.676,0,0,1,3.672,3.672A3.676,3.676,0,0,1-155.929,279.823Zm0-5.546a1.876,1.876,0,0,0-1.874,1.874,1.877,1.877,0,0,0,1.874,1.874,1.876,1.876,0,0,0,1.873-1.874A1.876,1.876,0,0,0-155.929,274.277Z" transform="translate(159.601 -272.479)"/>
+                </g>
+                <g transform="translate(8.208)">
+                    <path d="M-147.721,279.823a3.676,3.676,0,0,1-3.672-3.672,3.676,3.676,0,0,1,3.672-3.672,3.676,3.676,0,0,1,3.672,3.672A3.676,3.676,0,0,1-147.721,279.823Zm0-5.546a1.876,1.876,0,0,0-1.874,1.874,1.877,1.877,0,0,0,1.874,1.874,1.877,1.877,0,0,0,1.874-1.874A1.877,1.877,0,0,0-147.721,274.277Z" transform="translate(151.393 -272.479)"/>
+                </g>
+                <g transform="translate(0 8.087)">
+                    <path d="M-155.929,287.91a3.676,3.676,0,0,1-3.672-3.672,3.676,3.676,0,0,1,3.672-3.672,3.676,3.676,0,0,1,3.672,3.672A3.676,3.676,0,0,1-155.929,287.91Zm0-5.546a1.876,1.876,0,0,0-1.874,1.874,1.876,1.876,0,0,0,1.874,1.873,1.875,1.875,0,0,0,1.873-1.873A1.876,1.876,0,0,0-155.929,282.364Z" transform="translate(159.601 -280.566)"/>
+                </g>
+                <g transform="translate(8.208 8.087)">
+                    <path d="M-147.721,287.91a3.676,3.676,0,0,1-3.672-3.672,3.676,3.676,0,0,1,3.672-3.672,3.676,3.676,0,0,1,3.672,3.672A3.676,3.676,0,0,1-147.721,287.91Zm0-5.546a1.876,1.876,0,0,0-1.874,1.874,1.876,1.876,0,0,0,1.874,1.873,1.876,1.876,0,0,0,1.874-1.873A1.877,1.877,0,0,0-147.721,282.364Z" transform="translate(151.393 -280.566)"/>
+                </g>
+            </g>
+        </symbol>
+        <symbol id="icon_BLOG_PAGE" viewBox="0 0 15.9 15.853">
+            <g id="Group_848" data-name="Group 848" transform="translate(0.75)">
+                <line y2="15.853" transform="translate(0)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line x2="9.853" transform="translate(0.11 0.757)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line x2="14.853" transform="translate(0.11 15.093)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line y2="8.517" transform="translate(14.399 7.263)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line y2="7.87" transform="translate(9.714)" fill="none" stroke="currentColor" strokecurrentColorth="1.5"/>
+                <line x2="6.101" transform="translate(9.048 7.116)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line x2="4.527" transform="translate(2.773 5.408)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line x2="8.963" transform="translate(2.718 11.408)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </g>
+        </symbol>
+        <symbol id="icon_Blog_Post" viewBox="0 0 16 15.957">
+            <g id="Group_873" data-name="Group 873" transform="translate(0.75 0.707)">
+                <path d="M15.25,8v7.25H.75V2.75H8" transform="translate(-0.75 -0.75)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line x2="7.202" transform="translate(3.199 9.897)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line y1="5.624" x2="5.624" transform="translate(8.876)" fill="none" stroke="currentColor" stroke-width="2"/>
+                <rect width="1.412" height="1.412" transform="translate(8.17 4.918)"/>
+            </g>
+        </symbol>
+        <symbol id="icon_brand_view" viewBox="0 0 16.001 16.339">
+            <g transform="translate(0.001)">
+                <rect width="16" height="16" transform="translate(-0.001 0.339)" fill="none"/>
+                <rect width="14.5" height="14.5" rx="7.25" transform="translate(0.75 0.75)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line y2="5" transform="translate(7.999 7.339)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect width="2" height="2" rx="1" transform="translate(6.999 4.339)"/>
+            </g>
+        </symbol>
+        <symbol id="icon_category_view" viewBox="0 0 15.873 15.841">
+            <g transform="translate(0)">
+                <g transform="translate(8.767 8.735)">
+                    <path d="M.115,263.819H-6.991v-7.106H.115Zm-5.606-1.5h4.106v-4.106H-5.491Z" transform="translate(6.991 -256.713)"/>
+                </g>
+                <g transform="translate(0 8.735)">
+                    <path d="M-8.652,263.819h-7.106v-7.106h7.106Zm-5.606-1.5h4.106v-4.106h-4.106Z" transform="translate(15.758 -256.713)"/>
+                </g>
+                <g transform="translate(8.767)">
+                    <path d="M.115,255.083H-6.991v-7.1H.115Zm-5.606-1.5h4.106v-4.1H-5.491Z" transform="translate(6.991 -247.978)"/>
+                </g>
+                <g>
+                    <path d="M-8.652,255.083h-7.106v-7.1h7.106Zm-5.606-1.5h4.106v-4.1h-4.106Z" transform="translate(15.758 -247.978)"/>
+                </g>
+            </g>
+        </symbol>
+        <symbol id="icon_cms_page_view" viewBox="0 0 16 16">
+            <g>
+                <path d="M112,295.925H96v-16h16Zm-14.5-1.5h13v-13h-13Z" transform="translate(-96.001 -279.925)"/>
+            </g>
+            <line y1="8.918" x2="2.115" transform="translate(6.931 3.79)" fill="none" stroke="currentColor" stroke-width="1.25"/>
+            <g transform="translate(9.994 6.336)">
+                <path d="M108.935,288.118,106,289.632V289.2l2.478-1.242v-.012L106,286.7v-.438l2.94,1.515Z" transform="translate(-105.995 -286.261)" stroke="currentColor" stroke-width="0.75"/>
+            </g>
+            <g transform="translate(2.8 6.336)">
+                <path d="M98.8,287.776l2.94-1.515v.438l-2.478,1.242v.012l2.478,1.242v.437l-2.94-1.514Z" transform="translate(-98.801 -286.261)" stroke="currentColor" stroke-width="0.75"/>
+            </g>
+        </symbol>
+        <symbol id="icon_default" viewBox="0 0 16 16.322">
+            <g transform="translate(0 -0.017)">
+                <g>
+                    <rect width="16" height="16" transform="translate(0 0.339)" fill="none"/>
+                </g>
+                <g transform="translate(4.75 4.75)">
+                    <path d="M200.018,186.7a3.25,3.25,0,1,1,3.25-3.25A3.254,3.254,0,0,1,200.018,186.7Zm0-5a1.75,1.75,0,1,0,1.75,1.75A1.753,1.753,0,0,0,200.018,181.7Z" transform="translate(-196.768 -180.195)"/>
+                </g>
+                <g transform="translate(0.347 0.017)">
+                    <path d="M201.02,191.429h-2.005a1.8,1.8,0,0,1-1.745-1.4l-.173-.766a6.287,6.287,0,0,1-.656-.382l-.744.234a1.8,1.8,0,0,1-2.1-.824l-.994-1.719a1.805,1.805,0,0,1,.329-2.207l.587-.541c-.007-.127-.01-.253-.01-.377s0-.25.01-.377l-.577-.531a1.8,1.8,0,0,1-.347-2.2l1.01-1.747a1.79,1.79,0,0,1,2.084-.814l.752.238a6.287,6.287,0,0,1,.656-.382l.173-.769a1.8,1.8,0,0,1,1.745-1.4h2.005a1.8,1.8,0,0,1,1.745,1.4l.173.766a6.282,6.282,0,0,1,.656.382l.744-.235a1.8,1.8,0,0,1,2.1.825l.994,1.717a1.806,1.806,0,0,1-.329,2.208l-.588.542c.007.126.011.252.011.376s0,.25-.011.376l.588.541,0,0,.044.043a1.8,1.8,0,0,1,.29,2.149l-1.01,1.748a1.785,1.785,0,0,1-2.088.81l-.749-.236a5.987,5.987,0,0,1-.656.382l-.174.77A1.8,1.8,0,0,1,201.02,191.429Zm-4.307-4.209.309.233a4.784,4.784,0,0,0,1.018.592l.356.149.338,1.506a.294.294,0,0,0,.281.229h2.005a.3.3,0,0,0,.28-.225l.339-1.509.354-.15a4.764,4.764,0,0,0,1.018-.592l.31-.234,1.47.465a.3.3,0,0,0,.335-.122l1.01-1.748a.294.294,0,0,0-.011-.3l-.1-.1-1.078-.989.041-.377a5.3,5.3,0,0,0,0-1.2l-.041-.377,1.131-1.039a.3.3,0,0,0,.046-.368l-.994-1.718a.3.3,0,0,0-.35-.135l-1.462.462-.309-.233a4.8,4.8,0,0,0-1.02-.593l-.354-.151-.338-1.5a.3.3,0,0,0-.281-.229h-2.005a.3.3,0,0,0-.281.226L198.4,178.7l-.355.15a4.742,4.742,0,0,0-1.018.592l-.309.233-1.47-.465a.3.3,0,0,0-.335.123l-1.01,1.748a.3.3,0,0,0,.066.363l1.12,1.031-.042.377a5.425,5.425,0,0,0,0,1.2l.043.378-1.132,1.041a.3.3,0,0,0-.047.367l.995,1.72a.3.3,0,0,0,.348.135Z" transform="translate(-192.365 -175.462)"/>
+                </g>
+            </g>
+        </symbol>
+        <symbol id="icon_product_view" viewBox="0 0 16.74 16.152">
+            <g transform="translate(0.001 -0.337)">
+                <g transform="translate(0)">
+                    <rect width="16" height="16" transform="translate(0 0.337)" fill="none"/>
+                </g>
+                <g transform="translate(0.739 0.489)">
+                    <path d="M215.861,263.931h-16v-16h16Zm-14.5-1.5h13v-13h-13Z" transform="translate(-199.861 -247.931)"/>
+                </g>
+                <line y2="5" transform="translate(8.999 7.712)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect width="2" height="2" rx="1" transform="translate(7.999 4.712)"/>
+            </g>
+        </symbol>
+        <symbol id="icon_shop_view" viewBox="0 0 16.001 16.331">
+            <g transform="translate(0.001 -0.008)">
+                <rect width="16" height="16" transform="translate(-0.001 0.339)" fill="none"/>
+                <g transform="translate(0.75 0.758)">
+                    <path d="M0,0H4.831a0,0,0,0,1,0,0V2.415A2.415,2.415,0,0,1,2.415,4.831h0A2.415,2.415,0,0,1,0,2.415V0A0,0,0,0,1,0,0Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M0,0H4.831a0,0,0,0,1,0,0V2.415A2.415,2.415,0,0,1,2.415,4.831h0A2.415,2.415,0,0,1,0,2.415V0A0,0,0,0,1,0,0Z" transform="translate(4.831)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M0,0H4.831a0,0,0,0,1,0,0V2.415A2.415,2.415,0,0,1,2.415,4.831h0A2.415,2.415,0,0,1,0,2.415V0A0,0,0,0,1,0,0Z" transform="translate(9.661)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                </g>
+                <rect width="16" height="1.5" rx="0.75" transform="translate(0 14.5)"/>
+                <line y2="10.257" transform="translate(1.75 4.993)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line y2="10.257" transform="translate(14.242 4.993)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect width="4" height="5" transform="translate(6 10.25)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </g>
+        </symbol>
+        <symbol id="icon_all_shop" viewBox="0 0 16.001 16.331">
+            <g transform="translate(0.001 -0.008)">
+                <rect width="16" height="16" transform="translate(-0.001 0.339)" fill="none"/>
+                <g transform="translate(0.75 0.758)">
+                    <path d="M0,0H4.831a0,0,0,0,1,0,0V2.415A2.415,2.415,0,0,1,2.415,4.831h0A2.415,2.415,0,0,1,0,2.415V0A0,0,0,0,1,0,0Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M0,0H4.831a0,0,0,0,1,0,0V2.415A2.415,2.415,0,0,1,2.415,4.831h0A2.415,2.415,0,0,1,0,2.415V0A0,0,0,0,1,0,0Z" transform="translate(4.831)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M0,0H4.831a0,0,0,0,1,0,0V2.415A2.415,2.415,0,0,1,2.415,4.831h0A2.415,2.415,0,0,1,0,2.415V0A0,0,0,0,1,0,0Z" transform="translate(9.661)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                </g>
+                <rect width="16" height="1.5" rx="0.75" transform="translate(0 14.5)"/>
+                <line y2="10.257" transform="translate(1.75 4.993)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <line y2="10.257" transform="translate(14.242 4.993)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect width="4" height="5" transform="translate(6 10.25)" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </g>
+        </symbol>
+    </defs>
+</svg>
