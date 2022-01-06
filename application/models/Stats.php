@@ -44,7 +44,7 @@ class Stats extends MyAppModel
                 break;
         }
 
-        $cnd = $srch->addCondition($alias . 'temp.order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
+        $cnd = $srch->addCondition($alias . 'temp.order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         $cnd->attachCondition($alias . 'pm.plugin_code', '=', 'CashOnDelivery');
 
         return     $srch;

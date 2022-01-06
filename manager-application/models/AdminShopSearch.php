@@ -1,10 +1,12 @@
 <?php
 
-class AdminShopSearch extends SearchBase {
+class AdminShopSearch extends SearchBase
+{
 
     private $langId;
 
-    public function __construct(int $langId = 0) {
+    public function __construct(int $langId = 0)
+    {
         parent::__construct(Shop::DB_TBL, 'shop');
         $this->langId = $langId;
         if ($this->langId > 0) {
@@ -12,15 +14,18 @@ class AdminShopSearch extends SearchBase {
         }
     }
 
-    public function joinWithUser() {
+    public function joinWithUser()
+    {
         $this->joinTable(User::DB_TBL, 'INNER JOIN', 'users.user_id = shop.shop_user_id', 'users');
     }
 
-    public function joinWithCredential() {
+    public function joinWithCredential()
+    {
         $this->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'users.user_id = cred.credential_user_id', 'cred');
     }
 
-    public function getListingRecords() {
+    public function getListingRecords()
+    {
         $this->addMultipleFields([
             'shop.shop_id',
             'shop.shop_user_id',
@@ -36,7 +41,7 @@ class AdminShopSearch extends SearchBase {
             'shop.shop_updated_on'
         ]);
         $this->joinWithUser();
-        $this->joinWithCredential(); 
+        $this->joinWithCredential();
         $results = Fatapp::getDb()->fetchAll($this->getResultSet());
         if (empty($results)) {
             return [];
@@ -52,7 +57,8 @@ class AdminShopSearch extends SearchBase {
         return $results;
     }
 
-    private function numOfReports(array $shopIds) {
+    private function numOfReports(array $shopIds)
+    {
         if (empty($shopIds)) {
             return [];
         }
@@ -65,7 +71,8 @@ class AdminShopSearch extends SearchBase {
         return Fatapp::getDb()->fetchAllAssoc($shopReportObj->getResultSet());
     }
 
-    private function numOfProducts(array $shopUserIds) {
+    private function numOfProducts(array $shopUserIds)
+    {
         if (empty($shopUserIds)) {
             return [];
         }
@@ -80,7 +87,8 @@ class AdminShopSearch extends SearchBase {
         return Fatapp::getDb()->fetchAllAssoc($prodSrch->getResultSet());
     }
 
-    private function prodReviewSearch(array $shopUserIds) {
+    private function prodReviewSearch(array $shopUserIds)
+    {
         if (empty($shopUserIds)) {
             return [];
         }
@@ -97,7 +105,8 @@ class AdminShopSearch extends SearchBase {
         return Fatapp::getDb()->fetchAllAssoc($ratingSrch->getResultSet());
     }
 
-    public function applySearchConditions(array $conditions) {
+    public function applySearchConditions(array $conditions)
+    {
         if (empty($conditions)) {
             return;
         }
@@ -125,16 +134,16 @@ class AdminShopSearch extends SearchBase {
         }
         $shopFeatured = FatUtility::convertToType($conditions['shop_featured'], FatUtility::VAR_INT, -1);
         if ($shopFeatured > -1 && $conditions['shop_featured'] != '') {
-            $this->addCondition('shop_featured', '=', $shopFeatured);
+            $this->addCondition('shop_featured', '=', 'mysql_func_' . $shopFeatured, 'AND', true);
         }
 
         $shopActive = FatUtility::convertToType($conditions['shop_active'], FatUtility::VAR_INT, -1);
         if ($shopActive > -1 && $conditions['shop_active'] != '') {
-            $this->addCondition('shop_active', '=', $shopActive);
+            $this->addCondition('shop_active', '=', 'mysql_func_' . $shopActive, 'AND', true);
         }
         $shopDisplayStatus = FatUtility::convertToType($conditions['shop_supplier_display_status'], FatUtility::VAR_INT, -1);
         if ($shopDisplayStatus > -1 && $conditions['shop_supplier_display_status'] != '') {
-            $this->addCondition('shop_supplier_display_status', '=', $shopDisplayStatus);
+            $this->addCondition('shop_supplier_display_status', '=', 'mysql_func_' . $shopDisplayStatus, 'AND', true);
         }
 
         $date_from = FatUtility::convertToType($conditions['date_from'], FatUtility::VAR_DATE, '');
@@ -148,11 +157,12 @@ class AdminShopSearch extends SearchBase {
         }
 
         if (!empty($conditions['shop_id'])) {
-            $this->addCondition('shop_id', '=', $conditions['shop_id']);
+            $this->addCondition('shop_id', '=', 'mysql_func_' . FatUtility::int($conditions['shop_id']), 'AND', true);
         }
     }
 
-    public static function getUrlRewrite($searchId) {
+    public static function getUrlRewrite($searchId)
+    {
         $urlSrch = UrlRewrite::getSearchObject();
         $urlSrch->doNotCalculateRecords();
         $urlSrch->setPageSize(1);
@@ -164,5 +174,4 @@ class AdminShopSearch extends SearchBase {
         }
         return '';
     }
-
 }
