@@ -16,4 +16,17 @@ $(document).ready(function () {
             fcom.removeLoader();
         });
     };
+
+    showDescription = function (obj) {
+        console.log($(obj).find('span').html());
+        $.ykmodal($(obj).find('span').html(),true);
+    };
+
+    getDescription = function (recordId) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "getDescription"), "recordId=" + recordId, function (t) {
+            $.ykmodal(t.html, true);
+            $.ykmsg.close();
+            fcom.removeLoader();
+        });
+    };
 })();

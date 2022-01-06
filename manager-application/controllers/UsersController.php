@@ -538,8 +538,9 @@ class UsersController extends ListingBaseController
 
         $post = FatApp::getPostedData();
 
+        $deletedOnly = FatApp::getPostedData('deletedOnly', FatUtility::VAR_INT, 0);
         $skipDeletedUser = true;
-        if (isset($post['deletedUser']) && $post['deletedUser'] == true) {
+        if ((isset($post['deletedUser']) && $post['deletedUser'] == 1) || 0 < $deletedOnly) {
             $skipDeletedUser = false;
         }
 
@@ -576,7 +577,7 @@ class UsersController extends ListingBaseController
             }
         }
 
-        if (!$skipDeletedUser) {
+        if (0 < $deletedOnly) {
             $srch->addCondition('user_deleted', '=', applicationConstants::YES);
         }
         $srch->addOrder('credential_email', 'ASC');

@@ -20,7 +20,7 @@ $(document).on('blur', ".splPriceColJs:not(.dateJs)", function () {
     updateValues($(this));
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     select2("productSellerJs", fcom.makeUrl('SpecialPrice', 'autoCompleteSeller'));
 });
 
@@ -36,36 +36,63 @@ $(document).ready(function() {
             });
     }
 
-    updateValues = function (currObj) {
-        var value = currObj.val();
-        var oldValue = currObj.attr('data-oldval');
-        var displayOldValue = currObj.attr('data-displayoldval');
-        displayOldValue = typeof displayOldValue == 'undefined' ? oldValue : displayOldValue;
-        var attribute = currObj.attr('name');
-        var id = currObj.data('id');
-        var selProdId = currObj.data('selprodid');
+    showOrignal = function (ele) {
+        var obj = $(ele);
+        var value = obj.attr('data-value');
+        obj.text(value);
+
+        if (obj.hasClass('dateJs')) {
+            $(".dateJs").datepicker("show");
+        }
+    }
+
+    updateValues = function (ele) {
+        var obj = $(ele);
+        var percentDiv = obj.siblings('div.percentValJs');
+        var value = ele.textContent;
+        var price = obj.attr('data-price');
+        var oldValue = obj.attr('data-value');
+        var formattedValue = obj.attr('data-formated-value');
+        var attribute = obj.attr('name');
+        var id = obj.attr('data-id');
+        var selProdId = obj.attr('data-selprod-id');
+
         if ('splprice_price' == attribute) {
             value = parseFloat(value);
             oldValue = parseFloat(oldValue);
         }
+
+        if (Number.isNaN(value)) {
+            $.ykmsg.error(langLbl.notANumber);
+            return;
+        }
+
+        var discountPrice = price - value;
+        var discountPercentage = '';
+        if (0 < discountPrice) {
+            var discountPercentage = ((discountPrice / price) * 100).toFixed(2);
+            discountPercentage = discountPercentage + "% off";
+        }
+
         if ('' != value && value != oldValue) {
             var data = 'attribute=' + attribute + "&splprice_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
-            fcom.ajax(fcom.makeUrl('SpecialPrice', 'updateColValue'), data, function (t) {
+            fcom.displayProcessing();
+            fcom.ajax(fcom.makeUrl(controllerName, 'updateColValue'), data, function (t) {
+                $.ykmsg.close();
                 var ans = $.parseJSON(t);
                 if (ans.status != 1) {
                     $.ykmsg.error(ans.msg);
                     value = oldValue;
-                    updatedValue = displayOldValue;
+                    updatedValue = formattedValue;
                 } else {
                     updatedValue = ans.data.value;
-                    currObj.attr('data-oldval', value);
+
+                    percentDiv.text(discountPercentage);
                 }
-                currObj.attr('value', value);
-                showElement(currObj, updatedValue);
+                obj.attr('data-value', value);
+                obj.attr('data-formated-value', updatedValue);
+                obj.text(updatedValue);
             });
-        } else {
-            showElement(currObj);
-            currObj.val(oldValue);
         }
     };
 

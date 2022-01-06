@@ -73,10 +73,10 @@ class applicationConstants {
     public const LOCATION_COUNTRY = 0;
     public const LOCATION_STATE = 1;
     public const LOCATION_ZIP = 2;
-    public const CLASS_INFO = 'label-info';
-    public const CLASS_SUCCESS = 'label-success';
-    public const CLASS_DANGER = 'label-danger';
-    public const CLASS_WARNING = 'label-warning';
+    public const CLASS_INFO = 'text-info';
+    public const CLASS_SUCCESS = 'text-success';
+    public const CLASS_DANGER = 'text-danger';
+    public const CLASS_WARNING = 'text-warning';
     public const CURRENCY_SEPARATOR_DECIMAL = '.';
     public const CURRENCY_SEPARATOR_COMMA = ',';
 

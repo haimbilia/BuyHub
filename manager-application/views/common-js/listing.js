@@ -187,8 +187,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         $(listingTableJs).prepend(fcom.getLoader());
 
-        fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function (res) {
-            var res = JSON.parse(res);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "search"), data, function (res) {
+            $.ykmsg.close();
             if (res.headSection) {
                 $('.tableHeadJs').replaceWith(res.headSection);
             }

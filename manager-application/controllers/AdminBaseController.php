@@ -24,7 +24,9 @@ class AdminBaseController extends FatController
 
         if (!AdminAuthentication::isAdminLogged()) {
             CommonHelper::initCommonVariables(true);
-            LibHelper::exitWithError(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, true);
+            if (FatUtility::isAjaxCall()) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_YOUR_SESSION_SEEMS_TO_BE_EXPIRED', CommonHelper::getLangId()), false, true);
+            }
             FatApp::redirectUser(UrlHelper::generateUrl('AdminGuest', 'loginForm'));
         }
 
@@ -175,6 +177,7 @@ class AdminBaseController extends FatController
                     'confirmSellerAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MAKE_SELLER_AS_BUYER', $this->siteLangId),
                     'maxLengthValidator' => Labels::getLabel('FRM_USED_%charsTyped%_of_%charsTotal%_CHARS_JS.', $this->siteLangId), /* Used By Maxlength bootstrap validator. */
                     'unread' => Labels::getLabel('LBL_UNREAD', $this->siteLangId),
+                    'notANumber' => Labels::getLabel('LBL_NOT_A_NUMBER', $this->siteLangId),
                 );
                 foreach ($languages as $val) {
                     if (empty($val)) {

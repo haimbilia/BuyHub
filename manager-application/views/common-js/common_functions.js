@@ -8,16 +8,16 @@ function setSiteDefaultLang(langId) {
     );
 }
 
-function getNotifications(type,obj) {
+function getNotifications(type, obj) {
 
     $("#notificationList").prepend(fcom.getLoader());
     let url = fcom.makeUrl("Notifications", "notificationList");
-    let viewAllUrl =  fcom.makeUrl("Notifications");
-    if(type == 1 ){
+    let viewAllUrl = fcom.makeUrl("Notifications");
+    if (type == 1) {
         url = fcom.makeUrl("SystemLog", "notificationList");
-        viewAllUrl =  fcom.makeUrl("SystemLog");
+        viewAllUrl = fcom.makeUrl("SystemLog");
     }
-    if(typeof obj != undefined){
+    if (typeof obj != undefined) {
         $(obj).siblings().removeClass('is-current');
         $(obj).addClass('is-current');
     }
@@ -29,11 +29,11 @@ function getNotifications(type,obj) {
             $.ykmsg.close();
             fcom.removeLoader();
             $("#notificationList").html(res.html);
-            $('#notifiLinkViewAll').attr('href',viewAllUrl);
+            $('#notifiLinkViewAll').attr('href', viewAllUrl);
             $('#notifiLinkCount').addClass('hide');
-            if(type == 0 ){
+            if (type == 0) {
                 $('#notifiLinkCount').removeClass('hide').text(res.notifyCount + " " + langLbl.unread);
-            }            
+            }
         }
     );
 }
@@ -204,8 +204,13 @@ select2 = function (
         return false;
     }
 
+    var obj = ele.closest('.modal').length ? ele.closest('.modal') : null;
+    if (null === obj) {
+        obj = ele.closest('.dropdown-menu').length ? ele.closest('.dropdown-menu') : null;
+    }
+
     ele.select2({
-        dropdownParent: ele.closest('.modal').length ? ele.closest('.modal') : null,
+        dropdownParent: obj,
         closeOnSelect: ele.data("closeOnSelect") || true,
         data: data,
         dir: layoutDirection,
@@ -365,7 +370,12 @@ $(document).ready(function () {
     var uri = window.location.pathname.replace(/^\/|\/$/g, "");
 
     $(".sidebarMenuJs .navLinkJs").each(function () {
-        var href = $(this).attr("href").replace(/^\/|\/$/g, "");
+        var attr = $(this).attr("href");
+        var href = '';
+        if (typeof attr !== 'undefined' && attr !== false) {
+            var href = attr.replace(/^\/|\/$/g, "");
+        }
+
         if (uri == href) {
             markNavActive($(this));
         } else {
@@ -399,7 +409,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.dropdown-menu').on('click',function(e) {
+    $('.dropdown-menu').on('click', function (e) {
         e.stopPropagation();
     });
 

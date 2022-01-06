@@ -63,7 +63,7 @@ class TransactionsController extends ListingBaseController {
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current($allowedKeysForSorting);
         }
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING),applicationConstants::SORT_DESC);
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
         $postedData = FatApp::getPostedData();
@@ -120,7 +120,7 @@ class TransactionsController extends ListingBaseController {
     protected function getSearchForm($fields = []) {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'user_name');
+            $this->addSortingElements($frm, 'utxn_id',applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
@@ -216,8 +216,8 @@ class TransactionsController extends ListingBaseController {
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_id' => Labels::getLabel('LBL_Transaction_Id', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
             'utxn_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
             'utxn_credit' => Labels::getLabel('LBL_Credit', $this->siteLangId),
             'utxn_debit' => Labels::getLabel('LBL_Debit', $this->siteLangId),
@@ -233,8 +233,8 @@ class TransactionsController extends ListingBaseController {
     protected function getDefaultColumns(): array {
         return [
             'listSerial',
-            'user_name',
             'utxn_id',
+            'user_name',
             'utxn_date',
             'utxn_credit',
             'utxn_debit',
@@ -262,4 +262,11 @@ class TransactionsController extends ListingBaseController {
         return $this->nodes;
     }
 
+    public function getDescription()
+    {
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        $this->set('description', Transactions::getAttributesById($recordId, 'utxn_comments'));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 }
