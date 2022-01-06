@@ -399,7 +399,7 @@ $(document).ready(function () {
         }
     });
 
-    $('.dropdown-menu.notificationDropMenuJs').on('click',function(e) {
+    $('.dropdown-menu').on('click',function(e) {
         e.stopPropagation();
     });
 
