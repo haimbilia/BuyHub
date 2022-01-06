@@ -33,11 +33,11 @@ class UserFavoriteShopSearch extends SearchBase
         }
 
         if ($isActive) {
-            $this->addCondition('shop_active', '=', applicationConstants::ACTIVE);
-            $this->addCondition('shop_supplier_display_status', '=', applicationConstants::ACTIVE);
+            $this->addCondition('shop_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            $this->addCondition('shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
         if ($shopSupplierDisplayStatus) {
-            $this->addCondition('shop_supplier_display_status', '=', applicationConstants::ACTIVE);
+            $this->addCondition('shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
         $this->shopsJoined = true;
     }
@@ -82,11 +82,11 @@ class UserFavoriteShopSearch extends SearchBase
 
         $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 's.shop_user_id = u.user_id', 'u');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'u_cred.credential_user_id = u.user_id', 'u_cred');
-        $this->addCondition('u.user_is_supplier', '=', applicationConstants::YES);
+        $this->addCondition('u.user_is_supplier', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
 
         if ($isActive) {
-            $this->addCondition('u_cred.credential_active', '=', applicationConstants::ACTIVE);
-            $this->addCondition('u_cred.credential_verified', '=', applicationConstants::YES);
+            $this->addCondition('u_cred.credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            $this->addCondition('u_cred.credential_verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         }
     }
 
@@ -103,7 +103,7 @@ class UserFavoriteShopSearch extends SearchBase
             $this->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop_country.country_id = shop_country_l.countrylang_country_id AND shop_country_l.countrylang_lang_id = ' . $langId, 'shop_country_l');
         }
         if ($isActive) {
-            $this->addCondition('shop_country.country_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('shop_country.country_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
     }
 
@@ -119,7 +119,7 @@ class UserFavoriteShopSearch extends SearchBase
             $this->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop_state.state_id = shop_state_l.statelang_state_id AND shop_state_l.statelang_lang_id = ' . $langId, 'shop_state_l');
         }
         if ($isActive) {
-            $this->addCondition('shop_state.state_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('shop_state.state_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
     }
 
@@ -128,8 +128,8 @@ class UserFavoriteShopSearch extends SearchBase
         $this->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'ufs.ufs_user_id = uf.user_id', 'uf');
         $this->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uf_cred.credential_user_id = uf.user_id', 'uf_cred');
         if ($isActive) {
-            $this->addCondition('uf_cred.credential_active', '=', applicationConstants::ACTIVE);
-            $this->addCondition('uf_cred.credential_verified', '=', applicationConstants::YES);
+            $this->addCondition('uf_cred.credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            $this->addCondition('uf_cred.credential_verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         }
     }
 

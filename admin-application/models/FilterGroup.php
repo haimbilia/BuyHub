@@ -4,14 +4,12 @@ class FilterGroup extends MyAppModel
 {
     public const DB_TBL = 'tbl_filter_groups';
     public const DB_TBL_PREFIX = 'filtergroup_';
-    private $db;
 
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
-    
+
     public function getSearchObject($isDeleted = true)
     {
         $srch = new SearchBase(static::DB_TBL, 'fg');
@@ -21,7 +19,7 @@ class FilterGroup extends MyAppModel
         $srch->addOrder('fg.' . static::DB_TBL_PREFIX . 'active', 'DESC');
         return $srch;
     }
-    
+
     public function canRecordMarkDelete($id)
     {
         $srch = $this->getSearchObject();

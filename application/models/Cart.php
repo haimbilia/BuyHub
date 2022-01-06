@@ -65,7 +65,7 @@ class Cart extends FatModel
         $srch = new SearchBase('tbl_user_cart');
         $srch->doNotCalculateRecords();
         $srch->addCondition('usercart_user_id', '=', $this->cart_user_id);
-        $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $rs = $srch->getResultSet();
         $this->cartSameSessionUser = true;
         if ($row = FatApp::getDb()->fetch($rs)) {
@@ -126,7 +126,7 @@ class Cart extends FatModel
 
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', $userId);
-        $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -392,7 +392,7 @@ class Cart extends FatModel
             //$this->getBasketProducts($siteLangId);
 
             $productSelectedShippingMethodsArr = $this->getProductShippingMethod();
-            
+
             $maxConfiguredCommissionVal = FatApp::getConfig("CONF_MAX_COMMISSION", FatUtility::VAR_INT, 0);
 
             /* $db = FatApp::getDb();
@@ -1818,7 +1818,7 @@ class Cart extends FatModel
 
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', $tempUserId);
-        $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 

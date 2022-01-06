@@ -7,12 +7,10 @@ class QuestionBanks extends MyAppModel
     
     public const DB_TBL_PREFIX = 'qbank_';
     public const DB_TBL_LANG_PREFIX = 'qbanklang_';
-    private $db;
-
+   
     public function __construct($id = 0)
     {
-        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
+        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);       
     }
     
     public static function getSearchObject($langId = 0, $active = true, $deleted = true)

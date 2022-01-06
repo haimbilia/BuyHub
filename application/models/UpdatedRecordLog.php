@@ -44,11 +44,11 @@ class UpdatedRecordLog extends MyAppModel
         if (1 > $pageSize) {
             $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         }
-        
+
         $srch = static::getSearchObject();
         $srch->doNotCalculateRecords();
         $srch->setPageSize($pageSize);
-        $srch->addCondition(static::DB_TBL_PREFIX . 'executed', '!=', applicationConstants::YES);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'executed', '!=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addOrder(static::DB_TBL_PREFIX . 'added_on', 'asc');
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
@@ -67,7 +67,7 @@ class UpdatedRecordLog extends MyAppModel
         $srch->joinShops(0, false, false, $shopId);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('shop_id', '=', $shopId);
+        $srch->addCondition('shop_id', '=', 'mysql_func_' . $shopId, 'AND', true);
         $srch->addMultipleFields(array('distinct(product_id)'));
         $rs = $srch->getResultSet();
         while ($record = FatApp::getDb()->fetch($rs)) {
@@ -127,7 +127,7 @@ class UpdatedRecordLog extends MyAppModel
         $srch->joinProductToCategory(0, false, false, false);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('prodcat_id', '=', $categoryId);
+        $srch->addCondition('prodcat_id', '=', 'mysql_func_' . $categoryId, 'AND', true);
         $srch->addMultipleFields(array('distinct(product_id)'));
         $rs = $srch->getResultSet();
         while ($record = FatApp::getDb()->fetch($rs)) {
@@ -156,7 +156,7 @@ class UpdatedRecordLog extends MyAppModel
         $srch->joinBrands(0, false, false, false);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('brand_id', '=', $brandId);
+        $srch->addCondition('brand_id', '=', 'mysql_func_' . $brandId, 'AND', true);
         $srch->addMultipleFields(array('distinct(product_id)'));
         $rs = $srch->getResultSet();
         while ($record = FatApp::getDb()->fetch($rs)) {
@@ -188,7 +188,7 @@ class UpdatedRecordLog extends MyAppModel
         $srch->joinShopCountry(0, false);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('country_id', '=', $countryId);
+        $srch->addCondition('country_id', '=', 'mysql_func_' . $countryId, 'AND', true);
         $srch->addMultipleFields(array('distinct(product_id)'));
         $rs = $srch->getResultSet();
         while ($record = FatApp::getDb()->fetch($rs)) {
@@ -220,7 +220,7 @@ class UpdatedRecordLog extends MyAppModel
         $srch->joinShopState(0, false);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('state_id', '=', $stateId);
+        $srch->addCondition('state_id', '=', 'mysql_func_' .$stateId, 'AND', true);
         $srch->addMultipleFields(array('distinct(product_id)'));
         $rs = $srch->getResultSet();
         while ($record = FatApp::getDb()->fetch($rs)) {
@@ -246,8 +246,8 @@ class UpdatedRecordLog extends MyAppModel
                 static::DB_TBL_PREFIX . 'executed' => 1
             ),
             array(
-            'smt' => static::DB_TBL_PREFIX . 'record_type = ? and ' . static::DB_TBL_PREFIX . 'record_id = ?  and ' . static::DB_TBL_PREFIX . 'subrecord_id = ?' ,
-            'vals' => array($type, $recordId, $subRecordId)
+                'smt' => static::DB_TBL_PREFIX . 'record_type = ? and ' . static::DB_TBL_PREFIX . 'record_id = ?  and ' . static::DB_TBL_PREFIX . 'subrecord_id = ?',
+                'vals' => array($type, $recordId, $subRecordId)
             )
         );
     }
@@ -255,7 +255,7 @@ class UpdatedRecordLog extends MyAppModel
     /**
      * Maintain records queue for Full text Search server .
      *
-    */
+     */
     public static function updateQueue($data)
     {
         if (empty($data)) {

@@ -1,6 +1,7 @@
 <?php
 
-class TaxStructure extends MyAppModel {
+class TaxStructure extends MyAppModel
+{
 
     public const DB_TBL = 'tbl_tax_structure';
     public const DB_TBL_PREFIX = 'taxstr_';
@@ -11,7 +12,8 @@ class TaxStructure extends MyAppModel {
 
     private $db;
 
-    public function __construct($id = 0) {
+    public function __construct($id = 0)
+    {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
         $this->db = FatApp::getDb();
     }
@@ -21,17 +23,18 @@ class TaxStructure extends MyAppModel {
      *
      * @return object
      */
-    public static function getSearchObject($langId = 0) {
+    public static function getSearchObject($langId = 0)
+    {
         $langId = FatUtility::int($langId);
         $srch = new SearchBase(static::DB_TBL, 'ts');
 
         if ($langId > 0) {
             $srch->joinTable(
-                    static::DB_TBL_LANG,
-                    'LEFT OUTER JOIN',
-                    'ts_l.' . static::DB_TBL_LANG_PREFIX . 'taxstr_id = ts.' . static::tblFld('id') . ' and
+                static::DB_TBL_LANG,
+                'LEFT OUTER JOIN',
+                'ts_l.' . static::DB_TBL_LANG_PREFIX . 'taxstr_id = ts.' . static::tblFld('id') . ' and
 			ts_l.' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId,
-                    'ts_l'
+                'ts_l'
             );
         }
         return $srch;
@@ -44,12 +47,13 @@ class TaxStructure extends MyAppModel {
      * @param  bool $onlyParent
      * @return object
      */
-    public static function getAllAssoc($langId, $onlyParent = true): array {
+    public static function getAllAssoc($langId, $onlyParent = true): array
+    {
         $langId = FatUtility::int($langId);
         $srch = static::getSearchObject($langId);
         $srch->addMultipleFields(array('taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name'));
         if ($onlyParent) {
-            $srch->addCondition('taxstr_parent', '=', 0);
+            $srch->addCondition('taxstr_parent', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -62,10 +66,12 @@ class TaxStructure extends MyAppModel {
      * @param  int $parentId
      * @return object
      */
-    public function getCombinedTaxes($parentId): array {
+    public function getCombinedTaxes($parentId): array
+    {
+        $parentId = FatUtility::int($parentId);
         $srch = static::getSearchObject();
         $srch->addMultipleFields(array('taxstr_id'));
-        $srch->addCondition('taxstr_parent', '=', $parentId);
+        $srch->addCondition('taxstr_parent', '=', 'mysql_func_' . $parentId, 'AND', true);
         $srch->addOrder('taxstr_id', 'ASC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -92,12 +98,15 @@ class TaxStructure extends MyAppModel {
      * @param  int $parentId
      * @return object
      */
-    public function getCombinedTaxesForLang($parentId, $lang): array {
+    public function getCombinedTaxesForLang($parentId, $langId): array
+    {
+        $parentId = FatUtility::int($parentId);
+        $langId = FatUtility::int($langId);
         $srch = static::getSearchObject();
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id=taxstrlang_taxstr_id', 'taxLang');
         $srch->addMultipleFields(array('taxstr_id', 'taxstr_name'));
-        $srch->addCondition('taxstr_parent', '=', $parentId);
-        $srch->addCondition('taxstrlang_lang_id', '=', $lang);
+        $srch->addCondition('taxstr_parent', '=', 'mysql_func_' . $parentId, 'AND', true);
+        $srch->addCondition('taxstrlang_lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
         $srch->addOrder('taxstrlang_taxstr_id', 'ASC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -110,10 +119,12 @@ class TaxStructure extends MyAppModel {
      * @param  int $parentId
      * @return object
      */
-    public function getCombinedTax($parentId): array {
+    public function getCombinedTax($parentId): array
+    {
+        $parentId = FatUtility::int($parentId);
         $srch = static::getSearchObject();
         $srch->addMultipleFields(array('taxstr_id', 'taxstr_identifier'));
-        $srch->addCondition('taxstr_parent', '=', $parentId);
+        $srch->addCondition('taxstr_parent', '=', 'mysql_func_' . $parentId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
@@ -126,10 +137,12 @@ class TaxStructure extends MyAppModel {
      * @return object
      */
     /* @@ todo We have to modifiy the current procress for tax component */
-    public function getCombinedTaxesWithLang($parentId, $data = []): array {
+    public function getCombinedTaxesWithLang($parentId, $data = []): array
+    {
+        $parentId = FatUtility::int($parentId);
         $srch = static::getSearchObject();
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxstr_id=taxstrlang_taxstr_id', 'taxLang');
-        $srch->addCondition('taxstr_parent', '=', $parentId);
+        $srch->addCondition('taxstr_parent', '=', 'mysql_func_' . $parentId, 'AND', true);
         if (isset($data['deleted_taxstr_id']) && !empty(array_filter($data['deleted_taxstr_id']))) {
             $srch->addCondition('taxstr_id', 'NOT IN', array_filter($data['deleted_taxstr_id']));
         }
@@ -168,11 +181,12 @@ class TaxStructure extends MyAppModel {
      * @param int $userId
      * @return array
      */
-    public function getCombinedTaxesByParent(int $langId, int $ruleId, int $userId = 0): array {
+    public function getCombinedTaxesByParent(int $langId, int $ruleId, int $userId = 0): array
+    {
         $srch = static::getSearchObject($langId);
         $srch->joinTable(TaxRule::DB_DETAIL_TBL, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstr_id and taxruledet_taxrule_id = ' . $ruleId . ' and taxruledet_user_id =' . $userId);
         $srch->addMultipleFields(array('taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxruledet_rate'));
-        $srch->addCondition('taxstr_parent', '=', $this->mainTableRecordId);
+        $srch->addCondition('taxstr_parent', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         return FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -185,7 +199,8 @@ class TaxStructure extends MyAppModel {
      * @param  int $taxStrId
      * @return object
      */
-    public static function getForm($langId, $taxStrId = 0) {
+    public static function getForm($langId, $taxStrId = 0)
+    {
         $taxStrId = FatUtility::int($taxStrId);
 
         $frm = new Form('frmTaxStructure');
@@ -231,7 +246,8 @@ class TaxStructure extends MyAppModel {
      * @param  array $post
      * @return bool
      */
-    public function addUpdateData($post): bool {
+    public function addUpdateData($post): bool
+    {
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         if (empty($post)) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', $siteDefaultLangId);
@@ -286,7 +302,8 @@ class TaxStructure extends MyAppModel {
      * @param  array $post
      * @return bool
      */
-    public function addUpdateCombinedData($post, $parentId): bool {
+    public function addUpdateCombinedData($post, $parentId): bool
+    {
         $parentId = FatUtility::int($parentId);
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 
@@ -346,7 +363,8 @@ class TaxStructure extends MyAppModel {
      * @param  array $post
      * @return bool
      */
-    public function addUpdateCombinedTax($post, $parentId, $langId): bool {
+    public function addUpdateCombinedTax($post, $parentId, $langId): bool
+    {
         $parentId = FatUtility::int($parentId);
         if (!FatApp::getDb()->deleteRecords(static::DB_TBL, array('smt' => 'taxstr_parent = ?', 'vals' => array($parentId)))) {
             $this->error = FatApp::getDb()->getError();
@@ -378,7 +396,8 @@ class TaxStructure extends MyAppModel {
      * @param  mixed $langId
      * @return bool
      */
-    public function saveTranslatedLangData($langId): bool {
+    public function saveTranslatedLangData($langId): bool
+    {
         $langId = FatUtility::int($langId);
         if ($this->mainTableRecordId < 1 || $langId < 1) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
@@ -400,7 +419,8 @@ class TaxStructure extends MyAppModel {
      * @param  int $toLangId
      * @return void
      */
-    public function getTranslatedData($data, $toLangId) {
+    public function getTranslatedData($data, $toLangId)
+    {
         $toLangId = FatUtility::int($toLangId);
         if (empty($data) || $toLangId < 1) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
@@ -416,10 +436,11 @@ class TaxStructure extends MyAppModel {
         return $translatedData;
     }
 
-    public static function getDefaultTaxStructureId() {
+    public static function getDefaultTaxStructureId()
+    {
 
         $srch = self::getSearchObject();
-        $srch->addCondition('taxstr_is_combined', '=', 0);
+        $srch->addCondition('taxstr_is_combined', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addFld('taxstr_id');
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -449,5 +470,4 @@ class TaxStructure extends MyAppModel {
         }
         return $row['taxstr_id'];
     }
-
 }

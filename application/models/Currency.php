@@ -30,7 +30,7 @@ class Currency extends MyAppModel
         }
 
         if ($isActive) {
-            $srch->addCondition('curr.currency_active', '=', 1);
+            $srch->addCondition('curr.currency_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         return $srch;

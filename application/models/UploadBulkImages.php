@@ -21,10 +21,10 @@ class UploadBulkImages extends FatModel
     {
         $srch = AttachedFile::getSearchObject();
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'credential_user_id = afile_record_id');
-        $srch->addCondition('afile_type', '=', AttachedFile::FILETYPE_BULK_IMAGES);
+        $srch->addCondition('afile_type', '=', 'mysql_func_' . AttachedFile::FILETYPE_BULK_IMAGES, 'AND', true);
 
         if (0 < $loggedUserId) {
-            $srch->addCondition('afile_record_id', '=', $loggedUserId);
+            $srch->addCondition('afile_record_id', '=', 'mysql_func_' . $loggedUserId, 'AND', true);
         }
 
         $srch->addMultipleFields(

@@ -4,21 +4,21 @@ class UserPermission extends MyAppModel
 {
     public const DB_TBL = 'tbl_user_permissions';
     public const DB_TBL_PREFIX = 'userperm_';
-    
-    public function __construct(){
-        
+
+    public function __construct()
+    {
     }
-    
+
     public static function getSearchObject($userId = 0)
     {
         $srch = new SearchBase(static::DB_TBL, 'up');
-
+        $userId = FatUtility::int($userId);
         if ($userId) {
-            $srch->addCondition(static::tblFld('user_id'), '=', $userId);
+            $srch->addCondition(static::tblFld('user_id'), '=', 'mysql_func_' . $userId, 'AND', true);
         }
         return $srch;
     }
-    
+
     public static function getSellerPermissions($userId = 0)
     {
         $srch = static::getSearchObject($userId);
@@ -35,7 +35,7 @@ class UserPermission extends MyAppModel
         if ($updateAll) {
             $permissionModules = UserPrivilege::getSellerPermissionModulesArr($siteLangId);
             foreach ($permissionModules as $key => $val) {
-                $assignValues['userperm_section_id'] = $key;                
+                $assignValues['userperm_section_id'] = $key;
                 if (!FatApp::getDb()->insertFromArray(
                     static::DB_TBL,
                     $assignValues,

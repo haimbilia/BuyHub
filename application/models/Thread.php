@@ -33,9 +33,9 @@ class Thread extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-        static::THREAD_TYPE_PRODUCT => Labels::getLabel('LBL_Message_Product', $langId),
-        static::THREAD_TYPE_SHOP => Labels::getLabel('LBL_Order_Message_Shop', $langId),
-        static::THREAD_TYPE_ORDER_PRODUCT => Labels::getLabel('LBL_Message_Order', $langId),
+            static::THREAD_TYPE_PRODUCT => Labels::getLabel('LBL_Message_Product', $langId),
+            static::THREAD_TYPE_SHOP => Labels::getLabel('LBL_Order_Message_Shop', $langId),
+            static::THREAD_TYPE_ORDER_PRODUCT => Labels::getLabel('LBL_Message_Order', $langId),
         );
     }
 
@@ -47,7 +47,7 @@ class Thread extends MyAppModel
         }
         $db = FatApp::getDb();
         $srch = new SearchBase(static::DB_TBL_THREAD_MESSAGES);
-        $srch->addCondition('message_id', '=', $recordId);
+        $srch->addCondition('message_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $srch->joinTable(static::DB_TBL, 'LEFT JOIN', 'message_thread_id = th.thread_id', 'th');
         if (null != $attr) {
             if (is_array($attr)) {
@@ -87,10 +87,10 @@ class Thread extends MyAppModel
             Thread::DB_TBL_THREAD_MESSAGES,
             $data,
             array(
-            'smt' => '`message_id` = ?',
-            'vals' => array(
-            $messageId
-            )
+                'smt' => '`message_id` = ?',
+                'vals' => array(
+                    $messageId
+                )
             )
         )) {
             $this->error = FatApp::getDb()->getError();
@@ -103,7 +103,7 @@ class Thread extends MyAppModel
         $srch = new SearchBase(static::DB_TBL_THREAD_MESSAGES, 'ttm');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('message_deleted', '=', 0);
+        $srch->addCondition('message_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         if ($type) {
             $srch->addCondition('message_is_unread', '=', $type);
         }
@@ -119,11 +119,11 @@ class Thread extends MyAppModel
         }
 
         if ($this->mainTableRecordId > 0) {
-            $srch->addCondition('message_thread_id', '=', $this->mainTableRecordId);
+            $srch->addCondition('message_thread_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         }
 
         $parentAndThierChildIds = User::getParentAndTheirChildIds($userId);
-       
+
         $cnd = $srch->addCondition('ttm.message_to', 'in', $parentAndThierChildIds);
         /* $cnd->attachCondition('ttm.message_to','=',$userId,'OR'); */
 
@@ -145,9 +145,10 @@ class Thread extends MyAppModel
         $this->error = FatApp::getDb()->getError();
         return false;
     }
-    
-    public function markMessageReadFromUserArr($threadId, $userIds){    
-        if(FatApp::getDb()->query('update tbl_thread_messages set message_is_unread = ' . self::MESSAGE_IS_READ . ' where message_thread_id = '. $threadId . ' and  message_to in (' . implode(',', $userIds) . ')')){
+
+    public function markMessageReadFromUserArr($threadId, $userIds)
+    {
+        if (FatApp::getDb()->query('update tbl_thread_messages set message_is_unread = ' . self::MESSAGE_IS_READ . ' where message_thread_id = ' . $threadId . ' and  message_to in (' . implode(',', $userIds) . ')')) {
             return true;
         }
         $this->error = FatApp::getDb()->getError();
@@ -162,7 +163,7 @@ class Thread extends MyAppModel
         }
 
         $db = FatApp::getDb();
-        if (!$db->updateFromArray(static::DB_TBL_THREAD_MESSAGES, array( static::DB_TBL_THREAD_MESSAGES_PREFIX . 'deleted' => 1), array('smt' => static::DB_TBL_THREAD_MESSAGES_PREFIX . 'id = ?', 'vals' => array($message_id)))) {
+        if (!$db->updateFromArray(static::DB_TBL_THREAD_MESSAGES, array(static::DB_TBL_THREAD_MESSAGES_PREFIX . 'deleted' => 1), array('smt' => static::DB_TBL_THREAD_MESSAGES_PREFIX . 'id = ?', 'vals' => array($message_id)))) {
             $this->error = $db->getError();
             return false;
         }
