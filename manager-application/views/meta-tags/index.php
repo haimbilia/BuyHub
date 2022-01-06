@@ -33,7 +33,7 @@
                                         <a class="settings-inner-link" href="javascript:void(0)" onclick='tabSearchRecords("<?php echo $tabMetaType; ?>")'>
                                             <i class="settings-inner-icn">
                                                 <svg class="svg" width="20" height="20">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-extension">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.meta.svg#icon_<?php echo $tabMetaType;?>">
                                                     </use>
                                                 </svg>
                                             </i>
