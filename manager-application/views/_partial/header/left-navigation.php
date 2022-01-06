@@ -13,6 +13,17 @@
     </div>
     <div class="sidebar-menu sidebarMenuJs" id="sidebar-menu">
         <ul class="menu">
+            <li class="menu-item dropdownJs">
+                <button class="menu-section navLinkJs" type="button" data-selector='["Home"]' title="<?php echo Labels::getLabel('NAV_HOME', $siteLangId); ?>" onclick="redirectFn('<?php echo UrlHelper::generateUrl(); ?>')">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
+                            </use>
+                        </svg>
+                    </span>
+                    <span class="menu-title"><?php echo Labels::getLabel('NAV_HOME', $siteLangId); ?></span>
+                </button>
+            </li>
             <?php
             if (
                 $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true) ||
@@ -27,7 +38,7 @@
                     <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_CATALOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-product-catalog">
                                 </use>
                             </svg>
                         </span>
@@ -401,10 +412,8 @@
             <?php
             if (
                 $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) /* ||
-              $objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true) ||
-              $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-              $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true) */
+                $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
                 <li class="menu-item dropdownJs">
@@ -432,7 +441,7 @@
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_ADMIN_USERS', $siteLangId); ?></span>
                                     </a>
                                 </li>
-                            <?php } ?>
+                            <?php } ?>                            
                             <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Users"]' href="<?php echo UrlHelper::generateUrl('Users'); ?>">
@@ -503,30 +512,19 @@
                                     </a>
                                 </li>
                             <?php } ?>
-                            <?php /* if ($objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) || $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a class="nav_link navLinkJs dropdown-toggle-custom"
-                              href="<?php echo UrlHelper::generateUrl('AdminUsers') ?>">
-                              <?php echo Labels::getLabel('LBL_Admin_Sub_Users', $siteLangId); ?>
-                              </a>
-                              </li>
-                              <?php } ?>
-                              <?php if ($objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a class="nav_link navLinkJs dropdown-toggle-custom"
-                              href="<?php echo UrlHelper::generateUrl('Messages'); ?>">
-                              <?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>
-                              </a>
-                              </li>
-                              <?php } ?>
-                              <?php if ($objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a class="nav_link navLinkJs dropdown-toggle-custom"
-                              href="<?php echo UrlHelper::generateUrl('Users', 'sellerForm'); ?>">
-                              <?php echo Labels::getLabel('LBL_Seller_Approval_Form', $siteLangId); ?>
-                              </a>
-                              </li>
-                              <?php } */ ?>
+                            <?php if ($objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Messages"]' href="<?php echo UrlHelper::generateUrl('Messages') ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_MESSAGES', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
@@ -864,7 +862,8 @@
                 $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewCollections(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
                 <li class="menu-item dropdownJs">
@@ -970,6 +969,18 @@
                                                 </use>
                                             </svg>
                                         </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_NAVIGATIONS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($objPrivilege->canViewCollections(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Collections"]' href="<?php echo UrlHelper::generateUrl('Collections'); ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                                </use>
+                                            </svg>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_COLLECTIONS', $siteLangId); ?></span>
                                     </a>
                                 </li>
                             <?php } ?>

@@ -76,11 +76,6 @@ class AbusiveWordsController extends ListingBaseController
         $srch->addMultipleFields(['aw.*', 'tl.*']);
         $srch->joinTable('tbl_languages', 'inner join', 'abusive_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE, 'tl');
 
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
         if (!empty($post['keyword'])) {
             $srch->addCondition('aw.abusive_keyword', 'like', '%' . $post['keyword'] . '%');
         }
@@ -89,6 +84,10 @@ class AbusiveWordsController extends ListingBaseController
             $srch->addCondition('aw.abusive_lang_id', '=', $post['lang_id']);
         }
 
+        $srch->addOrder($sortBy, $sortOrder);
+
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 

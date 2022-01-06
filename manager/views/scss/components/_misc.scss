@@ -2137,6 +2137,7 @@ strong {
 }
 
 .cms {
+    word-break: break-all;
     font-size: 0.85rem;
     line-height: 1.8;
     color: $txt-body;
@@ -2399,7 +2400,9 @@ strong {
         list-style: none;
         li {
             margin: 0.7rem 0;
-            &:last-child{ margin-bottom: 0;}
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
     }
 

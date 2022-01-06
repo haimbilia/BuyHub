@@ -1,5 +1,8 @@
 $(document).ready(function () {
     bindSortable();
+    $(document).on('change', '.orderStatusClassJs', function () {
+        $(this).css("color", $('option:selected', this).css("color"));
+    });
 });
 
 $(document).ajaxComplete(function () {
@@ -51,4 +54,19 @@ $(document).ajaxComplete(function () {
         });
     }
 
+    editRecord = function (recordId) {
+        data = "recordId=" + recordId;
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
+            $.ykmodal(t.html, false);
+            $.ykmsg.close();
+            fcom.removeLoader();
+
+            if (0 < $('.orderStatusClassJs').length) {
+                $('.orderStatusClassJs option').each(function () {
+                    $(this).attr('class', 'label ' + $(this).text());
+                });
+                $('.orderStatusClassJs').css("color", $('.orderStatusClassJs option:selected').css("color"));
+            }
+        });
+    };
 })();

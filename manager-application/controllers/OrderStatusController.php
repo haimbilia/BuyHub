@@ -204,7 +204,7 @@ class OrderStatusController extends ListingBaseController
 
         /* Please retain actual css class as option text. As that class used in JS to fill color of that option. */
         $classArr = applicationConstants::getClassArr();
-        $frm->addSelectBox(Labels::getLabel('FRM_ORDER_STATUS_COLOR_CLASS', $this->siteLangId), 'orderstatus_color_class', $classArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ORDER_STATUS_TEXT_COLOR', $this->siteLangId), 'orderstatus_color_class', $classArr, '', array(), '');
 
         $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->siteLangId);
 
