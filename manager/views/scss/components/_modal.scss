@@ -24,7 +24,7 @@
         padding-#{$end-direction}: 0 !important;
         .modal-dialog-vertical {
             height: 100%;
-            max-width: 400px;
+            max-width: 500px;
             margin: 0;
             margin-#{$start-direction}: auto;
             .modal-content {
@@ -39,7 +39,7 @@
                 max-width: 250px;
             }
             &-md {
-                max-width: 700px;
+                max-width: 750px;
             }
             &-lg {
                 max-width: 1000px;
