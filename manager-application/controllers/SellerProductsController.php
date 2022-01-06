@@ -223,7 +223,10 @@ class SellerProductsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $sellerProductRow = SellerProduct::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $selProdId,  null, true);
+        $sellerProductLangRow = SellerProduct::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $selProdId);
+        if(false != $sellerProductLangRow){
+            $sellerProductRow = array_merge($sellerProductRow, $sellerProductLangRow);
+        }        
 
         $frmSellerProduct = $this->getSellerProductForm($sellerProductRow['selprod_product_id']);
 

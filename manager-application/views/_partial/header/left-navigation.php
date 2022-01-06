@@ -87,7 +87,7 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["sellerProducts"]' href="<?php echo UrlHelper::generateUrl('sellerProducts'); ?>">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["SellerProducts"]' href="<?php echo UrlHelper::generateUrl('SellerProducts'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
@@ -679,7 +679,9 @@
                                     </a>
                                 </li>
                             <?php } ?>
-                            <?php if ($objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php 
+                            $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_PUSH_NOTIFICATION, 'plugin_active');
+                            if ($objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true) && false != $active && !empty($active)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["PushNotifications"]' href="<?php echo UrlHelper::generateUrl('PushNotifications'); ?>">
                                         <span class="nav_icon">

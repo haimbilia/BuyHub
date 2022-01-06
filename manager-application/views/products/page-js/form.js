@@ -750,9 +750,10 @@ $(document).on('click', '.warrantyTypeJs', function () {
 });
 
 $(document).on('change', '#product_fulfillment_type', function () {
-    if($(this).data('shippingApiActive') == 1){
+    if($('#shipping_profile').data('shippingApiActive') == 1){
         return;        
     }
+   
     if($(this).val() == fulfilmentTypePickup){
         $('#shipping_profile').parent().parent().addClass('hide');
     }else{

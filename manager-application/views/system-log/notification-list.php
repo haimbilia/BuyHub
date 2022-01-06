@@ -15,4 +15,5 @@ if (count($arrListing) > 0) {
 } else {
 	$tbody = new HtmlElement("div");
 	include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+	echo $tbody->getHtml();
 }

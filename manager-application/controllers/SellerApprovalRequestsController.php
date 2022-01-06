@@ -38,7 +38,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_Keyword', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'usuprequest_status');
+            $this->addSortingElements($frm, 'usuprequest_date',applicationConstants::SORT_DESC);
         }
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', ['-1' => Labels::getLabel('FRM_ALL', $this->siteLangId)] + User::getSupplierReqStatusArr($this->siteLangId), '', array(), '');
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
@@ -69,16 +69,16 @@ class SellerApprovalRequestsController extends ListingBaseController
 
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'usuprequest_date');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'usuprequest_date';
         }
 
         if ('user_details' == $sortBy) {
             $sortBy = 'user_name';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING),applicationConstants::SORT_DESC);
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
@@ -260,6 +260,7 @@ class SellerApprovalRequestsController extends ListingBaseController
             'listSerial',
             'usuprequest_reference',
             'user_details',
+            'usuprequest_date',
             'usuprequest_status',
             'action',
         ];
