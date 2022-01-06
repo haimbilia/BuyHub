@@ -20,6 +20,7 @@ class GuestUserController extends MyAppController
         $socialLoginApis = Plugin::getDataByType(Plugin::TYPE_SOCIAL_LOGIN, $this->siteLangId);
 
         $loginFrm = $this->getLoginForm();
+        $loginFrm->addSecurityToken();
         $loginData = array(
             'loginFrm' => $loginFrm,
             'socialLoginApis' => $socialLoginApis,
@@ -56,6 +57,7 @@ class GuestUserController extends MyAppController
     public function registerFormDetail($isRegisterForm, $signUpWithPhone = 0)
     {
         $registerFrm = $this->getRegistrationForm(true, $signUpWithPhone);
+        $registerFrm->addSecurityToken();
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
         $cPageSrch->doNotCalculateRecords();
@@ -340,6 +342,7 @@ class GuestUserController extends MyAppController
     {
         $includeGuestLogin = FatApp::getPostedData('includeGuestLogin', FatUtility::VAR_STRING, false);
         $frm = $this->getLoginForm($includeGuestLogin);
+        $frm->addSecurityToken();
         $socialLoginApis = Plugin::getDataByType(Plugin::TYPE_SOCIAL_LOGIN, $this->siteLangId);
         $this->set('loginFrm', $frm);
         $this->set('siteLangId', $this->siteLangId);
@@ -378,7 +381,8 @@ class GuestUserController extends MyAppController
         }
 
         $registerFrm = $this->getRegistrationForm();
-
+        $registerFrm->addSecurityToken();
+        
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
         $cPageSrch->doNotCalculateRecords();
@@ -434,8 +438,7 @@ class GuestUserController extends MyAppController
         $signUpWithPhone = FatApp::getPostedData('signUpWithPhone', FatUtility::VAR_INT, 0);
         $showNewsLetterCheckBox = 0 < $signUpWithPhone ? false : true;
 
-        $frm = $this->getRegistrationForm($showNewsLetterCheckBox, $signUpWithPhone);
-
+        $frm = $this->getRegistrationForm($showNewsLetterCheckBox, $signUpWithPhone);        
         $userName = FatApp::getPostedData('user_username', FatUtility::VAR_STRING, '');
         if (empty($userName) || false === ValidateElement::fatbitUsername($userName)) {
             $message = Labels::getLabel("MSG_INVALID_FATBIT_USERNAME", $this->siteLangId);
@@ -449,7 +452,8 @@ class GuestUserController extends MyAppController
             LibHelper::exitWithError($message, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
         }
-
+        $frm->expireSecurityToken(FatApp::getPostedData());
+        
         $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $phoneNumber = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, '');
         if ((0 < $signUpWithPhone && empty($phoneNumber)) && empty($dialCode)) {
