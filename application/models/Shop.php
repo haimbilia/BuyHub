@@ -7,7 +7,7 @@ class Shop extends MyAppModel
 
     public const DB_TBL_LANG = 'tbl_shops_lang';
     public const DB_TBL_LANG_PREFIX = 'shoplang_';
-    
+
     public const DB_TBL_STATS = 'tbl_shop_stats';
     public const DB_TBL_STATS_PREFIX = 'sstats_';
 
@@ -69,7 +69,7 @@ class Shop extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 's');
 
         if ($isActive == true) {
-            $srch->addCondition(static::tblFld('active'), '=', applicationConstants::ACTIVE);
+            $srch->addCondition(static::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($langId > 0) {
@@ -101,7 +101,7 @@ class Shop extends MyAppModel
 
         $db = FatApp::getDb();
         $srch = static::getSearchObject($isActive, $langId, true);
-        $srch->addCondition(static::tblFld('user_id'), '=', $userId);
+        $srch->addCondition(static::tblFld('user_id'), '=', 'mysql_func_' . $userId, 'AND', true);
 
         if (null != $attr) {
             if (is_array($attr)) {
@@ -129,7 +129,7 @@ class Shop extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'ts');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addCondition(static::tblFld('id'), '=', $recordId);
+        $srch->addCondition(static::tblFld('id'), '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if (true === $joinSpecifics) {
             $srch->joinTable(
@@ -171,13 +171,13 @@ class Shop extends MyAppModel
         $srch->joinShops();
         $srch->joinProductToCategory($siteLangId);
 
-        $srch->addCondition('selprod_user_id', '=', $userId);
+        $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         if ($shopId > 0) {
-            $srch->addCondition('shop_id', '=', $shopId);
+            $srch->addCondition('shop_id', '=', 'mysql_func_' . $shopId, 'AND', true);
         }
 
         if ($prodcat_id > 0) {
-            $srch->addCondition('prodcat_id', '=', $prodcat_id);
+            $srch->addCondition('prodcat_id', '=', 'mysql_func_' . $prodcat_id, 'AND', true);
         }
         $srch->addGroupBy('prodcat_id');
         $srch->addMultipleFields(array('prodcat_id', 'ifnull(prodcat_name,prodcat_identifier) as prodcat_name', 'shop_id'));
@@ -190,7 +190,7 @@ class Shop extends MyAppModel
         $langId = FatUtility::int($langId);
         $db = FatApp::getDb();
         $srch = static::getSearchObject($isActive, $langId);
-        $srch->addCondition(static::tblFld('id'), '=', $shop_id);
+        $srch->addCondition(static::tblFld('id'), '=', 'mysql_func_' . $shop_id, 'AND', true);
         $srch->joinTable(States::DB_TBL, 'LEFT JOIN', 's.shop_state_id=ss.state_id and ss.state_active=' . applicationConstants::ACTIVE, 'ss');
         $srch->joinTable(Countries::DB_TBL, 'LEFT JOIN', 's.shop_country_id=sc.country_id and sc.country_active=' . applicationConstants::ACTIVE, 'sc');
 
@@ -200,9 +200,9 @@ class Shop extends MyAppModel
         }
 
         if ($isActive) {
-            $srch->addCondition('s.shop_active', '=', $isActive);
+            $srch->addCondition('s.shop_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
-        $srch->addCondition('s.shop_id', '=', $shop_id);
+        $srch->addCondition('s.shop_id', '=', 'mysql_func_' . $shop_id, 'AND', true);
         if (null != $attr) {
             if (is_array($attr)) {
                 $srch->addMultipleFields($attr);
@@ -400,7 +400,7 @@ class Shop extends MyAppModel
 
         $srch = static::getSearchObject($isActive, $langId);
         $srch->addMultipleFields(array('IFNULL(shop_name, shop_identifier) as shop_name'));
-        $srch->addCondition('shop_id', '=', $shopId);
+        $srch->addCondition('shop_id', '=', 'mysql_func_' . $shopId, 'AND', true);
         $srch->setPageSize(1);
         $shopRs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($shopRs);
