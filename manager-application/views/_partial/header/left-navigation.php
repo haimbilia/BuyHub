@@ -679,7 +679,9 @@
                                     </a>
                                 </li>
                             <?php } ?>
-                            <?php if ($objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <?php 
+                            $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_PUSH_NOTIFICATION, 'plugin_active');
+                            if ($objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true) && false != $active && !empty($active)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["PushNotifications"]' href="<?php echo UrlHelper::generateUrl('PushNotifications'); ?>">
                                         <span class="nav_icon">
