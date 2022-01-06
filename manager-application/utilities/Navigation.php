@@ -9,28 +9,28 @@ class Navigation
         
         /* seller approval requests */
         $supReqSrchObj = $userObj->getUserSupplierRequestsObj();
-        $supReqSrchObj->addCondition('usuprequest_status', '=', 0);
+        $supReqSrchObj->addCondition('usuprequest_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $supReqSrchObj->addMultipleFields(array('count(usuprequest_id) as countOfRec'));
         $supReqResult = $db->fetch($supReqSrchObj->getResultset());
         $supReqCount = FatUtility::int($supReqResult['countOfRec']);
         
         /* product catalog requests */
         $catReqSrchObj = $userObj->getUserCatalogRequestsObj();
-        $catReqSrchObj->addCondition('scatrequest_status', '=', 0);
+        $catReqSrchObj->addCondition('scatrequest_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $catReqSrchObj->addMultipleFields(array('count(scatrequest_id) as countOfRec'));
         $catReqResult = $db->fetch($catReqSrchObj->getResultset());
         $catReqCount = FatUtility::int($catReqResult['countOfRec']);
         
         /* Custom catalog requests */
         $custReqSrchObj = ProductRequest::getSearchObject(0, false, true);
-        $custReqSrchObj->addCondition('preq_status', '=', ProductRequest::STATUS_PENDING);
+        $custReqSrchObj->addCondition('preq_status', '=', 'mysql_func_' .ProductRequest::STATUS_PENDING, 'AND', true);
         $custReqSrchObj->addMultipleFields(array('count(preq_id) as countOfRec'));
         $custProdReqResult = $db->fetch($custReqSrchObj->getResultset());
         $custProdReqCount = FatUtility::int($custProdReqResult['countOfRec']);
         
         /* Custom brand requests */
         $brandReqSrchObj = Brand::getSearchObject(0, true, false);
-        $brandReqSrchObj->addCondition('brand_status', '=', Brand::BRAND_REQUEST_PENDING);
+        $brandReqSrchObj->addCondition('brand_status', '=', 'mysql_func_' .Brand::BRAND_REQUEST_PENDING, 'AND', true);
         $brandReqSrchObj->addMultipleFields(array('count(brand_id) as countOfRec'));
         $brandReqResult = $db->fetch($brandReqSrchObj->getResultset());
         $brandReqCount = FatUtility::int($brandReqResult['countOfRec']);
@@ -44,35 +44,35 @@ class Navigation
         
         /* withdrawal requests */
         $drReqSrchObj = new WithdrawalRequestsSearch();
-        $drReqSrchObj->addCondition('withdrawal_status', '=', 0);
+        $drReqSrchObj->addCondition('withdrawal_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $drReqSrchObj->addMultipleFields(array('count(withdrawal_id) as countOfRec'));
         $drReqResult = $db->fetch($drReqSrchObj->getResultset());
         $drReqCount = FatUtility::int($drReqResult['countOfRec']);
         
         /* order cancellation requests */
         $orderCancelReqSrchObj = new OrderCancelRequestSearch($langId);
-        $orderCancelReqSrchObj->addCondition('ocrequest_status', '=', 0);
+        $orderCancelReqSrchObj->addCondition('ocrequest_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $orderCancelReqSrchObj->addMultipleFields(array('count(ocrequest_id) as countOfRec'));
         $orderCancelReqResult = $db->fetch($orderCancelReqSrchObj->getResultset());
         $orderCancelReqCount = FatUtility::int($orderCancelReqResult['countOfRec']);
         
         /* order return/refund requests */
         $orderRetReqSrchObj = new OrderReturnRequestSearch();
-        $orderRetReqSrchObj->addCondition('orrequest_status', '=', 0);
+        $orderRetReqSrchObj->addCondition('orrequest_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $orderRetReqSrchObj->addMultipleFields(array('count(orrequest_id) as countOfRec'));
         $orderRetReqResult = $db->fetch($orderRetReqSrchObj->getResultset());
         $orderRetReqCount = FatUtility::int($orderRetReqResult['countOfRec']);
         
         /* blog contributions */
         $blogContrSrchObj = BlogContribution::getSearchObject();
-        $blogContrSrchObj->addCondition('bcontributions_status', '=', 0);
+        $blogContrSrchObj->addCondition('bcontributions_status', '=', 'mysql_func_' . applicationConstants::INACTIVE, 'AND', true);
         $blogContrSrchObj->addMultipleFields(array('count(bcontributions_id) as countOfRec'));
         $blogContrResult = $db->fetch($blogContrSrchObj->getResultset());
         $blogContrCount = FatUtility::int($blogContrResult['countOfRec']);
         
         /* blog comments */
         $blogCommentsSrchObj = BlogComment::getSearchObject();
-        $blogCommentsSrchObj->addCondition('bpcomment_approved', '=', 0);
+        $blogCommentsSrchObj->addCondition('bpcomment_approved', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $blogCommentsSrchObj->addMultipleFields(array('count(bpcomment_id) as countOfRec'));
         $blogCommentsResult = $db->fetch($blogCommentsSrchObj->getResultset());
         $blogCommentsCount = FatUtility::int($blogCommentsResult['countOfRec']);
@@ -106,21 +106,21 @@ class Navigation
         
         /* User GDPR requests */
         $gdprSrch = new UserGdprRequestSearch();
-        $gdprSrch->addCondition('ureq_status', '=', UserGdprRequest::STATUS_PENDING);
-        $gdprSrch->addCondition('ureq_deleted', '=', applicationConstants::NO);
+        $gdprSrch->addCondition('ureq_status', '=', 'mysql_func_' .UserGdprRequest::STATUS_PENDING, 'AND', true);
+        $gdprSrch->addCondition('ureq_deleted', '=', 'mysql_func_' .applicationConstants::NO, 'AND', true);
         $gdprSrch->getResultSet();
         $gdprReqCount = $gdprSrch->recordCount();
 
         /* Badge requests */
         $badgeRequest = new SearchBase(BadgeRequest::DB_TBL, 'breq');
         $badgeRequest->addMultipleFields([BadgeRequest::DB_TBL_PREFIX . 'id']);
-        $badgeRequest->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', BadgeRequest::REQUEST_PENDING);
+        $badgeRequest->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', 'mysql_func_' .BadgeRequest::REQUEST_PENDING, 'AND', true);
         $badgeRequest->getResultSet();
         $badgeRequestCount = $badgeRequest->recordCount();
 
         /* Order return requests */
         $orderRetReqSrchObj = OrderReturnRequest::getSearchObject();
-        $orderRetReqSrchObj->addCondition('orrequest_status', '=', OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING);
+        $orderRetReqSrchObj->addCondition('orrequest_status', '=', 'mysql_func_' .OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING, 'AND', true);
         $orderRetReqSrchObj->addMultipleFields(array('count(orrequest_id) as countOfRec'));
         $orderRetReqResult = $db->fetch($orderRetReqSrchObj->getResultset());
         $orderRetReqCount = FatUtility::int($orderRetReqResult['countOfRec']);

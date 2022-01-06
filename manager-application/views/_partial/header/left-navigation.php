@@ -17,7 +17,7 @@
                 <button class="menu-section navLinkJs" type="button" data-selector='["Home"]' title="<?php echo Labels::getLabel('NAV_HOME', $siteLangId); ?>" onclick="redirectFn('<?php echo UrlHelper::generateUrl(); ?>')">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-home">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
                             </use>
                         </svg>
                     </span>
@@ -38,7 +38,7 @@
                     <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_CATALOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-product-catalog">
                                 </use>
                             </svg>
                         </span>

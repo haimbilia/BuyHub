@@ -28,16 +28,16 @@ class Testimonial extends MyAppModel
             );
         }
         if ($active == true) {
-            $srch->addCondition('t.testimonial_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('t.testimonial_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
-        $srch->addCondition('t.testimonial_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('t.testimonial_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         return $srch;
     }
 
     public function canRecordMarkDelete(int $testimonialId): bool
     {
         $srch = static::getSearchObject();
-        $srch->addCondition('testimonial_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('testimonial_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('testimonial_id', '=', $testimonialId);
         $srch->addFld('testimonial_id');
         $rs = $srch->getResultSet();

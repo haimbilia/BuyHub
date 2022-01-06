@@ -58,8 +58,8 @@ class EmailHandler extends FatModel
         $emails = array(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'));
 
         $srch = AdminUsers::getSearchObject();
-        $srch->addCondition('admin_id', '!=', Admin::SUPER);
-        $srch->addCondition('admin_email_notification', '=', applicationConstants::YES);
+        $srch->addCondition('admin_id', '!=', 'mysql_func_' . Admin::SUPER, 'AND', true);
+        $srch->addCondition('admin_email_notification', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addMultipleFields(array('admin_id', 'admin_email'));
         $rs = $srch->getResultSet();
 
@@ -940,6 +940,7 @@ class EmailHandler extends FatModel
     public function sendProductStockAlert($selprod_id, $langId = 0)
     {
         $langId = FatUtility::int($langId);
+        $selprod_id = FatUtility::int($selprod_id);
         if ($langId == 0) {
             $langId = FatApp::getConfig('conf_default_site_lang');
         }
@@ -947,7 +948,7 @@ class EmailHandler extends FatModel
         $srch = SellerProduct::getSearchObject($langId);
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = sp.selprod_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'c.credential_user_id = u.user_id', 'c');
-        $srch->addCondition('selprod_id', '= ', $selprod_id);
+        $srch->addCondition('selprod_id', '= ', 'mysql_func_' . $selprod_id, 'AND', true);
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = u.user_id', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $langId, 's_l');
 
@@ -1316,6 +1317,7 @@ class EmailHandler extends FatModel
     public function sendWithdrawRequestNotification($requestId, $langId, $adminOrUser = "A")
     {
         $langId = FatUtility::int($langId);
+        $requestId = FatUtility::int($requestId);
         if (1 > $langId) {
             return 'ERR_Invalid_Lang';
         }
@@ -1330,7 +1332,7 @@ class EmailHandler extends FatModel
                 'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email', 'credential_username as user_username', 'user_phone_dcode', 'user_phone'
             )
         );
-        $srch->addCondition('tuwr.withdrawal_id', '=', $requestId);
+        $srch->addCondition('tuwr.withdrawal_id', '=', 'mysql_func_' . $requestId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -1419,8 +1421,8 @@ class EmailHandler extends FatModel
         $srch->joinMessagePostedFromUser();
         $srch->joinMessagePostedToUser();
         $srch->addMultipleFields(array('tth.*', 'ttm.message_text', 'ttm.message_to'));
-        $srch->addCondition('ttm.message_deleted', '=', 0);
-        $srch->addCondition('ttm.message_id', '=', $messageId);
+        $srch->addCondition('ttm.message_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('ttm.message_id', '=', 'mysql_func_' . $messageId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -1476,7 +1478,7 @@ class EmailHandler extends FatModel
         $ocRequestSrch->joinOrderSellerUser();
         //$ocRequestSrch->joinShops();
         $ocRequestSrch->joinOrderCancelReasons($langId);
-        $ocRequestSrch->addCondition('ocrequest_id', '=', $ocrequest_id);
+        $ocRequestSrch->addCondition('ocrequest_id', '=', 'mysql_func_' . $ocrequest_id, 'AND', true);
         $ocRequestSrch->addMultipleFields(array('op_id', 'op_invoice_number', 'op_shop_owner_name', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_shop_owner_email', 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'ocrequest_message', 'seller.user_id as seller_id'));
         $ocRequestSrch->doNotCalculateRecords();
         $ocRequestSrch->setPageSize(1);
@@ -1563,7 +1565,7 @@ class EmailHandler extends FatModel
         $srch->joinReturnReason($langId);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('orrmsg_id', '=', $orrmsg_id);
+        $srch->addCondition('orrmsg_id', '=', 'mysql_func_' . $orrmsg_id, 'AND', true);
         $srch->addMultipleFields(
             array(
                 'op_selprod_id', 'op_selprod_user_id', 'op_is_batch', 'orrmsg_orrequest_id', 'op_product_name', 'op_selprod_title',
@@ -1697,7 +1699,7 @@ class EmailHandler extends FatModel
         $srch->joinReturnReason($langId);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('orrmsg_id', '=', $orrmsg_id);
+        $srch->addCondition('orrmsg_id', '=', 'mysql_func_' . $orrmsg_id, 'AND', true);
         $srch->addMultipleFields(
             array(
                 'op_selprod_id', 'op_is_batch', 'op_product_name', 'op_selprod_title',
@@ -1887,7 +1889,7 @@ class EmailHandler extends FatModel
         $srch->joinReceiverUser();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('scatrequestmsg_id', '=', $scatrequestmsg_id);
+        $srch->addCondition('scatrequestmsg_id', '=', 'mysql_func_' . $scatrequestmsg_id, 'AND', true);
         $srch->addMultipleFields(
             array(
                 'scatrequestmsg_from_user_id',
@@ -1953,7 +1955,7 @@ class EmailHandler extends FatModel
         $srch->joinOrderSellerUser();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('orrequest_id', '=', $orrequest_id);
+        $srch->addCondition('orrequest_id', '=', 'mysql_func_' . $orrequest_id, 'AND', true);
         $srch->addMultipleFields(
             array(
                 'orrequest_id', 'orrequest_user_id', 'orrequest_status', 'orrequest_reference',
@@ -1973,7 +1975,7 @@ class EmailHandler extends FatModel
         $msgSrch->joinMessageAdmin();
         $msgSrch->joinOrderReturnRequests();
         $msgSrch->doNotCalculateRecords();
-        $msgSrch->addCondition('orrmsg_orrequest_id', '=', $orrequest_id);
+        $msgSrch->addCondition('orrmsg_orrequest_id', '=', 'mysql_func_' . $orrequest_id, 'AND', true);
         $msgSrch->addOrder('orrmsg_id', 'DESC');
         $msgSrch->setPageNumber(1);
         $msgSrch->setPageSize(1);
@@ -2079,7 +2081,7 @@ class EmailHandler extends FatModel
         $srch->joinOrderProducts();
         $srch->joinOrders();
         $srch->joinOrderBuyerUser();
-        $srch->addCondition('ocrequest_id', '=', $ocrequest_id);
+        $srch->addCondition('ocrequest_id', '=', 'mysql_func_' . $ocrequest_id, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(
@@ -2138,7 +2140,7 @@ class EmailHandler extends FatModel
         $srch->doNotCalculateRecords();
         $srch->joinUser();
         $srch->joinShops($langId);
-        $srch->addCondition('sreport_id', '=', $sreport_id);
+        $srch->addCondition('sreport_id', '=', 'mysql_func_' . $sreport_id, 'AND', true);
         $srch->addMultipleFields(
             array(
                 'sreport_id', 'sreport_reportreason_id', 'IFNULL(shop_name, shop_identifier) as shop_name',
@@ -2277,7 +2279,7 @@ class EmailHandler extends FatModel
         $schObj->joinProducts($langId);
         $schObj->joinSellerProducts($langId);
         $schObj->addCondition('spreview_id', '=', $spreviewId);
-        $schObj->addCondition('spreview_status', '!=', SelProdReview::STATUS_PENDING);
+        $schObj->addCondition('spreview_status', '!=', 'mysql_func_' . SelProdReview::STATUS_PENDING, 'AND', true);
         $schObj->addMultipleFields(array('spreview_selprod_id', 'spreview_status', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
         $schObj->doNotCalculateRecords();
         $schObj->setPageSize(1);
@@ -2362,7 +2364,7 @@ class EmailHandler extends FatModel
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->joinUser();
-        $srch->addCondition('urp_id', '=', $urpId);
+        $srch->addCondition('urp_id', '=', 'mysql_func_' . $urpId, 'AND', true);
         $srch->addMultipleFields(array('urp.*', 'u.user_name', 'u.user_phone_dcode', 'u.user_phone', 'uc.credential_email'));
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -2789,7 +2791,7 @@ class EmailHandler extends FatModel
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->addCondition('selprod_id', 'IN', $selProdIds);
-        $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $prodSrch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $prodSrch->doNotLimitRecords();
         $prodSrch->addMultipleFields(
             array(
@@ -2847,7 +2849,7 @@ class EmailHandler extends FatModel
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->addCondition('selprod_id', 'IN', $selProdIds);
-        $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $prodSrch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $prodSrch->addGroupBy('selprod_id');
         $prodSrch->setPageSize(9);
         $prodSrch->addMultipleFields(

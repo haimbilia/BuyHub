@@ -67,9 +67,9 @@ class TimeSlot extends MyAppModel
     {
         $addressId = FatUtility::int($addressId);
         $srch = new SearchBase(static::DB_TBL, 'ts');
-        $srch->addCondition(self::tblFld('record_id'), '=', $addressId);
+        $srch->addCondition(self::tblFld('record_id'), '=', 'mysql_func_' . $addressId, 'AND', true);
         $srch->addOrder(self::tblFld('day'), 'ASC');
-        $srch->addOrder(self::tblFld('from_time'), 'ASC');       
+        $srch->addOrder(self::tblFld('from_time'), 'ASC');
         $rs = $srch->getResultSet();
         return  FatApp::getDb()->fetchAll($rs);
     }
@@ -78,7 +78,7 @@ class TimeSlot extends MyAppModel
     {
         $addressId = FatUtility::int($addressId);
         $srch = new SearchBase(static::DB_TBL, 'ts');
-        $srch->addCondition(self::tblFld('record_id'), '=', $addressId);
+        $srch->addCondition(self::tblFld('record_id'), '=', 'mysql_func_' . $addressId, 'AND', true);
         $srch->addCondition(self::tblFld('day'), '=', $day);
         $rs = $srch->getResultSet();
         return  FatApp::getDb()->fetchAll($rs);

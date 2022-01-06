@@ -27,8 +27,8 @@ class UserRewardBreakup extends MyAppModel
 
         $srch = new UserRewardSearch();
         $srch->joinUserRewardBreakup();
-        $srch->addCondition('urp.urp_user_id', '=', $userId);
-        $srch->addCondition('urpb.urpbreakup_used', '=', 0);
+        $srch->addCondition('urp.urp_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+        $srch->addCondition('urpb.urpbreakup_used', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $cond = $srch->addCondition('urpb.urpbreakup_expiry', '>=', date('Y-m-d'), 'AND');
         $cond->attachCondition('urpb.urpbreakup_expiry', '=', '0000-00-00', 'OR');
         $srch->addMultipleFields(array('sum(urpbreakup_points) as balance'));
@@ -45,8 +45,8 @@ class UserRewardBreakup extends MyAppModel
         $srch->joinPaymentMethod();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('order_reward_point_used', '>', 0);
-        $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PENDING);
+        $srch->addCondition('order_reward_point_used', '>', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
         $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
         $srch->addCondition('op.op_status_id', '=', FatApp::getConfig("CONF_DEFAULT_ORDER_STATUS"));
         $date = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' - 2 hours'));
@@ -57,8 +57,8 @@ class UserRewardBreakup extends MyAppModel
             $srch->addCondition('order_id', '!=', $orderId);
         }
         $srch->addGroupBy('order_id');
-        $srch->addCondition('order_user_id', '=', $userId);
-        
+        $srch->addCondition('order_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+
         $rs = $db->query('SELECT SUM(order_reward_point_used) as usedRewards from (' . $srch->getQuery() . ') as temp');
         $row = $db->fetch($rs);
 

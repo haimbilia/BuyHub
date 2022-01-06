@@ -13,7 +13,7 @@ class UserSearch extends SearchBase
         }
 
         if ($skipDeleted == true) {
-            $this->addCondition('u.user_deleted', '=', applicationConstants::NO);
+            $this->addCondition('u.user_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         $this->userId = $userId;
@@ -35,9 +35,9 @@ class UserSearch extends SearchBase
         $srch->addGroupBy('utxn.utxn_user_id');
         $srch->addMultipleFields(array('utxn.utxn_user_id', 'SUM(utxn_credit - utxn_debit) as walletAmount'));
         if (0 < $this->userId) {
-            $srch->addCondition('utxn.utxn_user_id', '=', $this->userId);
+            $srch->addCondition('utxn.utxn_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         }
-        $srch->addCondition('utxn_status', '=', Transactions::STATUS_COMPLETED);
+        $srch->addCondition('utxn_status', '=', 'mysql_func_' . Transactions::STATUS_COMPLETED, 'AND', true);
 
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = tqub.utxn_user_id', 'tqub');
 
@@ -62,7 +62,7 @@ class UserSearch extends SearchBase
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         if (0 < $this->userId) {
-            $srch->addCondition('pr.promotion_user_id', '=', $this->userId);
+            $srch->addCondition('pr.promotion_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         }
         $srch->addGroupBy('pr.promotion_id');
         $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(MAX(pcharge_end_piclick_id),0) as endClickId', 'IFNULL(MAX(pcharge_end_date),"0000-00-00") as chargeTillDate']);
@@ -88,12 +88,12 @@ class UserSearch extends SearchBase
         $wrSrch->addGroupBy('tuwr.withdrawal_user_id');
         $wrSrch->addMultipleFields(array('tuwr.withdrawal_user_id', 'SUM(withdrawal_amount) as pendingWithdrawalAmount'));
         if (0 < $this->userId) {
-            $wrSrch->addCondition('withdrawal_user_id', '=', $this->userId);
+            $wrSrch->addCondition('withdrawal_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         }
 
-        $cnd = $wrSrch->addCondition('withdrawal_status', '=', Transactions::WITHDRAWL_STATUS_PENDING);
+        $cnd = $wrSrch->addCondition('withdrawal_status', '=', 'mysql_func_' . Transactions::WITHDRAWL_STATUS_PENDING, 'AND', true);
         if (true == $excludeProcessedWidrawReq) {
-            $cnd->attachCondition('withdrawal_status', '=', Transactions::WITHDRAWL_STATUS_PROCESSED);
+            $cnd->attachCondition('withdrawal_status', '=', 'mysql_func_' . Transactions::WITHDRAWL_STATUS_PROCESSED, 'AND', true);
         }
         $this->joinTable('(' . $wrSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = wrqb.withdrawal_user_id', 'wrqb');
     }
@@ -107,7 +107,7 @@ class UserSearch extends SearchBase
         $srch->addGroupBy('urp.urp_user_id');
         $srch->addMultipleFields(['urp.urp_user_id', 'sum(if(urpb.urpbreakup_used = 1, urpbreakup_points,0)) as rewardsPointsRedeemed', 'SUM(urpb.urpbreakup_points) as rewardsPointsEarned', 'sum(if(urpb.urpbreakup_used = 0 and (urp_date_expiry = "0000-00-00" or urp_date_expiry >= ' . date('Y-m-d') . '), urpbreakup_points,0)) as rewardsPoints']);
         if (0 < $this->userId) {
-            $srch->addCondition('urp.urp_user_id', '=', $this->userId);
+            $srch->addCondition('urp.urp_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         }
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = urpbal.urp_user_id', 'urpbal');
     }
@@ -118,8 +118,8 @@ class UserSearch extends SearchBase
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addGroupBy('utxn.utxn_user_id');
-        $cnd = $srch->addCondition('utxn_type', '=', Transactions::TYPE_AFFILIATE_REFERRAL_SIGN_UP);
-        $cnd->attachCondition('utxn_type', '=', Transactions::TYPE_AFFILIATE_REFERRAL_ORDER);
+        $cnd = $srch->addCondition('utxn_type', '=', 'mysql_func_' . Transactions::TYPE_AFFILIATE_REFERRAL_SIGN_UP, 'AND', true);
+        $cnd->attachCondition('utxn_type', '=', 'mysql_func_' . Transactions::TYPE_AFFILIATE_REFERRAL_ORDER, 'AND', true);
         $srch->addMultipleFields(array('utxn.utxn_user_id', 'SUM(utxn_credit) as totAffilateRevenue', 'SUM(if(utxn_type = ' . Transactions::TYPE_AFFILIATE_REFERRAL_SIGN_UP . ',utxn_credit,0)) as totAffilateSignupRevenue', 'SUM(if(utxn_type = ' . Transactions::TYPE_AFFILIATE_REFERRAL_ORDER . ',utxn_credit,0)) as totAffilateOrdersRevenue'));
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = afRev.utxn_user_id', 'afRev');
     }
@@ -149,10 +149,10 @@ class UserSearch extends SearchBase
         $srch = new PromotionSearch();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('promotion_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('promotion_approved', '=', applicationConstants::YES);
+        $srch->addCondition('promotion_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('promotion_approved', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         if (0 < $this->userId) {
-            $srch->addCondition('pr.promotion_user_id', '=', $this->userId);
+            $srch->addCondition('pr.promotion_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
         }
         $currDate = date('Y-m-d');
         $currTime = date('H:i');
@@ -176,7 +176,7 @@ class UserSearch extends SearchBase
         $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
         $srch->addGroupby('spreview_seller_user_id');
 
         $this->joinTable('(' . $srch->getQuery() . ')', 'LEFT OUTER JOIN', 'sprating.spreview_seller_user_id = u.user_id', 'sprating');

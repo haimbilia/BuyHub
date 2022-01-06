@@ -40,7 +40,7 @@ class EmailTemplates extends MyAppModel
         $srch = static::getSearchObject($langId);
         $srch->addCondition(static::DB_TBL_PREFIX . 'code', 'LIKE', $etpl_code);
         if ($langId > 0) {
-            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' .  $langId, 'AND', true);
         }
         $srch->addOrder(static::DB_TBL_PREFIX . 'lang_id', 'ASC');
         $srch->addGroupby(static::DB_TBL_PREFIX . 'code');
@@ -77,7 +77,7 @@ class EmailTemplates extends MyAppModel
             )
         );
         if ($langId > 0) {
-            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
         }
         return $srch;
     }
