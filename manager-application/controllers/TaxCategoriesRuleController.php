@@ -55,6 +55,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         ]);
         $this->set('postedData', ['taxrule_taxcat_id' => $ruleId]);
         $this->set('recordId', $ruleId);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_RULE_NAME', $this->siteLangId));
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -106,7 +107,11 @@ class TaxCategoriesRuleController extends ListingBaseController
         $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
         $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxstr_id = taxrule_taxstr_id');
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $this->siteLangId);
-        $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'trr_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxrule_taxcat_id'));
+
+        $srch->joinTable(Tax::DB_TBL, 'INNER JOIN', 'taxcat_id = taxrule_taxcat_id');
+        $srch->joinTable(Tax::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxcat_id = taxcatlang_taxcat_id and taxcatlang_lang_id = ' . $this->siteLangId);
+        
+        $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'trr_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxrule_taxcat_id','taxcat_name','taxcat_identifier'));
         if (!empty($post['keyword'])) {
             $srch->addCondition('taxrule_name', 'LIKE', "%" . $post['keyword'] . "%");
         }
@@ -366,6 +371,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         $arr = [
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'taxrule_name' => Labels::getLabel('LBL_RULE_NAME', $this->siteLangId),
+            'taxcat_identifier' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
             'trr_rate' => Labels::getLabel('LBL_TAX_RATE(%)', $this->siteLangId),
             'taxstr_name' => Labels::getLabel('LBL_TAX_STRUCTURE_NAME', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
@@ -380,6 +386,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         return [
             'listSerial',
             'taxrule_name',
+            'taxcat_identifier',
             'trr_rate',
             'taxstr_name',
             'action',
@@ -388,7 +395,7 @@ class TaxCategoriesRuleController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['trr_rate', 'taxstr_name'], Common::excludeKeysForSort());
+        return array_diff($fields, ['trr_rate', 'taxstr_name','taxcat_identifier'], Common::excludeKeysForSort());
     }
 
     public function getBreadcrumbNodes($action)

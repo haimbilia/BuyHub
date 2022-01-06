@@ -1476,7 +1476,7 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 UPDATE `tbl_product_specifics` SET `product_warranty_unit` = '0';
 
-UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'conf_page_size'
+UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'conf_page_size';
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_ACTION_BUTTONS', '1', 'Action', 1) ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- -------------------TV-9.4.0.20211223-----------------------
 

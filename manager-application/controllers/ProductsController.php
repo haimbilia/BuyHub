@@ -162,7 +162,7 @@ class ProductsController extends ListingBaseController
                 'product_added_on','product_name', 'user_name', 'product_updated_on'
             )
         );
-
+        
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);      

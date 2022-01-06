@@ -375,7 +375,7 @@ $(document).ready(function () {
         if (typeof attr !== 'undefined' && attr !== false) {
             var href = attr.replace(/^\/|\/$/g, "");
         }
-        
+
         if (uri == href) {
             markNavActive($(this));
         } else {

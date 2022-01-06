@@ -38,6 +38,7 @@ class TaxCategoriesController extends ListingBaseController
         $this->set('canEdit', $this->objPrivilege->canEditTax($this->admin_id, true));
         $this->set("frmSearch", $this->getSearchForm($fields));
         $this->set('actionItemsData', HtmlHelper::getDefaultActionItems($fields, $this->modelObj));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_CATEGORY_NAME', $this->siteLangId));
         $this->getListingData();
         $this->_template->render(true, true, '_partial/listing/index.php');
     }

@@ -248,8 +248,8 @@ class HomeController extends ListingBaseController
                 $srch = $userObj->getUserSearchObj();
                 $srch->doNotCalculateRecords();
                 $srch->addOrder('u.user_id', 'DESC');
-                $cnd = $srch->addCondition('u.user_is_supplier', '=', 1);
-                $cnd->attachCondition('u.user_is_buyer', '=', 1);
+                $cnd = $srch->addCondition('u.user_is_supplier', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+                $cnd->attachCondition('u.user_is_buyer', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                 $srch->addMultipleFields(
                     array(
                         'user_name', 'credential_username', 'credential_email', 'user_phone_dcode', 'user_phone',
@@ -267,8 +267,8 @@ class HomeController extends ListingBaseController
                 $srch = $userObj->getUserSearchObj();
                 $srch->doNotCalculateRecords();
                 $srch->addOrder('u.user_id', 'DESC');
-                $srch->addCondition('u.user_is_advertiser', '=', 1);
-                $srch->addCondition('u.user_parent', '=', 0);
+                $srch->addCondition('u.user_is_advertiser', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+                $srch->addCondition('u.user_parent', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
                 $srch->addMultipleFields(array('user_name', 'credential_username', 'credential_email', 'user_phone_dcode', 'user_phone', 'user_regdate'));
                 $srch->setPageNumber(1);
                 $srch->setPageSize(10);
@@ -281,7 +281,7 @@ class HomeController extends ListingBaseController
                 $srch = $userObj->getUserSearchObj();
                 $srch->doNotCalculateRecords();
                 $srch->addOrder('u.user_id', 'DESC');
-                $srch->addCondition('u.user_is_affiliate', '=', 1);
+                $srch->addCondition('u.user_is_affiliate', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                 $srch->addMultipleFields(array('user_name', 'credential_username', 'credential_email', 'user_phone_dcode', 'user_phone', 'user_regdate'));
                 $srch->setPageNumber(1);
                 $srch->setPageSize(10);
@@ -303,7 +303,7 @@ class HomeController extends ListingBaseController
         $srch = new OrderSearch();
         $srch->joinOrderBuyerUser();
         $srch->addOrder('order_date_added', 'DESC');
-        $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
+        $srch->addCondition('order_type', '=', 'mysql_func_' . Orders::ORDER_PRODUCT, 'AND', true);
         $srch->setPageSize($limit);
         $srch->addMultipleFields(array('order_id', 'order_number', 'order_date_added', 'order_payment_status', 'buyer.user_name as buyer_user_name', 'buyer.user_updated_on as buyer_updated_on', 'buyer_cred.credential_username as buyer_credential_username', 'buyer_cred.credential_email as buyer_credential_email', 'order_user_id',  'order_net_amount'));
         $rs = $srch->getResultSet();
@@ -321,7 +321,7 @@ class HomeController extends ListingBaseController
         $srch = new OrderProductSearch($this->siteLangId, true);
         $srch->joinPaymentMethod();
         $srch->joinSellerProducts();
-        $cnd = $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
+        $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore');
         $srch->setPageSize($limit);
@@ -430,7 +430,7 @@ class HomeController extends ListingBaseController
     public function setLanguage($langId = 0)
     {
         $langId = FatUtility::int($langId);
-        if (1 > $langId) {    
+        if (1 > $langId) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Please_select_any_language', $this->siteLangId), true);
         }
         $languages = Language::getAllNames();

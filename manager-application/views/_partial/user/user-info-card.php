@@ -8,7 +8,7 @@ $userTitleClass = $userTitleClass ?? 'user-profile_title';
 $title = $title ?? '';
 
 $uploadedTime = AttachedFile::setTimeParam($user['user_updated_on']);
-$userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($user['user_id'], 'MINITHUMB'), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+$userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($user['user_id'], 'MINITHUMB',true), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['credential_username'] . ')' : $user['credential_username'];
 ?>
 <div class="user-profile <?php echo $extraClass; ?>">

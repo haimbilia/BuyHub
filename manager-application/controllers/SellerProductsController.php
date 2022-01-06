@@ -42,23 +42,23 @@ class SellerProductsController extends ListingBaseController
     }
 
     public function index($product_id = 0)
-    {        
-        $fields = $this->getFormColumns();        
-        $frmSearch = $this->getSearchForm($fields);     
+    {
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
         $pageData = PageLanguageData::getAttributesByKey('MANAGE_SELLER_INVENTORIES', $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
-      
+
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['statusButton'] = true;
         $actionItemsData['newRecordBtn'] = false;
-      
+
         $this->set('actionItemsData', $actionItemsData);
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
 
         $this->getListingData($product_id);
-        
+
         $this->set('canEdit', $this->objPrivilege->canEditSellerProducts($this->admin_id, true));
         $this->set("frmSearch", $frmSearch);
         $this->set('includeEditor', true);
@@ -99,13 +99,13 @@ class SellerProductsController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $post['prodcat_id'] = FatApp::getPostedData('prodcat_id', FatUtility::VAR_INT, 0);
         $post['user_id'] = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
-        
+
         $srch = SellerProduct::getSearchObject($this->siteLangId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'selprod_user_id = u.user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'u.user_id = uc.credential_user_id', 'uc');
-        $srch->addCondition('selprod_deleted', '=', 0);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
@@ -114,14 +114,14 @@ class SellerProductsController extends ListingBaseController
             $cnd = $srch->addCondition('product_name', 'like', "%$keyword%");
             $cnd->attachCondition('selprod_title', 'LIKE', '%' . $keyword . '%', 'OR');
         }
-       
+
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         if (0 < $selProdId) {
-            $srch->addCondition('selprod_id', '=', $selProdId);
+            $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
         }
 
         if ($post['user_id'] > 0) {
-            $srch->addCondition('selprod_user_id', '=', $post['user_id']);
+            $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $post['user_id'], 'AND', true);
         } else {
             $user_name = FatApp::getPostedData('user_name', null, '');
             if (!empty($user_name)) {
@@ -133,22 +133,36 @@ class SellerProductsController extends ListingBaseController
 
         $product_attrgrp_id = FatApp::getPostedData('product_attrgrp_id', FatUtility::VAR_INT, -1);
         if ($product_attrgrp_id != -1) {
-            $srch->addCondition('product_attrgrp_id', '=', $product_attrgrp_id);
+            $srch->addCondition('product_attrgrp_id', '=', 'mysql_func_' . $product_attrgrp_id, 'AND', true);
         }
 
         $active = FatApp::getPostedData('active', FatUtility::VAR_INT, -1);
         if ($active != -1) {
-            $srch->addCondition('selprod_active', '=', $active);
+            $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
-  
+
         if ($post['prodcat_id'] > 0) {
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'p.product_id = ptc_product_id', 'ptcat');
-            $srch->addCondition('ptcat.ptc_prodcat_id', '=', $post['prodcat_id']);
+            $srch->addCondition('ptcat.ptc_prodcat_id', '=', 'mysql_func_' . $post['prodcat_id'], 'AND', true);
         }
         $product_id = 0;
         if (isset($post['product_id'])) {
             $product_id = FatUtility::int($post['product_id']);
         }
+
+
+        if ($product_id) {
+            $row = Product::getAttributesById($product_id, array('product_id'));
+            if (!$row) {
+                LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
+            }
+            $srch->addCondition('selprod_product_id', '=', 'mysql_func_' .  $product_id, 'AND', true);
+        }
+
+        $srchRecordCount = clone $srch;
+        $srchRecordCount->addFld('count(selprod_id) as count');
+        $recordCount = FatApp::getDb()->fetch($srchRecordCount->getResultSet());
+
 
         if ($product_id) {
             $srch->doNotCalculateRecords();
@@ -157,14 +171,6 @@ class SellerProductsController extends ListingBaseController
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
         }
-        if ($product_id) {
-            $row = Product::getAttributesById($product_id, array('product_id'));
-            if (!$row) {
-                LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId), true);
-            }
-            $srch->addCondition('selprod_product_id', '=', $product_id);
-        }
-
         $srch->addMultipleFields(
             array(
                 'selprod_id', 'selprod_user_id', 'selprod_price', 'selprod_stock', 'selprod_product_id',
@@ -173,7 +179,9 @@ class SellerProductsController extends ListingBaseController
             )
         );
 
+        $srch->doNotCalculateRecords();
         $srch->addOrder($sortBy, $sortOrder);
+
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (count($records)) {
             foreach ($records as &$arr) {
@@ -186,12 +194,13 @@ class SellerProductsController extends ListingBaseController
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('canViewProducts', $this->objPrivilege->canViewProducts($this->admin_id, true));
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
+        $pageCount = ceil($recordCount['count'] / $pageSize);
 
         if (!$product_id) {
             $this->set('page', $page);
-            $this->set('pageCount', $srch->pages());
+            $this->set('pageCount', $pageCount);
             $this->set('postedData', $post);
-            $this->set('recordCount', $srch->recordCount());
+            $this->set('recordCount', $recordCount['count']);
         }
         $this->set('pageSize', $pageSize);
         $this->set('sortBy', $sortBy);
@@ -214,7 +223,10 @@ class SellerProductsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
 
-        $sellerProductRow = SellerProduct::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $selProdId,  null, true);
+        $sellerProductLangRow = SellerProduct::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $selProdId);
+        if(false != $sellerProductLangRow){
+            $sellerProductRow = array_merge($sellerProductRow, $sellerProductLangRow);
+        }        
 
         $frmSellerProduct = $this->getSellerProductForm($sellerProductRow['selprod_product_id']);
 
@@ -381,7 +393,7 @@ class SellerProductsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '', array('class' => 'search-input'));
         $fld->overrideFldType('search');
 
-        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id',[]);
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME_OR_EMAIL', $this->siteLangId), 'user_id', []);
 
         $prodCatObj = new ProductCategory();
         $arrCategories = $prodCatObj->getCategoriesForSelectBox($this->siteLangId);
@@ -737,7 +749,7 @@ class SellerProductsController extends ListingBaseController
             'smt' => $smt,
             'vals' => $smtValues
         );
-        
+
         if ($tblRecord->loadFromDb($condition)) {
             $specialPriceRow = $tblRecord->getFlds();
             if ($specialPriceRow['splprice_id'] != $splprice_id) {

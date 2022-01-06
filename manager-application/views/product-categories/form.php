@@ -40,6 +40,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
             dropdownParent: $('.'+$.ykmodal.element)
         });
         $("." + $.ykmodal.element).removeAttr('tabindex');
+        $("select[name='prodcat_parent']").data("select2").$container.addClass("w-100");
         addRatingType = function(e) {
             var rt_id = e.detail.tag.id;
             var ratingtype_name = e.detail.tag.title;

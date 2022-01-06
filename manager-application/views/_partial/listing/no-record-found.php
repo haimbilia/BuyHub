@@ -9,7 +9,7 @@ if (count($arrListing) == 0) {
     $tbody->appendElement('tr')->appendElement(
         'td',
         array(
-            'colspan' => count($fields),
+            'colspan' => isset($fields) ? count($fields) :1,
             'class' => 'noRecordFoundJs'
         ),
         $img, true
