@@ -17,18 +17,19 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'utxn_id':
-                $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionNumber($row[$key]));
+                $td->appendElement('html', $tdAttr, '<strong>' . Transactions::formatTransactionNumber($row[$key]) . '</strong>', true);
                 break;
             case 'user_name':
                 $href = "javascript:void(0)";
                 $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', [
                     'user' => $row,
-                    'extraClass'=>'user-profile-sm',
+                    'extraClass' => 'user-profile-sm',
                     'siteLangId' => $siteLangId,
                     'href' => $href,
                     'onclick' => $onclick,
-                    'displayEmail'=>false
+                    'displayEmail' => false,
+                    'userTitleClass' => 'text-muted'
                 ], false, true);
                 $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
@@ -42,15 +43,15 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'utxn_comments':
                 $body = $row[$key];
-                if(strlen($body) > 25){
+                if (strlen($body) > 25) {
                     $htm = strlen($body) > 25 ? substr($body, 0, 22) . "..." : $body;
-                    $td->appendElement('plaintext', $tdAttr, $htm.' <button onclick="getDescription(' . $row['utxn_id'] .')">'.Labels::getLabel('LBL_VIEW', $siteLangId).'</button>', true);
-                }else{
+                    $td->appendElement('plaintext', $tdAttr, '<div class="txt-description">' . $htm . ' <button class="btn btn-view" data-bs-toggle="tooltip" data-placement="top"  data-bs-original-title="' . Labels::getLabel('LBL_VIEW_MORE', $siteLangId) . '" onclick="getDescription(' . $row['utxn_id'] . ')"><i class="fas fa-eye"></i></button></div>', true);
+                } else {
                     $td->appendElement('plaintext', $tdAttr, $body, true);
                 }
                 break;
-                
-                
+
+
                 $td->appendElement('plaintext', $tdAttr, Transactions::formatTransactionComments($row[$key]), true);
                 break;
             case 'utxn_status':
@@ -65,7 +66,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();
