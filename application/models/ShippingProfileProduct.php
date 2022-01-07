@@ -14,7 +14,7 @@ class ShippingProfileProduct extends MyAppModel
         $srch->joinTable(Product::DB_TBL, 'LEFT OUTER JOIN', 'pro.product_id = sppro.shippro_product_id', 'pro');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'pro.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . CommonHelper::getLangId(), 'p_l');
         $srch->addMultipleFields(array('product_id', 'IFNULL(product_name, product_identifier) as product_name', 'shippro_shipprofile_id as profile_id'));
-        $srch->addCondition('product_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('product_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         return $srch;
     }
 
@@ -55,9 +55,9 @@ class ShippingProfileProduct extends MyAppModel
 
     public static function getAdminShippedProdcutsObj(int $landId = 0)
     {
-        $srch = new SearchBase(static::DB_TBL, 'sppro');       
+        $srch = new SearchBase(static::DB_TBL, 'sppro');
         $srch->joinTable(Product::DB_TBL, 'LEFT OUTER JOIN', 'tp.product_id = sppro.shippro_product_id', 'tp');
-        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN','productlang_product_id = tp.product_id	AND productlang_lang_id = ' . $landId, 'tp_l');
+        $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'productlang_product_id = tp.product_id	AND productlang_lang_id = ' . $landId, 'tp_l');
         /* $srch->joinTable(static::DB_TBL, 'LEFT OUTER JOIN', 'spprot.shippro_product_id = sppro.shippro_product_id and spprot.shippro_user_id = 0', 'spprot'); */
         $srch->joinTable(ShippingProfile::DB_TBL, 'LEFT OUTER JOIN', 'sppro.shippro_shipprofile_id = spprof.shipprofile_id and spprof.shipprofile_active = ' . applicationConstants::YES, 'spprof');
         return $srch;
@@ -69,8 +69,8 @@ class ShippingProfileProduct extends MyAppModel
         $userId = FatUtility::int($userId);
 
         $srch = new SearchBase(static::DB_TBL, 'sppro');
-        $srch->addCondition('shippro_product_id', '=', $productId);
-        $srch->addCondition('shippro_user_id', '=', $userId);
+        $srch->addCondition('shippro_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
+        $srch->addCondition('shippro_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->setPageSize(1);
         $srch->doNotCalculateRecords();
         $res = FatApp::getDb()->fetch($srch->getResultSet());
@@ -79,5 +79,4 @@ class ShippingProfileProduct extends MyAppModel
         }
         return false;
     }
-    
 }

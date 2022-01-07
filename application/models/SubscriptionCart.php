@@ -32,7 +32,7 @@ class SubscriptionCart extends FatModel
 
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', $this->scart_user_id);
-        $srch->addCondition('usercart_type', '=', Cart::TYPE_SUBSCRIPTION);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . Cart::TYPE_SUBSCRIPTION, 'AND', true);
         $rs = $srch->getResultSet();
         if ($row = FatApp::getDb()->fetch($rs)) {
             $this->SYSTEM_ARR['subscription_cart'] = json_decode($row["usercart_details"], true);
@@ -53,7 +53,7 @@ class SubscriptionCart extends FatModel
     public static function getCartKeyPrefixArr()
     {
         return array(
-        static::SUBSCRIPTION_CART_KEY_PREFIX_PRODUCT => static::SUBSCRIPTION_CART_KEY_PREFIX_PRODUCT,
+            static::SUBSCRIPTION_CART_KEY_PREFIX_PRODUCT => static::SUBSCRIPTION_CART_KEY_PREFIX_PRODUCT,
 
         );
     }
@@ -71,7 +71,7 @@ class SubscriptionCart extends FatModel
     {
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', UserAuthentication::getLoggedUserId());
-        $srch->addCondition('usercart_type', '=', Cart::TYPE_SUBSCRIPTION);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . Cart::TYPE_SUBSCRIPTION, 'AND', true);
         $rs = $srch->getResultSet();
         if ($row = FatApp::getDb()->fetch($rs)) {
             return $row["usercart_details"];
@@ -102,15 +102,15 @@ class SubscriptionCart extends FatModel
         $adjustedAmount = 0;
         $userId = UserAuthentication::getLoggedUserId();
         if (FatApp::getConfig('CONF_ENABLE_ADJUST_AMOUNT_CHANGE_PLAN')) {
-            $currentActivePlanDetails = OrderSubscription:: getUserCurrentActivePlanDetails(
+            $currentActivePlanDetails = OrderSubscription::getUserCurrentActivePlanDetails(
                 $langId,
                 UserAuthentication::getLoggedUserId(),
                 array(
-                OrderSubscription::DB_TBL_PREFIX . 'plan_id',
-                OrderSubscription::DB_TBL_PREFIX . 'till_date',
-                OrderSubscription::DB_TBL_PREFIX . 'from_date',
-                OrderSubscription::DB_TBL_PREFIX . 'price',
-                SellerPackages::DB_TBL_PREFIX . 'type'
+                    OrderSubscription::DB_TBL_PREFIX . 'plan_id',
+                    OrderSubscription::DB_TBL_PREFIX . 'till_date',
+                    OrderSubscription::DB_TBL_PREFIX . 'from_date',
+                    OrderSubscription::DB_TBL_PREFIX . 'price',
+                    SellerPackages::DB_TBL_PREFIX . 'type'
                 )
             );
             $adjustedAmount = 0;
@@ -174,7 +174,7 @@ class SubscriptionCart extends FatModel
         }
         return $cartTotal;
     }
-    
+
     public function getSubTotalAfterAdjustment()
     {
         return $this->getSubTotal() - $this->getAdjustableAmount();
@@ -211,18 +211,18 @@ class SubscriptionCart extends FatModel
 
         $WalletAmountCharge = ($this->isCartUserWalletSelected()) ? min($orderNetAmount, $userWalletBalance) : 0;
         $orderPaymentGatewayCharges = $orderNetAmount - $WalletAmountCharge;
-        $orderPaymentGatewayCharges = round($orderPaymentGatewayCharges,2);
+        $orderPaymentGatewayCharges = round($orderPaymentGatewayCharges, 2);
 
         $cartSummary = array(
-        'cartTotal' => $cartTotal,
+            'cartTotal' => $cartTotal,
 
-        'cartDiscounts' => $cartDiscounts,
-        'cartWalletSelected' => $this->isCartUserWalletSelected(),
-        'cartRewardPoints' => $cartRewardPoints,
-        'cartAdjustableAmount' => $cartAdjustableAmount,
-        'orderNetAmount' => round($orderNetAmount,2),
-        'WalletAmountCharge' => $WalletAmountCharge,
-        'orderPaymentGatewayCharges' => $orderPaymentGatewayCharges,
+            'cartDiscounts' => $cartDiscounts,
+            'cartWalletSelected' => $this->isCartUserWalletSelected(),
+            'cartRewardPoints' => $cartRewardPoints,
+            'cartAdjustableAmount' => $cartAdjustableAmount,
+            'orderNetAmount' => round($orderNetAmount, 2),
+            'WalletAmountCharge' => $WalletAmountCharge,
+            'orderPaymentGatewayCharges' => $orderPaymentGatewayCharges,
         );
 
 
@@ -249,7 +249,7 @@ class SubscriptionCart extends FatModel
                     }
                 }
             }
-            
+
             $cartSubTotalAfterAdjustment = $subTotal - $this->getAdjustableAmount();
 
             if ($couponInfo['coupon_discount_in_percent'] == applicationConstants::FLAT) {
@@ -312,9 +312,9 @@ class SubscriptionCart extends FatModel
             /*]*/
 
             $labelArr = array(
-            'coupon_label' => $couponInfo["coupon_title"],
-            'coupon_discount_in_percent' => $couponInfo["coupon_discount_in_percent"],
-            'max_discount_value' => $couponInfo["coupon_max_discount_value"]
+                'coupon_label' => $couponInfo["coupon_title"],
+                'coupon_discount_in_percent' => $couponInfo["coupon_discount_in_percent"],
+                'max_discount_value' => $couponInfo["coupon_max_discount_value"]
             );
 
             // If discount greater than total
@@ -332,13 +332,13 @@ class SubscriptionCart extends FatModel
             }
 
             $couponData = array(
-            'coupon_discount_type' => $couponInfo["coupon_type"],
-            'coupon_code' => $couponInfo["coupon_code"],
-            'coupon_discount_value' => $couponInfo["coupon_discount_value"],
-            'coupon_discount_total' => $selProdDiscountTotal,
-            'coupon_info' => json_encode($labelArr),
-            'discountedSelProdIds' => $discountedSelProdIds,
-            'discountedProdGroupIds' => $discountedProdGroupIds,
+                'coupon_discount_type' => $couponInfo["coupon_type"],
+                'coupon_code' => $couponInfo["coupon_code"],
+                'coupon_discount_value' => $couponInfo["coupon_discount_value"],
+                'coupon_discount_total' => $selProdDiscountTotal,
+                'coupon_info' => json_encode($labelArr),
+                'discountedSelProdIds' => $discountedSelProdIds,
+                'discountedProdGroupIds' => $discountedProdGroupIds,
             );
         }
 
@@ -435,8 +435,8 @@ class SubscriptionCart extends FatModel
                 $cart_arr["subscription_shopping_cart"] = $this->SYSTEM_ARR['subscription_shopping_cart'];
             }
             $cart_arr = json_encode($cart_arr);
-            $record->assignValues(array("usercart_user_id" => $this->scart_user_id, 'usercart_type' => Cart::TYPE_SUBSCRIPTION, "usercart_details" => $cart_arr, "usercart_added_date" => date('Y-m-d H:i:s') ));
-            if (!$record->addNew(array(), array( 'usercart_details' => $cart_arr ))) {
+            $record->assignValues(array("usercart_user_id" => $this->scart_user_id, 'usercart_type' => Cart::TYPE_SUBSCRIPTION, "usercart_details" => $cart_arr, "usercart_added_date" => date('Y-m-d H:i:s')));
+            if (!$record->addNew(array(), array('usercart_details' => $cart_arr))) {
                 Message::addErrorMessage($record->getError());
                 throw new Exception('');
             }
@@ -463,7 +463,7 @@ class SubscriptionCart extends FatModel
 
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', session_id());
-        $srch->addCondition('usercart_type', '=', Cart::TYPE_SUBSCRIPTION);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . Cart::TYPE_SUBSCRIPTION, 'AND', true);
         $rs = $srch->getResultSet();
 
         if (!$row = FatApp::getDb()->fetch($rs)) {
@@ -509,7 +509,7 @@ class SubscriptionCart extends FatModel
                 }
                 /* Subscription Plan[ */
                 if ($spplan_id) {
-                    $sellerPlanRow = SellerPackagePlans :: getSubscriptionPlanDataByPlanId($spplan_id, $siteLangId);
+                    $sellerPlanRow = SellerPackagePlans::getSubscriptionPlanDataByPlanId($spplan_id, $siteLangId);
                     if (!$sellerPlanRow) {
                         $this->removeCartKey($key);
                         continue;

@@ -54,8 +54,8 @@ class ShippingSettings
             }
 
             $data = array(
-            'shipsetting_shippingapi_id' => $shippingapi_id,
-            'shipsetting_key' => $key
+                'shipsetting_shippingapi_id' => $shippingapi_id,
+                'shipsetting_key' => $key
             );
 
             if (!is_array($val)) {
@@ -109,8 +109,9 @@ class ShippingSettings
 
     private function getShippingMethodFieldsById($shippingapi_id)
     {
+        $shippingapi_id = FatUtility::int($shippingapi_id);
         $srch = new SearchBase(static::DB_SHIPPING_METHOD_SETTINGS_TBL, 'tsms');
-        $srch->addCondition('tsms.' . static::DB_SHIPPING_METHOD_SETTINGS_TBL_PREFIX . 'shippingapi_id', '=', (int)$shippingapi_id);
+        $srch->addCondition('tsms.' . static::DB_SHIPPING_METHOD_SETTINGS_TBL_PREFIX . 'shippingapi_id', '=', 'mysql_func_' . $shippingapi_id, 'AND', true);
         $rs = $srch->getResultSet();
         $shippingMethodSettings = $this->db->fetchAll($rs);
         return $shippingMethodSettings;

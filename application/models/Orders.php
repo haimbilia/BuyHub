@@ -1206,7 +1206,7 @@ class Orders extends MyAppModel
             $srch->addMultipleFields(array('b.user_name as buyer_name', 'b.user_phone_dcode as buyer_phone_dcode', 'b.user_phone as buyer_phone', 'bc.credential_email as buyer_email'));
         }
 
-        $srch->addMultipleFields(array('tosh.*', 'tor.order_payment_status', 'order_language_id', 'torp.*', 'torp.op_id'));
+        $srch->addMultipleFields(array('tosh.*', 'tor.order_payment_status', 'order_language_id', 'torp.*', 'torp.op_id','opshipping_label','opshipping_plugin_id'));
 
         foreach ($criteria as $key => $val) {
             if (strval($val) == '') {

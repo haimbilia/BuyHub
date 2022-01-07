@@ -35,7 +35,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_CATALOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_CATALOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-product-catalog">
@@ -140,7 +140,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_REQUESTS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_REQUESTS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-requests">
@@ -305,7 +305,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_ORDERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_ORDERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-orders">
@@ -417,7 +417,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_USERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_USERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-users">
@@ -542,7 +542,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_PROMOTIONS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_PROMOTIONS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-promotions">
@@ -733,7 +733,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_BLOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_BLOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-blog">
@@ -804,7 +804,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_TAX" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_TAX" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-sales-tax">
@@ -867,7 +867,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_CMS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_CMS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-CMS">
@@ -1008,7 +1008,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_REPORTS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_REPORTS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-reports">
@@ -1239,7 +1239,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_IMPORT_EXPORT" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_IMPORT_EXPORT" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-import-export">
@@ -1278,7 +1278,7 @@
             ?>
             <?php } ?>
             <li class="menu-item dropdownJs">
-                <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_SHIPPING" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?>">
+                <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_SHIPPING" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?>">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-shipping-pickup">
@@ -1378,7 +1378,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_SEO" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_SEO" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-SEO">
