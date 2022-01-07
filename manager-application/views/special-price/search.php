@@ -50,25 +50,23 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'splprice_start_date':
             case 'splprice_end_date':
-                $editable = $canEdit ? 'true' : 'false';
                 $date = date('Y-m-d', strtotime($row[$key]));
-                $attr = array(
+                $fldAttr = array(
                     'placeholder' => $val,
-                    'class' => 'dateJs click-to-edit',
+                    'readonly' => 'readonly',
+                    'class' => 'field--calender inputDateJs hide',
                     'name' => $key,
-                    'data-selprodid' => $selProdId,
+                    'data-selprod-id' => $selProdId,
                     'data-price' => $row['selprod_price'],
                     'data-id' => $splPriceId,
                     'data-value' => $date,
                     'data-formated-value' => $date,
-                    'contentEditable' => $editable,
-                    'data-bs-toggle' => 'tooltip',
-                    'data-placement' => 'top',
-                    'onblur' => 'updateValues(this)',
-                    'onfocus' => 'showOrignal(this)',
-                    'title' => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)
                 );
+
+                $attr = ['class' => 'dateJs contenteditable click-to-edit', 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)];
                 $td->appendElement('div', $attr, $date, true);
+                $editListingFrm->addDateField($val, $key, $date, $fldAttr);
+                $td->appendElement('plaintext', array(), $editListingFrm->getFieldHtml($key), true);
                 break;
             case 'splprice_price':
                 $editable = $canEdit ? 'true' : 'false';
@@ -88,7 +86,7 @@ foreach ($arrListing as $sn => $row) {
                     'data-placement' => 'top',
                     'onblur' => 'updateValues(this)',
                     'onfocus' => 'showOrignal(this)',
-                    'title' => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)
+                    'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)
                 ], $splPrice, true);
                 if ($row['selprod_price'] > $row[$key]) {
                     $discountPrice = $row['selprod_price'] - $row[$key];

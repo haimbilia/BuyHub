@@ -507,6 +507,7 @@ Bugs :
     => 060536 - Admin UI: View comments moved in popup view from listing.
     => 060594 - Admin UI: Suggestion to show the "tax category" of the rules for the better understanding.
     => 060505 - Admin UI: Suggestion to give some indication to admin i.e. how "Order Status Color Class" will appear at the front-end
+    => 061431 - Special Price and Volume discount listing design row issue while editing
 
 =============TV-9.4.0.20210107================
 
