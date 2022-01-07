@@ -21,14 +21,21 @@ foreach ($arrListing as $sn=>$row){
             case 'listSerial':
                 $td->appendElement('plaintext', [], $serialNo);
                 break;
+			case 'user_name':
+				$href = "javascript:void(0)";
+				$onclick = 'redirectUser(' . $row['user_id'] . ')';
+				$str = $this->includeTemplate('_partial/user/user-info-card.php', [
+					'user' => $row,
+					'siteLangId' => $siteLangId,
+					'href' => $href,
+					'onclick' => $onclick,
+				], false, true);
+				$td->appendElement('plaintext', [], $str , true);
+				break;
 			case 'notification':
 				$div = $td->appendElement('div', array('class' => 'd-flex'));
-				$div->appendElement('div', array('class' => 'avatar avatar--small'))
-				->appendElement('img', array('src' => UrlHelper::generateFileUrl('Image', 'user', array($row['notification_user_id'], 'MINI', true), CONF_WEBROOT_FRONT_URL)));
-				
 				$url = UrlHelper::generateUrl($labelArr[$row['notification_label_key']][1]);
-				$uname = ($row['user_name']) ? $row['user_name'] : Labels::getLabel('LBL_GUEST_USER', $siteLangId);
-				$div->appendElement('div', array('class' => 'notifications__summary'), '<a href="javascript:void(0)" onclick=redirectfunc("' . $url . '","' . $row['notification_record_id'] . '","' . $row['notification_id'] . '") ><h6>' . $uname . '</h6>' . $labelArr[$row['notification_label_key']][0] . '</a>', true);
+				$div->appendElement('div', array('class' => 'notifications__summary'), '<a href="javascript:void(0)" onclick=redirectfunc("' . $url . '","' . $row['notification_record_id'] . '","' . $row['notification_id'] . '") >' . $labelArr[$row['notification_label_key']][0] . '</a>', true);
 				
 			break;
 			case 'notification_added_on':
