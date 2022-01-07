@@ -221,7 +221,7 @@ class SpecialPriceController extends ListingBaseController
         $json = array(
             'status' => true,
             'msg' => Labels::getLabel('MSG_Success', $this->siteLangId),
-            'data' => array('value' => $value)
+            'data' => ['value' => $value]
         );
         FatUtility::dieJsonSuccess($json);
     }

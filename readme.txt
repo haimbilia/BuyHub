@@ -463,6 +463,14 @@ Bugs :
     => Add product screen
     => UAT Fixes
 =============TV-9.4.0.20211228================
+=> Product Catalog
+    - Seller Inventory
+
+=> Notification and Logs
+
+=> Promotions   
+    - Badges 
+    - Robbons        
 
 Bugs : 
     => 060664 - Admin UI: "Alpha-3 Code" column is not showing in the exported file under the countries section.
@@ -498,6 +506,10 @@ Bugs :
     => 060543 - Admin UI: In the pagination, the extreme right and left arrows icon is not showing on the whole system
     => 060536 - Admin UI: View comments moved in popup view from listing.
     => 060594 - Admin UI: Suggestion to show the "tax category" of the rules for the better understanding.
+    => 060505 - Admin UI: Suggestion to give some indication to admin i.e. how "Order Status Color Class" will appear at the front-end
+    => 061431 - Special Price and Volume discount listing design row issue while editing
+
+=============TV-9.4.0.20210107================
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

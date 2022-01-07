@@ -13,6 +13,17 @@
     </div>
     <div class="sidebar-menu sidebarMenuJs" id="sidebar-menu">
         <ul class="menu">
+            <li class="menu-item dropdownJs">
+                <button class="menu-section navLinkJs" type="button" data-selector='["Home"]' title="<?php echo Labels::getLabel('NAV_HOME', $siteLangId); ?>" onclick="redirectFn('<?php echo UrlHelper::generateUrl(); ?>')">
+                    <span class="menu-icon">
+                        <svg class="svg" width="24" height="24">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
+                            </use>
+                        </svg>
+                    </span>
+                    <span class="menu-title"><?php echo Labels::getLabel('NAV_HOME', $siteLangId); ?></span>
+                </button>
+            </li>
             <?php
             if (
                 $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true) ||
@@ -24,10 +35,10 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_CATALOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_PRODUCT_CATALOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PRODUCT_CATALOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-dashboard">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-product-catalog">
                                 </use>
                             </svg>
                         </span>
@@ -129,7 +140,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_REQUESTS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_REQUESTS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REQUESTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-requests">
@@ -294,7 +305,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_ORDERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_ORDERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_ORDERS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-orders">
@@ -401,14 +412,12 @@
             <?php
             if (
                 $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) /* ||
-              $objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true) ||
-              $objPrivilege->canViewCustomCatalogProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
-              $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true) */
+                $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_USERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_USERS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_USERS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-users">
@@ -432,7 +441,7 @@
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_ADMIN_USERS', $siteLangId); ?></span>
                                     </a>
                                 </li>
-                            <?php } ?>
+                            <?php } ?>                            
                             <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Users"]' href="<?php echo UrlHelper::generateUrl('Users'); ?>">
@@ -503,30 +512,19 @@
                                     </a>
                                 </li>
                             <?php } ?>
-                            <?php /* if ($objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) || $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a class="nav_link navLinkJs dropdown-toggle-custom"
-                              href="<?php echo UrlHelper::generateUrl('AdminUsers') ?>">
-                              <?php echo Labels::getLabel('LBL_Admin_Sub_Users', $siteLangId); ?>
-                              </a>
-                              </li>
-                              <?php } ?>
-                              <?php if ($objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a class="nav_link navLinkJs dropdown-toggle-custom"
-                              href="<?php echo UrlHelper::generateUrl('Messages'); ?>">
-                              <?php echo Labels::getLabel('LBL_Messages', $siteLangId); ?>
-                              </a>
-                              </li>
-                              <?php } ?>
-                              <?php if ($objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true)) { ?>
-                              <li class="nav_item navItemJs">
-                              <a class="nav_link navLinkJs dropdown-toggle-custom"
-                              href="<?php echo UrlHelper::generateUrl('Users', 'sellerForm'); ?>">
-                              <?php echo Labels::getLabel('LBL_Seller_Approval_Form', $siteLangId); ?>
-                              </a>
-                              </li>
-                              <?php } */ ?>
+                            <?php if ($objPrivilege->canViewMessages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item navItemJs">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Messages"]' href="<?php echo UrlHelper::generateUrl('Messages') ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                                </use>
+                                            </svg>
+                                        </span>
+                                        <span class="nav_text"><?php echo Labels::getLabel('NAV_MESSAGES', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
@@ -544,7 +542,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_PROMOTIONS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_PROMOTIONS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_PROMOTIONS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-promotions">
@@ -735,7 +733,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_BLOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_BLOG" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_BLOG', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-blog">
@@ -806,7 +804,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_TAX" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_TAX" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_TAX', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-sales-tax">
@@ -864,11 +862,12 @@
                 $objPrivilege->canViewContentBlocks(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewFaqCategories(AdminAuthentication::getLoggedAdminId(), true) ||
                 $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true) ||
-                $objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true)
+                $objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true) ||
+                $objPrivilege->canViewCollections(AdminAuthentication::getLoggedAdminId(), true)
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_CMS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_CMS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_CMS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-CMS">
@@ -973,6 +972,18 @@
                                     </a>
                                 </li>
                             <?php } ?>
+                            <?php if ($objPrivilege->canViewCollections(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                                <li class="nav_item">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Collections"]' href="<?php echo UrlHelper::generateUrl('Collections'); ?>">
+                                        <span class="nav_icon">
+                                            <svg class="svg" width="24" height="24">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
+                                                </use>
+                                            </svg>
+                                        </span> <span class="nav_text"><?php echo Labels::getLabel('NAV_COLLECTIONS', $siteLangId); ?></span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>
@@ -997,7 +1008,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_REPORTS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_REPORTS" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_REPORTS', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-reports">
@@ -1228,7 +1239,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_IMPORT_EXPORT" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_IMPORT_EXPORT" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_IMPORT_EXPORT', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-import-export">
@@ -1267,7 +1278,7 @@
             ?>
             <?php } ?>
             <li class="menu-item dropdownJs">
-                <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_SHIPPING" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?>">
+                <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_SHIPPING" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SHIPPING/PICKUP', $siteLangId); ?>">
                     <span class="menu-icon">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-shipping-pickup">
@@ -1367,7 +1378,7 @@
             ) {
             ?>
                 <li class="menu-item dropdownJs">
-                    <button class="menu-section dropdown-toggle-custom menuLinkJs" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_SEO" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?>">
+                    <button class="menu-section dropdown-toggle-custom menuLinkJs collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#NAV_SEO" aria-expanded="true" aria-controls="collapseOne" title="<?php echo Labels::getLabel('NAV_SEO', $siteLangId); ?>">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-SEO">

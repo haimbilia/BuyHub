@@ -16,7 +16,7 @@ class SelProdReviewHelpful extends MyAppModel
     public function getdata()
     {
         $srch = new SearchBase(static::DB_TBL, 'sprh');
-        $srch->addCondition(static::DB_TBL_PREFIX . 'spreview_id', '=', $this->mainTableRecordId);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'spreview_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->addMultipleFields(
             array('sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful')
         );

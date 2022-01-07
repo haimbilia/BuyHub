@@ -33,9 +33,9 @@ class SelProdReview extends MyAppModel
             trigger_error(Labels::getLabel('MSG_Language_Id_not_specified.', $langId), E_USER_ERROR);
         }
         $arr = array(
-        static::STATUS_PENDING => Labels::getLabel('LBL_PENDING', $langId),
-        static::STATUS_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
-        static::STATUS_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId),
+            static::STATUS_PENDING => Labels::getLabel('LBL_PENDING', $langId),
+            static::STATUS_APPROVED => Labels::getLabel('LBL_APPROVED', $langId),
+            static::STATUS_CANCELLED => Labels::getLabel('LBL_CANCELLED', $langId),
         );
         return $arr;
     }
@@ -58,9 +58,9 @@ class SelProdReview extends MyAppModel
         $srch->addMultipleFields(array('count(*) as numOfReviews'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('spreview_seller_user_id', '=', $userId);
+        $srch->addCondition('spreview_seller_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->addGroupby('spreview_seller_user_id');
-        $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
 
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
@@ -72,10 +72,11 @@ class SelProdReview extends MyAppModel
 
     public static function getProductOrderId($product_id, $loggedUserId)
     {
+        $product_id = FatUtility::int($product_id);
         $selProdSrch = SellerProduct::getSearchObject(0);
-        $selProdSrch->addCondition('selprod_product_id', '= ', $product_id);
-        $selProdSrch->addCondition('selprod_active', '= ', applicationConstants::ACTIVE);
-        $selProdSrch->addCondition('selprod_deleted', '= ', applicationConstants::NO);
+        $selProdSrch->addCondition('selprod_product_id', '= ', 'mysql_func_' . $product_id, 'AND', true);
+        $selProdSrch->addCondition('selprod_active', '= ', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $selProdSrch->addCondition('selprod_deleted', '= ', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $selProdSrch->addMultipleFields(array('selprod_id'));
         $rs = $selProdSrch->getResultSet();
         $selprodListing = FatApp::getDb()->fetchAll($rs);
@@ -89,7 +90,7 @@ class SelProdReview extends MyAppModel
         $srch->addDirectCondition('order_user_id =' . $loggedUserId . ' and ( FIND_IN_SET(op_selprod_id,(\'' . $allowedSelProdId . '\')) and op_is_batch = 0) and  FIND_IN_SET(op_status_id,(\'' . $allowedReviewStatus . '\')) ');
         /* $srch->addOrder('order_date_added'); */
         return (array) FatApp::getDb()->fetch($srch->getResultSet());
-    }    
+    }
 
 
     public static function getStatusClassArr()

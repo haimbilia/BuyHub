@@ -33,7 +33,7 @@ class SelProdReviewSearch extends SearchBase
         $this->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'spr.spreview_seller_user_id = shop.shop_user_id', 'shop');
 
         if ($isActive) {
-            $this->addCondition('shop.shop_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('shop.shop_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($langId) {
@@ -61,15 +61,15 @@ class SelProdReviewSearch extends SearchBase
         }
 
         if ($isProductActive) {
-            $this->addCondition('product_active', '=', applicationConstants::ACTIVE);
+            $this->addCondition('product_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($isProductApproved) {
-            $this->addCondition('product_approved', '=', Product::APPROVED);
+            $this->addCondition('product_approved', '=', 'mysql_func_' . Product::APPROVED, 'AND', true);
         }
 
         if ($isProductDeleted) {
-            $this->addCondition('product_deleted', '=', applicationConstants::NO);
+            $this->addCondition('product_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
     }
 
@@ -85,10 +85,10 @@ class SelProdReviewSearch extends SearchBase
             $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sp_l.selprodlang_selprod_id = sp.selprod_id and sp_l.selprodlang_lang_id = ' . $langId, 'sp_l');
         }
         if ($active == true) {
-            $this->addCondition('sp.selprod_active', '=', applicationConstants::YES);
+            $this->addCondition('sp.selprod_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         }
         if ($deleted == false) {
-            $this->addCondition('sp.selprod_deleted', '=', applicationConstants::NO);
+            $this->addCondition('sp.selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
     }
 
@@ -138,7 +138,7 @@ class SelProdReviewSearch extends SearchBase
         $this->joinOrderProd = true;
         $this->joinTable(OrderProduct::DB_TBL, 'INNER JOIN', 'op.op_order_id = spr.spreview_order_id AND op.op_selprod_id = spr.spreview_selprod_id', 'op');
     }
-    
+
     public function joinOrderProductShipping()
     {
         if (false === $this->joinOrderProd) {
@@ -146,7 +146,7 @@ class SelProdReviewSearch extends SearchBase
         }
         $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
     }
-    
+
     public function joinOrderProductSpecifics()
     {
         if (false === $this->joinOrderProd) {
@@ -154,5 +154,4 @@ class SelProdReviewSearch extends SearchBase
         }
         $this->joinTable(OrderProductSpecifics::DB_TBL, 'LEFT JOIN', 'opspec.ops_op_id = op.op_id', 'opspec');
     }
-
 }

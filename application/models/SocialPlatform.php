@@ -37,7 +37,7 @@ class SocialPlatform extends MyAppModel
         }
 
         if ($isActive == true) {
-            $srch->addCondition('sp.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('sp.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         return $srch;
@@ -73,7 +73,7 @@ class SocialPlatform extends MyAppModel
         $srch = static::getSearchObject();
         $srch->addFld('splatform_icon_class');
         $srch->doNotCalculateRecords();
-        $srch->addCondition('splatform_user_id', '=', $userId);
+        $srch->addCondition('splatform_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
         foreach ($records as $row) {

@@ -7,12 +7,12 @@
     <title>FATbit | Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    
-    <link href="<?php echo CSS_PATH;?>main-ltr.css" rel="stylesheet" type="text/css" />
-    
+
+
+    <link href="<?php echo CSS_PATH; ?>main-ltr.css" rel="stylesheet" type="text/css" />
+
     <link rel="shortcut icon" href="../images/favicon.ico" />
 </head>
 
@@ -22,8 +22,8 @@
     <div class="wrapper">
 
         <?php
-  include 'includes/header.php';
-?>
+        include 'includes/header.php';
+        ?>
         <div class="body" id="body">
             <div class="content " id="content">
                 <!-- begin:: Subheader -->
@@ -93,76 +93,76 @@
                                                             </div>
                                                         </div>
                                                         <div class="heading heading--md pt-4">Tax Rules</div>
-                                                        
+
                                                         <div class="">
-                                                        
-                                                        <div class="row">
-                                                            <div class="col-lg-4">
-                                                                <div class="border rounded p-4  h-100">
-                                                                    <div class="form-group">
-                                                                        <label for="example-text-input" class="">Name</label>
-                                                                        <input class="form-control" type="text" value="" id="example-text-input">
+
+                                                            <div class="row">
+                                                                <div class="col-lg-4">
+                                                                    <div class="border rounded p-4  h-100">
+                                                                        <div class="form-group">
+                                                                            <label for="example-text-input" class="">Name</label>
+                                                                            <input class="form-control" type="text" value="" id="example-text-input">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="example-text-input" class="">Tax Rate(%) </label>
+                                                                            <input class="form-control" type="text" value="" id="example-text-input">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="example-text-input" class="">Country</label>
+                                                                            <input class="form-control" type="text" value="" id="example-text-input">
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label for="example-text-input" class="">Tax Rate(%) </label>
-                                                                        <input class="form-control" type="text" value="" id="example-text-input">
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="example-text-input" class="">Country</label>
-                                                                        <input class="form-control" type="text" value="" id="example-text-input">
+                                                                </div>
+                                                                <div class="col-lg-8">
+                                                                    <div class="border rounded p-4  h-100">
+                                                                        <div class="form-group">
+                                                                            <label for="example-text-input" class="">States</label>
+                                                                            <select class="form-control" tabindex="-98">
+                                                                                <option>All States</option>
+                                                                                <option>Specific States</option>
+                                                                                <option>Excluding States</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="example-text-input" class="">Select States</label>
+                                                                            <select class="form-control" tabindex="">
+                                                                                <option>Auto Select</option>
+                                                                                <option>Auto Select</option>
+                                                                                <option>Auto Select</option>
+                                                                                <option>Auto Select</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="checkbox">
+                                                                                <input type="checkbox"> Combined Tax
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-lg-8">
-                                                                <div class="border rounded p-4  h-100">
-                                                                    <div class="form-group">
-                                                                        <label for="example-text-input" class="">States</label>
-                                                                        <select class="form-control" tabindex="-98">
-                                                                            <option>All States</option>
-                                                                            <option>Specific States</option>
-                                                                            <option>Excluding States</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="example-text-input" class="">Select States</label>
-                                                                        <select class="form-control" tabindex="">
-                                                                            <option>Auto Select</option>
-                                                                            <option>Auto Select</option>
-                                                                            <option>Auto Select</option>
-                                                                            <option>Auto Select</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label class="checkbox">
-                                                                            <input type="checkbox"> Combined Tax
-                                                                            <span></span>
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
+                                                            <table class="table table-edited">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th width="70%">Name</th>
+                                                                        <th width="30%">Tax Rate</th>
+
+
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td scope="row"><input type="text" class="input-edited"></td>
+                                                                        <td><input type="text" class="input-edited"></td>
+
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                            <div class="row mb-5">
+                                                                <div class="col-xl-12"><a href="javascript:;" class="btn btn-bold btn-label-brand"><i class="la la-plus"></i> Add more</a></div>
                                                             </div>
                                                         </div>
-                                                        <table class="table table-bordered table-hover table-edited mt-4">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th width="70%">Name</th>
-                                                                    <th width="30%">Tax Rate</th>
-                                                                    
-
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td scope="row"><input type="text" class="input-edited"></td>
-                                                                    <td><input type="text" class="input-edited"></td>
-                                                                    
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-
-                                                        <div class="row mb-5">
-                                                            <div class="col-xl-12"><a href="javascript:;" class="btn btn-bold btn-label-brand"><i class="la la-plus"></i> Add more</a></div>
-                                                        </div>
-</div>
 
 
 
@@ -312,8 +312,8 @@
         </div>
 
         <?php
-  include 'includes/footer.php';
-?>
+        include 'includes/footer.php';
+        ?>
         <script src="../js/vendors/bootstrap-select.min.js"></script>
 
     </div>

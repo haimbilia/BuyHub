@@ -118,7 +118,7 @@ class Transactions extends MyAppModel
             }
         }
 
-        $srch->addCondition('utxn.utxn_withdrawal_id', '=', $withdrawalId);
+        $srch->addCondition('utxn.utxn_withdrawal_id', '=', 'mysql_func_' . $withdrawalId, 'AND', true);
 
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -146,11 +146,11 @@ class Transactions extends MyAppModel
         }
 
         if ($this->mainTableRecordId > 0) {
-            $srch->addCondition('utxn.utxn_id', '=', $this->mainTableRecordId);
+            $srch->addCondition('utxn.utxn_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         }
 
         if ($userId > 0) {
-            $srch->addCondition('utxn.utxn_user_id', '=', $userId);
+            $srch->addCondition('utxn.utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         }
 
         $rs = $srch->getResultSet();
@@ -190,7 +190,7 @@ class Transactions extends MyAppModel
         $srch = static::getSearchObject();
 
         if ($userId > 0) {
-            $srch->addCondition('utxn.utxn_user_id', '=', $userId);
+            $srch->addCondition('utxn.utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         }
 
         if (!empty($date)) {
@@ -200,7 +200,7 @@ class Transactions extends MyAppModel
         $srch->addMultipleFields(array('IFNULL(SUM(utxn.utxn_credit),0) AS total_earned', 'IFNULL(SUM(utxn.utxn_debit),0) AS total_used'));
         $srch->doNotCalculateRecords();
         $srch->doNotlimitRecords();
-        $srch->addCondition('utxn_status', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('utxn_status', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $rs = $srch->getResultSet();
 
         if ($row = FatApp::getDb()->fetch($rs)) {
@@ -226,19 +226,20 @@ class Transactions extends MyAppModel
 
     public static function getUserTransactionsObj($userId)
     {
+        $userId = FatUtility::int($userId);
         $balSrch = static::getSearchObject();
         $balSrch->doNotCalculateRecords();
         $balSrch->doNotLimitRecords();
         $balSrch->addMultipleFields(array('utxn.*', "utxn_credit - utxn_debit as bal"));
-        $balSrch->addCondition('utxn_user_id', '=', $userId);
-        $balSrch->addCondition('utxn_status', '=', applicationConstants::ACTIVE);
+        $balSrch->addCondition('utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+        $balSrch->addCondition('utxn_status', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $qryUserPointsBalance = $balSrch->getQuery();
 
         $srch = static::getSearchObject();
         $srch->joinTable('(' . $qryUserPointsBalance . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
 
         $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", "IF(utxn.utxn_credit > 0, " . static::CREDIT_TYPE . ", " . static::DEBIT_TYPE . ") as txnPaymentType"));
-        $srch->addCondition('utxn.utxn_user_id', '=', $userId);
+        $srch->addCondition('utxn.utxn_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->addGroupBy('utxn.utxn_id');
         $srch->addOrder('utxn_id', 'DESC');
         return $srch;
@@ -295,13 +296,13 @@ class Transactions extends MyAppModel
         $arr = Transactions::getStatusArr($langId);
         $msg = $arr[$status];
         switch ($status) {
-            case static::STATUS_PENDING : 
+            case static::STATUS_PENDING:
                 $status = HtmlHelper::INFO;
                 break;
-            case static::STATUS_COMPLETED : 
+            case static::STATUS_COMPLETED:
                 $status = HtmlHelper::SUCCESS;
                 break;
-            case static::STATUS_DECLINED : 
+            case static::STATUS_DECLINED:
                 $status = HtmlHelper::DANGER;
                 break;
             case applicationConstants::DRAFT:
@@ -319,25 +320,25 @@ class Transactions extends MyAppModel
         $arr = Transactions::getWithdrawlStatusArr($langId);
         $msg = $arr[$status];
         switch ($status) {
-            case static::WITHDRAWL_STATUS_PENDING : 
+            case static::WITHDRAWL_STATUS_PENDING:
                 $status = HtmlHelper::INFO;
                 break;
-            case static::WITHDRAWL_STATUS_COMPLETED : 
+            case static::WITHDRAWL_STATUS_COMPLETED:
                 $status = HtmlHelper::SUCCESS;
                 break;
-            case static::WITHDRAWL_STATUS_APPROVED : 
+            case static::WITHDRAWL_STATUS_APPROVED:
                 $status = HtmlHelper::SUCCESS;
                 break;
-            case static::WITHDRAWL_STATUS_DECLINED : 
+            case static::WITHDRAWL_STATUS_DECLINED:
                 $status = HtmlHelper::DANGER;
                 break;
-            case static::WITHDRAWL_STATUS_PAYOUT_UNCLAIMED : 
+            case static::WITHDRAWL_STATUS_PAYOUT_UNCLAIMED:
                 $status = HtmlHelper::WARNING;
                 break;
-            case static::WITHDRAWL_STATUS_PROCESSED : 
+            case static::WITHDRAWL_STATUS_PROCESSED:
                 $status = HtmlHelper::SUCCESS;
                 break;
-            case static::WITHDRAWL_STATUS_PAYOUT_FAILED : 
+            case static::WITHDRAWL_STATUS_PAYOUT_FAILED:
                 $status = HtmlHelper::DANGER;
                 break;
             default:

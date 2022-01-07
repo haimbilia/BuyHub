@@ -51,25 +51,43 @@ foreach ($arrListing as $sn => $row) {
             case 'splprice_start_date':
             case 'splprice_end_date':
                 $date = date('Y-m-d', strtotime($row[$key]));
-                $attr = array(
-                    'readonly' => 'readonly',
+                $fldAttr = array(
                     'placeholder' => $val,
-                    'data-selprodid' => $selProdId,
-                    'data-id' => $splPriceId,
-                    'data-oldval' => $date,
+                    'readonly' => 'readonly',
+                    'class' => 'field--calender inputDateJs hide',
+                    'name' => $key,
+                    'data-selprod-id' => $selProdId,
                     'data-price' => $row['selprod_price'],
-                    'id' => $key . '-' . $splPriceId,
-                    'class' => 'dateJs splPriceColJs hide click-to-edit-input sp-input',
+                    'data-id' => $splPriceId,
+                    'data-value' => $date,
+                    'data-formated-value' => $date,
                 );
-                $editListingFrm->addDateField($val, $key, $date, $attr);
-                $td->appendElement('div', array("class" => 'editColJs click-to-edit', "data-bs-toggle" => "tooltip", "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $date, true);
-                $td->appendElement('plaintext', $tdAttr, $editListingFrm->getFieldHtml($key), true);
+
+                $attr = ['class' => 'dateJs contenteditable click-to-edit', 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)];
+                $td->appendElement('div', $attr, $date, true);
+                $editListingFrm->addDateField($val, $key, $date, $fldAttr);
+                $td->appendElement('plaintext', array(), $editListingFrm->getFieldHtml($key), true);
                 break;
             case 'splprice_price':
+                $editable = $canEdit ? 'true' : 'false';
                 $div = $td->appendElement('div', ['class' => 'text-nowrap d-flex']);
-                $input = '<input type="text" class="" data-price="' . $row['selprod_price'] . '" data-id="' . $splPriceId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" data-oldval="' . $row[$key] . '" data-displayoldval="' . CommonHelper::displayMoneyFormat($row[$key], true, true) . '" class="splPriceColJs click-to-edit-input hide  sp-input"/>';
-                $div->appendElement('div', array("class" => 'editColJs click-to-edit', "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), CommonHelper::displayMoneyFormat($row[$key], true, true), true);
-                $div->appendElement('plaintext', $tdAttr, $input, true);
+                $splPrice = CommonHelper::displayMoneyFormat($row[$key], true, true);
+
+                $div->appendElement('div', [
+                    "class" => 'click-to-edit',
+                    'name' => $key,
+                    'data-selprod-id' => $selProdId,
+                    'data-price' => $row['selprod_price'],
+                    'data-id' => $splPriceId,
+                    'data-value' => $row[$key],
+                    'data-formated-value' => $splPrice,
+                    'contentEditable' => $editable,
+                    'data-bs-toggle' => 'tooltip',
+                    'data-placement' => 'top',
+                    'onblur' => 'updateValues(this)',
+                    'onfocus' => 'showOrignal(this)',
+                    'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)
+                ], $splPrice, true);
                 if ($row['selprod_price'] > $row[$key]) {
                     $discountPrice = $row['selprod_price'] - $row[$key];
                     $discountPercentage = round(($discountPrice / $row['selprod_price']) * 100, 2);
@@ -96,7 +114,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

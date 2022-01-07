@@ -63,7 +63,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "layoutSelectorForm"), "", function (t) {
-            $.ykmodal(t.html, false, "modal-dialog-vertical-md");
+            $.ykmodal(t.html, false);
             $.ykmsg.close();
             fcom.removeLoader();
         });
