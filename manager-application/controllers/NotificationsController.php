@@ -188,7 +188,7 @@ class NotificationsController extends ListingBaseController
 
         $frm->addSelectBox(Labels::getLabel('FRM_NOTIFICATION_TYPE', $this->siteLangId), 'label_key', $typeArr);
         if (!empty($fields)) {
-            $this->addSortingElements($frm, current($allowedKeysForSorting));
+            $this->addSortingElements($frm, 'notification_added_on',applicationConstants::SORT_DESC);
         }
 
         HtmlHelper::addSearchButton($frm);
@@ -206,6 +206,7 @@ class NotificationsController extends ListingBaseController
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_USER_NAME', $this->siteLangId),
             'notification' => Labels::getLabel('LBL_NOTIFICATION', $this->siteLangId),
             'notification_added_on' => Labels::getLabel('LBL_CREATED_ON', $this->siteLangId),
         ];
@@ -218,6 +219,7 @@ class NotificationsController extends ListingBaseController
         return [
             'select_all',
             'listSerial',
+            'user_name',
             'notification',
             'notification_added_on',
         ];
@@ -225,6 +227,6 @@ class NotificationsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['notification'], Common::excludeKeysForSort());
+        return array_diff($fields, ['user_name','notification'], Common::excludeKeysForSort());
     }
 }

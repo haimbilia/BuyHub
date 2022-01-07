@@ -98,7 +98,7 @@ class HtmlHelper
                 return CommonHelper::replaceStringData(Labels::getLabel('LBL_{COUNT}_DAYS_AGO', $langId), ['{COUNT}' => $diff]);
                 break;
             default:
-                return date('d-m-Y', $theDate);
+                return FatDate::format($date);
                 break;
         }
     }

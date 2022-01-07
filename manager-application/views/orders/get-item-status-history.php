@@ -6,11 +6,20 @@ $totalRecords = count($arrListing); ?>
     </h5>
 </div>
 <div class="modal-body opStausLogJs<?php echo $recordId; ?>">
-    <div class="form-edit-body">
+    <div class="form-edit-body loaderContainerJs">
         <?php 
         if ($totalRecords == 0) {
             echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_NO_RECORD_FOUND', $siteLangId));
-        } else { ?>
+        } else {   
+            
+            $orderDetail = current($arrListing);
+            $shippedBySeller = applicationConstants::NO;
+            if (CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id'])) {
+                $shippedBySeller = applicationConstants::YES;
+            }           
+            $shippingApiObj = (new Shipping($siteLangId))->getShippingApiObj(($shippedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+  
+            ?>
             <div class="timeline-v4 appendRowsJs">
                 <?php require_once('get-rows.php'); ?>
             </div>

@@ -665,7 +665,7 @@ class ProductsController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'user_id');
+            $this->addSortingElements($frm, 'product_added_on',applicationConstants::SORT_DESC);
         }
         $frm->setRequiredStarWith('caption');
         $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');

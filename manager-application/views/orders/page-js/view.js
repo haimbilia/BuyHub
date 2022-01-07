@@ -35,10 +35,10 @@
     };
 
     getOpCharges = function (orderId, chargeType) {
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderProductsCharges', [orderId, chargeType]), '', function (ans) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderProductsCharges', [orderId, chargeType]), '', function (t) {
             fcom.removeLoader();
             $.ykmsg.close();
-            $.ykmodal(ans.html);
+            $.ykmodal(t.html, true, "modal-dialog-vertical-md");
         });
     }
 
@@ -135,7 +135,7 @@
         } else {
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) { });
         }
-    };   
+    };
 
     updateShippingUser = function (frm) {
         var data = fcom.frmData(frm);
@@ -168,7 +168,7 @@
             }
             $.ykmsg.success(t.msg);
 
-            let data = { op_id: opId, op_status_id: orderShippedStatus, customer_notified: 1, tracking_number: t.tracking_number,shipped_by_plugin:1 };
+            let data = { op_id: opId, op_status_id: orderShippedStatus, customer_notified: 1, tracking_number: t.tracking_number, shipped_by_plugin: 1 };
             fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) {
                 window.location.reload();
             });
@@ -196,11 +196,12 @@
         });
     }
 
-    trackOrder = function (trackingNumber, courier, orderNumber) {
-        fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl(controllerName, 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function (res) {
+    trackOrder = function (trackingNumber, courier, orderNumber, orderId, op_id) {
+        $.ykmodal(fcom.getLoader(),false);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), {orderId,op_id}, function (res) {
+            $.ykmodal(res.html, false);
+            fcom.removeLoader();
             $.ykmsg.close();
-            $.ykmodal(res, true);
         });
     };
 

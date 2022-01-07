@@ -1,5 +1,4 @@
 <?php
-
 class ProductCategoriesController extends ListingBaseController
 {
     protected $modelClass = 'ProductCategory';
@@ -49,25 +48,14 @@ class ProductCategoriesController extends ListingBaseController
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
 
-        $srch = new ProductCategorySearch(0, false, false, false, -1);
-        $this->set("recordCount", FatApp::getDb()->totalRecords($srch->getResultSet()));
-
-        $this->_template->addJs(array('js/select2.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));
-        $this->_template->addCss(array('css/select2.min.css', 'css/cropper.css', 'css/tagify.min.css'));
-
-        $this->_template->render();
-    }
-
-    public function search()
-    {
         $prodCat = new ProductCategory();
         $records = (array) $prodCat->getCategories(true, true);
 
         $this->set("arrListing", $records);
-        $this->set("recordCount", count($records));
-        $this->set("canEdit", $this->objPrivilege->canEditProductCategories(0, true));
-        $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);
+        $this->_template->addJs(array('js/select2.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));
+        $this->_template->addCss(array('css/select2.min.css', 'css/cropper.css', 'css/tagify.min.css'));
+
+        $this->_template->render();
     }
 
     public function getSubCategories()
