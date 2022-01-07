@@ -58,6 +58,7 @@ class SelProdRating extends MyAppModel
 
     public static function getReviewsAndRatings($recordId, $langId, $isSeller = true)
     {
+        $recordId = FatUtility::int($recordId);
         $srch = new SelProdReviewSearch();
         $srch->joinSeller();
         $srch->joinSellerProducts();
@@ -70,12 +71,12 @@ class SelProdRating extends MyAppModel
         $srch->doNotLimitRecords();
 
         if (true === $isSeller) {
-            $srch->addCondition('spreview_seller_user_id', '=', $recordId);
+            $srch->addCondition('spreview_seller_user_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         } else {
-            $srch->addCondition('sprating_spreview_id', '=', $recordId);
+            $srch->addCondition('sprating_spreview_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         }
 
-        $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
         $srch->addOrder('ratingtype_id');
         $rs = $srch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs);
@@ -94,8 +95,8 @@ class SelProdRating extends MyAppModel
         $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `ratingtype_type` = '" . RatingType::TYPE_SHOP . "' END)");
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('spreview_seller_user_id', '=', $userId);
-        $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $srch->addCondition('spreview_seller_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+        $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
         $srch->addGroupby('spreview_seller_user_id');
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
@@ -107,11 +108,11 @@ class SelProdRating extends MyAppModel
         $srch = new SelProdReviewSearch();
         $srch->joinSelProdRating($langId);
         $srch->addCondition(RatingType::DB_TBL_PREFIX . 'type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
-        $srch->addCondition('spreview_selprod_id', '=', $selProdId);
+        $srch->addCondition('spreview_selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
         $srch->addGroupBy('sprating_ratingtype_id');
         $srch->addMultipleFields([
-            'sprating_ratingtype_id', 
-            'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 
+            'sprating_ratingtype_id',
+            'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name',
             'IFNULL(ROUND(AVG(sprating_rating),2),0) as prod_rating'
         ]);
         $srch->getResultSet();
@@ -126,11 +127,11 @@ class SelProdRating extends MyAppModel
         $srch->joinSelProdRating($langId);
         $srch->addDirectCondition("(CASE WHEN 0 < opshipping_by_seller_user_id THEN `ratingtype_type` IN ('" . RatingType::TYPE_SHOP . "', '" . RatingType::RATING_DELIVERY . "') ELSE `ratingtype_type` IN ('" . RatingType::TYPE_SHOP . "') END)");
 
-        $srch->addCondition('op_selprod_user_id', '=', $shopUserId);
+        $srch->addCondition('op_selprod_user_id', '=', 'mysql_func_' . $shopUserId, 'AND', true);
         $srch->addGroupBy('sprating_ratingtype_id');
         $srch->addMultipleFields([
-            'sprating_ratingtype_id', 
-            'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 
+            'sprating_ratingtype_id',
+            'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name',
             'IFNULL(ROUND(AVG(sprating_rating),2),0) as prod_rating'
         ]);
         $srch->addOrder('sprating_ratingtype_id');

@@ -586,8 +586,8 @@ class Tax extends MyAppModel
             $srch = TaxRule::getCombinedTaxSearchObject();
             $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstr_id');
             $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxruledet_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $langId);
-            $srch->addCondition('taxruledet_taxrule_id', '=', $taxCategoryRow['taxrule_id']);
-            $srch->addCondition('taxruledet_user_id', '=', $taxCategoryRow['trr_user_id']);
+            $srch->addCondition('taxruledet_taxrule_id', '=', 'mysql_func_' . FatUtility::int($taxCategoryRow['taxrule_id']), 'AND', true);
+            $srch->addCondition('taxruledet_user_id', '=', 'mysql_func_' . $taxCategoryRow['trr_user_id'], 'AND', true);
             $srch->addMultipleFields(array('taxstr_id', 'taxruledet_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name'));
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -731,7 +731,7 @@ class Tax extends MyAppModel
     {
         $taxData = array();
         $taxObj = static::getTaxCatObjByProductId($productId, $langId);
-        $taxObj->addCondition('ptt_seller_user_id', '=', $userId);
+        $taxObj->addCondition('ptt_seller_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         if ($fields) {
             $taxObj->addMultipleFields($fields);
         }
@@ -834,7 +834,7 @@ class Tax extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $srch->addCondition(static::tblFld('code'), '=', $code);
-        $srch->addCondition(static::tblFld('plugin_id'), '=', $plugInId);
+        $srch->addCondition(static::tblFld('plugin_id'), '=', 'mysql_func_' . $plugInId, 'AND', true);
 
         if (null != $attr) {
             if (is_array($attr)) {

@@ -17,7 +17,7 @@ class ShippingZone extends MyAppModel
     {
         $srch = new SearchBase(static::DB_TBL, 'szone');
         if ($isActive == true) {
-            $srch->addCondition('szone.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('szone.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' .applicationConstants::ACTIVE, 'AND', true);
         }
         return $srch;
     }
