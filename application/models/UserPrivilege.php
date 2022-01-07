@@ -234,9 +234,9 @@ class UserPrivilege
         /* ] */
 
         $srch = UserPermission::getSearchObject();
-        $srch->addCondition('userperm_user_id', '=', $sellerId);
+        $srch->addCondition('userperm_user_id', '=', 'mysql_func_' . $sellerId, 'AND', true);
         if (0 < $sectionId) {
-            $srch->addCondition('userperm_section_id', '=', $sectionId);
+            $srch->addCondition('userperm_section_id', '=', 'mysql_func_' . $sectionId, 'AND' . true);
         }
 
         $srch->addMultipleFields(array('userperm_section_id', 'userperm_value'));
@@ -280,7 +280,7 @@ class UserPrivilege
 
         $user = new User($sellerId);
         $srch = $user->getUserSearchObj();
-        $srch->addCondition('credential_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $rs = $srch->getResultSet();
         $userData = FatApp::getDb()->fetch($rs);
         if (empty($userData)) {
@@ -288,8 +288,8 @@ class UserPrivilege
         }
 
         $srch = UserPermission::getSearchObject();
-        $srch->addCondition('userperm_user_id', '=', $sellerId);
-        $srch->addCondition('userperm_section_id', '=', $secId);
+        $srch->addCondition('userperm_user_id', '=', 'mysql_func_' . $sellerId, 'AND', true);
+        $srch->addCondition('userperm_section_id', '=', 'mysql_func_' . $secId, 'AND', true);
 
         $srch->addFld('userperm_value');
         $rs = $srch->getResultSet();
@@ -938,12 +938,12 @@ class UserPrivilege
     {
         return $this->checkPermission($sellerId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_READ, $returnResult);
     }
-    
+
     public function canEditBadgeLinks($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_BADGE_LINKS, static::PRIVILEGE_WRITE, $returnResult);
     }
-    
+
     public function canViewMarketplaceChannel($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_MARKETPLACE_CHANNEL, static::PRIVILEGE_READ, $returnResult);

@@ -10,7 +10,7 @@ $space: 25px;
     top: 0;
     bottom: 0;
     #{$start-direction}: 0;
-    z-index: $zindex-fixed;
+    z-index: $zindex-modal-backdrop;
     width: $side-bar-size;
     transition: width 0.3s ease;
     display: flex;

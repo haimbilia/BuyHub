@@ -219,11 +219,11 @@ class User extends MyAppModel
 
         $srch = new SearchBase(static::DB_TBL, 'u');
         if ($skipDeleted == true) {
-            $srch->addCondition('user_deleted', '=', applicationConstants::NO);
+            $srch->addCondition('user_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         if (0 < $parentId) {
-            $srch->addCondition('user_parent', '=', $parentId);
+            $srch->addCondition('user_parent', '=', 'mysql_func_' . $parentId, 'AND', true);
         }
 
         if ($joinUserCredentials) {
@@ -286,7 +286,7 @@ class User extends MyAppModel
 
         $srch = new SearchBase(static::DB_TBL_META, 't_um');
         $srch->addMultipleFields(['usermeta_key', 'usermeta_value']);
-        $srch->addCondition('t_um.' . static::DB_TBL_META_PREFIX . 'user_id', '=', $userId);
+        $srch->addCondition('t_um.' . static::DB_TBL_META_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         if (!empty($key)) {
             $srch->addCondition('t_um.' . static::DB_TBL_META_PREFIX . 'key', '=', $key);
         }
@@ -535,7 +535,7 @@ class User extends MyAppModel
         $srch = static::getSearchObject($joinUserCredentials, 0, $skipDeleted);
 
         if ($this->mainTableRecordId > 0) {
-            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         }
 
         if (null != $attr) {
@@ -574,11 +574,11 @@ class User extends MyAppModel
         }
         $srch = $this->getUserSearchObj($attr);
         if ($isActive) {
-            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
+            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($isVerified) {
-            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'verified', '=', 1);
+            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         }
 
         if ($joinUserCredentials) {
@@ -597,7 +597,7 @@ class User extends MyAppModel
         return false;
     }
 
-    public function getUserSupplierRequestsObj($requestId = 0,$applyActive=true)
+    public function getUserSupplierRequestsObj($requestId = 0, $applyActive = true)
     {
         $requestId = FatUtility::int($requestId);
 
@@ -610,13 +610,13 @@ class User extends MyAppModel
         );
         $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
         if ($this->mainTableRecordId > 0) {
-            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         }
         if ($requestId > 0) {
-            $srch->addCondition('tusr.' . static::DB_TBL_USR_SUPP_REQ_PREFIX . 'id', '=', $requestId);
+            $srch->addCondition('tusr.' . static::DB_TBL_USR_SUPP_REQ_PREFIX . 'id', '=', 'mysql_func_' . $requestId, 'AND', true);
         }
-        if($applyActive){
-            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
+        if ($applyActive) {
+            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         $srch->addMultipleFields(
@@ -672,7 +672,7 @@ class User extends MyAppModel
         }
 
         $srch = new SearchBase(static::DB_TBL_USR_BANK_INFO, 'tub');
-        $srch->addCondition(static::DB_TBL_USR_BANK_INFO_PREFIX . 'user_id', '=', $this->mainTableRecordId);
+        $srch->addCondition(static::DB_TBL_USR_BANK_INFO_PREFIX . 'user_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -871,7 +871,7 @@ class User extends MyAppModel
         $srch->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'c.country_id = tura.ura_country_id', 'c');
         $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 's.state_id = tura.ura_state_id', 's');
 
-        $srch->addCondition(static::DB_TBL_USR_RETURN_ADDR_PREFIX . 'user_id', '=', $this->mainTableRecordId);
+        $srch->addCondition(static::DB_TBL_USR_RETURN_ADDR_PREFIX . 'user_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         if ($langId > 0) {
             $srch->joinTable(static::DB_TBL_USR_RETURN_ADDR_LANG, 'LEFT OUTER JOIN', 'tura_l.uralang_user_id = tura.ura_user_id and tura_l.uralang_lang_id = ' . $langId, 'tura_l');
             $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c_l.countrylang_country_id = tura.ura_country_id and c_l.countrylang_lang_id = ' . $langId, 'c_l');
@@ -970,7 +970,7 @@ class User extends MyAppModel
 			af.afile_record_id = tusr.usuprequest_user_id and af.afile_record_subid = tusrv.sfreqvalue_formfield_id',
             'af'
         );
-        $srch->addCondition('tusrv.sfreqvalue_request_id', '=', $requestId);
+        $srch->addCondition('tusrv.sfreqvalue_request_id', '=', 'mysql_func_' . $requestId, 'AND', true);
         $srch->addMultipleFields(
             array('tusrv.*', 'tusff_l.sformfield_caption', 'tusff.*', 'af.afile_id', 'afile_physical_path', 'afile_name', 'IFNULL(tusrv_lang.sfreqvalue_sformfield_caption, tusff_l.sformfield_caption) as sformfield_caption')
         );
@@ -1125,16 +1125,16 @@ class User extends MyAppModel
         );
         $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
 
-        $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
+        $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
 
         if ($this->mainTableRecordId > 0) {
-            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         }
 
         if ($requestId > 0) {
-            $srch->addCondition('tucr.' . static::DB_TBL_USR_CATALOG_REQ_PREFIX . 'id', '=', $requestId);
+            $srch->addCondition('tucr.' . static::DB_TBL_USR_CATALOG_REQ_PREFIX . 'id', '=', 'mysql_func_' . $requestId, 'AND', true);
         }
-        $srch->addCondition('tucr.' . static::DB_TBL_USR_CATALOG_REQ_PREFIX . 'deleted', '=', 0);
+        $srch->addCondition('tucr.' . static::DB_TBL_USR_CATALOG_REQ_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
         $srch->addMultipleFields(
             array(
@@ -1556,7 +1556,7 @@ class User extends MyAppModel
             return false;
         }
         $srch = static::getSearchObject(true);
-        $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+        $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
         unset($record['credential_password']);
@@ -1640,7 +1640,7 @@ class User extends MyAppModel
         $userId = FatUtility::int($arrCode[0]);
 
         $emvSrch = new SearchBase(static::DB_TBL_USER_EMAIL_VER);
-        $emvSrch->addCondition(static::DB_TBL_UEMV_PREFIX . 'user_id', '=', $userId);
+        $emvSrch->addCondition(static::DB_TBL_UEMV_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $emvSrch->addCondition(static::DB_TBL_UEMV_PREFIX . 'token', '=', $code, 'AND');
 
         $emvSrch->addFld(array(static::DB_TBL_UEMV_PREFIX . 'user_id', static::DB_TBL_UEMV_PREFIX . 'email'));
@@ -1665,7 +1665,7 @@ class User extends MyAppModel
         }
 
         $emvSrch = new SearchBase(static::DB_TBL_USER_PHONE_VER);
-        $emvSrch->addCondition(static::DB_TBL_UPV_PREFIX . 'user_id', '=', $this->mainTableRecordId);
+        $emvSrch->addCondition(static::DB_TBL_UPV_PREFIX . 'user_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
 
         if (null != $otp) {
             $emvSrch->addCondition(static::DB_TBL_UPV_PREFIX . 'otp', '=', $otp);
@@ -1935,8 +1935,8 @@ class User extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addGroupBy('txn.utxn_user_id');
         $srch->addMultipleFields(array("SUM(utxn_credit - utxn_debit) as userBalance"));
-        $srch->addCondition('utxn_user_id', '=', $user_id);
-        $srch->addCondition('utxn_status', '=', Transactions::STATUS_COMPLETED);
+        $srch->addCondition('utxn_user_id', '=', 'mysql_func_' . $user_id, 'AND', true);
+        $srch->addCondition('utxn_status', '=', 'mysql_func_' . Transactions::STATUS_COMPLETED, 'AND', true);
         $rs = $srch->getResultSet();
         if (!$row = FatApp::getDb()->fetch($rs)) {
             return 0;
@@ -2171,18 +2171,18 @@ class User extends MyAppModel
 
     return $row;
     } */
-    public static function getUserShopName(int $user_id , $langId)
+    public static function getUserShopName(int $user_id, $langId)
     {
         $user_id = FatUtility::int($user_id);
         $srch = new SearchBase(static::DB_TBL, 'tu');
         $srch->joinTable('tbl_shops', 'LEFT JOIN', 'tu.user_id = s.shop_user_id', 's');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 's.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $langId, 's_l');
         $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = tu.user_id', 'uc');
-        $srch->addMultipleFields(array('user_id', 'user_name', 'COALESCE(s_l.shop_name, s.shop_identifier) as shop_name')); 
+        $srch->addMultipleFields(array('user_id', 'user_name', 'COALESCE(s_l.shop_name, s.shop_identifier) as shop_name'));
         $srch->addCondition('tu.user_id', '=', intval($user_id));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->setPagesize(1); 
+        $srch->setPagesize(1);
         if (!$row = FatApp::getDb()->fetch($srch->getResultSet())) {
             return false;
         }

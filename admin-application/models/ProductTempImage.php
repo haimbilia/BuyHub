@@ -12,7 +12,7 @@ class ProductTempImage extends MyAppModel
     {
         $srch = static::getSearchObject();
         if ($this->mainTableRecordId > 0) {
-            $srch->addCondition('af.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+            $srch->addCondition('af.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         }
         return $srch;
     }
