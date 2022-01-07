@@ -359,7 +359,7 @@ markRead = function (nid, url, id) {
 markNavActive = function (ele) {
     ele.addClass("active");
     var menuLink = ele.parents("li:not(.hasNestedChildJs)").find(".menuLinkJs");
-    menuLink.addClass("active");
+    menuLink.addClass("active collapsed");
     var target = menuLink.data('bsTarget');
     $(target).addClass('show');
     ele.parents("li.hasNestedChildJs").find(".collapseJs").addClass("show");
