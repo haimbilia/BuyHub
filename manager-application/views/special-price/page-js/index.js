@@ -1,22 +1,19 @@
-$(document).on('click', '.editColJs', function () {
-    $(this).hide();
-    var input = $(this).siblings('input[type="text"]');
-    var value = input.attr('value');
-    input.removeClass('hide');
-    input.val('').focus().val(value);
+$(document).on('click', '.dateJs', function () {
+    var ele = $(this);
+    ele.hide().bind('active');
+    var inputFld = ele.siblings('input[type="text"]');
+    inputFld.removeClass('hide').focus().addClass('hide');
+    if (inputFld.val() != inputFld.attr('data-value')) {
+        inputFld.val(inputFld.attr('data-value'));
+    }
 });
 
-$(document).on('blur', ".splPriceColJs.dateJs", function () {
-    var currObj = $(this);
-    var oldValue = currObj.attr('data-oldval');
-    showElement(currObj, oldValue);
+$(document).on('blur', ".inputDateJs", function (e) {
+    e.stopPropagation();
+    $(this).addClass('hide').siblings('.dateJs').show();
 });
 
-$(document).on('change', ".splPriceColJs.dateJs", function () {
-    updateValues($(this));
-});
-
-$(document).on('blur', ".splPriceColJs:not(.dateJs)", function () {
+$(document).on('change', ".inputDateJs", function () {
     updateValues($(this));
 });
 
@@ -40,39 +37,35 @@ $(document).ready(function () {
         var obj = $(ele);
         var value = obj.attr('data-value');
         obj.text(value);
-
-        if (obj.hasClass('dateJs')) {
-            $(".dateJs").datepicker("show");
-        }
     }
 
     updateValues = function (ele) {
         var obj = $(ele);
+        var attribute = obj.attr('name');
         var percentDiv = obj.siblings('div.percentValJs');
-        var value = ele.textContent;
+        var value = ('splprice_price' == attribute) ? ele.textContent : obj.val();
         var price = obj.attr('data-price');
         var oldValue = obj.attr('data-value');
         var formattedValue = obj.attr('data-formated-value');
-        var attribute = obj.attr('name');
         var id = obj.attr('data-id');
         var selProdId = obj.attr('data-selprod-id');
 
+        var discountPercentage = '';
         if ('splprice_price' == attribute) {
             value = parseFloat(value);
+            if (Number.isNaN(value)) {
+                obj.text(formattedValue);
+                $.ykmsg.error(langLbl.notANumber);
+                return;
+            }
             oldValue = parseFloat(oldValue);
+            var discountPrice = price - value;
+            if (0 < discountPrice) {
+                var discountPercentage = ((discountPrice / price) * 100).toFixed(2);
+                discountPercentage = discountPercentage + "% off";
+            }
         }
 
-        if (Number.isNaN(value)) {
-            $.ykmsg.error(langLbl.notANumber);
-            return;
-        }
-
-        var discountPrice = price - value;
-        var discountPercentage = '';
-        if (0 < discountPrice) {
-            var discountPercentage = ((discountPrice / price) * 100).toFixed(2);
-            discountPercentage = discountPercentage + "% off";
-        }
 
         if ('' != value && value != oldValue) {
             var data = 'attribute=' + attribute + "&splprice_id=" + id + "&selProdId=" + selProdId + "&value=" + value;
@@ -91,24 +84,14 @@ $(document).ready(function () {
                 }
                 obj.attr('data-value', value);
                 obj.attr('data-formated-value', updatedValue);
-                obj.text(updatedValue);
+                if ('splprice_price' == attribute) {
+                    obj.text(updatedValue);
+                } else {
+                    obj.addClass('hide').siblings('.dateJs').text(updatedValue).show();
+                }
             });
+        } else if ('splprice_price' == attribute) {
+            obj.text(formattedValue);
         }
-    };
-
-    showElement = function (currObj, value) {
-        var sibling = currObj.siblings('div.editColJs');
-        var percentDiv = currObj.siblings('div.percentValJs');
-        if ('' != value) {
-            sibling.text(value);
-            var price = currObj.attr('data-price');
-            var value = currObj.attr('value');
-            var discountPrice = price - value;
-            var discountPercentage = ((discountPrice / price) * 100).toFixed(2);
-            discountPercentage = discountPercentage + "% off";
-            percentDiv.text(discountPercentage);
-        }
-        sibling.fadeIn();
-        currObj.addClass('hide');
     };
 })();

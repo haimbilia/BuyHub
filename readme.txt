@@ -499,6 +499,7 @@ Bugs :
     => 060536 - Admin UI: View comments moved in popup view from listing.
     => 060594 - Admin UI: Suggestion to show the "tax category" of the rules for the better understanding.
     => 060505 - Admin UI: Suggestion to give some indication to admin i.e. how "Order Status Color Class" will appear at the front-end
+    => 061431 - Special Price and Volume discount listing design row issue while editing
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
