@@ -649,6 +649,10 @@ class OrdersController extends ListingBaseController
         if (empty($trackingNumber) || empty($courier)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
+        /*
+        $trackingNumber  = '287939467220';
+        $courier  = 'FedEx';  
+        */    
 
         $shipmentTracking = new ShipmentTracking();
         if (false === $shipmentTracking->init($this->siteLangId)) {
@@ -662,8 +666,12 @@ class OrdersController extends ListingBaseController
         }
         $trackingInfo = $shipmentTracking->getResponse();
 
-        $this->set('trackingInfo', $trackingInfo);
-        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->set('orderNumber', $orderNumber);
+        $this->set('orderId', FatApp::getPostedData('orderId', FatUtility::VAR_INT, 0));
+        $this->set('op_id', FatApp::getPostedData('op_id', FatUtility::VAR_INT, 0));
+
+        $this->set('trackingInfo', $trackingInfo);       
+        $this->set('html', $this->_template->render(false, false, 'orders/order-tracking-info.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -735,16 +743,12 @@ class OrdersController extends ListingBaseController
         $opId = FatUtility::int($post['op_id']);
         if (1 > $opId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-
-        $shippingApiObj = (new Shipping($this->siteLangId))->getShippingApiObj() ?? NULL;
+        }      
 
         $status = FatApp::getPostedData('op_status_id', FatUtility::VAR_INT, 0);
         $manualShipping = FatApp::getPostedData('manual_shipping', FatUtility::VAR_INT, 0);
         $trackingNumber = FatApp::getPostedData('tracking_number', FatUtility::VAR_STRING, '');
-        if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && empty($shippingApiObj)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId), true);
-        }
+        
 
         $shippedByPlugin = FatApp::getPostedData('shipped_by_plugin', FatUtility::VAR_INT, 0);
 
@@ -769,7 +773,7 @@ class OrdersController extends ListingBaseController
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->joinOrderUser();
         $srch->addCondition('op_id', '=', $opId);
-        $srch->addMultipleFields(['op.*', 'pm.*', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code']);
+        $srch->addMultipleFields(['op.*', 'pm.*', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code','opshipping_by_seller_user_id','op_selprod_user_id','opshipping_carrier_code']);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -780,6 +784,14 @@ class OrdersController extends ListingBaseController
 
         if (empty($orderDetail)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']);
+        $shippingObj = new Shipping($this->siteLangId);
+        $shippingApiObj = $shippingObj->getShippingApiObj(($shippingHanldedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+       
+        if ($status ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && empty($trackingNumber) && 1 > $manualShipping && empty($shippingApiObj)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_SELF_SHIPPING', $this->siteLangId), true);
         }
 
         if ($orderDetail['plugin_code'] == 'CashOnDelivery') {
@@ -807,14 +819,16 @@ class OrdersController extends ListingBaseController
 
         if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && !$orderDetail['optsu_user_id'] && in_array($post["op_status_id"], $restrictOrderStatusChange) && $orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
             LibHelper::exitWithError(Labels::getLabel('ERR_Please_assign_shipping_user', $this->siteLangId), true);
-        }
-
+        }    
+     
         if (in_array($orderDetail["op_status_id"], $processingStatuses) && in_array($post["op_status_id"], $processingStatuses)) {
+          
             $trackingCourierCode = '';
-            $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
-            if ($post["op_status_id"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && !empty($shippingApiObj) && in_array($shippingApiObj->keyName, ['AfterShipShipment'])) {
-                $activatedTrackPluginId = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, 'plugin_id') ?? 0;
-                if (0 < $manualShipping) {
+            $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');  
+            $activatedTrackPluginId = (new Plugin())->getDefaultPluginData(Plugin::TYPE_SHIPMENT_TRACKING, 'plugin_id') ?? 0;        
+            if ($post["op_status_id"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {                 
+                
+                if (0 < $manualShipping) {               
                     $updateData = [
                         'opship_op_id' => $post['op_id'],
                         "opship_tracking_number" => $post['tracking_number'],
@@ -829,21 +843,28 @@ class OrdersController extends ListingBaseController
                         $updateData['opship_tracking_courier_code'] = $oshistory_courier;
                         $updateData['opship_tracking_plugin_id'] = $activatedTrackPluginId;
                     }
-                } else {
-                    $trackingRelation = new TrackingCourierCodeRelation();
-                    $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
-                    $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
-                    $updateData = [
-                        'opship_op_id' => $post['op_id'],
-                        "opship_tracking_courier_code" => $trackingCourierCode,
-                        "opship_tracking_plugin_id" => $activatedTrackPluginId,
-                    ];
-                }
-
-                if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
-                    LibHelper::exitWithError(FatApp::getDb()->getError(), true);
-                }
+                    if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
+                        LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+                    }
+                } else {                    
+                    
+                    if(0 < $activatedTrackPluginId){
+                        $trackingRelation = new TrackingCourierCodeRelation();
+                        $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
+                        $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
+                        $updateData = [
+                            'opship_op_id' => $post['op_id'],
+                            "opship_tracking_courier_code" => $trackingCourierCode,
+                            "opship_tracking_plugin_id" => $activatedTrackPluginId,
+                        ];
+    
+                        if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
+                            LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+                        }
+                    }                                     
+                }                    
             }
+          
             $trackingNumber = FatApp::getPostedData("tracking_number", FatUtility::VAR_STRING, '');
             if (!$orderObj->addChildProductOrderHistory($opId, $orderDetail["order_language_id"], $post["op_status_id"], $post["comments"], $post["customer_notified"], $trackingNumber, 0, true, $trackingCourierCode, $opship_tracking_url)) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
