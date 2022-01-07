@@ -1556,3 +1556,4 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 VALUES ('LBL_NOT_SERVICEABLE', 1, 'Not serviceable at your location', 1),
 ('LBL_NOT_AVAILABLE', 1, 'Not Available', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- -------------------TV-9.4.0.20210107-----------------
