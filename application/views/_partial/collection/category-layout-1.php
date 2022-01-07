@@ -32,22 +32,22 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
 
                             $i = 1;
                             foreach ($category['products'] as $key => $product) {
-                               
-                                    $selProdRibbons = [];
-                                    if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
-                                        $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
-                                    }
 
-                                    if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
-                                        $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
-                                    }
+                                $selProdRibbons = [];
+                                if (array_key_exists($product['selprod_id'], $tLeftRibbons)) {
+                                    $selProdRibbons[] = $tLeftRibbons[$product['selprod_id']];
+                                }
+
+                                if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
+                                    $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
+                                }
                             ?>
-                                    <div class="items">
-                                        <?php $prodImgSize = 'MEDIUM'; ?>
-                                        <div class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> item--sold  <?php } ?>">
-                                            <?php if ($product['selprod_stock'] <= 0) { ?>
-                                                <span class="tag--soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
-                                            <?php  } ?>
+                                <div class="items">
+                                    <?php $prodImgSize = 'MEDIUM'; ?>
+                                    <div class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> item--sold  <?php } ?>">
+                                        <?php if ($product['selprod_stock'] <= 0) { ?>
+                                            <span class="tag--soldout"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></span>
+                                        <?php  } ?>
 
                                         <div class="products-body">
                                             <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
@@ -57,37 +57,36 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                                     </svg> <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?></div>
                                             <?php } ?>
 
-                                                <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
-                                                <div class="products-img">
-                                                    <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])); ?>">
-                                                        <?php
-                                                        $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
-                                                        $pictureAttr = [
-                                                            'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : "WEBPCLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
-                                                            'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                                                            'ratio' => '1:1',
-                                                            'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name'],
-                                                            'siteLangId' => $siteLangId,
-                                                        ];
+                                            <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
+                                            <div class="products-img">
+                                                <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])); ?>">
+                                                    <?php
+                                                    $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
+                                                    $pictureAttr = [
+                                                        'webpImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : "WEBPCLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp'),
+                                                        'jpgImageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : "CLAYOUT3", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
+                                                        'ratio' => '1:1',
+                                                        'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name'],
+                                                        'siteLangId' => $siteLangId,
+                                                    ];
 
-                                                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
-                                                        ?>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="products-foot">
-                                                <div class="products-title">
-                                                    <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo $product['selprod_title']; ?>
-                                                    </a>
-                                                </div>
-                                                <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
+                                                    $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                                    ?>
+                                                </a>
                                             </div>
                                         </div>
-
-
+                                        <div class="products-foot">
+                                            <div class="products-title">
+                                                <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo $product['selprod_title']; ?>
+                                                </a>
+                                            </div>
+                                            <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
+                                        </div>
                                     </div>
+
+
+                                </div>
                             <?php $i++;
-                               
                             } ?>
                         </div>
                     </div>

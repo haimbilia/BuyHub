@@ -45,39 +45,63 @@
     &-brand {
         background-color: var(--brand-color);
         color: var(--brand-color-inverse);
+        &:hover {
+            color: currentColor;
+        }
     }
     &-outline-brand {
         border-color: var(--brand-color);
         color: var(--brand-color-inverse);
+        &:hover {
+            color: currentColor;
+        }
     }
     &-white {
         background: #fff;
         color: #000;
+        &:hover {
+            color: currentColor;
+        }
     }
     &-outline-brand {
         background: none;
         border-color: $brand-color;
         color: $brand-color;
+        &:hover {
+            color: currentColor;
+        }
     }
     &-outline-secondary {
         background: none;
         border-color: $secondary-color;
         color: $secondary-color;
+        &:hover {
+            color: currentColor;
+        }
     }
     &-outline-white {
         background: none;
         border-color: #fff;
         color: #fff;
+        &:hover {
+            color: currentColor;
+        }
     }
     &-outline-black {
         background: none;
         border-color: #000;
         color: $body-color;
+        &:hover {
+            color: currentColor;
+        }
     }
     &-outline-gray {
         background: none;
         border-color: $border-color;
         color: $body-color;
+        &:hover {
+            color: currentColor;
+        }
     }
     &-block {
         display: block;
@@ -196,7 +220,7 @@ a.link-arrow {
     background-repeat: no-repeat;
     background-size: 0% 1px;
     transition: background-size 0.3s;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     &:after {
         transition: all 0.5s ease;

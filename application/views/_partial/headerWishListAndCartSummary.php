@@ -27,7 +27,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
 
         </div>
         <?php if ($totalCartItems > 0) { ?>
-            <div class="offcanvas-body side-cart_body ">
+            <div class="offcanvas-body side-cart_body">
                 <div class="short-detail">
                     <ul class="list-cart">
                         <?php
@@ -40,69 +40,64 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                                 $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], "WEBPEXTRA-SMALL", $product['selprod_id'], 0, $siteLangId)) . $uploadedTime,   CONF_IMG_CACHE_TIME, '.webp');
                         ?>
 
-                                <li class="<?php echo (!$product['in_stock']) ? 'disabled' : '';
-                                            echo ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>">
+                                <li class="list-cart-item <?php echo (!$product['in_stock']) ? 'disabled' : '';
+                                                            echo ($product['is_digital_product']) ? 'digital_product_tab-js' : 'physical_product_tab-js'; ?>">
+                                    <div class="block-img block-img-sm">
+                                        <div class="products-img">
+                                            <a href="<?php echo $productUrl; ?>">
+                                                <?php
+                                                $pictureAttr = [
+                                                    'siteLangId' => $siteLangId,
+                                                    'webpImageUrl' => $imageWebpUrl,
+                                                    'jpgImageUrl' => $imageUrl,
+                                                    'alt' => $product['product_name'],
+                                                ];
+                                                $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
+                                                ?>
+                                            </a>
+                                        </div>
+                                        <button class="btn-remove" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                            <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
+                                        </button>
+                                    </div>
+                                    <div class="block-detail">
+                                        <div class="block-detail-top">
+                                            <div class="product-profile">
+                                                <div class="product-profile-data">
+                                                    <div class="category">
+                                                        <a href="<?php echo $shopUrl; ?>"><?php echo $product['shop_name']; ?> </a>
+                                                    </div>
+                                                    <a class="title" title="<?php echo $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                                                    <div class="options">
+                                                        <?php
+                                                        if (isset($product['options']) && count($product['options'])) {
+                                                            $count = 0;
+                                                            foreach ($product['options'] as $option) {
+                                                        ?>
+                                                                <?php echo ($count > 0) ? ' | ' : '';
+                                                                echo $option['option_name'] . ':'; ?>
+                                                                <?php echo $option['optionvalue_name']; ?>
+                                                        <?php $count++;
+                                                            }
+                                                        } ?>
+                                                        | <?php echo Labels::getLabel('LBL_Quantity:', $siteLangId) ?>
+                                                        <?php echo $product['quantity']; ?> </div>
 
-                                    <div class="cell cell_product">
-                                        <div class="item">
-                                            <div class="item__pic">
-                                                <a href="<?php echo $productUrl; ?>">
-                                                    <?php
-                                                    $pictureAttr = [
-                                                        'siteLangId' => $siteLangId,
-                                                        'webpImageUrl' => $imageWebpUrl,
-                                                        'jpgImageUrl' => $imageUrl,
-                                                        'alt' => $product['product_name'],
-                                                    ];
-
-                                                    $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
-                                                    ?>
-                                                </a>
-                                            </div>
-                                            <div class="item__description">
-                                                <div class="item__category"><a href="<?php echo $shopUrl; ?>"><?php echo $product['shop_name']; ?> </a></div>
-                                                <div class="item__title"><a title="<?php echo $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                                                    <div class="products-price">
+                                                        <span class="products-price-new">
+                                                            <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
+                                                        </span>
+                                                        <?php if ($product['special_price_found']) { ?>
+                                                            <span class="products-price-off"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
+                                                        <?php } ?>
+                                                    </div>
                                                 </div>
-                                                <div class="item__specification"> <?php
-                                                                                    if (isset($product['options']) && count($product['options'])) {
-                                                                                        $count = 0;
-                                                                                        foreach ($product['options'] as $option) {
-                                                                                    ?>
-                                                            <?php echo ($count > 0) ? ' | ' : '';
-                                                                                            echo $option['option_name'] . ':'; ?>
-                                                            <?php echo $option['optionvalue_name']; ?>
-                                                    <?php $count++;
-                                                                                        }
-                                                                                    } ?>
-                                                    | <?php echo Labels::getLabel('LBL_Quantity:', $siteLangId) ?>
-                                                    <?php echo $product['quantity']; ?> </div>
+
+
+
                                             </div>
+
                                         </div>
-                                    </div>
-
-
-                                    <div class="cell cell_price">
-                                        <div class="product-price">
-                                            <span class="new_price">
-                                                <?php echo CommonHelper::displayMoneyFormat($product['theprice'] * $product['quantity']); ?>
-                                            </span>
-                                            <?php if ($product['special_price_found']) { ?>
-                                                <span class="off_price text-success"><?php echo CommonHelper::showProductDiscountedText($product, $siteLangId); ?></span>
-                                            <?php } ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="cell cell_action">
-                                        <ul class="actions">
-                                            <li>
-                                                <a href="javascript:void(0)" class="" onclick="cart.remove('<?php echo md5($product['key']); ?>')" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                                    <svg class="svg" width="18" height="18" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#bin">
-                                                        </use>
-                                                    </svg>
-                                                </a>
-                                            </li>
-                                        </ul>
 
                                     </div>
                                 </li>
@@ -129,7 +124,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                         <?php } ?>
                         <?php ?>
                         <?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0); ?>
-                        <li class="hightlighted">
+                        <li class="highlighted">
                             <span class="label"><?php echo Labels::getLabel('LBL_Net_Payable', $siteLangId); ?></span>
                             <span class="value"><?php echo CommonHelper::displayMoneyFormat($netChargeAmt); ?></span>
                         </li>
@@ -149,39 +144,3 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
         <?php } ?>
     </div>
 <?php } ?>
-
-<script>
-    $(document).ready(function() {
-
-        $('body').find('*[data-trigger-cart]').click(function() {
-            var targetElmId = $(this).data('trigger-cart');
-            var elmToggleClass = targetElmId + '--on';
-            if ($('body').hasClass(elmToggleClass)) {
-                $('body').removeClass(elmToggleClass);
-            } else {
-                $('body').addClass(elmToggleClass);
-            }
-        });
-
-        $('body').find('*[data-bs-target-close-cart]').click(function() {
-            var targetElmId = $(this).data('target-close-cart');
-            $('body').toggleClass(targetElmId + '--on');
-        });
-
-        $('body').mouseup(function(event) {
-            if ($(event.target).data('triggerCart') != '' && typeof $(event.target).data('triggerCart') !==
-                typeof undefined) {
-                event.preventDefault();
-                return;
-            }
-
-            $('body').find('*[data-close-on-click-outside-cart]').each(function(idx, elm) {
-                var slctr = $(elm);
-                if (!slctr.is(event.target) && !$.contains(slctr[0], event.target)) {
-                    $('body').removeClass(slctr.data('close-on-click-outside-cart') + '--on');
-                }
-            });
-        });
-
-    });
-</script>

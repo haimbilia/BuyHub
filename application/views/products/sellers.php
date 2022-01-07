@@ -14,12 +14,12 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                             <div class="product-avtar"><a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array(
                                                                                                                         $product['selprod_id']
                                                                                                                     )); ?>"><img alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array(
-                                $product['product_id'],
-                                "SMALL",
-                                $product['selprod_id'],
-                                0,
-                                $siteLangId
-                            ), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>"></a>
+                                                                                                                                                    $product['product_id'],
+                                                                                                                                                    "SMALL",
+                                                                                                                                                    $product['selprod_id'],
+                                                                                                                                                    0,
+                                                                                                                                                    $siteLangId
+                                                                                                                                                ), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>"></a>
                             </div>
                         </div>
                         <div class="prod-info__right">
@@ -28,7 +28,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                                                                                     $product['selprod_id']
                                                                                                 )); ?>"><?php echo $product['selprod_title']; ?></a></h5>
                                 <?php if (round($product['prod_rating']) > 0 && FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-                                ?> <div class="products__rating"><i class="icn"><svg class="svg">
+                                ?> <div class="product-ratings"><i class="icn"><svg class="svg">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                                                 </use>
                                             </svg> </i><span class="rate"><?php echo round($product['prod_rating'], 1); ?></span> </div> <?php
@@ -93,8 +93,8 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                         )) . '" alt="' . $moresellers['shop_name'] . '">
                                                             </a>
                                                         </figure>
-                                                        <div class="item__description">
-                                                            <div class="item__title">
+                                                         <div class="product-profile-data">
+                                                            <div class="title" >
                                                                 <a title="' . $moresellers[$key] . '" href="' . UrlHelper::generateUrl('shops', 'view', array(
                                             $moresellers['shop_id']
                                         )) . '">
@@ -109,7 +109,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
                                                                 </a>
                                                             </div>';
                                         if (isset($product['rating'][$moresellers['selprod_user_id']]) && $product['rating'][$moresellers['selprod_user_id']] > 0) {
-                                            $txt .= '<div class="products__rating">
+                                            $txt .= '<div class="product-ratings">
                                                                             <i class="icn">
                                                                                 <svg class="svg">
                                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#star-yellow" href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#star-yellow">

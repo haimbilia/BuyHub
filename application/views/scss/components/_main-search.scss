@@ -49,10 +49,8 @@
         }
         &-link {
             display: inline-block;
-
             transition: all 0.2s linear;
             position: relative;
-
             &:after {
                 transition: all 0.5s ease;
                 position: absolute;
@@ -71,7 +69,6 @@
                 }
             }
         }
-
         &-span {
         }
     }

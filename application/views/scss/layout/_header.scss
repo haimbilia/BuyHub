@@ -1,7 +1,7 @@
 $header-height: 138px;
 .header {
     position: sticky;
-    z-index: $zindex-sticky;
+    z-index: $zindex-fixed;
     top: 0;
     width: 100%;
     font-weight: 300;
@@ -112,6 +112,9 @@ $header-height: 138px;
         background: none;
         border: none;
         margin-#{$end-direction}: 10px;
+        @include media-breakpoint-up(xl) {
+            display: none;
+        }
     }
 }
 
@@ -128,7 +131,10 @@ $header-height: 138px;
     &-link {
         background: none;
         border: none;
-        font-weight: inherit;
+        font-weight: 400;
+        line-height: 1;
+        display: flex;
+        align-items: center;
         &:hover {
             color: $secondary-color;
         }
@@ -136,7 +142,7 @@ $header-height: 138px;
     .icn {
         .svg {
             color: $secondary-color;
-            margin-#{$end-direction}: 5px;
+            margin-#{$end-direction}: 8px;
         }
     }
 }
@@ -148,4 +154,7 @@ $header-height: 138px;
 .btn-mega-search {
     background: transparent;
     border: none;
+    .svg {
+        color: $secondary-color;
+    }
 }

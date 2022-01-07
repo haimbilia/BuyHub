@@ -18,13 +18,13 @@
                         <div class="item">
                             <h6 class="big-title"><?php echo $firstCharacter; ?></h6>
                             <ul>
-                    <?php } ?>
-                                <li>
-                                    <a href="<?php echo UrlHelper::generateUrl('Brands', 'view', array($brands['brand_id'])); ?>">
-                                        <?php echo $brandName; ?>
-                                    </a>
-                                </li>
-                <?php } ?>
+                            <?php } ?>
+                            <li>
+                                <a href="<?php echo UrlHelper::generateUrl('Brands', 'view', array($brands['brand_id'])); ?>">
+                                    <?php echo $brandName; ?>
+                                </a>
+                            </li>
+                        <?php } ?>
                             </ul>
                         </div>
             <?php }

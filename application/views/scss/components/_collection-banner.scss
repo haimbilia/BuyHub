@@ -23,9 +23,9 @@
 .poster-layout-2 {
     display: grid;
     grid-gap: 3rem;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     @include media-breakpoint-down(sm) {
-        grid-template-columns: repeat(1, 1fr);
+        display: block;
     }
     .poster {
         text-align: center;

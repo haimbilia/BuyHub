@@ -48,15 +48,14 @@ if (!empty($category['banner'])) {
                 break;
         } ?>
     <?php } ?>
-    <section class="bg-shop">
-        <div class="shop-banner">
-            <picture>
-                <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($mobile_url, ','); ?>" media="(max-width: 767px)">
-                <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($tablet_url, ','); ?>" media="(max-width: 1024px)">
-                <source data-aspect-ratio="4:1" srcset="<?php echo rtrim($desktop_url, ','); ?>">
-                <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
-            </picture>
-        </div>
+    <section class="bg-shop shop-banner">
+        <picture>
+            <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($mobile_url, ','); ?>" media="(max-width: 767px)">
+            <source data-aspect-ratio="4:3" srcset="<?php echo rtrim($tablet_url, ','); ?>" media="(max-width: 1024px)">
+            <source data-aspect-ratio="4:1" srcset="<?php echo rtrim($desktop_url, ','); ?>">
+            <img data-aspect-ratio="4:1" src="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
+        </picture>
+
         <?php /* if (!empty($category['prodcat_description']) && array_key_exists('prodcat_description', $category)) { ?>
     <div class="page-category__content">
         <p><?php  echo FatUtility::decodeHtmlEntities($category['prodcat_description']); ?></p>
@@ -84,21 +83,16 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                     break;
             }
         } ?>
-        <section class="bg-shop">
-            <div class="shop-banner">
-                <picture>
-                    <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
-                    <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
-                    <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
-                    <img data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
-                </picture>
-
-            </div>
+        <section class="bg-shop shop-banner">
+            <picture>
+                <source data-aspect-ratio="4:3" srcset="<?php echo $mobile_url; ?>" media="(max-width: 767px)">
+                <source data-aspect-ratio="4:3" srcset="<?php echo $tablet_url; ?>" media="(max-width: 1024px)">
+                <source data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>">
+                <img data-aspect-ratio="4:1" srcset="<?php echo $desktop_url; ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $pageTitle; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $pageTitle; ?>">
+            </picture>
         </section>
     <?php } ?>
 <?php } ?>
-
-
 <?php $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearch' => $frmProductSearch, 'siteLangId' => $siteLangId, 'recordCount' => $recordCount, 'pageTitle' => (isset($pageTitle)) ? $pageTitle : 'Products'), false);  ?>
 <section class="section">
     <div class="container">
@@ -110,7 +104,6 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                             <?php $this->includeTemplate('_partial/custom/header-breadcrumb.php'); ?>
                         </div>
                     <?php } ?>
-
                     <div id="top-filters" class="page-sort hide_on_no_product">
                         <ul>
                             <!-- <li>
@@ -123,7 +116,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                             <li class="page-views">
                                 <a href="javascript:void(0);" data-vtype="grid" class="listing-view-toggle--js <?php echo $vtype == 'grid' ? 'active' : ''; ?>">
                                     <i class="icn">
-                                        <svg class="svg" width="18px" height="18px">
+                                        <svg class="svg" width="18" height="18">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#gridview">
                                             </use>
                                         </svg>
@@ -133,7 +126,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                             <li class="page-views">
                                 <a href="javascript:void(0);" data-vtype="list" class="listing-view-toggle--js <?php echo $vtype == 'list' ? 'active' : ''; ?>">
                                     <i class="icn">
-                                        <svg class="svg" width="18px" height="18px">
+                                        <svg class="svg" width="18" height="18">
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#listview">
                                             </use>
                                         </svg>
@@ -144,7 +137,7 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                 <li class="page-views">
                                     <a href="javascript:void(0);" data-vtype="map" class="listing-view-toggle--js <?php echo $vtype == 'map' ? 'active' : ''; ?>">
                                         <i class="icn">
-                                            <svg class="svg" width="18px" height="18px">
+                                            <svg class="svg" width="18" height="18">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mapview">
                                                 </use>
                                             </svg>
@@ -155,8 +148,6 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                         </ul>
                         <?php echo $frmProductSearch->getFieldHtml('pageSize'); ?>
                     </div>
-
-
                 </div>
                 <div class="collection-search-bottom">
                     <?php if (isset($pageTitle)) { ?>
@@ -168,16 +159,15 @@ if (array_key_exists('brand_id', $postedData) && $postedData['brand_id'] > 0) {
                                     $keywordStr = '<span title="' . $keyword . '" class="search-results">"' . $short_keyword . '"</span>';
                                 }
                                 echo $pageTitle; ?> <?php echo $keywordStr; ?>
-                                <span class="total-products">
-                                    <?php echo isset($scollection_name) && !empty($scollection_name) ? $scollection_name : ''; ?>
-                                    <span class="hide_on_no_product">
-                                        <span id="total_records"><?php echo $recordCount; ?></span>
-                                        <?php echo Labels::getLabel('LBL_ITEM(S)', $siteLangId); ?>
-
-                                    </span>
-
-                                </span>
                             </h1>
+                            <span class="total-products">
+                                <?php echo isset($scollection_name) && !empty($scollection_name) ? $scollection_name : ''; ?>
+                                <span class="hide_on_no_product">
+                                    <span id="total_records"><?php echo $recordCount; ?></span>
+                                    <?php echo Labels::getLabel('LBL_ITEM(S)', $siteLangId); ?>
+                                </span>
+                            </span>
+
                         </div>
                     <?php } ?>
                     <div class="selected-filters" id="filters">

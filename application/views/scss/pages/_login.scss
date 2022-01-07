@@ -6,6 +6,9 @@
     flex-wrap: nowrap;
     .banner-side {
         background: #000;
+        background-repeat: no-repeat;
+        background-position: center top;
+        background-size: cover;
         display: flex;
         max-width: 30%;
         flex: 0 0 30%;
@@ -47,9 +50,8 @@
         }
         &-body {
             padding: 2rem;
-
             @include media-breakpoint-up(lg) {
-                border: $border;
+                //border: $border;
             }
         }
     }

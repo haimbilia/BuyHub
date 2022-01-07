@@ -120,8 +120,6 @@
     min-width: 14rem;
     padding: 0;
     box-shadow: 0 0 50px 0 rgba(82, 63, 105, 0.15);
-    padding: 1rem 0;
-
     #{$start-direction}: 0;
     text-align: #{$start-direction};
     &-anim {
