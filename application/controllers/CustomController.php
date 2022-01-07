@@ -5,7 +5,7 @@ class CustomController extends MyAppController
     public function contactUs()
     {
         $contactFrm = $this->contactUsForm();
-        
+        $contactFrm->addSecurityToken();
         $termsAndConditionsLinkHref = 'javascript:void(0)';
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
@@ -36,7 +36,7 @@ class CustomController extends MyAppController
     public function contactSubmit()
     {
         $frm = $this->contactUsForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
         
         if (false === $post) {
             $message = $frm->getValidationErrors();
@@ -46,7 +46,8 @@ class CustomController extends MyAppController
             Message::addErrorMessage($message);
             FatApp::redirectUser(UrlHelper::generateUrl('Custom', 'ContactUs'));
         }
-
+        $frm->expireSecurityToken(FatApp::getPostedData());
+        
         if (false === MOBILE_APP_API_CALL && !CommonHelper::verifyCaptcha()) {
             $message = Labels::getLabel('MSG_That_captcha_was_incorrect', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
