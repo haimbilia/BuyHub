@@ -194,7 +194,11 @@ class NavigationsController extends ListingBaseController
         $post['nav_identifier'] = $post['nav_name'];
         $record->assignValues($post);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $this->setLangData($record, [
@@ -346,7 +350,11 @@ class NavigationsController extends ListingBaseController
         $navLinkObj = new NavigationLinks($nlinkId);
         $navLinkObj->assignValues($post);
         if (!$navLinkObj->save()) {
-            LibHelper::exitWithError($navLinkObj->getError(), true);
+            $msg = $navLinkObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $nlinkId = $navLinkObj->getMainTableRecordId();

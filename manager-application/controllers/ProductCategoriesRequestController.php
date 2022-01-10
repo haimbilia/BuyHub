@@ -176,7 +176,11 @@ class ProductCategoriesRequestController extends ListingBaseController
         $record = new ProductCategory($recordId);
         $record->assignValues($data);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($record, ['prodcat_name' => $data['prodcat_name']]);
         $record->updateCatCode();

@@ -205,7 +205,11 @@ class SlidesController extends ListingBaseController
         $slideObj->assignValues($post);
 
         if (!$slideObj->save()) {
-            LibHelper::exitWithError($slideObj->getError(), true);
+            $msg = $slideObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $recordId = $slideObj->getMainTableRecordId();

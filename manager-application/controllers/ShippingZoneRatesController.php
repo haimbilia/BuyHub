@@ -63,7 +63,6 @@ class ShippingZoneRatesController extends ListingBaseController {
         $this->set('frm', $frm);
         $this->set('rateData', $data);
         $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);nder(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
@@ -88,7 +87,11 @@ class ShippingZoneRatesController extends ListingBaseController {
         $srObj = new ShippingRate($rateId);
         $srObj->assignValues($post);
         if (!$srObj->save()) {
-            LibHelper::exitWithError($srObj->getError(), true);
+            $msg = $srObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $rateId = $srObj->getMainTableRecordId();
         $this->setLangData($srObj, [
@@ -125,8 +128,8 @@ class ShippingZoneRatesController extends ListingBaseController {
         $this->set('langId', $langId);
         $this->set('langFrm', $langFrm);
         $this->set('activeLangtab', true);
-        $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);ayoutDirection($langId));
+
+        $this->set('formLayout', Language::getLayoutDirection($langId));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

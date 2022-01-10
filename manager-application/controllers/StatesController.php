@@ -188,7 +188,11 @@ class StatesController extends ListingBaseController
         $recordObj->assignValues($post);
 
         if (!$recordObj->save()) {
-            LibHelper::exitWithError($recordObj->getError(), true);
+            $msg = $recordObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $this->setLangData($recordObj, [$recordObj::tblFld('name') => $post[$recordObj::tblFld('name')]]);

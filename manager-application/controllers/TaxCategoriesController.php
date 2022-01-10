@@ -178,7 +178,11 @@ class TaxCategoriesController extends ListingBaseController
         $tax = new Tax($recordId);
         $tax->assignValues($data);
         if (!$tax->save()) {
-            LibHelper::exitWithError($tax->getError(), true);
+            $msg = $tax->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($tax, [$tax::tblFld('name') => $post[$tax::tblFld('name')]]);
         $this->set('msg', $this->str_setup_successful);

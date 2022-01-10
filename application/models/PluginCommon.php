@@ -209,7 +209,7 @@ class PluginCommon extends MyAppModel
     /**
      * getSeparateIconTypeArr
      *
-     * @return void
+     * @return array
      */
     public static function getSeparateIconTypeArr(): array
     {
