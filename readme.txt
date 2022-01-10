@@ -515,6 +515,7 @@ Bugs :
     => 060863 - Admin UI: Getting multiple issues under the side's menu section
     => 060835 - Admin UI: Inconsistency: Design is not the same for the edit fields in the table under the Manage weightages section
     => 060770 - Admin UI: Table's alignment is not correct under the special price section
+    => 060538 - Admin UI: Validation's design is not consistent for the User's dropdown under the rewards section
 
 
 Known Issues and Problems :
