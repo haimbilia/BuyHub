@@ -21,6 +21,8 @@ $(document).on('change', '.prefDimensionsJs', function () {
         }
         $(".listingTableJs tbody.listingRecordJs").sortable({
             handle: '.handleJs',
+            helper: fixWidthHelper,
+            start: fixPlaceholderStyle,
             update: function (event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
