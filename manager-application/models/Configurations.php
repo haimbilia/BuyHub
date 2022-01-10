@@ -29,6 +29,8 @@ class Configurations extends FatModel
     public const FORM_USER_ACCOUNT = 21;
     public const FORM_CART_WISHLIST = 22;
     public const FORM_COMMISSION = 23;
+    
+    public const MESSAGE_AUTOCLOSE_TIME = 3;
 
     public function __construct()
     {
