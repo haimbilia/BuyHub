@@ -20,7 +20,7 @@
                                 <div class="info">
                                     <span>
                                         <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#info">
                                             </use>
                                         </svg>
                                         <?php echo str_replace("{clickhere}", '<a href="javascript:void(0)" class="link" onclick="resendVerificationLink(' . "'" . $userInfo['credential_email'] . "'" . ')">' . Labels::getLabel('LBL_VERIFY?', $siteLangId) . '</a>', Labels::getLabel('MSG_YOUR_EMAIL_VERIFICATION_IS_PENDING._{clickhere}', $siteLangId)); ?>

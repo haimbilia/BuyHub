@@ -1,14 +1,16 @@
 <?php
+
 class GuestUserController extends MyAppController
 {
+
     private $authToken = '';
     private $username = '';
 
     public function loginForm()
     {
         /* if(UserAuthentication::doCookieLogin()){
-        FatApp::redirectUser(UrlHelper::generateUrl('account'));
-        } */
+          FatApp::redirectUser(UrlHelper::generateUrl('account'));
+          } */
         if (UserAuthentication::isGuestUserLogged()) {
             FatApp::redirectUser(UrlHelper::generateUrl('home'));
         }
@@ -20,6 +22,7 @@ class GuestUserController extends MyAppController
         $socialLoginApis = Plugin::getDataByType(Plugin::TYPE_SOCIAL_LOGIN, $this->siteLangId);
 
         $loginFrm = $this->getLoginForm();
+        $loginFrm->addSecurityToken();
         $loginData = array(
             'loginFrm' => $loginFrm,
             'socialLoginApis' => $socialLoginApis,
@@ -32,7 +35,6 @@ class GuestUserController extends MyAppController
         $this->set('exculdeMainHeaderDiv', true);
         $this->_template->render(true, false);
     }
-
 
     public function registrationForm()
     {
@@ -51,11 +53,10 @@ class GuestUserController extends MyAppController
         $this->_template->render(true, false, 'guest-user/registration-form.php');
     }
 
-
-
     public function registerFormDetail($isRegisterForm, $signUpWithPhone = 0)
     {
         $registerFrm = $this->getRegistrationForm(true, $signUpWithPhone);
+        $registerFrm->addSecurityToken();
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
         $cPageSrch->doNotCalculateRecords();
@@ -116,8 +117,15 @@ class GuestUserController extends MyAppController
             LibHelper::dieJsonResponse($resp);
         }
 
-        $password = FatApp::getPostedData('password');
+        $frm = $this->getLoginForm();
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
+        if ($post == false) {
+            $resp = LibHelper::formatResponse(applicationConstants::FAILURE, current($frm->getValidationErrors()));
+            LibHelper::dieJsonResponse($resp);
+        }
+        $frm->expireSecurityToken(FatApp::getPostedData());
 
+        $password = FatApp::getPostedData('password');
         $userName = FatApp::getPostedData('username');
         $dialCode = FatApp::getPostedData('username_dcode', FatUtility::VAR_STRING, '');
 
@@ -222,14 +230,14 @@ class GuestUserController extends MyAppController
 
 
             /* if( User::isBuyer()  || User::isSigningUpBuyer()){
-            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'B';
-            } else if( User::isSeller() || User::isSigningUpForSeller() ){
-            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';
-            } else if( User::isAdvertiser() || User::isSigningUpAdvertiser() ){
-            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'Ad';
-            } else if( User::isAffiliate()  || User::isSigningUpAffiliate()){
-            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'AFFILIATE';
-            } */
+              $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'B';
+              } else if( User::isSeller() || User::isSigningUpForSeller() ){
+              $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'S';
+              } else if( User::isAdvertiser() || User::isSigningUpAdvertiser() ){
+              $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'Ad';
+              } else if( User::isAffiliate()  || User::isSigningUpAffiliate()){
+              $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'AFFILIATE';
+              } */
         }
         if ($redirectUrl == '') {
             $redirectUrl = User::getPreferedDashbordRedirectUrl($preferredDashboard);
@@ -340,6 +348,7 @@ class GuestUserController extends MyAppController
     {
         $includeGuestLogin = FatApp::getPostedData('includeGuestLogin', FatUtility::VAR_STRING, false);
         $frm = $this->getLoginForm($includeGuestLogin);
+        $frm->addSecurityToken();
         $socialLoginApis = Plugin::getDataByType(Plugin::TYPE_SOCIAL_LOGIN, $this->siteLangId);
         $this->set('loginFrm', $frm);
         $this->set('siteLangId', $this->siteLangId);
@@ -366,7 +375,6 @@ class GuestUserController extends MyAppController
         die(json_encode($json));
     }
 
-
     public function registrationFormOld()
     {
         if (UserAuthentication::isGuestUserLogged()) {
@@ -378,6 +386,7 @@ class GuestUserController extends MyAppController
         }
 
         $registerFrm = $this->getRegistrationForm();
+        $registerFrm->addSecurityToken();
 
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
@@ -402,6 +411,7 @@ class GuestUserController extends MyAppController
     }
 
     /* Used for APP only. */
+
     public function checkEmailExists()
     {
         $emailAddress = FatApp::getPostedData('email', FatUtility::VAR_STRING, '');
@@ -418,13 +428,13 @@ class GuestUserController extends MyAppController
         }
 
         $resp = LibHelper::formatResponse(
-            applicationConstants::SUCCESS,
-            Labels::getLabel('MSG_RESULT_FOUND', $this->siteLangId),
-            [
-                'found' => 1,
-                'verified' => $data['credential_verified'],
-            ],
-            LibHelper::RC_OK
+                applicationConstants::SUCCESS,
+                Labels::getLabel('MSG_RESULT_FOUND', $this->siteLangId),
+                [
+                    'found' => 1,
+                    'verified' => $data['credential_verified'],
+                ],
+                LibHelper::RC_OK
         );
         LibHelper::dieJsonResponse($resp);
     }
@@ -435,7 +445,6 @@ class GuestUserController extends MyAppController
         $showNewsLetterCheckBox = 0 < $signUpWithPhone ? false : true;
 
         $frm = $this->getRegistrationForm($showNewsLetterCheckBox, $signUpWithPhone);
-
         $userName = FatApp::getPostedData('user_username', FatUtility::VAR_STRING, '');
         if (empty($userName) || false === ValidateElement::fatbitUsername($userName)) {
             $message = Labels::getLabel("MSG_INVALID_FATBIT_USERNAME", $this->siteLangId);
@@ -443,12 +452,13 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
         }
 
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);
         if ($post == false) {
             $message = Labels::getLabel(current($frm->getValidationErrors()), $this->siteLangId);
             LibHelper::exitWithError($message, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'RegistrationForm', CONF_WEBROOT_FRONTEND));
         }
+        $frm->expireSecurityToken(FatApp::getPostedData());
 
         $dialCode = FatApp::getPostedData('user_phone_dcode', FatUtility::VAR_STRING, '');
         $phoneNumber = FatApp::getPostedData('user_phone', FatUtility::VAR_INT, '');
@@ -736,6 +746,7 @@ class GuestUserController extends MyAppController
     public function forgotPasswordForm($withPhone = 0, $includeHeaderAndFooter = 1)
     {
         $frm = $this->getForgotForm($withPhone);
+        $frm->addSecurityToken();
         $obj = new Extrapage();
         $pageData = $obj->getContentByPageType(Extrapage::FORGOT_PAGE_RIGHT_BLOCK, $this->siteLangId);
 
@@ -796,10 +807,10 @@ class GuestUserController extends MyAppController
     }
 
     public function forgotPassword()
-    {
+    {   
         $withPhone = FatApp::getPostedData('withPhone', FatUtility::VAR_INT, 0);
         $frm = $this->getForgotForm($withPhone);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData(), [], true);   
         if (false === $post) {
             if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
                 FatUtility::dieJsonError(current($frm->getValidationErrors()));
@@ -807,7 +818,8 @@ class GuestUserController extends MyAppController
             Message::addErrorMessage($frm->getValidationErrors());
             FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
         }
-
+        $frm->expireSecurityToken(FatApp::getPostedData());
+        
         if (false === MOBILE_APP_API_CALL && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '') != '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '') {
             if (!CommonHelper::verifyCaptcha()) {
                 $message = Labels::getLabel('MSG_That_captcha_was_incorrect', $this->siteLangId);
@@ -872,7 +884,7 @@ class GuestUserController extends MyAppController
 
         $db = FatApp::getDb();
         $db->startTransaction();
-        // commonHelper::printArray($row); die;
+
         if (!$userAuthObj->addPasswordResetRequest($row)) {
             $db->rollbackTransaction();
             $message = Labels::getLabel($userAuthObj->getError(), $this->siteLangId);
@@ -885,7 +897,7 @@ class GuestUserController extends MyAppController
         $row['link'] = UrlHelper::generateFullUrl('GuestUser', 'resetPassword', array($row['user_id'], $token));
         $row['user_email'] = $row['credential_email'];
 
-        /*Send verification email if email not verified[*/
+        /* Send verification email if email not verified[ */
         $srch = new SearchBase('tbl_user_credentials');
         $srch->addCondition('credential_user_id', '=', $row['user_id']);
         $srch->doNotCalculateRecords();
@@ -919,7 +931,7 @@ class GuestUserController extends MyAppController
                 FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'forgotPasswordForm', [], CONF_WEBROOT_FRONTEND));
             }
         }
-        /*]*/
+        /* ] */
 
         if (1 > $withPhone) {
             $email = new EmailHandler();
@@ -1067,9 +1079,9 @@ class GuestUserController extends MyAppController
         }
 
         /* if (! ValidateElement::password($post['new_pwd'])) {
-            Message::addErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        } */
+          Message::addErrorMessage(Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->siteLangId));
+          FatUtility::dieJsonError(Message::getHtml());
+          } */
 
         $userAuthObj = new UserAuthentication();
 
@@ -1096,7 +1108,7 @@ class GuestUserController extends MyAppController
         $email->sendResetPasswordConfirmationEmail($this->siteLangId, $row);
 
         /* Message::addMessage(Labels::getLabel('MSG_PASSWORD_CHANGED_SUCCESSFULLY',$this->siteLangId));
-        FatUtility::dieJsonError( Message::getHtml() ); */
+          FatUtility::dieJsonError( Message::getHtml() ); */
 
         $this->set('msg', Labels::getLabel('MSG_PASSWORD_CHANGED_SUCCESSFULLY', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
@@ -1261,9 +1273,9 @@ class GuestUserController extends MyAppController
         }
 
         /* if ($data['credential_password'] != UserAuthentication::encryptPassword($post['current_password'])) {
-        Message::addErrorMessage(Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED',$this->siteLangId));
-        FatUtility::dieJsonError( Message::getHtml() );
-        } */
+          Message::addErrorMessage(Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED',$this->siteLangId));
+          FatUtility::dieJsonError( Message::getHtml() );
+          } */
         $dialCode = array_key_exists('user_phone_dcode', $data) ? ValidateElement::formatDialCode($data['user_phone_dcode']) : '';
         $phone = array_key_exists('user_phone', $data) ? $data['user_phone'] : '';
         $arr = array(
@@ -1550,4 +1562,5 @@ class GuestUserController extends MyAppController
         }
         return $userId;
     }
+
 }

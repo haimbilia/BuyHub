@@ -17,7 +17,7 @@
         onclick="getPromoCode()"><?php echo Labels::getLabel('LBL_I_have_a_coupon', $siteLangId); ?></a> </div>
 
 <?php } */ ?>
-<h5 class="h5">PRICE SUMMARY</h5>
+<h5 class="h5"> <?php echo Labels::getLabel('LBL_PRICE_SUMMARY', $siteLangId); ?></h5>
 <div class="cart-summary">
     <ul>
         <li class="cart-summary-item">
@@ -89,12 +89,11 @@
             </use>
         </svg> You will earn 575 points </p> <?php */ ?>
 </div>
-<h5 class="h5">
+<!-- <h5 class="h5">
     <?php echo Labels::getLabel('LBL_Order_Summary', $siteLangId); ?> - <?php echo count($products); ?>
     <?php echo Labels::getLabel('LBL_item(s)', $siteLangId); ?>
 </h5>
 <div class="order-summary_list">
-
     <ul class="list-cart">
         <?php foreach ($products as $product) {
             $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']));
@@ -146,7 +145,7 @@
             </li>
         <?php } ?>
     </ul>
-</div>
+</div> -->
 
 <?php /*?><div class="place-order">
     <p>By placing an order, you agree to Yokart.com's <a href=""> Terms & Conditions</a> and

@@ -113,24 +113,24 @@
     flex-wrap: wrap;
     align-items: center;
     font-size: 0.75rem;
-    margin: 1rem 0;
+    margin: 0;
+    padding-top: 7px;
+    margin-#{$start-direction}: 1rem;
     .chip {
         white-space: nowrap;
         display: flex;
         align-items: center;
-        border-radius: 30px;
+        //border-radius: 30px;
         //border: $border;
-        padding: 5px 5px;
-        margin: 2px 0;
-        padding-#{$start-direction}: 14px;
-        margin-#{$end-direction}: 14px;
+        padding: 0;
+        margin: 0;
+        margin-#{$end-direction}: 1rem;
         font-size: inherit;
-        background: $bg-brand-light;
-        color: $brand-color;
+        //background: $bg-brand-light;
+        color: $txt-body;
         font-weight: 300;
-        height: 28px;
+        //height: 28px;
         &:hover {
-            border-color: $brand-color;
             .remove {
                 background: $brand-color;
                 color: $brand-color-inverse;
@@ -160,11 +160,12 @@
                 color: $brand-color-inverse;
             }
         }
-
-        .btn-clear-all {
-            background: #000;
-            border: none;
-            font-size: 0.8rem;
-        }
+    }
+    .btn-clear-all {
+        background: #000;
+        color: #fff;
+        padding: 4px 8px;
+        border: none;
+        font-size: inherit;
     }
 }

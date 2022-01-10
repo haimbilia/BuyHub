@@ -47,7 +47,7 @@ echo $registerFrm->getFormTag();
                         <div class="field_cover">
                         <?php 
                         echo $registerFrm->getFieldHtml('user_phone'); 
-                        echo $registerFrm->getFieldHtml('user_phone_dcode'); 
+                        echo $registerFrm->getFieldHtml('user_phone_dcode');                         
                         ?>
                         </div>
                     </div>
@@ -128,6 +128,7 @@ echo $registerFrm->getFormTag();
                     <div class="field_cover">
                         <?php echo $registerFrm->getFieldHTML('user_id') , $registerFrm->getFieldHTML('btn_submit'); ?>
                         <?php echo (isset($signUpWithPhone) && 0 < $signUpWithPhone) ? $registerFrm->getFieldHTML('signUpWithPhone') : ''; ?>
+                        <?php echo $registerFrm->getFieldHtml('fatpostsectkn'); ?>
                     </div>
                 </div>
             </div>

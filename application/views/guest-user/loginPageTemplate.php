@@ -142,7 +142,9 @@ if (isset($smsPluginStatus) && true === $smsPluginStatus) {
         <div class="col-md-12">
             <div class="field-set">
                 <div class="field-wraper">
-                    <div class="field_cover"><?php echo $loginFrm->getFieldHtml('btn_submit'); ?></div>
+                    <div class="field_cover"><?php echo $loginFrm->getFieldHtml('btn_submit'); ?>
+                    <?php echo $loginFrm->getFieldHtml('fatpostsectkn'); ?>
+                    </div>
                 </div>
             </div>
         </div>

@@ -112,6 +112,9 @@ $header-height: 138px;
         background: none;
         border: none;
         margin-#{$end-direction}: 10px;
+        @include media-breakpoint-up(xl) {
+            display: none;
+        }
     }
 }
 

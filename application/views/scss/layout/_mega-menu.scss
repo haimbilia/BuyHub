@@ -143,6 +143,8 @@
         padding-#{$end-direction}: 1rem;
         min-width: 250px;
         &-media {
+            margin-#{$start-direction}: auto;
+            max-width: 300px;
             padding: 0;
         }
 
@@ -187,7 +189,7 @@
     }
 }
 
-@media only screen and (max-width: 1200px) {
+@include media-breakpoint-down(xl) {
     .navs_toggle {
         display: inline-block;
     }
