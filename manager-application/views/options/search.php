@@ -33,7 +33,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($row['user_name'] != '') {
                     $td->appendElement('plaintext', $tdAttr, $row['user_name'], true);
                 } else {
-                    $td->appendElement('plaintext', $tdAttr, 'Admin', true);
+                    $td->appendElement('plaintext', $tdAttr, Labels::getLabel('LBL_Admin'), true);
                 }
                 break;
             case 'action':

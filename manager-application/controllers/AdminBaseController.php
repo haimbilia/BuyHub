@@ -202,7 +202,7 @@ class AdminBaseController extends FatController
 
             $this->set('bodyClass', 'fb-body');
         }
-
+        
         $this->set('languages', $languages);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());

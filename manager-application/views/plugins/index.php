@@ -10,8 +10,8 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
     <div class="container">
         <?php
         $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
-        <div class="row grid-layout">
-            <div class="col-lg-4">
+        <div class="grid-layout">
+            <div class="grid-layout-left">
                 <button class="float-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#card-aside" aria-controls="card-aside">
                     <svg class="svg" width="20" height="20">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#nav">
@@ -44,7 +44,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                                             </i>
                                             <div>
                                                 <h6 class="settings-inner-title"><?php echo $tabName; ?></h6>
-                                                <span class="settings-inner-desc"><?PHP echo $labels[$formType]?> </span>
+                                                <span class="settings-inner-desc"><?PHP echo $labels[$formType] ?> </span>
                                             </div>
                                         </a>
                                     </li>
@@ -54,7 +54,7 @@ $sortOrderFld->setFieldTagAttribute('id', 'sortOrder'); ?>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="grid-layout-right">
                 <?php echo $frmSearch->getFormHtml(); ?>
                 <div id="pluginsListing" class="card">
                     <?php require_once(CONF_THEME_PATH . 'plugins/search.php'); ?>

@@ -1,10 +1,10 @@
 <div class="quick-search">
-    <form method="get" class="form form--quick-search">
-        <div class="quick-search__form">
+    <form method="get" class="form  quick-search-form">
+        <div class="quick-search-head">
             <input id="quickSearchJs" type="search" class="form-control" placeholder="<?php echo Labels::getLabel('LBL_GO_TO..', $siteLangId); ?>">
         </div>
-        <div class="quick-search__wrapper">
-            <ul class="list list--search-result navMenuItems">
+        <div class="quick-search-body">
+            <ul class="quick-search-list navMenuItems">
                 <?php if (
                     $objPrivilege->canViewBrands(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewShops(AdminAuthentication::getLoggedAdminId(), true) ||
@@ -13,7 +13,7 @@
                     $objPrivilege->canViewSellerProducts(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewOptions(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -103,7 +103,7 @@
                     $objPrivilege->canViewCustomProductRequests(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -167,7 +167,7 @@
                                 </span>
                                 <a class="search-result__link" href="<?php echo UrlHelper::generateUrl('thresholdProducts'); ?>"><?php echo Labels::getLabel('NAV_THRESHOLD_PRODUCTS', $siteLangId); ?></a>
                             </div>
-                        <?php } ?>                       
+                        <?php } ?>
                         <?php if ($objPrivilege->canViewWithdrawRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                             <div class="search-result">
                                 <span class="search-result__icon">
@@ -215,15 +215,15 @@
                     </li>
                 <?php } ?>
                 <?php if (
-                     $objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true) ||
-                     $objPrivilege->canViewSubscriptionOrders(AdminAuthentication::getLoggedAdminId(), true) ||
-                     $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
-                     $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
-                     $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true) ||
-                     $objPrivilege->canViewProductReviews(AdminAuthentication::getLoggedAdminId(), true) ||
-                     $objPrivilege->canViewAbandonedCart(AdminAuthentication::getLoggedAdminId(), true)
+                    $objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewSubscriptionOrders(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewOrderCancelReasons(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewOrderReturnReasons(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewOrderStatus(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewProductReviews(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewAbandonedCart(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -316,7 +316,7 @@
                     $objPrivilege->canViewAdminUsers(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -404,7 +404,7 @@
                     $objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewBadgesAndRibbons(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -547,7 +547,7 @@
                     $objPrivilege->canViewBlogContributions(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewBlogComments(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -607,7 +607,7 @@
                 <?php if (
                     $objPrivilege->canViewTax(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -656,7 +656,7 @@
                     $objPrivilege->canViewTestimonial(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewNavigationManagement(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -754,7 +754,7 @@
                     $objPrivilege->canViewShopsReport(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewBuyersReport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -828,7 +828,7 @@
                     $objPrivilege->canViewAffiliatesReport(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAdvertisersReport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -888,7 +888,7 @@
                 <?php if (
                     $objPrivilege->canViewFinancialReport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -948,7 +948,7 @@
                 <?php if (
                     $objPrivilege->canViewSubscriptionReport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -981,7 +981,7 @@
                 <?php if (
                     $objPrivilege->canViewDiscountCoupons(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -1006,7 +1006,7 @@
                 <?php if (
                     $objPrivilege->canViewImportExport(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -1034,7 +1034,7 @@
                     $objPrivilege->canViewPickupAddresses(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewTrackingRelationCode(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -1117,7 +1117,7 @@
                     $objPrivilege->canViewUrlRewrite(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewMetaTags(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">
@@ -1207,7 +1207,7 @@
                     $objPrivilege->canViewEmptyCartItems(AdminAuthentication::getLoggedAdminId(), true) ||
                     $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)
                 ) { ?>
-                    <li>
+                    <li class="quick-search-list-item">
                         <h6 class="title">
                             <i class="title-icon">
                                 <svg class="svg" width="14" height="14">

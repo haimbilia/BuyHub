@@ -70,7 +70,7 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'splprice_price':
                 $editable = $canEdit ? 'true' : 'false';
-                $div = $td->appendElement('div', ['class' => 'text-nowrap d-flex']);
+                $div = $td->appendElement('div', ['class' => 'edit-price']);
                 $splPrice = CommonHelper::displayMoneyFormat($row[$key], true, true);
 
                 $div->appendElement('div', [
@@ -92,7 +92,7 @@ foreach ($arrListing as $sn => $row) {
                     $discountPrice = $row['selprod_price'] - $row[$key];
                     $discountPercentage = round(($discountPrice / $row['selprod_price']) * 100, 2);
                     $discountPercentage = $discountPercentage . "% " . Labels::getLabel('LBL_off', $siteLangId);
-                    $div->appendElement('div', array("class" => 'percentValJs badge badge-success ms-3'), $discountPercentage, true);
+                    $div->appendElement('div', array("class" => 'percentValJs badge badge-success'), $discountPercentage, true);
                 }
                 break;
             case 'action':

@@ -22,7 +22,7 @@ foreach ($arrListing as $sn => $row) {
                                                         </svg>', true);
                 break;
             case 'select_all':
-                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="collection_ids[]" value='.$row['collection_id'].'><i class="input-helper"></i></label>', true);
+                $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="collection_ids[]" value=' . $row['collection_id'] . '><i class="input-helper"></i></label>', true);
                 break;
             case 'collection_name':
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
@@ -31,9 +31,9 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, Collections::getTypeArr($siteLangId)[$row[$key]]);
                 break;
             case 'collection_layout_type':
-                $td->appendElement('plaintext', $tdAttr, '<div class="layout-type"><svg class="svg" width="50" height="30">
+                $td->appendElement('plaintext', $tdAttr, '<div class="layout-type"><svg class="svg" width="40" height="40">
                 <use
-                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-layout.svg#collection-layout-'.$row[$key].'">
+                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-layout.svg#collection-layout-' . $row[$key] . '">
                 </use>
             </svg></div>', true);
                 //$td->appendElement('plaintext', $tdAttr, Collections::getLayoutTypeArr($siteLangId)[$row[$key]]);
@@ -64,7 +64,7 @@ foreach ($arrListing as $sn => $row) {
     }
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();
