@@ -252,7 +252,10 @@ class SellerProductsController extends ListingBaseController
         if (Product::isProductShippedBySeller($sellerProductRow['selprod_product_id'], $productSellerId, $sellerProductRow['selprod_user_id'])) {
             $shippedBySeller = 1;
         }
+        $productOptions = Product::getProductOptions($sellerProductRow['selprod_product_id'], $this->siteLangId, true);
+
         $this->set('shippedBySeller', $shippedBySeller);
+        $this->set('productOptions', $productOptions);
         $this->set('frm', $frmSellerProduct);
         $this->set('recordId', $selProdId);
         $this->set('html', $this->_template->render(false, false, NULL, true));

@@ -511,6 +511,9 @@ Bugs :
 
 =============TV-9.4.0.20210107================
     => 060478 - Admin UI: Suggestion to change the errors messages while trying to add the new record by using the same name on the whole system 
+    => 061012 - Admin UI: "Row's Re-arrange" functionality is not working properly on the whole system
+    => 060863 - Admin UI: Getting multiple issues under the side's menu section
+    => 060835 - Admin UI: Inconsistency: Design is not the same for the edit fields in the table under the Manage weightages section
 
 
 Known Issues and Problems :

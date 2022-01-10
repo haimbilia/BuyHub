@@ -17,6 +17,8 @@ $(document).ajaxComplete(function () {
 
         $("#listingTableJs > tbody").sortable({
             handle: '.handleJs',
+            helper: fixWidthHelper,
+            start: fixPlaceholderStyle,
             update: function (event, ui) {
                 fcom.displayProcessing();
                 $('.listingTableJs').prepend(fcom.getLoader());
