@@ -48,7 +48,7 @@ $(function () {
         stop: function () {
             reloadList();
         }
-    }).disableSelection();
+    });
 });
 
 /* Reset result on clear(cross) icon on keyword search field. */
