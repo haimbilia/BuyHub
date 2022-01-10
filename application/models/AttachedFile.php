@@ -23,6 +23,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_USER_PROFILE_CROPED_IMAGE = 10;    /*User profile croped image*/
     public const FILETYPE_CATEGORY_ICON = 11; /*Used for mobile and shop templates*/
     public const FILETYPE_CATEGORY_BANNER = 12; /* Used in category detail page */
+    
     public const FILETYPE_CATEGORY_BANNER_SELLER = 13; /* Used in seller shop template page */
     public const FILETYPE_SHOP_BACKGROUND_IMAGE = 14; /* Used in seller shop template page */
     public const FILETYPE_FRONT_LOGO = 15;
@@ -75,6 +76,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_BADGE_REQUEST = 62;
     public const FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW = 63;
     public const FILETYPE_PRODUCT_IMAGE_TEMP = 64;
+    public const FILETYPE_CATEGORY_THUMB = 65; /* Used in category detail page */
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
@@ -259,6 +261,7 @@ class AttachedFile extends MyAppModel
 
     public static function getAttachment($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0)
     {
+       
         $data = static::getMultipleAttachments($fileType, $recordId, $recordSubid, $langId, $displayUniversalImage, $screen);
         if (count($data) > 0) {
             reset($data);

@@ -88,9 +88,9 @@ class CategoryController extends MyAppController
 
         $products = FatApp::getDb()->fetchAll($srch->getResultSet());
         $moreSellersArr = [];
-        if($get['vtype'] == 'map'){            
-            if(0 < count($products)){           
-                $selprodCodes = array_column($products, 'selprod_code');               
+        if ($get['vtype'] == 'map') {
+            if (0 < count($products)) {
+                $selprodCodes = array_column($products, 'selprod_code');
                 $moreSellersArr = Product::getMoreSeller($selprodCodes, $this->siteLangId);
             }
         }
@@ -167,11 +167,11 @@ class CategoryController extends MyAppController
                 $h = 100;
                 AttachedFile::displayImage($image_name, $w, $h);
                 break;
-            case 'MEDIUM':
+            case 'l':
                 $w = 400;
                 $h = 400;
                 AttachedFile::displayImage($image_name, $w, $h);
-                break;    
+                break;
             case 'COLLECTION_PAGE':
                 $w = 45;
                 $h = 41;
@@ -208,6 +208,33 @@ class CategoryController extends MyAppController
         }
     }
 
+
+    public function thumb($catId, $langId = 0, $sizeType = '')
+    {
+        $catId = FatUtility::int($catId);
+        $langId = FatUtility::int($langId);
+        $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $catId, 0, $langId);
+        $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+
+        switch (strtoupper($sizeType)) {
+            case 'ICON':
+                $w = 300;
+                $h = 300;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
+            case 'THUMB':
+                $w = 60;
+                $h = 60;
+                AttachedFile::displayImage($image_name, $w, $h);
+                break;
+            default:
+                AttachedFile::displayOriginalImage($image_name);
+                break;
+        }
+    }
+
+
     public function sellerBanner($shopId, $prodCatId, $langId = 0, $sizeType = '')
     {
         $shopId = FatUtility::int($shopId);
@@ -234,7 +261,7 @@ class CategoryController extends MyAppController
         }
     }
 
-    public function banner($prodCatId, $langId = 0, $sizeType = '',$afileId = 0, $screen = 0, $displayUniversalImage = true)
+    public function banner($prodCatId, $langId = 0, $sizeType = '', $afileId = 0, $screen = 0, $displayUniversalImage = true)
     {
         $default_image = 'product_default_image.jpg';
         $prodCatId = FatUtility::int($prodCatId);
@@ -251,7 +278,7 @@ class CategoryController extends MyAppController
 
 
         $image_name = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType); 
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         switch (strtoupper($sizeType)) {
             case 'THUMB':
                 $w = 250;

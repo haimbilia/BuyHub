@@ -1633,4 +1633,25 @@ class ProductCategory extends MyAppModel
         $srch->doNotLimitRecords();
         return $srch;
     }
+
+
+    public static function isParentCategory($prodCat_id)
+    {
+        $srch = static::getSearchObject();
+        $srch->addCondition('prodcat_parent', '=', 0);
+        $srch->addCondition('prodcat_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('prodcat_id', '=', $prodCat_id);
+        $srch->addMultipleFields(array('prodcat_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        $records = FatApp::getDb()->fetch($rs);
+        if (empty($records)) {
+            return false;
+        }
+        return true;
+    }
+
+
 }

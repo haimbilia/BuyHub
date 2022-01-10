@@ -12,6 +12,12 @@ $iconLangFld->addFieldTagAttribute('class', 'icon-language-js');
 $fld = $frm->getField('heading_icon');
 $fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_ICON', $siteLangId) . '</h3>';
 
+if($isParent){
+    $fld = $frm->getField('heading_thumb');
+    $fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_THUMB', $siteLangId) . '</h3>';
+    
+}
+
 $fld = $frm->getField('heading_banner');
 $fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_BANNER', $siteLangId) . '</h3>';
 
@@ -24,13 +30,29 @@ $bannerFld = $frm->getField('cat_banner');
 $bannerFld->value = '<div id="banner-imageListingJs"></div>';
 $bannerFld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '2000 x 500') . '</span>';
 
+if($isParent){
+$thumbFld = $frm->getField('cat_thumb');
+$thumbFld->value = '<div id="thumb-imageListingJs"></div>';
+$thumbFld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), '300 x 300') . '</span>';
+
+}
+
 
 $fld = $frm->getField('seperator');
 $fld->value = '<div class="separator separator-dashed my-4"></div>';
 
+if($isParent){
+$fld = $frm->getField('seperatorthumb');
+$fld->value = '<div class="separator separator-dashed my-4"></div>';
+}
 $bannerLangFld = $frm->getField('banner_lang_id');
 $bannerLangFld->addFieldTagAttribute('class', 'banner-language-js');
 
+if($isParent){
+$thumbLangFld = $frm->getField('thumb_lang_id');
+$thumbLangFld->addFieldTagAttribute('class', 'thumb-language-js');
+
+}
 $screenFld = $frm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('class', 'prefDimensions-js');
 
@@ -64,6 +86,8 @@ $formTitle = Labels::getLabel('LBL_CATEGORY_SETUP', $siteLangId); ?>
     $('input[name=banner_min_height]').val(500);
     $('input[name=logo_min_width]').val(150);
     $('input[name=logo_min_height]').val(150);
+    $('input[name=thumb_min_width]').val(300);
+    $('input[name=thumb_min_height]').val(300);
     var aspectRatio = 4 / 1;
     $(document).on('change', '.prefDimensions-js', function() {
         console.log('vvv')
