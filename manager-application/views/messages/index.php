@@ -77,19 +77,19 @@
                             </form>
                         </div>
                     </div>
-                    <div class="card-body p-0 settings-inner">
+                    <div class="card-body p-0">
                         <?php
-                            $activeIndex = 0;
-                            require_once(CONF_THEME_PATH . 'messages/search.php'); 
-            
-                            $lastRecord = current(array_reverse($arrListing));
-                            $data = [
-                                'siteLangId' => $siteLangId,
-                                'postedData' => $postedData,
-                                'page' => $page,
-                                'pageCount' => $pageCount,
-                            ];
-                            $this->includeTemplate('_partial/load-more-pagination.php', $data);
+                        $activeIndex = 0;
+                        require_once(CONF_THEME_PATH . 'messages/search.php');
+
+                        $lastRecord = current(array_reverse($arrListing));
+                        $data = [
+                            'siteLangId' => $siteLangId,
+                            'postedData' => $postedData,
+                            'page' => $page,
+                            'pageCount' => $pageCount,
+                        ];
+                        $this->includeTemplate('_partial/load-more-pagination.php', $data);
                         ?>
                     </div>
                 </div>
