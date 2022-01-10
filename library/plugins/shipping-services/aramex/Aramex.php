@@ -30,7 +30,7 @@ class Aramex extends ShippingServicesBase
         'AccountNumber',
         'AccountPin',
         'UserName',
-        'Password'
+        'Password'     
     ];
 
     /**

@@ -164,11 +164,11 @@ class ShippingServicesBase extends PluginBase
     }
     
     /**
-     * canGenerateLabelSeprately
+     * canGenerateLabelSeparately
      *
      * @return bool
      */
-    public function canGenerateLabelSeprately(): bool
+    public function canGenerateLabelSeparately(): bool
     {
         return false;
     }

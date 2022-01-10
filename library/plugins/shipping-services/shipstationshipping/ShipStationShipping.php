@@ -51,11 +51,11 @@ class ShipStationShipping extends ShippingServicesBase
     }
     
     /**
-     * canGenerateLabelSeprately
+     * canGenerateLabelSeparately
      *
      * @return bool
      */
-    public function canGenerateLabelSeprately(): bool
+    public function canGenerateLabelSeparately(): bool
     {
         return true;
     }
