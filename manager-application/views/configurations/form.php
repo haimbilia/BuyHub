@@ -22,15 +22,15 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
                 <?php echo $tabs[$frmType] . ' ' . Labels::getLabel('LBL_SETTINGS', $siteLangId); ?>
             </h3>
         </div>
-        <div class="card-head-toolbar">          
-            <?php if ($dispLangTab) { ?>    
-            <div class="input-group">
-                <select class="form-control form-select select-language" onchange="getForm(<?php echo $frmType; ?>, this.value)">
-                    <?php foreach( $languages as $langKey => $langName){ ?>
-                        <option value="<?php echo $langKey;?>" <?php echo $langKey == $lang_id ? "selected":"";?>  ><?php echo $langName;?></option>
-                    <?php } ?>
-                </select>                
-            </div>
+        <div class="card-head-toolbar">
+            <?php if ($dispLangTab) { ?>
+                <div class="input-group">
+                    <select class="form-control form-select select-language" onchange="getForm(<?php echo $frmType; ?>, this.value)">
+                        <?php foreach ($languages as $langKey => $langName) { ?>
+                            <option value="<?php echo $langKey; ?>" <?php echo $langKey == $lang_id ? "selected" : ""; ?>><?php echo $langName; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
             <?php } ?>
         </div>
     </div>
@@ -64,7 +64,7 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
         getStatesByCountryCode($("#geo_country_code").val(),
             '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code',
             'state_code');
-    <?php } ?>   
+    <?php } ?>
 
     $(document).on('change', '.geoLocation', function() {
         var geolocVal = $(this).val();
@@ -84,9 +84,9 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
             });
         }
     });
-   
+
     <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-        $(document).ready(function() {   
+        $(document).ready(function() {
             var lat = $('#lat').val();
             var lng = $('#lng').val();
             initMap(lat, lng);
@@ -96,5 +96,5 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
         if ('undefined' != typeof countryId) {
             getCountryStates(countryId, '<?php echo $stateData; ?>', '#user_state_id');
         }
-    <?php } ?>    
+    <?php } ?>
 </script>
