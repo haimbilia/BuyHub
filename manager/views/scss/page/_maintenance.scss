@@ -19,6 +19,7 @@
 
 .not-found {
     @extend .maintenance;
+    height: auto;
 }
 
 .access-denied {
