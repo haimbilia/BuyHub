@@ -71,12 +71,11 @@ class ShopsController extends ListingBaseController
         $post['pageSize'] = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $shopSrch = new AdminShopSearch($this->siteLangId);
+        $shopSrch->joinWithUser();
+        $shopSrch->joinWithCredential();
         $shopSrch->applySearchConditions($post);
+        $this->setRecordCount(clone $shopSrch, $post['pageSize'], $post['page'], $post);
         $this->set("arrListing", $shopSrch->getListingRecords());
-        $this->set('pageCount', $shopSrch->pages());
-        $this->set('recordCount', $shopSrch->recordCount());
-        $this->set('page', $post['page']);
-        $this->set('pageSize', $post['pageSize']);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $post['sortOrder']);
@@ -89,7 +88,7 @@ class ShopsController extends ListingBaseController
             LibHelper::exitWithSuccess([
                 'listingHtml' => $this->_template->render(false, false, 'shops/search.php', true),
                 'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
-            ], true);
+                    ], true);
         }
     }
 
@@ -303,17 +302,17 @@ class ShopsController extends ListingBaseController
         $fileHandlerObj->deleteFile($file_type, $shop_id, 0, 0, $lang_id, $slide_screen);
 
         if (!$fileHandlerObj->saveAttachment(
-            $_FILES['cropped_image']['tmp_name'],
-            $file_type,
-            $shop_id,
-            0,
-            $_FILES['cropped_image']['name'],
-            -1,
-            false,
-            $lang_id,
-            $slide_screen,
-            $aspectRatio
-        )) {
+                        $_FILES['cropped_image']['tmp_name'],
+                        $file_type,
+                        $shop_id,
+                        0,
+                        $_FILES['cropped_image']['name'],
+                        -1,
+                        false,
+                        $lang_id,
+                        $slide_screen,
+                        $aspectRatio
+                )) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -404,6 +403,7 @@ class ShopsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_SHOP_STATUS_BY_SELLER', $this->siteLangId), 'shop_supplier_display_status', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getOnOffArr($this->siteLangId), -1, array(), '');
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -570,4 +570,5 @@ class ShopsController extends ListingBaseController
     {
         return array_diff($fields, ['shop_active', 'numOfReports', 'numOfProducts', 'numOfReviews'], Common::excludeKeysForSort());
     }
+
 }

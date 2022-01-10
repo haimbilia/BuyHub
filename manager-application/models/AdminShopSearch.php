@@ -39,9 +39,8 @@ class AdminShopSearch extends SearchBase
             'users.user_name',
             'cred.credential_username',
             'shop.shop_updated_on'
-        ]);
-        $this->joinWithUser();
-        $this->joinWithCredential();
+        ]); 
+        $this->doNotCalculateRecords();
         $results = Fatapp::getDb()->fetchAll($this->getResultSet());
         if (empty($results)) {
             return [];
