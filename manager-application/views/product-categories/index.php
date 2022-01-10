@@ -18,17 +18,13 @@ $actionItemsData = $actionItemsData + [
 
 ul.append-ul {
     background: #ffffff;
-    display: flex;
-    flex-direction: column;
+    padding: 1px;
 }
 .sorting-categories .sorting-bar{
     margin-bottom: 0;
 }
 .sorting-categories .sorting-bar{
     border: 0;
-}
-ul.append-ul li + li {
-    margin-top: 0;
 }
 </style>
 <main class="main mainJs">

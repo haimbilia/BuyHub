@@ -111,7 +111,7 @@
 		}
 
 		if ($("#" + prodCatId + ' ul.append-ul').length) {
-			$("#" + prodCatId + ' ul:first').fadeIn();
+			$("#" + prodCatId + ' ul:first').slideDown();
 			if (catId == 0) {
 				togglePlusMinus(prodCatId);
 			}
@@ -128,7 +128,7 @@
 				$("#" + prodCatId).append('<ul class="append-ul ulJs ul-' + prodCatId + '" style="display:none;">' + res.html + '</ul>');
 			}
 
-			$('.ul-' + prodCatId).fadeIn();
+			$('.ul-' + prodCatId).slideDown();
 
 			if (catId == 0) {
 				togglePlusMinus(prodCatId);
@@ -161,7 +161,7 @@
 
 	hideItems = function (obj) {
 		var prodCatId = $(obj).parent().parent().parent().attr('id');
-		$("#" + prodCatId + ' ul').hide();
+		$("#" + prodCatId + ' ul').slideUp();
 		$("#" + prodCatId).removeClass('sortableListsOpen').addClass('sortableListsClosed');
 		var icon = $("#" + prodCatId).children('div').children('.sortableListsOpener').remove();
 		$("#" + prodCatId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onClick="displaySubCategories(this)"></i></span>');
