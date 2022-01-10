@@ -69,7 +69,7 @@ class ConfigurationsController extends ListingBaseController
         $dispLangTab = false;
         if (in_array($frmType, Configurations::getLangTypeFormArr())) {
             $dispLangTab = true;
-            $this->set('languages', Language::getAllNames());
+            $this->set('languagesNames', Language::getAllNames());
         }
 
         $tabs = Configurations::getTabsArr($langId);

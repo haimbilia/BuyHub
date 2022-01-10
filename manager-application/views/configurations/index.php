@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            <div class="grid-layout-right" id="frmBlockJs">
+            <div class="grid-layout-right">
                 <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
             </div>
         </div>
@@ -60,4 +60,5 @@
     var YES = <?php echo applicationConstants::YES; ?>;
     var NO = <?php echo applicationConstants::NO; ?>;
     var FORM_MEDIA = <?php echo Configurations::FORM_MEDIA; ?>;
+    var MESSAGE_AUTOCLOSE_TIME = <?php echo Configurations::MESSAGE_AUTOCLOSE_TIME; ?>;
 </script>

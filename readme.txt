@@ -517,7 +517,7 @@ Bugs :
     => 060770 - Admin UI: Table's alignment is not correct under the special price section
     => 060538 - Admin UI: Validation's design is not consistent for the User's dropdown under the rewards section
     => 060587 - Admin UI: Suggestion removed the scroller if "no record found" in the list
-
+    => 061099 - Admin UI: Breadcrumb is also gets blurred while selecting the options under the "Meta tags Management" section
 
 
 Known Issues and Problems :

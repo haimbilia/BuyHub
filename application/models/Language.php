@@ -94,8 +94,9 @@ class Language extends MyAppModel
         if ($getLayoutDirection) {
             return json_decode($getLayoutDirection, true);
         }
-
+        
         $langData = self::getAttributesById($langId, array('language_layout_direction'));
+        
         if (false != $langData) {
             CacheHelper::create('getLayoutDirection' . $langId, FatUtility::convertToJson($langData['language_layout_direction']), CacheHelper::TYPE_LANGUAGE);
             return $langData['language_layout_direction'];

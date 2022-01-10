@@ -50,9 +50,7 @@
                 </div>
             </div>
             <div class="grid-layout-right">
-                <div id="metaTagsListing">
-                    <?php require_once(CONF_THEME_PATH . 'meta-tags/search.php'); ?>
-                </div>
+                <?php require_once(CONF_THEME_PATH . 'meta-tags/search.php'); ?>
             </div>
         </div>
     </div>

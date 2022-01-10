@@ -1375,7 +1375,8 @@ class CustomProductsController extends ListingBaseController
             $this->addSortingElements($frm, 'preq_requested_on');
         }
         $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
+        $fld->overrideFldType('search');
         $frm->addSelectBox(Labels::getLabel('FRM_SELLER_NAME', $this->siteLangId), 'seller_id', [], '', ['id' => 'searchFrmUserIdJs']);
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', ProductRequest::getStatusArr($this->siteLangId));
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));

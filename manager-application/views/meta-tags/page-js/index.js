@@ -65,7 +65,7 @@ $(document).on('blur', '.metaUrlJs', function () {
             if (true === replaceRowsOnly) {
                 $(listingTableJs).html(res.listingHtml);
             } else {
-                $(dv).html(res.listingHtml);
+                $(dv).replaceWith(res.listingHtml);
             }
         });
     };
