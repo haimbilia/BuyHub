@@ -60,7 +60,7 @@ $(document).ready(function () {
         fcom.updateWithAjax(fcom.makeUrl('Configurations', 'form', [frmType, langId]), '', function (t) {
             fcom.removeLoader();
             $.ykmsg.close();
-            $(dv).html(t.html);
+            $(dv).replaceWith(t.html);
             setTabActive(frmType);
         });
     };
@@ -98,8 +98,9 @@ $(document).ready(function () {
 
     changedMessageAutoCloseSetting = function (val) {
         if (val == YES) {
-
+            $("input[name='CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES']").val(MESSAGE_AUTOCLOSE_TIME);
         }
+
         if (val == NO) {
             $("input[name='CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES']").val(0);
         }

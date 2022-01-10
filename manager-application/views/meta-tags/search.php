@@ -63,20 +63,14 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php'); ?>
 
-$keyWordFld = $frmSearch->getField('keyword');
-if (1 > $loadRows) {
-    if (null != $keyWordFld) {
-        echo '<div class="card">';
-    }
-    $onSubmit = 'searchRecords(this, true); return(false);';
-    require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php');
-    if (null != $keyWordFld) {
-        echo '</div>';
-    }
-} ?>
-<div class="card listingTableJs">
+<div id="metaTagsListing" class="card listingTableJs">
+    <?php $keyWordFld = $frmSearch->getField('keyword');
+    if (1 > $loadRows) {
+        $onSubmit = 'searchRecords(this, true); return(false);';
+        require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php');
+    } ?>
     <div class="card-head">
         <div class="card-head-label">
             <h3 class="card-head-title">
