@@ -48,7 +48,7 @@ $(function () {
         stop: function () {
             reloadList();
         }
-    }).disableSelection();
+    });
 });
 
 /* Reset result on clear(cross) icon on keyword search field. */
@@ -304,7 +304,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         fcom.resetEditorInstance();
         data = "recordId=" + recordId + "&langId=" + langId;
         var isPopupView = ($.ykmodal.isAdded() && !$.ykmodal.isSideBarView());
-        
+
         $.ykmodal(fcom.getLoader(), isPopupView);
         fcom.updateWithAjax(
             fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
@@ -582,8 +582,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                     imageSmoothingEnabled: true,
                 };
                 $(inputBtn).val("");
-                setTimeout(function () { cropImage(file, options, "uploadImages", inputBtn);
-             }, 100);
+                setTimeout(function () {
+                    cropImage(file, options, "uploadImages", inputBtn);
+                }, 100);
                 return;
             });
         }
@@ -592,7 +593,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
     uploadImages = function (formData) {
         if (false === checkControllerName()) {
             return false;
-        }                
+        }
 
         var frmName = formData.get("frmName");
         var frm = document.forms[frmName];
@@ -624,8 +625,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function () {               
-                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());               
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
             },
             success: function (ans) {
                 fcom.removeLoader();
@@ -708,7 +709,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         $('.listingTableJs .tableHeadJs th').each(function () {
             var arr = {
-                'width': $(this).width(),
+                'width': $(this).outerWidth(true),
                 'element': $(this)
             };
             thWidthArr.push(arr);
@@ -717,16 +718,31 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         thWidthArr.sort((a, b) => (a.width > b.width) ? 1 : -1)
         /* Sort By width */
 
-        let isSortableTable = 0 < $(".listingTableJs .listingRecordJs .handleJs").length; 
-        
-        $.each(thWidthArr, function (index, value) {            
+        /* let isSortableTable = 0 < $(".listingTableJs .listingRecordJs .handleJs").length; */
+
+        $.each(thWidthArr, function (index, value) {
             var width = value.width;
-            var element = value.element;       
+            var element = value.element;
             $(element).attr('width', width);
-            if(isSortableTable){
-                $(".listingTableJs .listingRecordJs tr td:nth-child(" + (value.element.index() + 1)  + ")").attr('width', width);
-            }            
+
+            /* Not required for drag drop functionality. */
+            /* if (isSortableTable) {
+                $(".listingTableJs .listingRecordJs tr td:nth-child(" + (value.element.index() + 1) + ")").attr('width', width);
+            } */
         });
+    }
+
+    fixWidthHelper = function (e, ui) {
+        ui.children().each(function () {
+            $(this).width($(this).width());
+        });
+        return ui;
+    }
+
+    fixPlaceholderStyle = function (e, ui) {
+        ui.placeholder.height(ui.item.height());
+        ui.placeholder.css("visibility", "visible");
+        ui.placeholder.css('background-color', '#f3f6f9');
     }
 })();
 

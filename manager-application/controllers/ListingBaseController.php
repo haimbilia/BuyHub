@@ -1,8 +1,10 @@
 <?php
+
 class ListingBaseController extends AdminBaseController
 {
+
     use RecordOperations;
-    
+
     protected int $mainTableRecordId = 0;
     protected bool $isPlugin = false;
     protected object $modelObj;
@@ -25,4 +27,20 @@ class ListingBaseController extends AdminBaseController
     {
         $this->modelObj = (new ReflectionClass($this->modelClass))->newInstanceArgs($constructorArgs);
     }
+
+    public function setRecordCount(object $srch, int $pageSize)
+    {
+        if ($pageSize < 1) {
+            return;
+        }
+
+        $srch->addFld('count(*) as totalRecords');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $defaultRecordCount = FatApp::getDb()->fetch($srch->getResultSet());
+        $this->set('pageCount', ceil($defaultRecordCount['totalRecords'] / $pageSize) ?? 0);
+        $this->set('recordCount', $defaultRecordCount['totalRecords']);
+        $this->set('pageSize', $pageSize);
+    }
+
 }

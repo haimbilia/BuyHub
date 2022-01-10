@@ -24,7 +24,7 @@ $(document).ready(function () {
 		}
 
 		if ($("#" + recordId + ' ul.append-ul').length) {
-			$("#" + recordId + ' ul:first').show();
+			$("#" + recordId + ' ul:first').slideDown();
 			if (catId == 0) {
 				togglePlusMinus(recordId);
 			}
@@ -34,12 +34,15 @@ $(document).ready(function () {
 			return false;
 		}
 
-		fcom.ajax(fcom.makeUrl('BlogPostCategories', 'getSubCategories'), 'recordId=' + recordId, function (res) {
+		fcom.updateWithAjax(fcom.makeUrl('BlogPostCategories', 'getSubCategories'), 'recordId=' + recordId, function (res) {
 			if ($("#" + recordId).children('ul.append-ul').length) {
-				$("#" + recordId).children('ul.append-ul').append(res);
+				$("#" + recordId).children('ul.append-ul').append(res.html);
 			} else {
-				$("#" + recordId).append('<ul class="append-ul">' + res + '</ul>');
+				$("#" + recordId).append('<ul class="append-ul ulJs ul-' + recordId + '" style="display:none;">' + res.html + '</ul>');
 			}
+
+			$('.ul-' + recordId).slideDown();
+
 			if (catId == 0) {
 				togglePlusMinus(recordId);
 			}
@@ -70,19 +73,16 @@ $(document).ready(function () {
 	}
 
 	updateCatOrder = function (data) {
+		$("#sorting-categories").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('BlogPostCategories', 'updateOrder'), data, function (res) {
-			searchBlogPostCategories();
-			$("#js-cat-section").removeClass('overlay-blur');
-			setTimeout(function () {
-				data = queryStringToJSON(data);
-				goToCategory(data.catId);
-			}, 1000);
+			fcom.removeLoader();
+			$.ykmsg.close();
 		});
 	}
 
 	hideItems = function (obj) {
 		var catId = $(obj).parent().parent().parent().attr('id');
-		$("#" + catId + ' ul').hide();
+		$("#" + catId + ' ul').slideUp();
 		$("#" + catId).removeClass('sortableListsOpen').addClass('sortableListsClosed');
 		var icon = $("#" + catId).children('div').children('.sortableListsOpener').remove();
 		$("#" + catId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onclick="displaySubCategories(this)"></i></span>');

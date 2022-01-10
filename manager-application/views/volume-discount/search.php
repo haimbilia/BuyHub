@@ -63,14 +63,6 @@ foreach ($arrListing as $sn => $row) {
                     'title' => Labels::getLabel('LBL_CLICK_TO_EDIT', $siteLangId)
                 ], $row[$key], true);
                 break;
-            /* case 'voldiscount_min_qty':
-            case 'voldiscount_percentage':
-                $div = $td->appendElement('div', ['class' => 'text-nowrap d-flex']);
-                $input = '<input type="text" data-id="' . $volDiscountId . '" value="' . $row[$key] . '" data-selprodid="' . $selProdId . '" name="' . $key . '" class="volDiscountColJs hide vd-input" data-oldval="' . $row[$key] . '"/>';
-
-                $div->appendElement('div', array("class" => 'editColJs', "data-bs-toggle" => "tooltip", "data-placement" => "top", "title" => Labels::getLabel('LBL_Click_To_Edit', $siteLangId)), $row[$key], true);
-                $div->appendElement('plaintext', array(), $input, true);
-                break; */
             case 'action':
                 $data = [
                     'siteLangId' => $siteLangId,

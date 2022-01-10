@@ -205,4 +205,20 @@ class UrlHelper extends FatUtility
 
         return false;
     }
+
+    public static function getQueryStringArr($key = '')
+    {
+        $url = substr(strstr($_SERVER['REQUEST_URI'], '?'), 1);
+        $url = explode('&', $url);
+        $arr = [];
+        foreach ($url as $val) {
+            $index = strtolower(strstr($val, '=', true));
+            if (strtolower($key) == $index) {
+                return substr(strstr($val, '='), 1);
+            }
+
+            $arr[strstr($val, '=', true)] = substr(strstr($val, '='), 1);
+        }
+        return $arr;
+    }
 }

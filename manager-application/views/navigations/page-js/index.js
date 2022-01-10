@@ -170,6 +170,8 @@
     bindSortable = function () {
         $(".childrensJs").sortable({
             handle: '.handleJs',
+            helper: fixWidthHelper,
+            start: fixPlaceholderStyle,
             update: function (event, ui) {
                 fcom.displayProcessing();
                 $(dv).prepend(fcom.getLoader());
