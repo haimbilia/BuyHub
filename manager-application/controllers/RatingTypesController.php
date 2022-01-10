@@ -163,7 +163,11 @@ class RatingTypesController extends ListingBaseController
         $rating = new RatingType($recordId);
         $rating->assignValues($data);
         if (!$rating->save()) {
-            LibHelper::exitWithError($rating->getError(), true);
+            $msg = $rating->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $this->setLangData($rating, [$rating::tblFld('name') => $post[$rating::tblFld('name')]]);

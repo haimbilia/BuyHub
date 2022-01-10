@@ -170,7 +170,11 @@ class BrandsController extends ListingBaseController
         $brand = new Brand($recordId);
         $brand->assignValues($data);
         if (!$brand->save()) {
-            LibHelper::exitWithError($brand->getError(), true);
+            $msg = $brand->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $recordId = $brand->getMainTableRecordId();

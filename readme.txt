@@ -510,6 +510,8 @@ Bugs :
     => 061431 - Special Price and Volume discount listing design row issue while editing
 
 =============TV-9.4.0.20210107================
+    => 060478 - Admin UI: Suggestion to change the errors messages while trying to add the new record by using the same name on the whole system 
+
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

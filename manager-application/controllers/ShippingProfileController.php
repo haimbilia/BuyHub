@@ -163,7 +163,11 @@ class ShippingProfileController extends ListingBaseController
         $spObj = new ShippingProfile($profileId);
         $spObj->assignValues($post);
         if (!$spObj->save()) {
-            LibHelper::exitWithError($spObj->getError(), true);
+            $msg = $spObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $languages = Language::getAllNames();

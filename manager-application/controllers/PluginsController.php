@@ -229,7 +229,11 @@ class PluginsController extends ListingBaseController
         $post['plugin_identifier'] = $post['plugin_name'];
         $record->assignValues($post);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);
 

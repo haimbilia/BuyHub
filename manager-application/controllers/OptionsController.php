@@ -176,7 +176,11 @@ class OptionsController extends ListingBaseController
         $post['option_identifier'] = $post['option_name'];
         $optionObj->assignValues($post);
         if (!$optionObj->save()) {
-            LibHelper::exitWithError($optionObj->getError(), true);
+            $msg = $optionObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $recordId = $optionObj->getMainTableRecordId();
