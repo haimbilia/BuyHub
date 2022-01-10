@@ -149,7 +149,7 @@ if (0 < $recordId) {
             <div class="add-stock-column column-main">
                 <div class="add-stock-column-head">
                     <div class="add-stock-column-head-label">
-                        <h2 class="h2"><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId):Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
+                        <h2 class="h2"><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId) : Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
                         <span class="text-muted"> <span class="required"></span> required
                             information</span>
                     </div>
@@ -248,15 +248,15 @@ if (0 < $recordId) {
                                 etc for your product</span>
                         </div> <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
-                    <div class="card-body show" id="stock-block1">                      
+                    <div class="card-body show" id="stock-block1">
                         <table class="table table-variants" id="variantsJs">
-                        <thead>
-                            <tr>
-                                <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId)?></th>
-                                <th><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId)?></th>
-                                <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId)?></th>
-                            </tr>
-                        </thead>
+                            <thead>
+                                <tr>
+                                    <th><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                                    <th><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                                    <th class="align-right"><?php echo Labels::getLabel('LBL_ACTION_BUTTONS', $langId) ?></th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <?php
                                 $optionCount = count($productOptions);
@@ -288,12 +288,12 @@ if (0 < $recordId) {
                 <div class="card card-toggle" id="media">
                     <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
                         <div class="card-head-label">
-                            <h3 class="card-head-title">Media                            </h3>
+                            <h3 class="card-head-title">Media </h3>
                             <span class="text-muted">Attach media files for the product </span>
                         </div>
                         <div class="card-toolbar">
-                           <div class="me-5">
-                               <a href="javascript:void(0)" onclick="imageForm();" class="btn btn-outline-secondary btn-sm">Advance Media</a>
+                            <div class="me-5">
+                                <a href="javascript:void(0)" onclick="imageForm();" class="btn btn-outline-secondary btn-sm">Advance Media</a>
                             </div>
                             <i class="dropdown-toggle-custom-arrow"></i>
                         </div>
@@ -385,7 +385,7 @@ if (0 < $recordId) {
                         <div class="row">
                             <?php
                             echo HtmlHelper::getFieldHtml($frm, 'ptt_taxcat_id', 12, ['id' => 'ptt_taxcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_TAX_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addTaxCategory()', 'class' => 'link']]);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6,['id' => 'product_fulfillment_type']);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_fulfillment_type', 6, ['id' => 'product_fulfillment_type']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_ship_package', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'product_weight_unit', 6);
@@ -404,12 +404,12 @@ if (0 < $recordId) {
                                 <span class="text-muted">Digital Files are added in this section </span>
                             </div>
                             <?php if ($displayDigitalDownloadAddBtn) { ?>
-                            <div class="card-toolbar">
-                            <div class="me-5">
-                                <a href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE;?>);" class="btn btn-outline-secondary btn-sm">Digital Files</a>
+                                <div class="card-toolbar">
+                                    <div class="me-5">
+                                        <a href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);" class="btn btn-outline-secondary btn-sm">Digital Files</a>
+                                    </div>
+                                    <i class="dropdown-toggle-custom-arrow"></i>
                                 </div>
-                                <i class="dropdown-toggle-custom-arrow"></i>
-                            </div>
                             <?php } ?>
                         </div>
                         <div class="card-body show" id="digital-files-block">
@@ -419,97 +419,97 @@ if (0 < $recordId) {
                     </div>
                     <div class="card card-toggle" id="digital-links">
                         <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-links-block" aria-expanded="false" aria-controls="stock-block2">
-                                <div class="card-head-label">
-                                    <h3 class="card-head-title">Digital Links</h3>
-                                    <span class="text-muted">Digital Links are added in this section </span>
-                                </div>
-                                <?php if ($displayDigitalDownloadAddBtn) { ?>
+                            <div class="card-head-label">
+                                <h3 class="card-head-title">Digital Links</h3>
+                                <span class="text-muted">Digital Links are added in this section </span>
+                            </div>
+                            <?php if ($displayDigitalDownloadAddBtn) { ?>
                                 <div class="card-toolbar">
-                                <div class="me-5">
-                                    <a href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK;?>);"  class="btn btn-outline-secondary btn-sm">Digital Links</a>
+                                    <div class="me-5">
+                                        <a href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);" class="btn btn-outline-secondary btn-sm">Digital Links</a>
                                     </div>
                                     <i class="dropdown-toggle-custom-arrow"></i>
                                 </div>
-                                <?php } ?>
-                        </div>                     
+                            <?php } ?>
+                        </div>
                         <div class="card-body show" id="digital-links-block">
                             <div id="digitalLinksDefaultListJs">
                             </div>
                         </div>
                     </div>
-        <?php } ?>
-        </div>
-        <div class="add-stock-column column-actions">
-            <div class="sticky-top">
-                <div class="card">
-                    <div class="card-body">
-                        <button type="submit" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>
-                        <div class="mt-3">
-                            <?php
-                            $fld = $frm->getField('product_active');
-                            if (null !=  $fld) {
-                                HtmlHelper::configureSwitchForCheckbox($fld);
-                                echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
-                            }
-                            $fld = $frm->getField('product_approved');
-                            $uLangDatafld = $frm->getField('auto_update_other_langs_data');
-
-                            if (null !=  $fld) {
-                                HtmlHelper::configureSwitchForCheckbox($fld);
-                                echo null ==  $uLangDatafld ? '<div class="setting-block">' . $fld->getHtml() . '</div>' : '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
-                            }
-                            
-                            if (null !=  $uLangDatafld) {
-                                HtmlHelper::configureSwitchForCheckbox($uLangDatafld);
-                                echo '<div class="setting-block">' . $uLangDatafld->getHtml() . '</div>';
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="list-featured">
-                            <?php
-                            $fld = $frm->getField('product_featured');
-                            $codFld = $frm->getField('product_cod_enabled');
-                            if (null !=  $fld) {
-                                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', $langId));
-                                echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>':'<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
-                            }
-                            
-                            if (null !=  $codFld && $codEnabled) {
-                                HtmlHelper::configureSwitchForCheckbox($codFld, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));                           
-                                echo '<li><div class="setting-block">' . $codFld->getHtml() . '</div></li>';
-                            }
-                            ?>
-                        </ul>
-                    </div>
-                </div>
-                <?php
-                $fld = $frm->getField('product_tags');
-                if (null != $fld) {
-                    $fld->addFieldTagAttribute('class', 'form-tagify');
-                    $fld->addFieldTagAttribute('id', 'product_tags');
-                ?>
-                    <div class="card">
-                        <div class="card-head">
-                            <div class="card-head-label">
-                                <h3 class="card-head-title">Tags</h3>
-                                <span class="text-muted">
-                                    <?php echo Labels::getLabel('FRM_PRODUCT_TAG_INFO', $langId); ?>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <?php echo $fld->getHtml(); ?>
-                        </div>
-                    </div>
                 <?php } ?>
             </div>
+            <div class="add-stock-column column-actions">
+                <div class="sticky-top">
+                    <div class="card">
+                        <div class="card-body">
+                            <button type="submit" class="btn btn-brand btn-block"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>
+                            <div class="mt-3">
+                                <?php
+                                $fld = $frm->getField('product_active');
+                                if (null !=  $fld) {
+                                    HtmlHelper::configureSwitchForCheckbox($fld);
+                                    echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
+                                }
+                                $fld = $frm->getField('product_approved');
+                                $uLangDatafld = $frm->getField('auto_update_other_langs_data');
+
+                                if (null !=  $fld) {
+                                    HtmlHelper::configureSwitchForCheckbox($fld);
+                                    echo null ==  $uLangDatafld ? '<div class="setting-block">' . $fld->getHtml() . '</div>' : '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
+                                }
+
+                                if (null !=  $uLangDatafld) {
+                                    HtmlHelper::configureSwitchForCheckbox($uLangDatafld);
+                                    echo '<div class="setting-block">' . $uLangDatafld->getHtml() . '</div>';
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="list-featured">
+                                <?php
+                                $fld = $frm->getField('product_featured');
+                                $codFld = $frm->getField('product_cod_enabled');
+                                if (null !=  $fld) {
+                                    HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', $langId));
+                                    echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>' : '<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
+                                }
+
+                                if (null !=  $codFld && $codEnabled) {
+                                    HtmlHelper::configureSwitchForCheckbox($codFld, Labels::getLabel('FRM_PRODUCT_COD_INFO', $langId));
+                                    echo '<li><div class="setting-block">' . $codFld->getHtml() . '</div></li>';
+                                }
+                                ?>
+                            </ul>
+                        </div>
+                    </div>
+                    <?php
+                    $fld = $frm->getField('product_tags');
+                    if (null != $fld) {
+                        $fld->addFieldTagAttribute('class', 'form-tagify');
+                        $fld->addFieldTagAttribute('id', 'product_tags');
+                    ?>
+                        <div class="card">
+                            <div class="card-head">
+                                <div class="card-head-label">
+                                    <h3 class="card-head-title">Tags</h3>
+                                    <span class="text-muted">
+                                        <?php echo Labels::getLabel('FRM_PRODUCT_TAG_INFO', $langId); ?>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <?php echo $fld->getHtml(); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
         </div>
-    </div>
-    </form>
+        </form>
     </div>
     <table class="hide" id="variantCloneJs">
         <?php echo getVariantUiTr($langId, -1);  ?>
@@ -535,7 +535,7 @@ if (0 < $recordId) {
         var tempImageType = '<?php echo AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP; ?>';
         var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
         var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
-        var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';     
+        var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
 
         $(function() {
             prodSpecifications();
