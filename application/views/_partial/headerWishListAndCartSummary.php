@@ -18,16 +18,17 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
             <?php /* } */ ?>
         </span>
     </button>
-    <div class="offcanvas offcanvas-end side-cart" tabindex="-1" id="side-cart" aria-labelledby="side-cartLabel">
-        <div class="offcanvas-header side-cart_head">
-            <h6>
-                <strong><?php echo Labels::getLabel('LBL_ITEMS', $siteLangId); ?>(<?php echo $totalCartItems; ?>)</strong>
-            </h6>
+    <!-- offcanvas-side-cart -->
+    <div class="offcanvas offcanvas-side-cart offcanvas-end" tabindex="-1" id="side-cart" aria-labelledby="side-cartLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">
+                <?php echo Labels::getLabel('LBL_ITEMS', $siteLangId); ?>(<?php echo $totalCartItems; ?>)
+            </h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 
         </div>
         <?php if ($totalCartItems > 0) { ?>
-            <div class="offcanvas-body side-cart_body">
+            <div class="offcanvas-body">
                 <div class="short-detail">
                     <ul class="list-cart">
                         <?php
@@ -110,7 +111,7 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                     </ul>
                 </div>
             </div>
-            <div class="offcanvas-foot side-cart_foot">
+            <div class="offcanvas-foot">
                 <div class="cart-summary">
                     <ul>
                         <li>
@@ -131,7 +132,6 @@ if ($user_is_buyer > 0 || (!UserAuthentication::isUserLogged())) { ?>
                         </li>
                     </ul>
                 </div>
-
                 <div class="buttons-group">
                     <a href="javascript:void(0);" onclick="cart.clear();" class="btn btn-outline-brand"><?php echo Labels::getLabel('LBL_CLEAR_CART', $siteLangId); ?> </a>
                     <a class="btn btn-brand" href="<?php echo UrlHelper::generateUrl('cart'); ?>"><?php echo Labels::getLabel('LBL_Proceed_To_Pay', $siteLangId); ?></a>

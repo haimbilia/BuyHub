@@ -101,11 +101,20 @@
 
     &-bottom {
         border-top: $border;
+        padding-bottom: 80px;
+        @include media-breakpoint-up(lg) {
+            padding-bottom: 0;
+        }
+
         &-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding-top: 1rem;
+            flex-direction: column;
+            @include media-breakpoint-up(lg) {
+                flex-direction: row;
+            }
 
             .copyright {
                 color: $txt-gray;
@@ -139,8 +148,12 @@
 
     .footer-layout {
         display: grid;
-        grid-gap: 4rem;
-        grid-template-columns: 25% 1fr 12%;
+        grid-gap: 2rem;
+        grid-template-columns: auto;
+        @include media-breakpoint-up(lg) {
+            grid-gap: 4rem;
+            grid-template-columns: 25% 1fr 12%;
+        }
     }
 
     .footer-group {
@@ -151,34 +164,7 @@
             padding: 5px 0;
             margin-bottom: 20px;
             @include media-breakpoint-down(sm) {
-                width: 100%;
-                display: inline-block;
-                position: relative;
-                position: relative;
-                margin: 0.5rem 0;
-                cursor: pointer;
-                font-size: 0.95em;
-                text-transform: uppercase;
-                padding: 1rem;
-                border: $border;
-                border-radius: $radius4;
-                &:before {
-                    position: absolute;
-                    #{$end-direction}: 15px;
-                    top: 13px;
-                    width: 10px;
-                    height: 10px;
-                    content: "";
-                    border-#{$start-direction}: 2px solid rgba(0, 0, 0, 0.32);
-                    border-bottom: 2px solid rgba(0, 0, 0, 0.32);
-                    transform: rotate(-45deg);
-                    transition: 0.3s all ease-in-out;
-                }
                 &.is-active {
-                    &:before {
-                        top: 19px;
-                        transform: rotate(135deg);
-                    }
                 }
             }
         }
@@ -215,10 +201,19 @@
         margin: 0;
         padding: 0;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
         font-size: 0.8rem;
-
+        @include media-breakpoint-up(lg) {
+            flex-direction: column;
+        }
         &-item {
+            flex: 0 0 50%;
+            max-width: 50%;
+            @include media-breakpoint-up(lg) {
+                flex: 1 1 0%;
+                max-width: inherit;
+            }
             margin: 0.5rem 0;
         }
         &-link {

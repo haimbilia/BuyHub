@@ -1,6 +1,10 @@
 .geo-location {
-    position: relative;
-    padding-#{$start-direction}: 1.5rem;
+    display: none;
+    @include media-breakpoint-up(lg) {
+        display: block;
+        position: relative;
+        padding-#{$start-direction}: 1.5rem;
+    }
     &::before {
         content: "";
         background: $border-color;

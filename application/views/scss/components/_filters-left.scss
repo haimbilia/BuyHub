@@ -6,6 +6,7 @@
         display: block;
     }
     .collection-sidebar {
+        background: $bg-white;
         flex-grow: 0;
         flex-basis: 0;
         // background: $bg-gray;
@@ -28,7 +29,7 @@
                 #{$start-direction}: 0;
                 visibility: visible;
                 box-shadow: 0px 0px 0 1500px rgba(0, 0, 0, 0.2);
-                z-index: 10;
+                z-index: $zindex-fixed;
             }
         }
     }

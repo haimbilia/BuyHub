@@ -84,6 +84,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-direction: column;
+    flex-wrap: wrap;
+    @include media-breakpoint-up(lg) {
+        flex-direction: row;
+    }
     &-center {
         justify-content: center;
         text-align: center;

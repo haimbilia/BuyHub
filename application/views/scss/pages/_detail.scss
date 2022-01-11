@@ -5,9 +5,11 @@
 }
 
 .detail-first-fold {
-    display: grid;
-    grid-gap: 6rem;
-    grid-template-columns: 1fr 1fr;
+    @include media-breakpoint-up(lg) {
+        display: grid;
+        grid-gap: 6rem;
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 .product-detail-gallery {
@@ -1066,9 +1068,11 @@
 // new review and rating UI
 
 .rating-layout {
-    display: grid;
-    grid-gap: 8rem;
-    grid-template-columns: minmax(auto, 24%) 1fr;
+    @include media-breakpoint-up(lg) {
+        display: grid;
+        grid-gap: 8rem;
+        grid-template-columns: minmax(auto, 24%) 1fr;
+    }
 }
 
 .rating-block {
@@ -1245,17 +1249,27 @@
     margin: 2rem 0;
     display: flex;
     align-items: center;
+    flex-direction: column;
+    @include media-breakpoint-up(lg) {
+        flex-direction: row;
+    }
+
     &-item {
         border-radius: $radius-common;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         padding: 5px 1rem;
         border: $border;
         margin-#{$end-direction}: 10px;
+        margin-bottom: 5px;
         font-size: 0.8rem;
         color: $txt-gray;
         &:last-child {
             margin-#{$end-direction}: 0;
+        }
+        @include media-breakpoint-up(lg) {
+            margin-bottom: 0;
         }
     }
     .product-ratings {

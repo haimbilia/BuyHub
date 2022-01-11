@@ -1,8 +1,12 @@
+.main-search {
+}
+
 .offcanvas-mega-search {
     top: $header-height;
+
     right: 0;
     left: 0;
-    max-height: 70%;
+    // max-height: 70%;
     transform: translateY(-100%);
     z-index: 100;
     box-shadow: 0 1.2px 1.9px -1px rgba(0, 0, 0, 0.014), 0 3.3px 5.3px -1px rgba(0, 0, 0, 0.038), 0 8.5px 12.7px -1px rgba(0, 0, 0, 0.085), 0 30px 42px -1px rgba(0, 0, 0, 0.15);
@@ -11,7 +15,7 @@
     max-width: 600px;
     width: 100%;
     margin: 0 auto;
-    padding: 4rem 0;
+    padding: 4rem 2rem;
     &-input {
         font-size: 0.85rem;
         background: none;

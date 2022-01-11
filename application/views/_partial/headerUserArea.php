@@ -22,9 +22,10 @@ if (!UserAuthentication::isUserLogged()) {
                     </ul>
                 </div>
             </div>
-        </li><?php
-            } else {
-                ?>
+        </li>
+    <?php
+    } else {
+    ?>
         <li class="quick-nav-item">
             <div class="dropdown">
                 <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js">
@@ -62,7 +63,7 @@ if (!UserAuthentication::isUserLogged()) {
                 $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD);
                 $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl);
             } ?>
-    <li class="quick-nav-item">
+    <li class="quick-nav-item item-desktop">
         <div class="dropdown">
             <button type="button" class="quick-nav-link button-account dropdown-toggle no-after" data-bs-toggle="dropdown">
                 <i class="icn">
@@ -83,7 +84,7 @@ if (!UserAuthentication::isUserLogged()) {
                             <?php echo Labels::getLabel('LBL_Hi,', $siteLangId) . ' ' . $userName; ?>
                         </a>
                     </li>
-                    <li class="nav__item "><a class="dropdown-item nav__link" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?></a>
+                    <li class="nav__item"><a class="dropdown-item nav__link" data-org-url="<?php echo $dashboardOrgUrl; ?>" href="<?php echo $dashboardUrl; ?>"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?></a>
                     </li>
                     <li class="nav__item logout"><a class="dropdown-item nav__link" data-org-url="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', array(), CONF_WEBROOT_FRONTEND, null, false, $getOrgUrl); ?>" href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND); ?>"><?php echo Labels::getLabel('LBL_Logout', $siteLangId); ?>
                         </a></li>

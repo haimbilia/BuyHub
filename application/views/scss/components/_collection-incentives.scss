@@ -1,13 +1,16 @@
 .incentives-layout-1 {
     display: grid;
-    grid-gap: 4rem;
-    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 4rem;
+    }
     .incentives {
         display: flex;
         flex-direction: column;
         text-align: center;
-        @include media-breakpoint-down(lg) {
-        }
+
         &-icon {
             width: 30px;
             margin: 1.5rem auto;
