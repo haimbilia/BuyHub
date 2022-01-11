@@ -208,6 +208,7 @@ select2 = function (
     if (null === obj) {
         obj = ele.closest('.dropdown-menu').length ? ele.closest('.dropdown-menu') : null;
     }
+    console.log(postdata);
 
     ele.select2({
         dropdownParent: obj,

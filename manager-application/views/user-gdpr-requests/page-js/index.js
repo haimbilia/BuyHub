@@ -1,3 +1,8 @@
+$(document).ready(function () {
+    select2('searchFrmUserIdJs', fcom.makeUrl('Users', 'autoComplete'), {'deletedUser' : 1}, '', function () {
+        clearSearch();
+    });
+});
 
 (function () {
     viewRequestPurpose = function (requestId) {
@@ -30,13 +35,5 @@
             }
         });
     };
-    bindUserSelect2 = function (element) {
-        select2(element, fcom.makeUrl('Users', 'autoComplete'), {}, '', function () {
-            clearSearch();
-        });
-    };
 })();
 
-$(document).ready(function () {
-    bindUserSelect2('searchFrmUserIdJs');
-});
