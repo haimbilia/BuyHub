@@ -14,7 +14,7 @@ if (!$frm->getFormTagAttribute('onsubmit')) {
 
 require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
-        <ul class="list-stats">
+        <ul class="list-stats list-stats-double">
             <li class="list-stats-item">
                 <span class="lable">
                     <?php echo Labels::getLabel('LBL_PRODUCT_NAME', $siteLangId); ?> :
