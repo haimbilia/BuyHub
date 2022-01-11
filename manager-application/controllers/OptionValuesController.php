@@ -241,10 +241,10 @@ class OptionValuesController extends ListingBaseController
             }
         }
 
+        $post['optionvalue_identifier'] = $post['optionvalue_name'];
         $optionValueObj = new OptionValue($recordId);
         $optionValueObj->assignValues($post);
 
-        $post['optionvalue_identifier'] = $post['optionvalue_name'];
         if (!$optionValueObj->save()) {
             $msg = $optionValueObj->getError();
             if (false !== strpos(strtolower($msg), 'duplicate')) {
