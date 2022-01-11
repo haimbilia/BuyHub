@@ -56,16 +56,14 @@ $(document).on('change', '#conditionTypeJs', function () {
 
 
 (function () {
-    editConditionRecord = function (badgeId, recordId = 0, displayInPopup = 0) {
+    editConditionRecord = function (badgeId, recordId = 0) {
         /* Uncheck all if checked. */
         $(".selectAllJs, .selectItemJs").prop("checked", false)
 
-        /* !! is used to convert variable type in to bool. */
-        var displayInPopup = !!displayInPopup;
         var data = (0 < recordId) ? ("recordId=" + recordId) : '';
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'form', [badgeId]), data, function (t) {
-            $.ykmodal(t.html, displayInPopup);
+            $.ykmodal(t.html, false);
             fcom.removeLoader();
             $.ykmsg.close();
         });

@@ -532,6 +532,11 @@ class BadgeLinkConditionsController extends SellerBaseController
         $newRecord = (1 > $badgeLinkCondId);
         $post['blinkcond_user_id'] = $sellerId;
 
+        /* No need to as for position. */
+        if (Badge::TYPE_RIBBON == $badgeType) {
+            $post['blinkcond_position'] = Badge::RIBB_POS_TRIGHT;
+        }
+        
         $record = new BadgeLinkCondition($badgeLinkCondId);
         $record->assignValues($post);
         if (!$record->save()) {
@@ -636,10 +641,6 @@ class BadgeLinkConditionsController extends SellerBaseController
     {
         $frm = $this->getCommonFields($recordCondition);
         $frm->addHiddenField('', 'badge_type', Badge::TYPE_RIBBON);
-
-        $positionArr = Badge::getRibbonPostionArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_POSITION', $this->siteLangId), 'blinkcond_position', $positionArr, '', [], '');
-
         return $frm;
     }
 
