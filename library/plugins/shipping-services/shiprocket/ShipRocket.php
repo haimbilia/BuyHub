@@ -543,7 +543,6 @@ class ShipRocket extends ShippingServicesBase
 
 
         if (false === $this->doRequest(self::REQUEST_ADD_ORDER, $requestParam)) {
-            echo 111;
             return false;
         }
         $orderShipment = $this->getResponse();
@@ -833,7 +832,7 @@ class ShipRocket extends ShippingServicesBase
             }
             return true;
         } catch (Exception $e) { 
-            SystemLog::plugin(json_encode($requestParam), $e->getMessage(), 'ShipRocket');          
+            SystemLog::plugin(json_encode($requestParam), $e->getMessage(), 'ShipRocket'); 
             $this->error = $e->getMessage();
         } catch (Error $e) {       
             SystemLog::plugin(json_encode($requestParam), $e->getMessage(), 'ShipRocket');

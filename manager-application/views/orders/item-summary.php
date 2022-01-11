@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS");
+$pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($order['op_id']) : NULL;
 ?>
 <div class="card-body p-0 itemSummaryJs">
     <div class="table-responsive table-scrollable js-scrollable listingTableJs">
@@ -217,7 +218,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                                         </i>' . Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId),
                                         ];
                                     } else {
-                                        if ($shippingApiObj->getKey('plugin_id') == $op['opshipping_plugin_id']) {
+                                        if ($shippingApiObj->getKey('plugin_id') == $op['opshipping_plugin_id']) {                           
                                             if (empty($op['opr_response']) && empty($op['opship_tracking_number']) && $shippingApiObj->canGenerateLabelSeparately()) {
                                                 $data['dropdownButtons']['otherButtons'][] = [
                                                     'attr' => [
@@ -251,7 +252,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                                                 </i>' . Labels::getLabel($title, $siteLangId),
                                                 ];
                                             }
-                                            if ((!empty($opStatus) && 'awaiting_shipment' == $opStatus && !empty($op['opr_response']) || ($shippingApiObj->canGenerateLabelFromShipment() || $shippingApiObj->canGenerateLabelSeparately() ) ) && empty($op['opship_order_number'])) {                                            
+                                            if ((!empty($opStatus) && 'awaiting_shipment' == $opStatus && !empty($op['opr_response']) || ($shippingApiObj->canGenerateLabelFromShipment() || !empty($orderDetail['opship_tracking_number']) ) ) && empty($op['opship_order_number'])) {                                            
                                                 if (true == $shippingApiObj->canGenerateLabelFromShipment()) {
                                                     $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
                                                 } else {

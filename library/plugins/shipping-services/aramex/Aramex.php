@@ -30,7 +30,7 @@ class Aramex extends ShippingServicesBase
         'AccountNumber',
         'AccountPin',
         'UserName',
-        'Password'     
+        'Password'
     ];
 
     /**
@@ -870,5 +870,10 @@ class Aramex extends ShippingServicesBase
             $this->error = $e->faultstring;
         }
         return false;
+    }
+
+    public function canGenerateLabelFromShipment(): bool
+    {
+        return true;
     }
 }
