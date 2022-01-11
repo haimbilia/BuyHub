@@ -1557,3 +1557,8 @@ VALUES ('LBL_NOT_SERVICEABLE', 1, 'Not serviceable at your location', 1),
 ('LBL_NOT_AVAILABLE', 1, 'Not Available', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 -- -------------------TV-9.4.0.20210107-----------------
+
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) 
+VALUES ('CONF_AUTO_CLOSE_SYSTEM_MESSAGES', 1, '0'),
+('CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES', 3, '0')
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);

@@ -3,7 +3,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('data-onclear', "editRecord(" . $addressId . ", " . $siteLangId . ");");
 
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
+$frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
 $frm->setFormTagAttribute('onsubmit', 'setup($("#' . $frm->getFormTagAttribute('id') . '")[0]); return(false);');
 
 $frm->setFormTagAttribute('dir', $formLayout);

@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
+$frm->setFormTagAttribute('class', 'form');
 $frm->setFormTagAttribute('data-callbackfn', 'productImagesCallback');
 
 $fld = $frm->getField('prod_image');

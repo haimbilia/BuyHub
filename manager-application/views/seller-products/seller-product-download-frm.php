@@ -2,7 +2,7 @@
 
 HtmlHelper::formatFormFields($frm);
 
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('id', 'frmDownload');
 
 $frm->setFormTagAttribute('onsubmit', 'return(false);');

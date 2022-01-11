@@ -110,11 +110,15 @@ class OptionsController extends ListingBaseController
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('o.option_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ol.option_name', 'like', '%' . $post['keyword'] . '%', 'OR');
-            $condition->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+            if(strtolower($post['keyword']) == strtolower(Labels::getLabel('LBL_Admin',$this->siteLangId))){
+                $condition->attachCondition('u.user_name', 'is','mysql_func_NULL', 'OR',true);
+            }else{
+                $condition->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+            }
+            
         }
 
         $srch->addOrder($sortBy, $sortOrder);
-
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
@@ -176,7 +180,11 @@ class OptionsController extends ListingBaseController
         $post['option_identifier'] = $post['option_name'];
         $optionObj->assignValues($post);
         if (!$optionObj->save()) {
-            LibHelper::exitWithError($optionObj->getError(), true);
+            $msg = $optionObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $recordId = $optionObj->getMainTableRecordId();

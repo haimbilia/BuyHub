@@ -9,15 +9,7 @@ $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 $includeTabs = $includeTabs ?? true;
 $displayLangTab = $displayLangTab ?? true;
 $languages = $languages ?? [];
-unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
- 
-<button class="float-btn" type="button" data-trigger="" onclick="layoutSelectorForm()">
-    <svg class="svg" width="20" height="20">
-        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back"></use>
-    </svg>
-</button>
-
- 
+unset($languages[CommonHelper::getDefaultFormLangId()]); ?> 
 <div class="modal-header">
     <h5 class="modal-title">
         <?php if (false !== $formBackButtonAttr) {

@@ -172,7 +172,11 @@ class FaqCategoriesController extends ListingBaseController
         unset($post['faqcat_id'], $post['faqcat_name']);
         $record->assignValues($post);
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $recordId = $record->getMainTableRecordId();
         $epageObj = new Extrapage($recordId);

@@ -3,7 +3,7 @@
 HtmlHelper::formatFormFields($frm);
 
 $frm->setFormTagAttribute('data-onclear', 'collectionMediaForm(' . $recordId . ',' . $collection_type . ')');
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 
 $displayMediaOnlyObj = $frm->getField('collection_display_media_only');
 $displayMediaOnlyObj->developerTags['noCaptionTag'] = true;

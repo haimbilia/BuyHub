@@ -1,17 +1,5 @@
-$(document).ready(function () {
-	reloadList();
-});
-
 (function () {
 	var dv = "#listing";
-
-	reloadList = function () {
-		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'search'), '', function (res) {
-			$(dv).html(res.html);
-			$.ykmsg.close();
-			fcom.removeLoader();
-		});
-	};
 
 	categoryForm = function (prodCatId) {
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'form', [prodCatId]), '', function (res) {
@@ -42,27 +30,21 @@ $(document).ready(function () {
 		});
 	};
 
-	discardForm = function () {
-		reloadList();
-	}
-
-	goToProduct = function (prodCatId) {
-		window.location.href = fcom.makeUrl('Products', 'form', [0, prodCatId]);
+	goToProducts = function (prodCatId) {
+		redirectToProduct(0, { prodcat_id: prodCatId });
 	};
 
 	updateStatus = function (e, obj, recordId, status) {
 		if (false === checkControllerName()) {
 			return false;
 		}
-
 		e.stopPropagation();
-		/* if (!confirm(langLbl.confirmUpdateStatus)) {
-			e.preventDefault();
-			return false;
-		} */
+		fcom.displayProcessing();
+		$("#sorting-categories").prepend(fcom.getLoader());
 
+		var childEle = $(obj).closest('.liJs').find('.statusEleJs');
+		var parentEle = $(obj).data('catParent').split('_');
 		var oldStatus = $(obj).attr("data-old-status");
-		$('.listingTableJs').prepend(fcom.getLoader());
 
 		if (1 > recordId) {
 			$(obj).prop("checked", 1 == oldStatus);
@@ -70,27 +52,52 @@ $(document).ready(function () {
 			fcom.removeLoader();
 			return false;
 		}
-
+		
 		data = "recordId=" + recordId + "&status=" + status;
-		fcom.ajax(
-			fcom.makeUrl(controllerName, "updateStatus"),
-			data,
+		fcom.ajax(fcom.makeUrl(controllerName, "updateStatus"), data,
 			function (res) {
-				$(obj).prop("checked", 1 == status);
-				var ans = JSON.parse(res);
-				if (ans.status == 1) {
-					$.ykmsg.success(ans.msg);
-					$(obj).attr({
-						onclick:
-							"updateStatus(event, this, " + recordId + ", " + oldStatus + ")",
-						"data-old-status": status,
-					});
-					reloadList();
-				} else {
+				fcom.removeLoader();
+				$.ykmsg.close();
+				var ans = $.parseJSON(res);
+				if (ans.status != 1) {
 					$(obj).prop("checked", 1 == oldStatus);
 					$.ykmsg.error(ans.msg);
+					return;
 				}
-				fcom.removeLoader();
+				$.ykmsg.success(ans.msg);
+				$(obj).prop("checked", 1 == status);
+				$(obj).attr({
+					"onclick": "updateStatus(event, this, " + recordId + ", " + oldStatus + ")",
+					"data-old-status": status,
+				});
+
+				/* Mark all children In-Active */
+				if (0 < childEle.length && 0 == status) {
+					$.each(childEle, function (key, children) {
+						$(children).prop("checked", 1 == status);
+						$(children).attr({
+							"onclick": "updateStatus(event, this, " + $(children).val() + ", " + oldStatus + ")",
+							"data-old-status": status,
+						});
+					});
+				}
+
+				/* Mark all parents Active */
+				if (1 < parentEle.length && 1 == status) {
+					$.each(parentEle, function (key, parent) {
+						if ("" != parent) {
+							var statusEle = '.statusEle-' + parseInt(parent);
+							var val = $(statusEle).val();
+							if (recordId != val) {
+								$(statusEle).prop("checked", 1 == status);
+								$(statusEle).attr({
+									"onclick": "updateStatus(event, this, " + val + ", " + oldStatus + ")",
+									"data-old-status": status,
+								});
+							}
+						}
+					});
+				}
 			}
 		);
 	};
@@ -104,7 +111,7 @@ $(document).ready(function () {
 		}
 
 		if ($("#" + prodCatId + ' ul.append-ul').length) {
-			$("#" + prodCatId + ' ul:first').show();
+			$("#" + prodCatId + ' ul:first').slideDown();
 			if (catId == 0) {
 				togglePlusMinus(prodCatId);
 			}
@@ -118,11 +125,15 @@ $(document).ready(function () {
 			if ($("#" + prodCatId).children('ul.append-ul').length) {
 				$("#" + prodCatId).children('ul.append-ul').append(res.html);
 			} else {
-				$("#" + prodCatId).append('<ul class="append-ul">' + res.html + '</ul>');
+				$("#" + prodCatId).append('<ul class="append-ul ulJs ul-' + prodCatId + '" style="display:none;">' + res.html + '</ul>');
 			}
+
+			$('.ul-' + prodCatId).slideDown();
+
 			if (catId == 0) {
 				togglePlusMinus(prodCatId);
 			}
+
 			if (catId > 0) {
 				updateCatOrder(data);
 			}
@@ -150,20 +161,17 @@ $(document).ready(function () {
 
 	hideItems = function (obj) {
 		var prodCatId = $(obj).parent().parent().parent().attr('id');
-		$("#" + prodCatId + ' ul').hide();
+		$("#" + prodCatId + ' ul').slideUp();
 		$("#" + prodCatId).removeClass('sortableListsOpen').addClass('sortableListsClosed');
 		var icon = $("#" + prodCatId).children('div').children('.sortableListsOpener').remove();
 		$("#" + prodCatId).children('div').append('<span class="sortableListsOpener" ><i class="fa fa-plus c3 clickable sort-icon" onClick="displaySubCategories(this)"></i></span>');
 	}
 
 	updateCatOrder = function (data) {
+		$("#sorting-categories").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'updateOrder'), data, function (res) {
-			reloadList();
-			$("#js-cat-section").removeClass('overlay-blur');
-			setTimeout(function () {
-				data = queryStringToJSON(data);
-				goToCategory(data.catId);
-			}, 1000);
+			fcom.removeLoader();
+			$.ykmsg.close();
 		});
 	}
 
@@ -315,34 +323,6 @@ $(document).ready(function () {
 				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
 		});
-	}
-
-	var parentIds = [];
-	var i = 0;
-	goToCategory = function (catId = 0) {
-		if (0 < parentIds.length) {
-			parentIds = i >= parentIds.length ? [] : parentIds;
-
-			if (i < parentIds.length) {
-				const element = $('.cat' + parentIds[i] + '-js')[0];
-				i = i + 1;
-				displaySubCategories(element, 0, '', 'goToCategory');
-			}
-			return;
-		} else {
-			i = 0;
-			fcom.ajax(fcom.makeUrl('ProductCategories', 'getParentIds', [catId]), '', function (t) {
-				var ans = JSON.parse(t);
-				if (0 < ans.status) {
-					parentIds = ans.data;
-					if (i < parentIds.length) {
-						const element = $('.cat' + parentIds[i] + '-js')[0];
-						i = i + 1;
-						displaySubCategories(element, 0, '', 'goToCategory');
-					}
-				}
-			});
-		}
 	}
 
 	mediaForm = function (record_id) {

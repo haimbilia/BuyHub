@@ -163,10 +163,9 @@ class HtmlHelper
             if ($interval->s == 0) {
                 return Labels::getLabel('LBL_JUST_NOW', $langId);
             }
-            
+
             $str =  $interval->i == 1 ? Labels::getLabel('LBL_IN_A_SECOND', $langId) :  Labels::getLabel('LBL_IN_{INTERVAL}_SECONDS', $langId);
             return str_replace("{interval}", $interval->i, $str);
-            
         } else {
 
             if ($interval->h >= 1) {
@@ -180,12 +179,10 @@ class HtmlHelper
             if ($interval->s == 0) {
                 return Labels::getLabel('LBL_JUST_NOW', $langId);
             }
-           
+
             $str =  $interval->i == 1 ? Labels::getLabel('LBL_IN_A_SECOND', $langId) :  Labels::getLabel('LBL_IN_{INTERVAL}_SECONDS_AGO', $langId);
             return str_replace("{interval}", $interval->i, $str);
-            
         }
-        
     }
 
     public static function getStatusHtml(int $status, string $msg): string
@@ -336,11 +333,9 @@ class HtmlHelper
         }
         $str .= '</div>';
 
-        $oldFldPostion = $fld->getFormIndex();
-
-        $frm->removeField($fld);
         $htmlFld = $frm->addHTML('', $fldName . '_html', $str);
-        $htmlFld->setFormIndex($oldFldPostion);
+        $frm->changeFieldPosition($htmlFld->getFormIndex(), $fld->getFormIndex());
+        $frm->removeField($fld);
         $htmlFld->developerTags = $fld->developerTags;
         return $htmlFld;
     }

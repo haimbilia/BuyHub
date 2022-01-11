@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
+$frm->setFormTagAttribute('class', 'form');
 $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 

@@ -24,9 +24,9 @@ New Feature :
     => MSG-1390138 : Payfast payment gateway 
     => 85369 : Aramex Shipping API 
     => 72808 : EasyEcom Marketplace Channel API
-    => 86472 : YoCo Payment gateay
-    => 88040 : ShipRocket Payment gateay
-    => 88449 : ShipEngine Payment gateay
+    => 86472 : YoCo Payment gateway
+    => 88040 : ShipRocket Shipping API Integration
+    => 88449 : ShipEngine Shipping API Integration
 
 Updates/Fixes : 
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
@@ -510,6 +510,17 @@ Bugs :
     => 061431 - Special Price and Volume discount listing design row issue while editing
 
 =============TV-9.4.0.20210107================
+    => 060478 - Admin UI: Suggestion to change the errors messages while trying to add the new record by using the same name on the whole system 
+    => 061012 - Admin UI: "Row's Re-arrange" functionality is not working properly on the whole system
+    => 060863 - Admin UI: Getting multiple issues under the side's menu section
+    => 060835 - Admin UI: Inconsistency: Design is not the same for the edit fields in the table under the Manage weightages section
+    => 060770 - Admin UI: Table's alignment is not correct under the special price section
+    => 060538 - Admin UI: Validation's design is not consistent for the User's dropdown under the rewards section
+    => 060587 - Admin UI: Suggestion removed the scroller if "no record found" in the list
+    => 061099 - Admin UI: Breadcrumb is also gets blurred while selecting the options under the "Meta tags Management" section
+    => 061441 - Admin UI: Search is not working while trying to search the record according to 'added by' under the Options' section.
+    => 061445 - Admin UI: Admin is not able to add more than one option's value.
+
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

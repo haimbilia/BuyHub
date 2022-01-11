@@ -64,8 +64,8 @@ trait RecordOperations
 
         if (!empty($fields)) {
             $this->addSortingElements($frm, current($allowedKeysForSorting));
-        }
-
+        } 
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }

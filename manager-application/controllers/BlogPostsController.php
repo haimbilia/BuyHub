@@ -207,7 +207,11 @@ class BlogPostsController extends ListingBaseController
         $record->assignValues($post);
 
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $recordId = $record->getMainTableRecordId();
 

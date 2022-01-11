@@ -15,22 +15,22 @@ $stateData =  $frmType == Configurations::FORM_PRODUCT ? $stateData = FatApp::ge
 $displayMap = $frmType == Configurations::FORM_PRODUCT;
 
 ?>
-<div class="card">
+<div id="frmBlockJs" class="card">
     <div class="card-head">
         <div class="card-head-label">
             <h3 class="card-head-title">
                 <?php echo $tabs[$frmType] . ' ' . Labels::getLabel('LBL_SETTINGS', $siteLangId); ?>
             </h3>
         </div>
-        <div class="card-head-toolbar">          
-            <?php if ($dispLangTab) { ?>    
-            <div class="input-group">
-                <select class="form-control form-select select-language" onchange="getForm(<?php echo $frmType; ?>, this.value)">
-                    <?php foreach( $languages as $langKey => $langName){ ?>
-                        <option value="<?php echo $langKey;?>" <?php echo $langKey == $lang_id ? "selected":"";?>  ><?php echo $langName;?></option>
-                    <?php } ?>
-                </select>                
-            </div>
+        <div class="card-head-toolbar">
+            <?php if ($dispLangTab) { ?>
+                <div class="input-group">
+                    <select class="form-control form-select select-language" onchange="getForm(<?php echo $frmType; ?>, this.value)">
+                        <?php foreach ($languagesNames as $langKey => $langName) { ?>
+                            <option value="<?php echo $langKey; ?>" <?php echo $langKey == $lang_id ? "selected" : ""; ?>><?php echo $langName; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
             <?php } ?>
         </div>
     </div>
@@ -57,44 +57,44 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
             </div>
         </div>
     </div>
-</div>
-<script language="javascript">
-    var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
-    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-        getStatesByCountryCode($("#geo_country_code").val(),
-            '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code',
-            'state_code');
-    <?php } ?>   
+    <script language="javascript">
+        var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
+        <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+            getStatesByCountryCode($("#geo_country_code").val(),
+                '<?php echo FatApp::getConfig('CONF_GEO_DEFAULT_STATE', FatUtility::VAR_STRING, 1); ?>', '#geo_state_code',
+                'state_code');
+        <?php } ?>
 
-    $(document).on('change', '.geoLocation', function() {
-        var geolocVal = $(this).val();
-        $('.listingFilter').removeAttr('disabled');
-        if (geolocVal == <?php echo applicationConstants::BASED_ON_RADIUS; ?>) {
-            $('.listingFilter').attr('disabled', 'disabled');
-            $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', false); // enable
-        } else {
-            $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', true); // enable
-        }
+        $(document).on('change', '.geoLocation', function() {
+            var geolocVal = $(this).val();
+            $('.listingFilter').removeAttr('disabled');
+            if (geolocVal == <?php echo applicationConstants::BASED_ON_RADIUS; ?>) {
+                $('.listingFilter').attr('disabled', 'disabled');
+                $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', false); // enable
+            } else {
+                $('input[name="CONF_RADIUS_DISTANCE_IN_MILES"]').prop('disabled', true); // enable
+            }
 
-        if (geolocVal == <?php echo applicationConstants::BASED_ON_DELIVERY_LOCATION; ?>) {
-            $('.listingFilter').each(function() {
-                if ($(this).val() == <?php echo applicationConstants::LOCATION_ZIP; ?>) {
-                    $(this).attr('disabled', 'disabled');
-                }
-            });
-        }
-    });
-   
-    <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-        $(document).ready(function() {   
-            var lat = $('#lat').val();
-            var lng = $('#lng').val();
-            initMap(lat, lng);
+            if (geolocVal == <?php echo applicationConstants::BASED_ON_DELIVERY_LOCATION; ?>) {
+                $('.listingFilter').each(function() {
+                    if ($(this).val() == <?php echo applicationConstants::LOCATION_ZIP; ?>) {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+            }
         });
-    <?php } else { ?>
-        var countryId = $("#user_country_id").val();
-        if ('undefined' != typeof countryId) {
-            getCountryStates(countryId, '<?php echo $stateData; ?>', '#user_state_id');
-        }
-    <?php } ?>    
-</script>
+
+        <?php if ($displayMap && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+            $(document).ready(function() {
+                var lat = $('#lat').val();
+                var lng = $('#lng').val();
+                initMap(lat, lng);
+            });
+        <?php } else { ?>
+            var countryId = $("#user_country_id").val();
+            if ('undefined' != typeof countryId) {
+                getCountryStates(countryId, '<?php echo $stateData; ?>', '#user_state_id');
+            }
+        <?php } ?>
+    </script>
+</div>

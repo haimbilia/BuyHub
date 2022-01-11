@@ -17,9 +17,6 @@ foreach ($arrListing as $sn => $row) {
             case 'select_all':
                 $td->appendElement('plaintext', $tdAttr, '<label class="checkbox"><input class="selectItemJs" type="checkbox" name="user_ids[]" value=' . $row['user_id'] . '><i class="input-helper"></i></label>', true);
                 break;
-            case 'listSerial':
-                $td->appendElement('plaintext', $tdAttr, $serialNo);
-                break;
             case 'user_name':
                 $onclick = $canViewShops && !empty($row['shop_id']) ? 'redirectToShop(' . $row['shop_id'] . ')' : '';
                 $title = '';

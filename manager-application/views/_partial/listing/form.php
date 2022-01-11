@@ -9,7 +9,7 @@ if (!$frm->getFormTagAttribute('data-onclear')) {
     $frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
 }
 
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs ' . $formClassExtra);
+$frm->setFormTagAttribute('class', 'form modalFormJs ' . $formClassExtra);
 if (!$frm->getFormTagAttribute('onsubmit')) {
     $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#' . $frm->getFormTagAttribute('id') . '")[0]); return(false);');
 }

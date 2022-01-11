@@ -38,11 +38,10 @@ if (!empty($googleFontFamilyUrl)) {
 <main class="main">
     <div class="container">
         <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">                    
+        <div class="grid-layout">
+            <div class="grid-layout-left">
+                <div class="card">
                     <div class="card-body">
-
                         <?php echo $frm->getFormTag();
                         if (null != $frm->getField('CONF_THEME_FONT_FAMILY_URL')) {
                             echo $frm->getFieldHtml('CONF_THEME_FONT_FAMILY_URL');
@@ -217,16 +216,12 @@ if (!empty($googleFontFamilyUrl)) {
                 </div>
 
             </div>
-            <div class="col-md-8">
+            <div class="grid-layout-right">
                 <div class="card">
                     <div class="card-body p-0">
-
                         <div class="palette googleFontsJs">
                             <?php require_once('theme-color-svg.html'); ?>
                         </div>
-
-
-
                     </div>
                 </div>
             </div>

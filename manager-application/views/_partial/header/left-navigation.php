@@ -7,8 +7,12 @@
             $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
             ?>
             <img <?php if ($fileData['afile_aspect_ratio'] > 0 && $fileData['afile_aspect_ratio'] == 2) { ?> width="89" height="50" <?php } else { ?> width="50" height="50" <?php } ?> <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } else { ?> data-ratio="1:1" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
-        </a> <button class="sidebar-toggle sidebarOpenerBtnJs " type="button">
-            <i class="fas fa-angle-double-left"></i>
+        </a>
+        <button class="sidebar-toggle sidebarOpenerBtnJs active" type="button">
+            <svg class="svg" width="20" height="20">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#chevron-double-left">
+                </use>
+            </svg>
         </button>
     </div>
     <div class="sidebar-menu sidebarMenuJs" id="sidebar-menu">
@@ -441,7 +445,7 @@
                                         <span class="nav_text"><?php echo Labels::getLabel('NAV_ADMIN_USERS', $siteLangId); ?></span>
                                     </a>
                                 </li>
-                            <?php } ?>                            
+                            <?php } ?>
                             <?php if ($objPrivilege->canViewUsers(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
                                     <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Users"]' href="<?php echo UrlHelper::generateUrl('Users'); ?>">
@@ -677,7 +681,7 @@
                                     </a>
                                 </li>
                             <?php } ?>
-                            <?php 
+                            <?php
                             $active = (new Plugin())->getDefaultPluginData(Plugin::TYPE_PUSH_NOTIFICATION, 'plugin_active');
                             if ($objPrivilege->canViewPushNotification(AdminAuthentication::getLoggedAdminId(), true) && false != $active && !empty($active)) { ?>
                                 <li class="nav_item navItemJs">

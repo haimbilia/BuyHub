@@ -7,14 +7,14 @@ if (!$frm->getFormTagAttribute('data-onclear')) {
     $frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ')');
 }
 
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs ');
+$frm->setFormTagAttribute('class', 'form modalFormJs ');
 if (!$frm->getFormTagAttribute('onsubmit')) {
     $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#' . $frm->getFormTagAttribute('id') . '")[0]); return(false);');
 }
 
 require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
     <div class="form-edit-body loaderContainerJs">
-        <ul class="list-stats">
+        <ul class="list-stats list-stats-double">
             <li class="list-stats-item">
                 <span class="lable">
                     <?php echo Labels::getLabel('LBL_PRODUCT_NAME', $siteLangId); ?> :
@@ -73,7 +73,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                     <?php } ?>
                 </span>
             </li>
-            <li class="list-stats-item">
+            <li class="list-stats-item list-stats-item-full">
                 <div class="label">
                     <?php echo Labels::getLabel('LBL_REVIEW_TITLE', $siteLangId); ?>
                 </div>
@@ -88,7 +88,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                     ?>
                 </div>
             </li>
-            <li class="list-stats-item">
+            <li class="list-stats-item list-stats-item-full">
                 <div class="label">
                     <?php echo Labels::getLabel('LBL_Review_Comments', $siteLangId); ?>
                 </div>

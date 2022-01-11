@@ -111,7 +111,7 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                                 $fn = $fn . '(' . $op['order_id'] . ', ' . $op['op_id'] . ')';
 
                                 $data = ['siteLangId' => $siteLangId];
-                                $data['dropdownButtons']['otherButtons'] = [
+                                $data['otherButtons'] = [
                                     [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
@@ -124,8 +124,24 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                                                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
                                                             </use>
                                                         </svg>
-                                                    </i>' . Labels::getLabel('MSG_VIEW_DETAIL', $siteLangId),
+                                                    </i>',
                                     ],
+                                    [
+                                        'attr' => [
+                                            'href' => 'javascript:void(0)',
+                                            'onclick' => $fn,
+                                            'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
+                                        ],
+                                        'label' => '<i class="icn">
+                                                        <svg class="svg" width="18" height="18">
+                                                            <use
+                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#form">
+                                                            </use>
+                                                        </svg>
+                                                    </i>',
+                                    ]
+                                ];
+                                $data['dropdownButtons']['otherButtons'] = [
                                     [
                                         'attr' => [
                                             'href' => Fatutility::generateUrl('Orders', 'viewInvoice', [$op['op_id']]),
@@ -167,20 +183,6 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                                                             </use>
                                                         </svg>
                                                     </i>' . Labels::getLabel('MSG_STATUS_HISTORY', $siteLangId),
-                                    ],
-                                    [
-                                        'attr' => [
-                                            'href' => 'javascript:void(0)',
-                                            'onclick' => $fn,
-                                            'title' => Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
-                                        ],
-                                        'label' => '<i class="icn">
-                                                        <svg class="svg" width="18" height="18">
-                                                            <use
-                                                                xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#form">
-                                                            </use>
-                                                        </svg>
-                                                    </i>' . Labels::getLabel('MSG_UPDATE_STATUS', $siteLangId),
                                     ]
                                 ];
 
