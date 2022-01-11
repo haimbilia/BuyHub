@@ -33,15 +33,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, '<a href="' . $url . '" target="_blank">' . $url . '</a>', true);
                 break;
             case 'brand_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['brand_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
-                $statusClass = ($canEdit) ? '' : 'disabled';
-                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
-
-                $htm = '<label class="switch switch-sm switch-icon switch-inline">
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['brand_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                                        <span class="input-helper"></span>
-                                    
-                                </label>';
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['brand_id'], $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'action':

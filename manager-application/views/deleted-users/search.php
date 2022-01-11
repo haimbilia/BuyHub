@@ -17,7 +17,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $row['user_id']);
                 break;
             case 'user_name':
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'addVerifiedBadge' => true, 'siteLangId' => $siteLangId], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'user_regdate':
@@ -27,22 +27,10 @@ foreach ($arrListing as $sn => $row) {
                     true,
                     FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())
                 ), true);
-                break;
-            case 'user_is_buyer':
-                $class = ($row['user_is_buyer']) ? 'is-check' : '';
-                $td->appendElement('plaintext', $tdAttr, '<div class="checkmark ' . $class . '"><img src="' . CONF_WEBROOT_URL . 'images/retina/tick-green.svg" alt=""></div>', true);
-                break;
-            case 'user_is_supplier':
-                $class = ($row['user_is_supplier']) ? 'is-check' : '';
-                $td->appendElement('plaintext', $tdAttr, '<div class="checkmark ' . $class . '"><img src="' . CONF_WEBROOT_URL . 'images/retina/tick-green.svg" alt=""></div>', true);
-                break;
-            case 'user_is_advertiser':
-                $class = ($row['user_is_advertiser']) ? 'is-check' : '';
-                $td->appendElement('plaintext', $tdAttr, '<div class="checkmark ' . $class . '"><img src="' . CONF_WEBROOT_URL . 'images/retina/tick-green.svg" alt=""></div>', true);
-                break;
-            case 'user_is_affiliate':
-                $class = ($row['user_is_affiliate']) ? 'is-check' : '';
-                $td->appendElement('plaintext', $tdAttr, '<div class="checkmark ' . $class . '"><img src="' . CONF_WEBROOT_URL . 'images/retina/tick-green.svg" alt=""></div>', true);
+                break;            
+            case 'user_type':
+                $str = $this->includeTemplate('users/user-type.php', ['row' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'credential_verified':
                 $class = (applicationConstants::NO == $row[$key]) ? 'is-verified' : '';

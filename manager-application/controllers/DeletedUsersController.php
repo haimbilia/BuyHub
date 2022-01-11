@@ -187,12 +187,8 @@ class DeletedUsersController extends ListingBaseController
         $arr = [
             'user_id' => Labels::getLabel('LBL_User_Id', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_User_Name', $this->siteLangId),
-            'user_is_buyer' => Labels::getLabel('LBL_Buyer', $this->siteLangId),
-            'user_is_supplier' => Labels::getLabel('LBL_Seller', $this->siteLangId),
-            'user_is_advertiser' => Labels::getLabel('LBL_Advertiser', $this->siteLangId),
-            'user_is_affiliate' => Labels::getLabel('LBL_Affiliate', $this->siteLangId),
+            'user_type' => Labels::getLabel('LBL_USER_TYPE', $this->siteLangId),
             'user_regdate' => Labels::getLabel('LBL_Reg._Date', $this->siteLangId),
-            'credential_verified' => Labels::getLabel('LBL_verified', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
 
@@ -205,12 +201,8 @@ class DeletedUsersController extends ListingBaseController
         return [
             'user_id',
             'user_name',
-            'user_is_buyer',
-            'user_is_supplier',
-            'user_is_advertiser',
-            'user_is_affiliate',
+            'user_type',
             'user_regdate',
-            'credential_verified',
             'action',
         ];
     }
