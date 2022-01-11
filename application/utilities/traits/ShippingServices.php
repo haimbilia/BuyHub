@@ -181,9 +181,12 @@ trait ShippingServices
     {
         $db = FatApp::getDb();
         $opSrch = new OrderProductSearch($this->langId, false, true, true);
+        $opSrch->joinOrders();
+        $opSrch->joinPaymentMethod();
         $opSrch->joinShippingCharges();
         $opSrch->joinTable(OrderProductShipment::DB_TBL, 'LEFT JOIN', OrderProductShipment::DB_TBL_PREFIX . 'op_id = op.op_id', 'opship');
         $opSrch->joinTable(OrderProduct::DB_TBL_SHIPMENT_PICKUP, 'LEFT JOIN', OrderProduct::DB_TBL_SHIPMENT_PICKUP_PREFIX . 'op_id = op.op_id', 'oppick');
+        $opSrch->joinShippingUsers();        
         $opSrch->addCountsOfOrderedProducts();
         $opSrch->addOrderProductCharges();
         $opSrch->doNotCalculateRecords();
@@ -192,7 +195,7 @@ trait ShippingServices
         $attr = !empty($attr) ? $attr : [
             'op_id', 'op_status_id', 'op.op_order_id', 'op.op_invoice_number', 'opship_orderid', 'opship_tracking_number', 'opshipping_carrier_code', 'opshipping_service_code',
             'opsp_api_req_id', 'opsp_scheduled', 'opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_selprod_id', 'op_qty', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit',
-            'op_product_weight', 'op_product_weight_unit', 'opshipping_rate_id', 'opshipping_plugin_id'
+            'op_product_weight', 'op_product_weight_unit', 'opshipping_rate_id', 'opshipping_plugin_id','plugin_code','optsu_user_id'
         ];
         $opSrch->addMultipleFields($attr);
         return (array) $db->fetch($opSrch->getResultSet());
@@ -212,6 +215,10 @@ trait ShippingServices
             $msg = Labels::getLabel("MSG_INVALID_ORDER", $this->langId);
             LibHelper::dieJsonError($msg);
         }
+
+        if (in_array(strtolower($data['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($data['op_selprod_user_id'], $data['opshipping_by_seller_user_id']) && !$data['optsu_user_id']) {
+            LibHelper::dieJsonError(Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->langId), true);           
+        }  
 
         $this->validateShippingService($data);
 
@@ -563,6 +570,7 @@ trait ShippingServices
         $frm = new Form('frmRates');
         $frm->addSelectBox(Labels::getLabel('LBL_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();
         $frm->addHiddenField('', 'op_id', $opId)->requirements()->setIntPositive();
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->langId));
         return $frm;
     }
 
@@ -611,7 +619,9 @@ trait ShippingServices
         }
 
         $orderObj = new Orders($orderData['op_order_id']);
-        $addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_id']);
+        //$addresses = $orderObj->getOrderAddresses($orderData['op_order_id'], $orderData['op_id']);
+        $addresses = $orderObj->getOrderAddresses($orderData['op_order_id']);
+       
         $shippingAddress = [];
         if (!empty($addresses)) {
             $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();

@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS");
+$pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($order['op_id']) : NULL;
 ?>
 <div class="card-body p-0 itemSummaryJs">
     <div class="table-responsive table-scrollable js-scrollable listingTableJs">
@@ -194,7 +195,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                         Orders::ORDER_PAYMENT_PAID == $op['order_payment_status']
                                     )
                                 ) {
-                                    $allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
+                                    //$allowedForPlugin = in_array($shippingApiObj->keyName, ['EasyPost', 'Aramex']);
 
                                     if (
                                         1 < $op['opshipping_rate_id'] &&
@@ -219,8 +220,8 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                                         </i>' . Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId),
                                         ];
                                     } else {
-                                        if ($shippingApiObj->getKey('plugin_id') == $op['opshipping_plugin_id']) {
-                                            if (empty($op['opr_response']) && empty($op['opship_tracking_number']) && !$allowedForPlugin) {
+                                        if ($shippingApiObj->getKey('plugin_id') == $op['opshipping_plugin_id']) {                           
+                                            if (empty($op['opr_response']) && empty($op['opship_tracking_number']) && $shippingApiObj->canGenerateLabelSeparately()) {
                                                 $data['dropdownButtons']['otherButtons'][] = [
                                                     'attr' => [
                                                         'href' => 'javascript:void(0)',
@@ -253,9 +254,8 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                                                 </i>' . Labels::getLabel($title, $siteLangId),
                                                 ];
                                             }
-
-                                            if ((!empty($opStatus) && 'awaiting_shipment' == $opStatus && !empty($op['opr_response']) || $allowedForPlugin) && empty($op['opship_order_number'])) {
-                                                if ('EasyPost' == $shippingApiObj->keyName) {
+                                            if ((!empty($opStatus) && 'awaiting_shipment' == $opStatus && !empty($op['opr_response']) || ($shippingApiObj->canGenerateLabelFromShipment() || !empty($orderDetail['opship_tracking_number']) ) ) && empty($op['opship_order_number'])) {                                            
+                                                if (true == $shippingApiObj->canGenerateLabelFromShipment()) {
                                                     $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
                                                 } else {
                                                     $label = Labels::getLabel('LBL_PROCEED_TO_SHIPMENT', $siteLangId);

@@ -818,13 +818,14 @@ class Shipping
             }
         }
 
-        $pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId], $error, $this->langId, false);
-        if ($isSellerPluginObjActive) {
-            $pluginObj->setRecordId($sellerId);
-        }
-        if (false === $pluginObj) {
+        $pluginObj = PluginHelper::callPlugin($pluginData['plugin_code'], [$this->langId], $error, $this->langId, false);        
+        if (false === $pluginObj) {           
             $this->error = $error;
             return false;
+        }
+
+        if ($isSellerPluginObjActive) {
+            $pluginObj->setRecordId($sellerId);
         }
 
         if (method_exists($pluginObj, 'init') && false === $pluginObj->init()) {
