@@ -1010,8 +1010,14 @@ class ProductsController extends ListingBaseController
             $fld->options = $optionCombinations;
         }
 
+        $formTitle = Labels::getLabel('LBL_DIGITAL_LINKS_SETUP', $this->siteLangId);
+        if ($type == applicationConstants::DIGITAL_DOWNLOAD_FILE) {
+            $formTitle = Labels::getLabel('LBL_DIGITAL_FILES_ATTACHMENT_SETUP', $this->siteLangId);
+        }
+
         $this->set('frm', $frm);
         $this->set('type', $type);
+        $this->set('formTitle', $formTitle);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
