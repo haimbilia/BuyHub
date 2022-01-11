@@ -518,6 +518,7 @@ Bugs :
     => 060538 - Admin UI: Validation's design is not consistent for the User's dropdown under the rewards section
     => 060587 - Admin UI: Suggestion removed the scroller if "no record found" in the list
     => 061099 - Admin UI: Breadcrumb is also gets blurred while selecting the options under the "Meta tags Management" section
+    => 061441 - Admin UI: Search is not working while trying to search the record according to 'added by' under the Options' section.
 
 
 Known Issues and Problems :

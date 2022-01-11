@@ -160,12 +160,12 @@ class SellerProductsController extends ListingBaseController
             }
             $srch->addCondition('selprod_product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
         }
- 
-        $this->setRecordCount(clone $srch, $pageSize);
+
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        
+
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
+        $srch->setPageSize($pageSize);
         $srch->addMultipleFields(
                 array(
                     'selprod_id', 'selprod_user_id', 'selprod_price', 'selprod_stock', 'selprod_product_id',
@@ -173,8 +173,8 @@ class SellerProductsController extends ListingBaseController
                     'selprod_title', 'u.user_name', 'uc.credential_email', 'product_type', 'product_updated_on'
                 )
         );
- 
-        $srch->addOrder($sortBy, $sortOrder); 
+
+        $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         if (count($records)) {
             foreach ($records as &$arr) {
@@ -186,12 +186,11 @@ class SellerProductsController extends ListingBaseController
         $this->set('product_id', $product_id);
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('canViewProducts', $this->objPrivilege->canViewProducts($this->admin_id, true));
-        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));  
+        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
         if (!$product_id) {
-            $this->set('page', $page);
             $this->set('postedData', $post);
-        } 
-        
+        }
+
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -395,7 +394,7 @@ class SellerProductsController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'selprod_title');
         }
-
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;

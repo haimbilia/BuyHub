@@ -2,6 +2,7 @@
 
 class BrandsController extends ListingBaseController
 {
+
     protected string $modelClass = 'Brand';
     protected $pageKey = 'MANAGE_BRANDS';
 
@@ -72,33 +73,29 @@ class BrandsController extends ListingBaseController
 
         $prodBrandObj = new Brand();
         $srch = $prodBrandObj->getSearchObject($this->siteLangId, true, false, false);
-        $srch->addFld('b.*');
-
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('b_l.brand_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $page = (empty($page) || $page <= 0) ? 1 : $page;
-        $page = FatUtility::int($page);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $srch->addMultipleFields(array("b_l.brand_name"));
         $srch->addCondition('brand_status', '=', 'mysql_func_' . Brand::BRAND_REQUEST_APPROVED, 'AND', true);
         if (!empty($post['brand_id'])) {
             $srch->addCondition('b.brand_id', '=', 'mysql_func_' . $post['brand_id'], 'AND', true);
         }
+
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+
+        $srch->addMultipleFields(array('b.*', "b_l.brand_name"));
+        $page = (empty($page) || $page <= 0) ? 1 : $page;
+        $page = FatUtility::int($page);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize); 
         $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $this->set('postedData', $post);
-
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -358,17 +355,17 @@ class BrandsController extends ListingBaseController
         $fileHandlerObj->deleteFile($file_type, $brand_id, 0, 0, $lang_id, $slide_screen);
 
         if (!$fileHandlerObj->saveAttachment(
-            $_FILES['cropped_image']['tmp_name'],
-            $file_type,
-            $brand_id,
-            0,
-            $_FILES['cropped_image']['name'],
-            -1,
-            false,
-            $lang_id,
-            $slide_screen,
-            $aspectRatio
-        )) {
+                        $_FILES['cropped_image']['tmp_name'],
+                        $file_type,
+                        $brand_id,
+                        0,
+                        $_FILES['cropped_image']['name'],
+                        -1,
+                        false,
+                        $lang_id,
+                        $slide_screen,
+                        $aspectRatio
+                )) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -697,4 +694,5 @@ class BrandsController extends ListingBaseController
     {
         return array_diff($fields, ['brand_logo', 'brand_active', 'seo_url'], Common::excludeKeysForSort());
     }
+
 }
