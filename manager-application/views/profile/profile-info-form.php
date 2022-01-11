@@ -10,7 +10,7 @@ $emailFld->addFieldTagAttribute('id', 'admin_email');
 $nameFld = $frm->getField('admin_name');
 
 $frm->setFormTagAttribute('id', 'profileInfoFrm');
-$frm->setFormTagAttribute('class', 'form form-horizontal');
+$frm->setFormTagAttribute('class', 'form');
 $frm->developerTags['fld_default_col'] = 6;
 $frm->setFormTagAttribute('onsubmit', 'updateProfileInfo(this); return(false);');
 

@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'form form-edit');
+$frm->setFormTagAttribute('class', 'form');
 $frm->setFormTagAttribute('onsubmit', 'setupProfileProduct(this); return(false);');
 $proFld = $frm->getField("product_name");
 $proFld->developerTags['colWidthValues'] = [null, '9', null, null];

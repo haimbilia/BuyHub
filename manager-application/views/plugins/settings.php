@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('data-onclear', 'editSettingForm("' . $keyName . '")');
 $frm->setFormTagAttribute('onsubmit', 'setupPluginsSettings($("#'.$frm->getFormTagAttribute('id').'")[0]); return(false);');
 $formTitle = CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $siteLangId), ['{PLUGIN-NAME}' => $identifier]);

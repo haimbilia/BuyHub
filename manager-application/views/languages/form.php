@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
+$frm->setFormTagAttribute('class', 'form modalFormJs layout--' . $formLayout);
 
 $fld = $frm->getField('language_name');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];

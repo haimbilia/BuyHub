@@ -2,7 +2,7 @@
 HtmlHelper::formatFormFields($frm);
 
 $frm->setFormTagAttribute('data-onclear', 'attributeForm(' . $recordId . ')');
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 $frm->setFormTagAttribute('id', 'frmImgAttributeJs');
 $frm->setFormTagAttribute('onsubmit', 'setup(this); return(false);');
 

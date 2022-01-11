@@ -24,9 +24,9 @@ New Feature :
     => MSG-1390138 : Payfast payment gateway 
     => 85369 : Aramex Shipping API 
     => 72808 : EasyEcom Marketplace Channel API
-    => 86472 : YoCo Payment gateay
-    => 88040 : ShipRocket Payment gateay
-    => 88449 : ShipEngine Payment gateay
+    => 86472 : YoCo Payment gateway
+    => 88040 : ShipRocket Shipping API Integration
+    => 88449 : ShipEngine Shipping API Integration
 
 Updates/Fixes : 
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
