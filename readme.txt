@@ -519,6 +519,7 @@ Bugs :
     => 060587 - Admin UI: Suggestion removed the scroller if "no record found" in the list
     => 061099 - Admin UI: Breadcrumb is also gets blurred while selecting the options under the "Meta tags Management" section
     => 061441 - Admin UI: Search is not working while trying to search the record according to 'added by' under the Options' section.
+    => 061445 - Admin UI: Admin is not able to add more than one option's value.
 
 
 Known Issues and Problems :
