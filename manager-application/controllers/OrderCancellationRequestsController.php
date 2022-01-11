@@ -77,7 +77,7 @@ class OrderCancellationRequestsController extends ListingBaseController
 
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'ocrequest_id', 0);
-
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -120,24 +120,8 @@ class OrderCancellationRequestsController extends ListingBaseController
         $srch->joinOrderSellerUser();
         $srch->joinOrderProductStatus();
         $srch->joinOrderCancelReasons();
-        $srch->addOrderProductCharges();
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $srch->addOrder('ocrequest_date', 'DESC');
-        $srch->addMultipleFields(
-            array(
-                'ocrequest_id', 'ocrequest_message', 'ocrequest_date', 'ocrequest_status',
-                'buyer.user_name as buyer_name', 'buyer_cred.credential_username as buyer_username', 'buyer_cred.credential_email as buyer_email',
-                'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name',
-                'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'seller.user_phone_dcode as seller_phone_dcode',
-                'seller.user_phone as seller_phone', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
-                'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'op_qty', 'op_unit_price',
-                'order_tax_charged', 'op_other_charges', 'op_rounding_off', 'op_id', 'buyer.user_id AS buyer_id',
-                'buyer.user_updated_on AS buyer_updated_on', 'op_shop_id', 'op_shop_name', 'op_selprod_id',
-                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id'
-            )
-        );
-
+        $srch->addOrderProductCharges(); 
+        
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('op_invoice_number', '=', $keyword);
@@ -183,18 +167,32 @@ class OrderCancellationRequestsController extends ListingBaseController
             $srch->addDateToCondition($dateTo);
         }
         
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder('ocrequest_date', 'DESC');
+        $srch->addMultipleFields(
+            array(
+                'ocrequest_id', 'ocrequest_message', 'ocrequest_date', 'ocrequest_status',
+                'buyer.user_name as buyer_name', 'buyer_cred.credential_username as buyer_username', 'buyer_cred.credential_email as buyer_email',
+                'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name',
+                'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'seller.user_phone_dcode as seller_phone_dcode',
+                'seller.user_phone as seller_phone', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'op_qty', 'op_unit_price',
+                'order_tax_charged', 'op_other_charges', 'op_rounding_off', 'op_id', 'buyer.user_id AS buyer_id',
+                'buyer.user_updated_on AS buyer_updated_on', 'op_shop_id', 'op_shop_name', 'op_selprod_id',
+                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id'
+            )
+        );
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('requestStatusArr', OrderCancelRequest::getRequestStatusArr($this->siteLangId));
-        $this->set('statusClassArr', OrderCancelRequest::getStatusClassArr());
-        $this->set('pageSize', $pageSize);
+        $this->set('statusClassArr', OrderCancelRequest::getStatusClassArr()); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
+        $this->set("arrListing", $records); 
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->checkEditPrivilege(true);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));

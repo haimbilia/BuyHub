@@ -93,7 +93,6 @@ class CustomProductsController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = if(u.user_parent > 0, u.user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
 
-        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name'));
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('preq.preq_content', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('preq_l.preq_lang_data', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -115,7 +114,9 @@ class CustomProductsController extends ListingBaseController
         if (0 < $post['seller_id']) {
             $srch->addCondition('preq.preq_user_id', '=', $post['seller_id']);
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
@@ -146,11 +147,7 @@ class CustomProductsController extends ListingBaseController
             );
             $records[] = $arr;
         }
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $this->set('postedData', $post);
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
@@ -1383,7 +1380,7 @@ class CustomProductsController extends ListingBaseController
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'preq_id');
-
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
 
