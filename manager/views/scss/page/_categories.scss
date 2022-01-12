@@ -5,7 +5,7 @@
     li {
         list-style: none;
         position: relative;
-        padding-#{$start-direction}: 50px;
+        padding-#{$start-direction}: 40px;
         margin: 5px;
         border: $border;
         background-color: #efefef;
@@ -13,6 +13,9 @@
             .sorting-bar {
                 border-color: darken($border-color, 20);
             }
+        }
+        div {
+            background: #ffffff;
         }
     }
     .sorting-bar {
@@ -23,6 +26,8 @@
         border: dashed 1px $border-color;
         padding: 1rem;
         margin-bottom: 1rem;
+        margin-bottom: 0;
+        border: 0;
     }
     .sorting-title {
         font-weight: 500;
@@ -115,21 +120,8 @@
             text-decoration: none;
         }
     }
-}
-
-.sorting-categories li div {
-    background: #ffffff;
-}
-
-ul.append-ul {
-    background: #ffffff;
-    padding: 1px;
-}
-
-.sorting-categories .sorting-bar {
-    margin-bottom: 0;
-}
-
-.sorting-categories .sorting-bar {
-    border: 0;
+    ul.append-ul {
+        background: #ffffff;
+        padding: 1px;
+    }
 }

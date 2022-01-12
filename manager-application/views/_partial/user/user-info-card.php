@@ -40,7 +40,7 @@ $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['cred
             <?php } else {
                 echo $username;
             } ?>
-            
+
             <?php echo $verifiedBadge; ?>
         </div>
 
