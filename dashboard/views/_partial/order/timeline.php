@@ -12,7 +12,7 @@
         $orderStatusClass = $orderCancelled && $index > $selectUpto ? 'shipped' : OrderStatus::getOpStatusClass($statusId);
     ?>
         <li class="<?php echo $highlight . ' ' . $current . ' ' . $orderStatusClass; ?>">
-            <?php if (Orders::ORDER_PAYMENT_PENDING != $orderDetail['order_payment_status'] && !empty($orderTimeLineRecords)) {
+            <?php if (!empty($orderTimeLineRecords)) {
                 foreach (array_reverse($orderTimeLineRecords) as $i => $row) {
                     /* Same Status with no Comment.*/
                     if (1 < count($orderTimeLineRecords) && 0 < $i && empty(trim($row['oshistory_comments']))) {
@@ -29,9 +29,11 @@
                                 </span>
                         </div>
                         <div class="timeline_data_body">
-                            <?php
+                            <?php                       
                             if (isset($row['oshistory_orderstatus_id']) && $row['oshistory_orderstatus_id'] ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
                                 $trackingNumber = $row['oshistory_tracking_number'];
+                                $trackingNumber = number_format($trackingNumber,0,null,'');
+
                                 $carrier = $row['oshistory_courier']; ?>
                                 <h6><?php echo Labels::getLabel('MSG_TRACKING_NUMBER', $siteLangId); ?></h6>
                                 <div class="clipboard mb-4">
@@ -41,7 +43,9 @@
                                     </a>
                                 </div>
                                 <p>
-                                    <?php if (empty($row['oshistory_courier'])) {
+                                    <?php
+                                    
+                                    if (empty($row['oshistory_courier'])) {
                                         $str = '';
                                         if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) {
                                             $str .=  '<a class="link" href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'" . $trackingNumber . "'" . ',' . "'" . $childOrderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . Labels::getLabel("MSG_TRACK", $siteLangId) . '</a>';

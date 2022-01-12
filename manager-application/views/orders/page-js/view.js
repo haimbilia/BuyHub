@@ -99,7 +99,7 @@
     };
 
     getShippingUsersForm = function (orderId, opId) {
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'shippingUsersForm', [orderId]), 'op_id=' + opId, function (ans) {
+        fcom.updateWithAjax(fcom.makeUrl('Orders', 'shippingUsersForm', [orderId]), 'op_id=' + opId, function (ans) {
             fcom.removeLoader();
             $.ykmsg.close();
             $.ykmodal(ans.html);
@@ -154,16 +154,18 @@
     /* ShipStation */
 
     proceedToShipment = function (opId) {
-        fcom.displayProcessing();
-        if ('' == $(".shippingUser-js").val()) {
-            $.ykmsg.error(langLbl.shippingUser);
-            return;
-        }
+        fcom.displayProcessing();        
         fcom.ajax(fcom.makeUrl('ShippingServices', 'proceedToShipment', [opId]), '', function (t) {
             $.ykmsg.close();
             t = $.parseJSON(t);
             if (1 > t.status) {
                 $.ykmsg.error(t.msg);
+
+                if('openShipUser' in t && t.openShipUser == 1){
+                    setTimeout(function () {
+                        getShippingUsersForm(t.orderId,t.opId);
+                    }, 1000);                   
+                }
                 return;
             }
             $.ykmsg.success(t.msg);
@@ -191,8 +193,11 @@
     }
 
     fetchTrackingDetail = function (trackingId, opInvoiceId) {
-        fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {
-            $.ykmodal(res, true);
+        $.ykmodal(fcom.getLoader(),false);
+        fcom.ajax(fcom.makeUrl('ShippingServices', 'fetchTrackingDetail', [trackingId, opInvoiceId]), '', function (res) {          
+            $.ykmodal(res, false);
+            fcom.removeLoader();
+            $.ykmsg.close();
         });
     }
 
@@ -289,7 +294,7 @@
 
     cancelPickup = function (opId) {
         fcom.updateWithAjax(fcom.makeUrl('ShippingServices', 'cancelPickup', [opId]), '', function (t) {
-            setTimeout(function () { window.location.href = fcom.makeUrl(controllerName, 'view', [opId]) }, 300);
+            setTimeout(function () { window.location.reload(); }, 300);
         });
     };
 

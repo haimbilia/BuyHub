@@ -480,10 +480,12 @@ class OrderReturnRequestsController extends ListingBaseController
                 /* Update To Shipping Service */
                 $this->langId = $this->siteLangId;
                 
+                /*
                 $this->loadShippingService($row);
                 if (false != $this->shippingService) {
                     $this->returnShipment($row['op_id'], $row['orrequest_qty']);
                 }
+                */
                 /* Update To Shipping Service */
 
                 $successMsg = Labels::getLabel('LBL_Return_request_has_been_refunded_successfully.', $this->siteLangId);
