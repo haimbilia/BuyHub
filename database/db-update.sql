@@ -1562,3 +1562,4 @@ INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`)
 VALUES ('CONF_AUTO_CLOSE_SYSTEM_MESSAGES', 1, '0'),
 ('CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES', 3, '0')
 ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
+-- -------------------TV-9.4.0.20220112-----------------
