@@ -1,6 +1,29 @@
 (function () {
 	var dv = "#listing";
 
+	saveRecord = function (frm) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+        if (!$(frm).validate()) { return; }
+        $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
+
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
+            $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
+            fcom.removeLoader();
+            $.ykmsg.success(t.msg);
+
+            $('#' + t.recordId).replaceWith(t.listingHtml);
+            if (t.langId > 0) {
+                editLangData(t.recordId, t.langId);
+            } else if ("openMediaForm" in t) {
+                mediaForm(t.recordId);
+            }
+            return;
+        });
+    };
+	
 	categoryForm = function (prodCatId) {
 		fcom.updateWithAjax(fcom.makeUrl('productCategories', 'form', [prodCatId]), '', function (res) {
 			$.ykmsg.close();

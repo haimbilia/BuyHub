@@ -1,19 +1,31 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-HtmlHelper::formatFormFields($frm);
+
+$fld = $frm->getField('prodcat_identifier');
+$fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','prodcat_id');getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val(),'','pre',true)");
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+
+
+$fld = $frm->getField('prodcat_name[' . $siteLangId . ']');
+$fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('prodcat_parent');
 $fld->setFieldTagAttribute('id', "prodcat_parent");
 
+$fld = $frm->getField('urlrewrite_custom');
+$fld->setFieldTagAttribute('id', "urlrewrite_custom");
+$fld->htmlAfterField = "<span class='form-text text-muted'>" . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Category', 'view', [$recordId], CONF_WEBROOT_FRONT_URL)) . '</span>';
+$fld->setFieldTagAttribute('onkeyup', "getSlugUrl(this,this.value)");
+
 $fld = $frm->getField('prodcat_active');
 HtmlHelper::configureSwitchForCheckbox($fld);
-    $fld->developerTags['noCaptionTag'] = true;   
-    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+$fld->developerTags['noCaptionTag'] = true;
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
 $fld = $frm->getField('auto_update_other_langs_data');
 if ($fld != null) {
     HtmlHelper::configureSwitchForCheckbox($fld);
-    $fld->developerTags['noCaptionTag'] = true;   
+    $fld->developerTags['noCaptionTag'] = true;
     $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
 
@@ -34,10 +46,9 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
     var canEditRating = <?php echo $canEditRating ? 1 : 0; ?>;
     var ratingEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_RATING_TYPE', $siteLangId); ?>';
-    $("document").ready(function() {
-
+    $(document).ready(function() {
         $("#prodcat_parent").select2({
-            dropdownParent: $('.'+$.ykmodal.element)
+            dropdownParent: $('.' + $.ykmodal.element)
         });
         $("." + $.ykmodal.element).removeAttr('tabindex');
         $("select[name='prodcat_parent']").data("select2").$container.addClass("w-100");
@@ -53,8 +64,8 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 }
                 if (!confirm(addNewRatingType)) {
                     return;
-                }               
-            } 
+                }
+            }
         }
 
         removeRatingType = function(e) {
