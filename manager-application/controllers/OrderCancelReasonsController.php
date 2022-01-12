@@ -92,28 +92,20 @@ class OrderCancelReasonsController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = OrderCancelReason::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('ocreason.*', 'ocreason_l.ocreason_title'));
-
+        $srch = OrderCancelReason::getSearchObject($this->siteLangId); 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('ocreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('ocreason_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(array('ocreason.*', 'ocreason_l.ocreason_title')); 
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize); 
+        $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);

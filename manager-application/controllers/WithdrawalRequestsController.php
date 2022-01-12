@@ -162,17 +162,16 @@ class WithdrawalRequestsController extends ListingBaseController {
                 $srch->addCondition('user_is_affiliate', '=', applicationConstants::YES);
             }
         }
-        
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post,'tuwr.withdrawal_id');
-        $srch->doNotCalculateRecords();
+        $srch->addGroupBy('tuwr.withdrawal_id'); 
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords(); 
         $srch->addMultipleFields(
                 array(
                     'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email',
                     'credential_username as user_username', 'user_balance', 'user_is_buyer', 'user_is_supplier', 'user_is_advertiser',
                     'user_is_affiliate', 'user_id', 'user_updated_on', 'credential_username', 'credential_email'
                 )
-        );
-        $srch->addGroupBy('tuwr.withdrawal_id'); 
+        ); 
         $srch->addOrder('withdrawal_id', 'DESC');
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);

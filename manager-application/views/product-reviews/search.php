@@ -4,7 +4,7 @@ if (!isset($tbody)) {
     $printData = true;
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
 }
-$listSerial = 1;
+$listSerial = ($page - 1) * $pageSize + 1;
 foreach ($arrListing as $sn => $row) {
     $cls = (($row["spreview_id"] % 2) == 0) ? 'even' : 'odd';
     $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $row["spreview_id"]]);

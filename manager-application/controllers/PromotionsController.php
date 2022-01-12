@@ -132,13 +132,8 @@ class PromotionsController extends ListingBaseController
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
         $srch->joinPromotionsLogForCount();
         $srch->joinActiveUser(false);
-        $srch->joinShops($this->siteLangId);
-        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_id', 'user_updated_on', 'shop_updated_on']);
-        $srch->addCondition('pr.promotion_deleted', '=', applicationConstants::NO);
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
+        $srch->joinShops($this->siteLangId); 
+        $srch->addCondition('pr.promotion_deleted', '=', applicationConstants::NO); 
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('pr.promotion_identifier', 'like', '%' . $post['keyword'] . '%');
@@ -193,23 +188,22 @@ class PromotionsController extends ListingBaseController
             $srch->addCondition('promotion_type', '=', $type);
         }
         $srch->addGroupBy('pr.promotion_id');
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(['pr.promotion_id', 'IFNULL(pr_l.promotion_name,pr.promotion_identifier)as promotion_name', 'user_name', 'credential_username', 'credential_email', 'credential_email', 'pr.promotion_type', 'pr.promotion_budget', 'pr.promotion_duration', 'promotion_approved', 'bbl.blocation_promotion_cost', 'pri.impressions', 'pri.clicks', 'pri.orders', 'bbl.blocation_id', 'shop_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'user_id', 'user_updated_on', 'shop_updated_on']);
+        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize); 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set("arrListing", $records); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditPromotions($this->admin_id, true));
-
+        $this->set('canEdit', $this->objPrivilege->canEditPromotions($this->admin_id, true)); 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
         $this->set('typeArr', Promotion::getTypeArr($this->siteLangId));
@@ -848,7 +842,7 @@ class PromotionsController extends ListingBaseController
         $frm->addTextBox(Labels::getLabel('FRM_Clicks_to_(number)', $this->siteLangId), 'click_to');
         $frm->addHiddenField('', 'promotion_id');
         $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'type', array('-1' => Labels::getLabel('FRM_All_Type', $this->siteLangId)) + Promotion::getTypeArr($this->siteLangId), '', array(), '');
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;

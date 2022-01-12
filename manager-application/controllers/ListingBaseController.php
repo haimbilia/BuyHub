@@ -25,7 +25,7 @@ class ListingBaseController extends AdminBaseController {
         $this->modelObj = (new ReflectionClass($this->modelClass))->newInstanceArgs($constructorArgs);
     }
 
-    public function setRecordCount(object $recordCountSrch, int $pageSize, int $page, &$post, $isGroupSearch = '') {
+    public function setRecordCount(object $recordCountSrch, int $pageSize, int $page, &$post, $isGroupSearch = false) {
         if ($pageSize < 1) {
             return;
         }
@@ -35,12 +35,17 @@ class ListingBaseController extends AdminBaseController {
             return;
         }
 
-        $column = (!empty($isGroupSearch)) ? "count(DISTINCT $isGroupSearch) as totalRecords" : "count(*) as totalRecords";
-        $recordCountSrch->addFld($column);
+        $recordCountSrch->addFld('count(*) as totalRecords');
         $recordCountSrch->doNotLimitRecords();
-        $recordCountSrch->doNotCalculateRecords();
-        $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
-        $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
+        if ($isGroupSearch == false) {
+            $recordCountSrch->doNotCalculateRecords();
+            $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
+            $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
+        } else {
+            $recordCountSrch->getResultSet();
+            $defaultRecordCount = $recordCountSrch->recordCount();
+        }
+         
         $this->setPageRecord($defaultRecordCount, $pageSize, $page);
         $post['total_record_count'] = $defaultRecordCount;
     }

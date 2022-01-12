@@ -334,7 +334,7 @@ class AdminBaseController extends FatController
         $frm->addDateField(Labels::getLabel('LBL_Reg._Date_To', $this->adminLangId), 'user_regdate_to', '', array('readonly' => 'readonly'));
 
         $frm->addHiddenField('', 'page', 1);
-        $frm->addHiddenField('', 'user_id', '');
+        $frm->addHiddenField('', 'user_id', ''); 
         $fld_submit = $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Search', $this->adminLangId));
         $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->adminLangId));
         $fld_submit->attachField($fld_cancel);

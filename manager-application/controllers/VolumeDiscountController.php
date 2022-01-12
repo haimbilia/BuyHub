@@ -76,23 +76,17 @@ class VolumeDiscountController extends ListingBaseController
         $sellerId = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
 
         $srch = SellerProduct::searchVolumeDiscountProducts($this->siteLangId, $selProdId, $keyword, $sellerId, false);
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
         $sortByCol = ('product_name' == $sortBy) ? 'selprod_title' : $sortBy;
         $srch->addOrder($sortByCol, $sortOrder);
-        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet()); 
+        $this->set("arrListing", $arrListing);  
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -113,6 +107,7 @@ class VolumeDiscountController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'product_name');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
