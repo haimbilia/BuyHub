@@ -3,32 +3,7 @@ $actionItemsData = $actionItemsData + [
     'canEdit' => $canEdit ?? false
 ];
 ?>
-<style>
-    .sorting-categories li {
-        padding-left: 50px;
-        margin: 5px;
-        border: 1px solid #dee2e6;
-        background-color: #efefef;
-        color: #282828;
-    }
 
-    .sorting-categories li div {
-        background: #ffffff;
-    }
-
-    ul.append-ul {
-        background: #ffffff;
-        padding: 1px;
-    }
-
-    .sorting-categories .sorting-bar {
-        margin-bottom: 0;
-    }
-
-    .sorting-categories .sorting-bar {
-        border: 0;
-    }
-</style>
 <main class="main mainJs">
     <div class="container">
         <?php $this->includeTemplate('_partial/header/header-breadcrumb.php', $actionItemsData, false); ?>
