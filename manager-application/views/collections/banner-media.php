@@ -8,7 +8,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]);
 $frm->setFormTagAttribute('data-action', 'setupBannerImage');
 $frm->setFormTagAttribute('data-onclear', 'bannerMediaForm(' . $collectionId . ',' . $recordId . ')');
 $frm->setFormTagAttribute('data-callbackfn', 'loadBannerImagesCallback');
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 
 $fld = $frm->getField('banner_screen');
 $fld->setFieldTagAttribute('class', 'prefDimensionsJs');

@@ -24,9 +24,9 @@ New Feature :
     => MSG-1390138 : Payfast payment gateway 
     => 85369 : Aramex Shipping API 
     => 72808 : EasyEcom Marketplace Channel API
-    => 86472 : YoCo Payment gateay
-    => 88040 : ShipRocket Payment gateay
-    => 88449 : ShipEngine Payment gateay
+    => 86472 : YoCo Payment gateway
+    => 88040 : ShipRocket Shipping API Integration
+    => 88449 : ShipEngine Shipping API Integration
 
 Updates/Fixes : 
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
@@ -519,6 +519,9 @@ Bugs :
     => 060587 - Admin UI: Suggestion removed the scroller if "no record found" in the list
     => 061099 - Admin UI: Breadcrumb is also gets blurred while selecting the options under the "Meta tags Management" section
     => 061441 - Admin UI: Search is not working while trying to search the record according to 'added by' under the Options' section.
+    => 061445 - Admin UI: Admin is not able to add more than one option's value.
+    => 061097 - Admin UI: Loading is not working properly while sorting the columns of the table under the "Meta tags Management" section
+    => 060375 - Admin UI: Changes made to the requested brand's media file by admin are not visible until the admin does not reload/refresh the page.
 
 
 Known Issues and Problems :

@@ -37,18 +37,21 @@
         var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
         brandImages(brand_id, 'logo', 1, lang_id);
     });
+
     $(document).on('change', '#imageLanguageJs', function () {
         var lang_id = $(this).val();
         var brand_id = $(this).closest("form").find('input[name="brand_id"]').val();
         var slide_screen = $("#slideScreenJs").val();
         brandImages(brand_id, 'image', slide_screen, lang_id);
     }); 
+
     bindUserSelect2 = function (element) {
         select2(element, fcom.makeUrl('Users', 'autoComplete'), {}, '', function () {
             clearSearch();
         }); 
     }; 
 })();
+
 $(document).ready(function () {
     bindUserSelect2('searchFrmUserIdJs');
 });

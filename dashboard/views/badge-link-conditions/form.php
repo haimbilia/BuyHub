@@ -57,29 +57,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
                             }
                             ?>
                             <div class="row">
-                                <?php
-                                $classCol = 6;
-                                if (Badge::TYPE_RIBBON == $badgeType) {
-                                    $classCol = 4; ?>
-                                    <div class="col-md-4 position--js">
-                                        <div class="field-set">
-                                            <div class="caption-wraper">
-                                                <label class="field_label">
-                                                    <?php
-                                                    $fld = $frm->getField('blinkcond_position');
-                                                    echo $fld->getCaption();
-                                                    ?>
-                                                    <span class="spn_must_field">*</span></label>
-                                            </div>
-                                            <div class="field-wraper">
-                                                <div class="field_cover">
-                                                    <?php echo $frm->getFieldHtml('blinkcond_position'); ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                                <div class="col-md-<?php echo $classCol; ?>">
+                                <div class="col-md-6">
                                     <div class="field-set">
                                         <div class="caption-wraper">
                                             <label class="field_label">
@@ -96,7 +74,7 @@ if (Badge::TYPE_BADGE == $badgeType) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-<?php echo $classCol; ?>">
+                                <div class="col-md-6">
                                     <div class="field-set">
                                         <div class="caption-wraper">
                                             <label class="field_label">

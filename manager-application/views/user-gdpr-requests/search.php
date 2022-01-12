@@ -16,15 +16,9 @@ foreach ($arrListing as $sn => $row) {
         $tdAttr = ('action' == $key) ? ['class' => 'align-right'] : [];
         $td = $tr->appendElement('td', $tdAttr);
         switch ($key) {
-            case 'listSerial':
-                $td->appendElement('plaintext', $tdAttr, $serialNo);
-                break;
-            case 'user':
-                $userDetail = '<strong>' . Labels::getLabel('LBL_N:', $siteLangId) . ' </strong>' . $row['user_name'] . '<br/>';
-                $userDetail .= '<strong>' . Labels::getLabel('LBL_UN:', $siteLangId) . ' </strong>' . $row['credential_username'] . '<br/>';
-                $userDetail .= '<strong>' . Labels::getLabel('LBL_Email:', $siteLangId) . ' </strong>' . $row['credential_email'] . '<br/>';
-                $userDetail .= '<strong>' . Labels::getLabel('LBL_User_ID:', $siteLangId) . ' </strong>' . $row['user_id'] . '<br/>';
-                $td->appendElement('plaintext', array(), $userDetail, true);
+            case 'user_name':
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'ureq_date':
                 $td->appendElement('plaintext', array(), HtmlHelper::formatDateTime($row[$key], true, true, FatApp::getConfig('CONF_TIMEZONE', FatUtility::VAR_STRING, date_default_timezone_get())), true);
@@ -34,8 +28,8 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', array(), $userRequestTypeArr[$str], true);
                 break;
             case 'ureq_status':
-                $str = ($row['ureq_status'] == UserGdprRequest::STATUS_COMPLETE) ? UserGdprRequest::STATUS_COMPLETE : UserGdprRequest::STATUS_PENDING;
-                $td->appendElement('plaintext', array(), $userRequestStatusArr[$str], true);
+                $statusHtm = UserGdprRequest::getStatusHtml($siteLangId, $row[$key]);
+                $td->appendElement('plaintext', $tdAttr, $statusHtm, true);
                 break;
             case 'action':
                 $data = [
@@ -65,7 +59,7 @@ foreach ($arrListing as $sn => $row) {
                             ],
                             'label' => "<i class='fas fa-user-times'></i>"
                         ];
-                        $data['otherButtons'] [] = $truncate;
+                        $data['otherButtons'][] = $truncate;
                     }
                     $requestData = [];
                     if ($row['ureq_type'] == UserGdprRequest::TYPE_DATA_REQUEST) {
@@ -77,10 +71,13 @@ foreach ($arrListing as $sn => $row) {
                             ],
                             'label' => "<i class='far fa-eye icon'></i>"
                         ];
-                        $data['otherButtons'] [] = $requestData;
+                        $data['otherButtons'][] = $requestData;
                     }
                 }
-                $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                $actionItems = Labels::getLabel('LBL_N/A', $siteLangId);
+                if (2 < count($data)) {
+                    $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
+                }
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
             default:
@@ -91,7 +88,7 @@ foreach ($arrListing as $sn => $row) {
     $serialNo++;
 }
 
-include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
 
 if ($printData) {
     echo $tbody->getHtml();

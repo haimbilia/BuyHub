@@ -21,16 +21,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $serialNo);
                 break;
             case 'zone_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['zone_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
-                $statusClass = ($canEdit) ? '' : 'disabled';
-                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
-
-                $htm = '<span class="switch switch-sm switch-icon">
-                                    <label>
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['zone_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                                        <span class="input-helper"></span>
-                                    </label>
-                                </span>';
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['zone_id'], $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'action':

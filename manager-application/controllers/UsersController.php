@@ -918,12 +918,8 @@ class UsersController extends ListingBaseController
             'user_id' => Labels::getLabel('LBL_USER_ID', $this->siteLangId),
             'user_name' => Labels::getLabel('LBL_USER_NAME', $this->siteLangId),
             'user_registered_initially_for' => Labels::getLabel('LBL_REGISTERED_AS', $this->siteLangId),
-            'user_is_buyer' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
-            'user_is_supplier' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
-            'user_is_advertiser' => Labels::getLabel('LBL_ADVERTISER', $this->siteLangId),
-            'user_is_affiliate' => Labels::getLabel('LBL_AFFILIATE', $this->siteLangId),
+            'user_type' => Labels::getLabel('LBL_USER_TYPE', $this->siteLangId),
             'user_regdate' => Labels::getLabel('LBL_REG._Date', $this->siteLangId),
-            'credential_verified' => Labels::getLabel('LBL_VERIFIED', $this->siteLangId),
             'credential_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -939,12 +935,8 @@ class UsersController extends ListingBaseController
             'user_id',
             'user_name',
             'user_registered_initially_for',
-            'user_is_buyer',
-            'user_is_supplier',
-            'user_is_advertiser',
-            'user_is_affiliate',
+            'user_type',
             'user_regdate',
-            'credential_verified',
             'credential_active',
             'action',
         ];
@@ -952,6 +944,6 @@ class UsersController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, Common::excludeKeysForSort());
+        return array_diff($fields, ['user_type'], Common::excludeKeysForSort());
     }
 }

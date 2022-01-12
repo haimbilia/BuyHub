@@ -3,7 +3,7 @@
     editRecord = function (recordId) {
         data = "recordId=" + recordId;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "form"), data, function (t) {
-            $.ykmodal(t.html, true);
+            $.ykmodal(t.html);
             fcom.removeLoader();
             $.ykmsg.close();
         });
@@ -15,7 +15,7 @@
             fcom.makeUrl(controllerName, "langForm", [autoFillLangData]),
             data,
             function (t) {
-                $.ykmodal(t.html, true);
+                $.ykmodal(t.html);
                 $.ykmsg.close();
                 fcom.removeLoader();
             }

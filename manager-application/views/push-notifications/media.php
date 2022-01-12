@@ -2,7 +2,7 @@
 
 HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('data-onclear', 'mediaForm(' . $recordId . ')');
-$frm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs');
+$frm->setFormTagAttribute('class', 'form modalFormJs');
 
 $fld = $frm->getField('pnotification_image');
 $fld->value = HtmlHelper::getfileInputHtml(

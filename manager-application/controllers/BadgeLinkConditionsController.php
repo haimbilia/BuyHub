@@ -46,7 +46,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         }
 
         $this->objectType = $this->badgeData['badge_type'];
-        switch ($this->badgeData['badge_type']) {
+        switch ($this->objectType) {
             case Badge::TYPE_BADGE:
                 $this->objectTypeName = Labels::getLabel('LBL_BADGE', $this->siteLangId);
                 $this->objectCtrlName = 'Badges';
@@ -73,6 +73,7 @@ class BadgeLinkConditionsController extends ListingBaseController
     {
         $this->getListingData($objectId);
         $fields = $this->getFormColumns();
+
         $frmSearch = $this->getSearchForm($fields);
         $frmSearch->fill(['blinkcond_badge_id' => $objectId]);
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
@@ -101,7 +102,6 @@ class BadgeLinkConditionsController extends ListingBaseController
         $this->set('defaultColumns', $this->getDefaultColumns());
         $this->set('objectCtrlName', $this->objectCtrlName);
 
-
         $this->_template->addJs(['js/select2.js', 'badge-link-conditions/page-js/list.js']);
         $this->_template->addCss(['css/select2.min.css']);
 
@@ -125,6 +125,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $this->checkEditPrivilege(true);
 
         $fields = $this->getFormColumns();
+
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
@@ -294,6 +295,7 @@ class BadgeLinkConditionsController extends ListingBaseController
             if (!empty($dataToFill['blinkcond_to_date']) && 0 < strtotime($dataToFill['blinkcond_to_date'])) {
                 $toDate = date('Y-m-d H:i', strtotime($dataToFill['blinkcond_to_date']));
             }
+            
             $dataToFill['blinkcond_from_date'] = $fromDate;
             $dataToFill['blinkcond_to_date'] = $toDate;
             $this->recordData = $dataToFill;
@@ -302,7 +304,7 @@ class BadgeLinkConditionsController extends ListingBaseController
 
         $dataToFill['badge_trigger_type'] = $this->badgeData['badge_trigger_type'];
         $dataToFill['blinkcond_badge_id'] = $objectId;
-
+        
         $frm = $this->getForm($this->badgeData['badge_trigger_type']);
         $frm->fill($dataToFill);
 
@@ -426,10 +428,8 @@ class BadgeLinkConditionsController extends ListingBaseController
             $msg = Labels::getLabel('ERR_BADGE_CONDITION_ALREADY_BOUND_FOR_CONDITION_TYPE.', $this->siteLangId);
             LibHelper::exitWithError($msg, true);
         } else if (false === BadgeLinkCondition::isUnique($objectId, $sellerId, $recordType, $position, $blinkCondId)) {
-            $msg = Labels::getLabel('ERR_BADGE_CONDITION_ALREADY_BOUND_FOR_SAME_LINK_TYPE.', $this->siteLangId);
-            if (Badge::TYPE_RIBBON == $badgeType) {
-                $msg = Labels::getLabel('ERR_RIBBON_CONDITION_ALREADY_BOUND_FOR_SAME_LINK_TYPE_AND_SAME_POSITION.', $this->siteLangId);
-            }
+            $str = Labels::getLabel('ERR_{OBJECT-TYPE}_CONDITION_ALREADY_BOUND_FOR_SAME_RECORD_CONDITIONS', $this->siteLangId);
+            $msg = CommonHelper::replaceStringData($str, ['{OBJECT-TYPE}' => $this->objectTypeName]);
             LibHelper::exitWithError($msg, true);
         }
 
@@ -474,6 +474,7 @@ class BadgeLinkConditionsController extends ListingBaseController
             $post['blinkcond_user_id'] = $sellerId;
         }
         
+        /* No need to as for position. */
         if (Badge::TYPE_RIBBON == $badgeType) {
             $post['blinkcond_position'] = Badge::RIBB_POS_TRIGHT;
         }

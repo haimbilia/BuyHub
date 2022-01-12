@@ -5,6 +5,10 @@ $frm->setFormTagAttribute('class', 'form markAsShipped-js');
 $frm->setFormTagAttribute('data-onclear', 'getOrderCommentForm(' . $op['order_id'] . ', ' . $op['op_id'] . ')');
 
 $manualFld = $frm->getField('manual_shipping');
+if ($manualFld != null) {
+    HtmlHelper::configureSwitchForCheckbox($manualFld);
+    $manualFld->developerTags['noCaptionTag'] = true;
+}
 
 $statusFld = $frm->getField('op_status_id');
 $statusFld->setFieldTagAttribute('class', 'statusJs fieldsVisibilityJs');

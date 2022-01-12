@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form');
+$frm->setFormTagAttribute('class', 'form');
 $frm->setFormTagAttribute('id', 'digitalDownloadFrm');
 $frm->setFormTagAttribute('enctype', 'multipart/form-data');
 

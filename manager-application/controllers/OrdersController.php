@@ -773,14 +773,14 @@ class OrdersController extends ListingBaseController
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->joinOrderUser();
         $srch->addCondition('op_id', '=', $opId);
-        $srch->addMultipleFields(['op.*', 'pm.*', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code','opshipping_by_seller_user_id','op_selprod_user_id','opshipping_carrier_code']);
+        $srch->addMultipleFields(['op.*', 'pm.*', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code','opshipping_by_seller_user_id','op_selprod_user_id','opshipping_carrier_code','optsu_user_id']);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
         $orderDetail = array();
         if ($rs) {
             $orderDetail = FatApp::getDb()->fetch($rs);
-        }
+        }       
 
         if (empty($orderDetail)) {
             LibHelper::exitWithError($this->str_invalid_request, true);

@@ -4,7 +4,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
 <script> var placeholder = '<?php echo Labels::getLabel('FRM_TAX_COMPONENT_NAME', $siteLangId) ?>';</script>
 <?php
 HtmlHelper::formatFormFields($frm);
-$frm->setFormTagAttribute('class', 'modal-body form form-edit');
+$frm->setFormTagAttribute('class', 'form');
 
 $fld = $frm->getField('taxstr_is_combined');
 if ($fld != null) {

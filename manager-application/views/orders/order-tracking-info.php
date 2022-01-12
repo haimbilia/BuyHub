@@ -44,7 +44,12 @@ if (is_array($trackingInfo['data']['tracking']['checkpoints']) && count($trackin
                         <?php } ?>
                     </ul>
                 </div>
-            <?php } ?>
+            <?php } 
+            $arrListing = $dateWiseArr;          
+            $tbody = new HtmlElement('table');
+            include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+            echo $tbody->getHtml();
+            ?>
         </div>
     </div>
 </div>
