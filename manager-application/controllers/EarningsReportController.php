@@ -92,7 +92,7 @@ class EarningsReportController extends ListingBaseController
         $sSrch->joinSubscription();
         $sSrch->joinOrderUser();
         $sSrch->joinOtherCharges();
-        $sSrch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
+        $sSrch->addCondition('order_type', '=', 'mysql_func_' . Orders::ORDER_SUBSCRIPTION, 'AND', true);
         $sSrch->addGroupBy('DATE(o.order_date_added)');
         $sSrch->addMultipleFields(['DATE(o.order_date_added) as date']);
         $sSrch->doNotCalculateRecords();

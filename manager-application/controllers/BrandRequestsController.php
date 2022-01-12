@@ -103,8 +103,8 @@ class BrandRequestsController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
         $srch->joinTable(Brand::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'brandlang_brand_id = b.brand_id AND brandlang_lang_id = ' . $this->siteLangId, 'bl');
         $srch->addMultipleFields(array('b.*', 'u.user_name', 'ifnull(shop_name, shop_identifier) as shop_name', 'bl.brand_name'));
-        $srch->addCondition('brand_status', '=', applicationConstants::NO);
-        $srch->addCondition('brand_seller_id', '>', 0);
+        $srch->addCondition('brand_status', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('brand_seller_id', '>', 'mysql_func_0', 'AND', true);
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('b.brand_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('bl.brand_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -114,7 +114,7 @@ class BrandRequestsController extends ListingBaseController
         }
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         if ($user_id > 0) {
-            $srch->addCondition('brand_seller_id', '=', $user_id);
+            $srch->addCondition('brand_seller_id', '=', 'mysql_func_' . $user_id, 'AND', true);
         }
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);

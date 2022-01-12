@@ -87,11 +87,11 @@ class AbandonedCartController extends ListingBaseController
         $srch->joinSellerProducts($this->siteLangId);
         $srch->addActionCondition($action);
         if ($userId > 0) {
-            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'user_id', '=', $userId);
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         }
 
         if ($selProdId > 0) {
-            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'selprod_id', '=', $selProdId);
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
         }
 
         if (!empty($dateFrom)) {
@@ -104,13 +104,13 @@ class AbandonedCartController extends ListingBaseController
 
         if ($action != AbandonedCart::ACTION_PURCHASED) {
             $srch->addSubQueryCondition();
-            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'email_count', '<', AbandonedCart::MAX_EMAIL_COUNT);
-            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'discount_notification', '<=', AbandonedCart::MAX_DISCOUNT_NOTIFICATION);
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'email_count', '<', 'mysql_func_' . AbandonedCart::MAX_EMAIL_COUNT, 'AND', true);
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'discount_notification', '<=', 'mysql_func_' . AbandonedCart::MAX_DISCOUNT_NOTIFICATION, 'AND', true);
         }
 
         if ($action == AbandonedCart::ACTION_PURCHASED) {
-            $cnd = $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'email_count', '>', 0);
-            $cnd->attachCondition(AbandonedCart::DB_TBL_PREFIX . 'discount_notification', '>', 0);
+            $cnd = $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'email_count', '>', 'mysql_func_0', 'AND', true);
+            $cnd->attachCondition(AbandonedCart::DB_TBL_PREFIX . 'discount_notification', '>', 'mysql_func_0', 'OR', true);
         }
 
         $srch->addOrder($sortBy, $sortOrder);
@@ -155,7 +155,7 @@ class AbandonedCartController extends ListingBaseController
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
     }
-    
+
     public function discountNotification()
     {
         $abandonedcartId = FatApp::getPostedData('abandonedcartId', FatUtility::VAR_INT, 0);

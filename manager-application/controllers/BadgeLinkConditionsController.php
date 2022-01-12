@@ -118,7 +118,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData($objectId = 0)
+    private function getListingData(int $objectId = 0)
     {
         $objectId = FatApp::getPostedData('blinkcond_badge_id', FatUtility::VAR_INT, $objectId);
         $this->validateBadge($objectId);
@@ -166,7 +166,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT JOIN', 'blnku.user_id = shp.shop_user_id', 'shp');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shp.shop_id = shp_l.shoplang_shop_id AND shp_l.shoplang_lang_id = ' . $this->siteLangId, 'shp_l');
         $srch->addFld('shop_id, COALESCE(shp_l.shop_name, shp.shop_identifier) as shop_name, shop_updated_on, blnku.user_name');
-        $srch->addCondition('blinkcond_badge_id', '=', $objectId);
+        $srch->addCondition('blinkcond_badge_id', '=', 'mysql_func_' .$objectId, 'AND', true);
 
         if (!empty($badgeType)) {
             $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=',  $badgeType);

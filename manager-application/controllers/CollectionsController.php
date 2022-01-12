@@ -119,14 +119,14 @@ class CollectionsController extends ListingBaseController
             $condition->attachCondition('c_l.collection_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $collection_type = FatApp::getPostedData('collection_type', FatUtility::VAR_INT, '');
+        $collection_type = FatApp::getPostedData('collection_type', FatUtility::VAR_INT, 0);
         if ($collection_type) {
-            $srch->addCondition('collection_type', '=', $collection_type);
+            $srch->addCondition('collection_type', '=', 'mysql_func_' . $collection_type, 'AND', true);
         }
 
-        $collection_layout_type = FatApp::getPostedData('collection_layout_type', FatUtility::VAR_INT, '');
+        $collection_layout_type = FatApp::getPostedData('collection_layout_type', FatUtility::VAR_INT, 0);
         if ($collection_layout_type > 0) {
-            $srch->addCondition('collection_layout_type', '=', $collection_layout_type);
+            $srch->addCondition('collection_layout_type', '=', 'mysql_func_' . $collection_layout_type, 'AND', true);
         }
         $srch->addMultipleFields(array('c.*', 'c_l.collection_name'));
 
@@ -964,7 +964,7 @@ class CollectionsController extends ListingBaseController
                 }
             }
         }
-        
+
         if (1 > $newTabLangId) {
             $this->set('openMediaForm', true);
         }

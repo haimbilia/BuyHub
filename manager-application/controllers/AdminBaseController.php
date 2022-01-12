@@ -202,7 +202,7 @@ class AdminBaseController extends FatController
 
             $this->set('bodyClass', 'fb-body');
         }
-        
+
         $this->set('languages', $languages);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('isAdminLogged', AdminAuthentication::isAdminLogged());
@@ -523,7 +523,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
             $srch = AttrGroupAttribute::getSearchObject();
             $srch->joinTable(AttrGroupAttribute::DB_TBL . '_lang', 'LEFT JOIN', 'lang.attrlang_attr_id = ' . AttrGroupAttribute::DB_TBL_PREFIX . 'id AND attrlang_lang_id = ' . $langId, 'lang');
             $srch->addCondition(AttrGroupAttribute::DB_TBL_PREFIX . 'attrgrp_id', '=', $attrgrp_id);
-            $srch->addCondition(AttrGroupAttribute::DB_TBL_PREFIX . 'type', '!=', AttrGroupAttribute::ATTRTYPE_TEXT);
+            $srch->addCondition(AttrGroupAttribute::DB_TBL_PREFIX . 'type', '!=', 'mysql_func_' . AttrGroupAttribute::ATTRTYPE_TEXT, 'AND', true);
             $srch->addOrder(AttrGroupAttribute::DB_TBL_PREFIX . 'display_order');
             $srch->addMultipleFields(array('attr_identifier', 'attr_type', 'attr_fld_name', 'attr_name', 'attr_options', 'attr_prefix', 'attr_postfix'));
             $rs = $srch->getResultSet();
@@ -582,11 +582,12 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
                 $frm->addHtml('', 'optionSectionHeading', '');
             }
             foreach ($optionArr as $val) {
+                $val = FatUtility::int($val);
                 $optionSrch = Option::getSearchObject($this->siteLangId);
                 $optionSrch->addMultipleFields(array('IFNULL(option_name,option_identifier) as option_name', 'option_id'));
                 $optionSrch->doNotCalculateRecords();
                 $optionSrch->setPageSize(1);
-                $optionSrch->addCondition('option_id', '=', $val);
+                $optionSrch->addCondition('option_id', '=', 'mysql_func_' . $val, 'AND', true);
                 $rs = $optionSrch->getResultSet();
                 $option = FatApp::getDb()->fetch($rs);
                 if ($option == false) {

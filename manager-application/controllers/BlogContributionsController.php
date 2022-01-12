@@ -47,9 +47,7 @@ class BlogContributionsController extends ListingBaseController
     }
 
     private function getListingData()
-    {
-        $db = FatApp::getDb();
-
+    {       
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();

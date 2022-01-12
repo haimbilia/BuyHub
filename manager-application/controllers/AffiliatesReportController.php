@@ -74,7 +74,7 @@ class AffiliatesReportController extends ListingBaseController
                 'u.user_name as name', 'uc.credential_email as email', 'u.user_regdate', 'totAffilateRevenue', 'totAffilateSignupRevenue', 'totAffilateOrdersRevenue', 'totAffiliatedUsers', 'u.user_referral_code'
             )
         );
-        $srch->addCondition('u.user_is_affiliate', '=', applicationConstants::YES);
+        $srch->addCondition('u.user_is_affiliate', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
 
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         if (!empty($date_from)) {

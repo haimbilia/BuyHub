@@ -81,7 +81,7 @@ class AbusiveWordsController extends ListingBaseController
         }
 
         if (isset($post['lang_id']) && $post['lang_id'] > 0) {
-            $srch->addCondition('aw.abusive_lang_id', '=', $post['lang_id']);
+            $srch->addCondition('aw.abusive_lang_id', '=', 'mysql_func_' . $post['lang_id'], 'AND', true);
         }
 
         $srch->addOrder($sortBy, $sortOrder);
@@ -125,7 +125,7 @@ class AbusiveWordsController extends ListingBaseController
         $this->set('frm', $frm);
         $this->set('languages', Language::getAllNames());
         $this->set('formLayout', Language::getLayoutDirection($this->siteLangId));
-        
+
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
