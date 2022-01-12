@@ -140,7 +140,7 @@ class CommissionController extends ListingBaseController
 
             if ($data['commsetting_product_id'] > 0) {
                 $prodObj = Product::getSearchObject($this->siteLangId);
-                $prodObj->addCondition('product_id', '=', $data['commsetting_product_id']);
+                $prodObj->addCondition('product_id', '=', 'mysql_func_' . $data['commsetting_product_id'], 'AND', true);
                 $prodObj->addMultipleFields(array('IFNULL(product_name,product_identifier) as product_name'));
                 $prodObj->doNotCalculateRecords();
                 $prodObj->setPageSize(1);
@@ -227,7 +227,7 @@ class CommissionController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $srch = Commission::getCommissionHistorySettingsObj($this->siteLangId);
-        $srch->addCondition('tcsh.csh_commsetting_id', '=', $recordId);
+        $srch->addCondition('tcsh.csh_commsetting_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 

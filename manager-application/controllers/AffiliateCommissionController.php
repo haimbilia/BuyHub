@@ -186,8 +186,8 @@ class AffiliateCommissionController extends ListingBaseController
 
         if ($post['afcommsetting_id'] == 0) {
             $srch = AffiliateCommission::getSearchObject($this->siteLangId);
-            $srch->addCondition('afcs.afcommsetting_user_id', '=', $post['afcommsetting_user_id']);
-            $srch->addCondition('afcs.afcommsetting_prodcat_id', '=', $post['afcommsetting_prodcat_id']);
+            $srch->addCondition('afcs.afcommsetting_user_id', '=', 'mysql_func_' . FatUtility::int($post['afcommsetting_user_id']), 'AND', true);
+            $srch->addCondition('afcs.afcommsetting_prodcat_id', '=', 'mysql_func_' . FatUtility::int($post['afcommsetting_prodcat_id']), 'AND', true);
             $rs = $srch->getResultSet();
             $records = FatApp::getDb()->fetchAll($rs);
             if ($records) {
@@ -224,7 +224,7 @@ class AffiliateCommissionController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $srch = AffiliateCommission::getAffiliateCommissionHistoryObj($this->siteLangId);
-        $srch->addCondition('tacsh.acsh_afcommsetting_id', '=', $recordId);
+        $srch->addCondition('tacsh.acsh_afcommsetting_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
 

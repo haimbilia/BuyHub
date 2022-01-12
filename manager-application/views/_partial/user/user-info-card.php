@@ -33,15 +33,15 @@ $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['cred
     </figure>
     <div class="user-profile_data">
         <div class="d-flex">
+            <?php echo $verifiedBadge; ?>
+
             <?php if (!empty($href) || !empty($onclick)) { ?>
                 <a class="<?php echo $userTitleClass; ?>" href="<?php echo $href; ?>" <?php echo $onclick; ?> title="<?php echo $title; ?>" data-bs-toggle="tooltip">
                     <?php echo $username; ?>
                 </a>
-            <?php } else {
-                echo $username;
-            } ?>
-            
-            <?php echo $verifiedBadge; ?>
+            <?php } else { ?>
+                <span class="<?php echo $userTitleClass; ?>"><?php echo $username; ?> </span>
+            <?php } ?>
         </div>
 
         <?php if ($displayEmail) { ?>

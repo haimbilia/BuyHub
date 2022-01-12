@@ -50,8 +50,8 @@ class ProductCategoriesController extends ListingBaseController
 
         $prodCat = new ProductCategory();
         $records = (array) $prodCat->getCategories(true, true);
-
         $this->set("arrListing", $records);
+        
         $this->_template->addJs(array('js/select2.js', 'js/jquery-sortable-lists.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/cropper.js', 'js/cropper-main.js'));
         $this->_template->addCss(array('css/select2.min.css', 'css/cropper.css', 'css/tagify.min.css'));
 
@@ -128,6 +128,19 @@ class ProductCategoriesController extends ListingBaseController
                 $ratingTypes[$key]['value'] = $types['ratingtype_name'];
             }
             $ratingTypes = ['rating_type' => json_encode($ratingTypes)];
+
+            /* url data[ */
+            $urlSrch = UrlRewrite::getSearchObject();
+            $urlSrch->doNotCalculateRecords();
+            $urlSrch->setPageSize(1);
+            $urlSrch->addFld('urlrewrite_custom');
+            $urlSrch->addCondition('urlrewrite_original', '=', 'category/view/' . $recordId);
+            $urlRow = FatApp::getDb()->fetch($urlSrch->getResultSet());
+            if ($urlRow) {
+                $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
+            }
+            /* ] */
+
             $data = array_merge($data, $catNameArr, $ratingTypes);
         }
         $frm->fill($data);
@@ -168,8 +181,11 @@ class ProductCategoriesController extends ListingBaseController
 
         $frm = new Form('frmProdCategory');
         $frm->addHiddenField('', 'prodcat_id', $recordId);
-        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name[' . CommonHelper::getDefaultFormLangId() . ']');
         $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_IDENTIFIER', $this->siteLangId), 'prodcat_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_NAME', $this->siteLangId), 'prodcat_name[' . CommonHelper::getDefaultFormLangId() . ']');
+
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
+        $fld->requirements()->setRequired();
 
         $prodCat = new ProductCategory();
         $categoriesArr = $prodCat->getCategoriesForSelectBox($this->siteLangId, $recordId, [], false);
@@ -261,7 +277,7 @@ class ProductCategoriesController extends ListingBaseController
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
             foreach ($languages as $langId => $langName) {
-                if (!Brand::getAttributesByLangId($langId, $recordId)) {
+                if (!ProductCategory::getAttributesByLangId($langId, $recordId)) {
                     $newTabLangId = $langId;
                     break;
                 }
@@ -273,11 +289,18 @@ class ProductCategoriesController extends ListingBaseController
         }
 
         FatApp::getDb()->query('CALL updateCategoryRelations(0)');
+        
 
+        $prodCat = new ProductCategory($productCategory->getMainTableRecordId());
+        $row = (array) $prodCat->getData(true, true);
+        $this->set("row", $row);
+        $this->set("canEdit", $this->objPrivilege->canEditProductCategories(0, true));
+        
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $productCategory->getMainTableRecordId());
+        $this->set('listingHtml', $this->_template->render(false, false, 'product-categories/search.php', true));
         $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     protected function isMediaUploaded($recordId)

@@ -107,7 +107,7 @@ class BadgesController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = new BadgeSearch($this->siteLangId);
-        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', Badge::TYPE_BADGE);
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', 'mysql_func_' . Badge::TYPE_BADGE, 'AND', true);
 
         $keyword = $post['keyword'];
         if (!empty($keyword)) {

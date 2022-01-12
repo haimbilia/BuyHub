@@ -1,71 +1,22 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');  ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-<div class="accordion-categories">
-    <?php
-    if (count($arrListing) > 0) {
-    ?>
-        <ul id="sorting-categories" class="sorting-categories">
-            <?php foreach ($arrListing as $sn => $row) {
-                $row['child_count'] = count($row['children']);
-            ?>
-                <li id="<?php echo $row['bpcategory_id']; ?>" class="sortableListsClosed <?php if ($row['child_count'] == 0) { ?>no-children<?php } ?>">
-                    <div>
-                        <div class="sorting-bar">
-                            <div class="sorting-title">
-                                <span class="clickable">
-                                    <?php echo !empty($row['bpcategory_name']) ? $row['bpcategory_name'] : $row['bpcategory_identifier']; ?>
-                                </span>
-                                <a onclick="goToBlog(<?php echo $row['bpcategory_id']; ?>)" href="javascript:void(0)" class="count badge badge-success clickable" title="<?php echo  Labels::getLabel('LBL_CATEGORY_BLOGS', $siteLangId); ?>">
-                                    <?php echo CommonHelper::displayBadgeCount($row['countChildBlogPosts']); ?>
-                                </a>
-                            </div>
-                            <div class="sorting-actions">
-                                <?php
-                                $active = "";
-                                $changeStatus = applicationConstants::ACTIVE;
-                                if (applicationConstants::ACTIVE == $row['bpcategory_active']) {
-                                    $active = 'checked';
-                                    $changeStatus = applicationConstants::INACTIVE;
-                                }
-
-                                $statusAct = ($canEdit === true) ? 'updateStatus(event,this,' . $row['bpcategory_id'] . ', ' . $changeStatus . ')' : 'return false;';
-                                $statusClass = ($canEdit === false) ? 'disabled' : '';
-                                $hasParent = 0 < $row['bpcategory_parent'] ? applicationConstants::YES : applicationConstants::NO;
-
-                                ?>
-                                <label class="switch switch-sm switch-icon">
-                                    <input <?php echo $active; ?> type="checkbox" id="switch<?php echo $row['bpcategory_id']; ?>" value="<?php echo $row['bpcategory_id']; ?>" onclick="<?php echo $statusAct; ?>" <?php echo $statusClass; ?> data-childcount="<?php echo $row['child_count']; ?>" data-hasparent="<?php echo $hasParent; ?>" />
-                                    <span></span>
-                                </label>
-                                <?php if ($canEdit) { ?>                                   
-                                    <button onclick="editRecord(<?php echo $row['bpcategory_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm btn-icon clickable">
-                                        <svg class="svg clickable" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#edit">
-                                            </use>
-                                        </svg>
-                                    </button>
-                                    <button title="<?php echo  Labels::getLabel('LBL_DELETE', $siteLangId); ?>" onclick="deleteRecord(<?php echo $row['bpcategory_id']; ?>)" class="btn btn-clean btn-sm btn-icon clickable">
-                                        <svg class="svg clickable" width="18" height="18">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                                            </use>
-                                        </svg>
-                                    </button>
-                                <?php } ?>
-                            </div>
-                        </div>
-                        <?php if ($row['child_count'] > 0) { ?>
-                            <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['bpcategory_id']; ?>-js" onclick="displaySubCategories(this)"></i></span>
-                        <?php } ?>
-                    </div>
-                </li>
-            <?php } ?>
-        </ul>
-    <?php } else {
-        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
-    }
-    ?>
-</div>
-
+$recordId = $recordId ?? 0;
+if (0 < $recordId) {
+    include('row.php');
+} else { ?>
+    <div class="accordion-categories listingRecordJs">
+        <?php if (count($arrListing) > 0) { ?>
+            <ul id="sorting-categories" class="sorting-categories">
+                <?php foreach ($arrListing as $sn => $row) {
+                    include('row.php');
+                } ?>
+            </ul>
+        <?php } else {
+            $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
+        }
+        ?>
+    </div>
+<?php } ?>
 
 <script type="text/javascript">
     $(function() {

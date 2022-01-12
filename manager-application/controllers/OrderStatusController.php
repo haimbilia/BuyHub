@@ -34,6 +34,11 @@ class OrderStatusController extends ListingBaseController
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
 
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'onclick' => 'editRecord(0)'
+            ],
+        ];
         $actionItemsData['performBulkAction'] = true;
         $actionItemsData['statusButtons'] = true;
 

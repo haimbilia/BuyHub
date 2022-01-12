@@ -213,8 +213,8 @@ class AdminUsersController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($postedData);
 
         $srch = AdminUsers::getSearchObject(false);
-        $srch->addCondition('admin_id', '!=', $this->admin_id);
-        $srch->addCondition('admin_id', '!=', 1);
+        $srch->addCondition('admin_id', '!=', 'mysql_func_' . $this->admin_id, 'AND', true);
+        $srch->addCondition('admin_id', '!=', 'mysql_func_1', 'AND', true);
 
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {

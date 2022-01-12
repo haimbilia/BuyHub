@@ -69,7 +69,7 @@ class BadgeRequestsController extends ListingBaseController {
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = breq_user_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
-        $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', BadgeRequest::REQUEST_PENDING);
+         $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', 'mysql_func_' . BadgeRequest::REQUEST_PENDING, 'AND', true);
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('badge_name', 'like', '%' . $keyword . '%');
@@ -92,8 +92,7 @@ class BadgeRequestsController extends ListingBaseController {
                             'user_name',
                             Badge::DB_TBL_PREFIX . 'id'
                         ]
-        ));
-        
+        )); 
 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
@@ -127,7 +126,7 @@ class BadgeRequestsController extends ListingBaseController {
         $srch = $this->getRequestedBadgeObj();
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addCondition('breq_id', '=', $badgeReqId);
+        $srch->addCondition('breq_id', '=', 'mysql_func_' . $badgeReqId, 'AND', true);
         $requestedBadge = FatApp::getDb()->fetch($srch->getResultSet());
         if ($requestedBadge === false) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
@@ -285,7 +284,7 @@ class BadgeRequestsController extends ListingBaseController {
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
 
-        $srch->addCondition('breq_id', '=', $badgeReqId);
+        $srch->addCondition('breq_id', '=', 'mysql_func_' . $badgeReqId, 'AND', true);
         $result = FatApp::getDb()->fetchAll($srch->getResultSet(), 'badgelink_record_id');
 
         foreach ($result as $badgeLink) {

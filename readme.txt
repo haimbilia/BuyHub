@@ -521,6 +521,7 @@ Bugs :
     => 061441 - Admin UI: Search is not working while trying to search the record according to 'added by' under the Options' section.
     => 061445 - Admin UI: Admin is not able to add more than one option's value.
     => 061097 - Admin UI: Loading is not working properly while sorting the columns of the table under the "Meta tags Management" section
+    => 060375 - Admin UI: Changes made to the requested brand media file by admin are not visible until the admin does not reload/refresh the page.
 
 
 Known Issues and Problems :

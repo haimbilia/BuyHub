@@ -119,7 +119,7 @@ class BannersController extends ListingBaseController
         $srch->joinPromotions($this->siteLangId, true);
         $srch->addPromotionTypeCondition();
         $srch->addMultipleFields(array('IFNULL(promotion_name, promotion_identifier) as promotion_name', 'banner_id', 'banner_type', 'banner_url', 'banner_target', 'banner_active', 'banner_blocation_id', 'banner_title', 'banner_updated_on'));
-        $srch->addCondition('b.banner_blocation_id', '=', $recordId);
+        $srch->addCondition('b.banner_blocation_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('banner_title', 'like', '%' . $post['keyword'] . '%');
@@ -183,8 +183,8 @@ class BannersController extends ListingBaseController
         ];
         if (0 < $recordId) {
             $srch = Banner::getSearchObject($this->siteLangId, false);
-            $srch->addCondition('banner_blocation_id', '=', $bannerLocationId);
-            $srch->addCondition('banner_id', '=', $recordId);
+            $srch->addCondition('banner_blocation_id', '=', 'mysql_func_' . $bannerLocationId, 'AND', true);
+            $srch->addCondition('banner_id', '=', 'mysql_func_' . $recordId, 'AND', true);
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
@@ -546,7 +546,7 @@ class BannersController extends ListingBaseController
         $recordId = FatUtility::int($recordId);
 
         $srch = Banner::getBannerLocationSrchObj(false);
-        $srch->addCondition('blocation_id', '=', $recordId);
+        $srch->addCondition('blocation_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $data = FatApp::getDb()->fetch($srch->getResultSet());

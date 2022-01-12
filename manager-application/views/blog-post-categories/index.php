@@ -9,7 +9,9 @@ $actionItemsData = $actionItemsData + [
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-body" id="listing"></div>
+                    <div class="card-body">
+                        <?php include('search.php'); ?>
+                    </div>
                 </div>
             </div>
         </div>

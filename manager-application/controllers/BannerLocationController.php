@@ -4,14 +4,14 @@ class BannerLocationController extends ListingBaseController
 {
     protected $modelClass = 'BannerLocation';
     protected $pageKey = 'MANAGE_BANNER_LOCATIONS';
-   
+
     public function __construct($action)
     {
         parent::__construct($action);
         $this->objPrivilege->canViewBanners();
     }
 
-     /**
+    /**
      * checkEditPrivilege - This function is used to check, set previlege and can be also used in parent class to validate request.
      *
      * @param  bool $setVariable
@@ -78,10 +78,10 @@ class BannerLocationController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
         $srch = BannerLocation::getSearchObject($this->siteLangId, false);
         $srch->addMultipleFields([
-            'blocation_banner_count', 'blocation_collection_id', 'blocation_banner_width', 'blocation_banner_height', 
+            'blocation_banner_count', 'blocation_collection_id', 'blocation_banner_width', 'blocation_banner_height',
             'blocation_id', 'blocation_promotion_cost', 'blocation_active', 'IFNULL(blocation_name,blocation_identifier) as blocation_name'
         ]);
-        $srch->addCondition('blocation_collection_id', '=', '0');
+        $srch->addCondition('blocation_collection_id', '=', 'mysql_func_0', 'AND', true);
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('blocation_name', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('blocation_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -138,14 +138,14 @@ class BannerLocationController extends ListingBaseController
         $frm = $this->getForm($recordId);
         $srch = BannerLocation::getSearchObject($this->siteLangId, false);
         $srch->addMultipleFields([
-            'blocation_banner_count', 'blocation_collection_id', 'blocation_banner_width', 'blocation_banner_height', 'blocation_id', 
+            'blocation_banner_count', 'blocation_collection_id', 'blocation_banner_width', 'blocation_banner_height', 'blocation_id',
             'blocation_id', 'blocation_promotion_cost', 'blocation_active', 'IFNULL(blocation_name,blocation_identifier) as blocation_name'
         ]);
-        $srch->addCondition('blocation_id', '=', $recordId);
+        $srch->addCondition('blocation_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $data = FatApp::getDb()->fetch($srch->getResultSet());
-        
+
         if (empty($data)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -179,7 +179,7 @@ class BannerLocationController extends ListingBaseController
             'blocation_promotion_cost' => $post['blocation_promotion_cost'],
             'blocation_active' => $post['blocation_active'],
             'blocation_id' => $recordId,
-        ] ;
+        ];
 
         $bannerObj = new Banner();
         if (!$bannerObj->updateLocationData($data)) {
@@ -221,7 +221,7 @@ class BannerLocationController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function langForm($autoFillLangData = 0) 
+    public function langForm($autoFillLangData = 0)
     {
         $this->checkEditPrivilege();
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
@@ -369,5 +369,4 @@ class BannerLocationController extends ListingBaseController
     {
         return array_diff($fields, ['blocation_active'], Common::excludeKeysForSort());
     }
-    
 }
