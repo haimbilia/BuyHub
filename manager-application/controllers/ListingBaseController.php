@@ -1,7 +1,6 @@
 <?php
 
-class ListingBaseController extends AdminBaseController
-{
+class ListingBaseController extends AdminBaseController {
 
     use RecordOperations;
 
@@ -12,8 +11,7 @@ class ListingBaseController extends AdminBaseController
     protected bool $checkMediaExist = false;
     protected int $newTabLangId = 0;
 
-    public function __construct($action)
-    {
+    public function __construct($action) {
         parent::__construct($action);
     }
 
@@ -23,34 +21,40 @@ class ListingBaseController extends AdminBaseController
      * @param  array $constructorArgs
      * @return void
      */
-    protected function setModel(array $constructorArgs = []): void
-    {
+    protected function setModel(array $constructorArgs = []): void {
         $this->modelObj = (new ReflectionClass($this->modelClass))->newInstanceArgs($constructorArgs);
     }
 
-    public function setRecordCount(object $recordCountSrch, int $pageSize, int $page, &$post)
-    {
+    public function setRecordCount(object $recordCountSrch, int $pageSize, int $page, &$post, $isGroupSearch = false) {
         if ($pageSize < 1) {
             return;
         }
 
         if ($page > 1 && !empty($post['total_record_count'])) {
-            $this->set('pageCount', ceil($post['total_record_count'] / $pageSize) ?? 0);
-            $this->set('recordCount', $post['total_record_count']);
-            $this->set('pageSize', $pageSize);
-            $this->set('page', $page);
+            $this->setPageRecord($post['total_record_count'], $pageSize, $page);
             return;
         }
 
         $recordCountSrch->addFld('count(*) as totalRecords');
-        $recordCountSrch->doNotCalculateRecords();
-        $recordCountSrch->doNotLimitRecords(); 
-        $defaultRecordCount = FatApp::getDb()->fetch($recordCountSrch->getResultSet());  
-        $this->set('pageCount', ceil($defaultRecordCount['totalRecords'] / $pageSize) ?? 0);
-        $this->set('recordCount', $defaultRecordCount['totalRecords']);
+        $recordCountSrch->doNotLimitRecords();
+        if ($isGroupSearch == false) {
+            $recordCountSrch->doNotCalculateRecords();
+            $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
+            $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
+        } else {
+            $recordCountSrch->getResultSet();
+            $defaultRecordCount = $recordCountSrch->recordCount();
+        }
+         
+        $this->setPageRecord($defaultRecordCount, $pageSize, $page);
+        $post['total_record_count'] = $defaultRecordCount;
+    }
+
+    private function setPageRecord($recordCount, $pageSize, $page) {
+        $this->set('pageCount', ($recordCount > 0) ? ceil($recordCount / $pageSize) : 0);
+        $this->set('recordCount', $recordCount);
         $this->set('pageSize', $pageSize);
         $this->set('page', $page);
-        $post['total_record_count'] = $defaultRecordCount['totalRecords'];
     }
 
 }

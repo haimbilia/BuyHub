@@ -43,6 +43,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', ['-1' => Labels::getLabel('FRM_ALL', $this->siteLangId)] + User::getSupplierReqStatusArr($this->siteLangId), '', array(), '');
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -83,8 +84,7 @@ class SellerApprovalRequestsController extends ListingBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $userObj = new User();
-        $srch = $userObj->getUserSupplierRequestsObj();
-        $srch->addFld('tusr.*');
+        $srch = $userObj->getUserSupplierRequestsObj(); 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('tusr.usuprequest_reference', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -100,15 +100,14 @@ class SellerApprovalRequestsController extends ListingBaseController
         if (!empty($post['date_to'])) {
             $srch->addCondition('tusr.usuprequest_date', '<=', $post['date_to'] . ' 23:59:59');
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addFld('tusr.*');
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

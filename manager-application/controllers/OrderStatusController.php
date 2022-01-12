@@ -66,7 +66,7 @@ class OrderStatusController extends ListingBaseController
 
         $orderStatusTypeArr = OrderStatus::getOrderStatusTypeArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_ORDER_STATUS_TYPE', $this->siteLangId), 'orderstatus_type', $orderStatusTypeArr, '', array(), '');
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -105,12 +105,8 @@ class OrderStatusController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $postedData = FatApp::getPostedData();
-        $post = $searchForm->getFormDataFromArray($postedData);
-
-        $srch = OrderStatus::getSearchObject(false, $this->siteLangId);
-
-        $srch->addFld(array('ostatus.*', 'IFNULL(ostatus_l.orderstatus_name,ostatus.orderstatus_identifier) as orderstatus_name'));
-
+        $post = $searchForm->getFormDataFromArray($postedData); 
+        $srch = OrderStatus::getSearchObject(false, $this->siteLangId); 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('ostatus.orderstatus_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('ostatus_l.orderstatus_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -122,24 +118,18 @@ class OrderStatusController extends ListingBaseController
         } else {
             $srch->addCondition('ostatus.orderstatus_type', '=', Orders::ORDER_PRODUCT);
         }
-
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        //CommonHelper::printArray($records,1);
-
-        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addFld(array('ostatus.*', 'IFNULL(ostatus_l.orderstatus_name,ostatus.orderstatus_identifier) as orderstatus_name'));
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId)); 
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);

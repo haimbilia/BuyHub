@@ -1,6 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-<?php
 $recordId = $recordId ?? 0;
 if (0 < $recordId) {
     include('row.php');
@@ -8,9 +7,9 @@ if (0 < $recordId) {
     <div class="accordion-categories listingRecordJs">
         <?php if (count($arrListing) > 0) { ?>
             <ul id="sorting-categories" class="sorting-categories">
-                <?php foreach ($arrListing as $sn => $row) {  ?>
-                    <?php include('row.php'); ?>
-                <?php } ?>
+                <?php foreach ($arrListing as $sn => $row) {
+                    include('row.php');
+                } ?>
             </ul>
         <?php } else {
             $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));

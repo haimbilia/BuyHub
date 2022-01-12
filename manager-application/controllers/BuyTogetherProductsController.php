@@ -68,6 +68,10 @@ class BuyTogetherProductsController extends ListingBaseController {
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $keyword . '%', 'OR');
         }
         $prodSrch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = selprod_user_id', 'tuc');
+        $prodSrch->addGroupBy('upsell_sellerproduct_id');
+        $this->setRecordCount(clone $prodSrch, $pageSize, $page, $post,true);
+        $prodSrch->doNotCalculateRecords();
+        
         $prodSrch->addMultipleFields([
             'credential_username',
             'selprod_id',
@@ -80,7 +84,6 @@ class BuyTogetherProductsController extends ListingBaseController {
         $prodSrch->setPageNumber($page);
         $prodSrch->setPageSize($pageSize);
         $prodSrch->addOrder($sortBy, $sortOrder);
-        $prodSrch->addGroupBy('upsell_sellerproduct_id');
         $rs = $prodSrch->getResultSet();
         $upsellProds = FatApp::getDb()->fetchAll($rs, 'upsell_sellerproduct_id');
         $arrListing = array();
@@ -100,11 +103,7 @@ class BuyTogetherProductsController extends ListingBaseController {
         }
 
         $this->set("arrListing", $arrListing);
-        $this->set("productsList", $upsellProds);
-        $this->set('pageCount', $prodSrch->pages());
-        $this->set('recordCount', $prodSrch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("productsList", $upsellProds); 
         $this->set('postedData', $post);
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);

@@ -886,37 +886,42 @@ class SellerController extends SellerBaseController
             $opship_tracking_url = FatApp::getPostedData('opship_tracking_url', FatUtility::VAR_STRING, '');
 
             $activatedTrackPluginId = (false !== $activatedTrackPlugin && 0 < $activatedTrackPlugin['plugin_id']) ? $activatedTrackPlugin['plugin_id'] : 0;  
-            $activatedTrackPluginCode = (false !== $activatedTrackPlugin && 0 < $activatedTrackPlugin['plugin_code']) ? $activatedTrackPlugin['plugin_code'] : 0;  
-            
+            $activatedTrackPluginCode = (false !== $activatedTrackPlugin && 0 < $activatedTrackPlugin['plugin_code']) ? $activatedTrackPlugin['plugin_code'] : 0;
+
             if ($post["op_status_id"] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") &&  0 < $activatedTrackPluginId && in_array($activatedTrackPluginCode, ['AfterShipShipment'])) {
                 if (array_key_exists('manual_shipping', $post) && 0 < $post['manual_shipping']) {
                     $updateData = [
                         'opship_op_id' => $post['op_id'],
                         "opship_tracking_number" => $post['tracking_number']
                     ];
-                    if (array_key_exists('opship_tracking_url', $post)) {                   
-                        $updateData['opship_tracking_url'] =  $opship_tracking_url;                        
+                    if (array_key_exists('opship_tracking_url', $post)) {
+                        $updateData['opship_tracking_url'] =  $opship_tracking_url;
                     }
                     if (array_key_exists('oshistory_courier', $post)) {
                         $trackingCourierCode = $post['oshistory_courier'];
                         $updateData['opship_tracking_courier_code'] = $trackingCourierCode;
                         $updateData['opship_tracking_plugin_id'] = $activatedTrackPluginId;
                     }
-                    
+                    if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
+                        LibHelper::dieJsonError(FatApp::getDb()->getError());
+                    }
                 } else {
-                   
-                    $trackingRelation = new TrackingCourierCodeRelation();
-                    $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
-                    $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
-                    $updateData = [
-                        'opship_op_id' => $post['op_id'],
-                        "opship_tracking_courier_code" => $trackingCourierCode,
-                        "opship_tracking_plugin_id" => $activatedTrackPluginId,    
-                    ];                    
-                }              
-                 
-                if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
-                    LibHelper::dieJsonError(FatApp::getDb()->getError());
+
+                    if (0 < $activatedTrackPluginId) {
+                        $trackingRelation = new TrackingCourierCodeRelation();
+                        $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
+                        if(count($trackData)){
+                            $trackingCourierCode = !empty($trackData['tccr_tracking_courier_code']) ? $trackData['tccr_tracking_courier_code'] : '';
+                            $updateData = [
+                                'opship_op_id' => $post['op_id'],
+                                "opship_tracking_courier_code" => $trackingCourierCode,
+                                "opship_tracking_plugin_id" => $activatedTrackPluginId,
+                            ];
+                            if (!FatApp::getDb()->insertFromArray(OrderProductShipment::DB_TBL, $updateData, false, array(), $updateData)) {
+                                LibHelper::dieJsonError(FatApp::getDb()->getError());
+                            }
+                        }                       
+                    }                    
                 }
             }
             
@@ -5128,10 +5133,10 @@ class SellerController extends SellerBaseController
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $srch = SellerProduct::searchSpecialPriceProductsObj($this->siteLangId, $selProdId, $keyword, $userId);
         $srch->setPageNumber($page);
-
+        $srch->setPageSize($pagesize);
         $db = FatApp::getDb();
         $rs = $srch->getResultSet();
         $arrListing = $db->fetchAll($rs);        
@@ -5146,7 +5151,7 @@ class SellerController extends SellerBaseController
         $this->set('pageCount', $srch->pages());
         $this->set('postedData', $post);
         $this->set('recordCount', $srch->recordCount());
-        $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
+        $this->set('pageSize', $pagesize);
         $this->_template->render(false, false);
     }
 

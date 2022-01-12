@@ -55,19 +55,11 @@ class BlogPostCategoriesController extends ListingBaseController
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
 
-        $this->_template->addJs(array('js/jquery-sortable-lists.js'));
-
-        $this->_template->render();
-    }
-
-    public function search()
-    {
-        $this->checkEditPrivilege(true);
         $records = BlogPostCategory::getBlogPostCatParentChildWiseArr($this->siteLangId, 0, true, false, false);
-
         $this->set("arrListing", $records);
-        $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);
+
+        $this->_template->addJs(array('js/jquery-sortable-lists.js'));
+        $this->_template->render();
     }
 
     public function getSubCategories()
@@ -137,7 +129,11 @@ class BlogPostCategoriesController extends ListingBaseController
         $record->assignValues($data);
 
         if (!$record->save()) {
-            LibHelper::exitWithError($record->getError(), true);
+            $msg = $record->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD_NAME', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
         $recordId = $record->getMainTableRecordId();
         /* url data[ */
@@ -172,10 +168,15 @@ class BlogPostCategoriesController extends ListingBaseController
             }
         }
 
+        $this->checkEditPrivilege(true);
+        $row = BlogPostCategory::getData($this->siteLangId, $recordId, true, false);
+        $this->set("row", $row);
+
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
+        $this->set('listingHtml', $this->_template->render(false, false, 'blog-post-categories/search.php', true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function updateOrder()

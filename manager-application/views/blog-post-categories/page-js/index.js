@@ -1,19 +1,27 @@
-$(document).ready(function () {
-	searchBlogPostCategories();
-});
 (function () {
+	saveRecord = function (frm) {
+		if (false === checkControllerName()) {
+			return false;
+		}
+		if (!$(frm).validate()) { return; }
+		$.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
 
-	searchBlogPostCategories = function () {
-		fcom.updateWithAjax(fcom.makeUrl('BlogPostCategories', 'search'), '', function (res) {
-			$("#listing").html(res.html);
-			$.ykmsg.close();
+		var data = fcom.frmData(frm);
+		fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setup'), data, function (t) {
+			$("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading');
 			fcom.removeLoader();
+			$.ykmsg.success(t.msg);
+
+			if (0 < $('#' + t.recordId).length) {
+				$('#' + t.recordId).replaceWith(t.listingHtml);
+			}
+			
+			if (t.langId > 0) {
+				editLangData(t.recordId, t.langId);
+			}
+			return;
 		});
 	};
-
-	reloadList = function () {
-		searchBlogPostCategories();
-	}
 
 	displaySubCategories = function (obj, catId = 0, data, callable = '') {
 		$(obj).removeClass('clickable');

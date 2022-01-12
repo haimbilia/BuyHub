@@ -1,6 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
 $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS");
-$pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $order['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($order['op_id']) : NULL;
 ?>
 <div class="card-body p-0 itemSummaryJs">
     <div class="table-responsive table-scrollable js-scrollable listingTableJs">
@@ -19,6 +18,9 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
                 $store = "";
                 foreach ($order['products'] as $op) {
                     $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($op['op_selprod_user_id'], $op['opshipping_by_seller_user_id']);
+                    $shippingApiObj = (new Shipping($siteLangId))->getShippingApiObj(($shippingHanldedBySeller ? $op['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+                    $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $op['opshipping_plugin_id'] ? OrderProduct::getPickUpShedule($op['op_id']) : NULL;
+                   
                     $displayShippingUserForm = (
                         (
                             (in_array(strtolower($op['plugin_code']), ['cashondelivery', 'payatstore'])) ||
@@ -47,8 +49,7 @@ $pickUpDetails = $shippingApiObj && $shippingApiObj->getKey('plugin_id') == $ord
 
                     if (!empty($op['opship_tracking_url'])) {
                         $opStatusLbl = Labels::getLabel('LBL_SHIPPED', $siteLangId);
-                    }
-                    $shippingApiObj = (new Shipping($siteLangId))->getShippingApiObj(($shippingHanldedBySeller ? $op['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+                    }                    
 
                     if ($store != $op['op_shop_name']) {
                         if (!empty($store)) { ?>

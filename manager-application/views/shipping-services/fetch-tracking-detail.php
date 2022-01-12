@@ -1,29 +1,59 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage . '); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage . ');
+$dateWiseArr = [];
 
-<ul class="timeline" id="timeline">
-    <?php if (!empty($trackingData) && array_key_exists('trackingUrl', $trackingData)) {?>
-        <li class="event" data-date="<?php echo FatDate::format($data['dateTime'], true); ?>">
-            <a href="<?php echo $trackingData['trackingUrl']; ?>" target="_blank" class="link"><?php echo Labels::getLabel('LBL_CLICK_HERE_TO_TRACK_EXTERNALLY', $siteLangId); ?></a>
-            <hr>
-        </li>
-    <?php } ?>
-    <?php if (!empty($trackingData) && array_key_exists('detail', $trackingData) && !empty(array_filter($trackingData['detail']))) { ?>
-        <?php foreach ($trackingData['detail'] as $data) { ?>
-            <li class="event" data-date="<?php echo FatDate::format($data['dateTime'], true); ?>">
-                <div>
-                    <p><strong><?php echo $data['description']; ?></strong></p>
-                    <p><?php echo $data['location']; ?></p>
-                    <small><?php echo $data['comments']; ?></small>
+if (!empty($trackingData) && array_key_exists('detail', $trackingData) && !empty(array_filter($trackingData['detail']))) { 
+    foreach ($trackingData['detail'] as $data) {
+        $dateWiseArr[FatDate::format($data['dateTime'])][] = $data;
+    }
+}
+
+?>
+<div class="modal-header">
+    <h5 class="modal-title">
+    <a class="back" href="javascript:void(0)" onclick = "getItemStatusHistory(<?php echo $orderId;?> ,<?php echo $opId;?>)">
+        <svg class="svg" width="24" height="24">
+            <use xlink:href="/admin/images/retina/sprite-actions.svg#back">
+            </use>
+        </svg>
+    </a>
+        <?php echo Labels::getLabel('LBL_TRACKING_DETAIL', $siteLangId) ." - ".$orderNumber; ?> 
+    </h5>
+</div>
+<div class="modal-body opStausLogJs">
+    <div class="form-edit-body loaderContainerJs">
+        <div class="timeline-v4">
+            <?php foreach ($dateWiseArr as $date => $dataArr) {
+                $headTitle = HtmlHelper::getTheDay((current($dataArr))['dateTime'], $siteLangId);
+            ?>
+                <div class="rowJs" data-reference="<?php echo $date; ?>">
+                    <div class="timeline-v4__item-date">
+                        <span class="tag"><?php echo $headTitle; ?></span>
+                    </div>
+                    <ul class="timeline-v4__items">
+                        <?php foreach ($dataArr as $date => $data) { ?>
+                            <li class="timeline-v4__item">
+                                <span class="timeline-v4__item-time"><?php echo date('H:i', strtotime($data['dateTime'])); ?></span>
+                                <div class="timeline-v4__item-desc">
+                                    <span class="timeline-v4__item-text">                               
+                                        <b><?php echo $data['description']; ?></b>                                     
+                                    </span>
+                                    <span class="timeline-v4__item-text">                               
+                                        <b><?php echo $data['location']; ?></b>                                     
+                                    </span>
+                                    <span class="timeline-v4__item-text"> 
+                                        <span><?php echo $data['comments']; ?></span>
+                                    </span>
+                                </div>
+                            </li>
+                        <?php } ?>
+                    </ul>
                 </div>
-            </li>
-        <?php } ?>
-    <?php } else { ?>
-        <li class="event">
-            <?php if (!empty($trackingData) && array_key_exists('trackingUrl', $trackingData)) {?>
-                <a href="<?php echo $trackingData['trackingUrl']; ?>" target="_blank"><?php echo Labels::getLabel('LBL_CLICK_HERE_TO_TRACK_EXTERNALLY', $siteLangId); ?></a>
-            <?php } else {
-                echo Labels::getLabel('MSG_NO_DETAIL_FOUND', $siteLangId);
-            } ?>
-        </li>
-    <?php } ?>
-</ul>
+            <?php } 
+            $arrListing = $dateWiseArr;          
+            $tbody = new HtmlElement('table');
+            include (CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+            echo $tbody->getHtml();
+            ?>
+        </div>
+    </div>
+</div>
