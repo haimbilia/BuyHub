@@ -1,7 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-HtmlHelper::formatFormFields($frm);
-
 $fld = $frm->getField('bpcategory_identifier');
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','bpcategory_id');getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val(),'','pre',true)");
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];

@@ -213,8 +213,8 @@ class AdminUsersController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($postedData);
 
         $srch = AdminUsers::getSearchObject(false);
-        $srch->addCondition('admin_id', '!=', $this->admin_id);
-        $srch->addCondition('admin_id', '!=', 1);
+        $srch->addCondition('admin_id', '!=', 'mysql_func_' . $this->admin_id, 'AND', true);
+        $srch->addCondition('admin_id', '!=', 'mysql_func_1', 'AND', true);
 
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
@@ -222,25 +222,16 @@ class AdminUsersController extends ListingBaseController
             $cond->attachCondition('adu.admin_name', 'like', '%' . $keyword . '%', 'OR');
             $cond->attachCondition('adu.admin_email', 'like', '%' . $keyword . '%');
         }
-
-        $srch->addMultipleFields(array('*'));
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+         
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->setPageSize($pageSize);  
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet()); 
+        $this->set("arrListing", $records);   
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);

@@ -313,12 +313,12 @@ class ContentPagesController extends ListingBaseController
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
             $srch->addMultipleFields(array("cpblocklang_text", 'cpblocklang_block_id'));
-            $srch->addCondition('cpblocklang_cpage_id', '=', $recordId);
+            $srch->addCondition('cpblocklang_cpage_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
             if (0 < $autoFillLangData) {
                 $srch->addCondition('cpblocklang_lang_id', '=', FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
             } else {
-                $srch->addCondition('cpblocklang_lang_id', '=', $langId);
+                $srch->addCondition('cpblocklang_lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
             }
 
             $srchRs = $srch->getResultSet();
@@ -453,7 +453,7 @@ class ContentPagesController extends ListingBaseController
             $lang_id = array_key_first($languages);
         }
 
-        $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $recordId, 0, $lang_id,false);
+        $cbgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE, $recordId, 0, $lang_id, false);
         $this->set('image', $cbgImage);
         $this->set('imageFunction', 'cpageBackgroundImage');
         $this->set('recordId', $recordId);

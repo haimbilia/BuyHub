@@ -93,7 +93,6 @@ class CustomProductsController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', Shop::DB_TBL_PREFIX . 'user_id = if(u.user_parent > 0, u.user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
 
-        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name'));
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('preq.preq_content', 'like', '%' . $post['keyword'] . '%');
             $cond->attachCondition('preq_l.preq_lang_data', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -115,7 +114,9 @@ class CustomProductsController extends ListingBaseController
         if (0 < $post['seller_id']) {
             $srch->addCondition('preq.preq_user_id', '=', $post['seller_id']);
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'ifnull(shop_name, shop_identifier) as shop_name'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
@@ -146,11 +147,7 @@ class CustomProductsController extends ListingBaseController
             );
             $records[] = $arr;
         }
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $this->set('postedData', $post);
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
@@ -288,8 +285,8 @@ class CustomProductsController extends ListingBaseController
             }
         }
         $productData['upc_type'] = applicationConstants::YES;
-        $productData['preq_ean_upc_code'] = json_decode($productData['preq_ean_upc_code'], true);       
-        if (count($productData['preq_ean_upc_code']) &&  array_key_first($productData['preq_ean_upc_code']) != 0) {
+        $productData['preq_ean_upc_code'] = json_decode($productData['preq_ean_upc_code'], true);        
+        if (!empty($productData['preq_ean_upc_code']) && count($productData['preq_ean_upc_code']) &&  array_key_first($productData['preq_ean_upc_code']) != 0) {
             $productData['upc_type'] = applicationConstants::NO;
         }
 
@@ -682,7 +679,7 @@ class CustomProductsController extends ListingBaseController
     public function imageForm($recordId = 0)
     {
         $frm = $this->getImageFrm($recordId);
-        $this->set('frm', $frm);    
+        $this->set('frm', $frm);
         $this->set('html', $this->_template->render(false, false, 'products/image-form.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -710,7 +707,7 @@ class CustomProductsController extends ListingBaseController
         }
 
         $frm = DigitalDownload::getDownloadForm($this->siteLangId, $type, $recordId);
-        
+
         $productOptions = ProductRequest::getProductReqOptions($recordId, $this->siteLangId, true);
         $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '_');
 
@@ -723,7 +720,7 @@ class CustomProductsController extends ListingBaseController
         }
 
         $this->set('frm', $frm);
-        $this->set('type', $type);     
+        $this->set('type', $type);
         $this->set('html', $this->_template->render(false, false, 'products/digital-download-form.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -755,7 +752,7 @@ class CustomProductsController extends ListingBaseController
         $this->set('productSpecifications', $specifications);
         $this->set('langId', $langId);
         $this->set('html', $this->_template->render(false, false, 'products/prod-specifications.php', true));
-        $this->_template->render(false, false, 'json-success.php', true, false);      
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function upcListing()
@@ -784,7 +781,7 @@ class CustomProductsController extends ListingBaseController
         $this->set('optionCombinations', $optionCombinations);
         $this->set('upcCodeData', $upcCodeData);
         $this->set('recordId', $recordId);
-        $this->set('langId', $langId);    
+        $this->set('langId', $langId);
         $this->set('html', $this->_template->render(false, false, 'products/upc-listing.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -806,7 +803,7 @@ class CustomProductsController extends ListingBaseController
         $this->set('isDefaultLayout', FatApp::getPostedData('isDefaultLayout', FatUtility::VAR_INT, 0));
         $this->checkEditPrivilege(true);
         $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false);        
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function setup()
@@ -1150,7 +1147,7 @@ class CustomProductsController extends ListingBaseController
         $this->set('languages', $languages);
         $this->set('options', $optionCombinations);
         $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false); 
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function getDigitalDownloadAttachments()
@@ -1179,9 +1176,9 @@ class CustomProductsController extends ListingBaseController
         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
         $this->set('options', $optionCombinations);
         $this->set('recordId', $recordId);
-        $this->set('downloadrefType', Product::CATALOG_TYPE_REQUEST);  
+        $this->set('downloadrefType', Product::CATALOG_TYPE_REQUEST);
         $this->set('html', $this->_template->render(false, false, NULL, true));
-        $this->_template->render(false, false, 'json-success.php', true, false); 
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function deleteDigitalLink($linkId, $refId)
@@ -1383,7 +1380,7 @@ class CustomProductsController extends ListingBaseController
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'preq_id');
-
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
 

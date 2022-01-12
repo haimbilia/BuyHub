@@ -47,8 +47,6 @@ class BlogCommentsController extends ListingBaseController
 
     private function getListingData()
     {
-        $db = FatApp::getDb();
-
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -114,7 +112,7 @@ class BlogCommentsController extends ListingBaseController
         $srch = BlogComment::getSearchObject(true, $this->siteLangId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addCondition('bpcomment_id', '=', $recordId);
+        $srch->addCondition('bpcomment_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $data = FatApp::getDb()->fetch($srch->getResultSet());
         if ($data === false) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -160,7 +158,7 @@ class BlogCommentsController extends ListingBaseController
             $srch = BlogComment::getSearchObject(true, $this->siteLangId);
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
-            $srch->addCondition('bpcomment_id', '=', $recordId);
+            $srch->addCondition('bpcomment_id', '=', 'mysql_func_' . $recordId, 'AND', true);
             $newData = FatApp::getDb()->fetch($srch->getResultSet());
             $this->sendEmail($newData);
         }
@@ -242,7 +240,7 @@ class BlogCommentsController extends ListingBaseController
     public function getSearchForm($fields = [])
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'bpcomment_id');        
+        $frm->addHiddenField('', 'bpcomment_id');
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'bpcomment_author_name');
         }
@@ -252,7 +250,7 @@ class BlogCommentsController extends ListingBaseController
 
         $statusArr = BlogComment::getBlogCommentStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_COMMENT_STATUS', $this->siteLangId), 'bpcomment_approved', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_COMMENT_STATUS', $this->siteLangId));
-        
+
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

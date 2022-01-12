@@ -106,9 +106,9 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         }
         var frm = document.frmRecordSearchPaging;
         $(frm.page).val(page);
-        if ("undefined" != typeof document.frmRecordSearch.page) {
-            document.frmRecordSearch.page.value = page;
-        }
+        /* if ("undefined" != typeof document.frmRecordSearch.page) {
+            document.frmRecordSearch.page.value = 1;
+        } */
         searchRecords(frm);
     };
 

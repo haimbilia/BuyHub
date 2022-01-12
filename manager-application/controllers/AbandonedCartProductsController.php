@@ -77,7 +77,7 @@ class AbandonedCartProductsController extends ListingBaseController
         $srch->addGroupBy(AbandonedCart::DB_TBL_PREFIX . 'selprod_id');
 
         if ($selProdId > 0) {
-            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'selprod_id', '=', $selProdId);
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
         }
 
         $srch->addOrder($sortBy, $sortOrder);

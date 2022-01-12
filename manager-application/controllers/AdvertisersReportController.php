@@ -76,7 +76,7 @@ class AdvertisersReportController extends ListingBaseController
                 'u.user_name as name', 'uc.credential_email as email', 'u.user_regdate', 'u.user_is_supplier', 'activePromotions', 'promotionsCount', 'promotionCharged'
             )
         );
-        $srch->addCondition('u.user_is_advertiser', '=', applicationConstants::YES);
+        $srch->addCondition('u.user_is_advertiser', '=', 'mysql_func_' .applicationConstants::YES, 'AND', true);
 
         $date_from = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
         if (!empty($date_from)) {

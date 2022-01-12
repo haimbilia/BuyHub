@@ -85,17 +85,17 @@ class RelatedProductsController extends ListingBaseController
             $condition->attachCondition('selprod_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = selprod_user_id', 'tuc');
-        $srch->addMultipleFields(['related_sellerproduct_id', 'credential_username', 'selprod_id', 'selprod_product_id', 'product_updated_on', 'selprod_title', 'product_name', 'product_identifier']);
+        $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = selprod_user_id', 'tuc'); 
         $srch->addGroupBy('related_sellerproduct_id');
-
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(['related_sellerproduct_id', 'credential_username', 'selprod_id', 'selprod_product_id', 'product_updated_on', 'selprod_title', 'product_name', 'product_identifier']);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs, 'related_sellerproduct_id');
+        $srch->setPageSize($pageSize); 
+        $srch->addOrder($sortBy, $sortOrder);  
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'related_sellerproduct_id');
         $arrListing = array();
         foreach ($records as $relatedProd) {
             $productId = $relatedProd['related_sellerproduct_id'];
@@ -111,13 +111,8 @@ class RelatedProductsController extends ListingBaseController
         }
 
         $this->set("arrListing", $arrListing);
-        $this->set("productsList", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set("productsList", $records); 
+        $this->set('postedData', $post); 
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

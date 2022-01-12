@@ -45,9 +45,7 @@ class UrlRewritingController extends ListingBaseController
     }
 
     private function getListingData()
-    {
-        $db = FatApp::getDb();
-
+    {       
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
@@ -86,7 +84,7 @@ class UrlRewritingController extends ListingBaseController
         }
 
         if ($post['lang_id'] > 0) {
-            $srch->addCondition('ur.urlrewrite_lang_id', '=', $post['lang_id']);
+            $srch->addCondition('ur.urlrewrite_lang_id', '=', 'mysql_func_' . $post['lang_id'], 'AND', true);
         }
 
         $srch->addOrder($sortBy, $sortOrder);

@@ -90,7 +90,7 @@ class BuyersReportController extends ListingBaseController
         $srch = new UserSearch();
         $srch->joinTable('(' . $rSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'u.user_id = opq.order_user_id', 'opq');
         $srch->addMultipleFields(['u.user_name as buyerName', 'uc.credential_email as buyerEmail', 'opq.*']);
-        $srch->addCondition('totOrders', '>', '0');
+        $srch->addCondition('totOrders', '>', 'mysql_func_0', 'AND', true);
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'AND');

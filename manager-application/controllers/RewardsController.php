@@ -72,28 +72,19 @@ class RewardsController extends ListingBaseController
 
         $srch = new UserRewardSearch();
         $srch->joinUser();
-        $srch->addMultipleFields(['urp.*', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email']);
-
         if (0 < $userId) {
             $srch->addCondition('urp.urp_user_id', '=', $userId);
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(['urp.*', 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email']);
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->setPageSize($pageSize);   
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -109,7 +100,7 @@ class RewardsController extends ListingBaseController
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'urp_user_id', []);
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }

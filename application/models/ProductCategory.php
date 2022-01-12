@@ -387,7 +387,6 @@ class ProductCategory extends MyAppModel
         }
     }
 
-
     public static function parseTree($tree, $root = 0)
     {
         $return = array();
@@ -912,6 +911,7 @@ class ProductCategory extends MyAppModel
             return false;
         }
     }
+
     /* public static function getCatName($id,$categoryArr) {
             if (!array_key_exists($id, $categoryArr)) {
                 $categoryArr[$id] = productCategory::getAttributesByLangId($id, 'prodcat_name');
@@ -1135,7 +1135,7 @@ class ProductCategory extends MyAppModel
         $this->assignValues($post);
         if ($this->save()) {
             $this->updateCatCode();
-            $this->rewriteUrl($post['prodcat_identifier'], true, $parentCatId);
+            $this->rewriteUrl($post['urlrewrite_custom'], false, $parentCatId);
             // Product::updateMinPrices();
         } else {
             $categoryId = self::getDeletedProductCategoryByIdentifier($post['prodcat_identifier']);
@@ -1291,7 +1291,7 @@ class ProductCategory extends MyAppModel
         return $translatedData;
     }
 
-    public function getCategories($includeProductCount = true, $includeSubCategoriesCount = true)
+    private function categoryObj($includeProductCount = true, $includeSubCategoriesCount = true)
     {
         $attr = [
             'm.*',
@@ -1299,8 +1299,6 @@ class ProductCategory extends MyAppModel
         ];
         $srch = static::getSearchObject(false, $this->commonLangId, false);
         $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'deleted', '=', 0);
-        $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'parent', '=', $this->mainTableRecordId);
-
         if ($includeProductCount === true) {
             $srch->joinTable(self::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'cr.pcr_parent_id = m.prodcat_id', 'cr');
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT JOIN', 'ptc.ptc_prodcat_id = cr.pcr_prodcat_id', 'ptc');
@@ -1324,8 +1322,21 @@ class ProductCategory extends MyAppModel
         $srch->addOrder('prodcat_display_order', 'asc');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetchAll($rs);
+        return $srch;
+    }
+
+    public function getData($includeProductCount = true, $includeSubCategoriesCount = true)
+    {
+        $srch = $this->categoryObj($includeProductCount, $includeSubCategoriesCount);
+        $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+        return FatApp::getDb()->fetch($srch->getResultSet());
+    }
+
+    public function getCategories($includeProductCount = true, $includeSubCategoriesCount = true)
+    {
+        $srch = $this->categoryObj($includeProductCount, $includeSubCategoriesCount);
+        $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'parent', '=', $this->mainTableRecordId);
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     public function getSubCategoriesCount($prodCatId)
