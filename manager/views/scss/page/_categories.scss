@@ -5,7 +5,10 @@
     li {
         list-style: none;
         position: relative;
-        padding-#{$start-direction}: 40px;
+        padding-#{$start-direction}: 50px;
+        margin: 5px;
+        border: $border;
+        background-color: #efefef;
         &.sortableListsOpen {
             .sorting-bar {
                 border-color: darken($border-color, 20);
@@ -38,25 +41,25 @@
             color: darken($bg-gray, 50);
             //color: $brand-color-inverse;
             padding: 10px;
-            // width: 30px; 
+            // width: 30px;
             // height: 30px;
             line-height: 1.4;
             text-align: center;
             font-size: 0.8rem;
-            //border: solid 1px #dee2e6; 
+            //border: solid 1px #dee2e6;
             border-radius: 1px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
             &:hover {
-                background: lighten($bg-gray, 0.20);
+                background: lighten($bg-gray, 0.2);
             }
             .svg {
                 width: 16px;
                 height: 16px;
                 [fill]:not(.permanent):not(g) {
-                    transition: fill .3s ease;
+                    transition: fill 0.3s ease;
                     // fill: $brand-color;
                 }
             }
@@ -103,7 +106,7 @@
     a {
         color: $txt-body;
         display: block;
-        &[data-option='on'] {
+        &[data-option="on"] {
             .fa-angle-right {
                 transform: rotate(90deg);
             }
@@ -112,4 +115,21 @@
             text-decoration: none;
         }
     }
+}
+
+.sorting-categories li div {
+    background: #ffffff;
+}
+
+ul.append-ul {
+    background: #ffffff;
+    padding: 1px;
+}
+
+.sorting-categories .sorting-bar {
+    margin-bottom: 0;
+}
+
+.sorting-categories .sorting-bar {
+    border: 0;
 }

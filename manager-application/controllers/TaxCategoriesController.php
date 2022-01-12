@@ -298,7 +298,7 @@ class TaxCategoriesController extends ListingBaseController
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
-            'taxcat_identifier' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
+            'taxcat_name' => Labels::getLabel('LBL_CATEGORY_NAME', $this->siteLangId),
             'taxcat_active' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
@@ -312,7 +312,7 @@ class TaxCategoriesController extends ListingBaseController
         return [
             'select_all',
             'listSerial',
-            'taxcat_identifier',
+            'taxcat_name',
             'taxcat_active',
             'action',
         ];
