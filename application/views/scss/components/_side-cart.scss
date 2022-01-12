@@ -1,3 +1,11 @@
+.offcanvas {
+    &-side-cart {
+        .offcanvas-foot {
+            padding: 1rem;
+        }
+    }
+}
+
 .cart-footer {
     position: sticky !important;
     top: 185px;

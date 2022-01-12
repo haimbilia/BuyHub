@@ -1198,7 +1198,9 @@
 }
 
 .user-reviews {
-    max-width: 90%;
+    @include media-breakpoint-up(lg) {
+        max-width: 90%;
+    }
     &-item {
         padding: 1rem 0;
         margin-bottom: 2rem;
@@ -1248,28 +1250,28 @@
 .rated-by {
     margin: 2rem 0;
     display: flex;
-    align-items: center;
+
     flex-direction: column;
     @include media-breakpoint-up(lg) {
         flex-direction: row;
+        align-items: center;
     }
-
     &-item {
         border-radius: $radius-common;
         display: flex;
         align-items: center;
+        flex: 1;
         justify-content: space-between;
         padding: 5px 1rem;
         border: $border;
-        margin-#{$end-direction}: 10px;
         margin-bottom: 5px;
         font-size: 0.8rem;
         color: $txt-gray;
+        @include media-breakpoint-up(lg) {
+            margin-#{$end-direction}: 10px;
+        }
         &:last-child {
             margin-#{$end-direction}: 0;
-        }
-        @include media-breakpoint-up(lg) {
-            margin-bottom: 0;
         }
     }
     .product-ratings {
