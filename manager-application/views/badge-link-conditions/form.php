@@ -1,7 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$displayInPopup = (int)(Badge::COND_AUTO == $triggerType || BadgeLinkCondition::RECORD_TYPE_SHOP == $recordType);
 
-$frm->setFormTagAttribute('data-onclear', 'editConditionRecord(' . $badgeId . ', ' . $recordId . ', ' . $displayInPopup . ')');
+$frm->setFormTagAttribute('data-onclear', 'editConditionRecord(' . $badgeId . ', ' . $recordId . ')');
 
 $fld = $frm->getField('blinkcond_user_id');
 if (null != $fld) {

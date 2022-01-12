@@ -64,7 +64,7 @@ class PluginSettingController extends LoggedUserController
         $this->set('msg', Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     public function getForm()
     {
         $class = get_called_class();
@@ -76,7 +76,7 @@ class PluginSettingController extends LoggedUserController
             }
             $frm = $class::form($this->langId);
         }
-        
+
         if ((empty($requirements) || !is_array($requirements)) && !isset($frm)) {
             return false;
         }
@@ -85,6 +85,11 @@ class PluginSettingController extends LoggedUserController
         } else {
             $frm = PluginSetting::getForm($requirements, $this->langId);
         }
+        
+        if (null == $frm->getField('btn_submit')) {
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->langId));
+        }
+
         $frm->fill(['keyName' => $this->keyName]);
         return $frm;
     }

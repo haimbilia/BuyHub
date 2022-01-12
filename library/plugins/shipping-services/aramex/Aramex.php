@@ -871,4 +871,9 @@ class Aramex extends ShippingServicesBase
         }
         return false;
     }
+
+    public function canGenerateLabelFromShipment(): bool
+    {
+        return true;
+    }
 }

@@ -25,20 +25,11 @@ foreach ($arrListing as $sn => $row) {
                     $row['extra_text'] = CommonHelper::replaceStringData($str, ['{SHOP}' => $row['shop_name']]);
                     $title = Labels::getLabel('LBL_CLICK_HERE_TO_VISIT_SHOP_LIST', $siteLangId);
                 }
-                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title], false, true);
+                $str = $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $row, 'addVerifiedBadge' => true, 'siteLangId' => $siteLangId, 'onclick' => $onclick, 'title' => $title], false, true);
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'credential_active':
-                $statusAct = ($canEdit) ? 'updateStatus(event, this, ' . $row['user_id'] . ', ' . ((int) !$row[$key]) . ')' : 'return false;';
-                $statusClass = ($canEdit) ? '' : 'disabled';
-                $checked = applicationConstants::ACTIVE == $row[$key] ? 'checked' : '';
-
-                $htm = '<span class="switch switch-sm switch-icon">
-                                    <label>
-                                        <input type="checkbox" data-old-status="' . $row[$key] . '" value="' . $row['user_id'] . '" ' . $checked . ' onclick="' . $statusAct . '" ' . $statusClass . '>
-                                        <span class="input-helper"></span>
-                                    </label>
-                                </span>';
+                $htm = HtmlHelper::addStatusBtnHtml($canEdit, $row['user_id'], $row[$key]);
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;
             case 'user_regdate':
@@ -50,21 +41,9 @@ foreach ($arrListing as $sn => $row) {
                 );
                 $td->appendElement('plaintext', $tdAttr, $date, true);
                 break;
-            case 'user_is_buyer':
-                $class = ($row['user_is_buyer']) ? 'is-check' : '';
-                $td->appendElement('plaintext', $tdAttr, '<div class="checkmark ' . $class . '"><img src="' . CONF_WEBROOT_URL . 'images/retina/tick-green.svg" alt=""></div>', true);
-                break;
-            case 'user_is_supplier':
-                $class = ($row['user_is_supplier']) ? 'is-check' : '';
-                $td->appendElement('plaintext', $tdAttr, '<div class="checkmark ' . $class . '"><img src="' . CONF_WEBROOT_URL . 'images/retina/tick-green.svg" alt=""></div>', true);
-                break;
-            case 'user_is_advertiser':
-                $class = ($row['user_is_advertiser']) ? 'is-check' : '';
-                $td->appendElement('plaintext', $tdAttr, '<div class="checkmark ' . $class . '"><img src="' . CONF_WEBROOT_URL . 'images/retina/tick-green.svg" alt=""></div>', true);
-                break;
-            case 'user_is_affiliate':
-                $class = ($row['user_is_affiliate']) ? 'is-check' : '';
-                $td->appendElement('plaintext', $tdAttr, '<div class="checkmark ' . $class . '"><img src="' . CONF_WEBROOT_URL . 'images/retina/tick-green.svg" alt=""></div>', true);
+            case 'user_type':
+                $str = $this->includeTemplate('users/user-type.php', ['row' => $row, 'siteLangId' => $siteLangId], false, true);
+                $td->appendElement('plaintext', $tdAttr, $str, true);
                 break;
             case 'user_registered_initially_for':
                 $statusHtm = User::getUserTypeHtml($siteLangId, $row[$key]);
@@ -88,8 +67,8 @@ foreach ($arrListing as $sn => $row) {
                     'recordId' => $row['user_id']
                 ];
                 if ($canEdit) {
-                    $data['dropdownButtons']['editButton'] = [];
-                    $data['dropdownButtons']['deleteButton'] = [];
+                    $data['editButton'] = [];
+                    $data['deleteButton'] = [];
 
                     $data['dropdownButtons']['otherButtons'] = [
                         [

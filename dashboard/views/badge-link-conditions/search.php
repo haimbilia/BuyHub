@@ -2,7 +2,6 @@
 $arr_flds = array(
     'listserial' => Labels::getLabel('LBL_#', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'record_type' => Labels::getLabel('LBL_LINK_TYPE', $siteLangId),
-    BadgeLinkCondition::DB_TBL_PREFIX . 'position' => Labels::getLabel('LBL_POSITION', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type' => Labels::getLabel('LBL_CONDITION', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_from' => Labels::getLabel('LBL_CONDITION_FROM', $siteLangId),
     BadgeLinkCondition::DB_TBL_PREFIX . 'condition_to' => Labels::getLabel('LBL_CONDITION_TO', $siteLangId),
@@ -17,8 +16,6 @@ if (!$canEdit || 1 > count($arrListing)) {
 
 if (Badge::TYPE_RIBBON == $badgeType) {
     unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type']);
-} else {
-    unset($arr_flds[BadgeLinkCondition::DB_TBL_PREFIX . 'position']);
 }
 
 if (Badge::COND_AUTO == $badgeConditionType) {
@@ -57,10 +54,6 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'record_type':
                 $txt = empty($row[$key]) ? Labels::getLabel("LBL_N/A", $siteLangId) : $recordTypeArr[$row[$key]];
-                $td->appendElement('plaintext', [], $txt, true);
-                break;
-            case BadgeLinkCondition::DB_TBL_PREFIX . 'position':
-                $txt = Badge::RIBB_POS_TRIGHT == $row[$key] ? Labels::getLabel('LBL_TOP_RIGHT', $siteLangId) : Labels::getLabel('LBL_TOP_LEFT', $siteLangId);
                 $td->appendElement('plaintext', [], $txt, true);
                 break;
             case BadgeLinkCondition::DB_TBL_PREFIX . 'condition_type':
