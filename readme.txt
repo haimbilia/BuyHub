@@ -523,6 +523,9 @@ Bugs :
     => 061097 - Admin UI: Loading is not working properly while sorting the columns of the table under the "Meta tags Management" section
     => 060375 - Admin UI: Changes made to the requested brand media file by admin are not visible until the admin does not reload/refresh the page.
 ====================TV-9.4.0.20220112==============
+    => 061594 - Admin UI: Search is not working according to "username and email address" under the Order Cancellation Requests section.
+    => 061591 - Admin UI: Field's headings are missing under the 'advanced search' section under the "Withdrawal requests" section.
+
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

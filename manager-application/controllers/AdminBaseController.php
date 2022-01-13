@@ -346,10 +346,10 @@ class AdminBaseController extends FatController
         $frm->addTextBox(Labels::getLabel('FRM_SELLER/Shop', $this->siteLangId), 'shop_name');
         /* $frm->addTextBox(Labels::getLabel('FRM_CUSTOMER',$this->siteLangId),'customer_name'); */
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addTextBox('', 'price_from', '', array('placeholder' => Labels::getLabel('FRM_ORDER_FROM', $this->siteLangId) . ' [' . $currencySymbol . ']'));
-        $frm->addTextBox('', 'price_to', '', array('placeholder' => Labels::getLabel('FRM_ORDER_TO', $this->siteLangId) . ' [' . $currencySymbol . ']'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addTextBox(Labels::getLabel('FRM_AMOUNT_FROM', $this->siteLangId), 'price_from', '', array('placeholder' => Labels::getLabel('FRM_AMOUNT_FROM', $this->siteLangId) . ' [' . $currencySymbol . ']'));
+        $frm->addTextBox(Labels::getLabel('FRM_AMOUNT_TO', $this->siteLangId), 'price_to', '', array('placeholder' => Labels::getLabel('FRM_AMOUNT_TO', $this->siteLangId) . ' [' . $currencySymbol . ']'));
 
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'user_id');
