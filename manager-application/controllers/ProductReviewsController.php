@@ -68,8 +68,8 @@ class ProductReviewsController extends ListingBaseController
         $reqLbl = Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId);
         $frm->addSelectBox($reqLbl, 'spreview_status', [ -1 => 'Does not Matter' ] + $statusArr, '',[], $reqLbl);
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addHiddenField('', 'page');
         $this->addSortingElements($frm, 'spreview_posted_on', applicationConstants::SORT_DESC);
         $frm->addHiddenField('', 'total_record_count'); 
