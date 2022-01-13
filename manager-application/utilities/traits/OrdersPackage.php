@@ -180,6 +180,8 @@ trait OrdersPackage
 
         $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
         $this->set('orderStatusArr', $orderStatusArr);
+        $this->_template->addJs(array('js/jquery.datetimepicker.js'), false);
+        $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
         $this->_template->render();
     }
 
