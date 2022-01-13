@@ -62,20 +62,7 @@
                     height: 24px;
                 }
             }
-            .verified {
-                color: $brand-color;
-                filter: grayscale(1);
-                opacity: 0.5;
-                &.is-verified {
-                    filter: none;
-                    opacity: 1;
-                }
-                svg {
-                    width: 20px;
-                    height: 20px;
-                    fill: currentColor;
-                }
-            }
+
             &:first-child {
                 padding-#{$start-direction}: 0;
             }
