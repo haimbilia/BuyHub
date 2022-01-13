@@ -39,7 +39,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $this->set('pageTitle', $pageTitle);
         $this->set("frmSearch", $frmSearch);
         $this->set('defaultColumns', $this->getDefaultColumns());
-        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME_OR_EMAIL', $this->siteLangId));
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_INVOICE_NUMBER_AND_COMMENT', $this->siteLangId));
         $this->getListingData();
 
         $data = FatApp::getPostedData();
@@ -175,14 +175,11 @@ class OrderCancellationRequestsController extends ListingBaseController
         $srch->addMultipleFields(
             array(
                 'ocrequest_id', 'ocrequest_message', 'ocrequest_date', 'ocrequest_status',
-                'buyer.user_name as buyer_name', 'buyer_cred.credential_username as buyer_username', 'buyer_cred.credential_email as buyer_email',
-                'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name',
-                'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'seller.user_phone_dcode as seller_phone_dcode',
-                'seller.user_phone as seller_phone', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'buyer.user_name as user_name', 'buyer_cred.credential_username as credential_username', 'buyer_cred.credential_email as credential_email','seller.user_name as seller_name','seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email','op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
                 'IFNULL(ocreason_title, ocreason_identifier) as ocreason_title', 'op_qty', 'op_unit_price',
-                'order_tax_charged', 'op_other_charges', 'op_rounding_off', 'op_id', 'buyer.user_id AS buyer_id',
-                'buyer.user_updated_on AS buyer_updated_on', 'op_shop_id', 'op_shop_name', 'op_selprod_id',
-                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id'
+                'order_tax_charged', 'op_other_charges', 'op_rounding_off', 'op_id', 'buyer.user_id AS user_id',
+                'buyer.user_updated_on AS user_updated_on', 'op_shop_id', 'op_shop_name', 'op_selprod_id',
+                'op_product_name', 'op_selprod_title', 'op_brand_name', 'selprod_product_id','seller.user_updated_on AS seller_updated_on','seller.user_id AS seller_id'
             )
         );
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -196,6 +193,7 @@ class OrderCancellationRequestsController extends ListingBaseController
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->checkEditPrivilege(true);
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
+        $this->set('canViewShops', $this->objPrivilege->canViewShops($this->admin_id, true));
     }
 
     public function form()
@@ -363,20 +361,10 @@ class OrderCancellationRequestsController extends ListingBaseController
         FatUtility::dieJsonSuccess($successMsgString);
     }
 
-    public function viewComment($recordId, $langId = 0)
+    public function viewComment($ocrequestId)
     {
-        $this->checkEditPrivilege();
-        // $row = OrderCancelRequest::getAttributesById($recordId);
-
-        $srch = new OrderCancelRequestSearch($this->siteLangId);
-        $srch->joinOrderCancelReasons();
-        $srch->addCondition('ocrequest_id', '=', $recordId);
-        $records = FatApp::getDb()->fetch($srch->getResultSet());
-        if (!$records) {
-            LibHelper::exitWithError($this->str_invalid_request, true);
-        }
-        $this->set('title', Labels::getLabel('LBL_VIEW_COMMENT', $langId));
-        $this->set('cancelMessage', $records);
+        $ocrequestId = FatUtility::int($ocrequestId);
+        $this->set('comment', OrderCancelRequest::getAttributesById($ocrequestId, 'ocrequest_message'));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

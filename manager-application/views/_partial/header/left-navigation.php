@@ -275,7 +275,7 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["OrderCancellationRequests"]' href="<?php echo UrlHelper::generateUrl('BadgeRequests'); ?>">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BadgeRequests"]' href="<?php echo UrlHelper::generateUrl('BadgeRequests'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">
