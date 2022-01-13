@@ -26,15 +26,16 @@ class SiteTourHelper
     public static function getNextLink(int $stepNumber)
     {
         $url = '';
+        $stepNumber++;
         switch ($stepNumber) {
             case self::STEP_CONFIGURATION:
-                $url = UrlHelper::generateUrl('Configurations');
+                $url = UrlHelper::generateUrl('Configurations', 'Index', [Configurations::FORM_GENERAL]);
                 break;
             case self::STEP_ADD_PRODUCT:
                 $url = UrlHelper::generateUrl('Products', 'form');
                 break;
             case self::STEP_EMAIL_CONF:
-                $url = UrlHelper::generateUrl('Configurations');
+                $url = UrlHelper::generateUrl('Configurations', 'Index', [Configurations::FORM_EMAIL]);
                 break;
             case self::STEP_SLIDES:
                 $url = UrlHelper::generateUrl('Slides');
@@ -50,7 +51,7 @@ class SiteTourHelper
                 $stepNumber = 0;
                 break;
         }
-        return rtrim($url, '/') . '?' . self::TOUR_STEP . '=' . ($stepNumber + 1);
+        return rtrim($url, '/') . '?' . self::TOUR_STEP . '=' . ($stepNumber);
     }
 
     public static function isGettingStarted()
@@ -73,21 +74,41 @@ class SiteTourHelper
         return false;
     }
 
-    /* public function getSteps($langId)
+    public static function getStepsData($langId)
     {
         return [
             self::STEP_CONFIGURATION => [
-                'title' => Labels::getLabel('LBL_CONFIGURE_GENERAL_SETTINGS', $langId),
+                'title' => 'Configure General Settings',
                 'icon' => '',
-                'msg' => 'Lets configure your system settings'
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
             self::STEP_ADD_PRODUCT => [
-                'title' => 'Add product',
+                'title' => 'Add Product',
                 'icon' => '',
-                'msg' => 'Lets configure your system settings'
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+            ],
+            self::STEP_EMAIL_CONF => [
+                'title' => 'Configure Email Settings',
+                'icon' => '',
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+            ],
+            self::STEP_SLIDES => [
+                'title' => 'Configure Home page slides',
+                'icon' => '',
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+            ],
+            self::STEP_NAVIGATION => [
+                'title' => 'Configure Front End Header Navigation',
+                'icon' => '',
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+            ],
+            self::STEP_TAX => [
+                'title' => 'Setup Tax Rates',
+                'icon' => '',
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
         ];
-    } */
+    }
 
     public function validateSteps(int $stepNumber)
     {

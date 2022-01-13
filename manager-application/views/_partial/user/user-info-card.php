@@ -7,9 +7,7 @@ $displayEmail = $displayEmail ?? true;
 $userTitleClass = $userTitleClass ?? 'user-profile_title';
 $title = $title ?? '';
 $addVerifiedBadge = $addVerifiedBadge ?? false;
-
-$uploadedTime = AttachedFile::setTimeParam($user['user_updated_on']);
-$userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($user['user_id'], 'MINITHUMB', true), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+$displayProfileImage = $displayProfileImage ?? true;
 
 $verifiedBadge = '';
 if (true === $addVerifiedBadge) {
@@ -28,9 +26,14 @@ if (true === $addVerifiedBadge) {
 $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['credential_username'] . ')' : $user['credential_username'];
 ?>
 <div class="user-profile <?php echo $extraClass; ?>">
-    <figure class="user-profile_photo">
-        <img width="40" height="40" title="<?php echo $user['user_name']; ?>" alt="<?php echo $user['user_name']; ?>" src="<?php echo $userImageUrl; ?>">
-    </figure>
+    <?php if($displayProfileImage){
+        $uploadedTime = AttachedFile::setTimeParam($user['user_updated_on']);
+        $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', array($user['user_id'], 'MINITHUMB', true), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+    ?>
+        <figure class="user-profile_photo">
+            <img width="40" height="40" title="<?php echo $user['user_name']; ?>" alt="<?php echo $user['user_name']; ?>" src="<?php echo $userImageUrl; ?>">
+        </figure>
+    <?php } ?>
     <div class="user-profile_data">
         <div class="d-flex">
             <?php echo $verifiedBadge; ?>
