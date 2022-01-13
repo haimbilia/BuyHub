@@ -522,6 +522,7 @@ Bugs :
     => 061445 - Admin UI: Admin is not able to add more than one option's value.
     => 061097 - Admin UI: Loading is not working properly while sorting the columns of the table under the "Meta tags Management" section
     => 060375 - Admin UI: Changes made to the requested brand media file by admin are not visible until the admin does not reload/refresh the page.
+    => 061594 - Admin UI: Search is not working according to "username and email address" under the Order Cancellation Requests section.
 
 
 Known Issues and Problems :

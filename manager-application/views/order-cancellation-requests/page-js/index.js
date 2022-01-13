@@ -30,10 +30,9 @@ $(function () {
         });
     };
 
-
-    viewComment = function (id, langId) {
-        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'viewComment', [id, langId]), '', function (t) {
-            $.ykmodal(t.html);
+    viewComment = function (ocrequestId) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewComment",[ocrequestId]), '', function (t) {
+            $.ykmodal(t.html, true);
             $.ykmsg.close();
             fcom.removeLoader();
         });
