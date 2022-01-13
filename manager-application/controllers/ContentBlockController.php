@@ -102,24 +102,23 @@ class ContentBlockController extends ListingBaseController
             $condition = $srch->addCondition('epage_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('epage_label', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
         $srch->addMultipleFields([
             'epage_id', 'IFNULL(epage_label,epage_identifier) AS epage_label',
             'epage_type', 'epage_content_for', 'epage_active', 'epage_default',
             'epagelang_lang_id', 'IFNULL(epage_content, epage_default_content) AS epage_content'
         ]);
+        
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->addOrder($sortBy, $sortOrder);
-        $srch->setPageSize($pageSize);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $this->set("activeInactiveArr", $activeInactiveArr);
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $srch->setPageSize($pageSize);  
+        $srch->addOrder($sortBy, $sortOrder); 
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set("activeInactiveArr",  applicationConstants::getActiveInactiveArr($this->siteLangId)); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

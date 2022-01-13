@@ -55,25 +55,23 @@ class TaxStructureController extends ListingBaseController {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = TaxStructure::getSearchObject($this->siteLangId);
-        $srch->addCondition('taxstr_parent', '=', 0);
+        $srch->addCondition('taxstr_parent', '=', 0); 
+        if (!empty($post['keyword'])) {
+            $cond = $srch->addCondition('taxstr_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
+            $cond->attachCondition('taxstr_name', 'like', '%' . $post['keyword'] . '%', 'OR');
+        }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
         $srch->addMultipleFields([
             'ts.taxstr_id',
             'ts.taxstr_identifier',
             'ts.taxstr_is_combined',
             'ts_l.taxstr_name'
         ]);
-        if (!empty($post['keyword'])) {
-            $cond = $srch->addCondition('taxstr_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
-            $cond->attachCondition('taxstr_name', 'like', '%' . $post['keyword'] . '%', 'OR');
-        }
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $this->set("arrListing", $db->fetchAll($srch->getResultSet()));
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $srch->setPageSize($pageSize); 
+        $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
