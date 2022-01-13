@@ -132,8 +132,7 @@ class WithdrawalRequestsController extends ListingBaseController {
             $srch->addCondition('tuwr.withdrawal_id', '=', $post['withdrawal_id']);
         }
 
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        if (isset($status) && $status >= 0) {
+        if (isset($post['status']) && $post['status'] > 0) {
             $srch->addCondition('tuwr.withdrawal_status', '=', $status);
         }
 
