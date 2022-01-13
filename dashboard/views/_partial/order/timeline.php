@@ -42,15 +42,14 @@
                                         $trackingNumber = number_format($trackingNumber,0,null,''); 
                                     ?>
                                         <div class="clipboard mb-4">
-                                        <p class="clipboard_url" id="trackingNumberJs">
+                                        <p class="clipboard_url trackingNumberJs">
                                             <?php echo $trackingNumber; ?>
                                         </p>
                                         <a class="clipboard_btn" onclick="copyContent(this)" href="javascript:void(0);" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
                                             <i class="far fa-copy"></i>
                                         </a>
                                     </div> 
-                                   <?php  } ?>                                   
-                               
+                                   <?php  } ?>
                                 <p>
                                     <?php                                    
                                     if (empty($row['oshistory_courier'])) {
