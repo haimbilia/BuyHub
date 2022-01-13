@@ -31,18 +31,22 @@ foreach ($arrListing as $sn => $row) {
                     <?php 
                   
                     if ($row['oshistory_orderstatus_id'] ==  $shippedOrderStatus) {
-                        if (empty($row['oshistory_courier'])) {                      
-                            $trackingNumber = trim($row['oshistory_tracking_number']);        
-                            $str = !empty($trackingNumber) ? '<b>' . Labels::getLabel('LBL_TRACKING_NUMBER', $siteLangId).':</b>': '';                                              
+                        if (empty($row['oshistory_courier'])) {
+                            $trackingNumbers = explode(",",$row['oshistory_tracking_number']); 
+                            $str = !empty($trackingNumbers) ? '<b>' . Labels::getLabel('LBL_TRACKING_NUMBER', $siteLangId).':</b>': '';                                              
                             if (!empty($shippingApiObj) && $shippingApiObj->getKey('plugin_id') == $row['opshipping_plugin_id'] && true === $shippingApiObj->canFetchTrackingDetail()) {
-                                $str =  '<span class="timeline-v4__item-text"><a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $row['op_id'] . "'" . ')" title="' . Labels::getLabel("LBL_TRACK", $siteLangId) . '">' . $trackingNumber . '</a></span>';
+                                foreach($trackingNumbers as $trackingNumber){
+                                    $trackingNumber = trim($trackingNumber);
+                                    $trackingNumber = number_format($trackingNumber,0,null,'');  
+                                    $str .=  '<span class="timeline-v4__item-text"><a href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'". $trackingNumber ."'" . ',' . "'" . $row['op_id'] . "'" . ')" title="' . Labels::getLabel("LBL_TRACK", $siteLangId) . '">' . $trackingNumber . '</a></span>';
+                                }                                
                             }                                               
                             if (empty($trackingUrl) && !empty($trackingNumber)) {                               
                                 $str .=  '<span class="timeline-v4__item-text">VIA ' . CommonHelper::displayNotApplicable($siteLangId, $row["opshipping_label"]) . '</span>';
                             } elseif (!empty($trackingUrl) && !empty($trackingNumber)) {                             
                                 $trackingUrls = (array) explode(', ', $trackingUrl);                              
                                 foreach ($trackingUrls as $url) { 
-                                    $str .=  '<span class="timeline-v4__item-text"><a class="" href="' . $url . '" target="_blank">' . number_format($trackingNumber,0,null,'') . '</a>';
+                                    $str .=  '<span class="timeline-v4__item-text"><a class="" href="' . $url . '" target="_blank">' . $trackingNumber . '</a>';
                                 }                                
                             }
                             echo $str;

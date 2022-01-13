@@ -907,7 +907,11 @@ class SellerController extends SellerBaseController
                     }
                 } else {
 
-                    if (0 < $activatedTrackPluginId) {
+                    $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']);
+                    $shippingObj = new Shipping($this->siteLangId);
+                    $shippingApiObj = $shippingObj->getShippingApiObj(($shippingHanldedBySeller ? $orderDetail['opshipping_by_seller_user_id'] : 0)) ?? NULL;
+
+                    if (0 < $activatedTrackPluginId && !$shippingApiObj->canFetchTrackingDetail()) {
                         $trackingRelation = new TrackingCourierCodeRelation();
                         $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
                         if(count($trackData)){

@@ -153,7 +153,7 @@ class OrdersController extends ListingBaseController
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $this->set('trackingUrl', OrderProductShipment::getAttributesById($recordId,'opship_tracking_url'));
-        
+
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
@@ -849,7 +849,7 @@ class OrdersController extends ListingBaseController
                         LibHelper::exitWithError(FatApp::getDb()->getError(), true);
                     }
                 } else { 
-                    if(0 < $activatedTrackPluginId){                  
+                    if(0 < $activatedTrackPluginId && !$shippingApiObj->canFetchTrackingDetail()){                  
                         $trackingRelation = new TrackingCourierCodeRelation();
                         $trackData = $trackingRelation->getDataByShipCourierCode($orderDetail['opshipping_carrier_code']);
                         

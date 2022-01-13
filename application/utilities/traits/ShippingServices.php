@@ -582,8 +582,7 @@ trait ShippingServices
 
         $frm = new Form('frmRates');
         $frm->addSelectBox(Labels::getLabel('LBL_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();
-        $frm->addHiddenField('', 'op_id', $opId)->requirements()->setIntPositive();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->langId));
+        $frm->addHiddenField('', 'op_id', $opId)->requirements()->setIntPositive();      
         return $frm;
     }
 

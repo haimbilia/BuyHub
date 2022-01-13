@@ -77,7 +77,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($canEdit && $row['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING ) {
                     $data['editButton'] = [];
                 }
-
+                
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
                 $td->appendElement('plaintext', $tdAttr, $actionItems, true);
                 break;
