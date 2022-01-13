@@ -279,6 +279,10 @@ select2 = function (
     select2Selector.$container.addClass("custom-select2");
     $("." + $.ykmodal.element).removeAttr("tabindex");
 };
+
+$(document).on('select2:open', () => {
+    document.querySelector('.select2-search__field').focus();
+});
 /**
  * hiddenfields object = { fieldname : fieldValue}
  */

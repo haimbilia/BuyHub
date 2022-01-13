@@ -525,6 +525,7 @@ Bugs :
 ====================TV-9.4.0.20220112==============
     => 061594 - Admin UI: Search is not working according to "username and email address" under the Order Cancellation Requests section.
     => 061591 - Admin UI: Field's headings are missing under the 'advanced search' section under the "Withdrawal requests" section.
+    => 061584 - Admin UI: Double options are selected while selecting the "cancellation requests" option in the side menu.
 
 
 Known Issues and Problems :
