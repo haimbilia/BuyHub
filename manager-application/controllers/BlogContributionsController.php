@@ -84,19 +84,14 @@ class BlogContributionsController extends ListingBaseController
         if (isset($post['bcontributions_id']) && $post['bcontributions_id'] != '') {
             $srch->addCondition('bcontributions_id', '=', $post['bcontributions_id']);
         }
-        $srch->addMultipleFields(array('*', 'concat(bcontributions_author_first_name," ",bcontributions_author_last_name) author_name'));
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        
-        $srch->addOrder($sortBy, $sortOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize); 
+        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->addMultipleFields(array('*', 'concat(bcontributions_author_first_name," ",bcontributions_author_last_name) author_name'));
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -260,7 +255,7 @@ class BlogContributionsController extends ListingBaseController
 
         $statusArr = BlogContribution::getBlogContributionStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_CONTRIBUTION_STATUS', $this->siteLangId), 'bcontributions_status', $statusArr, '', array(), Labels::getLabel('LBL_SELECT_CONTRIBUTION_STATUS', $this->siteLangId));        
-        
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

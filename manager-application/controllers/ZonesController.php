@@ -79,30 +79,22 @@ class ZonesController extends ListingBaseController
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
         $srch = Zone::getSearchObject(false, $this->siteLangId);
-        $srch->addFld('zone.* , z_l.zone_name');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('zone.zone_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('z_l.zone_name', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addFld('zone.* , z_l.zone_name');
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
+        $srch->setPageSize($pageSize); 
+        $srch->addOrder($sortBy, $sortOrder);   
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet()); 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set("arrListing", $records); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);

@@ -45,7 +45,7 @@ class ListingBaseController extends AdminBaseController {
             $recordCountSrch->getResultSet();
             $defaultRecordCount = $recordCountSrch->recordCount();
         }
-         
+        //echo $recordCountSrch->getQuery();die;
         $this->setPageRecord($defaultRecordCount, $pageSize, $page);
         $post['total_record_count'] = $defaultRecordCount;
     }

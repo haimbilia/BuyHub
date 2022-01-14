@@ -196,9 +196,10 @@ $(function () {
             ]),
             "",
             function (res) {
+                var json = JSON.parse(res);
                 $.ykmsg.close();
                 $(dv).empty();
-                $(dv).append(res).change();
+                $(dv).append(json.html).change();
             }
         );
     };

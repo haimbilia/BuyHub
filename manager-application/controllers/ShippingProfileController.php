@@ -74,13 +74,15 @@ class ShippingProfileController extends ListingBaseController
         $srch = ShippingProfile::getSearchObject($this->siteLangId);
         $srch->addCondition('sprofile.shipprofile_user_id', '=', 0); /* only admin added profiles */
         $srch->joinTable('(' . $prodCountQuery . ')', 'LEFT OUTER JOIN', 'sproduct.shippro_shipprofile_id = sprofile.shipprofile_id', 'sproduct');
-
-        $srch->addMultipleFields(array('sprofile.*', 'if(sproduct.totalProducts is null, 0, sproduct.totalProducts) as totalProducts', 'IFNULL(shipprofile_name, shipprofile_identifier) as shipprofile_name'));
-
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('sprofile_l.shipprofile_name', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('sprofile.shipprofile_identifier', 'like', '%' . $post['keyword'] . '%');
         }
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
+        
+        $srch->addMultipleFields(array('sprofile.*', 'if(sproduct.totalProducts is null, 0, sproduct.totalProducts) as totalProducts', 'IFNULL(shipprofile_name, shipprofile_identifier) as shipprofile_name'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
@@ -89,11 +91,7 @@ class ShippingProfileController extends ListingBaseController
             $zones = (new ShippingProfile())->getZones(array_map('intval', array_column($records, 'shipprofile_id')));
         }
         $this->set("arrListing", $records);
-        $this->set("zones", $zones ?? []);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("zones", $zones ?? []); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -278,6 +276,7 @@ class ShippingProfileController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'shippack_name');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }
