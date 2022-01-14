@@ -15,34 +15,7 @@ if ($lang_id > 0) {
 
 $stateData = FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1);
 $displayMap = false;
-switch ($frmType) {
-    case Configurations::FORM_GENERAL:
-        /* if( $lang_id == 0 ){
-            $adminLogoFld = $frm->getField('admin_logo');
-            $desktopLogoFld = $frm->getField('front_logo');
-            $emailLogoFld = $frm->getField('email_logo');
-            $faviconFld = $frm->getField('favicon');
-
-            $adminLogoFld->htmlAfterField =  '<span class = "uploadimage--info" >Dimensions 142*45</span>';
-            $desktopLogoFld->htmlAfterField = '<span class = "uploadimage--info" >Dimensions 168*37</span>';
-            $emailLogoFld->htmlAfterField = '<span class = "uploadimage--info" >Dimensions 168*37</span>';
-            if( isset($adminLogo) && !empty($adminLogo) ){
-                $adminLogoFld->htmlAfterField .= '<div class="uploaded--image"><img src="'.UrlHelper::generateFullUrl('Image','siteAdminLogo',array('THUMB')).'"> <a  class="remove--img" href="javascript:void(0);" onclick="removeSiteAdminLogo()" ><i class="ion-close-round"></i></a></div>';
-            }
-
-            if( isset($desktopLogo) && !empty($desktopLogo) ){
-                $desktopLogoFld->htmlAfterField .= '<div class="uploaded--image"><img src="'.UrlHelper::generateFullUrl('Image','siteLogo',array(''), CONF_WEBROOT_FRONT_URL).'"> <a  class="remove--img" href="javascript:void(0);" onclick="removeDesktopLogo()" ><i class="ion-close-round"></i></a></div>';
-            }
-
-            if( isset($emailLogo) && !empty($emailLogo) ){
-                $emailLogoFld->htmlAfterField .= '<div class="uploaded--image"><img src="'.UrlHelper::generateFullUrl('Image','emailLogo',array(''), CONF_WEBROOT_FRONT_URL).'"><a  class="remove--img" href="javascript:void(0);" onclick="removeEmailLogo()" ><i class="ion-close-round"></i></a></div>';
-            }
-
-            if( isset($favicon) && !empty($favicon) ){
-                $faviconFld->htmlAfterField = '<div class="uploaded--image"><img src="'.UrlHelper::generateFullUrl('Image','favicon',array(''), CONF_WEBROOT_FRONT_URL).'"> <a  class="remove--img" href="javascript:void(0);" onclick="removeFavicon()" ><i class="ion-close-round"></i></a></div>';
-            }
-        } */
-        break;
+switch ($frmType) {    
     case Configurations::FORM_MEDIA:
         break;
     case Configurations::FORM_PRODUCT:
