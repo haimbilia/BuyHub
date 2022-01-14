@@ -137,10 +137,12 @@ class ProductCategory extends MyAppModel
         }
 
         $categoryArray = array($categoryId);
-        $parentCatData = ProductCategory::getAttributesById($categoryId, array('prodcat_parent'));
+
+        /* Not Required. */
+        /* $parentCatData = ProductCategory::getAttributesById($categoryId, array('prodcat_parent'));
         if (array_key_exists('prodcat_parent', $parentCatData) && $parentCatData['prodcat_parent'] > 0) {
             array_push($categoryArray, $parentCatData['prodcat_parent']);
-        }
+        } */
 
         foreach ($categoryArray as $categoryId) {
             $srch = ProductCategory::getSearchObject(false, 0, false, -1);
