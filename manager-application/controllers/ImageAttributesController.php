@@ -121,21 +121,15 @@ class ImageAttributesController extends ListingBaseController
         }
 
         $srch->addGroupBy('record_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords(); 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->addHaving('record_id', 'is not', 'mysql_func_NULL', 'AND', true);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arrListing", $records);
+        $srch->setPageSize($pageSize);  
+        $this->set("arrListing",  FatApp::getDb()->fetchAll($srch->getResultSet()));
         $this->set('moduleType', (isset($post['select_module'])) ? $post['select_module'] : AttachedFile::FILETYPE_PRODUCT_IMAGE);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -285,7 +279,7 @@ class ImageAttributesController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'record_name');
         }
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
