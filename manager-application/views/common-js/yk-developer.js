@@ -342,7 +342,6 @@ $(function () {
         if (0 < $(".loaderJs").length) {
             $(".loaderJs").each(function () {
                 if (0 < $(this).siblings('table').length) {
-                    alert('lp');
                     var selector = $(this).siblings('table');
                 } else {
                     var selector = $(this).parent();
