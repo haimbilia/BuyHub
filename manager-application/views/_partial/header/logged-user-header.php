@@ -1,5 +1,9 @@
 <div class="app">
-    <?php $this->includeTemplate('_partial/header/left-navigation.php') ?>
+    <?php
+    if (!SiteTourHelper::getStepIndex()) {
+        $this->includeTemplate('_partial/header/left-navigation.php');
+    }
+    ?>
     <div class="wrap">
         <header class="main-header mainHeaderJs">
             <div class="container-fluid">
@@ -23,6 +27,23 @@
                     </div>
                     <div class="main-header-toolbar">
                         <div class="header-action">
+                            <div class="header-action__item">
+                                <a href="<?php echo UrlHelper::generateUrl('GettingStarted'); ?>">
+                                    Site tour
+                                </a>
+                            </div>&nbsp;
+                            <?php if (isset($tourStep) && 0 < $tourStep) { ?>
+                                <div class="header-action__item">
+                                    <a href="<?php echo SiteTourHelper::getPrevLink($tourStep); ?>">
+                                        PREV
+                                    </a>
+                                </div>&nbsp;
+                                <div class="header-action__item">
+                                    <a href="<?php echo SiteTourHelper::getNextLink($tourStep); ?>">
+                                        NEXT
+                                    </a>
+                                </div>
+                            <?php } ?>
                             <div class="header-action__item">
                                 <a class="header-action__trigger quickSearchMain" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#search-main">
                                     <span class="icon">
@@ -68,13 +89,13 @@
                                             <h5><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?> <span class="count hide" id="notifiLinkCount"></span></h5>
                                             <nav class="nav nav--tabs js-tab">
                                                 <a class="is-current abc" href="javascript:void(0)" onclick="getNotifications(0,this);"><?php echo  Labels::getLabel('LBL_NOTIFICATIONS', $siteLangId); ?></a>
-                                                <a class="abc" href="javascript:void(0)" onclick="getNotifications(1,this);"><?php echo  Labels::getLabel('LBL_LOGS', $siteLangId); ?></a>                                           
+                                                <a class="abc" href="javascript:void(0)" onclick="getNotifications(1,this);"><?php echo  Labels::getLabel('LBL_LOGS', $siteLangId); ?></a>
                                             </nav>
                                         </div>
                                         <div class="header-notification__body">
                                             <div class="tab-1 tab-container visible">
                                                 <div class="scroll-y p-4">
-                                                    <div class="notifications" id="notificationList">                                                     
+                                                    <div class="notifications" id="notificationList">
                                                     </div>
                                                 </div>
                                             </div>
@@ -155,7 +176,7 @@
             <?php if (isset($pageData['plang_recommendations']) && !empty($pageData['plang_recommendations']) && !CommonHelper::isSetCookie('alert_' . $pageData['plang_id'])) { ?>
                 <div class="alert alert-solid-info fade show" role="alert">
                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
-                    <div class="alert-text"><?php echo nl2br($pageData['plang_recommendations']); ?></div>                    
+                    <div class="alert-text"><?php echo nl2br($pageData['plang_recommendations']); ?></div>
                 </div>
             <?php } ?>
         </header>

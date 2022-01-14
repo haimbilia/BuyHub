@@ -12,7 +12,7 @@
         $orderStatusClass = $orderCancelled && $index > $selectUpto ? 'shipped' : OrderStatus::getOpStatusClass($statusId);
     ?>
         <li class="<?php echo $highlight . ' ' . $current . ' ' . $orderStatusClass; ?>">
-            <?php if (Orders::ORDER_PAYMENT_PENDING != $orderDetail['order_payment_status'] && !empty($orderTimeLineRecords)) {
+            <?php if (!empty($orderTimeLineRecords)) {
                 foreach (array_reverse($orderTimeLineRecords) as $i => $row) {
                     /* Same Status with no Comment.*/
                     if (1 < count($orderTimeLineRecords) && 0 < $i && empty(trim($row['oshistory_comments']))) {
@@ -29,27 +29,42 @@
                                 </span>
                         </div>
                         <div class="timeline_data_body">
-                            <?php
+                            <?php                       
                             if (isset($row['oshistory_orderstatus_id']) && $row['oshistory_orderstatus_id'] ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
-                                $trackingNumber = $row['oshistory_tracking_number'];
+                               
+                                $trackingNumbers = explode(",",$row['oshistory_tracking_number']);                            
+
                                 $carrier = $row['oshistory_courier']; ?>
                                 <h6><?php echo Labels::getLabel('MSG_TRACKING_NUMBER', $siteLangId); ?></h6>
-                                <div class="clipboard mb-4">
-                                    <p class="clipboard_url" id="trackingNumberJs"><?php echo $trackingNumber; ?></p>
-                                    <a class="clipboard_btn" onclick="copyContent(this)" href="javascript:void(0);" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
-                                        <i class="far fa-copy"></i>
-                                    </a>
-                                </div>
+                             
+                                    <?php foreach($trackingNumbers as $trackingNumber){
+                                        $trackingNumber = trim($trackingNumber);
+                                        $trackingNumber = number_format($trackingNumber,0,null,''); 
+                                    ?>
+                                        <div class="clipboard mb-4">
+                                        <p class="clipboard_url trackingNumberJs">
+                                            <?php echo $trackingNumber; ?>
+                                        </p>
+                                        <a class="clipboard_btn" onclick="copyContent(this)" href="javascript:void(0);" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
+                                            <i class="far fa-copy"></i>
+                                        </a>
+                                    </div> 
+                                   <?php  } ?>
                                 <p>
-                                    <?php if (empty($row['oshistory_courier'])) {
-                                        $str = '';
+                                    <?php                                    
+                                    if (empty($row['oshistory_courier'])) {
+                                        $str = ''; 
                                         if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) {
-                                            $str .=  '<a class="link" href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'" . $trackingNumber . "'" . ',' . "'" . $childOrderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . Labels::getLabel("MSG_TRACK", $siteLangId) . '</a>';
+                                            foreach($trackingNumbers as $trackingNumber){
+                                                $trackingNumber = trim($trackingNumber);
+                                                $trackingNumber = number_format($trackingNumber,0,null,'');
+                                                $str .=  '<div><a class="link" href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'" . $trackingNumber . "'" . ',' . "'" . $childOrderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . Labels::getLabel("MSG_TRACK", $siteLangId) . '</a></div>';
+                                                if (empty($childOrderDetail['opship_tracking_url']) && !empty($trackingNumber)) {
+                                                    $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]) . "</em>";
+                                                }
+                                            }
                                         }
-
-                                        if (empty($childOrderDetail['opship_tracking_url']) && !empty($trackingNumber)) {
-                                            $str .=  " VIA <em>" . CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]) . "</em>";
-                                        } elseif (!empty($childOrderDetail['opship_tracking_url'])) {
+                                        if (!empty($childOrderDetail['opship_tracking_url'])) {
                                             $trackingUrls = (array) explode(', ', $childOrderDetail['opship_tracking_url']);
                                             $str .= '<br>';
                                             foreach ($trackingUrls as $url) {
@@ -57,10 +72,15 @@
                                             }
                                         }
                                         echo $str;
-                                    } else { ?>
+                                    } else { 
+                                        foreach($trackingNumbers as $trackingNumber){
+                                            $trackingNumber = trim($trackingNumber);
+                                            $trackingNumber = number_format($trackingNumber,0,null,'');                                        
+                                        ?>                                    
                                         <a class="link" href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" onClick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>', '<?php echo $childOrderDetail['op_invoice_number']; ?>')">
                                             <?php echo $trackingNumber; ?>
                                         </a>
+                                        <?php } ?>
                                         <?php echo Labels::getLabel('LBL_VIA', $siteLangId); ?>
                                         <em>
                                             <?php echo CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]); ?>

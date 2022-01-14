@@ -216,8 +216,14 @@ trait ShippingServices
             LibHelper::dieJsonError($msg);
         }
 
-        if (in_array(strtolower($data['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($data['op_selprod_user_id'], $data['opshipping_by_seller_user_id']) && !$data['optsu_user_id']) {
-            LibHelper::dieJsonError(Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->langId), true);           
+        if (in_array(strtolower($data['plugin_code']), ['cashondelivery', 'payatstore']) && !CommonHelper::canAvailShippingChargesBySeller($data['op_selprod_user_id'], $data['opshipping_by_seller_user_id']) && !$data['optsu_user_id']) {       
+            LibHelper::dieJsonError([
+               'msg' =>  Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->langId),
+               'status' => 0,
+               'openShipUser' => 1,
+               'opId' => $opId,
+               'orderId' => $data['op_order_id']
+            ], true);     
         }  
 
         $this->validateShippingService($data);
@@ -405,7 +411,7 @@ trait ShippingServices
      */
     public function fetchTrackingDetail(string $trackingId, int $opId)
     {
-        $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_invoice_number']);
+        $orderData = $this->getOrderProductDetail($opId, ['opshipping_by_seller_user_id', 'op_selprod_user_id', 'op_invoice_number','op.op_order_id']);
         if (empty($orderData)) {
             $this->error = Labels::getLabel("ERR_INVALID_ORDER", $this->langId);
             return false;
@@ -418,6 +424,9 @@ trait ShippingServices
 
         $trackingData = (array) $this->shippingService->fetchTrackingDetail($trackingId, $orderData['op_invoice_number']);
         $this->set('trackingData', $trackingData);
+        $this->set('opId', $opId);
+        $this->set('orderId', $orderData['op_order_id']);
+        $this->set('orderNumber', $orderData['op_invoice_number']);
         $this->_template->render(false, false);
     }
 
@@ -472,8 +481,12 @@ trait ShippingServices
         }
         $this->validateShippingService($data);
         $frm = $this->getPickupForm();
+        if(null == $frm->getField('btn_submit')){
+            $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->langId));
+        }
         $frm->fill(['op_id' => $opId]);
         $this->set('frm', $frm);
+        $this->set('op_id', $opId);
         $this->_template->render(false, false);
     }
 
@@ -569,8 +582,7 @@ trait ShippingServices
 
         $frm = new Form('frmRates');
         $frm->addSelectBox(Labels::getLabel('LBL_RATES', $this->langId), 'shipping_rates', $rateOptions)->requirements()->setRequired();
-        $frm->addHiddenField('', 'op_id', $opId)->requirements()->setIntPositive();
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save', $this->langId));
+        $frm->addHiddenField('', 'op_id', $opId)->requirements()->setIntPositive();      
         return $frm;
     }
 

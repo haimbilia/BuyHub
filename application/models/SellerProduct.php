@@ -1063,7 +1063,6 @@ class SellerProduct extends MyAppModel
 
     public static function searchSpecialPriceProductsObj($langId, $selProdId = 0, $keyword = '', $userId = 0, $addOrderBy = true)
     {
-        $pageSize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $srch = static::getSearchObject($langId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
         $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'u.user_id = sp.selprod_user_id', 'u');
@@ -1097,13 +1096,12 @@ class SellerProduct extends MyAppModel
         if (true === $addOrderBy) {
             $srch->addOrder('splprice_id', 'DESC');
         }
-        $srch->setPageSize($pageSize);
         return $srch;
     }
 
     public static function searchVolumeDiscountProducts($langId, $selProdId = 0, $keyword = '', $userId = 0, $addOrderBy = true)
     {
-        $pageSize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+            
         $srch = static::getSearchObject($langId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = sp.selprod_user_id', 'u');
@@ -1132,8 +1130,6 @@ class SellerProduct extends MyAppModel
 
         $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-        $srch->setPageSize($pageSize);
-
         if (true == $addOrderBy) {
             $srch->addOrder('voldiscount_id', 'DESC');
         }

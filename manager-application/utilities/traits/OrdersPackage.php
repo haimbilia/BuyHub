@@ -98,9 +98,6 @@ trait OrdersPackage
         $srch->joinOrderBuyerUser();
         $srch->joinOrderPaymentMethod($this->siteLangId);
         $srch->addCondition('order_type', '=', $this->ordersType);
-
-        $srch->addMultipleFields(['order_number', 'order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data', 'buyer.user_name', 'user_updated_on', 'user_id', 'credential_username', 'buyer_cred.credential_email']);
-
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
             $srch->addKeywordSearch($keyword);
@@ -139,19 +136,18 @@ trait OrdersPackage
         $isDeleted = FatApp::getPostedData('order_deleted', FatUtility::VAR_INT, applicationConstants::NO);
         $srch->addCondition('order_deleted', '=', $isDeleted);
         $this->set("deletedOrders", ($isDeleted == applicationConstants::YES));
-
-        $srch->addOrder($sortBy, $sortOrder);
-
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(['order_number', 'order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data', 'buyer.user_name', 'user_updated_on', 'user_id', 'credential_username', 'buyer_cred.credential_email']);
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
 
@@ -184,6 +180,8 @@ trait OrdersPackage
 
         $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
         $this->set('orderStatusArr', $orderStatusArr);
+        $this->_template->addJs(array('js/jquery.datetimepicker.js'), false);
+        $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
         $this->_template->render();
     }
 
@@ -226,17 +224,17 @@ trait OrdersPackage
 
         $frm->addSelectBox(Labels::getLabel('FRM_PAYMENT_STATUS', $this->siteLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($this->siteLangId));
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
 
         $str = Labels::getLabel('FRM_ORDER_FROM_[{CURRENCY-SYMBOL}]', $this->siteLangId);
         $str = CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => $currencySymbol]);
-        $frm->addTextBox('', 'price_from', '', array('placeholder' => $str));
+        $frm->addTextBox(Labels::getLabel('FRM_ORDER_FROM', $this->siteLangId), 'price_from', '', array('placeholder' => $str));
 
         $str = Labels::getLabel('FRM_ORDER_TO[{CURRENCY-SYMBOL}]', $this->siteLangId);
         $str = CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => $currencySymbol]);
-        $frm->addTextBox('', 'price_to', '', array('placeholder' => $str));
-
+        $frm->addTextBox(Labels::getLabel('FRM_ORDER_TO', $this->siteLangId), 'price_to', '', array('placeholder' => $str));
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;

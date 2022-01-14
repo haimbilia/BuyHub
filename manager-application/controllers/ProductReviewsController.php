@@ -68,10 +68,11 @@ class ProductReviewsController extends ListingBaseController
         $reqLbl = Labels::getLabel('FRM_REQUEST_STATUS', $this->siteLangId);
         $frm->addSelectBox($reqLbl, 'spreview_status', [ -1 => 'Does not Matter' ] + $statusArr, '',[], $reqLbl);
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addHiddenField('', 'page');
         $this->addSortingElements($frm, 'spreview_posted_on', applicationConstants::SORT_DESC);
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;
@@ -127,13 +128,7 @@ class ProductReviewsController extends ListingBaseController
         $srch->joinShops($this->siteLangId);
         $srch->joinProducts();
         $srch->joinSellerProducts($this->siteLangId);
-        $srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT);
-        $srch->addMultipleFields([
-            'IFNULL(product_name,product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 
-            'selprod_id', 'usc.credential_username as seller_username', 'uc.credential_username as reviewed_by', 'uc.credential_user_id', 'spreview_id', 
-            'spreview_posted_on', 'spreview_status', 'sprating_rating', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name',
-            'u.user_name AS buyer_name', 'us.user_name AS seller_name', 'selprod_product_id', 'product_updated_on'
-        ]);
+        $srch->joinSelProdRatingByType(RatingType::RATING_PRODUCT); 
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
@@ -167,19 +162,22 @@ class ProductReviewsController extends ListingBaseController
             $srch->addCondition('spreview_posted_on', '<=', $date_to . ' 23:59:59');
         }
         
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields([
+            'IFNULL(product_name,product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 
+            'selprod_id', 'usc.credential_username as seller_username', 'uc.credential_username as reviewed_by', 'uc.credential_user_id', 'spreview_id', 
+            'spreview_posted_on', 'spreview_status', 'sprating_rating', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name',
+            'u.user_name AS buyer_name', 'us.user_name AS seller_name', 'selprod_product_id', 'product_updated_on'
+        ]);
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id');
-        $this->set('pageSize', $pageSize);
+        $srch->setPageSize($pageSize);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id')); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
         $this->checkEditPrivilege(true);
         $this->set('reviewStatus', SelProdReview::getReviewStatusArr($this->siteLangId));

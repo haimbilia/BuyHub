@@ -1,17 +1,16 @@
 <?php
 
-class BadgeRequestsController extends ListingBaseController
-{
+class BadgeRequestsController extends ListingBaseController {
+
     protected string $pageKey = 'MANAGE_BADGE_REQUESTS';
     private array $recordData = [];
-    public function __construct($action)
-    {
+
+    public function __construct($action) {
         parent::__construct($action);
         $this->objPrivilege->canViewBadgeRequests();
     }
 
-    public function index()
-    {
+    public function index() {
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
 
@@ -34,8 +33,7 @@ class BadgeRequestsController extends ListingBaseController
         $this->_template->render();
     }
 
-    public function search()
-    {
+    public function search() {
         $this->getListingData();
         $jsonData = [
             'listingHtml' => $this->_template->render(false, false, 'badge-requests/search.php', true),
@@ -44,12 +42,11 @@ class BadgeRequestsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
-    {
+    private function getListingData() {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'breq_requested_on');
@@ -72,20 +69,7 @@ class BadgeRequestsController extends ListingBaseController
         $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = breq_user_id', 'u');
         $srch->joinTable(Shop::DB_TBL, 'LEFT OUTER JOIN', 'shop_user_id = if(u.user_parent > 0, user_parent, u.user_id)', 'shop');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT OUTER JOIN', 'shop.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $this->siteLangId, 's_l');
-        $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', 'mysql_func_' . BadgeRequest::REQUEST_PENDING, 'AND', true);
-
-        $srch->addMultipleFields(array_merge(
-            BadgeRequest::ATTR,
-            [
-                'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
-                'shop_name',
-                'shop_id',
-                'shop_updated_on',
-                'user_name',
-                Badge::DB_TBL_PREFIX . 'id'
-            ]
-        ));
-
+         $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'status', '=', 'mysql_func_' . BadgeRequest::REQUEST_PENDING, 'AND', true);
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('badge_name', 'like', '%' . $keyword . '%');
@@ -94,24 +78,29 @@ class BadgeRequestsController extends ListingBaseController
 
         $sellerId = FatApp::getPostedData('user_id', FatUtility::VAR_INT, 0);
         if (!empty($sellerId)) {
-            $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'user_id', '=',  $sellerId);
+            $srch->addCondition(BadgeRequest::DB_TBL_PREFIX . 'user_id', '=', $sellerId);
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array_merge(
+                        BadgeRequest::ATTR,
+                        [
+                            'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
+                            'shop_name',
+                            'shop_id',
+                            'shop_updated_on',
+                            'user_name',
+                            Badge::DB_TBL_PREFIX . 'id'
+                        ]
+        )); 
 
         $srch->addOrder($sortBy, $sortOrder);
-
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
-
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -119,8 +108,7 @@ class BadgeRequestsController extends ListingBaseController
         $this->set('canEdit', $this->objPrivilege->canEditBadgeRequests($this->admin_id, true));
     }
 
-    private function getRequestedBadgeObj()
-    {
+    private function getRequestedBadgeObj() {
         $srch = new SearchBase(BadgeRequest::DB_TBL, 'breq');
         $srch->joinTable(BadgeLinkCondition::DB_TBL, 'INNER JOIN', 'blinkcond_id = breq_blinkcond_id', 'blc');
         $srch->joinTable(Badge::DB_TBL, 'INNER JOIN', 'badge_id = blinkcond_badge_id', 'bdg');
@@ -128,8 +116,7 @@ class BadgeRequestsController extends ListingBaseController
         return $srch;
     }
 
-    public function form()
-    {
+    public function form() {
         $this->objPrivilege->canEditBadgeRequests();
         $badgeReqId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         if (1 > $badgeReqId) {
@@ -172,8 +159,7 @@ class BadgeRequestsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setup()
-    {
+    public function setup() {
         $this->objPrivilege->canEditBadgeRequests();
         $breqRecordType = FatApp::getPostedData('breq_record_type', FatUtility::VAR_INT, 0);
         if (1 > $breqRecordType) {
@@ -224,12 +210,12 @@ class BadgeRequestsController extends ListingBaseController
 
         $db = FatApp::getDb();
         if (!$db->deleteRecords(
-            BadgeLinkCondition::DB_TBL_BADGE_LINKS,
-            [
-                'smt' => 'badgelink_breq_id = ?',
-                'vals' => [$badgeReqId]
-            ]
-        )) {
+                        BadgeLinkCondition::DB_TBL_BADGE_LINKS,
+                        [
+                            'smt' => 'badgelink_breq_id = ?',
+                            'vals' => [$badgeReqId]
+                        ]
+                )) {
             LibHelper::exitWithError($db->getError(), true);
         }
 
@@ -246,8 +232,7 @@ class BadgeRequestsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function getSearchForm(array $fields = [])
-    {
+    public function getSearchForm(array $fields = []) {
         $frm = new Form('frmSearch');
         $frm->addHiddenField('', 'page');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
@@ -258,14 +243,13 @@ class BadgeRequestsController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'breq_requested_on', applicationConstants::SORT_DESC);
         }
-
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
     }
 
-    private function getForm($breqRecordType)
-    {
+    private function getForm($breqRecordType) {
         $frm = new Form('frmBadgeReq');
         $frm->addHiddenField('', 'breq_id');
         $frm->addHiddenField('', 'breq_record_type', $breqRecordType);
@@ -288,8 +272,7 @@ class BadgeRequestsController extends ListingBaseController
         return $frm;
     }
 
-    private function loadRecords(int $badgeReqId)
-    {
+    private function loadRecords(int $badgeReqId) {
         $srch = BadgeLinkCondition::getBadgeLinksSearchObj($this->siteLangId, true);
         /* Bind Records */
         $srch->joinProduct($this->siteLangId);
@@ -324,7 +307,7 @@ class BadgeRequestsController extends ListingBaseController
 
                 $option = '';
                 foreach ($optionName as $index => $optname) {
-                    $option .= !empty($optname) ? ' | ' .  $optname . ' : ' . (isset($optionValueName[$index]) ? $optionValueName[$index] : '') : '';
+                    $option .= !empty($optname) ? ' | ' . $optname . ' : ' . (isset($optionValueName[$index]) ? $optionValueName[$index] : '') : '';
                 }
                 $recordName = $name . $option . ' | ' . $seller;
             }
@@ -334,8 +317,7 @@ class BadgeRequestsController extends ListingBaseController
         return;
     }
 
-    public function downloadFile(int $badgeReqId)
-    {
+    public function downloadFile(int $badgeReqId) {
         $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_BADGE_REQUEST, $badgeReqId);
         if ($res == false || 1 > $res['afile_id']) {
             LibHelper::exitWithError(Labels::getLabel('MSG_NOT_AVAILABLE_TO_DOWNLOAD', $this->siteLangId), false, true);
@@ -351,8 +333,7 @@ class BadgeRequestsController extends ListingBaseController
         AttachedFile::downloadAttachment($filePath, $res['afile_name']);
     }
 
-    protected function getFormColumns(): array
-    {
+    protected function getFormColumns(): array {
         $tblHeadingCols = CacheHelper::get('badgeRequestTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
         if ($tblHeadingCols) {
             return json_decode($tblHeadingCols);
@@ -376,8 +357,7 @@ class BadgeRequestsController extends ListingBaseController
         return $arr;
     }
 
-    protected function getDefaultColumns(): array
-    {
+    protected function getDefaultColumns(): array {
         return [
             'listSerial',
             'badge_name',
@@ -389,8 +369,8 @@ class BadgeRequestsController extends ListingBaseController
         ];
     }
 
-    protected function excludeKeysForSort($fields = []): array
-    {
+    protected function excludeKeysForSort($fields = []): array {
         return array_diff($fields, ['media', 'download'], Common::excludeKeysForSort());
     }
+
 }

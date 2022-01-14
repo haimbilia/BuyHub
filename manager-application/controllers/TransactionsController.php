@@ -45,7 +45,7 @@ class TransactionsController extends ListingBaseController {
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
-    
+
     public function getRows() {
         $this->getListingData('utxn_id', 'DESC');
         $this->set('html', $this->_template->render(false, false, NULL, true));
@@ -63,7 +63,7 @@ class TransactionsController extends ListingBaseController {
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = current($allowedKeysForSorting);
         }
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING),applicationConstants::SORT_DESC);
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
         $userId = FatApp::getPostedData('utxn_user_id', FatUtility::VAR_INT, 0);
         $srchFrm = $this->getSearchForm($fields);
         $postedData = FatApp::getPostedData();
@@ -86,9 +86,12 @@ class TransactionsController extends ListingBaseController {
         if (0 < $userId) {
             $srch->addCondition('utxn.utxn_user_id', '=', $userId);
         }
+        $srch->addGroupBy('utxn.utxn_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post, true);
+        $srch->doNotCalculateRecords();
+        
         $srch->joinTable('(' . $balSrch->getQuery() . ')', 'JOIN', 'tqupb.utxn_id <= utxn.utxn_id', 'tqupb');
         $srch->addMultipleFields(array('utxn.*', "SUM(tqupb.bal) balance", 'user_name', 'user_updated_on', 'user_id', 'credential_username', 'credential_email'));
-        $srch->addGroupBy('utxn.utxn_id');
         if ($customSortBy != false && $customOrder != false) {
             $srch->addOrder($customSortBy, $customOrder);
         } else {
@@ -97,18 +100,9 @@ class TransactionsController extends ListingBaseController {
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
-
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -120,11 +114,11 @@ class TransactionsController extends ListingBaseController {
     protected function getSearchForm($fields = []) {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'utxn_id',applicationConstants::SORT_DESC);
+            $this->addSortingElements($frm, 'utxn_id', applicationConstants::SORT_DESC);
         }
 
         $frm->addSelectBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'utxn_user_id', []);
-
+        $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }
@@ -262,11 +256,11 @@ class TransactionsController extends ListingBaseController {
         return $this->nodes;
     }
 
-    public function getDescription()
-    {
+    public function getDescription() {
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $this->set('description', Transactions::getAttributesById($recordId, 'utxn_comments'));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
+
 }

@@ -214,7 +214,7 @@ $(document).ready(function () {
     };
 
     copyContent = function (obj) {
-        var text = document.getElementById('trackingNumberJs').innerText;
+        var text = $(obj).siblings('.trackingNumberJs').text().trim();      
         var elem = document.createElement("textarea");
         document.body.appendChild(elem);
         elem.value = text;

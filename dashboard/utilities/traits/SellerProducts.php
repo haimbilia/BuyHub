@@ -2691,9 +2691,9 @@ trait SellerProducts
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $srch = SellerProduct::searchVolumeDiscountProducts($this->siteLangId, $selProdId, $keyword, $userId);
-
+        $srch->setPageSize($pagesize);
         $srch->setPageNumber($page);
         $srch->addOrder('voldiscount_id', 'DESC');
 
@@ -2712,7 +2712,7 @@ trait SellerProducts
         $this->set('pageCount', $srch->pages());
         $this->set('postedData', FatApp::getPostedData());
         $this->set('recordCount', $srch->recordCount());
-        $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
+        $this->set('pageSize', $pagesize);
         $this->_template->render(false, false);
     }
 
