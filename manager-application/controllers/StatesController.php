@@ -59,7 +59,7 @@ class StatesController extends ListingBaseController
         $countriesArr = $countryObj->getCountriesAssocArr($this->siteLangId, true);
 
         $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $this->siteLangId), 'country', $countriesArr, '', [], Labels::getLabel('FRM_SELECT_COUNTRY', $this->siteLangId));
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -111,9 +111,7 @@ class StatesController extends ListingBaseController
             'st.' . States::DB_TBL_PREFIX . 'country_id = c.' . Countries::tblFld('id'),
             'c'
         );
-
-        $srch->addMultipleFields(array('st.*', 'st_l.state_name', 'c.country_name'));
-
+            
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('st.state_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('st_l.state_name', 'like', '%' . $post['keyword'] . '%', 'OR');
@@ -122,24 +120,18 @@ class StatesController extends ListingBaseController
         if (!empty($post['country'])) {
             $condition = $srch->addCondition('st.state_country_id', '=', $post['country']);
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('st.*', 'st_l.state_name', 'c.country_name'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
+        $srch->addOrder($sortBy, $sortOrder); 
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet()); 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set("arrListing", $records); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);

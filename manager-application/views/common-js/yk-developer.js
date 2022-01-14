@@ -196,9 +196,10 @@ $(function () {
             ]),
             "",
             function (res) {
+                var json = JSON.parse(res);
                 $.ykmsg.close();
                 $(dv).empty();
-                $(dv).append(res).change();
+                $(dv).append(json.html).change();
             }
         );
     };
@@ -335,6 +336,24 @@ $(function () {
             message: langLbl.maxLengthValidator
         });
     }
+
+    $(document).ajaxStart(function () {
+        /* Set loader height and width. */
+        if (0 < $(".loaderJs").length) {
+            $(".loaderJs").each(function () {
+                if (0 < $(this).siblings('table').length) {
+                    alert('lp');
+                    var selector = $(this).siblings('table');
+                } else {
+                    var selector = $(this).parent();
+                }
+                var width = selector.outerWidth();
+                var height = selector.outerHeight();
+                
+                $(this).css({'width' : width, 'height' : height});
+            });
+        }
+    });
 
     $(document).ajaxComplete(function () {
         $('[data-bs-toggle="popover"]').popover();

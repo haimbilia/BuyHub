@@ -123,22 +123,11 @@ class ProductsReportController extends ListingBaseController
         $srch->joinTable('(' . $uWsrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tquwl.uwlp_selprod_id = selprod.selprod_id', 'tquwl');
         $srch->joinProductToCategory();
         $srch->addCondition('selprod.selprod_id', '!=', 'NULL');
-        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', /* 'IFNULL(totOrders, 0) as totOrders', */ 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'opq.*'));
-
+       
         /* groupby added, because if same product is linked with multiple categories, then showing in repeat for each category[ */
         $srch->addGroupBy('selprod_id');
         /* ] */
-
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
-            $sortOrder = applicationConstants::SORT_ASC;
-        }
-
-        switch ($sortBy) {
-            default:
-                $srch->addOrder($sortBy, $sortOrder);
-                break;
-        }
-
+                        
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
         if (!empty($keyword)) {
             $srch->addKeywordSearch($keyword);
@@ -160,6 +149,19 @@ class ProductsReportController extends ListingBaseController
         if ($category_id) {
             $category_id = FatUtility::int($category_id);
             $srch->addCategoryCondition($category_id);
+        }
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', /* 'IFNULL(totOrders, 0) as totOrders', */ 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'opq.*'));
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+        
+        switch ($sortBy) {
+            default:
+                $srch->addOrder($sortBy, $sortOrder);
+                break;
         }
 
         if ($type == 'export') {
@@ -232,14 +234,8 @@ class ProductsReportController extends ListingBaseController
             exit;
         } else {
             $srch->setPageNumber($page);
-            $srch->setPageSize($pageSize);
-            $rs = $srch->getResultSet();
-            $arrListing = $db->fetchAll($rs);
-            $this->set("arrListing", $arrListing);
-            $this->set('pageCount', $srch->pages());
-            $this->set('recordCount', $srch->recordCount());
-            $this->set('page', $page);
-            $this->set('pageSize', $pageSize);
+            $srch->setPageSize($pageSize); 
+            $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
             $this->set('postedData', $post);
             $this->set('sortBy', $sortBy);
             $this->set('sortOrder', $sortOrder);
@@ -268,7 +264,7 @@ class ProductsReportController extends ListingBaseController
         $prodCatObj = new ProductCategory();
         $categoriesAssocArr = $prodCatObj->getProdCatTreeStructure(0, $this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'category_id', $categoriesAssocArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;

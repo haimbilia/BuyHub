@@ -74,12 +74,7 @@ class ShippedProductsController extends ListingBaseController
         $srch->addProductByAdminCondition();
         $srch->addProductDeletedCondition();
         $srch->addProductAdminShipCondition();
-        $srch->addPhyProductCheckCondition();
-        $srch->addMultipleFields(array('sppro.shippro_shipprofile_id, sppro.shippro_product_id, ifnull(tp_l.product_name, tp.product_identifier) as product_name, COALESCE(spprof_l.shipprofile_name, spprof.shipprofile_identifier) as shipprofile_name, tp.product_added_by_admin_id'));
-        $srch->addGroupBy('sppro.shippro_product_id');
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
+        $srch->addPhyProductCheckCondition(); 
 
         if (!empty($post['keyword'])) {
             $srch->addCondition('tp_l.product_name', 'like', '%' . $post['keyword'] . '%');
@@ -94,6 +89,13 @@ class ShippedProductsController extends ListingBaseController
         if (!empty($post['shipping_profile']) && $post['shipping_profile'] > 0) {
             $srch->addCondition('sppro.shippro_shipprofile_id', '=', $post['shipping_profile']);
         }
+        $srch->addGroupBy('sppro.shippro_product_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords(); 
+        $srch->addMultipleFields(array('sppro.shippro_shipprofile_id, sppro.shippro_product_id, ifnull(tp_l.product_name, tp.product_identifier) as product_name, COALESCE(spprof_l.shipprofile_name, spprof.shipprofile_identifier) as shipprofile_name, tp.product_added_by_admin_id'));
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $srch->addOrder($sortBy, $sortOrder);
 
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         /* Get Catelog shipped by Admin/seller */
@@ -126,11 +128,7 @@ class ShippedProductsController extends ListingBaseController
             }
         }
 
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -260,6 +258,7 @@ class ShippedProductsController extends ListingBaseController
             ]
         );
         $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $this->siteLangId), 'shipping_profile', array('-1' => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + applicationConstants::getYesNoArr($this->siteLangId), -1, array(), '');
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;

@@ -96,8 +96,6 @@ class ShopsReportController extends ListingBaseController
         $srch->addRatingsCount();
         $srch->addFavoritesCount();
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 's.shop_id = opq.op_shop_id', 'opq');
-        $srch->addMultipleFields(array('shop_id', 'shop_user_id', 's.shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'u.user_id', 'u.user_name as owner_name', 'u_cred.credential_email as owner_email', 'opq.*'));
-
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
@@ -153,6 +151,10 @@ class ShopsReportController extends ListingBaseController
         if ($date_to) {
             $srch->addCondition('s.shop_created_on', '<=', $date_to);
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(array('shop_id', 'shop_user_id', 's.shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'u.user_id', 'u.user_name as owner_name', 'u_cred.credential_email as owner_email', 'opq.*'));
 
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
@@ -206,17 +208,12 @@ class ShopsReportController extends ListingBaseController
 
             CommonHelper::convertToCsv($sheetData, Labels::getLabel('LBL_Shops_Report', $this->siteLangId) . ' ' . date("d-M-Y") . '.csv', ',');
             exit;
-        } else {
+        } else { 
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize);
             $rs = $srch->getResultSet();
-            $arrListing = $db->fetchAll($rs);
-
-            $this->set("arrListing", $arrListing);
-            $this->set('pageCount', $srch->pages());
-            $this->set('recordCount', $srch->recordCount());
-            $this->set('page', $page);
-            $this->set('pageSize', $pageSize);
+            $arrListing = $db->fetchAll($rs); 
+            $this->set("arrListing", $arrListing); 
             $this->set('postedData', $post);
             $this->set('sortBy', $sortBy);
             $this->set('sortOrder', $sortOrder);
@@ -248,7 +245,7 @@ class ShopsReportController extends ListingBaseController
 
         $fld = $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $fld->htmlAfterField = $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_SHOP_CREATED_DATE_TO', $this->siteLangId) . '</span>';
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;

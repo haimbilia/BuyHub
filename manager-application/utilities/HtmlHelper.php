@@ -307,6 +307,7 @@ class HtmlHelper
         if (!empty($msg)) {
             $fld->htmlAfterField = '<span class="form-text text-muted">' . $msg . '</span>';
         }
+        $fld->developerTags['noCaptionTag'] = true;
     }
 
     public static function configureSwitchForRadio($fld, $msg = '')

@@ -103,26 +103,20 @@ class MetaTagsController extends ListingBaseController
                 $srch = $this->renderTemplateForMetaType();
                 break;
         }
-
+        MetaTag::META_GROUP_BLOG_POST;
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $this->postedData,(MetaTag::META_GROUP_BLOG_POST==$metaType)?true:false);
+        $srch->doNotCalculateRecords(); 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
+        $srch->setPageSize($pageSize); 
         $arrListing = $db->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $arrListing);
-
+        $this->set("arrListing", $arrListing); 
         $searchForm->fill($this->postedData);
-        $this->set('frmSearch', $searchForm);
-
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $this->postedData);
-
+        $this->set('frmSearch', $searchForm); 
+        $this->set('postedData', $this->postedData); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -359,6 +353,7 @@ class MetaTagsController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'meta_title');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         return $frm;
     }
@@ -373,7 +368,7 @@ class MetaTagsController extends ListingBaseController
         }
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -392,7 +387,7 @@ class MetaTagsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId), 'hasTagsAssociated', applicationConstants::getYesNoArr($this->siteLangId), false, array(), Labels::getLabel('FRM_HAS_TAGS_ASSOCIATED', $this->siteLangId));
 
         HtmlHelper::addSearchButton($frm);
-
+        $frm->addHiddenField('', 'total_record_count'); 
         $clearBtnHtm = HtmlHelper::addButtonHtml(Labels::getLabel('FRM_CLEAR', CommonHelper::getLangId()), 'button', 'btn_clear', 'btn btn-link', 'clearSearch(true)');
         $frm->addHtml('', 'btn_clear', $clearBtnHtm);
         return $frm;

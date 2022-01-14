@@ -72,30 +72,20 @@ class RecomendedTagProductsController extends ListingBaseController
         $srch->joinTable(Tag::DB_TBL, 'INNER JOIN', 't.tag_id = tpr.tpr_tag_id and t.tag_lang_id = ' . $this->siteLangId, 't');
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = tpr.tpr_product_id', 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p_l.productlang_product_id = p.product_id and p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
-        $srch->addMultipleFields(array('tpr.*', 't.tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
-
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING);
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('tag_name', 'LIKE', '%' . $keyword . '%');
             $cnd->attachCondition('product_name', 'LIKE', '%' . $keyword . '%');
-        }
-
-        $srch->addCondition('t.tag_lang_id', '=', $this->siteLangId);
-        $srch->addOrder($sortBy, $sortOrder);
-
+        } 
+        $srch->addCondition('t.tag_lang_id', '=', $this->siteLangId);  
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
+        $srch->addMultipleFields(array('tpr.*', 't.tag_name', 'IFNULL(p_l.product_name,p.product_identifier) as product_name'));
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();       
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);

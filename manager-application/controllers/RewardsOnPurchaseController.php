@@ -75,13 +75,7 @@ class RewardsOnPurchaseController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = RewardsOnPurchase::getSearchObject();
-        $srch->addMultipleFields(['rop.*']);
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
+        $srch = RewardsOnPurchase::getSearchObject(); 
         if (!empty($post['keyword'])) {
             $srch->addCondition('rop.rop_purchase_upto', 'like', '%' . $post['keyword'] . '%');
         }
@@ -89,23 +83,24 @@ class RewardsOnPurchaseController extends ListingBaseController
         if (!empty($post['rop_reward_point'])) {
             $srch->addCondition('rop.rop_reward_point', 'like', '%' . $post['rop_reward_point'] . '%');
         }
-
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        
+        $srch->addMultipleFields(['rop.*']);
+        $srch->addOrder($sortBy, $sortOrder); 
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set("arrListing", $records); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditRewardsOnPurchase($this->admin_id, true));
-        
+        $this->set('canEdit', $this->objPrivilege->canEditRewardsOnPurchase($this->admin_id, true)); 
     }
 
     public function form()
@@ -232,7 +227,7 @@ class RewardsOnPurchaseController extends ListingBaseController
         $fld->overrideFldType('search');
         
         $frm->addTextBox(Labels::getLabel('FRM_REWARD_POINTS', $this->siteLangId), 'rop_reward_point');
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

@@ -81,31 +81,26 @@ class EmptyCartItemsController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray(FatApp::getPostedData());
 
         $srch = EmptyCartItems::getSearchObject($this->siteLangId, false, false);
-        $srch->addMultipleFields([
-            'eci.*',
-            'eci_l.*'
-        ]);
-
+       
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('emptycartitem_identifier', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('eci_l.emptycartitem_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();  
+        $srch->addMultipleFields([
+            'eci.*',
+            'eci_l.*'
+        ]); 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $srch->addOrder($sortBy, $sortOrder); 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $this->set("arrListing", $records); 
+        $this->set('postedData', $post); 
         $this->set('frmSearch', $searchForm);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

@@ -13,11 +13,11 @@ class ConfigurationsController extends ListingBaseController
         $this->set("includeEditor", true);
     }
 
-    public function index($activeTab = Configurations::FORM_GENERAL)
+    public function index($activeTab = Configurations::FORM_LOCAL)
     {
         $tabs = Configurations::getTabsArr($this->siteLangId);
         if (!array_key_exists($activeTab, $tabs)) {
-            $activeTab = Configurations::FORM_GENERAL;
+            $activeTab = Configurations::FORM_LOCAL;
         }
 
         $this->setGeneralForm($activeTab, CommonHelper::getDefaultFormLangId());
@@ -278,7 +278,7 @@ class ConfigurationsController extends ListingBaseController
         }
 
         $this->set('file', $_FILES['cropped_image']['name']);
-        $this->set('frmType', Configurations::FORM_GENERAL);
+        $this->set('frmType', Configurations::FORM_LOCAL);
         $this->set('msg', $_FILES['cropped_image']['name'] . Labels::getLabel('MSG_UPLOADED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -340,24 +340,7 @@ class ConfigurationsController extends ListingBaseController
     {
         $frm = new Form('frmConfiguration');
         switch ($type) {
-            case Configurations::FORM_GENERAL:
-
-                $frm->addTextBox(Labels::getLabel("FRM_SITE_NAME", $langId), 'CONF_WEBSITE_NAME_' . $langId);
-                $frm->addTextBox(Labels::getLabel("FRM_SITE_OWNER", $langId), 'CONF_SITE_OWNER_' . $langId);
-                $fld = $frm->addTextarea(Labels::getLabel('FRM_COOKIES_POLICIES_TEXT', $langId), 'CONF_COOKIES_TEXT_' . $langId);
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
-                $frm->addEmailField(Labels::getLabel('FRM_STORE_OWNER_EMAIL', $langId), 'CONF_SITE_OWNER_EMAIL');
-                $frm->addHiddenField('', 'CONF_SITE_PHONE_dcode');
-                $phnFld = $frm->addTextBox(Labels::getLabel('FRM_TELEPHONE', $langId), 'CONF_SITE_PHONE', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
-                $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-                $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
-
-                $frm->addHiddenField('', 'CONF_SITE_FAX_dcode');
-                $faxFld = $frm->addTextBox(Labels::getLabel('FRM_FAX', $langId), 'CONF_SITE_FAX', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
-                $faxFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
-                $faxFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
-
+            case Configurations::FORM_CMS:
                 $cpagesArr = ContentPage::getPagesForSelectBox($langId);
 
                 $frm->addSelectBox(Labels::getLabel('FRM_ABOUT_US', $langId), 'CONF_ABOUT_US_PAGE', $cpagesArr, '', [], Labels::getLabel('FRM_SELECT', $langId));
@@ -367,62 +350,53 @@ class ConfigurationsController extends ListingBaseController
 
                 $frm->addSelectBox(Labels::getLabel('FRM_COOKIES_POLICIES_PAGE', $langId), 'CONF_COOKIES_BUTTON_LINK', $cpagesArr, '', [], Labels::getLabel('FRM_SELECT', $langId));
 
-                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HEADER_MEGA_MENU", $langId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld);
-                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HOME_PAGE_LOADER", $langId), 'CONF_LOADER', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld);
-
-                $fld = $frm->addCheckBox(Labels::getLabel('FRM_COOKIES_POLICIES', $langId), 'CONF_ENABLE_COOKIES', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_COOKIES_POLICIES_SECTION_WILL_BE_SHOWN_ON_FRONTEND", $langId));
-
-                /* $fld3 = $frm->addTextBox(Labels::getLabel("FRM_ADMIN_DEFAULT_ITEMS_PER_PAGE", $langId), "CONF_ADMIN_PAGESIZE");
-                $fld3->requirements()->setInt();
-                $fld3->requirements()->setRange('1', '2000');
-                $fld3->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_DETERMINES_HOW_MANY_ITEMS_ARE_SHOWN_PER_PAGE_(user_listing,_categories,_etc)", $langId) . ".</span>"; */
-
-                $iframeFld = $frm->addTextarea(Labels::getLabel('FRM_GOOGLE_MAP_IFRAME', $langId), 'CONF_MAP_IFRAME_CODE');
-                $iframeFld->developerTags['colWidthValues'] = [null, '12', null, null];
-                $iframeFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_THIS_IS_THE_GOGLE_MAP_IFRAME_SCRIPT,_used_to_display_google_map_on_contact_us_page", $langId) . '</span>';
-
-                break;
-
-            case Configurations::FORM_LOCAL:
-
-                $frm->addTextarea(Labels::getLabel("FRM_ADDRESS", $langId), 'CONF_ADDRESS_' . $langId);
-                $frm->addTextarea(Labels::getLabel("FRM_ADDRESS_LINE_2", $langId), 'CONF_ADDRESS_LINE_2_' . $langId);
-                $frm->addTextBox(Labels::getLabel("FRM_CITY", $langId), 'CONF_CITY_' . $langId);
-                $frm->addSelectBox(
-                    Labels::getLabel('FRM_DEFAULT_SITE_LAGUAGE', $langId),
-                    'CONF_DEFAULT_SITE_LANG',
-                    Language::getAllNames(),
-                    false,
-                    array(),
-                    ''
-                );
-
-                $fld = $frm->addSelectBox(Labels::getLabel('FRM_TIMEZONE', $langId), 'CONF_TIMEZONE', Configurations::dateTimeZoneArr(), false, array(), '');
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_CURRENT", $langId) . ' <span id="currentDate">' . CommonHelper::currentDateTime(null, true) . '</span></span>';
-                $countryObj = new Countries();
-                $countriesArr = $countryObj->getCountriesAssocArr($langId);
-                $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $langId), 'CONF_COUNTRY', $countriesArr, '', ['id' => 'user_country_id', 'onChange' => 'getCountryStates(this.value,' . FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1) . ',\'#user_state_id\')'], Labels::getLabel('FRM_SELECT', $langId));
-
-                $frm->addSelectBox(Labels::getLabel('FRM_STATE', $langId), 'CONF_STATE', array(), '', ['id' => 'user_state_id'], Labels::getLabel('FRM_SELECT', $langId));
-                $frm->addRequiredField(Labels::getLabel("FRM_POSTAL_CODE", $langId), 'CONF_ZIP_CODE');
-                $frm->addSelectBox(Labels::getLabel('FRM_DATE_FORMAT', $langId), 'CONF_DATE_FORMAT', Configurations::dateFormatPhpArr(), false, array(), '');
-
-                $currencyArr = Currency::getCurrencyNameWithCode($langId);
-                $frm->addSelectBox(Labels::getLabel('FRM_DEFAULT_SYSTEM_CURRENCY', $langId), 'CONF_CURRENCY', $currencyArr, false, array(), '');
-
-                $currencySeparatorArr = applicationConstants::currencySeparatorArr($langId);
-                $frm->addSelectBox(Labels::getLabel('FRM_DEFAULT_CURRENCY_DECIMAL_SEPARATOR', $langId), 'CONF_DEFAULT_CURRENCY_SEPARATOR', $currencySeparatorArr, false, array(), '');
-
-
                 $faqCategoriesArr = FaqCategory::getFaqPageCategories();
                 $sellerCategoriesArr = FaqCategory::getSellerPageCategories();
 
                 $frm->addSelectBox(Labels::getLabel('FRM_FAQ_PAGE_MAIN_CATEGORY', $langId), 'CONF_FAQ_PAGE_MAIN_CATEGORY', $faqCategoriesArr, '', [], Labels::getLabel('FRM_SELECT', $langId));
                 $frm->addSelectBox(Labels::getLabel('FRM_SELLER_PAGE_MAIN_FAQ_CATEGORY', $langId), 'CONF_SELLER_PAGE_MAIN_CATEGORY', $sellerCategoriesArr, '', [], Labels::getLabel('FRM_SELECT', $langId));
 
+                /* $fld3 = $frm->addTextBox(Labels::getLabel("FRM_ADMIN_DEFAULT_ITEMS_PER_PAGE", $langId), "CONF_ADMIN_PAGESIZE");
+                $fld3->requirements()->setInt();
+                $fld3->requirements()->setRange('1', '2000');
+                $fld3->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_DETERMINES_HOW_MANY_ITEMS_ARE_SHOWN_PER_PAGE_(user_listing,_categories,_etc)", $langId) . ".</span>"; */
+                $fld = $frm->addCheckBox(Labels::getLabel('FRM_COOKIES_POLICIES', $langId), 'CONF_ENABLE_COOKIES', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_COOKIES_POLICIES_SECTION_WILL_BE_SHOWN_ON_FRONTEND", $langId));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+                $fld = $frm->addTextarea(Labels::getLabel('FRM_COOKIES_POLICIES_TEXT', $langId), 'CONF_COOKIES_TEXT_' . $langId);
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+                $iframeFld = $frm->addTextarea(Labels::getLabel('FRM_GOOGLE_MAP_IFRAME', $langId), 'CONF_MAP_IFRAME_CODE');
+                $iframeFld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $iframeFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_THIS_IS_THE_GOGLE_MAP_IFRAME_SCRIPT,_used_to_display_google_map_on_contact_us_page", $langId) . '</span>';
+                break;
+
+            case Configurations::FORM_LOCAL:
+                $frm->addTextBox(Labels::getLabel("FRM_SITE_NAME", $langId), 'CONF_WEBSITE_NAME_' . $langId);
+                $frm->addTextBox(Labels::getLabel("FRM_SITE_OWNER", $langId), 'CONF_SITE_OWNER_' . $langId);
+                $frm->addEmailField(Labels::getLabel('FRM_STORE_OWNER_EMAIL', $langId), 'CONF_SITE_OWNER_EMAIL');
+                $frm->addHiddenField('', 'CONF_SITE_PHONE_dcode');
+                $phnFld = $frm->addTextBox(Labels::getLabel('FRM_TELEPHONE', $langId), 'CONF_SITE_PHONE', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+                $phnFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
+                $phnFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
+
+
+                $countryObj = new Countries();
+                $countriesArr = $countryObj->getCountriesAssocArr($langId);
+                $fld = $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY', $langId), 'CONF_COUNTRY', $countriesArr, '', ['id' => 'user_country_id', 'onChange' => 'getCountryStates(this.value,' . FatApp::getConfig('CONF_STATE', FatUtility::VAR_INT, 1) . ',\'#user_state_id\')'], Labels::getLabel('FRM_SELECT', $langId));
+
+                $frm->addSelectBox(Labels::getLabel('FRM_STATE', $langId), 'CONF_STATE', array(), '', ['id' => 'user_state_id'], Labels::getLabel('FRM_SELECT', $langId));
+                $frm->addRequiredField(Labels::getLabel("FRM_POSTAL_CODE", $langId), 'CONF_ZIP_CODE');
+                $frm->addTextBox(Labels::getLabel("FRM_CITY", $langId), 'CONF_CITY_' . $langId);
+
+                $frm->addTextarea(Labels::getLabel("FRM_ADDRESS", $langId), 'CONF_ADDRESS_' . $langId);
+                $frm->addTextarea(Labels::getLabel("FRM_ADDRESS_LINE_2", $langId), 'CONF_ADDRESS_LINE_2_' . $langId);
+
+                $faxFld = $frm->addTextBox(Labels::getLabel('FRM_FAX', $langId), 'CONF_SITE_FAX', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));
+                $frm->addHiddenField('', 'CONF_SITE_FAX_DCODE');
+                $faxFld->requirements()->setRegularExpressionToValidate(ValidateElement::PHONE_REGEX);
+                $faxFld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_PLEASE_ENTER_VALID_FORMAT.', $langId));
                 break;
 
             case Configurations::FORM_SEO:
@@ -563,8 +537,10 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'geolocation', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel('FRM_LOCATION', $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ACTIVATE_GEO_LOCATION", $langId), 'CONF_ENABLE_GEO_LOCATION', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $prodGeoSettingArr = applicationConstants::getProductListingSettings($langId);
 
@@ -603,15 +579,9 @@ class ConfigurationsController extends ListingBaseController
                     $fld->setFieldTagAttribute('disabled', 'disabled');
                 }
 
-                $fld = $frm->addRadioButtons(
-                    Labels::getLabel("FRM_SET_DEFAULT_GEO_LOCATION", $langId),
-                    'CONF_DEFAULT_GEO_LOCATION',
-                    applicationConstants::getYesNoArr($langId),
-                    '0',
-                    array('class' => 'list-radio defaultLocationGeoFilter')
-                );
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_SET_DEFAULT_GEO_LOCATION", $langId), 'CONF_DEFAULT_GEO_LOCATION', applicationConstants::YES, array(), false, applicationConstants::NO);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_SET_DEFAULT_LOCATION_FOR_PRODUCT_LISTING", $langId));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-                HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("FRM_SET_DEFAULT_LOCATION_FOR_PRODUCT_LISTING", $langId));
 
                 $countryObj = new Countries();
                 $countriesArr = $countryObj->getCountriesAssocArr($langId, true, 'country_code');
@@ -992,7 +962,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_SET_NOTIFICATION_COUNT_TO_BE_SENT", $langId), 'CONF_SENT_CART_REMINDER_COUNT', '');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_HOW_MANY_NOTIFICATIONS_WILL_BE_SENT_TO_BUYER.", $langId) . "</span>";
 
-                $frm->addHtml('', 'Wishlist', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_WISHLIST", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'Wishlist', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_WISHLIST", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_REMINDER_INTERVAL_FOR_PRODUCTS_IN_WISHLIST_[Days]", $langId), 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_WISHLIST', '');
@@ -1007,9 +977,11 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_COMMISSION_CHARGED_INCLUDING_SHIPPING", $langId), 'CONF_COMMISSION_INCLUDING_SHIPPING', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_COMMISSION_CHARGED_INCLUDING_SHIPPING_CHARGES", $langId));
+                $fld->developerTags['noCaptionTag'] = true;
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_COMMISSION_CHARGED_INCLUDING_TAX", $langId), 'CONF_COMMISSION_INCLUDING_TAX', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_COMMISSION_CHARGED_INCLUDING_TAX_CHARGES", $langId));
+                $fld->developerTags['noCaptionTag'] = true;
 
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_MAXIMUM_SITE_COMMISSION", $langId) . ' [' . $this->siteDefaultCurrencyCode . ']', 'CONF_MAX_COMMISSION', '');
                 $fld->requirements()->setFloatPositive();
@@ -1059,6 +1031,7 @@ class ConfigurationsController extends ListingBaseController
                     0
                 );
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_AFFILIATE_USER_NEED_TO_VERIFY_THEIR_EMAIL_ADDRESS", $langId));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addCheckBox(
                     Labels::getLabel("FRM_ACTIVATE_SENDING_WELCOME_MAIL_AFTER_REGISTRATION", $langId),
@@ -1069,7 +1042,7 @@ class ConfigurationsController extends ListingBaseController
                     0
                 );
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_affiliate_will_receive_a_welcome_e-mail_after_registration.", $langId));
-
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 break;
 
             case Configurations::FORM_REWARD_POINTS:
@@ -1093,7 +1066,7 @@ class ConfigurationsController extends ListingBaseController
                     0
                 );
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("MSG_BUYER_WILL_REWARD_POINT_ON_EVERY_PURCHASE_AS_DEFINED_SETTINGS", $langId));
-
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addHtml('', 'Birthday_Rewards', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_BIRTHDAY_REWARD_POINTS", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1137,7 +1110,9 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_BUYING_COMPLETION_ORDER_STATUS", $langId), 'CONF_BUYING_YEAR_REWARD_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
                 $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
+
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_THE_ORDER_STATUS_THE_CUSTOMER's_order_must_reach_before_they_are_considered_completed_and_payment_released_to_Sellers.", $langId) . "</span>";
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 break;
 
@@ -1174,6 +1149,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_SEND_EMAIL", $langId), 'CONF_SEND_EMAIL', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 /* $fld = $frm->addRadioButtons(Labels::getLabel("FRM_SEND_EMAIL", $langId), 'CONF_SEND_EMAIL', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio')); */
                 HtmlHelper::configureSwitchForRadio($fld);
@@ -1394,8 +1370,6 @@ class ConfigurationsController extends ListingBaseController
                 break;
 
             case Configurations::FORM_DISCOUNT:
-                $fld = $frm->addHtml('', 'firstTimeDiscount', '<h3 class="form-section-head">' . Labels::getLabel("FRM_FIRST_TIME_BUYERS_DISCOUNT_COUPON", $langId) . '</h3>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("FRM_ENABLE_1ST_TIME_BUYERS_DISCOUNT", $langId),
                     'CONF_ENABLE_FIRST_TIME_BUYER_DISCOUNT',
@@ -1456,17 +1430,55 @@ class ConfigurationsController extends ListingBaseController
                 );
 
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_SELLER_SUBSCRIPTION_STATUSES", $langId), 'CONF_SELLER_SUBSCRIPTION_STATUS', $orderSubscriptionStatusArr, [], array('class' => 'list-checkboxes'));
-
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 break;
 
             case Configurations::FORM_SYSTEM:
-                $fld = $frm->addRadioButtons(Labels::getLabel("FRM_AUTO_CLOSE_SYSTEM_MESSAGES", $langId), 'CONF_AUTO_CLOSE_SYSTEM_MESSAGES', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
-                HtmlHelper::configureSwitchForRadio($fld);
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_MAINTENANCE_MODE", $langId), 'CONF_MAINTENANCE', applicationConstants::YES, array(), false, applicationConstants::NO);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_NOTE:_Enable_Maintenance_Mode_Text", $langId));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_SSL", $langId), 'CONF_USE_SSL', applicationConstants::YES, array(), false, applicationConstants::NO);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_NOTE:_To_use_SSL,_check_with_your_host_if_a_SSL_certificate_is_installed_and_enable_it_from_here.", $langId));
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+                $frm->addSelectBox(
+                    Labels::getLabel('FRM_DEFAULT_SITE_LAGUAGE', $langId),
+                    'CONF_DEFAULT_SITE_LANG',
+                    Language::getAllNames(),
+                    false,
+                    array(),
+                    ''
+                );
+
+                $currencyArr = Currency::getCurrencyNameWithCode($langId);
+                $frm->addSelectBox(Labels::getLabel('FRM_DEFAULT_SYSTEM_CURRENCY', $langId), 'CONF_CURRENCY', $currencyArr, false, array(), '');
+
+                $currencySeparatorArr = applicationConstants::currencySeparatorArr($langId);
+                $frm->addSelectBox(Labels::getLabel('FRM_DEFAULT_CURRENCY_DECIMAL_SEPARATOR', $langId), 'CONF_DEFAULT_CURRENCY_SEPARATOR', $currencySeparatorArr, false, array(), '');
+
+                $fld = $frm->addSelectBox(Labels::getLabel('FRM_TIMEZONE', $langId), 'CONF_TIMEZONE', Configurations::dateTimeZoneArr(), false, array(), '');
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_CURRENT", $langId) . ' <span id="currentDate">' . CommonHelper::currentDateTime(null, true) . '</span></span>';
+
+                $frm->addSelectBox(Labels::getLabel('FRM_DATE_FORMAT', $langId), 'CONF_DATE_FORMAT', Configurations::dateFormatPhpArr(), false, array(), '');
+
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HEADER_MEGA_MENU", $langId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HOME_PAGE_LOADER", $langId), 'CONF_LOADER', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_AUTO_CLOSE_SYSTEM_MESSAGES", $langId), 'CONF_AUTO_CLOSE_SYSTEM_MESSAGES', applicationConstants::YES, array(), false, applicationConstants::NO);
+                HtmlHelper::configureSwitchForCheckbox($fld);
                 $fld->addFieldTagAttribute("onchange", "changedMessageAutoCloseSetting(this.value);");
 
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_TIME_FOR_AUTO_CLOSE_MESSAGES', $langId), 'CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_NOTE:_After_how_much_seconds_system_message_should_be_close", $langId) . '.</span>';
                 $fld->requirements()->setInt();
+
+                $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_MAINTENANCE_TEXT', $this->siteLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $fld->requirements()->setRequired(true);
+
                 break;
             case Configurations::FORM_PPC:
                 $fld = $frm->addFloatField(Labels::getLabel('FRM_MINIMUM_WALLET_BALANCE', $langId), 'CONF_PPC_MIN_WALLET_BALANCE');
@@ -1498,7 +1510,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("MSG_SET_TIME_INTERVAL_TO_CALCULATE_NO._of_click_from_one_user_for_each_promotion", $langId) . '</span>';
 
                 break;
-            case Configurations::FORM_SERVER:
+                /*  case Configurations::FORM_SERVER:
                 $fld = $frm->addRadioButtons(Labels::getLabel("FRM_USE_SSL", $langId), 'CONF_USE_SSL', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
                 HtmlHelper::configureSwitchForRadio($fld, Labels::getLabel("FRM_NOTE:_To_use_SSL,_check_with_your_host_if_a_SSL_certificate_is_installed_and_enable_it_from_here.", $langId));
 
@@ -1509,7 +1521,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->requirements()->setRequired(true);
 
-                break;
+                break; */
             case Configurations::FORM_MEDIA:
                 $ratioArr = AttachedFile::getRatioTypeArray($langId);
                 /* block start */
@@ -1902,6 +1914,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_CAPTION_SHARED_ON_FACEBOOK", $langId) . "</span>";
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_FACEBOOK_POST_DESCRIPTION", $langId), 'CONF_SOCIAL_FEED_FACEBOOK_POST_DESCRIPTION_' . $langId);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_DESCRIPTION_SHARED_ON_FACEBOOK", $langId) . "</span>";
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_TWITTER_APP_KEY", $langId), 'CONF_TWITTER_API_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_APPLICATION_ID_USED_IN_POST.", $langId) . "</span>";
@@ -1911,6 +1924,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_TWITTER_POST_DESCRIPTION", $langId), 'CONF_SOCIAL_FEED_TWITTER_POST_TITLE' . $langId);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_DESCRIPTION_SHARED_ON_TWITTER", $langId) . "</span>";
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 break;
         }
         $frm->addHiddenField('', 'form_type', $type);
