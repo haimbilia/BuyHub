@@ -33,7 +33,7 @@ class ConfigurationsController extends ListingBaseController
         $this->_template->addJs('js/cropper-main.js');
         $this->set('defaultLangId', CommonHelper::getDefaultFormLangId());
         $this->set('activeTab', $activeTab);
-        $this->set('tourStep', SiteTourHelper::isGettingStarted());
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
         $this->_template->addJs('js/jscolor.js');
         $this->_template->render();
     }
