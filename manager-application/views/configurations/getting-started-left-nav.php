@@ -6,8 +6,8 @@
             foreach ($tourSteps as $keyIndex => $tour) {
             ?>
                 <li class="onboarding-nav-item completed">
-                    <a href="<?php echo SiteTourHelper::getNextLink($keyIndex)?>" class="onboarding-nav-link" type="button">
-                        <img class="onboarding-nav-icn" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/tick-green.svg" width="32" height="32" alt="">
+                    <a href="<?php echo SiteTourHelper::getNextLink($keyIndex)?>" class="onboarding-nav-link">
+                    <span class="onboarding-nav-icn"></span>
                         <span class="onboarding-nav-label"><?php echo $tour['title']; ?></span>
                     </a>
 
