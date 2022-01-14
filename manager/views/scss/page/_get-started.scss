@@ -73,3 +73,53 @@
         }
     }
 }
+
+//Onboarding
+
+.onboarding {
+    background-color: $bg-white;
+    box-shadow: $shadow1;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    &-aside {
+        color: $txt-gray;
+        display: flex;
+        flex-direction: column;
+        border-#{$end-direction}: $border;
+    }
+    &-body {
+        flex: 1 1 0;
+        padding: 1.5rem;
+    }
+    &-nav {
+        display: flex;
+        flex-direction: column;
+        &-item {
+            padding: 0.5rem 0;
+            display: flex;
+        }
+
+        &-link {
+            padding: 0;
+            margin: 0;
+            text-align: #{$start-direction};
+            border: none;
+            background-color: transparent;
+        }
+        &-label {
+            font-size: 1rem;
+        }
+    }
+
+    &-main {
+        .card-foot {
+            background-color: $bg-white;
+            position: sticky;
+            bottom: 0;
+        }
+    }
+}
+.rocket {
+    margin: 0 auto;
+    text-align: center;
+}
