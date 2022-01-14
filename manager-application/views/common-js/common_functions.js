@@ -324,6 +324,13 @@ redirectToProductReviews = function (id, extraData = {}) {
     redirectfunc(fcom.makeUrl('ProductReviews'), extraData, 0, true);
 };
 
+redirectToBlogPosts = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['bpcat_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('BlogPosts'), extraData, 0, true);
+};
+
 redirectfunc = function (url, hiddenfields = {}, nid, newTab) {
     newTab = typeof newTab != "undefined" ? newTab : true;
     if (nid > 0) {

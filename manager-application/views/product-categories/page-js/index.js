@@ -130,7 +130,7 @@
 		if (catId > 0) {
 			var prodCatId = catId;
 		} else {
-			var prodCatId = $(obj).parent().parent().parent().attr('id');
+			var prodCatId = $(obj).closest('.liJs').attr('id');
 		}
 
 		if ($("#" + prodCatId + ' ul.append-ul').length) {
