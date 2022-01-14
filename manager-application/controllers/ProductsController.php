@@ -224,12 +224,12 @@ class ProductsController extends ListingBaseController
                 $productData = $this->modelObj::getAttributesByLangId($langId, $recordId, null, true);
             }
 
-            $productData['record_id'] = $recordId;
-
             if (empty($productData)) {
                 LibHelper::exitWithError($this->str_invalid_request_id, false, true);
                 FatApp::redirectUser(UrlHelper::generateUrl('Products'));
             }
+            
+            $productData['record_id'] = $recordId;
 
             if (1 > $productType) {
                 $frm = $this->getForm($langId, $productData['product_type'], $recordId);

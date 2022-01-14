@@ -4,6 +4,12 @@ class DashboardBaseController extends FatController
 {
     public $app_user = array();
     public $appToken = '';
+    protected $str_update_record;
+    protected $str_invalid_request;
+    protected $str_invalid_request_id;
+    protected $str_delete_record;
+    protected $str_invalid_Action;
+    protected $str_setup_successful;
 
     public function __construct($action)
     {
@@ -29,6 +35,28 @@ class DashboardBaseController extends FatController
         $this->siteLangCode = CommonHelper::getLangCode();
         $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
         $this->siteCurrencyId = CommonHelper::getCurrencyId();
+
+        $curdLangLabelCache = FatCache::get('curdLangLabelCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$curdLangLabelCache) {
+            $arr = [
+                'str_update_record' => Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId),
+                'str_invalid_request_id' => Labels::getLabel('LBL_Invalid_Request_Id', $this->siteLangId),
+                'str_invalid_request' => Labels::getLabel('LBL_Invalid_Request', $this->siteLangId),
+                'str_delete_record' => Labels::getLabel('LBL_Record_Deleted_Successfully', $this->siteLangId),
+                'str_invalid_Action' => Labels::getLabel('LBL_Invalid_Action', $this->siteLangId),
+                'str_setup_successful' => Labels::getLabel('LBL_Setup_Successful', $this->siteLangId)
+            ];
+            FatCache::set('curdLangLabelCache' . $this->siteLangId, serialize($arr), '.txt');
+        } else {
+            $arr =  unserialize($curdLangLabelCache);
+        }
+
+        $this->str_update_record = $arr['str_update_record'];
+        $this->str_invalid_request_id = $arr['str_invalid_request_id'];
+        $this->str_invalid_request = $arr['str_invalid_request'];
+        $this->str_delete_record = $arr['str_delete_record'];
+        $this->str_invalid_Action = $arr['str_invalid_Action'];
+        $this->str_setup_successful = $arr['str_setup_successful'];
 
         $this->app_user['temp_user_id'] = 0;
         if (true === MOBILE_APP_API_CALL) {
@@ -95,8 +123,7 @@ class DashboardBaseController extends FatController
                 'confirmUpdateStatus' => Labels::getLabel('LBL_Do_you_want_to_update_the_status', $this->siteLangId),
                 'confirmDeleteOption' => Labels::getLabel('LBL_Do_you_want_to_delete_this_option', $this->siteLangId),
                 'confirmDefault' => Labels::getLabel('LBL_Do_you_want_to_set_default', $this->siteLangId),
-                'setMainProduct' => Labels::getLabel('LBL_Set_as_main_product', $this->siteLangId),
-                'layoutDirection' => CommonHelper::getLayoutDirection(),
+                'setMainProduct' => Labels::getLabel('LBL_Set_as_main_product', $this->siteLangId),                
                 'selectPlan' => Labels::getLabel('LBL_Please_Select_any_Plan_From_The_Above_Plans', $this->siteLangId),
                 'alreadyHaveThisPlan' => str_replace("{clickhere}", '<a href="' . UrlHelper::generateUrl('seller', 'subscriptions') . '">' . Labels::getLabel('LBL_Click_Here', $this->siteLangId) . '</a>', Labels::getLabel('LBL_You_have_already_Bought_this_plan._Please_choose_some_other_Plan_or_renew_it_from_{clickhere}', $this->siteLangId)),
                 'processing' => Labels::getLabel('LBL_Processing...', $this->siteLangId),
@@ -199,6 +226,7 @@ class DashboardBaseController extends FatController
         $jsVariables['controllerName'] = $controllerName;
         $jsVariables['defaultCountryCode'] = $defaultCountryCode;
         $jsVariables['siteCurrencyId'] = $this->siteCurrencyId;
+        $jsVariables['layoutDirection'] = CommonHelper::getLayoutDirection();    
 
         if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
             setcookie('_ykGeoLat', FatApp::getConfig('CONF_GEO_DEFAULT_LAT', FatUtility::VAR_INT, 40.72), time() + (86400 * 30), CONF_WEBROOT_FRONTEND, $_SERVER['SERVER_NAME']); // 86400 = 1 day
