@@ -118,31 +118,21 @@ class DiscountCouponsController extends ListingBaseController
         if (!empty($post['coupon_type'])) {
             $srch->addCondition('dc.coupon_type', '=', $post['coupon_type']);
         }
+        
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
 
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->setPageSize($pageSize);    
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-
-        $discountTypeArr = DiscountCoupons::getTypeArr($this->siteLangId);
-        $this->set('discountTypeArr', $discountTypeArr);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);  
+        $this->set('discountTypeArr', DiscountCoupons::getTypeArr($this->siteLangId));
         $this->set('canEdit', $this->objPrivilege->canEditDiscountCoupons($this->admin_id, true));
         $this->set('canView', $this->objPrivilege->canViewDiscountCoupons($this->admin_id, true));
     }
@@ -285,7 +275,7 @@ class DiscountCouponsController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
         $fld->overrideFldType('search');
         $frm->addSelectBox(Labels::getLabel('FRM_COUPON_TYPE', $this->siteLangId), 'coupon_type', DiscountCoupons::getTypeArr($this->siteLangId), '', [], Labels::getLabel('FRM_COUPON_TYPE', $this->siteLangId));
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

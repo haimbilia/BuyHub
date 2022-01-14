@@ -93,28 +93,20 @@ class ShopReportReasonsController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = ShopReportReason::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('reportreason.*', 'reportreason_l.reportreason_title'));
-
+        $srch = ShopReportReason::getSearchObject($this->siteLangId); 
         if (!empty($post['keyword'])) {
             $cond = $srch->addCondition('reportreason_identifier', 'like', '%' . $post['keyword'] . '%', 'AND');
             $cond->attachCondition('reportreason_title', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
+        $srch->addMultipleFields(array('reportreason.*', 'reportreason_l.reportreason_title'));
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize); 
+        $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);

@@ -184,7 +184,6 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (frm) {
             data = fcom.frmData(frm);
         }
-
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "search"), data, function (res) {

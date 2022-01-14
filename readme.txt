@@ -527,6 +527,9 @@ Bugs :
     => 061591 - Admin UI: Field's headings are missing under the 'advanced search' section under the "Withdrawal requests" section.
     => 061584 - Admin UI: Double options are selected while selecting the "cancellation requests" option in the side menu.
     => 061596 - Admin UI: All records are not showing on the table after updating the status of the withdrawal request.
+    => 060758 - Admin UI: The whole table is not getting blurred while sorting the columns if the table contains more columns & the admin needs to scroll it horizontally
+    => 060847 - Admin UI: Random behavior is showing while re-arranging the fields under the Blog post categories section
+    => 060839 - Admin UI: Getting multiple issues under the "Blog Post Categories" section
 
 
 Known Issues and Problems :

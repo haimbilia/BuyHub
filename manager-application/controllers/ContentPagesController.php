@@ -115,27 +115,20 @@ class ContentPagesController extends ListingBaseController
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 : $data['page'];
         $post = $searchForm->getFormDataFromArray($data);
-        $srch = ContentPage::getSearchObject($this->siteLangId);
-
+        $srch = ContentPage::getSearchObject($this->siteLangId); 
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('cpage_title', 'like', '%' . $post['keyword'] . '%');
             $condition->attachCondition('cpage_identifier', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->addOrder($sortBy, $sortOrder);
-        $srch->setPageSize($pageSize);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);

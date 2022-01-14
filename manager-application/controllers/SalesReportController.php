@@ -61,6 +61,7 @@ class SalesReportController extends ListingBaseController
             $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
             $fld->overrideFldType('search');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -123,10 +124,11 @@ class SalesReportController extends ListingBaseController
             $srch->addFld('op_invoice_number');
         }
 
-        $srch->setOrderBy($sortBy, $sortOrder);
-        $srch->setDateCondition($fromDate, $toDate);
-
-
+        
+        $srch->setDateCondition($fromDate, $toDate); 
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords();  
+        $srch->setOrderBy($sortBy, $sortOrder); 
         if ($type == 'export') {
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
@@ -183,16 +185,8 @@ class SalesReportController extends ListingBaseController
         }
 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
-
-        $this->set("arrListing", $arrListing);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
+        $srch->setPageSize($pageSize);   
+        $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);

@@ -32,12 +32,11 @@ $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['cred
     ?>
         <figure class="user-profile_photo">
             <img width="40" height="40" title="<?php echo $user['user_name']; ?>" alt="<?php echo $user['user_name']; ?>" src="<?php echo $userImageUrl; ?>">
+            <?php echo $verifiedBadge; ?>
         </figure>
     <?php } ?>
     <div class="user-profile_data">
         <div class="verified-wrap">
-            <?php echo $verifiedBadge; ?>
-
             <?php if (!empty($href) || !empty($onclick)) { ?>
                 <a class="<?php echo $userTitleClass; ?>" href="<?php echo $href; ?>" <?php echo $onclick; ?> title="<?php echo $title; ?>" data-bs-toggle="tooltip">
                     <?php echo $username; ?>

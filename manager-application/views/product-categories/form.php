@@ -1,16 +1,18 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-
 $fld = $frm->getField('prodcat_identifier');
 $fld->setFieldTagAttribute('onkeyup', "Slugify(this.value,'urlrewrite_custom','prodcat_id');getSlugUrl($(\"#urlrewrite_custom\"),$(\"#urlrewrite_custom\").val(),'','pre',true)");
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
+$fld = $frm->getField('prodcat_id');
+$fld->setFieldTagAttribute('id', "prodcat_id");
 
 $fld = $frm->getField('prodcat_name[' . $siteLangId . ']');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
 $fld = $frm->getField('prodcat_parent');
 $fld->setFieldTagAttribute('id', "prodcat_parent");
+$fld->setFieldTagAttribute('data-old-parent-id', $fld->value);
 
 $fld = $frm->getField('urlrewrite_custom');
 $fld->setFieldTagAttribute('id', "urlrewrite_custom");

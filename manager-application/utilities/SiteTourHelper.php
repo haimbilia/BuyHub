@@ -40,7 +40,7 @@ class SiteTourHelper
         $url = '';
         switch ($stepNumber) {
             case self::STEP_CONFIGURATION:
-                $url = UrlHelper::generateUrl('Configurations', 'Index', [Configurations::FORM_GENERAL]);
+                $url = UrlHelper::generateUrl('Configurations', 'Index', [Configurations::FORM_LOCAL]);
                 break;
             case self::STEP_ADD_PRODUCT:
                 $url = UrlHelper::generateUrl('Products', 'form');

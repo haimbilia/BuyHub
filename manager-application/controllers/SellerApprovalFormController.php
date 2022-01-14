@@ -96,19 +96,15 @@ class SellerApprovalFormController extends ListingBaseController
             $cnd = $srch->addCondition('sf.sformfield_identifier', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('sf_l.sformfield_caption', 'like', '%' . $post['keyword'] . '%');
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
+        $srch->setPageSize($pageSize); 
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
 
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
 
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);

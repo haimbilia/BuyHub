@@ -72,8 +72,7 @@ class AbusiveWordsController extends ListingBaseController
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
-        $srch = Abusive::getSearchObject();
-        $srch->addMultipleFields(['aw.*', 'tl.*']);
+        $srch = Abusive::getSearchObject(); 
         $srch->joinTable('tbl_languages', 'inner join', 'abusive_lang_id = language_id and language_active = ' . applicationConstants::ACTIVE, 'tl');
 
         if (!empty($post['keyword'])) {
@@ -83,21 +82,14 @@ class AbusiveWordsController extends ListingBaseController
         if (isset($post['lang_id']) && $post['lang_id'] > 0) {
             $srch->addCondition('aw.abusive_lang_id', '=', 'mysql_func_' . $post['lang_id'], 'AND', true);
         }
-
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(['aw.*', 'tl.*']);
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -229,6 +221,7 @@ class AbusiveWordsController extends ListingBaseController
         if (1 < count($languages)) {
             $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'lang_id', $languages, '', [], Labels::getLabel('LBL_SELECT_LANGUAGE', $this->siteLangId));
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

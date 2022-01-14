@@ -66,15 +66,13 @@ class ShippingPackagesController extends ListingBaseController
         if (!empty($post['keyword'])) {
             $srch->addCondition('spack.shippack_name', 'like', '%' . $post['keyword'] . '%');
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -151,6 +149,7 @@ class ShippingPackagesController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'shippack_id');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
