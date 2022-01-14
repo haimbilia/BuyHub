@@ -132,6 +132,7 @@ class AdminPrivilege
     public const SECTION_SETTINGS = 124;
     public const SECTION_PAGES_LANGUAGE_DATA = 125;
     public const SECTION_CATEGORY_REQUEST = 126;
+    public const SECTION_GETTING_STARTED = 127;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -297,6 +298,7 @@ class AdminPrivilege
                 static::SECTION_BADGE_REQUESTS => Labels::getLabel('NAV_BADGE_REQUESTS', $langId),
                 static::SECTION_SETTINGS => Labels::getLabel('NAV_SYSTEM_SETTINGS', $langId),
                 static::SECTION_PAGES_LANGUAGE_DATA => Labels::getLabel('NAV_PAGES_LANGUAGE_DATA_SETTINGS', $langId),
+                static::SECTION_GETTING_STARTED => Labels::getLabel('NAV_GETTING_STARTED', $langId),
 
                 /* static::SECTION_Languages => Labels::getLabel('NAV_LANGUAGES',$langId),
                 static::SECTION_Languages => Labels::getLabel('NAV_ORDER_STATUS',$langId), */
@@ -1688,5 +1690,10 @@ class AdminPrivilege
     public function canEditCategoryRequests($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_CATEGORY_REQUEST, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewGettingStarted($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_GETTING_STARTED, static::PRIVILEGE_READ, $returnResult);
     }
 }

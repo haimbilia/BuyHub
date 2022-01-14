@@ -82,5 +82,13 @@ class DummyController extends ListingBaseController
         $qry = "select shop_id, sum(shopRating) as shopRating, sum(completionRate) as completionRate,sum(completedOrders) as completedOrders,sum(returnAcceptanceRate) as returnAcceptanceRate, sum(orderCancelationRate) as orderCancelationRate from (".$query.") as tmp group by tmp.shop_id";
 
        echo $qry ;exit;
-    }       
+    }     
+    
+    public function tt(){
+
+        $trackingRelation = new TrackingCourierCodeRelation();
+        $trackData = $trackingRelation->getDataByShipCourierCode('stamps_com');
+
+        print_r($trackData);
+    }
 }       

@@ -522,6 +522,12 @@ Bugs :
     => 061445 - Admin UI: Admin is not able to add more than one option's value.
     => 061097 - Admin UI: Loading is not working properly while sorting the columns of the table under the "Meta tags Management" section
     => 060375 - Admin UI: Changes made to the requested brand media file by admin are not visible until the admin does not reload/refresh the page.
+====================TV-9.4.0.20220112==============
+    => 061594 - Admin UI: Search is not working according to "username and email address" under the Order Cancellation Requests section.
+    => 061591 - Admin UI: Field's headings are missing under the 'advanced search' section under the "Withdrawal requests" section.
+    => 061584 - Admin UI: Double options are selected while selecting the "cancellation requests" option in the side menu.
+    => 061596 - Admin UI: All records are not showing on the table after updating the status of the withdrawal request.
+    => 060758 - Admin UI: The whole table is not getting blurred while sorting the columns if the table contains more columns & the admin needs to scroll it horizontally
 
 
 Known Issues and Problems :

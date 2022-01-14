@@ -279,6 +279,10 @@ select2 = function (
     select2Selector.$container.addClass("custom-select2");
     $("." + $.ykmodal.element).removeAttr("tabindex");
 };
+
+$(document).on('select2:open', () => {
+    document.querySelector('.select2-search__field').focus();
+});
 /**
  * hiddenfields object = { fieldname : fieldValue}
  */
@@ -322,6 +326,13 @@ redirectToProductReviews = function (id, extraData = {}) {
         extraData['reviewed_for_id'] = id;
     }
     redirectfunc(fcom.makeUrl('ProductReviews'), extraData, 0, true);
+};
+
+redirectToBlogPosts = function (id, extraData = {}) {
+    if (0 < id) {
+        extraData['bpcat_id'] = id;
+    }
+    redirectfunc(fcom.makeUrl('BlogPosts'), extraData, 0, true);
 };
 
 redirectfunc = function (url, hiddenfields = {}, nid, newTab) {

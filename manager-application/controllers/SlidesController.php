@@ -48,6 +48,7 @@ class SlidesController extends ListingBaseController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_SLIDE_TITLE', $this->siteLangId));
         $this->checkEditPrivilege(true);
         $this->getListingData();
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
 
         $this->_template->addCss('css/cropper.css');
         $this->_template->addJs(['js/cropper.js', 'js/cropper-main.js', 'slides/page-js/index.js']);

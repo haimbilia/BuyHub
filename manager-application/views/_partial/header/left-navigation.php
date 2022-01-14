@@ -8,7 +8,7 @@
             ?>
             <img <?php if ($fileData['afile_aspect_ratio'] > 0 && $fileData['afile_aspect_ratio'] == 2) { ?> width="89" height="50" <?php } else { ?> width="50" height="50" <?php } ?> <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } else { ?> data-ratio="1:1" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
         </a>
-        <button class="sidebar-toggle sidebarOpenerBtnJs active" type="button">
+        <button class="sidebar-toggle sidebarOpenerBtnJs <?php if (isset($_COOKIE['adminSidebar'])) { ?>active<?php } ?>" type="button">
             <svg class="svg" width="20" height="20">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#chevron-double-left">
                 </use>
@@ -275,7 +275,7 @@
                             <?php } ?>
                             <?php if ($objPrivilege->canViewBadgeRequests(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                                 <li class="nav_item navItemJs">
-                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["OrderCancellationRequests"]' href="<?php echo UrlHelper::generateUrl('BadgeRequests'); ?>">
+                                    <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["BadgeRequests"]' href="<?php echo UrlHelper::generateUrl('BadgeRequests'); ?>">
                                         <span class="nav_icon">
                                             <svg class="svg" width="24" height="24">
                                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#test">

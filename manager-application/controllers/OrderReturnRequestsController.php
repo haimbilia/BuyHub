@@ -60,11 +60,10 @@ class OrderReturnRequestsController extends ListingBaseController {
     private function getFields() {
         return [
             'orrequest_id', 'orrequest_op_id', 'orrequest_qty', 'orrequest_type', 'orrequest_returnreason_id',
-            'orrequest_date', 'orrequest_status', 'orrequest_reference', 'buyer.user_name as buyer_name', 'buyer_cred.credential_username as buyer_username',
-            'buyer_cred.credential_email as buyer_email', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'seller.user_name as seller_name',
-            'seller.user_phone_dcode as seller_phone_dcode', 'seller.user_phone as seller_phone', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'op_product_name', 'op_selprod_title',
+            'orrequest_date', 'orrequest_status', 'orrequest_reference', 'buyer.user_name as user_name', 'buyer_cred.credential_username as credential_username',
+            'buyer_cred.credential_email as credential_email', 'seller.user_name as seller_name', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'op_product_name', 'op_selprod_title',
             'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_qty', 'op_unit_price', 'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'order_tax_charged', 'op_other_charges', 'op_refund_shipping', 'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 'op_commission_include_shipping', 'op_commission_include_tax', 'op_free_ship_upto', 'op_actual_shipping_charges',
-            'order_pmethod_id', 'op_rounding_off', 'selprod_product_id', 'order_user_id', 'op_selprod_user_id', 'op_shop_id', 'op_invoice_number', 'op_selprod_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id'
+            'order_pmethod_id', 'op_rounding_off', 'selprod_product_id', 'order_user_id', 'op_selprod_user_id', 'op_shop_id', 'op_invoice_number', 'op_selprod_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id','buyer.user_updated_on AS user_updated_on','seller.user_id AS seller_id','buyer.user_id AS user_id','seller.user_updated_on AS seller_updated_on',
         ];
     }
 
@@ -165,6 +164,8 @@ class OrderReturnRequestsController extends ListingBaseController {
         $this->set('requestStatusArr', OrderReturnRequest::getRequestStatusArr($this->siteLangId));
         $this->set('requestTypeArr', OrderReturnRequest::getRequestTypeArr($this->siteLangId));
         $this->set('requestTypeClassArr', OrderReturnRequest::getRequestStatusClass());
+        $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
+        $this->set('canViewShops', $this->objPrivilege->canViewShops($this->admin_id, true));
     }
 
     protected function getSearchForm($fields = []) {
@@ -461,11 +462,13 @@ class OrderReturnRequestsController extends ListingBaseController {
                 }
                 /* Update To Shipping Service */
                 $this->langId = $this->siteLangId;
-
+                
+                /*
                 $this->loadShippingService($row);
                 if (false != $this->shippingService) {
                     $this->returnShipment($row['op_id'], $row['orrequest_qty']);
                 }
+                */
                 /* Update To Shipping Service */
 
                 $successMsg = Labels::getLabel('LBL_Return_request_has_been_refunded_successfully.', $this->siteLangId);
@@ -545,11 +548,10 @@ class OrderReturnRequestsController extends ListingBaseController {
         }
 
         $arr = [
-            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
             'orrequest_reference' => Labels::getLabel('LBL_Refernce_No.', $this->siteLangId),
-            'product' => Labels::getLabel('LBL_Product', $this->siteLangId),
             'buyer_detail' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
             'vendor_detail' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
+            'product' => Labels::getLabel('LBL_Product', $this->siteLangId),
             'orrequest_qty' => Labels::getLabel('LBL_Qty', $this->siteLangId),
             'orrequest_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
             'orrequest_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
@@ -562,11 +564,10 @@ class OrderReturnRequestsController extends ListingBaseController {
 
     protected function getDefaultColumns(): array {
         return [
-            'listSerial',
             'orrequest_reference',
-            'product',
             'buyer_detail',
             'vendor_detail',
+            'product',
             'orrequest_qty',
             'orrequest_date',
             'orrequest_status',

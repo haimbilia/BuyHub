@@ -180,6 +180,8 @@ trait OrdersPackage
 
         $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
         $this->set('orderStatusArr', $orderStatusArr);
+        $this->_template->addJs(array('js/jquery.datetimepicker.js'), false);
+        $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
         $this->_template->render();
     }
 
@@ -222,16 +224,16 @@ trait OrdersPackage
 
         $frm->addSelectBox(Labels::getLabel('FRM_PAYMENT_STATUS', $this->siteLangId), 'order_payment_status', Orders::getOrderPaymentStatusArr($this->siteLangId));
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
 
         $str = Labels::getLabel('FRM_ORDER_FROM_[{CURRENCY-SYMBOL}]', $this->siteLangId);
         $str = CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => $currencySymbol]);
-        $frm->addTextBox('', 'price_from', '', array('placeholder' => $str));
+        $frm->addTextBox(Labels::getLabel('FRM_ORDER_FROM', $this->siteLangId), 'price_from', '', array('placeholder' => $str));
 
         $str = Labels::getLabel('FRM_ORDER_TO[{CURRENCY-SYMBOL}]', $this->siteLangId);
         $str = CommonHelper::replaceStringData($str, ['{CURRENCY-SYMBOL}' => $currencySymbol]);
-        $frm->addTextBox('', 'price_to', '', array('placeholder' => $str));
+        $frm->addTextBox(Labels::getLabel('FRM_ORDER_TO', $this->siteLangId), 'price_to', '', array('placeholder' => $str));
         $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');

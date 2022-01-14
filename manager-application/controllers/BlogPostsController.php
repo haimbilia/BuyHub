@@ -101,9 +101,18 @@ class BlogPostsController extends ListingBaseController
         if (isset($post['post_published']) && $post['post_published'] != '') {
             $srch->addCondition('bp.post_published', '=', $post['post_published']);
         }
+ 
+        if (isset($post['post_id']) && $post['post_id'] != '') {
+            $srch->addCondition('bp.post_id', '=', $post['post_id']);
+        }
+        
+        if (isset($post['bpcat_id']) && $post['bpcat_id'] != '') {
+            $srch->addCondition('bpcategory_id', '=', $post['bpcat_id']);
+        }
+
         $srch->addGroupby('post_id');
         $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
-        $srch->doNotCalculateRecords(); 
+        $srch->doNotCalculateRecords();  
         $srch->addMultipleFields(array('*', 'COALESCE(post_title,post_identifier) post_title', 'group_concat(COALESCE(bpcategory_name ,bpcategory_identifier)) categories'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);

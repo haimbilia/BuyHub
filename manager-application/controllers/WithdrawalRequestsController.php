@@ -68,14 +68,14 @@ class WithdrawalRequestsController extends ListingBaseController {
         $arr_options2 = $arr_options2 + array(User::USER_TYPE_SUB_USER => Labels::getLabel('FRM_SUB_USER', $this->siteLangId));
         $frm->addSelectBox(Labels::getLabel('FRM_USER_TYPE', $this->siteLangId), 'type', $arr_options2, -1, array(), '');
 
-        $frm->addDateField('', 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
-        $frm->addDateField('', 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
 
         $str = CommonHelper::replaceStringData(Labels::getLabel('FRM_AMOUNT_FROM_[{CURRENCY-SYMBOL}]', $this->siteLangId), ['{CURRENCY-SYMBOL}' => $currencySymbol]);
-        $frm->addTextBox('', 'price_from', '', array('placeholder' => $str));
+        $frm->addTextBox(Labels::getLabel('FRM_AMOUNT_FROM', $this->siteLangId), 'price_from', '', array('placeholder' => $str));
 
         $str = CommonHelper::replaceStringData(Labels::getLabel('FRM_AMOUNT_TO[{CURRENCY-SYMBOL}]', $this->siteLangId), ['{CURRENCY-SYMBOL}' => $currencySymbol]);
-        $frm->addTextBox('', 'price_to', '', array('placeholder' => $str));
+        $frm->addTextBox(Labels::getLabel('FRM_AMOUNT_TO', $this->siteLangId), 'price_to', '', array('placeholder' => $str));
         $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
@@ -132,8 +132,7 @@ class WithdrawalRequestsController extends ListingBaseController {
             $srch->addCondition('tuwr.withdrawal_id', '=', $post['withdrawal_id']);
         }
 
-        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
-        if (isset($status) && $status >= 0) {
+        if (isset($post['status']) && $post['status'] > 0) {
             $srch->addCondition('tuwr.withdrawal_status', '=', $status);
         }
 

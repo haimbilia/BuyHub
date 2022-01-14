@@ -7,162 +7,24 @@
                                                             ?>
 <main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
+        <?php
         $data = [
-            'headingLabel' => Labels::getLabel('LBL_Affiliate',$siteLangId),
-            'siteLangId' => $siteLangId,         
+            'headingLabel' => Labels::getLabel('LBL_Affiliate', $siteLangId),
+            'siteLangId' => $siteLangId,
         ];
         $this->includeTemplate('_partial/header/content-header.php', $data); ?>
 
         <div class="content-body">
-            <div class="js-widget-scroll widget-scroll">
-                <div class="widget widget-stats">
-                    <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
-                                <i class="icn"><svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#credits" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#Credits"></use>
-                                    </svg>
-                                </i>
-                            </div>
-                            <div class="card-body ">
-                                <div class="stats">
-                                    <div class="stats-number">
-                                        <ul>
-                                            <li>
-                                                <span class="total"><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?></span>
-                                                <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($userBalance); ?></span>
-                                            </li>
-                                            <li>
-                                                <span class="total"><?php echo Labels::getLabel('LBL_Credits_earned_today', $siteLangId); ?></span>
-                                                <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($txnsSummary['total_earned']); ?></span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="widget widget-stats">
-                    <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title"><?php echo Labels::getLabel('LBL_Revenue', $siteLangId); ?></h5>
-                                <i class="icn">
-                                    <svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#revenue" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#revenue"></use>
-                                    </svg>
-                                </i>
-                            </div>
-                            <div class="card-body ">
-                                <div class="stats">
-                                    <div class="stats-number">
-                                        <ul>
-                                            <li>
-                                                <span class="total"><?php echo Labels::getLabel('LBL_Total_Revenue', $siteLangId); ?></span>
-                                                <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($userRevenue); ?></span>
-                                            </li>
-                                            <li>
-                                                <span class="total"><?php echo Labels::getLabel('LBL_Today_Revenue', $siteLangId); ?></span>
-                                                <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($todayRevenue); ?></span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="widget widget-stats">
-                    <div class="card">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card" style="display:none;">
                         <div class="card-header">
-                            <h5 class="card-title">
-                                <?php echo Labels::getLabel('LBL_Share_and_earn_commission_on_every_purchase', $siteLangId) ?>
-                            </h5>
-                        </div>
-                        <div class="card-body ">
-                            <div class="stats">
-                                <a href="javascript:void(0)" class="btn btn-outline-brand btn-sm" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></a>
-                            </div>
-                        </div>
-                    </div>
-                </div> <?php
-                        if (!empty(FatApp::getConfig("CONF_FACEBOOK_APP_ID")) && !empty(FatApp::getConfig("CONF_FACEBOOK_APP_SECRET"))) {
-                        ?> <div class="widget widget-stats">
-                        <a id="facebook_btn" href="javascript:void(0);" class="box--share box--share-fb">
-                            <i class="icon fab fa-facebook-f"></i>
-                            <div class="detail">
-                                <h5><?php echo Labels::getLabel('L_Share_on', $siteLangId) ?></h5>
-                                <h2><?php echo Labels::getLabel('L_Facebook', $siteLangId) ?></h2>
-                                <p> <?php echo sprintf(Labels::getLabel('L_Post_your_wall_facebook', $siteLangId), '<strong>' . Labels::getLabel('L_Facebook', $siteLangId) . '</strong>') ?>
-                                </p>
-                            </div>
-                            <span class="ajax_message thanks-msg" id="fb_ajax"></span>
-                        </a>
-                    </div> <?php
-                        } ?> <?php if (false !== $twitterUrl) {
-                                ?> <div class="widget widget-stats">
-                        <a class="box--share box--share-tw" id="twitter_btn" href="javascript:void(0);">
-                            <i class="icon fa fa-twitter"></i>
-                            <div class="detail">
-                                <h5><?php echo Labels::getLabel('L_Share_on', $siteLangId) ?></h5>
-                                <h2><?php echo Labels::getLabel('L_Twitter', $siteLangId) ?></h2>
-                                <p> <?php echo sprintf(Labels::getLabel('L_Send_a_tweet_followers', $siteLangId), '<strong>' . Labels::getLabel('L_Tweet', $siteLangId) . '</strong>') ?>
-                                </p>
-                            </div>
-                            <span class="ajax_message thanks-msg" id="twitter_ajax"></span>
-                        </a>
-                    </div> <?php
-                                } ?> <div class="widget widget-stats">
-                    <a class="showbutton box--share box--share-mail" href="javascript:void(0);">
-                        <i class="fa fa-envelope"></i>
-                        <div class="detail">
-                            <h5><?php echo Labels::getLabel('L_Share_on', $siteLangId) ?></h5>
-                            <h2><?php echo Labels::getLabel('L_Email', $siteLangId) ?></h2>
-                            <p> <?php echo Labels::getLabel('L_Email', $siteLangId) ?>
-                                <?php echo Labels::getLabel('L_Your_friend_tell_them_about_yourself', $siteLangId) ?>
-                            </p>
-                        </div>
-                        <span class="ajax_message thanks-msg"></span>
-                    </a>
-                </div>
-            </div>
-            <!-- <div class="row">
-            <div class="col-lg-6 col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title "><?php echo Labels::getLabel('LBL_Information', $siteLangId); ?></h5>
-                        <div class="action">
-                            <a href="<?php echo UrlHelper::generateUrl('account', 'profileInfo'); ?>" class="link"><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>  <i class="fa fa-pencil"></i></a>
-                        </div>
-                    </div>
-                    <div class="card-body ">
-                        <div class="tabs tabs--small   tabs--scroll clearfix setactive-js">
-                            <ul>
-                                <li class="is-active"><a href="javascript:void(0);" onClick="personalInfo(this)"><?php echo Labels::getLabel('LBL_Personal', $siteLangId); ?></a></li>
-                                <li><a href="javascript:void(0);" onClick="addressInfo(this)"><?php echo Labels::getLabel('LBL_Address_Information', $siteLangId); ?></a></li>
-                            </ul>
-                        </div>
-                        <div class="tabs__content" id="tabListing"><?php echo Labels::getlabel('LBL_loading..', $siteLangId); ?></div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-            <div class="row mb-3 borderwrap showwrap" style="display:none;">
-                <div class="col-lg-12 col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4><?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?></h4>
+                            <h4>
+                                <?php echo Labels::getLabel('L_Invite_friends_through_email', $siteLangId) ?></h4>
                         </div>
                         <div class="card-body"> <?php echo $sharingFrm->getFormHtml(); ?> <span class="ajax_message" id="custom_ajax"></span></div>
 
                     </div>
-                </div>
-            </div>
-            <div class="row ">
-                <div class="col-lg-6 col-md-12 mb-4">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title "><?php echo Labels::getLabel('LBL_Referred_by_me', $siteLangId); ?>
@@ -230,8 +92,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-12 mb-4">
+
+
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title ">
@@ -302,7 +164,151 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="widget-scroll">
+                        <div class="widget widget-stats">
+                            <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Credits', $siteLangId); ?></h5>
+                                        <i class="icn"><svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#credits" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#Credits"></use>
+                                            </svg>
+                                        </i>
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="stats">
+                                            <div class="stats-number">
+                                                <ul>
+                                                    <li>
+                                                        <span class="total"><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?></span>
+                                                        <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($userBalance); ?></span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="total"><?php echo Labels::getLabel('LBL_Credits_earned_today', $siteLangId); ?></span>
+                                                        <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($txnsSummary['total_earned']); ?></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="widget widget-stats">
+                            <a href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title"><?php echo Labels::getLabel('LBL_Revenue', $siteLangId); ?></h5>
+                                        <i class="icn">
+                                            <svg class="svg">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#revenue" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#revenue"></use>
+                                            </svg>
+                                        </i>
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="stats">
+                                            <div class="stats-number">
+                                                <ul>
+                                                    <li>
+                                                        <span class="total"><?php echo Labels::getLabel('LBL_Total_Revenue', $siteLangId); ?></span>
+                                                        <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($userRevenue); ?></span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="total"><?php echo Labels::getLabel('LBL_Today_Revenue', $siteLangId); ?></span>
+                                                        <span class="total-numbers"><?php echo CommonHelper::displayMoneyFormat($todayRevenue); ?></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="widget widget-stats">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">
+                                        <?php echo Labels::getLabel('LBL_Share_and_earn_commission_on_every_purchase', $siteLangId) ?>
+                                    </h5>
+                                </div>
+                                <div class="card-body ">
+                                    <div class="stats">
+                                        <a href="javascript:void(0)" class="btn btn-outline-brand btn-sm" title="<?php echo $affiliateTrackingUrl; ?>" onclick="copy($(this))"><?php echo Labels::getLabel('LBL_Click_to_copy', $siteLangId) ?></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <?php
+                                if (!empty(FatApp::getConfig("CONF_FACEBOOK_APP_ID")) && !empty(FatApp::getConfig("CONF_FACEBOOK_APP_SECRET"))) {
+                                ?> <div class="widget widget-stats">
+                                <a id="facebook_btn" href="javascript:void(0);" class="box--share box--share-fb">
+                                    <i class="icon fab fa-facebook-f"></i>
+                                    <div class="detail">
+                                        <h5><?php echo Labels::getLabel('L_Share_on', $siteLangId) ?></h5>
+                                        <h2><?php echo Labels::getLabel('L_Facebook', $siteLangId) ?></h2>
+                                        <p> <?php echo sprintf(Labels::getLabel('L_Post_your_wall_facebook', $siteLangId), '<strong>' . Labels::getLabel('L_Facebook', $siteLangId) . '</strong>') ?>
+                                        </p>
+                                    </div>
+                                    <span class="ajax_message thanks-msg" id="fb_ajax"></span>
+                                </a>
+                            </div> <?php
+                                } ?> <?php if (false !== $twitterUrl) {
+                                        ?> <div class="widget widget-stats">
+                                <a class="box--share box--share-tw" id="twitter_btn" href="javascript:void(0);">
+                                    <i class="icon fa fa-twitter"></i>
+                                    <div class="detail">
+                                        <h5><?php echo Labels::getLabel('L_Share_on', $siteLangId) ?></h5>
+                                        <h2><?php echo Labels::getLabel('L_Twitter', $siteLangId) ?></h2>
+                                        <p> <?php echo sprintf(Labels::getLabel('L_Send_a_tweet_followers', $siteLangId), '<strong>' . Labels::getLabel('L_Tweet', $siteLangId) . '</strong>') ?>
+                                        </p>
+                                    </div>
+                                    <span class="ajax_message thanks-msg" id="twitter_ajax"></span>
+                                </a>
+                            </div> <?php
+                                        } ?> <div class="widget widget-stats">
+                            <a class="showbutton box--share box--share-mail" href="javascript:void(0);">
+                                <i class="fa fa-envelope"></i>
+                                <div class="detail">
+                                    <h5><?php echo Labels::getLabel('L_Share_on', $siteLangId) ?></h5>
+                                    <h2><?php echo Labels::getLabel('L_Email', $siteLangId) ?></h2>
+                                    <p> <?php echo Labels::getLabel('L_Email', $siteLangId) ?>
+                                        <?php echo Labels::getLabel('L_Your_friend_tell_them_about_yourself', $siteLangId) ?>
+                                    </p>
+                                </div>
+                                <span class="ajax_message thanks-msg"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title "><?php echo Labels::getLabel('LBL_Information', $siteLangId); ?></h5>
+                        <div class="action">
+                            <a href="<?php echo UrlHelper::generateUrl('account', 'profileInfo'); ?>" class="link"><?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>  <i class="fa fa-pencil"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-body ">
+                        <div class="tabs tabs--small   tabs--scroll clearfix setactive-js">
+                            <ul>
+                                <li class="is-active"><a href="javascript:void(0);" onClick="personalInfo(this)"><?php echo Labels::getLabel('LBL_Personal', $siteLangId); ?></a></li>
+                                <li><a href="javascript:void(0);" onClick="addressInfo(this)"><?php echo Labels::getLabel('LBL_Address_Information', $siteLangId); ?></a></li>
+                            </ul>
+                        </div>
+                        <div class="tabs__content" id="tabListing"><?php echo Labels::getlabel('LBL_loading..', $siteLangId); ?></div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+
+
+
+
+
         </div>
     </div>
 </main>

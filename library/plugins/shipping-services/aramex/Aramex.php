@@ -659,10 +659,10 @@ class Aramex extends ShippingServicesBase
     public function createPickup(array $orderData)
     {
 
-        if ($orderData['ReadyTime'] > $orderData['LastPickupTime'] || $orderData['ReadyTime'] > $orderData['ClosingTime'] || $orderData['ClosingTime'] < $orderData['LastPickupTime'] || time() > strtotime($orderData['PickupDate'])) {
-            $this->error = Labels::getLabel('ERR_INVALID_TIME', $this->langId);
-            return false;
-        }
+        // if ($orderData['ReadyTime'] > $orderData['LastPickupTime'] || $orderData['ReadyTime'] > $orderData['ClosingTime'] || $orderData['ClosingTime'] < $orderData['LastPickupTime'] || time() > strtotime($orderData['PickupDate'])) {
+        //     $this->error = Labels::getLabel('ERR_INVALID_TIME', $this->langId);
+        //     return false;
+        // }
 
         $systemOrderDetail = $this->getSystemOrder($orderData['op_id']);
         $fromAddress = $this->getShopAddress($systemOrderDetail['opshipping_by_seller_user_id']);
