@@ -25,23 +25,29 @@
                     </div>
                     <div class="main-header-toolbar">
                         <div class="header-action">
-                            <div class="header-action__item">
-                                <a href="<?php echo UrlHelper::generateUrl('GettingStarted'); ?>">
-                                    Site tour
-                                </a>
-                            </div>&nbsp;
                             <?php if (isset($tourStep) && 0 < $tourStep) { ?>
-                                <div class="header-action__item">
+                                <div class="header-action__item mx-2">
                                     <a href="<?php echo SiteTourHelper::getPrevLink($tourStep); ?>">
                                         PREV
                                     </a>
-                                </div>&nbsp;
-                                <div class="header-action__item">
+                                </div>
+                                <div class="header-action__item mx-2">
                                     <a href="<?php echo SiteTourHelper::getNextLink($tourStep); ?>">
                                         NEXT
                                     </a>
                                 </div>
                             <?php } ?>
+                            <div class="header-action__item">
+                                <a class="header-action__trigger" href="<?php echo UrlHelper::generateUrl('GettingStarted'); ?>">
+                                    <span class="icon">
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-getting-started">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+
                             <div class="header-action__item">
                                 <a class="header-action__trigger quickSearchMain" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#search-main">
                                     <span class="icon">
