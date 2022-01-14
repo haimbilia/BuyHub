@@ -25,8 +25,19 @@ class SiteTourHelper
 
     public static function getNextLink(int $stepNumber)
     {
-        $url = '';
         $stepNumber++;
+        return self::getUrl($stepNumber);
+    }
+
+    public static function getPrevLink(int $stepNumber)
+    {
+        $stepNumber--;
+        return self::getUrl($stepNumber);
+    }
+
+    public static function getUrl(int $stepNumber)
+    {
+        $url = '';
         switch ($stepNumber) {
             case self::STEP_CONFIGURATION:
                 $url = UrlHelper::generateUrl('Configurations', 'Index', [Configurations::FORM_GENERAL]);
@@ -47,14 +58,14 @@ class SiteTourHelper
                 $url = UrlHelper::generateUrl('TaxStructure');
                 break;
             default:
-                $url = UrlHelper::generateUrl('Dashboard');
+                $url = UrlHelper::generateUrl('GettingStarted');
                 $stepNumber = 0;
                 break;
         }
         return rtrim($url, '/') . '?' . self::TOUR_STEP . '=' . ($stepNumber);
     }
 
-    public static function isGettingStarted()
+    public static function getStepIndex()
     {
         $index = UrlHelper::getQueryStringArr(self::TOUR_STEP);
 
@@ -115,20 +126,44 @@ class SiteTourHelper
         $status = false;
         switch ($stepNumber) {
             case self::STEP_CONFIGURATION:
-                $status = $this->validateConfigurationSteps();
+                $status = $this->validateGeneralConfiguration();
                 break;
             case self::STEP_ADD_PRODUCT:
-                $status = $this->validateConfigurationSteps();
+                $status = $this->validateAddProduct();
                 break;
             case self::STEP_EMAIL_CONF:
                 $status = $this->validateEmailConfiguration();
+                break;
+            case self::STEP_SLIDES:
+                $status = $this->validateSlides();
+                break;
+            case self::STEP_NAVIGATION:
+                $status = $this->validateNavigation();
+                break;
+            case self::STEP_TAX:
+                $status = $this->validateTax();
                 break;
         }
 
         return $status;
     }
 
-    public function validateConfigurationSteps()
+    public function validateGeneralConfiguration()
+    {
+        return true;
+    }
+
+    public function validateSlides()
+    {
+        return true;
+    }
+
+    public function validateNavigation()
+    {
+        return true;
+    }
+
+    public function validateTax()
     {
         return true;
     }
@@ -137,8 +172,8 @@ class SiteTourHelper
     {
         $srch = Product::getSearchObject();
         // $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'product_id = ptc_product_id', 'ptcat');
-        $srch->addCondition('product_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('product_approved', '=', applicationConstants::YES);
+        $srch->addCondition('product_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('product_approved', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $srch->addFld('1');

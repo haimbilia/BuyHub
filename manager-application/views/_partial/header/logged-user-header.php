@@ -1,5 +1,9 @@
 <div class="app">
-    <?php $this->includeTemplate('_partial/header/left-navigation.php') ?>
+    <?php
+    if (!SiteTourHelper::getStepIndex()) {
+        $this->includeTemplate('_partial/header/left-navigation.php');
+    }
+    ?>
     <div class="wrap">
         <header class="main-header mainHeaderJs">
             <div class="container-fluid">
@@ -23,14 +27,14 @@
                     </div>
                     <div class="main-header-toolbar">
                         <div class="header-action">
-                        <div class="header-action__item">
-                                    <a href="<?php echo UrlHelper::generateUrl('GettingStarted'); ?>">
-                                        Site tour
-                                    </a>
-                                </div>&nbsp;
+                            <div class="header-action__item">
+                                <a href="<?php echo UrlHelper::generateUrl('GettingStarted'); ?>">
+                                    Site tour
+                                </a>
+                            </div>&nbsp;
                             <?php if (isset($tourStep) && 0 < $tourStep) { ?>
                                 <div class="header-action__item">
-                                    <a href="<?php echo SiteTourHelper::getNextLink($tourStep- 2); ?>">
+                                    <a href="<?php echo SiteTourHelper::getPrevLink($tourStep); ?>">
                                         PREV
                                     </a>
                                 </div>&nbsp;

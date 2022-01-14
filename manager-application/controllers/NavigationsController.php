@@ -48,7 +48,7 @@ class NavigationsController extends ListingBaseController
         
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
-        $this->set('tourStep', SiteTourHelper::isGettingStarted());
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
         $this->_template->addJs(['js/jquery-sortable-lists.js']);
         $this->_template->render();
     }

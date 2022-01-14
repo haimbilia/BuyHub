@@ -22,7 +22,7 @@ class TaxStructureController extends ListingBaseController {
         $this->set('actionItemsData', HtmlHelper::getDefaultActionItems($fields, $this->modelObj));
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TAX_STRUCTURE_NAME', $this->siteLangId));
         $this->getListingData();
-        $this->set('tourStep', SiteTourHelper::isGettingStarted());
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
         $this->_template->addJs('tax-structure/page-js/index.js');
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
