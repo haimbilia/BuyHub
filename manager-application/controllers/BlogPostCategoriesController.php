@@ -293,4 +293,34 @@ class BlogPostCategoriesController extends ListingBaseController
         }
         Product::updateMinPrices();
     }
+
+    protected function markAsDeleted(int $recordId)
+    {
+        $this->checkEditPrivilege();
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+                
+        $childIds = BlogPostCategory::getChildIds($recordId);
+        if (1 < count($childIds)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_REMOVE_CHILD_CATEGORIES_FIRST.'), true);
+        }
+        
+        $obj = new BlogPostCategory($recordId);
+        $obj->assignValues(
+            [
+                BlogPostCategory::tblFld('deleted') => 1,
+                BlogPostCategory::tblFld('identifier') => 'mysql_func_CONCAT(' . BlogPostCategory::tblFld('identifier') . ',"{deleted}",' . BlogPostCategory::tblFld('id') . ')'
+            ],
+            false,
+            '',
+            '',
+            true
+        );
+        if (!$obj->save()) {
+            LibHelper::exitWithError($obj->getError(), true);
+        }
+    }
 }

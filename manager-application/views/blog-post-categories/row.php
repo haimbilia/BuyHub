@@ -48,7 +48,7 @@ $catCode = $parentCatCode . $row['bpcategory_id'] . '_'; ?>
             </div>
         </div>
         <?php if ($row['child_count'] > 0) { ?>
-            <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['bpcategory_id']; ?>-js" onclick="displaySubCategories(this)"></i></span>
+            <span class="sortableListsOpener clickable"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['bpcategory_id']; ?>-js" onclick="displaySubCategories(this)"></i></span>
         <?php } ?>
     </div>
 </li>

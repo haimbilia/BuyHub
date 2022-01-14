@@ -11,7 +11,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
         <?php
         $totalRecords = count($arrListing);
         if ($totalRecords == 0) {
-            $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
+            $this->includeTemplate('_partial/no-record-found.php');
         } else {
             $arr_flds = array(
                 'listSerial' => Labels::getLabel('LBL_#', $siteLangId),

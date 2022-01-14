@@ -1,5 +1,7 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<li id="<?php echo $row['prodcat_id']; ?>" class="liJs sortableListsClosed <?php if ($row['subcategory_count'] == 0) { ?>no-children<?php } ?>">
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+$catCode = $row['prodcat_code'];
+?>
+<li id="<?php echo $row['prodcat_id']; ?>" data-parent-cat-code="<?php echo $catCode; ?>" class="liJs sortableListsClosed <?php if ($row['subcategory_count'] == 0) { ?>no-children<?php } ?>">
     <div>
         <div class="sorting-bar ">
             <div class="sorting-title">
@@ -16,7 +18,7 @@
                     $checked = applicationConstants::ACTIVE == $row['prodcat_active'] ? 'checked' : '';
                     ?>
                     <label class="switch switch-sm switch-icon">
-                        <input type="checkbox" data-cat-parent="<?php echo $row['prodcat_code']; ?>" data-old-status="<?php echo $row['prodcat_active']; ?>" value="<?php echo $row['prodcat_id']; ?>" <?php echo $checked; ?> onclick="<?php echo $statusAct; ?>" class="<?php echo $statusClass; ?>">
+                        <input type="checkbox" data-parent-cat-code="<?php echo $catCode; ?>" data-old-status="<?php echo $row['prodcat_active']; ?>" value="<?php echo $row['prodcat_id']; ?>" <?php echo $checked; ?> onclick="<?php echo $statusAct; ?>" class="<?php echo $statusClass; ?>">
                         <span class="input-helper clickable"></span>
                     </label>
 
@@ -38,7 +40,7 @@
             </div>
         </div>
         <?php if ($row['subcategory_count'] > 0) { ?>
-            <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['prodcat_id']; ?>-js" onClick="displaySubCategories(this)"></i></span>
+            <span class="sortableListsOpener clickable"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['prodcat_id']; ?>-js" onClick="displaySubCategories(this)"></i></span>
         <?php } ?>
     </div>
 </li>

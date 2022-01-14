@@ -19,7 +19,7 @@ if (!empty($productsData)) {
     }
     echo '</ul></div>';
 } else {
-    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
+    $this->includeTemplate('_partial/no-record-found.php');
 }
 
 $frm = new Form('frmProductListing', array('id' => 'frmProductListing'));

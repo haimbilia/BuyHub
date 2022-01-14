@@ -10,8 +10,13 @@
 		var newParendId = frm.bpcategory_parent.value;
 		var recordId = frm.bpcategory_id.value;
 
-		var childEle = $('#' + recordId).find('.statusEleJs');
-		var parentEle = $('#' + recordId).data('parentCatCode').split('_');
+		var childEle = [];
+		var parentEle = [];
+		if (0 < $('#' + recordId).length) {
+			childEle = $('#' + recordId).find('.statusEleJs');
+			parentEle = $('#' + recordId).data('parentCatCode').split('_');
+		}
+
 		var isActiveBefore = frm.bpcategory_active.dataset.oldValue;
 		var isActive = Number($(frm.bpcategory_active).is(":checked"));
 
@@ -20,9 +25,13 @@
 			fcom.removeLoader();
 			$.ykmsg.success(t.msg);
 
+			if (0 < $('.noRecordFoundJs').length) {
+				$('.noRecordFoundJs').remove();
+			}
+
 			var oldRecordParent = $('#' + t.recordId).parent().closest('.liJs');
 			var oldRecordParentId = oldRecordParent.attr('id');
-			if (oldParentId != newParendId && 1 == oldRecordParent.find('.ul-' + oldRecordParentId + ' li').length) {
+			if (oldParentId != newParendId && 1 == oldRecordParent.find('.ul-' + oldRecordParentId + ' > li').length) {
 				oldRecordParent.find('.ul-' + oldRecordParentId).remove();
 				$('.sortableListsOpener', oldRecordParent).remove();
 			} else if (oldParentId != newParendId) {
@@ -42,7 +51,6 @@
 				$(".categoriesListJs").append(t.listingHtml);
 			}
 
-			console.log(isActiveBefore + " != " + isActive);
 			if (isActiveBefore != isActive) {
 				updateChildAndParentStatus(t.recordId, isActiveBefore, isActive, childEle, parentEle);
 			}
@@ -52,6 +60,31 @@
 			}
 			return;
 		});
+	};
+
+	deleteRecord = function (recordId) {
+		if (false === checkControllerName()) {
+			return false;
+		}
+
+		if (!confirm(langLbl.confirmDelete)) {
+			return;
+		}
+		data = "recordId=" + recordId;
+		fcom.updateWithAjax(
+			fcom.makeUrl(controllerName, "deleteRecord"),
+			data,
+			function () {
+				var oldRecordParent = $('#' + recordId).parent().closest('.liJs');
+				var oldRecordParentId = oldRecordParent.attr('id');
+				if (1 == oldRecordParent.find('.ul-' + oldRecordParentId + ' > li').length) {
+					oldRecordParent.find('.ul-' + oldRecordParentId).remove();
+					$('.sortableListsOpener', oldRecordParent).remove();
+				} else {
+					$('#' + recordId).remove();
+				}
+			}
+		);
 	};
 
 	displaySubCategories = function (obj, catId = 0, data, callable = '') {
@@ -173,8 +206,6 @@
 	};
 
 	updateChildAndParentStatus = function (recordId, oldStatus, status, childEle, parentEle) {
-		console.log(childEle);
-		console.log(parentEle);
 		/* Mark all children In-Active */
 		if (0 < childEle.length && 0 == status) {
 			$.each(childEle, function (key, children) {

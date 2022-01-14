@@ -5,17 +5,16 @@ if (0 < $recordId) {
     include('row.php');
 } else { ?>
     <div class="accordion-categories listingRecordJs">
-        <?php if (count($arrListing) > 0) { ?>
-            <ul id="sorting-categories" class="sorting-categories categoriesListJs">
+        <ul id="sorting-categories" class="sorting-categories categoriesListJs">
+            <?php if (count($arrListing) > 0) { ?>
                 <?php foreach ($arrListing as $sn => $row) {
                     $parentCatCode = '';
                     include('row.php');
                 } ?>
-            </ul>
-        <?php } else {
-            $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId));
-        }
-        ?>
+            <?php } else {
+                $this->includeTemplate('_partial/no-record-found.php');
+            } ?>
+        </ul>
     </div>
     <script type="text/javascript">
         $(function() {
