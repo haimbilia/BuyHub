@@ -35,7 +35,7 @@ $username = !empty($user['user_name']) ? $user['user_name'] . ' (' . $user['cred
         </figure>
     <?php } ?>
     <div class="user-profile_data">
-        <div class="d-flex">
+        <div class="verified-wrap">
             <?php echo $verifiedBadge; ?>
 
             <?php if (!empty($href) || !empty($onclick)) { ?>

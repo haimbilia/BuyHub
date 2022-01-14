@@ -65,23 +65,20 @@ class RatingTypesController extends ListingBaseController
         $post = $searchForm->getFormDataFromArray($data);
 
         $srch = new RatingTypeSearch($this->siteLangId);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('ratingtype_name', 'like', '%' . $keyword . '%');
             $cnd->attachCondition('ratingtype_identifier', 'like', '%' . $keyword . '%');
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize); 
         $srch->addOrder($sortBy, $sortOrder);
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('restrictTypes', [RatingType::TYPE_PRODUCT, RatingType::TYPE_SHOP, RatingType::TYPE_DELIVERY]);
         $this->set('types', RatingType::getTypeArr($this->siteLangId));
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", $records); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
@@ -213,6 +210,7 @@ class RatingTypesController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'ratingtype_active');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

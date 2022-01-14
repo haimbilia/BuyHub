@@ -1,7 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$row['child_count'] = count($row['children']); 
 
-$row['child_count'] = count($row['children']); ?>
-<li id="<?php echo $row['bpcategory_id']; ?>" class="sortableListsClosed <?php if ($row['child_count'] == 0) { ?>no-children<?php } ?>">
+$catCode = $parentCatCode . $row['bpcategory_id'] . '_'; ?>
+
+<li id="<?php echo $row['bpcategory_id']; ?>" data-parent-cat-code="<?php echo $catCode; ?>" class="liJs sortableListsClosed <?php if ($row['child_count'] == 0) { ?>no-children<?php } ?>">
     <div>
         <div class="sorting-bar">
             <div class="sorting-title">
@@ -14,22 +16,21 @@ $row['child_count'] = count($row['children']); ?>
             </div>
             <div class="sorting-actions">
                 <?php
-                $active = "";
+                $checked = "";
                 $changeStatus = applicationConstants::ACTIVE;
                 if (applicationConstants::ACTIVE == $row['bpcategory_active']) {
-                    $active = 'checked';
+                    $checked = 'checked';
                     $changeStatus = applicationConstants::INACTIVE;
                 }
 
                 $statusAct = ($canEdit === true) ? 'updateStatus(event,this,' . $row['bpcategory_id'] . ', ' . $changeStatus . ')' : 'return false;';
-                $statusClass = ($canEdit === false) ? 'disabled' : '';
-                $hasParent = 0 < $row['bpcategory_parent'] ? applicationConstants::YES : applicationConstants::NO;
-
+                $statusClass = ($canEdit === false) ? 'disabled' : 'statusEleJs statusEle-' . $row['bpcategory_id'];
                 ?>
                 <label class="switch switch-sm switch-icon">
-                    <input <?php echo $active; ?> type="checkbox" id="switch<?php echo $row['bpcategory_id']; ?>" value="<?php echo $row['bpcategory_id']; ?>" onclick="<?php echo $statusAct; ?>" <?php echo $statusClass; ?> data-childcount="<?php echo $row['child_count']; ?>" data-hasparent="<?php echo $hasParent; ?>" />
-                    <span></span>
+                    <input type="checkbox" data-parent-cat-code="<?php echo $catCode; ?>" data-old-status="<?php echo $row['bpcategory_active']; ?>" value="<?php echo $row['bpcategory_id']; ?>" <?php echo $checked; ?> onclick="<?php echo $statusAct; ?>" class="<?php echo $statusClass; ?>">
+                    <span class="input-helper clickable"></span>
                 </label>
+
                 <?php if ($canEdit) { ?>
                     <button onclick="editRecord(<?php echo $row['bpcategory_id']; ?>)" title="<?php echo  Labels::getLabel('LBL_Edit', $siteLangId); ?>" class="btn btn-clean btn-sm clickable">
                         <svg class="svg clickable" width="18" height="18">
@@ -47,7 +48,7 @@ $row['child_count'] = count($row['children']); ?>
             </div>
         </div>
         <?php if ($row['child_count'] > 0) { ?>
-            <span class="sortableListsOpener"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['bpcategory_id']; ?>-js" onclick="displaySubCategories(this)"></i></span>
+            <span class="sortableListsOpener clickable"><i class="fa fa-plus clickable sort-icon cat<?php echo $row['bpcategory_id']; ?>-js" onclick="displaySubCategories(this)"></i></span>
         <?php } ?>
     </div>
 </li>

@@ -3127,3 +3127,19 @@ $header-height: 65px;
         margin-bottom: 1rem;
     }
 }
+
+.verified-wrap {
+    display: flex;
+    margin-bottom: 5px;
+    //align-items: center;
+    .verified {
+        color: $brand-color;
+        filter: grayscale(1);
+        opacity: 0.5;
+        margin-#{$end-direction}: 5px;
+        &.is-verified {
+            filter: none;
+            opacity: 1;
+        }
+    }
+}

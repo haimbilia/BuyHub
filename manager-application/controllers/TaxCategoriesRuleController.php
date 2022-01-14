@@ -69,6 +69,7 @@ class TaxCategoriesRuleController extends ListingBaseController
         }
 
         $frm->addHiddenField('', 'taxrule_taxcat_id', $parentId);
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -107,11 +108,8 @@ class TaxCategoriesRuleController extends ListingBaseController
         $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id') . ' and ' . TaxRule::DB_RATES_TBL_PREFIX . 'user_id = 0');
         $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxstr_id = taxrule_taxstr_id');
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $this->siteLangId);
-
         $srch->joinTable(Tax::DB_TBL, 'INNER JOIN', 'taxcat_id = taxrule_taxcat_id');
         $srch->joinTable(Tax::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxcat_id = taxcatlang_taxcat_id and taxcatlang_lang_id = ' . $this->siteLangId);
-        
-        $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'trr_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxrule_taxcat_id','taxcat_name','taxcat_identifier'));
         if (!empty($post['keyword'])) {
             $srch->addCondition('taxrule_name', 'LIKE', "%" . $post['keyword'] . "%");
         }
@@ -121,17 +119,14 @@ class TaxCategoriesRuleController extends ListingBaseController
         } else if (!empty($ruleId)) {
             $srch->addCondition('taxrule_taxcat_id', '=', $ruleId);
         }
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+        $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'trr_rate', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxrule_taxcat_id','taxcat_name','taxcat_identifier'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $srch->addOrder($sortBy, $sortOrder);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

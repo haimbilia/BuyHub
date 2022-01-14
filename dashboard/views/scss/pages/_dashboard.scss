@@ -526,18 +526,9 @@
 }
 
 .widget-scroll {
-    margin-#{$start-direction}: -15px;
-    margin-#{$end-direction}: -15px;
     margin-bottom: 1rem;
-    @include media-breakpoint-down(sm) {
-        margin: 0;
-        margin-bottom: 10px;
-        padding-bottom: 10px;
-    }
+
     .widget-stats {
-        padding-#{$end-direction}: 15px;
-        padding-#{$start-direction}: 15px;
-        padding-top: 8px;
         padding-bottom: 8px;
         min-height: 166px;
         @include media-breakpoint-down(sm) {
@@ -1033,7 +1024,6 @@
 }
 
 .switch {
-    margin: 0 -10px;
     li {
         display: inline-block;
         vertical-align: top;

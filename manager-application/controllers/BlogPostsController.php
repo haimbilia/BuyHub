@@ -101,23 +101,24 @@ class BlogPostsController extends ListingBaseController
         if (isset($post['post_published']) && $post['post_published'] != '') {
             $srch->addCondition('bp.post_published', '=', $post['post_published']);
         }
-        $srch->addMultipleFields(array('*', 'COALESCE(post_title,post_identifier) post_title', 'group_concat(COALESCE(bpcategory_name ,bpcategory_identifier)) categories'));
-        $srch->addGroupby('post_id');
+ 
+        if (isset($post['post_id']) && $post['post_id'] != '') {
+            $srch->addCondition('bp.post_id', '=', $post['post_id']);
+        }
+        
+        if (isset($post['bpcat_id']) && $post['bpcat_id'] != '') {
+            $srch->addCondition('bpcategory_id', '=', $post['bpcat_id']);
+        }
 
+        $srch->addGroupby('post_id');
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
+        $srch->doNotCalculateRecords();  
+        $srch->addMultipleFields(array('*', 'COALESCE(post_title,post_identifier) post_title', 'group_concat(COALESCE(bpcategory_name ,bpcategory_identifier)) categories'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $srch->addOrder($sortBy, $sortOrder);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->addOrder($sortBy, $sortOrder);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -525,7 +526,7 @@ class BlogPostsController extends ListingBaseController
 
         $postStatusArr = BlogPost::getBlogPostStatusArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_POST_STATUS', $this->siteLangId), 'post_published', $postStatusArr, '', array('class' => 'form-control'), Labels::getLabel('FRM_POST_STATUS', $this->siteLangId));
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

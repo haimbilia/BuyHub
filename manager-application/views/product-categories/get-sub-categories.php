@@ -1,7 +1,9 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (count($childCategories) > 0) { ?>
-    <?php foreach ($childCategories as $sn => $row) { ?>
-        <li id="<?php echo $row['prodcat_id']; ?>" class="liJs sortableListsClosed child-category <?php if ($row['subcategory_count'] == 0) { ?>no-children<?php } ?>">
+    <?php foreach ($childCategories as $sn => $row) { 
+        
+        $catCode = $row['prodcat_code']; ?>
+        <li id="<?php echo $row['prodcat_id']; ?>" data-parent-cat-code="<?php echo $catCode; ?>" class="liJs sortableListsClosed child-category <?php if ($row['subcategory_count'] == 0) { ?>no-children<?php } ?>">
             <div>
                 <div class="sorting-bar">
                     <div class="sorting-title">
@@ -18,7 +20,7 @@ if (count($childCategories) > 0) { ?>
                         ?>
                         <span class="switch switch-sm switch-icon clickable">
                             <label>
-                                <input type="checkbox" data-cat-parent="<?php echo $row['prodcat_code']; ?>" data-old-status="<?php echo $row['prodcat_active']; ?>" value="<?php echo $row['prodcat_id']; ?>" <?php echo $checked; ?> onclick="<?php echo $statusAct; ?>" class="<?php echo $statusClass; ?>">
+                                <input type="checkbox" data-parent-cat-code="<?php echo $catCode; ?>" data-old-status="<?php echo $row['prodcat_active']; ?>" value="<?php echo $row['prodcat_id']; ?>" <?php echo $checked; ?> onclick="<?php echo $statusAct; ?>" class="<?php echo $statusClass; ?>">
                                 <span class="input-helper clickable"></span>
                             </label>
                         </span>

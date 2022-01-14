@@ -1308,7 +1308,8 @@ class ProductCategory extends MyAppModel
 
         if (true === $includeSubCategoriesCount) {
             $srchRelation = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
-            $srchRelation->addCondition('pcr_parent_id', '=', 'mysql_func_prodcat_id', 'AND', true);
+            $srchRelation->joinTable(static::DB_TBL, 'INNER JOIN', 'cr.pcr_prodcat_id = pccr.prodcat_id AND pccr.prodcat_deleted = 0', 'pccr');
+            $srchRelation->addCondition('pcr_parent_id', '=', 'mysql_func_m.prodcat_id', 'AND', true);
             $srchRelation->addFld('(COUNT(pcr_prodcat_id) - 1) as subcategory_count');
 
             $srchRelation->doNotCalculateRecords();
@@ -1546,11 +1547,14 @@ class ProductCategory extends MyAppModel
      * @param  array $attr
      * @return array
      */
-    public function getChildrens(array $attr = []): array
+    public function getChildrens(array $attr = [], bool $skipDeleted = true): array
     {
         $catId = $this->getMainTableRecordId();
         $srch = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
         $srch->addCondition('pcr_parent_id', '=', 'mysql_func_' . $catId, 'AND', true);
+        if ($skipDeleted) {
+            $srch->joinTable(static::DB_TBL, 'INNER JOIN', 'cr.pcr_prodcat_id = pccr.prodcat_id AND pccr.prodcat_deleted = 0', 'pccr');
+        }
         $srch->addOrder('pcr_level', 'DESC');
         if (!empty($attr)) {
             $attr = in_array('pcr_prodcat_id', $attr) ? $attr : array_merge($attr, ['pcr_prodcat_id']);

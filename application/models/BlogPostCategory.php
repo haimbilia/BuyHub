@@ -197,9 +197,9 @@ class BlogPostCategory extends MyAppModel
         return $out;
     }
 
-    public function getCategoriesForSelectBox(int $langId, int $ignoreCategoryId = 0)
+    public function getCategoriesForSelectBox(int $langId, int $ignoreCategoryId = 0, bool $checkActive = true)
     {
-        $srch = static::getSearchObject();
+        $srch = static::getSearchObject(false, 0, $checkActive);
         $srch->joinTable(
             static::DB_TBL_LANG,
             'LEFT OUTER JOIN',
@@ -221,7 +221,6 @@ class BlogPostCategory extends MyAppModel
             $srch->addHaving('bpcategory_code', 'NOT LIKE', '%' . str_pad($ignoreCategoryId, 6, '0', STR_PAD_LEFT) . '%');
         }
         $rs = $srch->getResultSet();
-
         return FatApp::getDb()->fetchAll($rs, 'bpcategory_id');
     }
 
@@ -277,7 +276,7 @@ class BlogPostCategory extends MyAppModel
         return $return;
     }
 
-    public static function getBlogPostCatParentChildWiseArr(int $langId = 0, int $parentId = 0, bool $includeChildCat = true, bool $forSelectBox = false , bool $isActive = true): array
+    public static function getBlogPostCatParentChildWiseArr(int $langId = 0, int $parentId = 0, bool $includeChildCat = true, bool $forSelectBox = false, bool $isActive = true, bool $excludeDeleted = false): array
     {
         $parentId = FatUtility::int($parentId);
         $langId = FatUtility::int($langId);
@@ -290,6 +289,10 @@ class BlogPostCategory extends MyAppModel
         $bpCatSrch->setParent($parentId);
         $bpCatSrch->addOrder('bpcategory_display_order', 'asc');
 
+        if (true === $excludeDeleted) {
+            $bpCatSrch->addCondition('bpc.bpcategory_deleted', '=', applicationConstants::NO);
+        }
+
         $rs = $bpCatSrch->getResultSet();
         if ($forSelectBox) {
             $bpCatSrch->addMultipleFields(array('bpcategory_id', 'IFNULL(bpcategory_name,bpcategory_identifier) as bpcategory_name'));
@@ -297,12 +300,13 @@ class BlogPostCategory extends MyAppModel
         } else {            
             $categoriesArr = FatApp::getDb()->fetchAll($rs);
         }
+
         if (!$includeChildCat) {
             return $categoriesArr;
         }
         if (!empty($categoriesArr) && $forSelectBox == false) {
             foreach ($categoriesArr as &$cat) {
-                $cat['children'] = self::getBlogPostCatParentChildWiseArr($langId, $cat['bpcategory_id']);
+                $cat['children'] = self::getBlogPostCatParentChildWiseArr($langId, $cat['bpcategory_id'], $includeChildCat, $forSelectBox, $isActive, $excludeDeleted);
                 $childPosts = BlogPost::getBlogPostsUnderCategory($langId, $cat['bpcategory_id']);
                 $cat['countChildBlogPosts'] = count($childPosts);
             }
@@ -420,11 +424,94 @@ class BlogPostCategory extends MyAppModel
         }
 
         if (!empty($cat)) {
-            $cat['children'] = self::getBlogPostCatParentChildWiseArr($langId, $cat['bpcategory_id']);
+            $cat['children'] = self::getBlogPostCatParentChildWiseArr($langId, $cat['bpcategory_id'], $includeChildCat, false, $isActive);
             $childPosts = BlogPost::getBlogPostsUnderCategory($langId, $cat['bpcategory_id']);
             $cat['countChildBlogPosts'] = count($childPosts);
         }
 
         return $cat;
+    }
+
+    public static function getParentIds(int $bpCategoryId, array $parentIds = []): array
+    {
+        $parentId = BlogPostCategory::getAttributesById($bpCategoryId, 'bpcategory_parent');
+        array_unshift($parentIds, $bpCategoryId);
+
+        if (0 < $parentId) {
+            return self::getParentIds($parentId, $parentIds);
+        }
+        return $parentIds;
+    }
+    
+    public static function getChildIds($bpCategoryId, array $childIds = []): array
+    {
+        $bpCatSrch = new BlogPostCategorySearch(0, false);
+        $bpCatSrch->addFld('bpcategory_id');
+        $bpCatSrch->doNotCalculateRecords();
+        $bpCatSrch->doNotLimitRecords();        
+        if (is_array($bpCategoryId)) {
+            $bpCatSrch->addCondition('bpcategory_parent', 'in', $bpCategoryId);
+        } else {
+            $childIds[] = $bpCategoryId;
+            $bpCatSrch->setParent($bpCategoryId);
+        }
+        $bpCatSrch->addOrder('bpcategory_display_order', 'asc');
+        $bpCatSrch->addCondition('bpc.bpcategory_deleted', '=', applicationConstants::NO);
+
+        $rs = $bpCatSrch->getResultSet();
+        $db = FatApp::getDb();
+        $ids = [];
+        while ($data = $db->fetch($rs)) {
+            $ids[] = $data['bpcategory_id'];
+            $childIds[] = $data['bpcategory_id'];
+        }
+
+        if (!empty($ids)) {
+            return self::getChildIds($ids, $childIds);
+        }
+
+        return $childIds;
+    }
+
+    /**
+     * enableParentCategories
+     *
+     * @return bool
+     */
+    public function enableParentCategories(): bool
+    {
+        $catId = $this->getMainTableRecordId();
+        if (1 > $catId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
+            return false;
+        }
+
+        $parentIds = self::getParentIds($catId);
+        foreach ($parentIds as $recordId) {
+            $obj = new self($recordId);
+            $obj->changeStatus(applicationConstants::ACTIVE);
+        }
+        return true;
+    }
+
+    /**
+     * disableChildCategories
+     *
+     * @return bool
+     */
+    public function disableChildCategories(): bool
+    {
+        $catId = $this->getMainTableRecordId();
+        if (1 > $catId) {
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
+            return false;
+        }
+
+        $childIds = self::getChildIds($catId);
+        foreach ($childIds as $recordId) {
+            $obj = new self($recordId);
+            $obj->changeStatus(applicationConstants::INACTIVE);
+        }
+        return true;
     }
 }

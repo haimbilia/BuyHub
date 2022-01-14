@@ -75,8 +75,7 @@ class UrlRewritingController extends ListingBaseController
             $post['lang_id'] = $lang_id;
         }
 
-        $srch = UrlRewrite::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(['ur.*', 'lng.*']);
+        $srch = UrlRewrite::getSearchObject($this->siteLangId); 
         $srch->joinTable(Language::DB_TBL, 'LEFT OUTER JOIN', 'lng.language_id = ur.urlrewrite_lang_id', 'lng');
         if (!empty($post['keyword'])) {
             $condition = $srch->addCondition('ur.urlrewrite_original', 'like', '%' . $post['keyword'] . '%');
@@ -86,22 +85,14 @@ class UrlRewritingController extends ListingBaseController
         if ($post['lang_id'] > 0) {
             $srch->addCondition('ur.urlrewrite_lang_id', '=', 'mysql_func_' . $post['lang_id'], 'AND', true);
         }
-
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
+        $srch->addMultipleFields(['ur.*', 'lng.*']);
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-        $srch->getResultSet();
-        // echo $srch->getError();
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-        $this->set('postedData', $post);
-
+        $srch->setPageSize($pageSize); 
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
+        $this->set('postedData', $post); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -274,7 +265,7 @@ class UrlRewritingController extends ListingBaseController
             $lang_id = array_key_first($langArr);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;

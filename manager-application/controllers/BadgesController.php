@@ -107,8 +107,7 @@ class BadgesController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
         $srch = new BadgeSearch($this->siteLangId);
-        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', 'mysql_func_' . Badge::TYPE_BADGE, 'AND', true);
-
+        $srch->addCondition(Badge::DB_TBL_PREFIX . 'type', '=', 'mysql_func_' . Badge::TYPE_BADGE, 'AND', true); 
         $keyword = $post['keyword'];
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('badge_name', 'like', '%' . $keyword . '%');
@@ -125,28 +124,19 @@ class BadgesController extends ListingBaseController
             $srch->addCondition('badge_trigger_type', '=', $conditionType);
         }
 
-        $srch->addOrder($sortBy, $sortOrder);
-
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords(); 
+        
+        $srch->addOrder($sortBy, $sortOrder); 
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
-
-        $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
-
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
-
+        $srch->setPageSize($pageSize); 
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));  
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr);
-
+        $this->set('postedData', $paginationArr); 
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
-        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting); 
         $approvalStatusArr = Badge::getApprovalStatusArr($this->siteLangId);
         $this->set("approvalStatusArr", $approvalStatusArr);
     }
@@ -242,7 +232,7 @@ class BadgesController extends ListingBaseController
 
         $conditionTypeArr = Badge::getTriggerCondTypeArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_TRIGGER_TYPE', $this->siteLangId), 'badge_trigger_type', $conditionTypeArr);
-
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
         return $frm;

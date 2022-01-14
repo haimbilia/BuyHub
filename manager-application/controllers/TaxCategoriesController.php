@@ -51,6 +51,7 @@ class TaxCategoriesController extends ListingBaseController
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'taxcat_identifier');
         }
+        $frm->addHiddenField('', 'total_record_count'); 
         HtmlHelper::addSearchButton($frm);
         HtmlHelper::addClearButton($frm);
         return $frm;
@@ -96,18 +97,15 @@ class TaxCategoriesController extends ListingBaseController
             $cnd->attachCondition('t_l.taxcat_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             $cnd->attachCondition('t.taxcat_code', 'like', '%' . $post['keyword'] . '%', 'OR');
         }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addMultipleFields(["t_l.taxcat_name", 't.*']);
-        $srch->addOrder($sortBy, $sortOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set("arrListing", $records);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $srch->addOrder($sortBy, $sortOrder);  
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
