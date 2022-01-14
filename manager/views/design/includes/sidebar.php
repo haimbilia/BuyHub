@@ -1133,8 +1133,6 @@
     <div class="sidebar-foot">
         <ul class="menu">
             <li class="menu-item dropdownJs">
-
-
                 <div class="sidebar-dropdown-menu">
                     <ul class="nav">
                         <li class="nav_item navItemJs">
