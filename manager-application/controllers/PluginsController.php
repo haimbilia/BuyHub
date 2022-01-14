@@ -26,10 +26,10 @@ class PluginsController extends ListingBaseController
         $this->set('formTitle', CommonHelper::replaceStringData(Labels::getLabel('LBL_{PLUGIN-NAME}_PLUGIN_SETUP', $this->siteLangId), ['{PLUGIN-NAME}' => $identifier]));
     }
 
-    public function getSearchForm($fields = [])
+    public function getSearchForm($fields = [], $type = Plugin::TYPE_CURRENCY_CONVERTER)
     {
         $frm = new Form('frmRecordSearch');
-        $frm->addHiddenField('', 'type');
+        $frm->addHiddenField('', 'type', $type);
         $frm->addHiddenField('', 'page', 1);
         if (!empty($fields)) {
             $this->addSortingElements($frm, 'plugin_name');
@@ -37,11 +37,16 @@ class PluginsController extends ListingBaseController
         return $frm;
     }
 
-    public function index()
+    public function index($activeTab = Plugin::TYPE_CURRENCY_CONVERTER)
     {
+        $tabs = Plugin::getTypeArr($this->siteLangId);
+        if (!array_key_exists($activeTab, $tabs)) {
+            $activeTab = Plugin::TYPE_CURRENCY_CONVERTER;
+        }
+
         $fields = $this->getFormColumns();
         $frmSearch = $this->getSearchForm($fields);
-        $frmSearch->fill(['type' => Plugin::TYPE_CURRENCY_CONVERTER]);
+        $frmSearch->fill(['type' => $activeTab]);
 
         $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
@@ -50,11 +55,11 @@ class PluginsController extends ListingBaseController
         $this->set('pageData', $pageData);
         $this->set('pageTitle', $pageTitle);
         $this->set('svgIconNames', Plugin::getSvgIconNames());
-        $this->set('activeTab', Plugin::TYPE_CURRENCY_CONVERTER);
+        $this->set('activeTab', $activeTab);
         $this->set('includeEditor', true);
         $this->set('labels', Plugin::getLabels($this->siteLangId));
-        $this->getListingData();
-
+        $this->getListingData($activeTab);
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
         $this->_template->render();
     }
 
@@ -67,7 +72,7 @@ class PluginsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    private function getListingData($activeTab = Plugin::TYPE_CURRENCY_CONVERTER)
     {
         $db = FatApp::getDb();
 
@@ -76,7 +81,7 @@ class PluginsController extends ListingBaseController
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
-        $type = FatApp::getPostedData('type', FatUtility::VAR_INT, PluginCommon::TYPE_CURRENCY_CONVERTER);
+        $type = FatApp::getPostedData('type', FatUtility::VAR_INT, $activeTab);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'plugin_display_order');
@@ -92,7 +97,6 @@ class PluginsController extends ListingBaseController
         $searchForm = $this->getSearchForm($fields);
         $postedData = FatApp::getPostedData();
         $post = $searchForm->getFormDataFromArray($postedData);
-
 
         $attr = array(
             'plg.plugin_id',

@@ -5,21 +5,28 @@ class SiteTourHelper
     public const TOUR_STEP = 'tour-step';
 
     public const STEP_CONFIGURATION = 1;
-    public const STEP_ADD_PRODUCT = 2;
-    public const STEP_EMAIL_CONF = 3;
-    public const STEP_SLIDES = 4;
-    public const STEP_NAVIGATION = 5;
-    public const STEP_TAX = 6;
+    public const STEP_EMAIL_CONF = 2;
+    public const STEP_PAYMENT_METHOD = 3;
+    public const STEP_TAX_SERVICE = 4;
+    public const STEP_SHIPPING_SERVICE = 5;
+
+    public const STEP_ADD_PRODUCT = 6;
+    public const STEP_SLIDES = 7;
+    public const STEP_NAVIGATION = 8;
+    public const STEP_TAX = 9;
 
     public static function getStepsArr()
     {
         return [
             self::STEP_CONFIGURATION,
-            self::STEP_ADD_PRODUCT,
             self::STEP_EMAIL_CONF,
+            self::STEP_PAYMENT_METHOD,
+            self::STEP_TAX_SERVICE,
+            self::STEP_SHIPPING_SERVICE,
+            /*  self::STEP_ADD_PRODUCT,
             self::STEP_SLIDES,
             self::STEP_NAVIGATION,
-            self::STEP_TAX
+            self::STEP_TAX */
         ];
     }
 
@@ -47,6 +54,15 @@ class SiteTourHelper
                 break;
             case self::STEP_EMAIL_CONF:
                 $url = UrlHelper::generateUrl('Configurations', 'Index', [Configurations::FORM_EMAIL]);
+                break;
+            case self::STEP_PAYMENT_METHOD:
+                $url = UrlHelper::generateUrl('Plugins', 'Index', [PluginCommon::TYPE_REGULAR_PAYMENT_METHOD]);
+                break;
+            case self::STEP_TAX_SERVICE:
+                $url = UrlHelper::generateUrl('Plugins', 'Index', [PluginCommon::TYPE_TAX_SERVICES]);
+                break;
+            case self::STEP_SHIPPING_SERVICE:
+                $url = UrlHelper::generateUrl('Plugins', 'Index', [PluginCommon::TYPE_SHIPPING_SERVICES]);
                 break;
             case self::STEP_SLIDES:
                 $url = UrlHelper::generateUrl('Slides');
@@ -93,17 +109,33 @@ class SiteTourHelper
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
-            self::STEP_ADD_PRODUCT => [
+           /*  self::STEP_ADD_PRODUCT => [
                 'title' => 'Add Product',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
-            ],
+            ], */
             self::STEP_EMAIL_CONF => [
                 'title' => 'Configure Email Settings',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
             ],
-            self::STEP_SLIDES => [
+            self::STEP_PAYMENT_METHOD => [
+                'title' => 'Configure Payment Methods',
+                'icon' => '',
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+            ],
+            self::STEP_TAX_SERVICE => [
+                'title' => 'Configure Tax Services',
+                'icon' => '',
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+            ],
+            self::STEP_SHIPPING_SERVICE => [
+                'title' => 'Configure Shipping Services',
+                'icon' => '',
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+            ],
+            
+           /*  self::STEP_SLIDES => [
                 'title' => 'Configure Home page slides',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
@@ -117,7 +149,7 @@ class SiteTourHelper
                 'title' => 'Setup Tax Rates',
                 'icon' => '',
                 'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
-            ],
+            ], */
         ];
     }
 
@@ -128,10 +160,13 @@ class SiteTourHelper
             case self::STEP_CONFIGURATION:
                 $status = $this->validateGeneralConfiguration();
                 break;
-            case self::STEP_ADD_PRODUCT:
+                /*  case self::STEP_ADD_PRODUCT:
                 $status = $this->validateAddProduct();
-                break;
+                break; */
             case self::STEP_EMAIL_CONF:
+                $status = $this->validateEmailConfiguration();
+                break;
+            case self::STEP_PAYMENT_METHOD:
                 $status = $this->validateEmailConfiguration();
                 break;
             case self::STEP_SLIDES:

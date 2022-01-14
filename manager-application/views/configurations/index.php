@@ -2,10 +2,10 @@
 
 <main class="main">
     <div class="container">
-        <?php
-        $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
-        <div class="grid-layout">
-            <?php if (1 > $tourStep) { ?>
+        <?php if (1 > $tourStep) {
+            $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false);
+        ?>
+            <div class="grid-layout">
                 <div class="grid-layout-left">
                     <button class="float-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#card-aside" aria-controls="card-aside">
                         <svg class="svg" width="20" height="20">
@@ -50,11 +50,19 @@
                         </div>
                     </div>
                 </div>
-            <?php } ?>
-            <div class="grid-layout-right">
-                <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
+                <div class="grid-layout-right">
+                    <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
+                </div>
             </div>
-        </div>
+        <?php } else { ?>
+            <div class="onboarding">
+                <?php require_once(CONF_THEME_PATH . 'configurations/getting-started-left-nav.php'); ?>
+                <div class="onboarding-main">
+                    <?php require_once(CONF_THEME_PATH . 'configurations/form.php'); ?>
+                </div>
+            </div>
+        <?php } ?>
+
     </div>
 </main>
 

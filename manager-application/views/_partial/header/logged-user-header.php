@@ -1,8 +1,6 @@
 <div class="app">
     <?php
-    if (!SiteTourHelper::getStepIndex()) {
-        $this->includeTemplate('_partial/header/left-navigation.php');
-    }
+    $this->includeTemplate('_partial/header/left-navigation.php');    
     ?>
     <div class="wrap">
         <header class="main-header mainHeaderJs">
