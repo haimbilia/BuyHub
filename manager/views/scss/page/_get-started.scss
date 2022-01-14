@@ -78,7 +78,7 @@
 
 .onboarding {
     background-color: $bg-white;
-    box-shadow: $shadow1;
+    box-shadow: $shadow4;
     display: grid;
     grid-template-columns: 1fr 2fr;
     &-aside {
@@ -89,25 +89,95 @@
     }
     &-body {
         flex: 1 1 0;
-        padding: 1.5rem;
+        padding: 3.5rem;
+        padding-#{$end-direction}: 0;
     }
     &-nav {
         display: flex;
         flex-direction: column;
+        counter-reset: section;
         &-item {
-            padding: 0.5rem 0;
+            padding: 0.9rem 0;
             display: flex;
+            position: relative;
         }
 
         &-link {
+            color: $txt-gray;
+            display: flex;
+            align-items: center;
             padding: 0;
             margin: 0;
             text-align: #{$start-direction};
             border: none;
             background-color: transparent;
         }
+        &-icn {
+            margin-#{$end-direction}: 10px;
+            display: block;
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 100%;
+            border: solid 2px $border-color;
+            position: relative;
+            display: flex;
+            align-items: center;
+            color: $txt-gray;
+            font-size: 0.85rem;
+            &:before {
+                margin: 0 auto;
+                counter-increment: section;
+                content: counter(section);
+            }
+        }
         &-label {
-            font-size: 1rem;
+            font-size: 0.9rem;
+            color: lighten($txt-body, 50);
+        }
+
+        .completed {
+            .onboarding-nav-icn {
+                background-color: $brand-color;
+                border-color: $brand-color;
+                &:before {
+                    content: "";
+                    display: inline-block;
+                    transform: rotate(45deg);
+                    height: 13px;
+                    width: 8px;
+                    border-bottom: 3px solid #fff;
+                    border-right: 3px solid #fff;
+                    margin-top: -3px;
+                }
+
+                &:after {
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    height: 3px;
+                    width: 100%;
+                    background-color: #fff;
+                    // content: "";
+                    transform: translateX(10px) rotate(-45deg);
+                    transform-origin: left bottom;
+                }
+            }
+        }
+        .process {
+            .onboarding-nav-icn {
+                border-color: $brand-color;
+                color: $brand-color;
+            }
+            .onboarding-nav-label {
+                color: $txt-body;
+                font-weight: 600;
+            }
+        }
+        .pending {
+            .onboarding-nav-label {
+                color: $txt-gray;
+            }
         }
     }
 
@@ -118,8 +188,12 @@
             bottom: 0;
         }
     }
-}
-.rocket {
-    margin: 0 auto;
-    text-align: center;
+
+    .card {
+        margin-bottom: 0;
+    }
+    .rocket {
+        margin: 0 auto;
+        text-align: center;
+    }
 }
