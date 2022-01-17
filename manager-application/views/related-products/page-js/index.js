@@ -97,6 +97,12 @@
             minimumInputLength: 0
         });
         element.data("select2").$container.addClass("w-100")
+        if(element.attr('multiple') != undefined){
+            element.data("select2").$container.addClass("custom-select2-multiple");
+        }else{
+            element.data("select2").$container.addClass("custom-select2-single");
+        }
+
         setTimeout(() => {
             element.siblings('.select2').find('.select2-search__field').attr('name', element.attr('name') + '_search');
         }, 200);
