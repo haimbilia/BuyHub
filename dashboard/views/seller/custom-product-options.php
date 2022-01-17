@@ -37,8 +37,8 @@
                 dataType: 'json',
                 type: 'post',
                 success: function(json) {
-                    response($.map(json, function(item) {
-                        return { label: item['name'] + ' (' + item['option_identifier'] + ')', value: item['name'] + ' (' + item['option_identifier'] + ')', id: item['id'] };
+                    response($.map(json['results'], function(item) {
+                        return { label: item['text'], value: item['name'] + ' (' + item['option_identifier'] + ')', id: item['id'] };
                     }));
                 },
             });

@@ -565,12 +565,13 @@ class BrandsController extends ListingBaseController
             $srch->addCondition('brand_id', 'NOT IN', $excludeRecords);
         }
 
-        $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);
-        $srch->setPageNumber($page);
+        $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);  
         $doNotLimitRecords = FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 0);
-        if (0 < $doNotLimitRecords) {
+        if (0 < $doNotLimitRecords) {           
+            $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
         } else {
+            $srch->setPageNumber($page);
             $srch->setPageSize($pagesize);
         }
 

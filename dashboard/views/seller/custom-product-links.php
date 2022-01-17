@@ -133,9 +133,9 @@
                     dataType: 'json',
                     type: 'post',
                     success: function(json) {
-                        response($.map(json, function(item) {
+                        response($.map(json['results'], function(item) {
                             return {
-                                label: item['name'],
+                                label: item['text'],
                                 value: item['id']
                             };
                         }));
