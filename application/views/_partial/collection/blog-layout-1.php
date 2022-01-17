@@ -16,7 +16,7 @@
                 <?php foreach ($collection['blogs'] as $blog) { ?>
                     <div class="col-md-4 mb-4 mb-md-0">
                         <div class="post">
-                            <div class="post_media">
+                            <div class="post-media">
                                 <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blog['post_id'])); ?>" class="animate-scale">
                                     <picture>
                                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blog['post_id']); ?>
@@ -43,7 +43,12 @@
                                     <?php /* echo FatUtility::decodeHtmlEntities($blog['post_description']); */ ?>
                                 </div>
                             </div>
-                            <a class="readmore-button link" href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blog['post_id'])); ?>"><?php echo Labels::getLabel('LBL_READ_MORE', $siteLangId); ?></a>
+                            <div class="post-foot">
+                                <a class="post-link readmore-button link" href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blog['post_id'])); ?>">
+                                    <?php echo Labels::getLabel('LBL_READ_MORE', $siteLangId); ?>
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                 <?php } ?>

@@ -1,72 +1,82 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <div class="right-side-bar">
     <?php if (FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 0)) { ?>
-    <div class="blog-subscribers-inner text-center rounded p-4 mb-4">
-        <h3><?php echo Labels::getLabel('LBL_Get_Weekly_Insights', $siteLangId)?></h3>
-        <p><?php echo Labels::getLabel('LBL_Subscribe_to_our_weekly_newsletter', $siteLangId)?></p>
-        <?php $this->includeTemplate('_partial/footerNewsLetterForm.php', array('blogPage'=>true,'formId' => 'newsletter')); ?>
-    </div>
+        <div class="blog-subscribers-inner text-center rounded p-4 mb-4">
+            <h3><?php echo Labels::getLabel('LBL_Get_Weekly_Insights', $siteLangId) ?></h3>
+            <p><?php echo Labels::getLabel('LBL_Subscribe_to_our_weekly_newsletter', $siteLangId) ?></p>
+            <?php $this->includeTemplate('_partial/footerNewsLetterForm.php', array('blogPage' => true, 'formId' => 'newsletter')); ?>
+        </div>
     <?php } ?>
     <?php if (!empty($popularPostList) || (!empty($featuredPostList))) { ?>
-    <div class="bg-gray rounded p-4">
-        <ul class="js-tabs tabs-blog rounded">
-            <?php if (!empty($popularPostList)) { ?>
-                <li class="is--active"><a href="#/tab-1"><?php echo Labels::getLabel('LBL_Popular', $siteLangId)?></a></li>
-            <?php }?>
-            <?php if (!empty($featuredPostList)) { ?>
-                <li><a href="#/tab-2"><?php echo Labels::getLabel('LBL_Featured', $siteLangId)?> </a></li>
-            <?php }?>
-        </ul>
-        <div class="tabs-content">
-            <?php if (!empty($popularPostList)) { ?>
-            <div id="tab-1" class="content-data" style="display: block;">
-                <ul>
-                    <?php foreach ($popularPostList as $blogPost) { ?>
-                    <li>
-                        <div class="post">
-                            <ul class="post_category">
-                                <?php $categoryIds = !empty($blogPost['categoryIds'])?explode(',', $blogPost['categoryIds']):array();
-                                $categoryNames = !empty($blogPost['categoryNames'])?explode('~', $blogPost['categoryNames']):array();
-                                $categories = array_combine($categoryIds, $categoryNames);
-                                foreach ($categories as $id => $name) { ?>
-                                    <li><a href="<?php echo UrlHelper::generateUrl('Blog', 'category', array($id)); ?>"><?php echo $name; ?></a></li>
-                                <?php } ?>
-                            </ul>
-                            <h2 class="post_title"><a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo mb_substr($blogPost['post_title'], 0, 80); ?></a></h2>
-                        </div>
-                    </li>
-                    <?php }?>
-                </ul>
+        <div class="bg-gray rounded p-4">
+            <ul class="js-tabs tabs-blog rounded">
+                <?php if (!empty($popularPostList)) { ?>
+                    <li class="is--active"><a href="#/tab-1"><?php echo Labels::getLabel('LBL_Popular', $siteLangId) ?></a></li>
+                <?php } ?>
+                <?php if (!empty($featuredPostList)) { ?>
+                    <li><a href="#/tab-2"><?php echo Labels::getLabel('LBL_Featured', $siteLangId) ?> </a></li>
+                <?php } ?>
+            </ul>
+            <div class="tabs-content">
+                <?php if (!empty($popularPostList)) { ?>
+                    <div id="tab-1" class="content-data" style="display: block;">
+                        <ul>
+                            <?php foreach ($popularPostList as $blogPost) { ?>
+                                <li>
+                                    <div class="post">
+                                        <ul class="post_category">
+                                            <?php $categoryIds = !empty($blogPost['categoryIds']) ? explode(',', $blogPost['categoryIds']) : array();
+                                            $categoryNames = !empty($blogPost['categoryNames']) ? explode('~', $blogPost['categoryNames']) : array();
+                                            $categories = array_combine($categoryIds, $categoryNames);
+                                            foreach ($categories as $id => $name) { ?>
+                                                <li><a href="<?php echo UrlHelper::generateUrl('Blog', 'category', array($id)); ?>"><?php echo $name; ?></a></li>
+                                            <?php } ?>
+                                        </ul>
+                                        <h2 class="post_title">
+                                            <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo mb_substr($blogPost['post_title'], 0, 80); ?></a>
+                                        </h2>
+                                    </div>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                <?php } ?>
+                <?php if (!empty($featuredPostList)) { ?>
+                    <div id="tab-2" class="content-data">
+                        <ul>
+                            <?php foreach ($featuredPostList as $blogPost) { ?>
+                                <li>
+                                    <div class="post">
+                                        <div class="post-body">
+                                            <ul class="post_category">
+                                                <?php $categoryIds = !empty($blogPost['categoryIds']) ? explode(',', $blogPost['categoryIds']) : array();
+                                                $categoryNames = !empty($blogPost['categoryNames']) ? explode('~', $blogPost['categoryNames']) : array();
+                                                $categories = array_combine($categoryIds, $categoryNames);
+                                                foreach ($categories as $id => $name) { ?>
+                                                    <li><a href="<?php echo UrlHelper::generateUrl('Blog', 'category', array($id)); ?>"><?php echo $name; ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+
+                                            <h2 class="post_title">
+                                                <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo mb_substr($blogPost['post_title'], 0, 80); ?>
+                                                </a>
+                                            </h2>
+
+                                        </div>
+                                    </div>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                <?php } ?>
             </div>
-            <?php }?>
-            <?php if (!empty($featuredPostList)) { ?>
-            <div id="tab-2" class="content-data">
-                <ul>
-                    <?php foreach ($featuredPostList as $blogPost) { ?>
-                    <li>
-                        <div class="post">
-                            <ul class="post_category">
-                                <?php $categoryIds = !empty($blogPost['categoryIds'])?explode(',', $blogPost['categoryIds']):array();
-                                $categoryNames = !empty($blogPost['categoryNames'])?explode('~', $blogPost['categoryNames']):array();
-                                $categories = array_combine($categoryIds, $categoryNames);
-                                foreach ($categories as $id => $name) { ?>
-                                    <li><a href="<?php echo UrlHelper::generateUrl('Blog', 'category', array($id)); ?>"><?php echo $name; ?></a></li>
-                                <?php } ?>
-                            </ul>
-                            <h2 class="post_title"><a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo mb_substr($blogPost['post_title'], 0, 80); ?></a></h2>
-                        </div>
-                    </li>
-                    <?php }?>
-                </ul>
-            </div>
-            <?php }?>
         </div>
-    </div>
-    <?php }?>
+    <?php } ?>
 </div>
-<div class="gap"></div>
-<a href="<?php echo UrlHelper::generateUrl('Blog', 'contributionForm'); ?>" class="btn btn-brand btn--lg btn-block ripplelink btn--contribute"> <?php echo Labels::getLabel('Lbl_Contribute', $siteLangId); ?> </a>
-<div class="gap"></div>
+
+<a href="<?php echo UrlHelper::generateUrl('Blog', 'contributionForm'); ?>" class="btn btn-brand btn--lg btn-block ripplelink btn--contribute"> <?php echo Labels::getLabel('Lbl_Contribute', $siteLangId); ?>
+</a>
+
 <?php /*if (!empty($categoriesArr)) { ?>
 <h3 class="widget__title -style-uppercase"><?php echo Labels::getLabel('Lbl_categories', $siteLangId); ?></h3>
 <div class="">
@@ -99,7 +109,7 @@
         </ul>
     </nav>
 </div>
-<?php }*/?>
+<?php }*/ ?>
 
 <script>
     /* for blog links */

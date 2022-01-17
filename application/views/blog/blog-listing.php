@@ -1,23 +1,35 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (!empty($postList)) {
     foreach ($postList as $blogPost) { ?>
-        <div class="col-md-6 mb-5">
+        <div class="col-lg-4 mb-5">
             <div class="post">
-                <figure class="post_media">
-                    <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']); ?>
-                    <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><img data-ratio="16:9" src="<?php echo UrlHelper::generateFileUrl('image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, "LAYOUT2"), CONF_WEBROOT_URL); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $blogPost['post_title']; ?>"></a>
-                </figure>
-                <ul class="post_category">
-                    <?php $categoryIds = !empty($blogPost['categoryIds']) ? explode(',', $blogPost['categoryIds']) : array();
-                    $categoryNames = !empty($blogPost['categoryNames']) ? explode('~', $blogPost['categoryNames']) : array();
-                    $categories = array_combine($categoryIds, $categoryNames);
-                    foreach ($categories as $id => $name) { ?>
-                        <li><a href="<?php echo UrlHelper::generateUrl('Blog', 'category', array($id)); ?>"><?php echo $name; ?></a>
-                        </li>
-                    <?php } ?>
-                </ul>
-                <h2 class="post_title"> <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo $blogPost['post_title'] ?></a>
-                </h2>
+                <div class="post-head">
+                    <figure class="post-media">
+                        <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blogPost['post_id']); ?>
+                        <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>">
+                            <img data-ratio="16:9" src="<?php echo UrlHelper::generateFileUrl('image', 'blogPostFront', array($blogPost['post_id'], $siteLangId, "LAYOUT2"), CONF_WEBROOT_URL); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blogPost['post_title']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $blogPost['post_title']; ?>"></a>
+                    </figure>
+                </div>
+                <div class="post-body">
+                    <ul class="post-category">
+                        <?php $categoryIds = !empty($blogPost['categoryIds']) ? explode(',', $blogPost['categoryIds']) : array();
+                        $categoryNames = !empty($blogPost['categoryNames']) ? explode('~', $blogPost['categoryNames']) : array();
+                        $categories = array_combine($categoryIds, $categoryNames);
+                        foreach ($categories as $id => $name) { ?>
+                            <li class="post-category-tag">
+                                <a href="<?php echo UrlHelper::generateUrl('Blog', 'category', array($id)); ?>"><?php echo $name; ?>
+                                </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                    <h2 class="post-title">
+                        <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blogPost['post_id'])); ?>"><?php echo $blogPost['post_title'] ?></a>
+                    </h2>
+
+                </div>
+                <div class="post-foot">
+                    <a class="post-link" href="#">Read more</a>
+                </div>
                 <?php /* <div class="share-button share-button--static-horizontal justify-content-start">
                 <a href="javascript:void(0)" class="social-toggle"><i class="icn">
                         <svg class="svg">
