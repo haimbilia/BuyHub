@@ -75,7 +75,7 @@
                     dataType: 'json',
                     type: 'post',
                     success: function(json) {
-                        response($.map(json, function(item) {
+                        response($.map(json['results'], function(item) {
                             return {
                                 label: item['name'] + '[' + item['product_identifier'] + ']',
                                 value: item['name'] + '[' + item['product_identifier'] + ']',

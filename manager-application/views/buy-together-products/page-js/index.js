@@ -1,7 +1,8 @@
 (function () {
     var selected_products = [];
     bindProductNameSelect2 = function () {
-        $("select[name='product_name']").select2({
+        let ele = $("select[name='product_name']");
+        ele.select2({
             closeOnSelect: true,
             dir: layoutDirection,
             allowClear: true,
@@ -44,6 +45,13 @@
             var parentForm = $(this).closest('form').attr('id');
             $("#" + parentForm + " input[name='selprod_id']").val('');
         });
+
+        var select2Selector = ele.data("select2");
+        if(ele.attr('multiple') != undefined){
+            select2Selector.$container.addClass("custom-select2-multiple");
+        }else{
+            select2Selector.$container.addClass("custom-select2-single");
+        }
         $("." + $.ykmodal.element).removeAttr('tabindex');
     };
 
@@ -101,6 +109,12 @@
                 return (typeof result.product_identifier === 'undefined' || typeof result.name === 'undefined') ? result.text : result.name + '[' + result.product_identifier + ']';
             }
         });
+        var select2Selector = ele.data("select2");
+        if(element.attr('multiple') != undefined){
+            select2Selector.$container.addClass("custom-select2-multiple");
+        }else{
+            select2Selector.$container.addClass("custom-select2-single");
+        }
         setTimeout(() => {
             element.siblings('.select2').find('.select2-search__field').attr('name', element.attr('name') + '_search');
         }, 200);

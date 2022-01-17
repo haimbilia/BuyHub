@@ -430,7 +430,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             tagifyProducts();
             productDefaultImages();
             var langId = getCurrentFrmLangId();
-            select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete'), {
+            select2('product_brand_id', fcom.makeUrl('Brands', 'autoComplete',[],siteConstants.webrootfront), {
                 brand_active: 1,
                 langId: langId
             });
@@ -445,6 +445,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
             });
 
             $('#addProductfrm .optionsJs').each(function(index) {
+                console.log('vvv');
                 var selectedOptionData = [];
                 if (index in productOptions) {
                     selectedOptionData = [{
@@ -469,7 +470,7 @@ $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
                 tagifyOptionValue("#" + $(this).attr('id'));
             });
 
-            getShippingProfileOptions(<?php echo $frm->getField('product_seller_id')->value; ?>);
+            //getShippingProfileOptions(<?php echo $frm->getField('product_seller_id')->value; ?>);
             upcType();
             <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
                 getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>, <?php echo $recordId; ?>);

@@ -28,14 +28,16 @@ class ProductsController extends SellerBaseController
     public function form($recordId = 0, $productType = 0)
     {
         $this->checkEditPrivilege(); 
+
+        $userId = $this->userParentId;
         
         if (0 == $recordId && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
-            Product::getActiveCount($this->userParentId) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_products_allowed')) {
+            Product::getActiveCount($userId) >= SellerPackages::getAllowedLimit($userId, $this->siteLangId, 'ossubs_products_allowed')) {
             LibHelper::exitWithError(Labels::getLabel('ERR_YOU_HAVE_CROSSED_YOUR_PACKAGE_LIMIT', $this->siteLangId),false,true);
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));            
         }
 
-        if (!$this->isShopActive($this->userParentId, 0, true)) {          
+        if (!$this->isShopActive($userId, 0, true)) {          
             LibHelper::exitWithError($this->str_invalid_request, false ,true);         
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
@@ -45,7 +47,7 @@ class ProductsController extends SellerBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Products'));
         }
 
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+        if (!UserPrivilege::isUserHasValidSubsription($userId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_BUY_SUBSCRIPTION', $this->siteLangId),false,true);
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
@@ -58,7 +60,16 @@ class ProductsController extends SellerBaseController
             $langId = CommonHelper::getDefaultFormLangId();
         }
 
+
+        $shippingObj = new Shipping($userId);
+
         $frm = $this->getForm($langId, $productType, $recordId);
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) || ($shippingObj->getShippingApiObj($userId) && !Shop::getAttributesByUserId($userId, 'shop_use_manual_shipping_rates') )) {    
+                       
+            $frm->removeField($frm->getField('shipping_profile'));
+        }else{
+
+        }   
         $imgFrm = $this->getImageFrm();   
         $productOptions = [];
         if (1 < $recordId) {           
@@ -219,8 +230,8 @@ class ProductsController extends SellerBaseController
             $this->_template->render(false, false, 'json-success.php', true, false);
             return;
         }
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));
-
+        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));     
+        $this->_template->addCss(array('css/select2.min.css'));
         $this->set("includeEditor", true);  
         $this->_template->render();
     }
@@ -234,6 +245,9 @@ class ProductsController extends SellerBaseController
         }
         $productSpecifications = [];
         if (0 < $recordId) {
+            if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $recordId)) {
+                LibHelper::exitWithError($this->str_invalid_request_id);
+            }
             $prod = new Product($recordId);
             $productSpecifications = $prod->getProdSpecificationsByLangId($langId);
         }
@@ -274,23 +288,23 @@ class ProductsController extends SellerBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function getShippingProfileOptions()
-    {
-        $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT);
-        if (1 > $langId) {            
-            LibHelper::exitWithError($this->str_invalid_request, true);            
-        }
-        $shippingObj = new Shipping($userId);
-        $shipProfileArr = [];
-        $shippingApiActive = 1;
-        if (!$shippingObj->getShippingApiObj($userId)) {
-            $shippingApiActive = 0;
-            $shipProfileArr = ShippingProfile::getProfileArr($langId, $userId, true, true);
-        }
+    // public function getShippingProfileOptions()
+    // {
+    //     $userId = FatApp::getPostedData('userId', FatUtility::VAR_INT);
+    //     $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT);
+    //     if (1 > $langId) {            
+    //         LibHelper::exitWithError($this->str_invalid_request, true);            
+    //     }
+    //     $shippingObj = new Shipping($userId);
+    //     $shipProfileArr = [];
+    //     $shippingApiActive = 1;
+    //     if (!$shippingObj->getShippingApiObj($userId)) {
+    //         $shippingApiActive = 0;
+    //         $shipProfileArr = ShippingProfile::getProfileArr($langId, $userId, true, true);
+    //     }
 
-        FatUtility::dieJsonSuccess(['shipProfileArr' => $shipProfileArr, 'shippingApiActive' => $shippingApiActive]);
-    }
+    //     FatUtility::dieJsonSuccess(['shipProfileArr' => $shipProfileArr, 'shippingApiActive' => $shippingApiActive]);
+    // }
 
     public function upcListing()
     {
@@ -301,6 +315,10 @@ class ProductsController extends SellerBaseController
 
         $upcCodeData = [];
         if (0 < $recordId) {
+            if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $recordId)) {
+                LibHelper::exitWithError($this->str_invalid_request_id);
+            }
+
             $srch = UpcCode::getSearchObject();
             $srch->addCondition('upc_product_id', '=', $recordId);
             $srch->doNotCalculateRecords();
@@ -336,9 +354,6 @@ class ProductsController extends SellerBaseController
             return $shop->getData();
         }
 
-        return false;
-        
-    }
-
-    
+        return false;        
+    }    
 }

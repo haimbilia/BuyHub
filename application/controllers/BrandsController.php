@@ -212,14 +212,17 @@ class BrandsController extends MyAppController
         }
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
-        $brands = $db->fetchAll($rs, 'brand_id');
-        $json = array();
+        $brands = $db->fetchAll($rs, 'brand_id');        
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($brands as $key => $brand) {
-            $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($brand['brand_name'], ENT_QUOTES, 'UTF-8'))
+            $json['results'][] = array(
+                'id' => $key,
+                'text' => strip_tags(html_entity_decode($brand['brand_name'], ENT_QUOTES, 'UTF-8'))
             );
         }
+
         die(json_encode($json));
         /* $this->set('brands', $db->fetchAll($rs,'brand_id') );
         $this->_template->render(false,false); */
