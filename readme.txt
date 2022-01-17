@@ -534,6 +534,7 @@ Bugs :
     => 061658 - Admin UI: "Invalid Request" error is showing while clicking on the "New" button on the product`s review page
     => 061657 - Admin UI: Search is not working properly on the "Product Reviews" page
     => 061650 - Admin UI: Admin is not able to update the "shipping" status of the orders and the updated status is also not showing on the order details page
+    => 061639 - Admin UI: Titles 1st character is not capital and comments are also showing on the wrong side on the order details page
 
 
 Known Issues and Problems :

@@ -249,12 +249,20 @@ class OrdersController extends ListingBaseController
         $allowedShippingUserStatuses = $orderObj->getAdminAllowedUpdateShippingUser();
         $displayShippingUserForm = (
             (
-                (in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])) ||
-                (in_array($opRow['op_status_id'], $allowedShippingUserStatuses))) &&
+                (
+                    in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])
+                ) ||
+                (
+                    in_array($opRow['op_status_id'], $allowedShippingUserStatuses)
+                )
+            ) &&
             $this->objPrivilege->canEditSellerOrders($this->admin_id, true) &&
             !$shippingHanldedBySeller &&
-            ($opRow['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL &&
-                $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED));
+            (
+                $opRow['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL &&
+                $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED
+            )
+        );
 
 
         $frm = $this->getOrderCommentsForm($opRow, $processingStatuses);

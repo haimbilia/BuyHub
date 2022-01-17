@@ -55,7 +55,7 @@ if (!empty($order['payments'])) { ?>
                             ?>
                             <span class="badge <?php echo $cls; ?>"><?php echo $msg; ?></span>
                         </td>
-                        <td class="align-right">
+                        <td>
                             <div class="modal fade" id="modal<?php echo $key; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
