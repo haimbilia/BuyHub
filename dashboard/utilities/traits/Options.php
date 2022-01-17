@@ -325,38 +325,73 @@ trait Options
 
     public function autoCompleteOptions()
     {
-        //$pagesize = 10;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
         $post = FatApp::getPostedData();
         $userId = $this->userParentId;
-        $srch = Option::getSearchObject($this->siteLangId);
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
+        $srch = Option::getSearchObject($langId);
         $srch->addOrder('option_identifier');
 
         $cnd = $srch->addCondition('option_seller_id', '=', $userId);
         $cnd->attachCondition('option_seller_id', '=', 0, 'OR');
+        $srch->addMultipleFields(array('option_id as id, COALESCE(option_name, option_identifier) as text', 'option_is_separate_images'));
 
-
-        /* $srch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN',
-        'optionlang_option_id = option_id AND optionlang_lang_id = ' . FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 1)); */
-        $srch->addMultipleFields(array('option_id, option_name, option_identifier'));
+        $srch->setPageNumber($page);
+        $srch->setPageSize(20);
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('option_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('option_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
-        }
+        }       
+        $options = FatApp::getDb()->fetchAll($srch->getResultSet());
 
-        //$srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $options = $db->fetchAll($rs, 'option_id');
-
-        $json = array();
-        foreach ($options as $key => $option) {
-            $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($option['option_name'], ENT_QUOTES, 'UTF-8')),
-            'option_identifier' => strip_tags(html_entity_decode($option['option_identifier'], ENT_QUOTES, 'UTF-8'))
-            );
-        }
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => $options
+        );
         die(json_encode($json));
     }
+
+    public function autoCompleteValues()
+    { 
+        $post = FatApp::getPostedData();
+
+        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
+        $optionId = FatApp::getPostedData('optionId', FatUtility::VAR_INT, 0);
+
+        $srch = OptionValue::getSearchObject($langId, true);    
+        $srch->addCondition('ov.optionvalue_option_id', '=', $optionId);
+        $srch->addMultipleFields(array('optionvalue_id as id, COALESCE(optionvalue_name, optionvalue_identifier) as text'));
+
+        if (!empty($post['keyword'])) {
+            $cnd = $srch->addCondition('optionvalue_identifier', 'LIKE', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('optionvalue_name', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+        }
+
+        if(FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 1)){
+            $pagesize = 20;
+            $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+            if ($page < 2) {
+                $page = 1;
+            }    
+            $srch->setPageNumber($page);
+            $srch->setPageSize($pagesize);
+        }else{
+            $srch->doNotLimitRecords();
+        }       
+
+        $options = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $json = array(
+            'pageCount' => $srch->pages(),
+            'results' => $options
+        );        
+        die(FatUtility::convertToJson($json));
+    }
+
+
 }

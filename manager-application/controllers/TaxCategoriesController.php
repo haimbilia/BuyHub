@@ -238,6 +238,7 @@ class TaxCategoriesController extends ListingBaseController
                 ->attachCondition('taxcat_code', 'LIKE', '%' . $keyword . '%');
         }
         $srch->setPageSize($pagesize);
+        $srch->setPageNumber($page);
         $taxCategories = FatApp::getDb()->fetchAll($srch->getResultSet(), 'taxcat_id');
         $json = array(
             'pageCount' => $srch->pages()
