@@ -52,74 +52,73 @@
 
                             <ul class="onboarding-nav">
                                 <li class="onboarding-nav-item completed">
-                                    <button class="onboarding-nav-link" type="button">
-                                        <img class="onboarding-nav-icn" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/tick-green.svg" width="32" height="32" alt="">
-
+                                    <a class="onboarding-nav-link">
+                                        <span class="onboarding-nav-icn"></span>
                                         <span class="onboarding-nav-label">General configuration data</span>
-                                    </button>
+                                    </a>
 
                                 </li>
                                 <li class="onboarding-nav-item completed">
-                                    <button class="onboarding-nav-link" type="button">
-                                        <img class="onboarding-nav-icn" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/tick-green.svg" width="32" height="32" alt="">
+                                    <a class="onboarding-nav-link">
+                                        <span class="onboarding-nav-icn"></span>
                                         <span class="onboarding-nav-label">Theme</span>
-                                    </button>
+                                    </a>
 
                                 </li>
                                 <li class="onboarding-nav-item completed">
-                                    <button class="onboarding-nav-link" type="button">
-                                        <img class="onboarding-nav-icn" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/tick-green.svg" width="32" height="32" alt="">
+                                    <a class="onboarding-nav-link">
+                                        <span class="onboarding-nav-icn"></span>
                                         <span class="onboarding-nav-label">Email configuration</span>
-                                    </button>
+                                    </a>
 
                                 </li>
-                                <li class="onboarding-nav-item">
-                                    <button class="onboarding-nav-link" type="button">
-                                        <img class="onboarding-nav-icn" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/tick-green.svg" width="32" height="32" alt="">
+                                <li class="onboarding-nav-item process">
+                                    <a class="onboarding-nav-link">
+                                        <span class="onboarding-nav-icn"></span>
                                         <span class="onboarding-nav-label"> CMS pages</span>
-                                    </button>
+                                    </a>
 
                                 </li>
-                                <li class="onboarding-nav-item">
-                                    <button class="onboarding-nav-link" type="button">
-                                        <img class="onboarding-nav-icn" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/tick-green.svg" width="32" height="32" alt="">
+                                <li class="onboarding-nav-item pending">
+                                    <a class="onboarding-nav-link">
+                                        <span class="onboarding-nav-icn"></span>
                                         <span class="onboarding-nav-label">Add product</span>
-                                    </button>
+                                    </a>
 
                                 </li>
-                                <li class="onboarding-nav-item">
-                                    <button class="onboarding-nav-link" type="button">
-                                        <img class="onboarding-nav-icn" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/tick-green.svg" width="32" height="32" alt="">
+                                <li class="onboarding-nav-item pending">
+                                    <a class="onboarding-nav-link">
+                                        <span class="onboarding-nav-icn"></span>
                                         <span class="onboarding-nav-label">Payment methods</span>
-                                    </button>
+                                    </a>
 
                                 </li>
-                                <li class="onboarding-nav-item">
-                                    <button class="onboarding-nav-link" type="button">
-                                        <img class="onboarding-nav-icn" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/tick-green.svg" width="32" height="32" alt="">
+                                <li class="onboarding-nav-item pending">
+                                    <a class="onboarding-nav-link">
+                                        <span class="onboarding-nav-icn"></span>
                                         <span class="onboarding-nav-label">Tax Structure</span>
-                                    </button>
+                                    </a>
 
                                 </li>
-                                <li class="onboarding-nav-item">
-                                    <button class="onboarding-nav-link" type="button">
-                                        <img class="onboarding-nav-icn" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/tick-green.svg" width="32" height="32" alt="">
+                                <li class="onboarding-nav-item pending">
+                                    <a class="onboarding-nav-link">
+                                        <span class="onboarding-nav-icn"></span>
                                         <span class="onboarding-nav-label"> Navigation Management</span>
-                                    </button>
+                                    </a>
 
                                 </li>
-                                <li class="onboarding-nav-item">
-                                    <button class="onboarding-nav-link" type="button">
-                                        <img class="onboarding-nav-icn" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/tick-green.svg" width="32" height="32" alt="">
+                                <li class="onboarding-nav-item pending">
+                                    <a class="onboarding-nav-link">
+                                        <span class="onboarding-nav-icn"></span>
                                         <span class="onboarding-nav-label">Slides</span>
-                                    </button>
+                                    </a>
 
                                 </li>
                             </ul>
                         </div>
                         <div class="onboarding-foot">
                             <div class="rocket">
-                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/icons/rocket-launch.jpg" width="292" height="217" alt="">
+                                <img src="<?php echo CONF_WEBROOT_URL; ?>images/icons/rocket-launch.svg" width="290" height="" alt="">
                             </div>
 
                         </div>
@@ -221,7 +220,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group"><label class="label">Cookies Policies Page</label>
-                                                    <div class=""><select data-field-caption="Cookies Policies Page" data-fatreq="{&quot;required&quot;:false}" name="CONF_COOKIES_BUTTON_LINK">
+                                                    <div class=""><select data-field-caption="Cookies Policies Page" data-fatreq="{&quot;required&quot;:false}" name="CONF_COOKIES_a_LINK">
                                                             <option value="">Select</option>
                                                             <option value="1">About Us</option>
                                                             <option value="2" selected="selected">Terms &amp; Conditions</option>
@@ -267,10 +266,10 @@
                                     <div class="col-md-12">
                                         <div class="row">
                                             <div class="col">
-                                                <button type="button" name="btn_reset_form" class="btn btn-outline-brand resetModalFormJs">Reset</button>
+                                                <a name="btn_reset_form" class="btn btn-outline-brand resetModalFormJs">Reset</a>
                                             </div>
                                             <div class="col-auto">
-                                                <button type="button" name="btn_save" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">Save</button>
+                                                <a name="btn_save" class="btn btn-brand gb-btn gb-btn-primary submitBtnJs">Save</a>
                                             </div>
                                         </div>
                                     </div>
@@ -282,8 +281,5 @@
                 </div>
             </div>
         </div>
-
-
-
     </div>
 </main>
