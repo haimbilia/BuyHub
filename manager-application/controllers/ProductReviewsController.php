@@ -134,6 +134,7 @@ class ProductReviewsController extends ListingBaseController
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('product_name', 'like', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('product_identifier', 'like', '%' . $post['keyword'] . '%');
+            $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
         if ($post['reviewed_for_id'] > 0) {
