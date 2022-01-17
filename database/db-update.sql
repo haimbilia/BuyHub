@@ -1563,3 +1563,8 @@ VALUES ('CONF_AUTO_CLOSE_SYSTEM_MESSAGES', 1, '0'),
 ('CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES', 3, '0')
 ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
 -- -------------------TV-9.4.0.20220112-----------------
+
+ALTER TABLE `tbl_order_payments` DROP INDEX `op_gateway_txn_id`;
+ALTER TABLE `tbl_order_payments` DROP INDEX `opayment_order_id`;
+
+ALTER TABLE `tbl_order_payments` ADD UNIQUE( `opayment_order_id`, `opayment_gateway_txn_id`);
