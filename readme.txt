@@ -533,6 +533,7 @@ Bugs :
     => 061660 - Admin UI: Titles, shop rating, and images are missing on the product reviews page
     => 061658 - Admin UI: "Invalid Request" error is showing while clicking on the "New" button on the product`s review page
     => 061657 - Admin UI: Search is not working properly on the "Product Reviews" page
+    => 061650 - Admin UI: Admin is not able to update the "shipping" status of the orders and the updated status is also not showing on the order details page
 
 
 Known Issues and Problems :

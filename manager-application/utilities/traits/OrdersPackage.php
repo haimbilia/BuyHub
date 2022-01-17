@@ -333,6 +333,12 @@ trait OrdersPackage
     {
         switch ($action) {
             case 'view':
+                $lbl = Labels::getLabel('LBL_ORDER', $this->siteLangId);
+                $pageUrl = UrlHelper::generateUrl('Orders');
+                if ($this->ordersType == Orders::ORDER_SUBSCRIPTION) {
+                    $lbl = Labels::getLabel('LBL_SUBSCRIPTION_ORDER', $this->siteLangId);
+                    $pageUrl = UrlHelper::generateUrl('SubscriptionOrders');
+                }
                 $lbl = $this->ordersType == Orders::ORDER_SUBSCRIPTION ? Labels::getLabel('LBL_SUBSCRIPTION_ORDER', $this->siteLangId) : Labels::getLabel('LBL_ORDER', $this->siteLangId);
                 $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
                 $pageTitle = $pageData['plang_title'] ?? $lbl;
@@ -345,7 +351,7 @@ trait OrdersPackage
                 }
 
                 $this->nodes = [
-                    ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('Orders')],
+                    ['title' => $pageTitle, 'href' => $pageUrl],
                     ['title' => $title]
                 ];
                 break;
