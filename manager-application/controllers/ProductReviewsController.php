@@ -37,6 +37,7 @@ class ProductReviewsController extends ListingBaseController
 
         $this->setModel();
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields, $this->modelObj);
+        $actionItemsData['newRecordBtn'] = false;
         $actionItemsData['performBulkAction'] = false;
         $actionItemsData['deleteButton'] = false;
         $actionItemsData['searchFrmTemplate'] = 'product-reviews/search-form.php';

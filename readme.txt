@@ -531,6 +531,7 @@ Bugs :
     => 060847 - Admin UI: Random behavior is showing while re-arranging the fields under the Blog post categories section
     => 060839 - Admin UI: Getting multiple issues under the "Blog Post Categories" section
     => 061660 - Admin UI: Titles, shop rating, and images are missing on the product reviews page
+    => 061658 - Admin UI: "Invalid Request" error is showing while clicking on the "New" button on the product`s review page
 
 
 Known Issues and Problems :
