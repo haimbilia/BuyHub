@@ -215,20 +215,20 @@ class ImageAttributesController extends ListingBaseController
 
         if ($moduleType == AttachedFile::FILETYPE_PRODUCT_IMAGE) {
             $imgTypesArr = Product::getSeparateImageOptions($recordId, $this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, $optionId, array(), '');
+            $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', $imgTypesArr, $optionId, array(), '');
         }
 
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId);
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', $languages, $langId);
         } else {
             $lang_id = array_key_first($languages);
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
         foreach ($images as $afileId => $afileData) {
-            $frm->addTextBox(Labels::getLabel('LBL_Image_Title', $this->siteLangId), 'image_title' . $afileId);
-            $frm->addTextBox(Labels::getLabel('LBL_Image_Alt', $this->siteLangId), 'image_alt' . $afileId);
+            $frm->addTextBox(Labels::getLabel('FRM_IMAGE_TITLE', $this->siteLangId), 'image_title' . $afileId);
+            $frm->addTextBox(Labels::getLabel('FRM_IMAGE_ALT', $this->siteLangId), 'image_alt' . $afileId);
         }
         return $frm;
     }

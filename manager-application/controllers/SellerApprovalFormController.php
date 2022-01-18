@@ -198,8 +198,8 @@ class SellerApprovalFormController extends ListingBaseController
         $frm = new Form('frmSellerApprovalFormlang');
         $frm->addHiddenField('', 'sformfield_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_CAPTION', $langId), 'sformfield_caption');
-        $frm->addTextarea(Labels::getLabel('LBL_COMMENTS', $this->siteLangId), 'sformfield_comment');
+        $frm->addRequiredField(Labels::getLabel('FRM_CAPTION', $langId), 'sformfield_caption');
+        $frm->addTextarea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'sformfield_comment');
         return $frm;
     }
 

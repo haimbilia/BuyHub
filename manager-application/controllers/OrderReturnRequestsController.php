@@ -514,7 +514,7 @@ class OrderReturnRequestsController extends ListingBaseController {
 
         $fld = $frm->addTextArea(Labels::getLabel('FRM_COMMENT', $this->siteLangId), 'orrmsg_msg');
         $fld->requirements()->setRequired();
-        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_Message_is_mandatory', $langId));
+        $fld->requirements()->setCustomErrorMessage(Labels::getLabel('MSG_MESSAGE_IS_MANDATORY', $langId));
         return $frm;
     }
 

@@ -99,12 +99,12 @@ class CategoryRequestsController extends ListingBaseController
         $frm = new Form('frmcategoryReq', array('id' => 'frmCategoryReq'));
         $frm->addHiddenField('', 'scategoryreq_id', $categoryReqId);
         $frm->addHiddenField('', 'scategoryreq_seller_id', $categoryReqId);
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Request_Identifier', $this->siteLangId), 'scategoryreq_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_REQUEST_IDENTIFIER', $this->siteLangId), 'scategoryreq_identifier');
         $statusArr = CategoryRequest::getCategoryReqStatusArr($this->siteLangId);
         unset($statusArr[CategoryRequest::CATEGORY_REQUEST_PENDING]);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'status', $statusArr, '', [], Labels::getLabel('LBL_Select', $this->siteLangId))->requirements()->setRequired();
         $frm->addTextArea('', 'comments', '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -182,7 +182,7 @@ class CategoryRequestsController extends ListingBaseController
         $frm = new Form('frmCategoryReqLang', array('id' => 'frmCategoryReqLang'));
         $frm->addHiddenField('', 'scategoryreq_id', $categoryReqId);
         $frm->addHiddenField('', 'lang_id', $lang_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Category_Request_Name', $this->siteLangId), 'scategoryreq_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_CATEGORY_REQUEST_NAME', $this->siteLangId), 'scategoryreq_name');
         return $frm;
     }
 

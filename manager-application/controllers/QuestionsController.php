@@ -259,14 +259,14 @@ class QuestionsController extends ListingBaseController
         $frm->addHiddenField('', 'question_qbank_id', $qbank_id);
         
         $questionTypesArr = Questions::getQuestionTypesArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'question_type', $questionTypesArr, '', array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'question_identifier');
+        $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'question_type', $questionTypesArr, '', array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'question_identifier');
         
-        $frm->addCheckBox(Labels::getLabel('LBL_Is_Required', $this->siteLangId), 'question_required', 1, array(), false, 0);
+        $frm->addCheckBox(Labels::getLabel('FRM_IS_REQUIRED', $this->siteLangId), 'question_required', 1, array(), false, 0);
         
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'question_active', $activeInactiveArr, '', array(), '');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'question_active', $activeInactiveArr, '', array(), '');
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
     
@@ -278,13 +278,13 @@ class QuestionsController extends ListingBaseController
         $frm = new Form('frmQuestionLang');
         $frm->addHiddenField('', 'question_id', $question_id);
         $frm->addHiddenField('', 'lang_id', $lang_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Question_Title', $this->siteLangId), 'question_title');
+        $frm->addRequiredField(Labels::getLabel('FRM_QUESTION_TITLE', $this->siteLangId), 'question_title');
         if ($questData['question_type'] == Questions::TYPE_SINGLE_CHOICE || $questData['question_type'] == Questions::TYPE_MULTIPLE_CHOICE) {
-            $fld = $frm->addTextarea(Labels::getLabel('LBL_Question_Options', $this->siteLangId), 'question_options');
+            $fld = $frm->addTextarea(Labels::getLabel('FRM_QUESTION_OPTIONS', $this->siteLangId), 'question_options');
             $fld->requirements()->setRequired();
-            $fld->htmlAfterField = Labels::getLabel('LBL_Enter_each_option_in_a_new_line.', $this->siteLangId);
+            $fld->htmlAfterField = Labels::getLabel('FRM_ENTER_EACH_OPTION_IN_A_NEW_LINE.', $this->siteLangId);
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Update', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_UPDATE', $this->siteLangId));
         return $frm;
     }
     
@@ -292,10 +292,10 @@ class QuestionsController extends ListingBaseController
     {
         $this->objPrivilege->canViewQuestions();
         $frm = new Form('frmQuestionSearch');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword', '');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword', '');
         $frm->addHiddenField('', 'qbank_id', '');
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId));
         $fld_submit->attachField($fld_cancel);
         return $frm;
     }

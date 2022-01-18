@@ -234,35 +234,35 @@ class ShippingZoneRatesController extends ListingBaseController {
         $frm->addHiddenField('', 'shiprate_shipprozone_id', $zoneId);
         $frm->addHiddenField('', 'shiprate_id', $rateId);
         $cndFld = $frm->addHiddenField('', 'is_condition', 0);
-        $fld = $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $this->siteLangId), 'shiprate_name');
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_RATE_NAME', $this->siteLangId), 'shiprate_name');
 
-        $frm->addFloatField(Labels::getLabel('LBL_Cost', $this->siteLangId), 'shiprate_cost');
+        $frm->addFloatField(Labels::getLabel('FRM_COST', $this->siteLangId), 'shiprate_cost');
         $frm->addHtml('', 'add_condition', '');
 
         $fld = $frm->addRadioButtons('', 'shiprate_condition_type', $conditionTypes, '', array('class' => 'list-inline'));
 
-        $fldCndTypeUnReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('LBL_Condition_type', $this->siteLangId));
+        $fldCndTypeUnReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId));
         $fldCndTypeUnReq->setRequired(false);
 
-        $fldCndTypeReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('LBL_Condition_type', $this->siteLangId));
+        $fldCndTypeReq = new FormFieldRequirement('shiprate_condition_type', Labels::getLabel('FRM_CONDITION_TYPE', $this->siteLangId));
         $fldCndTypeReq->setRequired(true);
 
-        $frm->addFloatField(Labels::getLabel('LBL_Minimum', $this->siteLangId), 'shiprate_min_val');
+        $frm->addFloatField(Labels::getLabel('FRM_MINIMUM', $this->siteLangId), 'shiprate_min_val');
 
-        $fldMinUnReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('LBL_Minimum', $this->siteLangId));
+        $fldMinUnReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('FRM_MINIMUM', $this->siteLangId));
         $fldMinUnReq->setRequired(false);
 
-        $fldMinReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('LBL_Minimum', $this->siteLangId));
+        $fldMinReq = new FormFieldRequirement('shiprate_min_val', Labels::getLabel('FRM_MINIMUM', $this->siteLangId));
         $fldMinReq->setRequired(true);
         $fldMinReq->setFloatPositive();
         $fldMinReq->setRange('0.001', '99999999');
 
-        $frm->addFloatField(Labels::getLabel('LBL_Maximum', $this->siteLangId), 'shiprate_max_val');
+        $frm->addFloatField(Labels::getLabel('FRM_MAXIMUM', $this->siteLangId), 'shiprate_max_val');
 
-        $fldMaxUnReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('LBL_Maximum', $this->siteLangId));
+        $fldMaxUnReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('FRM_MAXIMUM', $this->siteLangId));
         $fldMaxUnReq->setRequired(false);
 
-        $fldMaxReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('LBL_Maximum', $this->siteLangId));
+        $fldMaxReq = new FormFieldRequirement('shiprate_max_val', Labels::getLabel('FRM_MAXIMUM', $this->siteLangId));
         $fldMaxReq->setRequired(true);
         $fldMaxReq->setFloatPositive();
         $fldMaxReq->setRange('0.001', '99999999');
@@ -293,7 +293,7 @@ class ShippingZoneRatesController extends ListingBaseController {
         $frm->addHiddenField('', 'lang_id', $langId);
         $langFld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $langId, array(), '');
         $langFld->setfieldTagAttribute('onChange', "editRateLangForm($zoneId,$rateId,this.value);");
-        $frm->addRequiredField(Labels::getLabel('LBL_Rate_Name', $langId), 'shiprate_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_RATE_NAME', $langId), 'shiprate_name');
         return $frm;
     }
 

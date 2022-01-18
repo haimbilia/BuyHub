@@ -394,9 +394,9 @@ class AttributesController extends ListingBaseController
         /* numeric data input fields[ */
         for ($i = 1; $i <= AttrGroupAttribute::MAX_NUMERIC_ATTRIBUTE_ROWS; $i++) {
             //$frm->addHiddenField('','attr_id_num_'.$i);
-            $frm->addCheckBox(Labels::getLabel('LBL_Select_This', $this->siteLangId), 'prodnumattr_num_' . $i, $i);
-            $frm->addTextBox(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'attr_identifier_num_' . $i);
-            $frm->addSelectBox(Labels::getLabel('LBL_Type', $this->siteLangId), 'attr_type_num_' . $i, AttrGroupAttribute::getNumericAttributeTypeArr($langId), '', [], Labels::getLabel('LBL_Select', $this->siteLangId));
+            $frm->addCheckBox(Labels::getLabel('FRM_SELECT_THIS', $this->siteLangId), 'prodnumattr_num_' . $i, $i);
+            $frm->addTextBox(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'attr_identifier_num_' . $i);
+            $frm->addSelectBox(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'attr_type_num_' . $i, AttrGroupAttribute::getNumericAttributeTypeArr($langId), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         }
         /* ] */
 
@@ -404,15 +404,15 @@ class AttributesController extends ListingBaseController
         /* textual data input fields[ */
         for ($i = 1; $i <= AttrGroupAttribute::MAX_TEXTUAL_ATTRIBUTE_ROWS; $i++) {
             //$frm->addHiddenField('','attr_id_text_'.$i);
-            $frm->addCheckBox(Labels::getLabel('LBL_Select_This', $this->siteLangId), 'prodtxtattr_text_' . $i, $i);
-            $frm->addTextBox(Labels::getLabel('LBL_Identifier', $this->siteLangId), 'attr_identifier_text_' . $i);
+            $frm->addCheckBox(Labels::getLabel('FRM_SELECT_THIS', $this->siteLangId), 'prodtxtattr_text_' . $i, $i);
+            $frm->addTextBox(Labels::getLabel('FRM_IDENTIFIER', $this->siteLangId), 'attr_identifier_text_' . $i);
             // $frm->addSelectBox( 'Type', 'attr_type_text_'.$i, AttrGroupAttribute::getTextualAttributeTypeArr($langId), '', array(), '' );
-            $frm->addHiddenField(Labels::getLabel('LBL_Type', $this->siteLangId), 'attr_type_text_' . $i, AttrGroupAttribute::ATTRTYPE_TEXT);
+            $frm->addHiddenField(Labels::getLabel('FRM_TYPE', $this->siteLangId), 'attr_type_text_' . $i, AttrGroupAttribute::ATTRTYPE_TEXT);
         }
         /* ] */
 
         $frm->addHiddenField('', 'attrgrp_id');
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -423,17 +423,17 @@ class AttributesController extends ListingBaseController
         $frm = new Form('frmAttribute');
         $frm->addHiddenField('', 'attr_id', $attr_id);
         $frm->addHiddenField('', 'lang_id', $lang_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Attribute_Name', $this->siteLangId), 'attr_name');
-        $frm->addTextBox(Labels::getLabel('LBL_Attribute_Prefix', $this->siteLangId), 'attr_prefix');
-        $frm->addTextBox(Labels::getLabel('LBL_Attribute_Suffix', $this->siteLangId), 'attr_postfix');
+        $frm->addRequiredField(Labels::getLabel('FRM_ATTRIBUTE_NAME', $this->siteLangId), 'attr_name');
+        $frm->addTextBox(Labels::getLabel('FRM_ATTRIBUTE_PREFIX', $this->siteLangId), 'attr_prefix');
+        $frm->addTextBox(Labels::getLabel('FRM_ATTRIBUTE_SUFFIX', $this->siteLangId), 'attr_postfix');
 
         if ($attribute_row && ($attribute_row['attr_type'] == AttrGroupAttribute::ATTRTYPE_SELECT_BOX)) {
             /* i.e if type is select box, then need to enter options data */
-            $fld = $frm->addTextArea(Labels::getLabel('LBL_Option_Data', $this->siteLangId), 'attr_options');
-            $fld->htmlAfterField = Labels::getLabel('LBL_Enter_Data_Separated_By_New_Line:<br/>_E.g:<br/>_Yes<br/>No', $this->siteLangId);
+            $fld = $frm->addTextArea(Labels::getLabel('FRM_OPTION_DATA', $this->siteLangId), 'attr_options');
+            $fld->htmlAfterField = Labels::getLabel('FRM_ENTER_DATA_SEPARATED_BY_NEW_LINE:<br/>_E.g:<br/>_Yes<br/>No', $this->siteLangId);
         }
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -442,14 +442,14 @@ class AttributesController extends ListingBaseController
         $this->objPrivilege->canEditAttributes();
         $attrgrp_id = FatUtility::int($attrgrp_id);
 
-        $action = Labels::getLabel('LBL_Add_New', $this->siteLangId);
+        $action = Labels::getLabel('FRM_ADD_NEW', $this->siteLangId);
         if ($attrgrp_id > 0) {
-            $action = Labels::getLabel('LBL_Update', $this->siteLangId);
+            $action = Labels::getLabel('FRM_UPDATE', $this->siteLangId);
         }
 
         $frm = new Form('frmAttrGroup', array('id' => 'frmAttrGroup'));
         $frm->addHiddenField('', 'attrgrp_id', $attrgrp_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Attribute_Group_Name', $this->siteLangId), 'attrgrp_name');
+        $frm->addRequiredField(Labels::getLabel('FRM_ATTRIBUTE_GROUP_NAME', $this->siteLangId), 'attrgrp_name');
         return $frm;
     }
 }

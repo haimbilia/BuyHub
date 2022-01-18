@@ -155,9 +155,9 @@ class ShippingCompaniesController extends ListingBaseController
         unset($post['lang_id']);
 
         $data = array(
-        'scompanylang_lang_id' => $lang_id,
-        'scompanylang_scompany_id' => $scompany_id,
-        'scompany_name' => $post['scompany_name']
+            'scompanylang_lang_id' => $lang_id,
+            'scompanylang_scompany_id' => $scompany_id,
+            'scompany_name' => $post['scompany_name']
         );
 
         $sCompanyObj = new ShippingCompanies($scompany_id);
@@ -165,7 +165,7 @@ class ShippingCompaniesController extends ListingBaseController
         if (!$sCompanyObj->updateLangData($lang_id, $data)) {
             LibHelper::exitWithError($sCompanyObj->getError(), true);
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData(ShippingCompanies::DB_TBL_LANG);
@@ -233,7 +233,8 @@ class ShippingCompaniesController extends ListingBaseController
         $scompanyIdsArr = FatUtility::int(FatApp::getPostedData('scompany_ids'));
         if (empty($scompanyIdsArr) || -1 == $status) {
             LibHelper::exitWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId),
+                true
             );
         }
 
@@ -254,7 +255,8 @@ class ShippingCompaniesController extends ListingBaseController
         $scompanyId = FatUtility::int($scompanyId);
         if (1 > $scompanyId || -1 == $status) {
             LibHelper::exitWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId),
+                true
             );
         }
 
@@ -270,13 +272,13 @@ class ShippingCompaniesController extends ListingBaseController
 
         $frm = new Form('frmShippingCompany');
         $frm->addHiddenField('', 'scompany_id', $scompany_id);
-        $frm->addRequiredField(Labels::getLabel('LBL_Shipping_Identifier', $this->siteLangId), 'scompany_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_SHIPPING_IDENTIFIER', $this->siteLangId), 'scompany_identifier');
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Status', $this->siteLangId), 'scompany_active', $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'scompany_active', $activeInactiveArr, '', array(), '');
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 
@@ -284,17 +286,17 @@ class ShippingCompaniesController extends ListingBaseController
     {
         $frm = new Form('frmShippingCompanyLang');
         $frm->addHiddenField('', 'scompany_id', $scompany_id);
-        $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('LBL_Shipping_Api_Name', $this->siteLangId), 'scompany_name');
-        
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getAllNames(), $lang_id, array(), '');
+        $frm->addRequiredField(Labels::getLabel('FRM_SHIPPING_API_NAME', $this->siteLangId), 'scompany_name');
+
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $lang_id == $siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
-        
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $this->siteLangId));
+
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $this->siteLangId));
         return $frm;
     }
 }

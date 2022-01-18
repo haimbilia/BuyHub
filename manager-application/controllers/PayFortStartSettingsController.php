@@ -6,9 +6,9 @@ class PayFortStartSettingsController extends PaymentMethodSettingsController
     {
         $frm = new Form('frmPaymentMethods');
         
-        $fld = $frm->addSelectBox(Labels::getLabel('LBL_Transaction_Mode', $langId), 'transaction_mode', array(0 => "Test/Sandbox", "1" => "Live"), 'transaction_mode', [], Labels::getLabel('LBL_Select', $langId))->requirements()->setRequired();
-        $frm->addRequiredField(Labels::getLabel('LBL_API_Secret_Key', $langId), 'secret_key');
-        $frm->addRequiredField(Labels::getLabel('LBL_API_Open_Key', $langId), 'open_key');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_TRANSACTION_MODE', $langId), 'transaction_mode', array(0 => "Test/Sandbox", "1" => "Live"), 'transaction_mode', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
+        $frm->addRequiredField(Labels::getLabel('FRM_API_SECRET_KEY', $langId), 'secret_key');
+        $frm->addRequiredField(Labels::getLabel('FRM_API_OPEN_KEY', $langId), 'open_key');
 
         return $frm;
     }

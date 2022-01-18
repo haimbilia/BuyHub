@@ -256,7 +256,7 @@ class PickupAddressesController extends ListingBaseController
             $frm->addSelectBox(Labels::getLabel('FRM_TO', $this->siteLangId), 'tslot_to_time[' . $i . '][]', TimeSlot::getTimeSlotsArr(), '', array(), Labels::getLabel('FRM_SELECT', $this->siteLangId));
             $frm->addButton('', 'btn_add_row[' . $i . ']', '+');
         }
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_CHANGES', $langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE_CHANGES', $langId));
         return $frm;
     }
 

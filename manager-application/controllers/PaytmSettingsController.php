@@ -8,43 +8,43 @@ class PaytmSettingsController extends PaymentMethodSettingsController
         $frm = new Form('frmPaymentMethods');
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('LBL_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('FRM_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Merchant_ID', $langId), 'merchant_id');
-        $merIdReqObj = new FormFieldRequirement('merchant_id', Labels::getLabel('LBL_Merchant_ID', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_MERCHANT_ID', $langId), 'merchant_id');
+        $merIdReqObj = new FormFieldRequirement('merchant_id', Labels::getLabel('FRM_MERCHANT_ID', $langId));
         $merIdReqObj->setRequired(true);
-        $merIdUnReqObj = new FormFieldRequirement('merchant_id', Labels::getLabel('LBL_Merchant_ID', $langId));
+        $merIdUnReqObj = new FormFieldRequirement('merchant_id', Labels::getLabel('FRM_MERCHANT_ID', $langId));
         $merIdUnReqObj->setRequired(false);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Merchant_Key', $langId), 'merchant_key');
-        $merKeyReqObj = new FormFieldRequirement('merchant_key', Labels::getLabel('LBL_Merchant_Key', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_MERCHANT_KEY', $langId), 'merchant_key');
+        $merKeyReqObj = new FormFieldRequirement('merchant_key', Labels::getLabel('FRM_MERCHANT_KEY', $langId));
         $merKeyReqObj->setRequired(true);
-        $merKeyUnReqObj = new FormFieldRequirement('merchant_key', Labels::getLabel('LBL_Merchant_Key', $langId));
+        $merKeyUnReqObj = new FormFieldRequirement('merchant_key', Labels::getLabel('FRM_MERCHANT_KEY', $langId));
         $merKeyUnReqObj->setRequired(false);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Website', $langId), 'merchant_website');
-        $merWebReqObj = new FormFieldRequirement('merchant_website', Labels::getLabel('LBL_Website', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_WEBSITE', $langId), 'merchant_website');
+        $merWebReqObj = new FormFieldRequirement('merchant_website', Labels::getLabel('FRM_WEBSITE', $langId));
         $merWebReqObj->setRequired(true);
-        $merWebUnReqObj = new FormFieldRequirement('merchant_website', Labels::getLabel('LBL_Website', $langId));
+        $merWebUnReqObj = new FormFieldRequirement('merchant_website', Labels::getLabel('FRM_WEBSITE', $langId));
         $merWebUnReqObj->setRequired(false);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Merchant_ID', $langId), 'live_merchant_id');
-        $merIdLiveReqObj = new FormFieldRequirement('live_merchant_id', Labels::getLabel('LBL_Merchant_ID', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_MERCHANT_ID', $langId), 'live_merchant_id');
+        $merIdLiveReqObj = new FormFieldRequirement('live_merchant_id', Labels::getLabel('FRM_MERCHANT_ID', $langId));
         $merIdLiveReqObj->setRequired(true);
-        $merIdLiveUnReqObj = new FormFieldRequirement('live_merchant_id', Labels::getLabel('LBL_Merchant_ID', $langId));
+        $merIdLiveUnReqObj = new FormFieldRequirement('live_merchant_id', Labels::getLabel('FRM_MERCHANT_ID', $langId));
         $merIdLiveUnReqObj->setRequired(false);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Merchant_Key', $langId), 'live_merchant_key');
-        $merKeyLiveReqObj = new FormFieldRequirement('live_merchant_key', Labels::getLabel('LBL_Merchant_Key', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_MERCHANT_KEY', $langId), 'live_merchant_key');
+        $merKeyLiveReqObj = new FormFieldRequirement('live_merchant_key', Labels::getLabel('FRM_MERCHANT_KEY', $langId));
         $merKeyLiveReqObj->setRequired(true);
-        $merKeyLiveUnReqObj = new FormFieldRequirement('live_merchant_key', Labels::getLabel('LBL_Merchant_Key', $langId));
+        $merKeyLiveUnReqObj = new FormFieldRequirement('live_merchant_key', Labels::getLabel('FRM_MERCHANT_KEY', $langId));
         $merKeyLiveUnReqObj->setRequired(false);
 
-        $frm->addTextBox(Labels::getLabel('LBL_Website', $langId), 'live_merchant_website');
-        $merWebLiveReqObj = new FormFieldRequirement('live_merchant_website', Labels::getLabel('LBL_Website', $langId));
+        $frm->addTextBox(Labels::getLabel('FRM_WEBSITE', $langId), 'live_merchant_website');
+        $merWebLiveReqObj = new FormFieldRequirement('live_merchant_website', Labels::getLabel('FRM_WEBSITE', $langId));
         $merWebLiveReqObj->setRequired(true);
-        $merWebLiveUnReqObj = new FormFieldRequirement('live_merchant_website', Labels::getLabel('LBL_Website', $langId));
+        $merWebLiveUnReqObj = new FormFieldRequirement('live_merchant_website', Labels::getLabel('FRM_WEBSITE', $langId));
         $merWebLiveUnReqObj->setRequired(false);
 
         $envFld->requirements()->addOnChangerequirementUpdate(Plugin::ENV_SANDBOX, 'eq', 'merchant_id', $merIdReqObj);

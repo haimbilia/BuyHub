@@ -194,21 +194,21 @@ class ImportInstructionsController extends ListingBaseController
         $frm->addHiddenField('', 'epage_id', $recordId);
         $languages = Language::getAllNames();
         if (count($languages) > 1) {
-            $frm->addSelectBox(Labels::getLabel('LBL_LANGUAGE', $langId), 'lang_id', $languages, $langId, array(), '');
+            $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', $languages, $langId, array(), '');
         } else {
             $langId = array_key_first($languages);
             $frm->addHiddenField('', 'lang_id', $langId);
         }
 
-        $frm->addRequiredField(Labels::getLabel('LBL_SECTION_TITLE', $langId), 'epage_label');
+        $frm->addRequiredField(Labels::getLabel('FRM_SECTION_TITLE', $langId), 'epage_label');
 
-        $frm->addHtmlEditor(Labels::getLabel('LBL_Section_Content', $langId), 'epage_content');
+        $frm->addHtmlEditor(Labels::getLabel('FRM_SECTION_CONTENT', $langId), 'epage_content');
 
         $siteLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
 
         if (!empty($translatorSubscriptionKey) && $langId == $this->siteLangId) {
-            $frm->addCheckBox(Labels::getLabel('LBL_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $langId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }
 
         return $frm;
