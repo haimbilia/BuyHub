@@ -305,12 +305,12 @@ class ProductsController extends ListingBaseController
             $profSrch->addCondition('shippro_product_id', '=', $recordId);
             $profSrch->addCondition('shippro_user_id', '=', $productData['product_seller_id']);
             $profSrch->doNotCalculateRecords();
-            $profSrch->setPageSize(1);
-            $proRs = $profSrch->getResultSet();
-            $profileData = FatApp::getDb()->fetch($proRs);
+            $profSrch->setPageSize(1);   
+            $profileData = FatApp::getDb()->fetch($profSrch->getResultSet());
             if (!empty($profileData)) {
                 $productData['shipping_profile'] = $profileData['profile_id'];
-            }
+            }            
+           
             /* ] */
             $isSelProdCreatedBySeller = 0 < Product::getCatalogProductCount($recordId);
             $isProductAddedByAdmin = applicationConstants::YES == $productData['product_added_by_admin_id'];
@@ -336,7 +336,7 @@ class ProductsController extends ListingBaseController
             /* to select product type in get */
             if (0 < $productType) {
                 $productData['product_type'] = $productType;
-            }
+            }           
 
             $frm->fill($productData);
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $recordId]);
@@ -363,6 +363,7 @@ class ProductsController extends ListingBaseController
         $this->set('isProductAddedByAdmin', $isProductAddedByAdmin);
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
         if (FatUtility::isAjaxCall()) {
             $this->set('html', $this->_template->render(false, false, NULL, true));
             $this->_template->render(false, false, 'json-success.php', true, false);
@@ -371,8 +372,7 @@ class ProductsController extends ListingBaseController
 
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/jquery-sortable-lists.js'));
         $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css', 'css/select2.min.css']);
-        $this->set("includeEditor", true);
-        $this->set('tourStep', SiteTourHelper::getStepIndex());
+        $this->set("includeEditor", true);       
         $this->_template->render();
     }
 
@@ -402,8 +402,10 @@ class ProductsController extends ListingBaseController
         $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
         $post['ptt_taxcat_id'] = FatApp::getPostedData('ptt_taxcat_id', FatUtility::VAR_INT, 0);
         $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);
-        $post['product_seller_id'] = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
+        $post['product_seller_id'] = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);        
         /* select2 data ] */
+
+        $post['shipping_profile'] = FatApp::getPostedData('shipping_profile', FatUtility::VAR_INT, 0);
 
         $this->validateGetForm($post);
 
@@ -473,7 +475,8 @@ class ProductsController extends ListingBaseController
         if (isset($post['shipping_profile'])) {
             $shipProProdData = array(
                 'shippro_shipprofile_id' => !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($post['product_seller_id']),
-                'shippro_product_id' => $recordId
+                'shippro_product_id' => $recordId,
+                'shippro_user_id' => $post['product_seller_id'],
             );
             $spObj = new ShippingProfileProduct();
             if (!$spObj->addProduct($shipProProdData)) {
@@ -920,7 +923,7 @@ class ProductsController extends ListingBaseController
 
     public function prodSpecifications()
     {
-        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         if (1 > $langId) {
             $langId = CommonHelper::getDefaultFormLangId();

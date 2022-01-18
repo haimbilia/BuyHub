@@ -13,9 +13,7 @@ $(function () {
 
 (function () {
     bindUserSelect2 = function (element, obj) {
-        select2(element, fcom.makeUrl('Users', 'autoComplete'), obj, '', function () {
-            clearSearch();
-        });
+        select2(element, fcom.makeUrl('Users', 'autoComplete'), obj);
     }
 
     setupStatus = function (frm) {
@@ -32,6 +30,14 @@ $(function () {
 
     viewComment = function (ocrequestId) {
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewComment",[ocrequestId]), '', function (t) {
+            $.ykmodal(t.html, true);
+            $.ykmsg.close();
+            fcom.removeLoader();
+        });
+    };
+    
+    viewAdminComment = function (ocrequestId) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewAdminComment",[ocrequestId]), '', function (t) {
             $.ykmodal(t.html, true);
             $.ykmsg.close();
             fcom.removeLoader();

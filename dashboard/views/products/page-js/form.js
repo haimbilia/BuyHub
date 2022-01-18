@@ -46,29 +46,17 @@
         });
     };
 
-    addBrand = function () {
-        fcom.resetEditorInstance();
-        fcom.updateWithAjax(fcom.makeUrl('Brands', "form"), "", function (t) {
-            $.ykmodal(t.html);
-            /* $.ykmsg.close(); */
-            /* fcom.removeLoader(); */
-        });
-    };
-
-    addCategory = function () {
-        fcom.resetEditorInstance();
+    addCategory = function () {   
+        fcom.displayProcessing();     
         fcom.updateWithAjax(fcom.makeUrl('ProductCategories', "form"), "", function (t) {
-            $.ykmodal(t.html);
-            /* $.ykmsg.close(); */
-            /* fcom.removeLoader(); */
+            $.ykmodal(t.html);        
         });
     };
     addTaxCategory = function () {
-        fcom.resetEditorInstance();
+        fcom.displayProcessing();
         fcom.updateWithAjax(fcom.makeUrl('TaxCategories', "form"), "", function (t) {
-            $.ykmodal(t.html);
-            /* $.ykmsg.close(); */
-            /* fcom.removeLoader(); */
+            $.ykmodal(t.html);    
+            fcom.closeAlertMessage();
         });
     };
     addTagData = function (e) {
@@ -433,8 +421,6 @@
                 });
             }           
             fcom.ajax(fcom.makeUrl('Products', "upcListing"), { recordId, langId, type, productOptions}, function (t) {
-                console.log(t);
-              
                 $('#variantsListJs').html(t.html);
                 $('#addProductfrm button[type="submit"]').prop("disabled", false);
             },{ fOutMode: 'json'});
@@ -646,6 +632,124 @@
         fcom.updateWithAjax(fcom.makeUrl('Products', 'deleteDigitalLink', [linkId, refId]), '', function (t) {
             let recordId = getCurrentFrmRecordId();
             getDigitalDownloads(typeDigitalLink, recordId);
+        });
+    };
+
+    loadCropperSkeleton = function (reopenSideBarOnClose = true) {
+        autoOpenSideBar = reopenSideBarOnClose;
+        $("#modalBoxJs").remove();
+        $("body").append(fcom.getModalBody());
+        $("#modalBoxJs").modal("show");
+        $.ykmodal.close();
+    };
+
+    loadImageCropper = function (inputBtn) {        
+
+        if (inputBtn.files && inputBtn.files[0]) {
+            loadCropperSkeleton();
+            $("#modalBoxJs .modal-title").text($(inputBtn).attr('data-name'));
+            fcom.updateWithAjax(fcom.makeUrl('Products', "imgCropper"), "", function (t) {               
+                $("#modalBoxJs .modal-body").html(t.body);
+                $("#modalBoxJs .modal-footer").html(t.footer);
+                var file = inputBtn.files[0];
+
+                var frmName = $(inputBtn).closest('form').attr('name');
+                var minWidth = document[frmName].min_width.value;
+                var minHeight = document[frmName].min_height.value;
+
+                if (minWidth == minHeight) {
+                    var aspectRatio = 1 / 1;
+                } else {
+                    var aspectRatio = 16 / 9;
+                }
+                var options = {
+                    aspectRatio: aspectRatio,
+                    data: {
+                        width: minWidth,
+                        height: minHeight,
+                    },
+                    minCropBoxWidth: minWidth,
+                    minCropBoxHeight: minHeight,
+                    toggleDragModeOnDblclick: false,
+                    imageSmoothingQuality: "high",
+                    imageSmoothingEnabled: true,
+                };
+                $(inputBtn).val("");
+                setTimeout(function () {
+                    cropImage(file, options, "uploadImages", inputBtn);
+                }, 100);
+                return;
+            });
+        }
+    };
+
+    uploadImages = function (formData) {        
+
+        var frmName = formData.get("frmName");
+        var frm = document.forms[frmName];
+        var langId = 0;
+        if ('undefined' != typeof frm.lang_id) {
+            langId = frm.lang_id.value;
+        }
+        var slideScreen = 0;
+        if ("undefined" != typeof frm.slide_screen) {
+            slideScreen = frm.slide_screen.value;
+        }
+
+        var action = 'uploadMedia';
+        if ("undefined" != typeof frm.dataset.action) {
+            action = frm.dataset.action;
+        }
+
+        var other_data = $('form[name="' + frmName + '"]').serializeArray();
+        $.each(other_data, function (key, input) {
+            formData.append(input.name, input.value);
+        });
+
+        formData.append('fOutMode', 'json');
+        $.ajax({
+            url: fcom.makeUrl('Products', action),
+            type: "post",
+            dataType: "json",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $("#modalBoxJs .modal-body").prepend(fcom.getLoader());
+            },
+            success: function (ans) {
+               /* fcom.removeLoader();*/
+                if (ans.status == 0) {
+                    fcom.displayErrorMessage(ans.msg);
+                    return;
+                }
+               
+                fcom.displaySuccessMessage(ans.msg);
+                if (true === $.ykmodal.isAdded()) {
+                    $.ykmodal.show();
+                    $("#modalBoxJs").modal("hide");
+                    if ("undefined" != typeof frm.dataset.callback) {
+                        eval(frm.dataset.callback);
+                    } else if ("undefined" != typeof frm.dataset.callbackfn) {
+                        window[frm.dataset.callbackfn](ans); /* callback function */
+                    } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").length) {
+                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='lang_id']").val(langId).change();
+                    } else if (0 < $(".navTabsJs").length && 0 < $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").length) {
+                        $("." + $.ykmodal.element + " form[name='" + frm['name'] + "'] select[name='slide_screen']").change();
+                    } else {
+                        mediaForm(ans.recordId, frm.file_type.value, langId, slideScreen);
+                    }
+                } else {
+                    mediaForm(ans.recordId, frm.file_type.value, langId, slideScreen);
+                }               
+                
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                fcom.displayErrorMessage(
+                    thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText
+                );
+            },
         });
     };
 

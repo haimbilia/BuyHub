@@ -2,6 +2,8 @@
 $frm->setFormTagAttribute('class', 'form');
 $displayDigitalDownloadAddBtn = false;
 $displayDigitalDownloadList = false;
+$shippingProfileId = $frm->getField('shipping_profile') ? $frm->getField('shipping_profile')->value : 0;
+
 if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = $productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 1 > $productData['product_seller_id'];
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
@@ -56,6 +58,7 @@ if (0 < $recordId) {
         var typeDigitalFile = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>';
         var typeDigitalLink = '<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>';
         var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
+        var shippingProfileId = '<?php echo $shippingProfileId; ?>';
 
         $(function() {
             prodSpecifications();

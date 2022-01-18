@@ -83,10 +83,10 @@
 
     /* Product Brand Request [ */
     addBrandReqForm = function (id) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'addBrandReqForm', [id]), '', function (t) {
-                $.facebox(t);
-            });
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'addBrandReqForm', [id]), '', function (t) {
+            $.ykmodal(t);
+            fcom.closeAlertMessage();
         });
     };
 
@@ -94,22 +94,21 @@
         if (!$(frm).validate())
             return;
         var data = fcom.frmData(frm);
-        fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'setupBrandReq'), data, function (t) {
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'setupBrandReq'), data, function (t) {
             $.mbsmessage.close();
             searchBrandRequests(frm);
             if (t.langId > 0) {
                 addBrandReqLangForm(t.brandReqId, t.langId);
                 return;
             }
-            $(document).trigger('close.facebox');
-        });
+            $.ykmodal(t);
+        },{ fOutMode: 'json'});
     };
 
     addBrandReqLangForm = function (brandReqId, langId, autoFillLangData = 0) {
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SellerRequests', 'brandReqLangForm', [brandReqId, langId, autoFillLangData = 0]), '', function (t) {
-                $.facebox(t);
-            });
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl('SellerRequests', 'brandReqLangForm', [brandReqId, langId, autoFillLangData = 0]), '', function (t) {
+            $.ykmodal(t);
         });
     };
 

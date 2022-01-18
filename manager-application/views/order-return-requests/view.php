@@ -152,7 +152,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                 </div>
 
                 <!-- Buyer Information -->
-                <?php if (!empty($order['buyer_name']) || !empty($order['buyer_username']) || !empty($order['buyer_email']) || !empty($order['buyer_phone'])) { ?>
+                <?php if (!empty($order['user_name']) || !empty($order['credential_username']) || !empty($order['credential_email']) || !empty($order['buyer_phone'])) { ?>
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
@@ -163,31 +163,31 @@ echo $msgsSrchForm->getFormHtml(); ?>
                         </div>
                         <div class="card-body">
                             <ul class="list-stats">
-                                <?php if (!empty($order['buyer_name'])) { ?>
+                                <?php if (!empty($order['user_name'])) { ?>
                                     <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_CUSTOMER_NAME', $siteLangId); ?>:</span>
-                                        <span class="value"><?php echo $order['buyer_name']; ?></span>
+                                        <span class="value"><?php echo $order['user_name']; ?></span>
                                     </li>
                                 <?php } ?>
 
-                                <?php if (!empty($order['buyer_username'])) { ?>
+                                <?php if (!empty($order['credential_username'])) { ?>
                                     <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_CUSTOMER_USERNAME', $siteLangId); ?>:</span>
-                                        <span class="value"><?php echo $order['buyer_username']; ?></span>
+                                        <span class="value"><?php echo $order['credential_username']; ?></span>
                                     </li>
                                 <?php } ?>
 
-                                <?php if (!empty($order['buyer_email'])) { ?>
+                                <?php if (!empty($order['credential_email'])) { ?>
                                     <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_EMAIL_ID', $siteLangId); ?>:</span>
-                                        <span class="value"><?php echo $order['buyer_email']; ?></span>
+                                        <span class="value"><?php echo $order['credential_email']; ?></span>
                                     </li>
                                 <?php } ?>
 
-                                <?php if (!empty($order['buyer_phone'])) { ?>
+                                <?php if (!empty($order['user_phone'])) { ?>
                                     <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?>:</span>
-                                        <span class="value"><?php echo $order['buyer_phone']; ?></span>
+                                        <span class="value"><?php echo ValidateElement::formatDialCode($order['user_phone_dcode']) . $order['user_phone']; ?></span>
                                     </li>
                                 <?php } ?>
                             </ul>

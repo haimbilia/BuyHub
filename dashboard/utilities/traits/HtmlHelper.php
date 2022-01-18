@@ -2,6 +2,29 @@
 class HtmlHelper
 {   
 
+    public static function formatFormFields(Form &$frm, $col = 12)
+    {
+        $frm->setCustomRendererClass('FormRendererBS');
+        /* For Each Row On Above Elements */
+        $frm->developerTags['colWidthClassesDefault'] = [null, 'col-md-', null, null];
+        $frm->developerTags['colWidthValuesDefault'] = [null, $col, null, null];
+        /* For Each Row On Above Elements */
+
+        /* For Input Fields */
+        $frm->developerTags['fldWidthClassesDefault'] = ['', '', '', ''];
+        $frm->developerTags['fldWidthValuesDefault'] = ['', '', '', ''];
+        /* For Input Fields */
+
+        /* For Labels Fields */
+        $frm->developerTags['labelWidthClassesDefault'] = ['label', 'label', 'label', 'label'];
+        $frm->developerTags['labelWidthValuesDefault'] = ['', '', '', ''];
+        /* For Labels Fields */
+
+        /* Group Label and Input field. */
+        $frm->developerTags['fieldWrapperRowExtraClassDefault'] = 'form-group';
+        /* Group Label and Input field. */
+    }
+
     public static function configureSwitchForCheckbox($fld, $msg = '')
     {
         $fld->developerTags['fldWidthValues'] = ['setting-block', null, null, null];
