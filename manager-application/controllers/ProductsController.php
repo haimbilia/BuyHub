@@ -309,7 +309,7 @@ class ProductsController extends ListingBaseController
             $profileData = FatApp::getDb()->fetch($profSrch->getResultSet());
             if (!empty($profileData)) {
                 $productData['shipping_profile'] = $profileData['profile_id'];
-            }
+            }            
            
             /* ] */
             $isSelProdCreatedBySeller = 0 < Product::getCatalogProductCount($recordId);
@@ -336,7 +336,7 @@ class ProductsController extends ListingBaseController
             /* to select product type in get */
             if (0 < $productType) {
                 $productData['product_type'] = $productType;
-            }
+            }           
 
             $frm->fill($productData);
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $recordId]);
@@ -363,6 +363,7 @@ class ProductsController extends ListingBaseController
         $this->set('isProductAddedByAdmin', $isProductAddedByAdmin);
         $this->set('productOptions', $productOptions);
         $this->set('formLayout', Language::getLayoutDirection($langId));
+        $this->set('tourStep', SiteTourHelper::getStepIndex());
         if (FatUtility::isAjaxCall()) {
             $this->set('html', $this->_template->render(false, false, NULL, true));
             $this->_template->render(false, false, 'json-success.php', true, false);
@@ -371,8 +372,7 @@ class ProductsController extends ListingBaseController
 
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js', 'js/jquery-sortable-lists.js'));
         $this->_template->addCss(['css/cropper.css', 'css/tagify.min.css', 'css/select2.min.css']);
-        $this->set("includeEditor", true);
-        $this->set('tourStep', SiteTourHelper::getStepIndex());
+        $this->set("includeEditor", true);       
         $this->_template->render();
     }
 
@@ -402,8 +402,10 @@ class ProductsController extends ListingBaseController
         $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
         $post['ptt_taxcat_id'] = FatApp::getPostedData('ptt_taxcat_id', FatUtility::VAR_INT, 0);
         $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);
-        $post['product_seller_id'] = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
+        $post['product_seller_id'] = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);        
         /* select2 data ] */
+
+        $post['shipping_profile'] = FatApp::getPostedData('shipping_profile', FatUtility::VAR_INT, 0);
 
         $this->validateGetForm($post);
 

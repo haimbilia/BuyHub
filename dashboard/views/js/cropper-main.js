@@ -2,7 +2,7 @@
     systemImgCropper = function (url, aspectRatio, callback, inputBtn) {
         if (inputBtn.files && inputBtn.files[0]) {
             fcom.ajax(url, '', function (t) {
-                $.facebox(t);
+                $.facebox(t, 'faceboxWidth fbminwidth');
                 var container = document.querySelector('.img-container');
                 var file = inputBtn.files[0];
                 $('#new-img').attr('src', URL.createObjectURL(file));
@@ -38,12 +38,11 @@
             window.alert('Please choose an image file.');
         }
 
-        var actions = document.getElementById('actions');
         var cropper = new Cropper(image, options);
         var originalImageURL = image.src;
         var uploadedImageURL;
 
-        actions.querySelector('.docs-buttons').onclick = function (event) {
+        document.querySelector('.mediaCropButtonsJs').onclick = function (event) {
             var e = event || window.event;
             var target = e.target || e.srcElement;
             var cropped;
@@ -139,8 +138,13 @@
                                     formData.append('cropped_image', blobs, uploadedImageName);
                                     formData.append("action", "avatar");
                                     if (inputBtn) {
-                                        var frmName = $(inputBtn).attr('data-frm')
+                                        /* var frmName = $(inputBtn).attr('data-frm');*/
+                                        var frmName = $(inputBtn).closest('form').attr('name');
                                         formData.append("frmName", frmName);
+                                    }
+                                    var fileType = $(inputBtn).attr('data-file_type');
+                                    if (typeof fileType !== typeof undefined && fileType !== false) {
+                                        formData.append("file_type", fileType);
                                     }
                                     window[callback](formData);
                                 }, uploadedImageType);

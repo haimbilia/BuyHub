@@ -828,6 +828,7 @@ class CustomProductsController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+        
         /* [select2 data */
         $post['product_brand_id'] = FatApp::getPostedData('product_brand_id', FatUtility::VAR_INT, 0);
         $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
@@ -879,12 +880,10 @@ class CustomProductsController extends ListingBaseController
             $opValuesArr = array_column(json_decode($post['optionValues'][$index]), 'id');
             $data['preq_content']['product_option_values'][] = $opValuesArr;
         }
-
-        $data['preq_content']['product_ship_package'] = $post['shipping_profile'] ?? 0;
+   
         unset(
             $post['options'],
-            $post['optionValues'],
-            $post['shipping_profile'],
+            $post['optionValues'],        
             $post['product_upcs'],
             $post['lang_id'],
             $post['record_id'],
@@ -918,14 +917,14 @@ class CustomProductsController extends ListingBaseController
         $this->checkEditPrivilege();
         $preqObj = new ProductRequest();
         $post = FatApp::getPostedData();
-        $preq_id = FatUtility::int($post['preq_id']);
+        $recordId = FatUtility::int($post['record_id']);
         $imageIds = explode('-', $post['ids']);
         $count = 1;
         foreach ($imageIds as $row) {
             $order[$count] = $row;
             $count++;
         }
-        if (!$preqObj->updateProdImagesOrder($preq_id, $order)) {
+        if (!$preqObj->updateProdImagesOrder($recordId, $order)) {
             LibHelper::exitWithError($preqObj->getError(), true);
         }
         $this->set("msg", $this->str_update_record);

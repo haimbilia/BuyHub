@@ -221,8 +221,8 @@ class ProductsController extends SellerBaseController
             $this->_template->render(false, false, 'json-success.php', true, false);
             return;
         }
-        $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));     
-        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->addJs(array('seller-requests/page-js/index.js','js/cropper.js', 'js/cropper-main.js', 'js/select2.js', 'js/tagify.min.js', 'js/tagify.polyfills.min.js'));     
+        $this->_template->addCss(array('css/select2.min.css'));        
         $this->set("includeEditor", true);  
         $this->_template->render();
     }
@@ -545,6 +545,7 @@ class ProductsController extends SellerBaseController
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
+
     public function setImageOrder()
     {
         $this->checkEditPrivilege();
@@ -705,6 +706,11 @@ class ProductsController extends SellerBaseController
             $profileFld->options = ShippingProfile::getProfileArr($langId, $this->userParentId, true, true);  
         } 
 
+        $fld = $frm->getField('product_approved');
+        if(null != $fld){
+            $frm->removeField($fld);        
+        }        
+
         return $frm;
     }
 
@@ -723,18 +729,17 @@ class ProductsController extends SellerBaseController
                     break;
                 }
             }
-        }
-
-        if (1 > $langId) {
-            $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-            if (0 < $autoUpdateOtherLangsData) {
-                $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
-                if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                    LibHelper::exitWithError($updateLangDataobj->getError(), true);
-                }
+        }                  
+           
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData && 0 < $langId) {
+            $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
-        }        
-    }
+        }
+             
+    }    
 
     private function isShopActive($userId, $shopId = 0, $returnResult = false)
     {

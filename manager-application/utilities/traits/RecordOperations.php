@@ -21,16 +21,14 @@ trait RecordOperations
                 }
             }
         }
-
-        if (1 > $langId) {
-            $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-            if (0 < $autoUpdateOtherLangsData) {
-                $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
-                if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
-                    LibHelper::exitWithError($updateLangDataobj->getError(), true);
-                }
+       
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($recordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
-        }
+        }       
 
         if ($this->checkMediaExist == true && $this->newTabLangId == 0 && !$this->isMediaUploaded($recordId)) {
             $this->set('openMediaForm', true);
