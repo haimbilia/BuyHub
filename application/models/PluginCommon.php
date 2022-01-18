@@ -48,7 +48,7 @@ class PluginCommon extends MyAppModel
         'CashOnDelivery',
         'PayAtStore'
     ];
-    
+
     public const HAVING_SEPARATE_ICON = [
         self::TYPE_SPLIT_PAYMENT_METHOD,
         self::TYPE_REGULAR_PAYMENT_METHOD,
@@ -67,7 +67,7 @@ class PluginCommon extends MyAppModel
         'COALESCE(plg_l.' . self::DB_TBL_PREFIX . 'name, plg.' . self::DB_TBL_PREFIX . 'identifier) as plugin_name',
         self::DB_TBL_PREFIX . 'active',
     ];
-    
+
     /**
      * getTypeArr - Used to get plugin type
      *
@@ -128,7 +128,7 @@ class PluginCommon extends MyAppModel
      * getActivatationLimit
      *
      * @param  int $typeId
-     * @return void
+     * @return int
      */
     public static function getActivatationLimit(int $typeId): int
     {
@@ -187,7 +187,7 @@ class PluginCommon extends MyAppModel
     /**
      * getKingpinTypeArr
      *
-     * @return void
+     * @return array
      */
     public static function getKingpinTypeArr(): array
     {
@@ -209,7 +209,7 @@ class PluginCommon extends MyAppModel
     /**
      * getSeparateIconTypeArr
      *
-     * @return void
+     * @return array
      */
     public static function getSeparateIconTypeArr(): array
     {
@@ -218,7 +218,7 @@ class PluginCommon extends MyAppModel
             self::TYPE_REGULAR_PAYMENT_METHOD
         ];
     }
-        
+
     /**
      * getPluginTypeIconClass
      *
@@ -270,10 +270,63 @@ class PluginCommon extends MyAppModel
             case self::TYPE_DATA_MIGRATION:
                 return 'plugin-data-migration';
                 break;
-            
+
             default:
                 return 'plugin-default';
                 break;
         }
+    }
+
+    /**
+     * getSvgIconNames - Used to get icons in admin plugins settings
+     *     
+     * @return array
+     */
+    public static function getSvgIconNames(): array
+    {
+        return [
+            self::TYPE_CURRENCY_CONVERTER => "currency-converter",
+            self::TYPE_SOCIAL_LOGIN => "social-login",
+            self::TYPE_PUSH_NOTIFICATION => "push-notification",
+            self::TYPE_ADVERTISEMENT_FEED => "advertisement-feed",
+            self::TYPE_SMS_NOTIFICATION => "sms-notification",
+            self::TYPE_PAYOUTS => "payout",
+            // self::TYPE_FULL_TEXT_SEARCH => "full-text-search", /* NOT IN USE */
+            self::TYPE_TAX_SERVICES => "tax",
+            self::TYPE_SPLIT_PAYMENT_METHOD => "payment-methods",
+            self::TYPE_MARKETPLACE_CHANNELS => "marketplace-channels",
+            self::TYPE_REGULAR_PAYMENT_METHOD => "payment-methods",
+            self::TYPE_SHIPPING_SERVICES => "shipping-services",
+            self::TYPE_SHIPMENT_TRACKING => "shipment-tracking",
+            self::TYPE_DATA_MIGRATION => "data-migration",
+        ];
+    }
+
+    public static function getLabels(int $langId): array
+    {
+        $pluginLabels = CacheHelper::get('pluginLabels' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($pluginLabels) {
+            return json_decode($pluginLabels);
+        }
+
+        $arr = [
+            self::TYPE_CURRENCY_CONVERTER => Labels::getLabel('MSG_SETUP_REAL-TIME_CURRENCY_EXCHANGE_RATES', $langId),
+            self::TYPE_SOCIAL_LOGIN => Labels::getLabel('MSG_SETUP_SOCIAL_LOGIN_FOR_FASTER_LOGIN/REGISTRATION', $langId),
+            self::TYPE_PUSH_NOTIFICATION => Labels::getLabel('MSG_SETUP_CLOUD_MESSAGING_NOTIFICATION', $langId),
+            self::TYPE_ADVERTISEMENT_FEED => Labels::getLabel('MSG_SETUP_GOOGLE_FEED_TO_ADD_PRODUCT', $langId),
+            self::TYPE_SMS_NOTIFICATION => Labels::getLabel('MSG_SETUP_SMS_NOTIFICATIONS_FOR_YOUR_CUSTOMERS', $langId),
+            self::TYPE_PAYOUTS => Labels::getLabel('MSG_SETUP_PAYMENT_METHOD_TO_WITHDRAW_MONEY', $langId),
+            // self::TYPE_FULL_TEXT_SEARCH => "fullLabels::getLabel('MSG_POST_TITLE', $langId), /* NOT IN USE */
+            self::TYPE_TAX_SERVICES => Labels::getLabel('MSG_SETUP_API_FOR_AUTOMATIC_TAX_CALCULATIONS', $langId),
+            self::TYPE_SPLIT_PAYMENT_METHOD => Labels::getLabel('MSG_SETUP_TO_SPLIT_PAYMENT_BETWEEN_SELLERS', $langId),
+            self::TYPE_MARKETPLACE_CHANNELS => Labels::getLabel('MSG_SETUP_MULTI_CHANNEL_INVENTORY', $langId),
+            self::TYPE_REGULAR_PAYMENT_METHOD => Labels::getLabel('MSG_SETUP_REGULAR_PAYMENT_METHODS', $langId),
+            self::TYPE_SHIPPING_SERVICES => Labels::getLabel('MSG_SETUP_SHIPPING_API_FOR_SHIPPING_SERVICES', $langId),
+            self::TYPE_SHIPMENT_TRACKING => Labels::getLabel('MSG_SETUP_AUTOMATIC_SHIPMENT_TRACKING', $langId),
+            self::TYPE_DATA_MIGRATION => Labels::getLabel('MSG_MIGRATE_DATA_FROM_THIRD-PARTIES', $langId),
+        ];
+
+        CacheHelper::create('pluginLabels' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
     }
 }

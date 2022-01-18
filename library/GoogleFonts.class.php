@@ -114,7 +114,7 @@ class GoogleFonts {
         // Set output characters, use &lt; and &gt; when debugging
         $x = $debug ? array("&lt;", "&gt;") : array("<", ">");
         // Return HTML
-        return $x[0] . "link data-font='googleFontCss--js' href='" . self::SOURCE_PREFIX . $request . "' rel='stylesheet' /" . $x[1] . "\n";
+        return $x[0] . "link data-font='googleFontCssJs' href='" . self::SOURCE_PREFIX . $request . "' rel='stylesheet' /" . $x[1] . "\n";
     }
 
     /*

@@ -3,7 +3,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage');
 
 $div = new HtmlElement('div', array('class' => 'd-flex'));
 if (isset($htmlContent) && $htmlContent != '') {
-    $div->appendElement('div', ["class" => 'dropdown custom-drag-drop mr-2'], $htmlContent, true);
+    $div->appendElement('div', ["class" => 'dropdown custom-drag-drop me-2'], $htmlContent, true);
 }
 $btnGrp = $div->appendElement('div', array("class" => "btn-group"));
 $msg = isset($msg) ? $msg : '';
@@ -27,7 +27,7 @@ if (isset($otherButtons) && is_array($otherButtons)) {
 echo $div->getHtml();
 ?>
 <script>
-$('.dropdown-menu').on('click', function(e) {
-    e.stopPropagation();
-});
+    $('.dropdown-menu').on('click', function(e) {
+        e.stopPropagation();
+    });
 </script>

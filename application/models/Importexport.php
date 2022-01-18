@@ -73,7 +73,7 @@ class Importexport extends ImportexportCommon
                 $arr[static::TYPE_COUNTRY] = Labels::getLabel('LBL_Countries', $langId);
                 $arr[static::TYPE_STATE] = Labels::getLabel('LBL_States', $langId);
                 //$arr[static::TYPE_POLICY_POINTS] = Labels::getLabel('LBL_Policy_Points', $langId);
-                $arr[static::TYPE_TAX_CATEGORY] = Labels::getLabel('LBL_Tax_Category', $langId);
+                $arr[static::TYPE_TAX_CATEGORY] = Labels::getLabel('LBL_Tax_Categories', $langId);
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_USERS] = Labels::getLabel('LBL_users', $langId);
                     $arr[static::TYPE_LANGUAGE_LABELS] = Labels::getLabel('LBL_Language_Labels', $langId);
@@ -407,7 +407,7 @@ class Importexport extends ImportexportCommon
             case Importexport::TYPE_USERS:
                 $sheetName = Labels::getLabel('LBL_Users', $langId) . $sheetName;
                 $this->CSVfileObj = $this->openCSVfileToWrite($sheetName, $langId);
-                $this->exportUsers($langId);
+                $this->exportUsers($langId, $offset, $noOfRows, $minId, $maxId);
                 break;
             case Importexport::TYPE_TAX_CATEGORY:
                 $sheetName = Labels::getLabel('LBL_Tax_Category', $langId) . $sheetName;
@@ -5027,7 +5027,7 @@ class Importexport extends ImportexportCommon
                         if (1 > $optionId) {
                             $invalid = true;
                         } else {
-                            $optionValueData = $optionValueObj->getAtttibutesByIdentifierAndOptionId($optionId, $optionvalue_identifier, array('optionvalue_id'));
+                            $optionValueData = $optionValueObj->getAttributesByIdentifierAndOptionId($optionId, $optionvalue_identifier, array('optionvalue_id'));
                         }
                     }
 
@@ -5290,7 +5290,7 @@ class Importexport extends ImportexportCommon
 
         $languageCodes = Language::getAllCodesAssoc(true);
         $currencyCodes = Currency::getCurrencyAssoc(true);
-
+        
         $useCountryId = false;
         if ($this->settings['CONF_USE_COUNTRY_ID']) {
             $useCountryId = true;
@@ -5308,7 +5308,7 @@ class Importexport extends ImportexportCommon
                 $colValue = array_key_exists($columnKey, $row) ? $row[$columnKey] : '';
 
                 if ('country_currency_code' == $columnKey) {
-                    $colValue = array_key_exists($row['country_currency_id'], $currencyCodes) ? $currencyCodes[$row['country_currency_id']] : 0;
+                    $colValue = ($row['country_currency_id'] > 0 && array_key_exists($row['country_currency_id'], $currencyCodes)) ? $currencyCodes[$row['country_currency_id']] : $currencyCodes[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)];
                 }
 
                 if ('country_language_code' == $columnKey) {
@@ -5433,7 +5433,9 @@ class Importexport extends ImportexportCommon
         $currencyCodes = Currency::getCurrencyAssoc(true);
         $currencyIds = array_flip($currencyCodes);
 
+
         $coloumArr = $this->getCountryColoumArr($langId);
+        
         $this->validateCSVHeaders($csvFilePointer, $coloumArr, $langId);
 
         $errInSheet = false;

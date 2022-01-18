@@ -19,9 +19,9 @@ class SuccessStories extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'ss');
 
         if ($isActive == true) {
-            $srch->addCondition('ss.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('ss.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
-        $srch->addCondition('ss.' . static::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
+        $srch->addCondition('ss.' . static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
         if ($langId > 0) {
             $srch->joinTable(

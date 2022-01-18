@@ -1,0 +1,214 @@
+<?php
+
+trait Catalog
+{
+    /**
+     * getForm
+     *
+     * @param  mixed $langId
+     * @param  mixed $productType
+     * @param  mixed $recordId  - isRequested = 0 then it is product id  else request id
+     * @param  mixed $isRequested - is requested catalog by seller
+     * @return object
+     */
+    private function getCatalogForm($langId, $productType = 0, $recordId = 0, $isRequested = 0): object
+    {
+        $frm = new Form('frmProduct');
+        $productTypeArr = Product::getProductTypes($langId);
+        $productType = $productType == 0 ? array_key_first($productTypeArr) : $productType;
+
+        if (0 < $recordId) {
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', Language::getDropDownList(), $langId, [], '');
+        } else {
+            $fld = $frm->addHiddenField('', 'lang_id', $langId);
+            $fld->requirements()->setRequired();
+        }
+
+        $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_TYPE', $langId), 'product_type', $productTypeArr, $productType);
+        $fld->requirements()->setRequired();
+
+        if (0 == $isRequested) {
+            $frm->addSelectBox(Labels::getLabel('FRM_USER', $langId), 'product_seller_id', [], '', [], Labels::getLabel('FRM_ADMIN', $langId));
+        }
+        $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_IDENTIFIER', $langId), 'product_identifier');
+        $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_NAME', $langId), 'product_name');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_BRAND', $langId), 'product_brand_id', []);
+        if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
+            $fld->requirements()->setRequired();
+        }
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $langId), 'ptc_prodcat_id', []);
+        $fld->requirements()->setRequired();
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_MODEL', $langId), 'product_model');
+        if (FatApp::getConfig("CONF_PRODUCT_MODEL_MANDATORY", FatUtility::VAR_INT, 1)) {
+            $fld->requirements()->setRequired();
+        }
+        $fld = $frm->addFloatField(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE', $langId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'product_min_selling_price', '');
+        $fld->requirements()->setPositive();
+        if ($productType != Product::PRODUCT_TYPE_DIGITAL) {
+            $fld = $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_WARRANTY', $langId), 'product_warranty');
+            $fld->requirements()->setInt();
+            $fld->requirements()->setPositive();
+            $frm->addHiddenField('', 'product_warranty_unit');
+        }
+        $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $langId), 'product_description');
+        $frm->addTextBox(Labels::getLabel('FRM_YOUTUBE_VIDEO_URL', $langId), 'product_youtube_video');
+        $frm->addCheckBox(Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED', $langId), 'product_featured', 1, array(), false, 0);        
+        $frm->addCheckBox(Labels::getLabel("LBL_ACTIVE", $langId), 'product_active', applicationConstants::YES, array(), true, 0);
+        
+        $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_TAGS', $langId), 'product_tags');
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_TAX_CATEGORY', $langId), 'ptt_taxcat_id', []);
+        $fld->requirements()->setRequired();
+        if (0 == $isRequested) {
+            $frm->addSelectBox(Labels::getLabel('LBL_COUNTRY_OF_ORIGIN', $langId), 'ps_from_country_id', []);
+        }
+        if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
+            $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', $this->siteLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($langId), applicationConstants::NO);
+            $fld->requirements()->setRequired();
+        } else {
+            $fld = $frm->addCheckBox(Labels::getLabel('FRM_PRODUCT_IS_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', $langId), 'product_cod_enabled', 1, array(), false, 0);
+            $fulFillmentArr = Shipping::getFulFillmentArr($langId, FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1));
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $langId), 'product_fulfillment_type', $fulFillmentArr, applicationConstants::NO, [], Labels::getLabel('FRM_SELECT', $langId));
+            $fld->requirements()->setRequired();
+            if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
+                $shipPackArr = ShippingPackage::getAllNames();
+                $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PACKAGE', $langId), 'product_ship_package', $shipPackArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
+
+                $weightUnitsArr = applicationConstants::getWeightUnitsArr($langId);
+                $frm->addSelectBox(Labels::getLabel('FRM_WEIGHT_UNIT', $langId), 'product_weight_unit', $weightUnitsArr, '', [], Labels::getLabel('FRM_SELECT', $langId))->requirements()->setRequired();
+
+                $weightFld = $frm->addFloatField(Labels::getLabel('FRM_WEIGHT', $langId), 'product_weight', '0.00');
+                $weightFld->requirements()->setRequired(true);
+                $weightFld->requirements()->setFloatPositive();
+                $weightFld->requirements()->setRange('0.01', '9999999999');
+            }
+
+            if (1 == $isRequested) {
+                $shippingObj = new Shipping($langId);
+                if (!$shippingObj->getShippingApiObj(0)) {
+                    $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', ShippingProfile::getProfileArr($langId, 0, true, true));
+                }
+            } else {
+                $frm->addSelectBox(Labels::getLabel('FRM_SHIPPING_PROFILE', $langId), 'shipping_profile', [], '', [], '');
+            }
+        }
+
+        if (0 < $recordId && $isRequested == 0) {
+            $frm->addCheckBox(Labels::getLabel('FRM_APPROVAL_STATUS', $langId), 'product_approved', 1, array(), false, 0);
+        }
+
+        if (0 < $recordId && $isRequested == 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_REQUEST_STATUS', $langId), '', ProductRequest::getStatusArr($langId), '', array(), '');           
+        }
+
+        if ($isRequested == 0) {
+            $languageArr = Language::getDropDownList();
+            $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+            if (!empty($translatorSubscriptionKey) && $langId == CommonHelper::getDefaultFormLangId() && 1 < count($languageArr)) {
+                $frm->addCheckBox(Labels::getLabel('FRM_UPDATE_OTHER_LANGUAGES_DATA', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
+            }
+        }
+
+        $fld = $frm->addRadioButtons('', 'upc_type', applicationConstants::getYesNoArr($langId), applicationConstants::YES);
+        $fld->requirements()->setRequired();
+
+        $frm->addHiddenField('', 'product_upcs');
+        $frm->addHiddenField('', 'options');
+        $frm->addHiddenField('', 'optionValues');
+        $frm->addHiddenField('', 'specifications');
+
+        if (1 > $recordId && $isRequested == 0) {
+            $fld = $frm->addHiddenField('', 'temp_product_id');
+            $fld->requirements()->setRequired();
+        }
+
+        $frm->addHiddenField('', 'record_id', 0);
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('FRM_SAVE_AND_NEXT', $langId));
+        return $frm;
+    }
+    
+    private function validateGetForm(&$post)
+    {
+        $langId = $post['lang_id'];
+        $recordId = $post['record_id'];
+        if (1 > $recordId) {
+            if (!isset($post['temp_product_id']) || 1 > $post['temp_product_id']) {
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
+        }
+
+        if (isset($post['options'])) {
+            $post['options'] = is_array($post['options']) ? array_filter($post['options']) : [];
+            if (count($post['options'])) {
+                if (!isset($post['optionValues']) || empty($post['optionValues']) ||  count($post['options']) != count($post['optionValues'])) {
+                    LibHelper::exitWithError(Labels::getLabel('ERR_OPTION_VALUES_IS_REQUIRED', $langId), true);
+                }
+                $srch = Option::getSearchObject(0);
+                $srch->addMultipleFields(['option_id', 'option_is_separate_images']);
+                $srch->doNotLimitRecords();
+                $srch->addCondition(Option::tblFld('id'), 'IN', $post['options']);
+                $rs = $srch->getResultSet();
+
+                if ($srch->recordCount() != count($post['options'])) {
+                    LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OPTION_ID', $langId), true);
+                }
+                $records =  FatApp::getDb()->fetchAll($rs);
+                $opImageCount = 0;
+                foreach ($records as $records) {
+                    if ($records['option_is_separate_images'] == 1) {
+                        $opImageCount++;
+                    }
+                    if (1 < $opImageCount) {
+                        LibHelper::exitWithError(Labels::getLabel('ERR_YOU_HAVE_ALREADY_ADDED_OPTION_HAVING_SEPARATE_IMAGE', $langId), true);
+                        break;
+                    }
+                }
+
+                if (0 < $recordId) {
+                    $srch = new SearchBase(Product::DB_PRODUCT_TO_OPTION);
+                    $srch->doNotLimitRecords();
+                    $srch->addCondition(Product::DB_PRODUCT_TO_OPTION_PREFIX . 'product_id', '=', $recordId);
+                    $srch->addFld('prodoption_option_id');
+                    $oldOptions = FatApp::getDb()->fetchAll($srch->getResultSet());
+                    if ($oldOptions) {
+                        $oldOptions = array_column($records, 'prodoption_option_id');
+                        $oldDeletedOptions = array_diff(array_column($records, 'prodoption_option_id'), $post['options']);
+                        if ($oldDeletedOptions) {
+                            if (SellerProduct::isOptionLinked($oldDeletedOptions, $recordId)) {
+                                LibHelper::exitWithError(Labels::getLabel('ERR_OPTION_IS_LINKED_WITH_SELLER_INVENTORY', $this->siteLangId), true);
+                            }
+                        }
+                    }
+                }
+
+                foreach ($post['options'] as $index => $optionId) {
+                    if (!isset($post['optionValues'][$index])) {
+                        LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OPTION_VALUES_ID', $langId), true);
+                    }
+                    $opValuesArr = array_column(json_decode($post['optionValues'][$index]), 'id');
+                    $srch = OptionValue::getSearchObject(0, false);
+                    $srch->doNotLimitRecords();
+                    $srch->addCondition(OptionValue::tblFld('option_id'), '=', $optionId);
+                    $srch->addCondition(OptionValue::tblFld('id'), 'IN', $opValuesArr);
+                    $srch->getResultSet();
+                    if ($srch->recordCount() != count($opValuesArr)) {
+                        LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_OPTION_VALUES_ID', $langId), true);
+                    }
+                }
+            }
+        }
+        $post['product_upcs'] = $post['product_upcs'] ?? [];
+        if (isset($post['product_upcs'])) {
+            foreach ($post['product_upcs'] as $optionsIds => $upcCode) {
+                if (empty($upcCode)) {
+                    unset($post['product_upcs'][$optionsIds]);
+                    continue;
+                }
+                $row = UpcCode::getUpcDataByCode($upcCode);
+
+                if ($row && $row['upc_product_id'] != $recordId) {
+                    LibHelper::exitWithError(Labels::getLabel('ERR_THIS_UPC/EAN_CODE_ALREADY_ASSIGNED_TO_ANOTHER_PRODUCT', $langId), true);
+                }
+            }
+        }
+    }
+}

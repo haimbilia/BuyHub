@@ -41,10 +41,11 @@ class UserWishList extends MyAppModel
 
     public static function getSearchObject($userId = 0)
     {
+        $userId = FatUtility::int($userId);
         $srch = new SearchBase(static::DB_TBL, 'uwl');
 
         if ($userId) {
-            $srch->addCondition(static::tblFld('user_id'), '=', $userId);
+            $srch->addCondition(static::tblFld('user_id'), '=', 'mysql_func_' . $userId, 'AND', true);
         }
 
         return $srch;
@@ -112,12 +113,12 @@ class UserWishList extends MyAppModel
         $srch = static::getSearchObject($userId);
         $srch->joinTable('(' . $selWishlistProductSubQuery . ')', 'LEFT OUTER JOIN', 'uwlist_id = uw_items.uwlp_uwlist_id', 'uw_items');
         if (0 < $excludeWishList) {
-            $srch->addCondition('uwlist_id', '!=', $excludeWishList);
+            $srch->addCondition('uwlist_id', '!=', 'mysql_func_' . $excludeWishList, 'AND', true);
         }
         if ($type == self::TYPE_SAVE_FOR_LATER) {
-            $srch->addCondition('uwlist_type', '=', self::TYPE_SAVE_FOR_LATER);
+            $srch->addCondition('uwlist_type', '=', 'mysql_func_' . self::TYPE_SAVE_FOR_LATER, 'AND', true);
         } else {
-            $srch->addCondition('uwlist_type', '!=', self::TYPE_SAVE_FOR_LATER);
+            $srch->addCondition('uwlist_type', '!=', 'mysql_func_' . self::TYPE_SAVE_FOR_LATER, 'AND', true);
         }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -139,7 +140,7 @@ class UserWishList extends MyAppModel
     public function getWishListId(int $userId, int $type): int
     {
         $srch = static::getSearchObject($userId, true);
-        $srch->addCondition('uwlist_type', '=', $type);
+        $srch->addCondition('uwlist_type', '=', 'mysql_func_' . $type, 'AND', true);
         $srch->addMultipleFields(array('uwlist_id'));
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -174,14 +175,15 @@ class UserWishList extends MyAppModel
     public static function getListProductsByListId($uwlp_uwlist_id = 0, $selprod_id = 0)
     {
         $uwlp_uwlist_id = FatUtility::int($uwlp_uwlist_id);
+        $selprod_id = FatUtility::int($selprod_id);
         if (!$uwlp_uwlist_id) {
             trigger_error(Labels::getLabel('MSG_Invalid_Argument_Passed!', CommonHelper::getLangId()), E_USER_ERROR);
         }
         $srch = new SearchBase(UserWishListProducts::DB_TBL);
-        $srch->addCondition('uwlp_uwlist_id', '=', $uwlp_uwlist_id);
+        $srch->addCondition('uwlp_uwlist_id', '=', 'mysql_func_' . $uwlp_uwlist_id, 'AND', true);
 
         if ($selprod_id) {
-            $srch->addCondition('uwlp_selprod_id', '=', $selprod_id);
+            $srch->addCondition('uwlp_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
         }
 
         $rs = $srch->getResultSet();
@@ -201,8 +203,8 @@ class UserWishList extends MyAppModel
         $srch->addSubscriptionValidCondition();
         $srch->joinSellerProductSpecialPrice();
         $srch->joinFavouriteProducts($userId);
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('selprod_active', '=', applicationConstants::YES);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addGroupBy('selprod_id');
         $srch->addFld('selprod_id');
         $srch->getResultSet();

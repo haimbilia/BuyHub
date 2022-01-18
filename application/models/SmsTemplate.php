@@ -23,7 +23,6 @@ class SmsTemplate extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         $srch = new SearchBase(static::DB_TBL);
-        $srch->addOrder(static::DB_TBL_PREFIX . 'name', 'ASC');
         $srch->addMultipleFields(
             [
                 static::DB_TBL_PREFIX . 'code',
@@ -35,7 +34,7 @@ class SmsTemplate extends MyAppModel
             ]
         );
         if ($langId > 0) {
-            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
         }
         return $srch;
     }
@@ -45,11 +44,11 @@ class SmsTemplate extends MyAppModel
         if (empty($stpl_code)) {
             return false;
         }
-       
+        $langId = FatUtility::int($langId);
         $srch = static::getSearchObject($langId);
         $srch->addCondition(static::DB_TBL_PREFIX . 'code', 'LIKE', $stpl_code);
         if ($langId > 0) {
-            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            $srch->addCondition(static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
         }
         if (!empty($attr)) {
             $cols = is_string($attr) ? [$attr] : $attr;
@@ -75,12 +74,12 @@ class SmsTemplate extends MyAppModel
     {
         $langId = 0 < FatUtility::int($data['stpl_lang_id']) ? $data['stpl_lang_id'] : 0;
         if (1 > $langId) {
-            $this->error = Labels::getLabel('MSG_INVALID_LANGUAGE', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_LANGUAGE', CommonHelper::getLangId());
             return false;
         }
-        
+
         if (empty($data['stpl_body'])) {
-            $this->error = Labels::getLabel('MSG_MESSAGE_BODY_IS_REQUIRED', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_MESSAGE_BODY_IS_REQUIRED', CommonHelper::getLangId());
             return false;
         }
 

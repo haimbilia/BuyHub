@@ -28,7 +28,7 @@
     text-align: center;
     >li {
         background: $bg-gray;
-        color: $body-color;
+        color: $txt-body;
         border-radius: $radius3;
         padding: 2rem;
         .name {
@@ -88,7 +88,7 @@
                     padding: 0 5px;
                     margin: 0.5rem auto;
                     font-size: 0.8rem;
-                    color: $body-color;
+                    color: $txt-body;
                 }
             }
         }

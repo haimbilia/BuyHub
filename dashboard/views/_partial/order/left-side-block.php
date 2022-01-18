@@ -71,7 +71,7 @@ foreach ($arr as $childOrder) {
                         <span class="label"><?php echo Labels::getLabel('Lbl_Cart_Total', $siteLangId) ?></span>
                         <span class="value"><?php echo CommonHelper::displayMoneyFormat($cartTotal, true, false, true, false, true); ?></span>
                     </li>
-                    <?php 
+                    <?php
                     $discount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'DISCOUNT', true)) : $orderDetail['order_discount_total'];
                     if (0 < $discount) { ?>
                         <li class="discounted">
@@ -81,7 +81,7 @@ foreach ($arr as $childOrder) {
                             </span>
                         </li>
                     <?php } ?>
-                    <?php 
+                    <?php
                     $volDiscount = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'VOLUME_DISCOUNT', true)) : $orderDetail['order_volume_discount_total'];
                     if (0 < $volDiscount) { ?>
                         <li class="discounted">
@@ -91,13 +91,14 @@ foreach ($arr as $childOrder) {
                             </span>
                         </li>
                     <?php } ?>
-                    <?php 
+                    <?php
                     $rewards = true === $primaryOrder ? abs(CommonHelper::orderProductAmount($childOrderDetail, 'REWARDPOINT', true)) : $orderDetail['order_reward_point_value'];
                     if (0 < $rewards) { ?>
                         <li class="discounted">
-                            <span class="label"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?> </span>
+                            <span class="label"><?php echo Labels::getLabel('LBL_REWARD_POINTS_DISCOUNT', $siteLangId); ?>
+                            </span>
                             <span class="value">
-                                    <?php echo '-' . CommonHelper::displayMoneyFormat($rewards, true, false, true, false, true); ?>
+                                <?php echo '-' . CommonHelper::displayMoneyFormat($rewards, true, false, true, false, true); ?>
                             </span>
                         </li>
                     <?php } ?>
@@ -114,12 +115,12 @@ foreach ($arr as $childOrder) {
                     <li class="highlighted">
                         <span class="label"><?php echo Labels::getLabel('LBL_NET_AMOUNT', $siteLangId) ?></span>
                         <span class="value">
-                            <?php 
-                                if (true === $primaryOrder) {
-                                    echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'NETAMOUNT', true), true, false, true, false, true);
-                                } else {
-                                    echo CommonHelper::displayMoneyFormat($orderDetail['order_net_amount'], true, false, true, false, true);
-                                }
+                            <?php
+                            if (true === $primaryOrder) {
+                                echo CommonHelper::displayMoneyFormat(CommonHelper::orderProductAmount($childOrderDetail, 'NETAMOUNT', true), true, false, true, false, true);
+                            } else {
+                                echo CommonHelper::displayMoneyFormat($orderDetail['order_net_amount'], true, false, true, false, true);
+                            }
                             ?>
                         </span>
                     </li>
@@ -140,11 +141,11 @@ foreach ($arr as $childOrder) {
             <div class="order-block">
                 <h4><?php echo Labels::getLabel('LBL_PACKAGE_DETAIL', $siteLangId); ?></h4>
                 <div class="order-block-data">
-                    <?php 
-                        $data = $this->variables + [
-                            'unitType' => $unitTypeArray[$orderDetail['op_product_dimension_unit']],
-                        ];
-                        $this->includeTemplate('_partial/order/package-detail.php', $data, false);
+                    <?php
+                    $data = $this->variables + [
+                        'unitType' => $unitTypeArray[$orderDetail['op_product_dimension_unit']],
+                    ];
+                    $this->includeTemplate('_partial/order/package-detail.php', $data, false);
                     ?>
                 </div>
             </div>
@@ -154,25 +155,23 @@ foreach ($arr as $childOrder) {
             <div class="order-block">
                 <h4><?php echo Labels::getLabel('LBL_Shipping_ADDRESS', $siteLangId); ?></h4>
                 <div class="order-block-data">
-                    <?php 
-                        $data = $this->variables + [
-                            'address' => $orderDetail['shippingAddress'],
-                        ];
-                        $this->includeTemplate('_partial/order/address.php', $data, false);
+                    <?php
+                    $data = $this->variables + ['address' => $orderDetail['shippingAddress']];
+                    $this->includeTemplate('_partial/order/address.php', $data, false);
                     ?>
                 </div>
             </div>
         <?php } ?>
         <div class="order-block">
-            <h4 class="dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block2" aria-expanded="false" aria-controls="order-block2">
+            <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block2" aria-expanded="false" aria-controls="order-block2">
                 <?php echo Labels::getLabel('LBL_Billing_ADDRESS', $siteLangId); ?>: <i class="dropdown-toggle-custom-arrow"></i></h4>
             <div class="collapse" id="order-block2">
                 <div class="order-block-data">
-                    <?php 
-                        $data = $this->variables + [
-                            'address' => $orderDetail['billingAddress'],
-                        ];
-                        $this->includeTemplate('_partial/order/address.php', $data, false);
+                    <?php
+                    $data = $this->variables + [
+                        'address' => $orderDetail['billingAddress'],
+                    ];
+                    $this->includeTemplate('_partial/order/address.php', $data, false);
                     ?>
                 </div>
             </div>
@@ -180,17 +179,17 @@ foreach ($arr as $childOrder) {
         </div>
         <?php if ($primaryOrder && !empty($orderDetail['pickupAddress'])) { ?>
             <div class="order-block">
-                <h4 class="dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block3" aria-expanded="false" aria-controls="order-block3">
+                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block3" aria-expanded="false" aria-controls="order-block3">
                     <?php echo Labels::getLabel('LBL_PICKUP_ADDRESS', $siteLangId); ?>:
                     <i class="dropdown-toggle-custom-arrow"></i>
                 </h4>
                 <div class="collapse" id="order-block3">
                     <div class="order-block-data">
-                        <?php 
-                            $data = $this->variables + [
-                                'address' => $orderDetail['pickupAddress'],
-                            ];
-                            $this->includeTemplate('_partial/order/address.php', $data, false);
+                        <?php
+                        $data = $this->variables + [
+                            'address' => $orderDetail['pickupAddress'],
+                        ];
+                        $this->includeTemplate('_partial/order/address.php', $data, false);
                         ?>
                     </div>
                 </div>
@@ -202,7 +201,7 @@ foreach ($arr as $childOrder) {
             $pickUpflds = $shippingApiObj->getPickupFormElementsArr();
         ?>
             <div class="order-block">
-                <h4 class="dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block7" aria-expanded="false" aria-controls="order-block3">
+                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block7" aria-expanded="false" aria-controls="order-block3">
                     <?php echo Labels::getLabel('LBL_PICKUP_TIMING', $siteLangId); ?>:
                     <i class="dropdown-toggle-custom-arrow"></i>
                 </h4>
@@ -243,7 +242,7 @@ foreach ($arr as $childOrder) {
                 $selected_method = (empty($childOrderDetail['plugin_name'])) ? $childOrderDetail['plugin_identifier'] : $childOrderDetail['plugin_name'];
             } ?>
             <div class="order-block">
-                <h4 class="dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block5" aria-expanded="false" aria-controls="order-block3">
+                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block5" aria-expanded="false" aria-controls="order-block3">
                     <?php echo Labels::getLabel('LBL_PAYMENT_METHOD', $siteLangId); ?>:
                     <i class="dropdown-toggle-custom-arrow"></i>
                 </h4>
@@ -268,7 +267,7 @@ foreach ($arr as $childOrder) {
             $settings = $pluginSettingsObj->get($siteLangId);
         ?>
             <div class="order-block">
-                <h4 class="dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block4" aria-expanded="false" aria-controls="order-block3">
+                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block4" aria-expanded="false" aria-controls="order-block3">
                     <?php echo Labels::getLabel('LBL_BANK_DETAIL', $siteLangId); ?>:
                     <i class="dropdown-toggle-custom-arrow"></i>
                 </h4>
@@ -322,7 +321,7 @@ foreach ($arr as $childOrder) {
         <?php } ?>
         <?php if (!empty($orderDetail['payments'])) { ?>
             <div class="order-block">
-                <h4 class="dropdown-toggle-custom collapsed" data-toggle="collapse" data-target="#order-block6" aria-expanded="false" aria-controls="order-block3">
+                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block6" aria-expanded="false" aria-controls="order-block3">
                     <?php echo Labels::getLabel('LBL_Payment_History', $siteLangId); ?>:
                     <i class="dropdown-toggle-custom-arrow"></i>
                 </h4>

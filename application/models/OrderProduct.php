@@ -47,7 +47,7 @@ class OrderProduct extends MyAppModel
             $srch->joinTable(
                 static::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
-                'op_l.oplang_op_id = o.op_id
+                'op_l.oplang_op_id = op.op_id
 			AND op_l.oplang_lang_id = ' . $langId,
                 'op_l'
             );
@@ -168,12 +168,12 @@ class OrderProduct extends MyAppModel
     public function bindResponse(int $type, string $response): bool
     {
         if (1 > $this->mainTableRecordId) {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER_PRODUCT_ID', 0);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER_PRODUCT_ID', 0);
             return false;
         }
 
         if (false === self::isValidResponseType($type)) {
-            $this->error = Labels::getLabel('MSG_INVALID_RESPONSE_TYPE', 0);
+            $this->error = Labels::getLabel('ERR_INVALID_RESPONSE_TYPE', 0);
             return false;
         }
 
@@ -209,12 +209,12 @@ class OrderProduct extends MyAppModel
     public function getResponse(int $type = 0, bool $joinTypeTables = false, array $attr = [], int $langId = 0): array
     {
         if (1 > $this->mainTableRecordId) {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER_PRODUCT_ID', $langId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER_PRODUCT_ID', $langId);
             return [];
         }
 
         if (0 < $type && false === self::isValidResponseType($type)) {
-            $this->error = Labels::getLabel('MSG_INVALID_RESPONSE_TYPE', $langId);
+            $this->error = Labels::getLabel('ERR_INVALID_RESPONSE_TYPE', $langId);
             return [];
         }
 
@@ -391,4 +391,25 @@ class OrderProduct extends MyAppModel
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
+    public static function getStatusHtml(int $status, string $msg): string
+    {
+        switch ($status) {
+            case applicationConstants::CLASS_INFO:
+                $status = HtmlHelper::INFO;
+                break;
+            case applicationConstants::CLASS_SUCCESS:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case applicationConstants::CLASS_DANGER:
+                $status = HtmlHelper::DANGER;
+                break;
+            case applicationConstants::CLASS_WARNING:
+                $status = HtmlHelper::WARNING;
+                break;
+            default:
+                $status = HtmlHelper::INFO;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, rtrim($msg));
+    }
 }

@@ -110,22 +110,24 @@ class DigitalDownloadSearch extends SearchBase
         if (null != $optionCombi) {
             if (is_array($optionCombi)) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', 'IN', $optionCombi);
-            } elseif (is_string($optionCombi) && '0' != $optionCombi) {
+            // } elseif (is_string($optionCombi) && '0' != $optionCombi) {
+            //     $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
+            // }
+            } elseif (is_string($optionCombi)) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
             }
         }
         
         $attahcedTblOn = 'afile.' . AttachedFile::DB_TBL_PREFIX . 'record_id =' . DigitalDownload::DB_TBL_PREFIX . 'id';
-        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');
+        $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', $attahcedTblOn, 'afile');      
         
-        
-        if (0 < $langId) {
+        //if (0 < $langId) {
             $langCond = $srch->addCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', $langId);
             if (true === $displayUniversalFiles) {
                 /* adding a language id 0 if added previews for all language  */
                 $langCond->attachCondition('afile.' . AttachedFile::DB_TBL_PREFIX . 'lang_id', '=', 0);
             }
-        }
+        //}
 
         if (is_array($attr)) {
             $srch->addMultipleFields($attr);
@@ -171,14 +173,17 @@ class DigitalDownloadSearch extends SearchBase
         if (null != $optionCombi) {
             if (is_array($optionCombi)) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', 'IN', $optionCombi);
-            } elseif (is_string($optionCombi) && '0' != $optionCombi) {
+            // } elseif (is_string($optionCombi) && '0' != $optionCombi) {
+            //     $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
+            // }
+            } elseif (is_string($optionCombi)) {
                 $srch->addCondition(DigitalDownload::DB_TBL_PREFIX . 'options_code', '=', $optionCombi);
             }
         }
 
-        if (0 < $langId) {
+        //if (0 < $langId) {
             $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'lang_id', '=', $langId);
-        }
+        //}
         if (true == $onlyPreview) {
             $srch->addCondition(DigitalDownload::DB_TBL_LINKS_PREFIX . 'preview_link', '!=', '');
         }
@@ -192,7 +197,6 @@ class DigitalDownloadSearch extends SearchBase
         }
 
         $srch->doNotCalculateRecords();
-
         $srch->addOrder(DigitalDownload::DB_TBL_LINKS_PREFIX . 'id', 'DESC');
 
         $rs = $srch->getResultSet();

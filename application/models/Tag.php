@@ -4,24 +4,22 @@ class Tag extends MyAppModel
 {
     public const DB_TBL = 'tbl_tags';
     public const DB_TBL_PREFIX = 'tag_';
-
     public const DB_TBL_LANG = 'tbl_tags_lang';
-    private $db;
+    public const DB_TBL_LANG_PREFIX = 'taglang_';
 
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
+        $this->objMainTableRecord->setSensitiveFields([self::DB_TBL_PREFIX . 'id']);
     }
 
-    public static function getSearchObject($langId = 0)
+    public static function getSearchObject(int $langId = 0)
     {
-        $langId = FatUtility::int($langId);
-        $srch = new SearchBase(static::DB_TBL, 't');
-        if ($langId) {
-            $srch->joinTable(static::DB_TBL_LANG, 'LEFT OUTER JOIN', 't.tag_id = t_l.taglang_tag_id AND t_l.taglang_lang_id = ' . $langId, 't_l');
+        $srch =  new SearchBase(static::DB_TBL, 't');
+        if (0 < $langId) {
+            $srch->addCondition(self::tblFld('lang_id'), '=', 'mysql_func_' . $langId, 'AND', true);
         }
-        return $srch;
+        return  $srch;
     }
 
     public static function requiredTagsFields()
@@ -31,7 +29,6 @@ class Tag extends MyAppModel
                 'tag_id',
             ),
             ImportexportCommon::VALIDATE_NOT_NULL => array(
-                'tag_identifier',
                 'tag_name',
                 'credential_username',
                 'tag_user_id',
@@ -57,7 +54,6 @@ class Tag extends MyAppModel
             ),
             ImportexportCommon::VALIDATE_NOT_NULL => array(
                 'product_identifier',
-                'tag_identifier',
             ),
         );
     }
@@ -79,10 +75,10 @@ class Tag extends MyAppModel
         return  $record->getId();
     }
 
-    public function canRecordDelete($id)
+    public function canRecordDelete(int $id)
     {
         $srch = static::getSearchObject();
-        $srch->addCondition('t.' . static::DB_TBL_PREFIX . 'id', '=', $id);
+        $srch->addCondition('t.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $id, 'AND', true);
         $srch->addFld('t.' . static::DB_TBL_PREFIX . 'id');
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -124,10 +120,10 @@ class Tag extends MyAppModel
         $prodObj = new Product($productId);
 
         $upcCode = UpcCode::getSearchObject();
-        $upcCode->addCondition('upc_product_id', '=', $productId);
+        $upcCode->addCondition('upc_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
         $upcCode->doNotCalculateRecords();
         $upcCode->doNotLimitRecords();
-        $upcCode->addMultipleFields(array('upc_code_id', 'upc_code'));
+        $upcCode->addMultipleFields(array('upc_options', 'upc_code'));
         $rs = $upcCode->getResultSet();
         $codeArr = FatApp::getDb()->fetchAllAssoc($rs);
         $code = '';

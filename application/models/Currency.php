@@ -30,7 +30,7 @@ class Currency extends MyAppModel
         }
 
         if ($isActive) {
-            $srch->addCondition('curr.currency_active', '=', 1);
+            $srch->addCondition('curr.currency_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         return $srch;
@@ -68,6 +68,7 @@ class Currency extends MyAppModel
         $srch = self::getListingObj($langId, array('currency_id', 'currency_code'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+        $srch->addOrder(self::DB_TBL_PREFIX . 'display_order');
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAllAssoc($rs);
 
@@ -90,6 +91,7 @@ class Currency extends MyAppModel
         );
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+        $srch->addOrder(self::DB_TBL_PREFIX . 'display_order');
 
         $rs = $srch->getResultSet();
 
@@ -118,10 +120,10 @@ class Currency extends MyAppModel
     {
         $defaultCurrConvAPI = FatApp::getConfig('CONF_DEFAULT_PLUGIN_' . PLUGIN::TYPE_CURRENCY_CONVERTER, FatUtility::VAR_INT, 0);
         if (empty($defaultCurrConvAPI)) {
-            $this->error = Labels::getLabel('MSG_DEFAULT_CURRENCY_CONVERTER_NOT_DEFINED', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_DEFAULT_CURRENCY_CONVERTER_NOT_DEFINED', CommonHelper::getLangId());
             return false;
         } elseif (1 > Plugin::getAttributesById($defaultCurrConvAPI, 'plugin_active')) {
-            $this->error = Labels::getLabel('MSG_DEFAULT_CURRENCY_CONVERTER_API_ACTIVE', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_DEFAULT_CURRENCY_CONVERTER_API_ACTIVE', CommonHelper::getLangId());
             return false;
         }
 

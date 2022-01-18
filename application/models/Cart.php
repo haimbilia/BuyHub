@@ -65,7 +65,7 @@ class Cart extends FatModel
         $srch = new SearchBase('tbl_user_cart');
         $srch->doNotCalculateRecords();
         $srch->addCondition('usercart_user_id', '=', $this->cart_user_id);
-        $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $rs = $srch->getResultSet();
         $this->cartSameSessionUser = true;
         if ($row = FatApp::getDb()->fetch($rs)) {
@@ -126,7 +126,7 @@ class Cart extends FatModel
 
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', $userId);
-        $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -392,6 +392,7 @@ class Cart extends FatModel
             //$this->getBasketProducts($siteLangId);
 
             $productSelectedShippingMethodsArr = $this->getProductShippingMethod();
+
             $maxConfiguredCommissionVal = FatApp::getConfig("CONF_MAX_COMMISSION", FatUtility::VAR_INT, 0);
 
             /* $db = FatApp::getDb();
@@ -815,8 +816,8 @@ class Cart extends FatModel
         /* set variable of shipping cost of the product, if shipping already selected[ */
         $sellerProductRow['shipping_cost'] = 0;
         $sellerProductRow['opshipping_rate_id'] = 0;
-        if (!empty($productSelectedShippingMethodsArr) && isset($productSelectedShippingMethodsArr[$selprod_id])) {
-            $shippingDurationRow = $productSelectedShippingMethodsArr[$selprod_id];
+        if (!empty($productSelectedShippingMethodsArr) && isset($productSelectedShippingMethodsArr['product'][$selprod_id])) {
+            $shippingDurationRow = $productSelectedShippingMethodsArr['product'][$selprod_id];
             $sellerProductRow['opshipping_rate_id'] = $shippingDurationRow['mshipapi_id'];
             $sellerProductRow['shipping_cost'] = ROUND(($shippingDurationRow['mshipapi_cost'] * $quantity), 2);
         }
@@ -1804,6 +1805,10 @@ class Cart extends FatModel
             $tempUserId = session_id();
         }
 
+        if (!UserAuthentication::isUserLogged() && !UserAuthentication::isGuestUserLogged() && $userId > 0) {
+            $cart_user_id = $userId;
+        }
+
         /* to keep track of temporary hold the product stock[ */
         $db->updateFromArray('tbl_product_stock_hold', array('pshold_user_id' => $cart_user_id), array('smt' => 'pshold_user_id = ?', 'vals' => array($tempUserId)));
         /* ] */
@@ -1815,7 +1820,7 @@ class Cart extends FatModel
 
         $srch = new SearchBase('tbl_user_cart');
         $srch->addCondition('usercart_user_id', '=', $tempUserId);
-        $srch->addCondition('usercart_type', '=', CART::TYPE_PRODUCT);
+        $srch->addCondition('usercart_type', '=', 'mysql_func_' . CART::TYPE_PRODUCT, 'AND', true);
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 

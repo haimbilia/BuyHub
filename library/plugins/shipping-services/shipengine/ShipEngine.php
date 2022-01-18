@@ -327,7 +327,7 @@ class ShipEngine extends ShippingServicesBase
     {
         $this->orderDetail = $this->getSystemOrder($requestParam['op_id']);
         if (empty($this->orderDetail)) {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER', $this->langId);
             return false;
         }
 
@@ -433,13 +433,13 @@ class ShipEngine extends ShippingServicesBase
     public function fetchTrackingDetail(): array
     {
         if (empty($this->orderDetail)) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_LOAD_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_LOAD_ORDER', $this->langId);
             return [];
         }
 
         $labelData = $this->orderDetail['opr_response'];
         if (empty($labelData)) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_FETCH_TRACKING_DETAILS', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_FETCH_TRACKING_DETAILS', $this->langId);
             return [];
         }
         $labelData = json_decode($labelData, true);

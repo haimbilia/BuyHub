@@ -1,0 +1,122 @@
+.restore-btn {
+    @include bg-brand;
+    border: none;
+    box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+    position: fixed;
+    z-index: 9;
+    #{$end-direction}: 0;
+    top: calc(50% - 50px);
+    transform: rotate(-90deg) translate3d(0, -40px, 0);
+    transform-origin: right top;
+    padding: calc(0.55rem + 1px) calc(1.25rem + 1px);
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+
+    &:hover {
+        color: currentColor;
+    }
+
+    &-icon {
+        animation: rotate 1.5s linear infinite;
+        border-color: transparent white;
+        border-radius: 50%;
+        border-style: solid;
+        border-width: 0.125em;
+        height: 1.2rem;
+        margin: 0.25em;
+        width: 1.2rem;
+
+        &:before,
+        &:after {
+            border-style: solid;
+            content: "";
+            display: block;
+            position: absolute;
+            width: 0;
+            transform: rotate(-45deg);
+        }
+        &:after {
+            border-color: transparent transparent transparent white;
+            border-width: 0.3125em 0 0.3125em 0.5em;
+            top: -0.3125em;
+            left: 0.0625em;
+        }
+        &:before {
+            border-color: transparent white transparent transparent;
+            border-width: 0.3125em 0.5em 0.3125em 0;
+            bottom: -0.3125em;
+            right: 0.0625em;
+        }
+    }
+    &-label {
+        margin-#{$start-direction}: 8px;
+    }
+}
+.modal-restore {
+    .modal-dialog-vertical {
+        max-width: 280px !important;
+    }
+}
+
+.demo {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    &-restore {
+        margin-bottom: 1rem;
+        .restore {
+            text-align: center;
+            padding: 2.5rem;
+            &-title {
+                font-size: 1rem;
+                font-weight: 500;
+                margin-bottom: 0.25rem;
+            }
+            &-counter {
+                color: $brand-color;
+                font-size: 2rem;
+                font-weight: 700;
+            }
+        }
+    }
+    &-switch {
+        flex: 1;
+        border-top: $border;
+        border-bottom: $border;
+        padding: 1rem 0;
+    }
+    &-action {
+        margin-top: 1rem;
+    }
+    .list-items {
+        display: flex;
+        flex-direction: column;
+        .list-item {
+            display: flex;
+            a {
+                padding: 0.5rem 0;
+                text-decoration: none;
+                color: $txt-gray;
+                font-size: 0.85rem;
+                &:hover {
+                    color: $brand-color;
+                }
+            }
+        }
+        &--icon {
+            .list-item {
+                a {
+                    .icon {
+                        margin-#{$end-direction}: 0.5rem;
+                        .svg {
+                            width: 1rem;
+                            height: 1rem;
+                            fill: currentColor;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

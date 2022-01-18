@@ -41,7 +41,7 @@ class DigitalDownload extends MyAppModel
         $recordId = FatUtility::int($recordId);
 
         if ($recordId < 1) {
-            $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId());
             return false;
         }
 
@@ -60,15 +60,15 @@ class DigitalDownload extends MyAppModel
         return true;
     }
 
-    public function saveLink($refId, $langId, $downloadLink, $previewLink = '', $ddLinkid = 0)
+    public function saveLink( $langId, $downloadLink, $previewLink = '', $ddLinkid = 0)
     {
-        if ($refId < 1) {
+        if (1 > $this->getMainTableRecordId()) {
             $this->error = Labels::getLabel('ERR_Invalid_Request', CommonHelper::getLangId());
             return false;
         }
 
         $dataToSave = array(
-            static::DB_TBL_LINKS_PREFIX . 'record_id' => $refId,
+            static::DB_TBL_LINKS_PREFIX . 'record_id' => $this->getMainTableRecordId(),
             static::DB_TBL_LINKS_PREFIX . 'lang_id' => $langId,
             static::DB_TBL_LINKS_PREFIX . 'download_link' => $downloadLink,
             static::DB_TBL_LINKS_PREFIX . 'preview_link' => $previewLink,
@@ -176,41 +176,39 @@ class DigitalDownload extends MyAppModel
         return 0;
     }
 
-    public static function getDownloadForm($langId)
+    public static function getDownloadForm($langId, $type = -1 , $recordId = 0)
     {
         $frm = new Form('frmDownload');
-        $bannerTypeArr = applicationConstants::bannerTypeArr($langId);
-        $digitalDownloadTypeArr = applicationConstants::digitalDownloadTypeArr($langId);
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Option', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '')->requirements()->setRequired();
-        
-        $frm->addSelectBox(Labels::getLabel('LBL_Digital_Download_Type', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_OPTION', $langId), 'option_comb_id', [], '', array('class' => 'option-comb-id-js'), '');
 
-        $frm->addSelectBox(Labels::getLabel('LBL_Attach_with_existing_orders', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');
-        
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Downloadable_Link', $langId), 'product_downloadable_link');
-        /* $fld->requirements()->setRequired(); */
+        $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $langId), 'lang_id', array(0 => Labels::getLabel('FRM_ALL_LANGUAGES', $langId)) + Language::getDropDownList(), '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
+        if ($type == applicationConstants::DIGITAL_DOWNLOAD_FILE) {
+            $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_FILE', $langId), 'downloadable_file');
+            $frm->addFileUpload(Labels::getLabel('FRM_UPLOAD_PREVIEW', $langId), 'preview_file');
+            $frm->addHiddenField('', 'download_type', $type);
+        }elseif($type == applicationConstants::DIGITAL_DOWNLOAD_LINK){
+            $frm->addTextBox(Labels::getLabel('FRM_DOWNLOADABLE_LINK', $langId), 'product_downloadable_link');
+            $frm->addTextBox(Labels::getLabel('FRM_PREVIEW_LINK', $langId), 'product_preview_link');
+            $frm->addHiddenField('', 'download_type', $type);
+        } else {
+            $digitalDownloadTypeArr = applicationConstants::digitalDownloadTypeArr($langId);
+            $frm->addSelectBox(Labels::getLabel('LBL_Digital_Download_Type', $langId), 'download_type', $digitalDownloadTypeArr, '', array('class' => 'download-type'), '')->requirements()->setRequired();
+        }
+        $frm->addSelectBox(Labels::getLabel('FRM_ATTACH_WITH_EXISTING_ORDERS', $langId), 'attach_with_existing_orders', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('id' => 'attach_with_existing_orders'), '');
+        // $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('FRM_UPLOAD', $langId)); 
+        // $frm->addButton('', 'attachment_link_btn', Labels::getLabel('FRM_ADD', $langId));
 
-        $frm->addTextBox(Labels::getLabel('LBL_Preview_Link', $langId), 'product_preview_link');
-        
-        $frm->addButton('', 'attachment_link_btn', Labels::getLabel('LBL_Add', $langId));
+        // $frm->addHiddenField('', 'product_id');
+        // $frm->addHiddenField('', 'selprod_id');
 
-        $frm->addSelectBox(Labels::getLabel('Lbl_Language', $langId), 'lang_id', $bannerTypeArr, '', array('class' => 'file-language-js'), '')->requirements()->setRequired();
-
-        $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Upload_File', $langId), 'downloadable_file', array('id' => 'downloadable_file'));
-        
-        $frm->addFileUpload(Labels::getLabel('LBL_Upload_Preview', $langId), 'preview_file', array('id' => 'preview_file'));
-
-        $frm->addButton('', 'attachement_upload_btn', Labels::getLabel('LBL_Upload', $langId));
-        $frm->addButton('', 'reset', Labels::getLabel('LBL_Reset', $langId));
-        
-        $frm->addHiddenField('', 'product_id');
-        $frm->addHiddenField('', 'selprod_id');
-        $frm->addHiddenField('', 'preq_id');
+        $frm->addHiddenField('', 'record_id', $recordId);
+        // $frm->addHiddenField('', 'preq_id');
         $frm->addHiddenField('', 'dd_link_id');
         $frm->addHiddenField('', 'is_preview', 0);
         $frm->addHiddenField('', 'dd_link_ref_id');
         $frm->addHiddenField('', 'ref_file_id', 0);
+      
         return $frm;
     }
 
@@ -289,7 +287,7 @@ class DigitalDownload extends MyAppModel
         return true;
     }
 
-    public function attachLinkWithOrderedProducts($downloadLink, $recordId, $requestType, $langId, $option)
+    public function attachLinkWithOrderedProducts($downloadLink, $recordId, $requestType, $option)
     {
         if (!in_array($requestType, [Product::CATALOG_TYPE_INVENTORY, Product::CATALOG_TYPE_PRIMARY])
             || '' == $downloadLink
@@ -352,4 +350,5 @@ class DigitalDownload extends MyAppModel
         
         return FatApp::getDb()->fetchAll($opSrchObj->getResultSet());
     }
+    
 }

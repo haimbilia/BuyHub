@@ -32,7 +32,7 @@ class PluginSetting
     private function delete(array $statement = []): bool
     {
         if (1 > $this->pluginId) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return false;
         }
         $statement = [
@@ -52,7 +52,7 @@ class PluginSetting
     public function get(int $langId = 0, string $column = '')
     {
         if (empty($this->pluginKey)) {
-            $this->error = Labels::getLabel('MSG_PLUGIN_KEY_NOT_FOUND', $this->langId);
+            $this->error = Labels::getLabel('ERR_PLUGIN_KEY_NOT_FOUND', $this->langId);
             return false;
         }
 
@@ -89,13 +89,13 @@ class PluginSetting
     public function cleanData(&$data): bool
     {
         if (empty($data) || !is_array($data)) {
-            $this->error = Labels::getLabel('MSG_PLEASE_PROVIDE_DATA_TO_SAVE_SETTINGS', $this->langId);
+            $this->error = Labels::getLabel('ERR_PLEASE_PROVIDE_DATA_TO_SAVE_SETTINGS', $this->langId);
             return false;
         }
         unset($data['keyName'], $data['btn_submit'], $data["plugin_id"]);
 
         if (1 > count($data)) {
-            $this->error = Labels::getLabel('MSG_NOTHING_TO_UPDATE', $this->langId);
+            $this->error = Labels::getLabel('ERR_NOTHING_TO_UPDATE', $this->langId);
             return false;
         }
         return true;
@@ -175,8 +175,6 @@ class PluginSetting
                 $fld->requirements()->setRequired(true);
             }
         }
-       
-        $frm->addSubmitButton('&nbsp;', 'btn_submit', Labels::getLabel('LBL_Save_Changes', $langId));
         return $frm;
     }
 

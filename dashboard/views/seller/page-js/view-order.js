@@ -65,6 +65,7 @@ $(document).ready(function () {
             if (0 < $(form).length) {
                 $(form + " .status-js").val(orderShippedStatus).change();
                 $(form + " .notifyCustomer-js").val(1);
+                $(form + " #shippedByPluginJs").val(1);
                 $(form + " input[name='tracking_number']").val(t.tracking_number);
                 canShipByPlugin = 0;
                 if ('' != t.tracking_number) {
@@ -213,7 +214,7 @@ $(document).ready(function () {
     };
 
     copyContent = function (obj) {
-        var text = document.getElementById('trackingNumberJs').innerText;
+        var text = $(obj).siblings('.trackingNumberJs').text().trim();      
         var elem = document.createElement("textarea");
         document.body.appendChild(elem);
         elem.value = text;

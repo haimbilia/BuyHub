@@ -88,7 +88,7 @@ class InstagramLogin extends SocialMediaAuthBase
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         if ($http_code != '200') {
-            $this->error = Labels::getLabel('MSG_FAILED_TO_RETRIEVE_ACCESS_TOKEN', $this->langId);
+            $this->error = Labels::getLabel('ERR_FAILED_TO_RETRIEVE_ACCESS_TOKEN', $this->langId);
             return false;
         }
 
@@ -115,7 +115,7 @@ class InstagramLogin extends SocialMediaAuthBase
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         if (empty($this->response)) {
-            $this->error = Labels::getLabel('MSG_FAILED_TO_RETRIEVE_USER_INFO', $this->langId);
+            $this->error = Labels::getLabel('ERR_FAILED_TO_RETRIEVE_USER_INFO', $this->langId);
             return false;
         }
 

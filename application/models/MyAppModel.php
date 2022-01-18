@@ -2,16 +2,17 @@
 
 class MyAppModel extends FatModel
 {
+
     /**
      *
      * @var TableRecord
      */
     protected $objMainTableRecord;
-
     protected $mainTableIdField;
     protected $mainTableRecordId;
     protected $mainTableName;
     protected $commonLangId;
+
     public const DB_TBL_FOREIGN_PREFIX = '';
 
     public function __construct($tblName, $keyFld, $id)
@@ -35,14 +36,14 @@ class MyAppModel extends FatModel
         $srch->addMultipleFields(array(static::tblFld('id'), static::tblFld('name')));
         $srch->addOrder(static::tblFld('name'));
         if ($activeFld != null) {
-            $srch->addCondition($activeFld, '=', applicationConstants::ACTIVE);
+            $srch->addCondition($activeFld, '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
         if ($deletedFld != null) {
-            $srch->addCondition($deletedFld, '=', applicationConstants::NO);
+            $srch->addCondition($deletedFld, '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         if ($recordId > 0) {
-            $srch->addCondition(static::tblFld('id'), '=', FatUtility::int($recordId));
+            $srch->addCondition(static::tblFld('id'), '=', 'mysql_func_' . FatUtility::int($recordId), 'AND', true);
         }
 
         $srch->doNotCalculateRecords();
@@ -58,7 +59,7 @@ class MyAppModel extends FatModel
     public function updateLangData($lang_id, $data)
     {
         if (!($this->mainTableRecordId > 0)) {
-            $this->error = Labels::getLabel('MSG_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
 
@@ -83,16 +84,16 @@ class MyAppModel extends FatModel
     }
 
     /* public function getLangData($lang_id) {
-    $srch = new SearchBase(static::DB_TBL . '_lang','ln');
-    $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
-    $srch->addCondition('ln.'.$prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
-    $srch->addCondition('ln.'.$prefix . 'lang_lang_id', '=', FatUtility::int($lang_id));
-    $rs=$srch->getResultSet();
-    if($rs){
-    return FatApp::getDb()->fetch( $rs, $prefix . 'lang_lang_id');
-    }
-    return false;
-    } */
+      $srch = new SearchBase(static::DB_TBL . '_lang','ln');
+      $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
+      $srch->addCondition('ln.'.$prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+      $srch->addCondition('ln.'.$prefix . 'lang_lang_id', '=', FatUtility::int($lang_id));
+      $rs=$srch->getResultSet();
+      if($rs){
+      return FatApp::getDb()->fetch( $rs, $prefix . 'lang_lang_id');
+      }
+      return false;
+      } */
 
     public function assignValues($arr, $handleDates = false, $mysql_date_format = '', $mysql_datetime_format = '', $execute_mysql_functions = false)
     {
@@ -211,7 +212,7 @@ class MyAppModel extends FatModel
         $srch = new SearchBase(static::DB_TBL);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addCondition(static::tblFld('id'), '=', $recordId);
+        $srch->addCondition(static::tblFld('id'), '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if (null != $attr) {
             if (is_array($attr)) {
@@ -235,7 +236,7 @@ class MyAppModel extends FatModel
         return $row;
     }
 
-    public static function getAttributesByLangId($langId, $recordId, $attr = null, bool $includePrimaryTable = false)
+    public static function getAttributesByLangId($langId, $recordId, $attr = null, bool $includePrimaryTable = false, $active = NULL, $deleted =  NULL)
     {
         $recordId = FatUtility::convertToType($recordId, FatUtility::VAR_INT);
         $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
@@ -244,13 +245,27 @@ class MyAppModel extends FatModel
         $db = FatApp::getDb();
         $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
         if (true === $includePrimaryTable) {
-            $srch->joinTable(static::DB_TBL, 'INNER JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id');
+            $srch->joinTable(static::DB_TBL, 'RIGHT JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id and ln.' . $prefix . 'lang_lang_id=' . $langId);
         }
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
-        $srch->addCondition('ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', $recordId);
-        $srch->addCondition('ln.' . $prefix . 'lang_lang_id', '=', FatUtility::int($langId));
+        if ($includePrimaryTable) {
+            $srch->addCondition(static::tblFld('id'), '=', 'mysql_func_' . $recordId, 'AND', true);
+            $cond = $srch->addCondition('ln.' . $prefix . 'lang_lang_id', '=', 'mysql_func_' . FatUtility::int($langId), 'AND', true);
+            $cond->attachCondition('ln.' . $prefix . 'lang_lang_id', 'is', 'mysql_func_NULL', 'OR', true);
+
+            if (NULL !== $active) {
+                $srch->addCondition(static::tblFld('active'), '=', 'mysql_func_' . $active, 'AND', true);
+            }
+
+            if (NULL !== $deleted) {
+                $srch->addCondition(static::tblFld('deleted'), '=', 'mysql_func_' . $deleted, 'AND', true);
+            }
+        } else {
+            $srch->addCondition('ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $recordId, 'AND', true);
+            $srch->addCondition('ln.' . $prefix . 'lang_lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
+        }
 
         if (null != $attr) {
             if (is_array($attr)) {
@@ -278,12 +293,12 @@ class MyAppModel extends FatModel
         $recordId = FatUtility::convertToType($recordId, FatUtility::VAR_INT);
         $db = FatApp::getDb();
         $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
-        
+
         $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
         if (true === $includePrimaryTable) {
             $srch->joinTable(static::DB_TBL, 'INNER JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id');
         }
-        $srch->addCondition('ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', $recordId);
+        $srch->addCondition('ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $recordId, 'AND', true);
         if (null != $attr) {
             if (is_array($attr)) {
                 $srch->addMultipleFields($attr);

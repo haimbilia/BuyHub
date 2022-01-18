@@ -4,39 +4,39 @@
 var  productCatId  =  <?php echo $prodCatId; ?>; */
 </script>
 <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
-<main id="main-area" class="main"   >
+<main id="main-area" class="main">
     <div class="content-wrapper content-space">
-        <?php 
-            $data = [
-                'headingLabel' => Labels::getLabel('LBL_Custom_Product_Setup', $siteLangId),
-                'siteLangId' => $siteLangId,
+        <?php
+        $data = [
+            'headingLabel' => Labels::getLabel('LBL_Custom_Product_Setup', $siteLangId),
+            'siteLangId' => $siteLangId,
+        ];
+        if (strtolower($previousAction) == 'catalog') {
+            $data['otherButtons'][] = [
+                'attr' => [
+                    'href' => UrlHelper::generateUrl('seller', 'catalog'),
+                    'title' => Labels::getLabel('LBL_Back_To_My_Products', $siteLangId),
+                ],
+                'label' => Labels::getLabel('LBL_Back_To_My_Products', $siteLangId),
             ];
-            if (strtolower($previousAction) == 'catalog') {
-                $data['otherButtons'][] = [
-                    'attr' => [
-                        'href' => UrlHelper::generateUrl('seller', 'catalog'),
-                        'title' => Labels::getLabel('LBL_Back_To_My_Products', $siteLangId),
-                    ],
-                    'label' => Labels::getLabel('LBL_Back_To_My_Products', $siteLangId),
-                ];
-            } else {
-                $data['otherButtons'][] = [
-                    'attr' => [
-                        'href' => UrlHelper::generateUrl('seller', 'products'),
-                        'title' => Labels::getLabel('LBL_Back_To_Inventory', $siteLangId),
-                    ],
-                    'label' => Labels::getLabel('LBL_Back_To_Inventory', $siteLangId),
-                ];
-            }
+        } else {
+            $data['otherButtons'][] = [
+                'attr' => [
+                    'href' => UrlHelper::generateUrl('seller', 'products'),
+                    'title' => Labels::getLabel('LBL_Back_To_Inventory', $siteLangId),
+                ],
+                'label' => Labels::getLabel('LBL_Back_To_Inventory', $siteLangId),
+            ];
+        }
 
-            $this->includeTemplate('_partial/header/content-header.php', $data, false);
+        $this->includeTemplate('_partial/header/content-header.php', $data, false);
         ?>
         <div class="content-body">
             <div class="tabs">
                 <ul class="tabs_nav-js">
                     <li>
                         <a class="tabs_001" rel="tabs_001" href="javascript:void(0)">
-                            <?php echo Labels::getLabel('LBL_Initial_Setup', $siteLangId); ?> <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Setup_Basic_Details', $siteLangId); ?>">
+                            <?php echo Labels::getLabel('LBL_Initial_Setup', $siteLangId); ?> <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Setup_Basic_Details', $siteLangId); ?>">
                             </i>
 
 
@@ -44,32 +44,32 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
                     </li>
                     <li><a rel="tabs_002" class="tabs_002" href="javascript:void(0)">
                             <?php echo Labels::getLabel('LBL_Attribute_&_Specifications', $siteLangId); ?>
-                            <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Attribute_&_Specifications', $siteLangId); ?>"></i>
+                            <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Attribute_&_Specifications', $siteLangId); ?>"></i>
 
                         </a></li>
                     <li><a rel="tabs_003" class="tabs_003" href="javascript:void(0)">
                             <?php echo Labels::getLabel('LBL_Options_And_Tags', $siteLangId); ?>
-                            <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Options_And_Tags', $siteLangId); ?>"></i>
+                            <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Options_And_Tags', $siteLangId); ?>"></i>
 
                         </a></li>
 
                     <li><a rel="tabs_004" class="tabs_004" href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Shipping_Information', $siteLangId); ?>
-                            <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Setup_Dimentions_And_Shipping_Information', $siteLangId); ?>"></i>
+                            <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Setup_Dimentions_And_Shipping_Information', $siteLangId); ?>"></i>
 
                         </a></li>
                     <li><a rel="tabs_005" class="tabs_005" href="javascript:void(0)"> <?php echo Labels::getLabel('LBL_Media', $siteLangId); ?>
-                            <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Option_Based_Media', $siteLangId); ?>"></i>
+                            <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Option_Based_Media', $siteLangId); ?>"></i>
 
                         </a></li>
                     <li>
-                        <a rel="tabs_007" class="tabs_007" href="javascript:void(0)" >
+                        <a rel="tabs_007" class="tabs_007" href="javascript:void(0)">
                             <?php echo Labels::getLabel('LBL_Downloads', $siteLangId); ?>
-                            <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Catalog_Inventory_Based_Downloads', $siteLangId); ?>"></i>
+                            <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Catalog_Inventory_Based_Downloads', $siteLangId); ?>"></i>
                         </a>
                     </li>
                     <?php if ($displayInventoryTab == true) { ?>
                         <li><a rel="tabs_006" class="tabs_006" href="javascript:void(0)"> <?php echo Labels::getLabel('LBL_Inventory', $siteLangId); ?>
-                                <i class="tabs-icon fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Inventory', $siteLangId); ?>"></i></a></li>
+                                <i class="tabs-icon fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Add_Inventory', $siteLangId); ?>"></i></a></li>
                     <?php } ?>
                 </ul>
             </div>
@@ -95,9 +95,9 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
 </main>
 <script>
     var PRODUCT_TYPE_DIGITAL = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
-    var product_type =  '<?php echo $productType; ?>';
-    var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv;?>';
-    
+    var product_type = '<?php echo $productType; ?>';
+    var attachDownloadsWithInv = '<?php echo $attachDownloadsWithInv; ?>';
+
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var ratioTypeRectangular = <?php echo AttachedFile::RATIO_TYPE_RECTANGULAR; ?>;
     $(document).ready(function() {
@@ -110,7 +110,7 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
         customProductForm('<?php echo $productId; ?>');
         hideShippingTab('<?php echo $productType; ?>', '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>');
 
-        if(product_type == PRODUCT_TYPE_DIGITAL){
+        if (product_type == PRODUCT_TYPE_DIGITAL) {
             if (0 == attachDownloadsWithInv) {
                 showDownloadTab();
             } else {
@@ -119,6 +119,6 @@ var  productCatId  =  <?php echo $prodCatId; ?>; */
         } else {
             hideDownloadTab();
         }
-        
+
     });
 </script>

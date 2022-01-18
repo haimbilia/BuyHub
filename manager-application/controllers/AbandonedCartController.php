@@ -1,0 +1,214 @@
+<?php
+
+class AbandonedCartController extends ListingBaseController {
+
+    protected string $pageKey = 'MANAGE_ABANDONED_CART';
+
+    public function __construct($action) {
+        parent::__construct($action);
+        $this->objPrivilege->canViewAbandonedCart();
+    }
+
+    public function index() {
+        $fields = $this->getFormColumns();
+        $frmSearch = $this->getSearchForm($fields);
+
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
+        $pageTitle = $pageData['plang_title'] ?? LibHelper::getControllerName(true);
+
+        $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
+        $actionItemsData['newRecordBtnAttrs'] = [
+            'attr' => [
+                'href' => commonHelper::generateUrl('AbandonedCartProducts'),
+                'title' => Labels::getLabel('LBL_VIEW_BY_PRODUCT', $this->siteLangId),
+                'onclick' => ''
+            ],
+            'label' => '<svg class="svg" width="18" height="18">
+                            <use xlink:href="' . CONF_WEBROOT_URL . '/images/retina/sprite-actions.svg#view"></use>
+                        </svg><span>' . Labels::getLabel('BTN_PRODUCTS', $this->siteLangId) . '</span>',
+        ];
+
+        $this->set('pageData', $pageData);
+        $this->set('pageTitle', $pageTitle);
+        $this->set('actionItemsData', $actionItemsData);
+        $this->set("frmSearch", $frmSearch);
+        $this->set('defaultColumns', $this->getDefaultColumns());
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_USER_NAME_OR_EMAIL', $this->siteLangId));
+        $this->getListingData();
+
+        $this->_template->addJs(array('js/select2.js', 'abandoned-cart/page-js/index.js'));
+        $this->_template->addCss(array('css/select2.min.css'));
+        $this->_template->render(true, true, null, false, false);
+    }
+
+    public function search() {
+        $this->getListingData();
+        $jsonData = [
+            'listingHtml' => $this->_template->render(false, false, 'abandoned-cart/search.php', true),
+            'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
+    }
+
+    private function getListingData() {
+        $fields = $this->getFormColumns();
+        $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+
+        $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'abandonedcart_id');
+        if (!array_key_exists($sortBy, $fields)) {
+            $sortBy = 'abandonedcart_id';
+        }
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
+
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+
+        $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+
+        $searchForm = $this->getSearchForm($fields);
+        $postedData = FatApp::getPostedData();
+        $post = $searchForm->getFormDataFromArray($postedData);
+
+        $userId = FatApp::getPostedData('abandonedcart_user_id', FatUtility::VAR_INT, 0);
+        $selProdId = FatApp::getPostedData('abandonedcart_selprod_id', FatUtility::VAR_INT, 0);
+        $action = FatApp::getPostedData('abandonedcart_action', FatUtility::VAR_INT, 0);
+        $dateFrom = FatApp::getPostedData('date_from', null, '');
+        $dateTo = FatApp::getPostedData('date_to', null, '');
+
+        $srch = new AbandonedCartSearch();
+        $srch->joinUsers();
+        $srch->joinSellerProducts($this->siteLangId);
+        $srch->addActionCondition($action);
+        if ($userId > 0) {
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+        }
+
+        if ($selProdId > 0) {
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
+        }
+
+        if (!empty($dateFrom)) {
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'added_on', '>=', $dateFrom . ' 00:00:00');
+        }
+
+        if (!empty($dateTo)) {
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'added_on', '<=', $dateTo . ' 23:59:59');
+        }
+
+        if ($action != AbandonedCart::ACTION_PURCHASED) {
+            $srch->addSubQueryCondition();
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'email_count', '<', 'mysql_func_' . AbandonedCart::MAX_EMAIL_COUNT, 'AND', true);
+            $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'discount_notification', '<=', 'mysql_func_' . AbandonedCart::MAX_DISCOUNT_NOTIFICATION, 'AND', true);
+        }
+
+        if ($action == AbandonedCart::ACTION_PURCHASED) {
+            $cnd = $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'email_count', '>', 'mysql_func_0', 'AND', true);
+            $cnd->attachCondition(AbandonedCart::DB_TBL_PREFIX . 'discount_notification', '>', 'mysql_func_0', 'OR', true);
+        }
+
+        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        $srch->doNotCalculateRecords();
+
+        $srch->addOrder($sortBy, $sortOrder);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $paginationArr = empty($postedData) ? $post : $postedData;
+        $this->set('postedData', $paginationArr);
+        $this->set('sortBy', $sortBy);
+        $this->set('sortOrder', $sortOrder);
+        $this->set('fields', $fields);
+        $this->set('allowedKeysForSorting', $allowedKeysForSorting);
+        $this->set('canEdit', $this->objPrivilege->canEditAbandonedCart($this->admin_id, true));
+    }
+
+    public function getSearchForm(array $fields = []) {
+        $frm = new Form('frmAbandonedCartSearch');
+        $frm->addHiddenField('', 'page', 1);
+        if (!empty($fields)) {
+            $this->addSortingElements($frm, 'abandonedcart_id', applicationConstants::SORT_DESC);
+        }
+
+        $frm->addSelectBox(Labels::getLabel('FRM_USER_NAME_OR_EMAIL', $this->siteLangId), 'abandonedcart_user_id', []);
+        $frm->addSelectBox(Labels::getLabel('FRM_SELLER_PRODUCT', $this->siteLangId), 'abandonedcart_selprod_id', [], '', ['placeholder' => Labels::getLabel('FRM_SELECT', $this->siteLangId)]);
+
+        $frm->addSelectBox(Labels::getLabel('FRM_CART_ACTION', $this->siteLangId), 'abandonedcart_action', AbandonedCart::getActionArr($this->siteLangId));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addHiddenField('', 'total_record_count');
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-outline-brand');
+        return $frm;
+    }
+
+ 
+    public function discountNotification()
+    { 
+        $abandonedcartId = FatApp::getPostedData('abandonedcartId', FatUtility::VAR_INT, 0);
+        $couponId = FatApp::getPostedData('couponId', FatUtility::VAR_INT, 0);
+        if ($abandonedcartId < 1 || $couponId < 1) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_EMAIL_NOT_SENT_INVALID_PARAMETERS', $this->siteLangId), true);
+        }
+
+        $abandonedCart = new AbandonedCart($abandonedcartId);
+        if (!$abandonedCart->sendDiscountEmail($couponId)) {
+            LibHelper::exitWithError($abandonedCart->getError(), true);
+        }
+        $abandonedCart->updateDiscountNotification();
+        $this->set('msg', Labels::getLabel('MSG_Email_Sent_Successful', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function validateProductForNotification($productId) {
+        $productId = FatUtility::int($productId);
+        if ($productId < 1) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        $product = AbandonedCart::validateProductForNotification($productId);
+        if (empty($product)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PRODUCT_IS_EITHER_DELETED/DISABLED_OR_OUT_OF_STOCK', $this->siteLangId), true);
+        }
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    protected function getFormColumns(): array {
+        $tblHeadingCols = CacheHelper::get('abandonedCartFormTblHeadingCols' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($tblHeadingCols) {
+            return json_decode($tblHeadingCols);
+        }
+
+        $arr = [
+            'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_USER', $this->siteLangId),
+            'selprod_title' => Labels::getLabel('LBL_SELLER_PRODUCT', $this->siteLangId),
+            'abandonedcart_qty' => Labels::getLabel('LBL_QTY', $this->siteLangId),
+            'abandonedcart_action' => Labels::getLabel('LBL_CART_ACTION', $this->siteLangId),
+            'abandonedcart_added_on' => Labels::getLabel('LBL_DATE', $this->siteLangId),
+            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+        ];
+
+        CacheHelper::create('abandonedCartFormTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    protected function getDefaultColumns(): array {
+        return [
+            'listSerial',
+            'user_name',
+            'selprod_title',
+            'abandonedcart_qty',
+            'abandonedcart_action',
+            'abandonedcart_added_on',
+            'action',
+        ];
+    }
+
+    protected function excludeKeysForSort($fields = []): array {
+        return array_diff($fields, Common::excludeKeysForSort());
+    }
+
+}

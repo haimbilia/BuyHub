@@ -20,6 +20,13 @@ New Feature :
     => 82892 : Easypost Shipping API Integration
     => Shopify sync module for SV seller
     => 85399 : QNB payment gateway 
+    => 80928 : Mollie payment gateway 
+    => MSG-1390138 : Payfast payment gateway 
+    => 85369 : Aramex Shipping API 
+    => 72808 : EasyEcom Marketplace Channel API
+    => 86472 : YoCo Payment gateway
+    => 88040 : ShipRocket Shipping API Integration
+    => 88449 : ShipEngine Shipping API Integration
 
 Updates/Fixes : 
     => 052459 - Repeat Fetched Rates from EasyPost API Plugin
@@ -273,8 +280,24 @@ Updates/Fixes :
     => 058142 - we should have zone export/import
     => 058197 - on email header logo static link is there
     => 058449 - import Product seo data not working 
-    => 058450 - product stock availability issue
     => 058462 - on product detail page specification not coming with group 
+    => 058450 - product stock availability issue
+    => 058557 - pagination issue in admin seller product pages
+    => 058768 - if category identifier contain apostrophe then filter not coming on category page
+    => 058807 - Unable to change the URL for a sellers collection    
+    => 059263 - On order product search with lang there is query issue 
+    => 059798 - invalid mime type error coming while uploading doc file in blog contribution
+    => 059422 - Seller: Admin disable the "Allow Sellers To Add Products" option and then, "Add Seller's Shipping profile" option is not showing to add the shipping for the marketplace product
+    => 059821 - new tag unable to add in catalog
+    => 059913 - on home page favorite icon not updating
+    => 060820 - On order subscription getting error
+    => 060772 - Admin UI: Admin is not able to edit the 'Minimum Purchase Quantity' and 'Discount (%)' fields under the Volume Discount section
+    => 060775 - Admin UI: Product's listing is not showing while adding the 'related products and facing some UI issue under the "Related Products" section
+    => 061094 - Admin UI: Titles are not showing in the table and it is a mandatory field
+    => 061073 - Admin UI: Heading is missing for the search's dropdown under the "meta tags management" section 
+    => 061115 - commission going negative when refund the product [RV-9.3.1]
+    => 061057 - Admin UI: 'URL Rewriting' is not working for the SEARCH
+    => 061025 - Admin UI: Loader is not showing while uploading the media on the whole system 
 
 New Features:  
     => Admin shipped products listing page
@@ -290,10 +313,234 @@ Enhancements :
    => Price surge based on special price. 
    => Admin Reports.
    => Map listing for products & shops 
-    
+   => Withdrawal Requests
+   => Order Cancellation Requests 
+   => Manage Alert text
+   => Manage Product Reviews
+
+Admin UI/UX Enhancements pages:
+    => Login / Register, Forgot Password
+    => My Profile/ Change Pasword
+    => Product Catalog
+        - Brands
+        - Shops
+        - Categories        
+
+    => Requests
+        - Brand request
+        - Categories requests 
+        - Seller approval requests
+        - Threshold products
+        - Rating types
+
+    => Orders
+        - Order Cancel Reasons
+        - Order Return Reasons
+        - Order Statuses
+
+    => Users
+        - Users
+        - Rewards
+        - Transactions
+        - Deleted Users
+        - Users addresses
+
+    => Promotions
+        - Special Price
+        - Volume Discount
+        - Related Products
+        - Promotions
+        - Rewards on purchase
+        - manage weightages
+        - Recommended tag products weightages
+
+    => Blog
+        - Blog Post Categories
+        - Blog Posts
+        - Blog Contributions
+        - Blog Comments
+
+    => Tax
+        - Tax structure
+        - Tax categories
+        - Tax categories rule
+
+    => CMS
+        - Content Pages
+        - Content Block
+        - Faq's
+        - Testimonials
+
+    => Reports
+        - Sales Report
+        - Financial Report
+        - Subscription Reports
+
+    => Import/Export
+
+    => Seo
+        - Url Rewriting
+        - Image attributes
+        - Generate Sitemap
+        - View Html
+        - View Xml
+        - Meta Tags Management
+
+    => Settings
+
+=========================TV-9.4.0.20211130======================
+=> Product Catalog
+    - Oprions
+
+=> Requests    
+    - Order return requests
+    - Order cancellation requests
+    - Withdrawal requests
+
+=> Orders
+    - Orders
+    - Subscription Orders
+    - Product Reviews
+
+=> Users
+    - Admin Users
+    - GDPR requests
+
+=> Promotions
+    - Discount Coupons
+    - Push notifications
+    - Badges
+    - Ribbons
+
+=> CMS
+    - Home page slidees
+    - Banners
+    - Navigations
+
+=> Reports
+   - Buyers report
+   - Discount coupons
+
+=> Shipping/Pickup
+    - Shipping compnay users
+    - Shipping packages
+    - Shipping profiles
+    - Pickup addresses
+    - Shipped addresses
+
+Bugs : 
+    => 060304 - The homepage logo is not clearly visible.
+    => 060346 - Admin UI: Nothing(hint text) is showing while hovering on the "Notification icon" on the top header section. 
+	=> 060494 - Admin UI: Spacing issue between in the title of "Order status Name".
+    => 060517 - Admin UI: Correct "order status type" is not showing while editing the order's status in case of subscription.
+    => 060524 - Admin UI: "Subscription's status" moves to the "product's status listing" after inactivating the status by editing it.
+    => 060615 - Admin UI: Price's search is not working and the shop's listing is also not showing under the sales reports section.
+    => 060482 - Admin UI: Search icon is not showing while selecting the option from the "suggested text" on the whole system.
+    => 060564 - Admin UI: States listing is not showing for the default selected country under the "Users Addresses.
+    => 060570 - Admin UI: Spacing issue between "name" and "address" under the user's addresses.
+    => 060572 - Admin UI: "Spacing" and "text size" issue for the Combined Tax option under the tax structure section.
+    => 060531 - Admin UI: Nothing is showing while clicking on the User's name on the whole system.
+    => 060513 - Admin UI: Order Status's sorting and re-arrange functionality is not working properly if trying to use it simultaneously.
+    => 060776 - Recommended tag products section error is coming.
+    => 060480 - Admin UI: Every-time page is refreshing while admin clicking(multiple times) on the "save" button while adding the new records.
+    => 060771 - Admin UI: Inconsistency => In the table of the special price, seller info. is not showing according to the 'volume discount' section.
+    => 060751 - Admin UI: Client-side validation is not showing while trying to enter the new password < 8 characters under the user's section.
+    => 060753 - Admin UI: Validation message is missing while clicking on the 'Resend set password email' option under the user's section.
+    => 060733 - Admin UI: Facing issue while adding the users at the admin's panel.
+    => 060897 - Tax category rule addition giving issue.
+    => 060600 - Admin UI: Suggestion to give information, on what basis the search functionality will work under the reports section.
+    => 060619 - Admin UI: "No Record Found" is showing after clicking on the Clear button under the sales reports section.
+    => 060682 - Admin UI: Heading name is not matched with the title and 1st letter of the heading is not capital under the Import/Export section.
+    => 060732 - Admin UI: Search is not working properly under the permission sections of the admin's sub-users.
+
+==================TV-9.4.0.20211215====================
+    => Dashboard Stats
+    => Product page
+    => UAT Fixes
+
+==================TV-9.4.0.20211223===================
+    => Multilingual Sitemap
+    => Add product screen
+    => UAT Fixes
+=============TV-9.4.0.20211228================
+=> Product Catalog
+    - Seller Inventory
+
+=> Notification and Logs
+
+=> Promotions   
+    - Badges 
+    - Robbons        
+
+Bugs : 
+    => 060664 - Admin UI: "Alpha-3 Code" column is not showing in the exported file under the countries section.
+    => 061063 - Admin UI: 'Type' text is missing with the 'Select' under the "Image Attributes" section.
+    => 061092 - Admin UI: "Clear" functionality is not working for the "Product details" listing under the 'Meta tags management' section.
+    => 061058 - Admin UI: Getting an error while clicking on the 'edit' option under the Image attributes section.
+    => 061133 - Error coming while editing blogs image attributes in image attributes section.
+    => 061109 - Admin UI: "NEW" button design is not correct for the 'Advanced settings' under the "Meta Tag Management" section.
+    => 061107 - Admin UI: "Clear" design is not correct under the "Meta Tag Management" section.
+    => 061059 - Admin UI: 'Default' option is not selected after editing the records.
+    => 061113 - Admin UI: Not able to delete the records from the "Advanced setting meta tags listing" under the Meta tags section.
+    => 060672 - Admin UI: "Export Data Range" is not working according to 'By Id' and 'By Batches' while exporting the user's file.
+    => 061106 - Admin UI: Admin navigates to the "English" page while clicking on the RESET button on the Arabic page under the "Meta Tag Management" section.
+    => 061024 - Admin UI: 'Language data' is also updated while adding the 'General Data' and language data' title is also not the same under the Testimonial section.
+    => 061101 - Admin UI: Search(Keyword and Dropdown) is not working properly under the "Meta tags Management" section.
+    => 061018 - Admin UI: 'Language data' is also updated while updating the 'General Data' under the FAQ section.
+    => 060822 - Admin UI: 'cpc' and 'ppc' is not capital under the promotion section.
+    => 060825 - Admin UI: Getting multiple issues under the 'rewards on purchase' section.
+    => 060830 - Admin UI: In the table, "N" is not capital for the serial number's abbreviation on the whole system.
+    => 060833 - Admin UI: "recomended" spelling is not correct under the Manage weightages section.
+    => 060861 - Admin UI: Watermark's text is not showing completely in the search fields under the "Blog Contributions" section.
+    => 060873 - Admin UI: Different data is showing under the 'Language data' section while editing and adding the pages under the content pages section.
+    => 060874 - Admin UI: Added data is not showing under the 'language data' section while editing the records under the content pages section.
+    => 060885 - Admin UI: Getting multiple issues while editing the content blocks section.
+    => 061020 - Admin UI: Admin is not able to 'copy' the text in the table if there is re-arrange functionality on the whole system
+    => 061017 - Admin UI: Design is not aligned when the session is expired under the FAQ section
+    => 061013 - Admin UI: Status is 'in-active' by default while adding the record on the whole system
+    => 060886 - Admin UI: 'Background Image' title design is not matched with the other titles under the content blocks section
+    => 060877 - Admin UI: Layout Instruction is not showing under the content pages section
+    => 060876 - Admin UI: Session is expired message is not showing on some of the pages on the whole system
+    => 060871 - Admin UI: Reset and Save buttons position is not aligned on the slide pages
+    => 060750 - Admin UI: Double validations messages for the "confirm password" field is showing while changing the password under the admin user section
+    => 060543 - Admin UI: In the pagination, the extreme right and left arrows icon is not showing on the whole system
+    => 060536 - Admin UI: View comments moved in popup view from listing.
+    => 060594 - Admin UI: Suggestion to show the "tax category" of the rules for the better understanding.
+    => 060505 - Admin UI: Suggestion to give some indication to admin i.e. how "Order Status Color Class" will appear at the front-end
+    => 061431 - Special Price and Volume discount listing design row issue while editing
+
+=============TV-9.4.0.20210107================
+    => 060478 - Admin UI: Suggestion to change the errors messages while trying to add the new record by using the same name on the whole system 
+    => 061012 - Admin UI: "Row's Re-arrange" functionality is not working properly on the whole system
+    => 060863 - Admin UI: Getting multiple issues under the side's menu section
+    => 060835 - Admin UI: Inconsistency: Design is not the same for the edit fields in the table under the Manage weightages section
+    => 060770 - Admin UI: Table's alignment is not correct under the special price section
+    => 060538 - Admin UI: Validation's design is not consistent for the User's dropdown under the rewards section
+    => 060587 - Admin UI: Suggestion removed the scroller if "no record found" in the list
+    => 061099 - Admin UI: Breadcrumb is also gets blurred while selecting the options under the "Meta tags Management" section
+    => 061441 - Admin UI: Search is not working while trying to search the record according to 'added by' under the Options' section.
+    => 061445 - Admin UI: Admin is not able to add more than one option's value.
+    => 061097 - Admin UI: Loading is not working properly while sorting the columns of the table under the "Meta tags Management" section
+    => 060375 - Admin UI: Changes made to the requested brand media file by admin are not visible until the admin does not reload/refresh the page.
+====================TV-9.4.0.20220112==============
+    => 061594 - Admin UI: Search is not working according to "username and email address" under the Order Cancellation Requests section.
+    => 061591 - Admin UI: Field's headings are missing under the 'advanced search' section under the "Withdrawal requests" section.
+    => 061584 - Admin UI: Double options are selected while selecting the "cancellation requests" option in the side menu.
+    => 061596 - Admin UI: All records are not showing on the table after updating the status of the withdrawal request.
+    => 060758 - Admin UI: The whole table is not getting blurred while sorting the columns if the table contains more columns & the admin needs to scroll it horizontally
+    => 060847 - Admin UI: Random behavior is showing while re-arranging the fields under the Blog post categories section
+    => 060839 - Admin UI: Getting multiple issues under the "Blog Post Categories" section
+    => 061660 - Admin UI: Titles, shop rating, and images are missing on the product reviews page
+    => 061658 - Admin UI: "Invalid Request" error is showing while clicking on the "New" button on the product`s review page
+    => 061657 - Admin UI: Search is not working properly on the "Product Reviews" page
+    => 061650 - Admin UI: Admin is not able to update the "shipping" status of the orders and the updated status is also not showing on the order details page
+    => 061639 - Admin UI: Comments are also showing on the wrong side on the order details page
+    => 061638 - Admin UI: Admin is not able to update the payment more than one-time if payment is not complete under the order details page
+
+
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.
-
+    => 93129 : In custom product request form view specification and EAN/UPC code will not come as old data is incorrect
 Following is a list of known errors that don’t have a workaround. These issues will be fixed in the subsequent release. 
         => Change in minimum selling price when reconfigured by Admin
         => Safari and IE 11 do not support our CSS. More info can be found at https://developer.microsoft.com/en-us/microsoft-edge/platform/status/csslevel3attrfunction/

@@ -28,8 +28,8 @@ class UpcCode extends MyAppModel
 
         $srch = self::getSearchObject();
 
-        $srch->addCondition(self::DB_TBL_PREFIX . 'product_id', '=', $product_id);
-        $srch->addCondition(self::DB_TBL_PREFIX . 'options', '=', $optionvalue_id);
+        $srch->addCondition(self::DB_TBL_PREFIX . 'product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
+        $srch->addCondition(self::DB_TBL_PREFIX . 'options', '=', 'mysql_func_' . $optionvalue_id, 'AND', true);
         $srch->addFld('upc_code');
         $rs = $srch->getResultSet();
         $code = $db->fetch($rs);
@@ -37,6 +37,14 @@ class UpcCode extends MyAppModel
             return '';
         }
         return $code['upc_code'];
+    }
+
+
+    public static function getUpcDataByCode($code)
+    {
+        $srch = self::getSearchObject();
+        $srch->addCondition(self::DB_TBL_PREFIX . 'code', '=', $code);
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public static function remove(int $product_id)

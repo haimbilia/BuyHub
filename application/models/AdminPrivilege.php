@@ -2,6 +2,8 @@
 
 class AdminPrivilege
 {
+    public const SESSION_ELEMENT_NAME = 'yokartPrivileges';
+
     public const SECTION_PRODUCT_CATEGORIES = 1;
     public const SECTION_PRODUCTS = 2;
     public const SECTION_BRANDS = 3;
@@ -127,6 +129,10 @@ class AdminPrivilege
     public const SECTION_BADGE_LINKS = 121;
     public const SECTION_BADGE_REQUESTS = 122;
     public const SECTION_SYSTEMLOG = 123;
+    public const SECTION_SETTINGS = 124;
+    public const SECTION_PAGES_LANGUAGE_DATA = 125;
+    public const SECTION_CATEGORY_REQUEST = 126;
+    public const SECTION_GETTING_STARTED = 127;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -148,177 +154,186 @@ class AdminPrivilege
         return (1 == $adminId);
     }
 
-    public static function getPermissionArr()
+    public static function getPermissionArr(): array
     {
+        $langId = CommonHelper::getLangId();
         $arr = array(
-            static::PRIVILEGE_NONE => Labels::getLabel('MSG_None', CommonHelper::getLangId()),
-            static::PRIVILEGE_READ => Labels::getLabel('MSG_Read_Only', CommonHelper::getLangId()),
-            static::PRIVILEGE_WRITE => Labels::getLabel('MSG_Read_and_Write', CommonHelper::getLangId())
+            static::PRIVILEGE_NONE => Labels::getLabel('LBL_NONE', $langId),
+            static::PRIVILEGE_READ => Labels::getLabel('LBL_READ_ONLY', $langId),
+            static::PRIVILEGE_WRITE => Labels::getLabel('LBL_READ_AND_WRITE', $langId)
         );
         return $arr;
     }
 
-    public static function getPermissionModulesArr()
+    public static function getPermissionModulesArr(): array
     {
-        $arr = array(
-            static::SECTION_ADMIN_DASHBOARD => Labels::getLabel('MSG_Admin_Dashboard', CommonHelper::getLangId()),
-            static::SECTION_SHOPS => Labels::getLabel('MSG_Shops', CommonHelper::getLangId()),
-            static::SECTION_PRODUCT_CATEGORIES => Labels::getLabel('MSG_Product_Categories', CommonHelper::getLangId()),
-            static::SECTION_PRODUCTS => Labels::getLabel('MSG_Products', CommonHelper::getLangId()),
-            static::SECTION_SELLER_PRODUCTS => Labels::getLabel('MSG_Seller_Products', CommonHelper::getLangId()),
-            static::SECTION_PRODUCT_REVIEWS => Labels::getLabel('MSG_Product_Reviews', CommonHelper::getLangId()),
-            static::SECTION_BRANDS => Labels::getLabel('MSG_Brands', CommonHelper::getLangId()),
-            static::SECTION_OPTIONS => Labels::getLabel('MSG_Options', CommonHelper::getLangId()),
-            static::SECTION_TAGS => Labels::getLabel('MSG_Tags', CommonHelper::getLangId()),
-            static::SECTION_BRAND_REQUESTS => Labels::getLabel('MSG_Brand_Requests', CommonHelper::getLangId()),
-            static::SECTION_ATTRIBUTES => Labels::getLabel('MSG_Attributes', CommonHelper::getLangId()),
+        $langId = CommonHelper::getLangId();
+        $arr = CacheHelper::get('permissionLabels' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$arr) {
+            $arr = array(
+                static::SECTION_ADMIN_DASHBOARD => Labels::getLabel('NAV_ADMIN_DASHBOARD', $langId),
+                static::SECTION_SHOPS => Labels::getLabel('NAV_SHOPS', $langId),
+                static::SECTION_PRODUCT_CATEGORIES => Labels::getLabel('NAV_PRODUCT_CATEGORIES', $langId),
+                static::SECTION_PRODUCTS => Labels::getLabel('NAV_PRODUCTS', $langId),
+                static::SECTION_SELLER_PRODUCTS => Labels::getLabel('NAV_SELLER_PRODUCTS', $langId),
+                static::SECTION_PRODUCT_REVIEWS => Labels::getLabel('NAV_PRODUCT_REVIEWS', $langId),
+                static::SECTION_BRANDS => Labels::getLabel('NAV_BRANDS', $langId),
+                static::SECTION_OPTIONS => Labels::getLabel('NAV_OPTIONS', $langId),
+                static::SECTION_TAGS => Labels::getLabel('NAV_TAGS', $langId),
+                static::SECTION_BRAND_REQUESTS => Labels::getLabel('NAV_BRAND_REQUESTS', $langId),
+                static::SECTION_ATTRIBUTES => Labels::getLabel('NAV_ATTRIBUTES', $langId),
 
-            static::SECTION_USERS => Labels::getLabel('MSG_Users', CommonHelper::getLangId()),
-            static::SECTION_SHIPPING_COMPANY_USERS => Labels::getLabel('MSG_Shipping_Company_Users', CommonHelper::getLangId()),
-            static::SECTION_SUPPLIER_APPROVAL_FORM => Labels::getLabel('MSG_Seller_Approval_Form', CommonHelper::getLangId()),
-            static::SECTION_SUPPLIER_APPROVAL_REQUESTS => Labels::getLabel('MSG_Seller_Approval_Requests', CommonHelper::getLangId()),
-            static::SECTION_CATALOG_REQUESTS => Labels::getLabel('MSG_Catalog_Requests', CommonHelper::getLangId()),
-            static::SECTION_CUSTOM_PRODUCT_REQUESTS => Labels::getLabel('MSG_Custom_Catalog_Requests', CommonHelper::getLangId()),
-            static::SECTION_CUSTOM_CATALOG_PRODUCT_REQUESTS => Labels::getLabel('MSG_Custom_Catalog_Product_Requests', CommonHelper::getLangId()),
+                static::SECTION_USERS => Labels::getLabel('NAV_USERS', $langId),
+                static::SECTION_SHIPPING_COMPANY_USERS => Labels::getLabel('NAV_SHIPPING_COMPANY_USERS', $langId),
+                static::SECTION_SUPPLIER_APPROVAL_FORM => Labels::getLabel('NAV_SELLER_APPROVAL_FORM', $langId),
+                static::SECTION_SUPPLIER_APPROVAL_REQUESTS => Labels::getLabel('NAV_SELLER_APPROVAL_REQUESTS', $langId),
+                static::SECTION_CATALOG_REQUESTS => Labels::getLabel('NAV_CATALOG_REQUESTS', $langId),
+                static::SECTION_CUSTOM_PRODUCT_REQUESTS => Labels::getLabel('NAV_CUSTOM_CATALOG_REQUESTS', $langId),
+                static::SECTION_CUSTOM_CATALOG_PRODUCT_REQUESTS => Labels::getLabel('NAV_CUSTOM_CATALOG_PRODUCT_REQUESTS', $langId),
+                static::SECTION_CATEGORY_REQUEST => Labels::getLabel('NAV_CATEGORY_REQUEST', $langId),
 
-            static::SECTION_CONTENT_PAGES => Labels::getLabel('MSG_Content_Pages', CommonHelper::getLangId()),
-            static::SECTION_CONTENT_BLOCKS => Labels::getLabel('MSG_Content_Blocks', CommonHelper::getLangId()),
-            static::SECTION_NAVIGATION_MANAGEMENT => Labels::getLabel('MSG_Navigation_Management', CommonHelper::getLangId()),
-            static::SECTION_COUNTRIES => Labels::getLabel('MSG_Countries', CommonHelper::getLangId()),
-            /* static::SECTION_ZONES => Labels::getLabel('MSG_Zones',CommonHelper::getLangId()), */
-            static::SECTION_STATES => Labels::getLabel('MSG_States', CommonHelper::getLangId()),
-            static::SECTION_COLLECTIONS => Labels::getLabel('MSG_Collections', CommonHelper::getLangId()),
-            static::SECTION_EMPTY_CART_ITEMS_MANAGEMENT => Labels::getLabel('MSG_Empty_Cart_Management', CommonHelper::getLangId()),
-            static::SECTION_SOCIALPLATFORM => Labels::getLabel('MSG_Social_Platform', CommonHelper::getLangId()),
-            static::SECTION_SHOP_REPORT_REASONS => Labels::getLabel('MSG_Shop_Report_Reasons', CommonHelper::getLangId()),
-            static::SECTION_ORDER_CANCEL_REASONS => Labels::getLabel('MSG_Order_Cancel_Reasons', CommonHelper::getLangId()),
-            static::SECTION_ORDER_RETURN_REASONS => Labels::getLabel('MSG_Order_Return_Reasons', CommonHelper::getLangId()),
-            static::SECTION_TESTIMONIAL => Labels::getLabel('MSG_Testimonial', CommonHelper::getLangId()),
-            static::SECTION_DISCOUNT_COUPONS => Labels::getLabel('MSG_Discount_Coupons', CommonHelper::getLangId()),
-            static::SECTION_LANGUAGE_LABELS => Labels::getLabel('MSG_Language_Labels', CommonHelper::getLangId()),
-            static::SECTION_SLIDES => Labels::getLabel('MSG_Home_Page_Slide_Management', CommonHelper::getLangId()),
-            static::SECTION_BANNERS => Labels::getLabel('MSG_Banners', CommonHelper::getLangId()),
+                static::SECTION_CONTENT_PAGES => Labels::getLabel('NAV_CONTENT_PAGES', $langId),
+                static::SECTION_CONTENT_BLOCKS => Labels::getLabel('NAV_CONTENT_BLOCKS', $langId),
+                static::SECTION_NAVIGATION_MANAGEMENT => Labels::getLabel('NAV_NAVIGATION_MANAGEMENT', $langId),
+                static::SECTION_COUNTRIES => Labels::getLabel('NAV_COUNTRIES', $langId),
+                /* static::SECTION_ZONES => Labels::getLabel('NAV_ZONES',$langId), */
+                static::SECTION_STATES => Labels::getLabel('NAV_STATES', $langId),
+                static::SECTION_COLLECTIONS => Labels::getLabel('NAV_COLLECTIONS', $langId),
+                static::SECTION_EMPTY_CART_ITEMS_MANAGEMENT => Labels::getLabel('NAV_EMPTY_CART_MANAGEMENT', $langId),
+                static::SECTION_SOCIALPLATFORM => Labels::getLabel('NAV_SOCIAL_PLATFORM', $langId),
+                static::SECTION_SHOP_REPORT_REASONS => Labels::getLabel('NAV_SHOP_REPORT_REASONS', $langId),
+                static::SECTION_ORDER_CANCEL_REASONS => Labels::getLabel('NAV_ORDER_CANCEL_REASONS', $langId),
+                static::SECTION_ORDER_RETURN_REASONS => Labels::getLabel('NAV_ORDER_RETURN_REASONS', $langId),
+                static::SECTION_TESTIMONIAL => Labels::getLabel('NAV_TESTIMONIAL', $langId),
+                static::SECTION_DISCOUNT_COUPONS => Labels::getLabel('NAV_DISCOUNT_COUPONS', $langId),
+                static::SECTION_LANGUAGE_LABELS => Labels::getLabel('NAV_LANGUAGE_LABELS', $langId),
+                static::SECTION_SLIDES => Labels::getLabel('NAV_HOME_PAGE_SLIDE_MANAGEMENT', $langId),
+                static::SECTION_BANNERS => Labels::getLabel('NAV_BANNERS', $langId),
 
-            static::SECTION_SHIPPING_APIS => Labels::getLabel('MSG_Shipping_Api_Methods', CommonHelper::getLangId()),
-            static::SECTION_SHIPPING_DURATIONS => Labels::getLabel('MSG_Shipping_Durations', CommonHelper::getLangId()),
-            /* static::SECTION_MANUAL_SHIPPING_API => Labels::getLabel('MSG_Manual_Shipping_Api',CommonHelper::getLangId()), */
+                static::SECTION_SHIPPING_APIS => Labels::getLabel('NAV_SHIPPING_API_METHODS', $langId),
+                static::SECTION_SHIPPING_DURATIONS => Labels::getLabel('NAV_SHIPPING_DURATIONS', $langId),
+                /* static::SECTION_MANUAL_SHIPPING_API => Labels::getLabel('NAV_MANUAL_SHIPPING_API',$langId), */
 
-            static::SECTION_GENERAL_SETTINGS => Labels::getLabel('MSG_General_Settings', CommonHelper::getLangId()),
-            static::SECTION_PAYMENT_METHODS => Labels::getLabel('MSG_Payment_Methods', CommonHelper::getLangId()),
-            static::SECTION_CURRENCY_MANAGEMENT => Labels::getLabel('MSG_Currency_Management', CommonHelper::getLangId()),
-            static::SECTION_TAX => Labels::getLabel('MSG_Tax', CommonHelper::getLangId()),
-            static::SECTION_COMMISSION => Labels::getLabel('MSG_Commission', CommonHelper::getLangId()),
-            static::SECTION_AFFILIATE_COMMISSION => Labels::getLabel('MSG_Affiliate_Commission', CommonHelper::getLangId()),
-            static::SECTION_EMAIL_TEMPLATES => Labels::getLabel('MSG_Email_Templates', CommonHelper::getLangId()),
-            static::SECTION_POLICY_POINTS => Labels::getLabel('MSG_Policy_Points', CommonHelper::getLangId()),
-            static::SECTION_SELLER_PACKAGES => Labels::getLabel('MSG_Seller_Packages', CommonHelper::getLangId()),
-            static::SECTION_REWARDS_ON_PURCHASE => Labels::getLabel('MSG_Rewards_on_purchase', CommonHelper::getLangId()),
+                static::SECTION_GENERAL_SETTINGS => Labels::getLabel('NAV_GENERAL_SETTINGS', $langId),
+                static::SECTION_PAYMENT_METHODS => Labels::getLabel('NAV_PAYMENT_METHODS', $langId),
+                static::SECTION_CURRENCY_MANAGEMENT => Labels::getLabel('NAV_CURRENCY_MANAGEMENT', $langId),
+                static::SECTION_TAX => Labels::getLabel('NAV_TAX', $langId),
+                static::SECTION_COMMISSION => Labels::getLabel('NAV_COMMISSION', $langId),
+                static::SECTION_AFFILIATE_COMMISSION => Labels::getLabel('NAV_AFFILIATE_COMMISSION', $langId),
+                static::SECTION_EMAIL_TEMPLATES => Labels::getLabel('NAV_EMAIL_TEMPLATES', $langId),
+                static::SECTION_POLICY_POINTS => Labels::getLabel('NAV_POLICY_POINTS', $langId),
+                static::SECTION_SELLER_PACKAGES => Labels::getLabel('NAV_SELLER_PACKAGES', $langId),
+                static::SECTION_REWARDS_ON_PURCHASE => Labels::getLabel('NAV_REWARDS_ON_PURCHASE', $langId),
 
-            static::SECTION_ORDERS => Labels::getLabel('MSG_Orders', CommonHelper::getLangId()),
-            static::SECTION_VENDOR_ORDERS => Labels::getLabel('MSG_Seller_Orders', CommonHelper::getLangId()),
-            static::SECTION_WITHDRAW_REQUESTS => Labels::getLabel('MSG_Withdraw_Requests', CommonHelper::getLangId()),
-            static::SECTION_ORDER_CANCELLATION_REQUESTS => Labels::getLabel('MSG_Order_Cancellation_Requests', CommonHelper::getLangId()),
-            static::SECTION_ORDER_RETURN_REQUESTS => Labels::getLabel('MSG_Order_Return_Requests', CommonHelper::getLangId()),
+                static::SECTION_ORDERS => Labels::getLabel('NAV_ORDERS', $langId),
+                static::SECTION_VENDOR_ORDERS => Labels::getLabel('NAV_SELLER_ORDERS', $langId),
+                static::SECTION_WITHDRAW_REQUESTS => Labels::getLabel('NAV_WITHDRAW_REQUESTS', $langId),
+                static::SECTION_ORDER_CANCELLATION_REQUESTS => Labels::getLabel('NAV_ORDER_CANCELLATION_REQUESTS', $langId),
+                static::SECTION_ORDER_RETURN_REQUESTS => Labels::getLabel('NAV_ORDER_RETURN_REQUESTS', $langId),
 
-            static::SMART_RECOMENDED_WEIGHTAGES => Labels::getLabel('MSG_Recommended_Weightages', CommonHelper::getLangId()),
-            static::SMART_PRODUCT_TAG_PRODUCTS => Labels::getLabel('MSG_Recommended_Tag_Products', CommonHelper::getLangId()),
+                static::SMART_RECOMENDED_WEIGHTAGES => Labels::getLabel('NAV_RECOMMENDED_WEIGHTAGES', $langId),
+                static::SMART_PRODUCT_TAG_PRODUCTS => Labels::getLabel('NAV_RECOMMENDED_TAG_PRODUCTS', $langId),
 
-            static::SECTION_PROMOTIONS => Labels::getLabel('MSG_Promotions', CommonHelper::getLangId()),
+                static::SECTION_PROMOTIONS => Labels::getLabel('NAV_PROMOTIONS', $langId),
 
-            static::SECTION_META_TAGS => Labels::getLabel('MSG_Meta_Tags', CommonHelper::getLangId()),
-            static::SECTION_FAQ_CATEGORY => Labels::getLabel('MSG_Faq_Category', CommonHelper::getLangId()),
-            static::SECTION_FAQ => Labels::getLabel('MSG_Faq', CommonHelper::getLangId()),
-            static::SECTION_URL_REWRITE => Labels::getLabel('MSG_Url_Rewriting', CommonHelper::getLangId()),
-            static::SECTION_IMAGE_ATTRIBUTES => Labels::getLabel('MSG_Image_Attributes', CommonHelper::getLangId()),
+                static::SECTION_META_TAGS => Labels::getLabel('NAV_META_TAGS', $langId),
+                static::SECTION_FAQ_CATEGORY => Labels::getLabel('NAV_FAQ_CATEGORY', $langId),
+                static::SECTION_FAQ => Labels::getLabel('NAV_FAQ', $langId),
+                static::SECTION_URL_REWRITE => Labels::getLabel('NAV_URL_REWRITING', $langId),
+                static::SECTION_IMAGE_ATTRIBUTES => Labels::getLabel('NAV_IMAGE_ATTRIBUTES', $langId),
 
-            static::SECTION_BLOG_POST_CATEGORIES => Labels::getLabel('MSG_Blog_Categories', CommonHelper::getLangId()),
-            static::SECTION_BLOG_POSTS => Labels::getLabel('MSG_Blog_Posts', CommonHelper::getLangId()),
-            static::SECTION_BLOG_CONTRIBUTIONS => Labels::getLabel('MSG_Blog_Contributions', CommonHelper::getLangId()),
-            static::SECTION_BLOG_COMMENTS => Labels::getLabel('MSG_Blog_Comments', CommonHelper::getLangId()),
+                static::SECTION_BLOG_POST_CATEGORIES => Labels::getLabel('NAV_BLOG_CATEGORIES', $langId),
+                static::SECTION_BLOG_POSTS => Labels::getLabel('NAV_BLOG_POSTS', $langId),
+                static::SECTION_BLOG_CONTRIBUTIONS => Labels::getLabel('NAV_BLOG_CONTRIBUTIONS', $langId),
+                static::SECTION_BLOG_COMMENTS => Labels::getLabel('NAV_BLOG_COMMENTS', $langId),
 
-            static::SECTION_SHOP_REPORTS => Labels::getLabel('MSG_Shop_Reports', CommonHelper::getLangId()),
-            static::SECTION_SHOPS_REPORT => Labels::getLabel('MSG_Shops_Report', CommonHelper::getLangId()),
-            static::SECTION_SALES_REPORT => Labels::getLabel('MSG_Sales_Report', CommonHelper::getLangId()),
-            static::SECTION_USERS_REPORT => Labels::getLabel('MSG_Users_Report', CommonHelper::getLangId()),
-            static::SECTION_PRODUCTS_REPORT => Labels::getLabel('MSG_Products_Report', CommonHelper::getLangId()),
-            static::SECTION_TAX_REPORT => Labels::getLabel('MSG_Tax_Report', CommonHelper::getLangId()),
-            static::SECTION_COMMISSION_REPORT => Labels::getLabel('MSG_Commission_Report', CommonHelper::getLangId()),
-            static::SECTION_CATALOG_REPORT => Labels::getLabel('MSG_Catalog_Report', CommonHelper::getLangId()),
-            static::SECTION_PERFORMANCE_REPORT => Labels::getLabel('MSG_Proformance_Report', CommonHelper::getLangId()),
-            static::SECTION_AFFILIATES_REPORT => Labels::getLabel('MSG_Affiliate_Report', CommonHelper::getLangId()),
-            static::SECTION_ADVERTISERS_REPORT => Labels::getLabel('MSG_Advertiser_Report', CommonHelper::getLangId()),
-            /* static::SECTION_SELLER_DISCOUNT_COUPONS => Labels::getLabel('MSG_Seller_Discount_Coupons',CommonHelper::getLangId()), */
-            static::SECTION_THEME_COLOR => Labels::getLabel('MSG_Theme_Color', CommonHelper::getLangId()),
+                static::SECTION_SHOP_REPORTS => Labels::getLabel('NAV_SHOP_REPORTS', $langId),
+                static::SECTION_SHOPS_REPORT => Labels::getLabel('NAV_SHOPS_REPORT', $langId),
+                static::SECTION_SALES_REPORT => Labels::getLabel('NAV_SALES_REPORT', $langId),
+                static::SECTION_USERS_REPORT => Labels::getLabel('NAV_USERS_REPORT', $langId),
+                static::SECTION_PRODUCTS_REPORT => Labels::getLabel('NAV_PRODUCTS_REPORT', $langId),
+                static::SECTION_TAX_REPORT => Labels::getLabel('NAV_TAX_REPORT', $langId),
+                static::SECTION_COMMISSION_REPORT => Labels::getLabel('NAV_COMMISSION_REPORT', $langId),
+                static::SECTION_CATALOG_REPORT => Labels::getLabel('NAV_CATALOG_REPORT', $langId),
+                static::SECTION_PERFORMANCE_REPORT => Labels::getLabel('NAV_PROFORMANCE_REPORT', $langId),
+                static::SECTION_AFFILIATES_REPORT => Labels::getLabel('NAV_AFFILIATE_REPORT', $langId),
+                static::SECTION_ADVERTISERS_REPORT => Labels::getLabel('NAV_ADVERTISER_REPORT', $langId),
+                /* static::SECTION_SELLER_DISCOUNT_COUPONS => Labels::getLabel('NAV_SELLER_DISCOUNT_COUPONS',$langId), */
+                static::SECTION_THEME_COLOR => Labels::getLabel('NAV_THEME_COLOR', $langId),
 
-            static::SECTION_ADMIN_USERS => Labels::getLabel('MSG_Admin_Users', CommonHelper::getLangId()),
-            static::SECTION_ADMIN_PERMISSIONS => Labels::getLabel('MSG_Admin_Roles', CommonHelper::getLangId()),
+                static::SECTION_ADMIN_USERS => Labels::getLabel('NAV_ADMIN_USERS', $langId),
+                static::SECTION_ADMIN_PERMISSIONS => Labels::getLabel('NAV_ADMIN_ROLES', $langId),
 
-            //static::SECTION_TOOLS => Labels::getLabel('MSG_Tools', CommonHelper::getLangId()),
-            static::SECTION_MESSAGES => Labels::getLabel('MSG_Messages', CommonHelper::getLangId()),
-            // static::SECTION_NOTIFICATION => Labels::getLabel('MSG_Notifications',CommonHelper::getLangId()),
-            static::SECTION_DATABASE_BACKUP => Labels::getLabel('MSG_Database_Backup', CommonHelper::getLangId()),
-            static::SECTION_ORDER_STATUS => Labels::getLabel('MSG_Order_Status_Management', CommonHelper::getLangId()),
-            static::SECTION_USER_REQUESTS => Labels::getLabel('MSG_User_Requests', CommonHelper::getLangId()),
-            static::SECTION_PRODUCT_TEMP_IMAGES => Labels::getLabel('MSG_Products_Temp_Images', CommonHelper::getLangId()),
-            static::SECTION_IMPORT_INSTRUCTIONS => Labels::getLabel('MSG_Import_Instructions', CommonHelper::getLangId()),
-            static::SECTION_UPLOAD_BULK_IMAGES => Labels::getLabel('MSG_Bulk_Upload', CommonHelper::getLangId()),
-            static::SECTION_SITEMAP => Labels::getLabel('MSG_SITEMAP', CommonHelper::getLangId()),
-            static::SECTION_PUSH_NOTIFICATION => Labels::getLabel('MSG_PUSH_NOTIFICATION', CommonHelper::getLangId()),
-            static::SECTION_PRODUCT_ADVERTISEMENT => Labels::getLabel('MSG_PRODUCT_ADVERTISEMENT', CommonHelper::getLangId()),
-            static::SECTION_PLUGINS => Labels::getLabel('MSG_Plugins', CommonHelper::getLangId()),
-            static::SECTION_APP_THEME_SETTINGS => Labels::getLabel('MSG_APP_THEME_SETTINGS', CommonHelper::getLangId()),
-            static::SECTION_ABANDONED_CART => Labels::getLabel('MSG_ABANDONED_CART', CommonHelper::getLangId()),
-            static::SECTION_IMPORT_EXPORT => Labels::getLabel('MSG_IMPORT_EXPORT', CommonHelper::getLangId()),
-            static::SECTION_SMS_TEMPLATE => Labels::getLabel('MSG_SMS_TEMPLATE', CommonHelper::getLangId()),
+                //static::SECTION_TOOLS => Labels::getLabel('NAV_TOOLS', $langId),
+                static::SECTION_MESSAGES => Labels::getLabel('NAV_MESSAGES', $langId),
+                // static::SECTION_NOTIFICATION => Labels::getLabel('NAV_NOTIFICATIONS',$langId),
+                static::SECTION_DATABASE_BACKUP => Labels::getLabel('NAV_DATABASE_BACKUP', $langId),
+                static::SECTION_ORDER_STATUS => Labels::getLabel('NAV_ORDER_STATUS_MANAGEMENT', $langId),
+                static::SECTION_USER_REQUESTS => Labels::getLabel('NAV_USER_REQUESTS', $langId),
+                static::SECTION_PRODUCT_TEMP_IMAGES => Labels::getLabel('NAV_PRODUCTS_TEMP_IMAGES', $langId),
+                static::SECTION_IMPORT_INSTRUCTIONS => Labels::getLabel('NAV_IMPORT_INSTRUCTIONS', $langId),
+                static::SECTION_UPLOAD_BULK_IMAGES => Labels::getLabel('NAV_BULK_UPLOAD', $langId),
+                static::SECTION_SITEMAP => Labels::getLabel('NAV_SITEMAP', $langId),
+                static::SECTION_PUSH_NOTIFICATION => Labels::getLabel('NAV_PUSH_NOTIFICATION', $langId),
+                static::SECTION_PRODUCT_ADVERTISEMENT => Labels::getLabel('NAV_PRODUCT_ADVERTISEMENT', $langId),
+                static::SECTION_PLUGINS => Labels::getLabel('NAV_PLUGINS', $langId),
+                static::SECTION_APP_THEME_SETTINGS => Labels::getLabel('NAV_APP_THEME_SETTINGS', $langId),
+                static::SECTION_ABANDONED_CART => Labels::getLabel('NAV_ABANDONED_CART', $langId),
+                static::SECTION_IMPORT_EXPORT => Labels::getLabel('NAV_IMPORT_EXPORT', $langId),
+                static::SECTION_SMS_TEMPLATE => Labels::getLabel('NAV_SMS_TEMPLATE', $langId),
 
-            static::SECTION_ABUSIVE_WORDS => Labels::getLabel('MSG_Abusive_Words', CommonHelper::getLangId()),
-            static::SECTION_SUBSCRIPTION_ORDERS => Labels::getLabel('MSG_Subscription_Orders', CommonHelper::getLangId()),
+                static::SECTION_ABUSIVE_WORDS => Labels::getLabel('NAV_ABUSIVE_WORDS', $langId),
+                static::SECTION_SUBSCRIPTION_ORDERS => Labels::getLabel('NAV_SUBSCRIPTION_ORDERS', $langId),
 
-            static::SECTION_PICKUP_ADDRESSES => Labels::getLabel('MSG_Pickup_Addresses', CommonHelper::getLangId()),
-            static::SECTION_RATING_TYPES => Labels::getLabel('MSG_RATING_TYPES', CommonHelper::getLangId()),
-            static::SECTION_BUYERS_REPORT => Labels::getLabel('MSG_CUSTOMER_REPORT', CommonHelper::getLangId()),
-            static::SECTION_SELLERS_REPORT => Labels::getLabel('MSG_SELLER_REPORT', CommonHelper::getLangId()),
-            static::SECTION_SUBSCRIPTION_REPORT => Labels::getLabel('MSG_SUBSCRIPTION_REPORT', CommonHelper::getLangId()),
-            static::SECTION_FINANCIAL_REPORT => Labels::getLabel('MSG_FINANCIAL_REPORT', CommonHelper::getLangId()),
-            static::SECTION_ORDERS_REPORT => Labels::getLabel('MSG_ORDERS_REPORT', CommonHelper::getLangId()),
+                static::SECTION_PICKUP_ADDRESSES => Labels::getLabel('NAV_PICKUP_ADDRESSES', $langId),
+                static::SECTION_RATING_TYPES => Labels::getLabel('NAV_RATING_TYPES', $langId),
+                static::SECTION_BUYERS_REPORT => Labels::getLabel('NAV_CUSTOMER_REPORT', $langId),
+                static::SECTION_SELLERS_REPORT => Labels::getLabel('NAV_SELLER_REPORT', $langId),
+                static::SECTION_SUBSCRIPTION_REPORT => Labels::getLabel('NAV_SUBSCRIPTION_REPORT', $langId),
+                static::SECTION_FINANCIAL_REPORT => Labels::getLabel('NAV_FINANCIAL_REPORT', $langId),
+                static::SECTION_ORDERS_REPORT => Labels::getLabel('NAV_ORDERS_REPORT', $langId),
 
-            static::SECTION_BADGES => Labels::getLabel('MSG_BADGES_&_RIBBONS', CommonHelper::getLangId()),
-            static::SECTION_BADGE_LINKS => Labels::getLabel('MSG_BADGE_LINKS', CommonHelper::getLangId()),
-            static::SECTION_BADGE_REQUESTS => Labels::getLabel('MSG_BADGE_REQUESTS', CommonHelper::getLangId()),
+                static::SECTION_BADGES => Labels::getLabel('NAV_BADGES_&_RIBBONS', $langId),
+                static::SECTION_BADGE_LINKS => Labels::getLabel('NAV_BADGE_LINKS', $langId),
+                static::SECTION_BADGE_REQUESTS => Labels::getLabel('NAV_BADGE_REQUESTS', $langId),
+                static::SECTION_SETTINGS => Labels::getLabel('NAV_SYSTEM_SETTINGS', $langId),
+                static::SECTION_PAGES_LANGUAGE_DATA => Labels::getLabel('NAV_PAGES_LANGUAGE_DATA_SETTINGS', $langId),
+                static::SECTION_GETTING_STARTED => Labels::getLabel('NAV_GETTING_STARTED', $langId),
 
-            /* static::SECTION_Languages => Labels::getLabel('MSG_Languages',CommonHelper::getLangId()),
-        static::SECTION_Languages => Labels::getLabel('MSG_Order_Status',CommonHelper::getLangId()), */
+                /* static::SECTION_Languages => Labels::getLabel('NAV_LANGUAGES',$langId),
+                static::SECTION_Languages => Labels::getLabel('NAV_ORDER_STATUS',$langId), */
 
-            /*static::SECTION_SUCCESS_STORIES => Labels::getLabel('MSG_Success_stories',CommonHelper::getLangId()),
-        static::SECTION_HOME_PAGE_ELEMENTS => Labels::getLabel('MSG_Home_Page_Elements',CommonHelper::getLangId()),
-        static::SECTION_QUESTION_BANKS => Labels::getLabel('MSG_Question_Banks',CommonHelper::getLangId()),
+                /*static::SECTION_SUCCESS_STORIES => Labels::getLabel('NAV_SUCCESS_STORIES',$langId),
+                static::SECTION_HOME_PAGE_ELEMENTS => Labels::getLabel('NAV_HOME_PAGE_ELEMENTS',$langId),
+                static::SECTION_QUESTION_BANKS => Labels::getLabel('NAV_QUESTION_BANKS',$langId),
 
-        static::SECTION_QUESTIONS => Labels::getLabel('MSG_Questions',CommonHelper::getLangId()),
-        static::SECTION_QUESTIONNAIRES => Labels::getLabel('MSG_Questionnaires',CommonHelper::getLangId()), */
+                static::SECTION_QUESTIONS => Labels::getLabel('NAV_QUESTIONS',$langId),
+                static::SECTION_QUESTIONNAIRES => Labels::getLabel('NAV_QUESTIONNAIRES',$langId), */
 
-            /* static::SECTION_POLLING => Labels::getLabel('MSG_Polling',CommonHelper::getLangId()),
-        static::SECTION_FILTER_GROUPS => 'Filter Groups',
-        static::SECTION_FILTERS => 'Filters',
-        static::SECTION_EXTRA_ATTRIBUTES => 'Extra Attributes',	 */
-        );
-        return $arr;
+                /* static::SECTION_POLLING => Labels::getLabel('NAV_POLLING',$langId),
+                static::SECTION_FILTER_GROUPS => 'Filter Groups',
+                static::SECTION_FILTERS => 'Filters',
+                static::SECTION_EXTRA_ATTRIBUTES => 'Extra Attributes',	 */
+            );
+            CacheHelper::create('permissionLabels' . $langId, FatUtility::convertToJson($arr), CacheHelper::TYPE_LABELS);
+            return $arr;
+        }
+
+        return json_decode($arr, true);
     }
 
-    public static function getWriteOnlyPermissionModulesArr()
+    public static function getWriteOnlyPermissionModulesArr(): array
     {
         return array(
             static::SECTION_UPLOAD_BULK_IMAGES,
         );
     }
 
-    public static function getAdminPermissionLevel($adminId, $sectionId = 0)
+    public static function getAdminPermissionLevel(int $adminId, int $sectionId = 0)
     {
-        $db = FatApp::getDb();
-        $adminId = FatUtility::int($adminId);
-
         /* Are you looking for permissions of administrator [ */
         if (static::isAdminSuperAdmin($adminId)) {
-            $arrLevels = array();
+            $arrLevels = [];
             if ($sectionId > 0) {
                 $arrLevels[$sectionId] = static::PRIVILEGE_WRITE;
             } else {
@@ -331,58 +346,71 @@ class AdminPrivilege
         /* ] */
 
         $srch = new SearchBase('tbl_admin_permissions');
-        $srch->addCondition('admperm_admin_id', '=', $adminId);
+        $srch->addCondition('admperm_admin_id', '=', 'mysql_func_' . $adminId, 'AND', true);
+        $srch->doNotCalculateRecords();
         if (0 < $sectionId) {
-            $srch->addCondition('admperm_section_id', '=', $sectionId);
+            $srch->addCondition('admperm_section_id', '=', 'mysql_func_' . $sectionId, 'AND', true);
         }
 
         $srch->addMultipleFields(array('admperm_section_id', 'admperm_value'));
         $rs = $srch->getResultSet();
-        $arr = $db->fetchAllAssoc($rs);
-
+        $arr = FatApp::getDb()->fetchAllAssoc($rs);
         return $arr;
     }
 
     private function cacheLoadedPermission($adminId, $secId, $level)
     {
-        if (!isset($this->loadedPermissions[$adminId])) {
+        /*  if (!isset($this->loadedPermissions[$adminId])) {
             $this->loadedPermissions[$adminId] = array();
         }
-        $this->loadedPermissions[$adminId][$secId] = $level;
-    }
+        $this->loadedPermissions[$adminId][$secId] = $level; */
 
-    private function checkPermission($adminId, $secId, $level, $returnResult = false)
-    {
-        $db = FatApp::getDb();
-
-        if (!in_array($level, array(1, 2))) {
-            trigger_error(Labels::getLabel('MSG_Invalid_permission_level_checked', CommonHelper::getLangId()) . ' ' . $level, E_USER_ERROR);
+        if (!isset($_SESSION[self::SESSION_ELEMENT_NAME])) {
+            $_SESSION[self::SESSION_ELEMENT_NAME] = array();
         }
 
-        $adminId = FatUtility::convertToType($adminId, FatUtility::VAR_INT);
+        $_SESSION[self::SESSION_ELEMENT_NAME][$adminId][$secId] = $level;
+        // $this->loadedPermissions = $_SESSION[self::SESSION_ELEMENT_NAME];
+    }
+
+    private function checkPermission(int $adminId, int $secId, int $level, bool $returnResult = false)
+    {
+
+        if (!in_array($level, array(1, 2))) {
+            trigger_error(Labels::getLabel('ERR_INVALID_PERMISSION_LEVEL_CHECKED', CommonHelper::getLangId()) . ' ' . $level, E_USER_ERROR);
+        }
+
         if (0 == $adminId) {
             $adminId = AdminAuthentication::getLoggedAdminId();
         }
 
-        if (isset($this->loadedPermissions[$adminId][$secId])) {
-            if ($level <= $this->loadedPermissions[$adminId][$secId]) {
+        if (isset($_SESSION[self::SESSION_ELEMENT_NAME][$adminId][$secId])) {
+            if ($level <= $_SESSION[self::SESSION_ELEMENT_NAME][$adminId][$secId]) {
                 return true;
             }
             return $this->returnFalseOrDie($returnResult);
         }
+        /*  if (isset($this->loadedPermissions[$adminId][$secId])) {
+            if ($level <= $this->loadedPermissions[$adminId][$secId]) {
+                return true;
+            }
+            return $this->returnFalseOrDie($returnResult);
+        } */
 
         if ($this->isAdminSuperAdmin($adminId)) {
             return true;
         }
 
-        $row_admin = Admin::getAttributesById($adminId, array('admin_active'));
-        if (empty($row_admin)) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', CommonHelper::getLangId()));
-        }
-        if ($row_admin['admin_active'] != applicationConstants::ACTIVE) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', CommonHelper::getLangId()));
+        $rowAdmin = Admin::getAttributesById($adminId, array('admin_active'));
+        if (empty($rowAdmin)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
         }
 
+        if ($rowAdmin['admin_active'] != applicationConstants::ACTIVE) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
+        }
+
+        $db = FatApp::getDb();
         $rs = $db->query(
             "SELECT admperm_value FROM tbl_admin_permissions WHERE
 				admperm_admin_id = " . $adminId . " AND admperm_section_id = " . $secId
@@ -408,11 +436,11 @@ class AdminPrivilege
         if ($returnResult) {
             return (false);
         }
-        Message::addErrorMessage(Labels::getLabel('MSG_Unauthorized_Access!', CommonHelper::getLangId()));
-        if ($msg == '') {
-            $msg = Message::getHtml();
+
+        if (empty($msg)) {
+            $msg = Labels::getLabel('ERR_UNAUTHORIZED_ACCESS!', CommonHelper::getLangId());
         }
-        FatUtility::dieWithError($msg);
+        LibHelper::exitWithError($msg);
     }
 
     public function clearPermissionCache($adminId)
@@ -1599,12 +1627,12 @@ class AdminPrivilege
         return $this->checkPermission($adminId, static::SECTION_RATING_TYPES, static::PRIVILEGE_WRITE, $returnResult);
     }
 
-    public function canViewBadges($adminId = 0, $returnResult = false)
+    public function canViewBadgesAndRibbons($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_BADGES, static::PRIVILEGE_READ, $returnResult);
     }
 
-    public function canEditBadges($adminId = 0, $returnResult = false)
+    public function canEditBadgesAndRibbons($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_BADGES, static::PRIVILEGE_WRITE, $returnResult);
     }
@@ -1628,10 +1656,44 @@ class AdminPrivilege
     {
         return $this->checkPermission($adminId, static::SECTION_BADGE_REQUESTS, static::PRIVILEGE_WRITE, $returnResult);
     }
-    
+
     public function canViewSystemLog($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_SYSTEMLOG, static::PRIVILEGE_READ, $returnResult);
     }
-    
+
+    public function canEditSystemLog($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SYSTEMLOG, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewSettings($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_SETTINGS, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canViewPagesLanguageData($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_PAGES_LANGUAGE_DATA, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditPagesLanguageData($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_PAGES_LANGUAGE_DATA, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewCategoryRequests($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_CATEGORY_REQUEST, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditCategoryRequests($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_CATEGORY_REQUEST, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewGettingStarted($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_GETTING_STARTED, static::PRIVILEGE_READ, $returnResult);
+    }
 }

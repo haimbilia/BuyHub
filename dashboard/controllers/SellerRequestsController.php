@@ -34,7 +34,7 @@ class SellerRequestsController extends SellerBaseController
             $noRecordFound = true;
         }
 
-        $this->set('canRequestBadge', $this->userPrivilege->canEditBadges(UserAuthentication::getLoggedUserId(), true));
+        $this->set('canRequestBadge', $this->userPrivilege->canEditBadgesAndRibbons(UserAuthentication::getLoggedUserId(), true));
         $this->set('noRecordFound', $noRecordFound);
         $this->_template->addJs(array('js/cropper.js', 'js/cropper-main.js', 'js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
@@ -535,7 +535,7 @@ class SellerRequestsController extends SellerBaseController
 
         $brandMediaFrm = $this->getMediaForm($brand_id);
         $brandImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_BRAND_LOGO, $brand_id, 0, -1);
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
 
         $this->set('languages', Language::getAllNames());
         $this->set('brandReqId', $brand_id);
@@ -740,7 +740,7 @@ class SellerRequestsController extends SellerBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $requestedBadges = FatApp::getDb()->fetchAll($srch->getResultSet());
-        $this->set('canEdit', $this->userPrivilege->canEditBadges(UserAuthentication::getLoggedUserId(), true));
+        $this->set('canEdit', $this->userPrivilege->canEditBadgesAndRibbons(UserAuthentication::getLoggedUserId(), true));
         $this->set("arrListing", $requestedBadges);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());

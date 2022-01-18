@@ -18,7 +18,7 @@
                                     $optionData = array();
                                     foreach($productOptions as $key=>$data){
                                         $optionData[$key]['id'] = $data['option_id'];
-                                        $optionData[$key]['value'] = $data['option_name'] .'('.$data['option_identifier'].')';
+                                        $optionData[$key]['value'] = $data['option_name'];
                                     }
                                     ?>
                                     <input type="text" name="option_groups" value='<?php echo htmlspecialchars(json_encode($optionData), ENT_QUOTES, 'UTF-8'); ?>'>
@@ -37,7 +37,7 @@
                 $tagData = array();
                 foreach($productTags as $key=>$data){
                     $tagData[$key]['id'] = $data['tag_id'];
-                    $tagData[$key]['value'] = $data['tag_identifier'];
+                    $tagData[$key]['value'] = $data['tag_name'];
                 }
             ?>
             <div class="col-md-6">                             
@@ -94,13 +94,12 @@ $("document").ready(function() {
         var tag_name = e.detail.tag.title;   
         if(tag_id == ''){
             var data = 'tag_id=0&tag_identifier='+tag_name
-            fcom.ajax(fcom.makeUrl('Seller', 'setupTag'), data, function(t) {           
+            fcom.ajax(fcom.makeUrl('Seller', 'setupTag'), data, function(t) {        
+                console.log('vvv');   
                 var dataLang = 'tag_id='+t.tagId+'&tag_name='+tag_name+'&lang_id=0';
-                fcom.ajax(fcom.makeUrl('Seller', 'tagLangSetup'), dataLang, function(t2) { 
-                    fcom.ajax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+t.tagId, function(t3) { 
-                         var tagifyId = e.detail.tag.__tagifyId;
-                         $('[__tagifyid='+tagifyId+']').attr('id', t.tagId);
-                     });
+                fcom.ajax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id='+product_id+'&tag_id='+t.tagId, function(t3) { 
+                        var tagifyId = e.detail.tag.__tagifyId;
+                        $('[__tagifyid='+tagifyId+']').attr('id', t.tagId);
                 });
             });
         }else{
@@ -124,7 +123,7 @@ $("document").ready(function() {
             for (i = 0; i < ans.length; i++) {            
                 list.push({
                     "id" : ans[i].id,
-                    "value" : ans[i].tag_identifier, 
+                    "value" : ans[i].tag_name, 
                 });
             } 
             tagify.settings.whitelist = list;
@@ -171,11 +170,12 @@ $("document").ready(function() {
                 var ans = $.parseJSON(t);
                 for (i = 0; i < ans.length; i++) {            
                     listOptions.push({
-                        "id" : ans[i].id,
-                        "value" : ans[i].name+'('+ans[i].option_identifier+')',
+                        "id" : ans['results'][i].id,
+                        "value" : ans['results'][i].text,
                     });
                 }            
                 tagifyOption.settings.whitelist = listOptions;
+                console.log(tagifyOption.loading(false).dropdown);
                 tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);
             }); 
         }, 800);    

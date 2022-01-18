@@ -158,6 +158,30 @@ class User extends MyAppModel
         );
     }
 
+    public static function getUserTypeHtml(int $langId, int $status): string
+    {
+        $arr = static::getUserTypesArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::USER_TYPE_BUYER:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::USER_TYPE_SELLER:
+                $status = HtmlHelper::INFO;
+                break;
+            case static::USER_TYPE_ADVERTISER:
+                $status = HtmlHelper::WARNING;
+                break;
+            case static::USER_TYPE_AFFILIATE:
+                $status = HtmlHelper::DANGER;
+                break;
+            default:
+                $status = HtmlHelper::INFO;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
+
     public static function getDeviceTypeArr($langId)
     {
         return [
@@ -195,11 +219,11 @@ class User extends MyAppModel
 
         $srch = new SearchBase(static::DB_TBL, 'u');
         if ($skipDeleted == true) {
-            $srch->addCondition('user_deleted', '=', applicationConstants::NO);
+            $srch->addCondition('user_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         if (0 < $parentId) {
-            $srch->addCondition('user_parent', '=', $parentId);
+            $srch->addCondition('user_parent', '=', 'mysql_func_' . $parentId, 'AND', true);
         }
 
         if ($joinUserCredentials) {
@@ -262,7 +286,7 @@ class User extends MyAppModel
 
         $srch = new SearchBase(static::DB_TBL_META, 't_um');
         $srch->addMultipleFields(['usermeta_key', 'usermeta_value']);
-        $srch->addCondition('t_um.' . static::DB_TBL_META_PREFIX . 'user_id', '=', $userId);
+        $srch->addCondition('t_um.' . static::DB_TBL_META_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         if (!empty($key)) {
             $srch->addCondition('t_um.' . static::DB_TBL_META_PREFIX . 'key', '=', $key);
         }
@@ -511,7 +535,7 @@ class User extends MyAppModel
         $srch = static::getSearchObject($joinUserCredentials, 0, $skipDeleted);
 
         if ($this->mainTableRecordId > 0) {
-            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         }
 
         if (null != $attr) {
@@ -550,17 +574,17 @@ class User extends MyAppModel
         }
         $srch = $this->getUserSearchObj($attr);
         if ($isActive) {
-            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
+            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($isVerified) {
-            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'verified', '=', 1);
+            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         }
 
         if ($joinUserCredentials) {
             $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
         }
-
+        //echo $srch->getQuery();die;
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
 
@@ -573,7 +597,7 @@ class User extends MyAppModel
         return false;
     }
 
-    public function getUserSupplierRequestsObj($requestId = 0)
+    public function getUserSupplierRequestsObj($requestId = 0, $applyActive = true)
     {
         $requestId = FatUtility::int($requestId);
 
@@ -585,18 +609,14 @@ class User extends MyAppModel
             'u'
         );
         $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
-        /* $srch = $this->getUserSearchObj();
-        $srch->joinTable(static::DB_TBL_USR_SUPP_REQ,'INNER JOIN',
-        'tusr.'.static::DB_TBL_USR_SUPP_REQ_PREFIX.'user_id = u.'.static::DB_TBL_PREFIX.'id','tusr'); */
-
-        $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
-
         if ($this->mainTableRecordId > 0) {
-            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         }
-
         if ($requestId > 0) {
-            $srch->addCondition('tusr.' . static::DB_TBL_USR_SUPP_REQ_PREFIX . 'id', '=', $requestId);
+            $srch->addCondition('tusr.' . static::DB_TBL_USR_SUPP_REQ_PREFIX . 'id', '=', 'mysql_func_' . $requestId, 'AND', true);
+        }
+        if ($applyActive) {
+            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         $srch->addMultipleFields(
@@ -605,6 +625,7 @@ class User extends MyAppModel
                 'u.' . static::DB_TBL_PREFIX . 'name',
                 'u.' . static::DB_TBL_PREFIX . 'phone_dcode',
                 'u.' . static::DB_TBL_PREFIX . 'phone',
+                'u.' . static::DB_TBL_PREFIX . 'updated_on',
                 'uc.' . static::DB_TBL_CRED_PREFIX . 'username',
                 'uc.' . static::DB_TBL_CRED_PREFIX . 'email',
             )
@@ -651,7 +672,7 @@ class User extends MyAppModel
         }
 
         $srch = new SearchBase(static::DB_TBL_USR_BANK_INFO, 'tub');
-        $srch->addCondition(static::DB_TBL_USR_BANK_INFO_PREFIX . 'user_id', '=', $this->mainTableRecordId);
+        $srch->addCondition(static::DB_TBL_USR_BANK_INFO_PREFIX . 'user_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -850,7 +871,7 @@ class User extends MyAppModel
         $srch->joinTable(Countries::DB_TBL, 'LEFT OUTER JOIN', 'c.country_id = tura.ura_country_id', 'c');
         $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 's.state_id = tura.ura_state_id', 's');
 
-        $srch->addCondition(static::DB_TBL_USR_RETURN_ADDR_PREFIX . 'user_id', '=', $this->mainTableRecordId);
+        $srch->addCondition(static::DB_TBL_USR_RETURN_ADDR_PREFIX . 'user_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         if ($langId > 0) {
             $srch->joinTable(static::DB_TBL_USR_RETURN_ADDR_LANG, 'LEFT OUTER JOIN', 'tura_l.uralang_user_id = tura.ura_user_id and tura_l.uralang_lang_id = ' . $langId, 'tura_l');
             $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c_l.countrylang_country_id = tura.ura_country_id and c_l.countrylang_lang_id = ' . $langId, 'c_l');
@@ -949,7 +970,7 @@ class User extends MyAppModel
 			af.afile_record_id = tusr.usuprequest_user_id and af.afile_record_subid = tusrv.sfreqvalue_formfield_id',
             'af'
         );
-        $srch->addCondition('tusrv.sfreqvalue_request_id', '=', $requestId);
+        $srch->addCondition('tusrv.sfreqvalue_request_id', '=', 'mysql_func_' . $requestId, 'AND', true);
         $srch->addMultipleFields(
             array('tusrv.*', 'tusff_l.sformfield_caption', 'tusff.*', 'af.afile_id', 'afile_physical_path', 'afile_name', 'IFNULL(tusrv_lang.sfreqvalue_sformfield_caption, tusff_l.sformfield_caption) as sformfield_caption')
         );
@@ -1104,16 +1125,16 @@ class User extends MyAppModel
         );
         $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
 
-        $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
+        $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
 
         if ($this->mainTableRecordId > 0) {
-            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+            $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         }
 
         if ($requestId > 0) {
-            $srch->addCondition('tucr.' . static::DB_TBL_USR_CATALOG_REQ_PREFIX . 'id', '=', $requestId);
+            $srch->addCondition('tucr.' . static::DB_TBL_USR_CATALOG_REQ_PREFIX . 'id', '=', 'mysql_func_' . $requestId, 'AND', true);
         }
-        $srch->addCondition('tucr.' . static::DB_TBL_USR_CATALOG_REQ_PREFIX . 'deleted', '=', 0);
+        $srch->addCondition('tucr.' . static::DB_TBL_USR_CATALOG_REQ_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
         $srch->addMultipleFields(
             array(
@@ -1352,7 +1373,7 @@ class User extends MyAppModel
 
         if (null != $password) {
             if (!ValidateElement::password($password)) {
-                $this->error = Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->commonLangId);
+                $this->error = Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->commonLangId);
                 return false;
             }
         }
@@ -1535,7 +1556,7 @@ class User extends MyAppModel
             return false;
         }
         $srch = static::getSearchObject(true);
-        $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+        $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
         unset($record['credential_password']);
@@ -1572,7 +1593,7 @@ class User extends MyAppModel
     public function prepareUserPhoneOtp($dialCode, $phone)
     {
         if (($this->mainTableRecordId < 1)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST.', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST.', $this->commonLangId);
             return false;
         }
         if ($row = $this->getOtpDetail()) {
@@ -1619,7 +1640,7 @@ class User extends MyAppModel
         $userId = FatUtility::int($arrCode[0]);
 
         $emvSrch = new SearchBase(static::DB_TBL_USER_EMAIL_VER);
-        $emvSrch->addCondition(static::DB_TBL_UEMV_PREFIX . 'user_id', '=', $userId);
+        $emvSrch->addCondition(static::DB_TBL_UEMV_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $emvSrch->addCondition(static::DB_TBL_UEMV_PREFIX . 'token', '=', $code, 'AND');
 
         $emvSrch->addFld(array(static::DB_TBL_UEMV_PREFIX . 'user_id', static::DB_TBL_UEMV_PREFIX . 'email'));
@@ -1644,7 +1665,7 @@ class User extends MyAppModel
         }
 
         $emvSrch = new SearchBase(static::DB_TBL_USER_PHONE_VER);
-        $emvSrch->addCondition(static::DB_TBL_UPV_PREFIX . 'user_id', '=', $this->mainTableRecordId);
+        $emvSrch->addCondition(static::DB_TBL_UPV_PREFIX . 'user_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
 
         if (null != $otp) {
             $emvSrch->addCondition(static::DB_TBL_UPV_PREFIX . 'otp', '=', $otp);
@@ -1671,13 +1692,13 @@ class User extends MyAppModel
         }
 
         if ('' == $otp || 1 > $otp) {
-            $this->error = Labels::getLabel('MSG_INVALID_OTP', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_OTP', $this->commonLangId);
             return false;
         }
 
         if ($row = $this->getOtpDetail($otp)) {
             if (strtotime($row[static::DB_TBL_UPV_PREFIX . 'expired_on']) < time()) {
-                $this->error = Labels::getLabel('MSG_OTP_EXPIRED.', $this->commonLangId);
+                $this->error = Labels::getLabel('ERR_OTP_EXPIRED.', $this->commonLangId);
                 return false;
             }
 
@@ -1696,7 +1717,7 @@ class User extends MyAppModel
             }
             return (true == $returnRow) ? $row : true;
         } else {
-            $this->error = Labels::getLabel('MSG_INVALID_OTP.', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_OTP.', $this->commonLangId);
             return false;
         }
         return false;
@@ -1773,7 +1794,7 @@ class User extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         if (empty($phone) || empty($otp)) {
-            $this->error = Labels::getLabel("MSG_INVALID_REQUEST", $langId);
+            $this->error = Labels::getLabel("ERR_INVALID_REQUEST", $langId);
             return false;
         }
 
@@ -1914,8 +1935,8 @@ class User extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addGroupBy('txn.utxn_user_id');
         $srch->addMultipleFields(array("SUM(utxn_credit - utxn_debit) as userBalance"));
-        $srch->addCondition('utxn_user_id', '=', $user_id);
-        $srch->addCondition('utxn_status', '=', Transactions::STATUS_COMPLETED);
+        $srch->addCondition('utxn_user_id', '=', 'mysql_func_' . $user_id, 'AND', true);
+        $srch->addCondition('utxn_status', '=', 'mysql_func_' . Transactions::STATUS_COMPLETED, 'AND', true);
         $rs = $srch->getResultSet();
         if (!$row = FatApp::getDb()->fetch($rs)) {
             return 0;
@@ -2150,20 +2171,19 @@ class User extends MyAppModel
 
     return $row;
     } */
-    public static function getUserShopName($user_id = 0)
+    public static function getUserShopName(int $user_id, $langId)
     {
         $user_id = FatUtility::int($user_id);
         $srch = new SearchBase(static::DB_TBL, 'tu');
-        $srch->joinTable('tbl_shops', 'LEFT JOIN', 'tu.user_id=ts.shop_user_id', 'ts');
+        $srch->joinTable('tbl_shops', 'LEFT JOIN', 'tu.user_id = s.shop_user_id', 's');
+        $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 's.shop_id = s_l.shoplang_shop_id AND shoplang_lang_id = ' . $langId, 's_l');
         $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = tu.user_id', 'uc');
-        $srch->addMultipleFields(array('user_id', 'user_name', 'shop_identifier'));
-        $srch->addOrder('user_name', 'asc');
-        if ($user_id > 0) {
-            $srch->addCondition('tu.user_id', '=', intval($user_id));
-        }
-        $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
-        $rs = $srch->getResultSet();
-        if (!$row = FatApp::getDb()->fetch($rs)) {
+        $srch->addMultipleFields(array('user_id', 'user_name', 'COALESCE(s_l.shop_name, s.shop_identifier) as shop_name'));
+        $srch->addCondition('tu.user_id', '=', intval($user_id));
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->setPagesize(1);
+        if (!$row = FatApp::getDb()->fetch($srch->getResultSet())) {
             return false;
         }
 
@@ -2429,7 +2449,7 @@ class User extends MyAppModel
         $userPhone = array_key_exists('user_phone', $postedData) ? $postedData['user_phone_dcode'] . $postedData['user_phone'] : '';
 
         if (empty($userPhone) && !filter_var($postedData['user_email'], FILTER_VALIDATE_EMAIL)) {
-            $this->error = Labels::getLabel("LBL_Invalid_email_address", $this->commonLangId);
+            $this->error = Labels::getLabel("ERR_Invalid_email_address", $this->commonLangId);
             return false;
         }
 
@@ -2455,7 +2475,7 @@ class User extends MyAppModel
         if (empty($userPhone) && isset($postedData['user_newsletter_signup']) && $postedData['user_newsletter_signup'] == 1) {
             if (!MailchimpHelper::saveSubscriber($email)) {
                 $db->rollbackTransaction();
-                $this->error = Labels::getLabel("LBL_Newsletter_is_not_configured_yet,_Please_contact_admin", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_Newsletter_is_not_configured_yet,_Please_contact_admin", $this->commonLangId);
                 return false;
             }
         }
@@ -2553,14 +2573,14 @@ class User extends MyAppModel
         }
 
         if ($row['credential_username'] == $userName) {
-            $this->error = Labels::getLabel('MSG_DUPLICATE_USERNAME', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_DUPLICATE_USERNAME', $this->commonLangId);
             return false;
         }
         if (empty($userPhone) && $row['credential_email'] == $userEmail) {
-            $this->error = Labels::getLabel('MSG_DUPLICATE_EMAIL', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_DUPLICATE_EMAIL', $this->commonLangId);
             return false;
         } elseif (!empty($userPhone) && $row['user_phone_dcode'] . $row['user_phone'] == $userPhone) {
-            $this->error = Labels::getLabel('MSG_DUPLICATE_PHONE.', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_DUPLICATE_PHONE.', $this->commonLangId);
             if ($row['credential_verified'] == applicationConstants::NO) {
                 $this->error .= ' ' . Labels::getLabel('MSG_THIS_PHONE_NUMBER_IS_NOT_VERIFIED_YET._DO_YOU_WANT_TO_CONTINUE?_{CONTINUE-BTN}', $this->commonLangId);
             }
@@ -2707,7 +2727,7 @@ class User extends MyAppModel
                 }
 
                 if ($invalidUser) {
-                    $this->error = Labels::getLabel('MSG_Invalid_User', $this->commonLangId);
+                    $this->error = Labels::getLabel('ERR_Invalid_User', $this->commonLangId);
                     return false;
                 }
             }
@@ -2744,7 +2764,7 @@ class User extends MyAppModel
             }
 
             if (!$row = $this->getUserInfo($attr)) {
-                $this->error = Labels::getLabel("MSG_USER_COULD_NOT_BE_SET", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->commonLangId);
                 return false;
             }
         }
@@ -2790,13 +2810,13 @@ class User extends MyAppModel
 
         $this->assignValues($userData);
         if (!$this->save()) {
-            $this->error = Labels::getLabel("MSG_USER_COULD_NOT_BE_SET", $this->commonLangId) . $this->getError();
+            $this->error = Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->commonLangId) . $this->getError();
             return false;
         }
         $userId = $this->getMainTableRecordId();
         $this->updateUserMeta($socialIdColumn, $socialAccountId);
         if (!$this->setLoginCredentials($username, $email, uniqid(), 1, 1)) {
-            $this->error = Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->commonLangId) . $this->getError();
+            $this->error = Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->commonLangId) . $this->getError();
             $db->rollbackTransaction();
             return false;
         }
@@ -2809,7 +2829,7 @@ class User extends MyAppModel
 
         if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
             if (!$this->notifyAdminRegistration($userData, $this->commonLangId)) {
-                $this->error = Labels::getLabel("MSG_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
                 $db->rollbackTransaction();
                 return false;
             }
@@ -2824,7 +2844,7 @@ class User extends MyAppModel
             $data = array_merge($data, $uData);
 
             if (!$this->userWelcomeEmailRegistration($data, $link, $this->commonLangId)) {
-                $this->error = Labels::getLabel("MSG_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
                 $db->rollbackTransaction();
                 return false;
             }

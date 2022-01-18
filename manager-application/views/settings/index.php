@@ -1,0 +1,381 @@
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+
+<main class="main mainJs">
+    <div class="container">
+        <?php
+        $this->includeTemplate('_partial/header/header-breadcrumb.php', [], false); ?>
+        <div class="card">
+            <div class="card-head">
+                <div class="card-head-label">
+
+                </div>
+                <div class="card-toolbar">
+                    <div class="maintenance-mode">
+                        <label class="switch switch-sm">
+                            <?php
+                            $status = FatApp::getConfig('CONF_MAINTENANCE', FatUtility::VAR_INT, 0);
+                            $checked = applicationConstants::ON == $status ? 'checked' : '';
+                            ?>
+                            <input type="checkbox" name="CONF_MAINTENANCE" data-old-status="<?php echo $status; ?>" value="<?php echo $status; ?>" onclick="updateMaintenanceModeStatus(event, this, <?php echo ((int) !$status); ?>)" <?php echo $checked; ?>>
+                            <span class="input-helper"></span><?php echo Labels::getLabel('FRM_MAINTENANCE_MODE', $siteLangId); ?>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <?php if (
+                    $objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewPlugins(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewPaymentMethods(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewCurrencyManagement(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewCommissionSettings(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewAffiliateCommissionSettings(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewSellerPackages(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewThemeColor(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewZones(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewCountries(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewStates(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewEmptyCartItems(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canEditPagesLanguageData(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewSmsTemplate(AdminAuthentication::getLoggedAdminId(), true) ||
+                    $objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true)
+
+                ) { ?>
+                    <div class="setting-search">
+                        <form class="form">
+                            <div class="row justify-content-center">
+                                <div class="col-md-12">
+                                    <input type="search" id="settingsSearch" class="form-control omni-search" name="search" value="" placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="settings settingListJs">
+                        <?php if ($objPrivilege->canViewGeneralSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('configurations'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#general-settings">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SYSTEM_CONFIGURATIONS', $siteLangId); ?></h6>
+                                    <span>Settings, Account, Product, Logos, Affiliate, Commission, Referals</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewPlugins(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('Plugins'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#plugins">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_PLUGINS', $siteLangId); ?></h6>
+                                    <span>Addons, Third party services</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewLanguageLabels(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('Labels'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#labels">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_LABELS', $siteLangId); ?></h6>
+                                    <span>Manage application labels</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canEditPagesLanguageData(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('PageLanguageData'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_PAGES_LANGUAGE_DATA', $siteLangId); ?></h6>
+                                    <span>Manage Pages Language Data</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewThemeColor(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('ThemeColor'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#theme">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_THEME', $siteLangId); ?></h6>
+                                    <span>Fonts, color, styling</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewCurrencyManagement(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('CurrencyManagement'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#currencies">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_CURRENCIES', $siteLangId); ?></h6>
+                                    <span>Currency, Symbol, conversions</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewCommissionSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('Commission'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#site-commission">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SITE_COMMISSION', $siteLangId); ?></h6>
+                                    <span>Category, Seller, product, commision fees</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewAffiliateCommissionSettings(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('AffiliateCommission'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#affiliate-commision">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_AFFILIATE_COMMISSION', $siteLangId); ?></h6>
+                                    <span>Category, Users, Commision fees</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewSellerPackages(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('SellerPackages'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#subscriptions-packages">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SELLER_PACKAGES', $siteLangId); ?></h6>
+                                    <span>Subscription, Packages for seller</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewZones(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('Zones'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#zones">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_MANAGE_SHIPPING_ZONES', $siteLangId); ?></h6>
+                                    <span>Manage country zones</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewCountries(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('Countries'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#countries">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_COUNTRIES', $siteLangId); ?></h6>
+                                    <span>Addresses, Shipping Rates configuration and Tax rates</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewStates(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('States'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#states">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_STATES', $siteLangId); ?></h6>
+                                    <span>Addresses, Shipping Rates configuration and Tax rates</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewAbusiveWords(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('AbusiveWords'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#abusive-keywords">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_ABUSIVE_KEYWORDS', $siteLangId); ?></h6>
+                                    <span>Configure Abusive keywords</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewEmptyCartItems(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('emptyCartItems'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#empty-cart">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_EMPTY_CART', $siteLangId); ?></h6>
+                                    <span>Items for empty cart page</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewShopReportReasons(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('ShopReportReasons'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SHOP_REPORT_REASONS', $siteLangId); ?></h6>
+                                    <span>Shop report reasons management</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewRatingTypes(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('RatingTypes'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#star-outline">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_RATING_TYPES', $siteLangId); ?></h6>
+                                    <span>Can be used while product reviews</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewSmsTemplate(AdminAuthentication::getLoggedAdminId(), true) && SmsArchive::canSendSms()) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('SmsTemplates'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#sms-notification">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SMS_TEMPLATES', $siteLangId); ?></h6>
+                                    <span>Can be used while sending sms</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                        <?php if ($objPrivilege->canViewEmailTemplates(AdminAuthentication::getLoggedAdminId(), true) && SmsArchive::canSendSms()) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('EmailTemplates'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#email">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_EMAIL_TEMPLATES', $siteLangId); ?></h6>
+                                    <span>Can be used while sending sms</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+
+                        <?php if ($objPrivilege->canViewSellerApprovalForm(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('sellerApprovalForm'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#shop-reports">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_SELLER_APPROVAL_FORM', $siteLangId); ?></h6>
+                                    <span>Seller Approval Form Settings</span>
+                                </div>
+                            </a>
+                        <?php } ?>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    var formType = '<?php echo Configurations::FORM_SERVER; ?>';
+</script>

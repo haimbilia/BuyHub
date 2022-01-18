@@ -59,7 +59,7 @@ class ProductCategory extends MyAppModel
 
         if ($includeChildCount) {
             $childSrchbase = new SearchBase(static::DB_TBL, 'pcc');
-            $childSrchbase->addCondition('pcc.prodcat_deleted', '=', 0);
+            $childSrchbase->addCondition('pcc.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
             $childSrchbase->doNotCalculateRecords();
             $childSrchbase->doNotLimitRecords();
 
@@ -79,11 +79,11 @@ class ProductCategory extends MyAppModel
         }
 
         if (-1 != $prodcatStatus) {
-            $srch->addCondition('m.prodcat_status', '=', $prodcatStatus);
+            $srch->addCondition('m.prodcat_status', '=', 'mysql_func_' . $prodcatStatus, 'AND', true);
         }
 
         if ($prodcatActive) {
-            $srch->addCondition('m.prodcat_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('m.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         return $srch;
@@ -137,10 +137,12 @@ class ProductCategory extends MyAppModel
         }
 
         $categoryArray = array($categoryId);
-        $parentCatData = ProductCategory::getAttributesById($categoryId, array('prodcat_parent'));
+
+        /* Not Required. */
+        /* $parentCatData = ProductCategory::getAttributesById($categoryId, array('prodcat_parent'));
         if (array_key_exists('prodcat_parent', $parentCatData) && $parentCatData['prodcat_parent'] > 0) {
             array_push($categoryArray, $parentCatData['prodcat_parent']);
-        }
+        } */
 
         foreach ($categoryArray as $categoryId) {
             $srch = ProductCategory::getSearchObject(false, 0, false, -1);
@@ -174,7 +176,7 @@ class ProductCategory extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(array('prodcat_id', 'GETCATORDERCODE(`prodcat_id`) as prodcat_ordercode'));
         if ($prodCatId) {
-            $srch->addCondition('prodcat_id', '=', $prodCatId);
+            $srch->addCondition('prodcat_id', '=', 'mysql_func_' . $prodCatId, 'AND', true);
         }
 
         $rs = $srch->getResultSet();
@@ -195,7 +197,7 @@ class ProductCategory extends MyAppModel
         $srch = new SearchBase(static::DB_TBL);
         $srch->addFld("MAX(" . static::DB_TBL_PREFIX . "display_order) as max_order");
         if ($parent > 0) {
-            $srch->addCondition(static::DB_TBL_PREFIX . 'parent', '=', $parent);
+            $srch->addCondition(static::DB_TBL_PREFIX . 'parent', '=', 'mysql_func_' . $parent, 'AND', true);
         }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -233,7 +235,7 @@ class ProductCategory extends MyAppModel
             $prodSrchObj->doNotLimitRecords();
             $prodSrchObj->joinProductToCategory();
             $prodSrchObj->joinCategoryRelationWithChild();
-            $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
+            $prodSrchObj->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
             if (0 < $parentId) {
                 $prodSrchObj->addCondition('prodcat_code', 'like', $catCode . '%');
             }
@@ -266,12 +268,12 @@ class ProductCategory extends MyAppModel
         }
 
         if (0 < $parentId) {
-            $srch->addCondition('cr.pcr_parent_id', '=', $parentId);
+            $srch->addCondition('cr.pcr_parent_id', '=', 'mysql_func_' . $parentId, 'AND', true);
             // $srch->addCondition('c.prodcat_code', 'like', $catCode . '%');
         }
-        $srch->addCondition('prodcat_status', '=', self::REQUEST_APPROVED);
-        $srch->addCondition('prodcat_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('prodcat_status', '=', 'mysql_func_' . self::REQUEST_APPROVED, 'AND', true);
+        $srch->addCondition('prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
         $rs = $srch->getResultSet();
         $categoriesArr = FatApp::getDb()->fetchAll($rs, 'prodcat_id');
@@ -337,7 +339,7 @@ class ProductCategory extends MyAppModel
             $prodSrchObj->doNotLimitRecords();
             $prodSrchObj->joinProductToCategory();
             $prodSrchObj->joinCategoryRelationWithChild();
-            $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
+            $prodSrchObj->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
             if (0 < $parentId) {
                 $prodSrchObj->addCondition('prodcat_code', 'like', $catCode . '%');
             }
@@ -387,7 +389,6 @@ class ProductCategory extends MyAppModel
         }
     }
 
-
     public static function parseTree($tree, $root = 0)
     {
         $return = array();
@@ -412,8 +413,8 @@ class ProductCategory extends MyAppModel
         $langId = FatUtility::int($langId);
 
         $srch = static::getSearchObject();
-        $srch->addCondition('m.prodcat_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('m.prodcat_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('m.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('m.prodcat_id', '=', $prodcat_id);
         $srch->addOrder('m.prodcat_display_order', 'asc');
         $srch->addOrder('m.prodcat_identifier', 'asc');
@@ -470,12 +471,12 @@ class ProductCategory extends MyAppModel
     {
         $langId = FatUtility::int($langId);
         $srch = static::getSearchObject(false, $langId, $active, $status);
-        $srch->addFld('m.prodcat_id,COALESCE(prodcat_name,m.prodcat_identifier) as prodcat_identifier,m.prodcat_parent');
-        $srch->addCondition('m.prodcat_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('m.prodCat_id', '=', FatUtility::int($prodCat_id));
+        $srch->addFld('m.prodcat_id, COALESCE(prodcat_name,m.prodcat_identifier) as prodcat_identifier, m.prodcat_parent');
+        $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('m.prodCat_id', '=', 'mysql_func_' . FatUtility::int($prodCat_id), 'AND', true);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
-        $name = '';
+        $name = $name_suffix;
         $seprator = '';
         if ($level > 0) {
             $seprator = ' &nbsp;&nbsp;&raquo;&raquo;&nbsp;&nbsp;';
@@ -494,8 +495,8 @@ class ProductCategory extends MyAppModel
     {
         $srch = static::getSearchObject();
         $srch->addCondition('prodcat_parent', '=', $prodCat_id);
-        $srch->addCondition('prodcat_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addMultipleFields(array('prodcat_id'));
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -507,19 +508,18 @@ class ProductCategory extends MyAppModel
         return false;
     }
 
-    public function getProdCatAutoSuggest($keywords = '', $limit = 10, $langId = 0, $collectionId = 0)
+    public function getProdCatAutoSuggest($keywords = '', $limit = 20, $langId = 0, $excludeRecords = [])
     {
         $srch = static::getSearchObject(false, $langId);
-        $srch->addFld('m.prodcat_id,m.prodcat_identifier,m.prodcat_parent');
-        $srch->addCondition('m.prodcat_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('m.prodcat_active', '=', applicationConstants::ACTIVE);
+        $srch->addFld('m.prodcat_id, m.prodcat_identifier, m.prodcat_parent');
+        $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('m.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         if (!empty($keywords)) {
             $srch->addCondition('m.prodcat_identifier', 'like', '%' . $keywords . '%');
         }
 
-        $alreadyAdded = Collections::getRecords($collectionId);
-        if (!empty($alreadyAdded) && 0 < count($alreadyAdded)) {
-            $srch->addCondition('prodcat_id', 'NOT IN', array_keys($alreadyAdded));
+        if (!empty($excludeRecords) && is_array($excludeRecords)) {
+            $srch->addCondition('prodcat_id', 'NOT IN', $excludeRecords);
         }
 
         $srch->addOrder('m.prodcat_parent', 'asc');
@@ -594,7 +594,7 @@ class ProductCategory extends MyAppModel
         $srch = static::getSearchObject(false, 0, $checkActive);
         $srch->joinTable(static::DB_TBL_LANG, 'LEFT OUTER JOIN', 'prodcatlang_prodcat_id = prodcat_id
 			AND prodcatlang_lang_id = ' . $langId);
-        $srch->addCondition(static::DB_TBL_PREFIX . 'deleted', '=', 0);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addMultipleFields(array(
             'prodcat_id',
             'COALESCE(prodcat_name, prodcat_identifier) AS prodcat_name',
@@ -633,13 +633,13 @@ class ProductCategory extends MyAppModel
         }
 
         if ($isDeleted) {
-            $srch->addCondition('m.prodcat_deleted', '=', 0);
+            $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         if ($isActive) {
-            $srch->addCondition('m.prodcat_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('m.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
-        $srch->addCondition('m.prodcat_parent', '=', FatUtility::int($parent_id));
+        $srch->addCondition('m.prodcat_parent', '=', 'mysql_func_' . FatUtility::int($parent_id), 'AND', true);
 
         if (!empty($keywords)) {
             $srch->addCondition('prodcat_name', 'like', '%' . $keywords . '%');
@@ -680,13 +680,13 @@ class ProductCategory extends MyAppModel
         }
 
         if ($isDeleted) {
-            $srch->addCondition('m.prodcat_deleted', '=', 0);
+            $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         if ($isActive) {
-            $srch->addCondition('m.prodcat_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('m.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
-        $srch->addCondition('m.prodcat_parent', '=', FatUtility::int($parent_id));
+        $srch->addCondition('m.prodcat_parent', '=', 'mysql_func_' . FatUtility::int($parent_id) . 'AND', true);
 
         if (!empty($keywords)) {
             //$srch->addCondition('prodcat_name','like','%'.$keywords.'%');
@@ -737,11 +737,11 @@ class ProductCategory extends MyAppModel
         }
 
         if ($isDeleted) {
-            $srch->addCondition('m.prodcat_deleted', '=', 0);
+            $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         if ($parent_id > 0) {
-            $srch->addCondition('m.prodcat_id', '=', FatUtility::int($parent_id));
+            $srch->addCondition('m.prodcat_id', '=', 'mysql_func_' . FatUtility::int($parent_id), 'AND', true);
         }
 
         if (!empty($keywords)) {
@@ -820,7 +820,7 @@ class ProductCategory extends MyAppModel
             $prodSrchObj->joinSellerSubscription(0, true);
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->addMultipleFields(array('product_id'));
-            $prodSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
+            $prodSrchObj->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
             $prodSrchObj->addGroupBy('product_id');
 
             $prodCatSrch->joinProductCategoryRelations();
@@ -864,7 +864,7 @@ class ProductCategory extends MyAppModel
     public function canRecordMarkDelete($prodcat_id)
     {
         $srch = static::getSearchObject(false, 0, false);
-        $srch->addCondition('m.prodcat_deleted', '=', 0);
+        $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('m.prodcat_id', '=', $prodcat_id);
         $srch->addFld('m.prodcat_id');
         $rs = $srch->getResultSet();
@@ -878,7 +878,7 @@ class ProductCategory extends MyAppModel
     public function canRecordUpdateStatus($prodcat_id)
     {
         $srch = static::getSearchObject();
-        $srch->addCondition('m.prodcat_deleted', '=', 0);
+        $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('m.prodcat_id', '=', $prodcat_id);
         $srch->addFld('m.prodcat_id,m.prodcat_active');
         $rs = $srch->getResultSet();
@@ -900,7 +900,7 @@ class ProductCategory extends MyAppModel
     public static function getDeletedProductCategoryByIdentifier($identifier = '')
     {
         $srch = static::getSearchObject(false, 0, false);
-        $srch->addCondition('m.prodcat_deleted', '=', applicationConstants::YES);
+        $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addCondition('m.prodcat_identifier', '=', $identifier);
 
         $srch->addFld('m.prodcat_id');
@@ -913,6 +913,7 @@ class ProductCategory extends MyAppModel
             return false;
         }
     }
+
     /* public static function getCatName($id,$categoryArr) {
             if (!array_key_exists($id, $categoryArr)) {
                 $categoryArr[$id] = productCategory::getAttributesByLangId($id, 'prodcat_name');
@@ -923,8 +924,8 @@ class ProductCategory extends MyAppModel
     public static function getProductCategoryName($id, $langId)
     {
         $srch = static::getSearchObject(false, $langId);
-        $srch->addCondition('m.prodcat_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('m.prodcat_deleted', '=', 0);
+        $srch->addCondition('m.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition('m.prodcat_id', '=', $id);
         $srch->addFld('COALESCE(prodcat_name,prodcat_identifier) as prodcat_name');
         $rs = $srch->getResultSet();
@@ -947,7 +948,7 @@ class ProductCategory extends MyAppModel
             if (!empty($attr) && is_array($attr)) {
                 $prodCatSrch = new ProductCategorySearch($siteLangId);
                 $prodCatSrch->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(prodcat_code,1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'prodcat_code as prodcat_code'));
-                $prodCatSrch->addCondition('prodcat_id', '=', $catId);
+                $prodCatSrch->addCondition('prodcat_id', '=', 'mysql_func_' . $catId, 'AND', true);
                 $rs = $prodCatSrch->getResultSet();
                 $rows = FatApp::getDb()->fetch($rs);
                 foreach ($rows as $key => $val) {
@@ -958,7 +959,7 @@ class ProductCategory extends MyAppModel
 
                 $prodCatSrch = new ProductCategorySearch($siteLangId);
                 $prodCatSrch->addFld('COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name');
-                $prodCatSrch->addCondition('prodcat_id', '=', $catId);
+                $prodCatSrch->addCondition('prodcat_id', '=', 'mysql_func_' . $catId, 'AND', true);
                 $rs = $prodCatSrch->getResultSet();
                 $rows = FatApp::getDb()->fetch($rs);
 
@@ -988,7 +989,7 @@ class ProductCategory extends MyAppModel
             if (!empty($attr) && is_array($attr)) {
                 $prodCatSrch = new ProductCategorySearch($siteLangId);
                 $prodCatSrch->addMultipleFields($attr);
-                $prodCatSrch->addCondition('prodcat_id', '=', FatUtility::int($prodCats[0]));
+                $prodCatSrch->addCondition('prodcat_id', '=', 'mysql_func_' . FatUtility::int($prodCats[0]), 'AND', true);
                 $rs = $prodCatSrch->getResultSet();
                 $rows = FatApp::getDb()->fetch($rs);
                 foreach ($rows as $key => $val) {
@@ -998,7 +999,7 @@ class ProductCategory extends MyAppModel
                 /* $this->categoryTreeArr [$parentId]['prodcat_name'] = productCategory::getAttributesByLangId($siteLangId,FatUtility::int($prodCats[0]),'prodcat_name'); */
                 $prodCatSrch = new ProductCategorySearch($siteLangId);
                 $prodCatSrch->addFld('COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name');
-                $prodCatSrch->addCondition('prodcat_id', '=', FatUtility::int($prodCats[0]));
+                $prodCatSrch->addCondition('prodcat_id', '=', 'mysql_func_' . FatUtility::int($prodCats[0]), 'AND', true);
                 $rs = $prodCatSrch->getResultSet();
                 $row = FatApp::getDb()->fetch($rs);
 
@@ -1018,8 +1019,8 @@ class ProductCategory extends MyAppModel
     {
         $srch = static::getSearchObject($inludeChildCount, $langId);
         $srch->addFld('m.prodcat_id,COALESCE(pc_l.prodcat_name,m.prodcat_identifier) as prodcat_name,m.prodcat_parent,substr(m.prodcat_code,1,6) AS prodrootcat_code');
-        $srch->addCondition('m.prodcat_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('m.prodcat_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('m.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('m.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         if (!empty($keywords)) {
             $cnd = $srch->addCondition('m.prodcat_identifier', 'like', '%' . $keywords . '%');
             $cnd->attachCondition('pc_l.prodcat_name', 'like', '%' . $keywords . '%');
@@ -1064,7 +1065,7 @@ class ProductCategory extends MyAppModel
         $prodSrchObj->addMultipleFields(array('count(selprod_id) as productCounts', 'prodcat_id'));
         /* $prodSrchObj->addMultipleFields(array('substr(prodcat_code,1,6) AS prodrootcat_code','count(selprod_id) as productCounts', 'prodcat_id')); */
 
-        $cnd = $prodSrchObj->addCondition('c.prodcat_id', '=', $this->mainTableRecordId);
+        $cnd = $prodSrchObj->addCondition('c.prodcat_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $cnd->attachCondition('c.prodcat_code', 'like', '%' . str_pad($this->mainTableRecordId, 6, '0', STR_PAD_LEFT) . '%');
 
         /*  if (0 < $this->mainTableRecordId) {
@@ -1123,10 +1124,7 @@ class ProductCategory extends MyAppModel
         $parentCatId = FatUtility::int($post['prodcat_parent']);
         $prodCatId = FatUtility::int($post['prodcat_id']);
         unset($post['prodcat_id']);
-        $autoUpdateOtherLangsData = 0;
-        if (isset($post['auto_update_other_langs_data'])) {
-            $autoUpdateOtherLangsData = FatUtility::int($post['auto_update_other_langs_data']);
-        }
+
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         if ($this->mainTableRecordId == 0) {
             $post['prodcat_display_order'] = $this->getMaxOrder($parentCatId);
@@ -1139,7 +1137,7 @@ class ProductCategory extends MyAppModel
         $this->assignValues($post);
         if ($this->save()) {
             $this->updateCatCode();
-            $this->rewriteUrl($post['prodcat_identifier'], true, $parentCatId);
+            $this->rewriteUrl($post['urlrewrite_custom'], false, $parentCatId);
             // Product::updateMinPrices();
         } else {
             $categoryId = self::getDeletedProductCategoryByIdentifier($post['prodcat_identifier']);
@@ -1180,18 +1178,48 @@ class ProductCategory extends MyAppModel
         $this->saveLangData($siteDefaultLangId, $post['prodcat_name'][$siteDefaultLangId]); // For site default language
         $catNameArr = $post['prodcat_name'];
         unset($catNameArr[$siteDefaultLangId]);
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData(static::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($this->mainTableRecordId)) {
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+        }
+
         foreach ($catNameArr as $langId => $catName) {
-            if (empty($catName) && $autoUpdateOtherLangsData > 0) {
-                $this->saveTranslatedLangData($langId);
-            } elseif (!empty($catName)) {
+            if (!empty($catName)) {
                 $this->saveLangData($langId, $catName);
+            }
+        }
+
+        if (isset($post['rating_type']) && !empty($post['rating_type'])) {
+            $ratingTypeArr = json_decode($post['rating_type'], true);
+            foreach ($ratingTypeArr as $rating) {
+                if (!isset($rating['id'])) {
+                    $ratingObj = new RatingType();
+                    $ratingObj->assignValues(['ratingtype_active' => 1, 'ratingtype_identifier' => $rating['value'], 'ratingtype_type' => RatingType::TYPE_OTHER]);
+                    if (!$ratingObj->save()) {
+                        LibHelper::exitWithError($ratingObj->getError(), true);
+                    }
+                    if (!$ratingObj->updateLangData(FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1), ['ratingtype_name' => $rating['value']])) {
+                        FatUtility::dieJsonError($ratingObj->getError());
+                    }
+                    $ratingId = $ratingObj->getMainTableRecordId();
+                } else {
+                    $ratingId = $rating['id'];
+                }
+
+                if (!$this->addUpdateRatingType($ratingId)) {
+                    LibHelper::exitWithError($this->getError(), true);
+                }
             }
         }
 
         if ($prodCatId == 0 && isset($post['cat_icon_image_id']) && isset($post['cat_banner_image_id'])) {
             $this->updateMedia($post['cat_icon_image_id']);
             $this->updateMedia($post['cat_banner_image_id']);
-        }        
+        }
         CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         return true;
     }
@@ -1213,7 +1241,7 @@ class ProductCategory extends MyAppModel
             $this->error = $this->getError();
             return false;
         }
-        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);        
+        CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         return true;
     }
 
@@ -1265,16 +1293,14 @@ class ProductCategory extends MyAppModel
         return $translatedData;
     }
 
-    public function getCategories($includeProductCount = true, $includeSubCategoriesCount = true)
+    private function categoryObj($includeProductCount = true, $includeSubCategoriesCount = true)
     {
         $attr = [
             'm.*',
             'COALESCE(prodcat_name,m.prodcat_identifier ) as prodcat_name'
         ];
         $srch = static::getSearchObject(false, $this->commonLangId, false);
-        $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'deleted', '=', 0);
-        $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'parent', '=', $this->mainTableRecordId);
-        
+        $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         if ($includeProductCount === true) {
             $srch->joinTable(self::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'cr.pcr_parent_id = m.prodcat_id', 'cr');
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT JOIN', 'ptc.ptc_prodcat_id = cr.pcr_prodcat_id', 'ptc');
@@ -1284,7 +1310,8 @@ class ProductCategory extends MyAppModel
 
         if (true === $includeSubCategoriesCount) {
             $srchRelation = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
-            $srchRelation->addCondition('pcr_parent_id', '=', 'mysql_func_prodcat_id', 'AND', true);
+            $srchRelation->joinTable(static::DB_TBL, 'INNER JOIN', 'cr.pcr_prodcat_id = pccr.prodcat_id AND pccr.prodcat_deleted = 0', 'pccr');
+            $srchRelation->addCondition('pcr_parent_id', '=', 'mysql_func_m.prodcat_id', 'AND', true);
             $srchRelation->addFld('(COUNT(pcr_prodcat_id) - 1) as subcategory_count');
 
             $srchRelation->doNotCalculateRecords();
@@ -1298,16 +1325,29 @@ class ProductCategory extends MyAppModel
         $srch->addOrder('prodcat_display_order', 'asc');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetchAll($rs);
+        return $srch;
+    }
+
+    public function getData($includeProductCount = true, $includeSubCategoriesCount = true)
+    {
+        $srch = $this->categoryObj($includeProductCount, $includeSubCategoriesCount);
+        $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
+        return FatApp::getDb()->fetch($srch->getResultSet());
+    }
+
+    public function getCategories($includeProductCount = true, $includeSubCategoriesCount = true)
+    {
+        $srch = $this->categoryObj($includeProductCount, $includeSubCategoriesCount);
+        $srch->addCondition('m.' . static::DB_TBL_PREFIX . 'parent', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
     public function getSubCategoriesCount($prodCatId)
     {
         $prodCatId = FatUtility::int($prodCatId);
         $srch = static::getSearchObject(false, 0, false);
-        $srch->addCondition(static::DB_TBL_PREFIX . 'deleted', '=', 0);
-        $srch->addCondition(static::DB_TBL_PREFIX . 'parent', '=', $prodCatId);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'parent', '=', 'mysql_func_' . $prodCatId, 'AND', true);
         $srch->addMultipleFields(array('COUNT(' . static::DB_TBL_PREFIX . 'id) as subcategory_count'));
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
@@ -1317,7 +1357,7 @@ class ProductCategory extends MyAppModel
     public static function getActiveInactiveCategoriesCount($active)
     {
         $srch = static::getSearchObject(false, 0, false);
-        $srch->addCondition(static::DB_TBL_PREFIX . 'deleted', '=', 0);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addCondition(static::DB_TBL_PREFIX . 'active', '=', $active);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -1372,7 +1412,8 @@ class ProductCategory extends MyAppModel
     {
         $db = FatApp::getDb();
         if (!$db->query('CALL updateCategoryRelations(' . $recordId . ')')) {
-            echo $db->getError();die;
+            echo $db->getError();
+            die;
             return false;
         }
         CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
@@ -1432,7 +1473,7 @@ class ProductCategory extends MyAppModel
         CacheHelper::clear(CacheHelper::TYPE_PRODUCT_CATEGORIES);
         return true;
     }
-    
+
     public function unDeleteParentCategories(): bool
     {
         $catId = $this->getMainTableRecordId();
@@ -1487,7 +1528,7 @@ class ProductCategory extends MyAppModel
     {
         $catId = $this->getMainTableRecordId();
         $srch = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
-        $srch->addCondition('pcr_prodcat_id', '=', $catId);
+        $srch->addCondition('pcr_prodcat_id', '=', 'mysql_func_' . $catId, 'AND', true);
         $srch->addOrder('pcr_level', 'DESC');
         if (!empty($attr)) {
             $attr = in_array('pcr_parent_id', $attr) ? $attr : array_merge($attr, ['pcr_parent_id']);
@@ -1508,11 +1549,14 @@ class ProductCategory extends MyAppModel
      * @param  array $attr
      * @return array
      */
-    public function getChildrens(array $attr = []): array
+    public function getChildrens(array $attr = [], bool $skipDeleted = true): array
     {
         $catId = $this->getMainTableRecordId();
         $srch = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
-        $srch->addCondition('pcr_parent_id', '=', $catId);
+        $srch->addCondition('pcr_parent_id', '=', 'mysql_func_' . $catId, 'AND', true);
+        if ($skipDeleted) {
+            $srch->joinTable(static::DB_TBL, 'INNER JOIN', 'cr.pcr_prodcat_id = pccr.prodcat_id AND pccr.prodcat_deleted = 0', 'pccr');
+        }
         $srch->addOrder('pcr_level', 'DESC');
         if (!empty($attr)) {
             $attr = in_array('pcr_prodcat_id', $attr) ? $attr : array_merge($attr, ['pcr_prodcat_id']);
@@ -1575,8 +1619,8 @@ class ProductCategory extends MyAppModel
         }
 
         $srch = self::getRatingTypesObj($langId, $isActive);
-        $srch->addCondition('prt_prodcat_id', '=', $this->mainTableRecordId);
-        $srch->addCondition('ratingtype_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('prt_prodcat_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
+        $srch->addCondition('ratingtype_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addMultipleFields(['ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'ratingtype_active', 'ratingtype_default']);
 
         $rs = $srch->getResultSet();
@@ -1600,7 +1644,7 @@ class ProductCategory extends MyAppModel
         );
 
         if (0 < $isActive) {
-            $srch->addCondition('ratingtype_active', '=', $isActive);
+            $srch->addCondition('ratingtype_active', '=', 'mysql_func_' . $isActive, 'AND', true);
         }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();

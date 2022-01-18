@@ -188,10 +188,6 @@ class Orders extends MyAppModel
         $srch->addMultipleFields(array('orderstatus_id', 'IFNULL(orderstatus_name,orderstatus_identifier) as orderstatus_name'));
 
         $rs = $srch->getResultSet();
-        if (!$rs) {
-            return array();
-        }
-
         if (true === $assoc) {
             return FatApp::getDb()->fetchAllAssoc($rs);
         }
@@ -235,10 +231,7 @@ class Orders extends MyAppModel
         $srch->addMultipleFields(array('orderstatus_id', 'IFNULL(orderstatus_name,orderstatus_identifier) as orderstatus_name'));
 
         $rs = $srch->getResultSet();
-        if (!$rs) {
-            return array();
-        }
-        return $row = FatApp::getDb()->fetchAllAssoc($rs);
+        return FatApp::getDb()->fetchAllAssoc($rs);
     }
 
     public function getOrderNo()
@@ -373,7 +366,7 @@ class Orders extends MyAppModel
         if (array_key_exists('coupon_id', $discountInfo)) {
             $couponInfo = DiscountCoupons::getValidCoupons($data['order_user_id'], $data['order_language_id'], $data['order_discount_coupon_code'], $this->getOrderId());
             if ($couponInfo == false) {
-                $this->error = Labels::getLabel('LBL_Invalid_Coupon_Code', $data['order_language_id']);
+                $this->error = Labels::getLabel('ERR_Invalid_Coupon_Code', $data['order_language_id']);
                 return false;
             }
 
@@ -1052,7 +1045,7 @@ class Orders extends MyAppModel
         $order_status_id = FatUtility::int($order_status_id);
         $orderInfo = $this->getOrderById($order_id, $langId);
         if (!$orderInfo) {
-            $this->error = Labels::getLabel('MSG_Error_in_updating_the_order,_Please_try_after_some_time.', $langId);
+            $this->error = Labels::getLabel('ERR_Error_in_updating_the_order,_Please_try_after_some_time.', $langId);
             return false;
         }
 
@@ -1157,7 +1150,7 @@ class Orders extends MyAppModel
         return $childOrders;
     }
 
-    public function getOrderComments($langId, $criteria = array(), $pagesize = 0)
+    public function getOrderCommentsSrchObj($langId, $criteria = array())
     {
         if (count($criteria) == 0) {
             return array();
@@ -1213,7 +1206,7 @@ class Orders extends MyAppModel
             $srch->addMultipleFields(array('b.user_name as buyer_name', 'b.user_phone_dcode as buyer_phone_dcode', 'b.user_phone as buyer_phone', 'bc.credential_email as buyer_email'));
         }
 
-        $srch->addMultipleFields(array('tosh.*', 'tor.order_payment_status', 'order_language_id', 'torp.*', 'torp.op_id'));
+        $srch->addMultipleFields(array('tosh.*', 'tor.order_payment_status', 'order_language_id', 'torp.*', 'torp.op_id','opshipping_label','opshipping_plugin_id'));
 
         foreach ($criteria as $key => $val) {
             if (strval($val) == '') {
@@ -1238,20 +1231,24 @@ class Orders extends MyAppModel
             }
         }
 
+        $srch->addOrder('oshistory_date_added', 'DESC');
+        $srch->addOrder('oshistory_orderstatus_id');
+        $srch->addGroupBy('oshistory_id');
+        return $srch;
+    }
+
+    public function getOrderComments($langId, $criteria = array(), $pagesize = 0)
+    {
+        $srch = $this->getOrderCommentsSrchObj($langId, $criteria);
+
         if (intval($pagesize) > 0) {
             $srch->setPageSize($pagesize);
         } else {
             $srch->doNotLimitRecords();
         }
         $srch->doNotCalculateRecords(true);
-        $srch->addOrder('oshistory_date_added', 'DESC');
-        $srch->addOrder('oshistory_orderstatus_id');
-        $srch->addGroupBy('oshistory_id');
 
         $rs = $srch->getResultSet();
-        if (!$rs) {
-            return false;
-        }
         return ($pagesize == 1) ? FatApp::getDb()->fetch($rs) : FatApp::getDb()->fetchAll($rs);
     }
 
@@ -1357,7 +1354,7 @@ class Orders extends MyAppModel
 
         $childOrderInfo = $orderSubObj->getOrderSubscriptionByOssubId($ossubs_id, $langId);
         if (empty($childOrderInfo)) {
-            $this->error = Labels::getLabel("MSG_Invalid_Access", $langId);
+            $this->error = Labels::getLabel("ERR_Invalid_Access", $langId);
             return false;
         }
 
@@ -1573,7 +1570,7 @@ class Orders extends MyAppModel
 
         $childOrderInfo = $this->getOrderProductsByOpId($op_id, $langId);
         if (empty($childOrderInfo)) {
-            $this->error = Labels::getLabel("MSG_Invalid_Access", $langId);
+            $this->error = Labels::getLabel("ERR_Invalid_Access", $langId);
             return false;
         }
 
@@ -2741,7 +2738,7 @@ class Orders extends MyAppModel
         $rs = $srch->getResultSet();
         $order = FatApp::getDb()->fetch($rs);
         if (!$order) {
-            $this->error = Labels::getLabel('MSG_Order_Data_Not_Found', $langId);
+            $this->error = Labels::getLabel('ERR_Order_Data_Not_Found', $langId);
             return false;
         }
 
@@ -2893,5 +2890,26 @@ class Orders extends MyAppModel
         $order->addChildProductOrderHistory($opId, $orderLangId, FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS"), $comment, true);
         $where = array('smt' => 'op_id = ? ', 'vals' => array($opId));
         FatApp::getDb()->updateFromArray(Orders::DB_TBL_ORDER_PRODUCTS, array('op_confirm_date' => date('Y-m-d H:i:s')), $where);
+    }
+
+    public static function getPaymentStatusHtml(int $langId, int $status, string $extraInfo = ''): string
+    {
+        $arr = self::getOrderPaymentStatusArr($langId);
+        $msg = $arr[$status] . ' ' . $extraInfo;
+        switch ($status) {
+            case Orders::ORDER_PAYMENT_PENDING:
+                $status = HtmlHelper::INFO;
+                break;
+            case Orders::ORDER_PAYMENT_PAID:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case Orders::ORDER_PAYMENT_CANCELLED:
+                $status = HtmlHelper::DANGER;
+                break;
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, rtrim($msg));
     }
 }

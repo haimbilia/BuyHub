@@ -33,7 +33,7 @@
             $tagData = array();
             foreach ($productTags as $key => $data) {
                 $tagData[$key]['id'] = $data['tag_id'];
-                $tagData[$key]['value'] = $data['tag_identifier'];
+                $tagData[$key]['value'] = $data['tag_name'];
             }
             ?>
             <div class="col-md-4">
@@ -88,15 +88,14 @@
             var tag_id = e.detail.tag.id;
             var tag_name = e.detail.tag.title;
             if (tag_id == '') {
-                var data = 'tag_id=0&tag_identifier=' + tag_name
+                var data = 'tag_id=0&tag_name=' + tag_name
                 fcom.updateWithAjax(fcom.makeUrl('Seller', 'setupTag'), data, function (t) {
-                    var dataLang = 'tag_id=' + t.tagId + '&tag_name=' + tag_name + '&lang_id=0';
-                    fcom.updateWithAjax(fcom.makeUrl('Seller', 'tagLangSetup'), dataLang, function (t2) {
-                        fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateCustomCatalogTag'), 'preq_id=' + preq_id + '&tag_id=' + t.tagId, function (t3) {
-                            var tagifyId = e.detail.tag.__tagifyId;
-                            $('[__tagifyid=' + tagifyId + ']').attr('id', t.tagId);
-                        });
+                    var dataLang = 'tag_id=' + t.tagId + '&tag_name=' + tag_name + '&lang_id=0';                 
+                    fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateCustomCatalogTag'), 'preq_id=' + preq_id + '&tag_id=' + t.tagId, function (t3) {
+                        var tagifyId = e.detail.tag.__tagifyId;
+                        $('[__tagifyid=' + tagifyId + ']').attr('id', t.tagId);
                     });
+                    
                 });
             } else {
                 fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateCustomCatalogTag'), 'preq_id=' + preq_id + '&tag_id=' + tag_id, function (t) { });
@@ -118,7 +117,7 @@
                 for (i = 0; i < ans.length; i++) {            
                     list.push({
                         "id" : ans[i].id,
-                        "value" : ans[i].tag_identifier, 
+                        "value" : ans[i].tag_name, 
                     });
                 } 
                 tagify.settings.whitelist = list;
@@ -158,8 +157,8 @@
                 var ans = $.parseJSON(t);
                 for (i = 0; i < ans.length; i++) {            
                     listOptions.push({
-                        "id" : ans[i].id,
-                        "value" : ans[i].name+'('+ans[i].option_identifier+')',
+                        "id" : ans['results'][i].id,
+                        "value" : ans['results'][i].text,
                     });
                 }            
                 tagifyOption.settings.whitelist = listOptions;

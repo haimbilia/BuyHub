@@ -4,7 +4,7 @@ class SupplierFormFields extends MyAppModel
 {
     public const DB_TBL = 'tbl_user_supplier_form_fields';
     public const DB_TBL_PREFIX = 'sformfield_';
-    
+
     public const DB_TBL_LANG = 'tbl_user_supplier_form_fields_lang';
 
     private $db;
@@ -17,8 +17,7 @@ class SupplierFormFields extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'sf');
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'sf');
     }
 
     public function getMaxOrder()
@@ -46,7 +45,7 @@ class SupplierFormFields extends MyAppModel
         }
 
         $srch = static::getSearchObject();
-        $srch->addCondition('sf.' . static::DB_TBL_PREFIX . 'id', '=', $this->mainTableRecordId);
+        $srch->addCondition('sf.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->addFld(array('sf.' . static::DB_TBL_PREFIX . 'id', 'sf.' . static::DB_TBL_PREFIX . 'mandatory'));
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();

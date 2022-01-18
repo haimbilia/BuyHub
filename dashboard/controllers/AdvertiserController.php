@@ -947,7 +947,7 @@ class AdvertiserController extends AdvertiserBaseController
         $this->set('bannerWidth', $bannerWidth);
         $this->set('bannerHeight', $bannerHeight);
         $this->set('promotionType', $promotionType);
-        $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
+        $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->set('screenTypeArr', array(
             0 => ''
         ) + applicationConstants::getDisplaysArr($this->siteLangId));
@@ -1012,7 +1012,7 @@ class AdvertiserController extends AdvertiserBaseController
         }
 
         $this->set('promotionType', $promotionType);
-        $this->set('bannerTypeArr', applicationConstants::bannerTypeArr());
+        $this->set('bannerTypeArr', applicationConstants::getAllLanguages());
         $this->set('screenTypeArr', array(
             0 => ''
         ) + applicationConstants::getDisplaysArr($this->siteLangId));
@@ -1397,6 +1397,12 @@ class AdvertiserController extends AdvertiserBaseController
             'blocation_promotion_cost',
             'ifnull(blocation_name,blocation_identifier) as blocation_name'
         ));
+        $srch->joinTable(
+            Collections::DB_TBL,
+            'INNER JOIN',
+            'collections.collection_id = blocation_collection_id',
+            'collections'
+        );
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetchAll($rs, 'blocation_id');
         $locationArr = array();
@@ -1483,7 +1489,7 @@ class AdvertiserController extends AdvertiserBaseController
         $frm->addHiddenField('', 'promotion_id', $promotionId);
         $frm->addHiddenField('', 'promotion_type', $promotionType);
 
-        $bannerTypeArr = applicationConstants::bannerTypeArr();
+        $bannerTypeArr = applicationConstants::getAllLanguages();
         $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', $bannerTypeArr, '', array(), '');
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel("LBL_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');

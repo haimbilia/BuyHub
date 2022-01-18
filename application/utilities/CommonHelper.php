@@ -111,15 +111,18 @@ class CommonHelper extends FatUtility
 
     public static function getLangId(): int
     {
-        $langId = FatUtility::int(self::$_lang_id);
-        if (1 > $langId) {
+        if (1 > self::$_lang_id) {
             return FatUtility::int(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
         }
-        return $langId;
+        return self::$_lang_id;
     }
 
-    public static function setLangId($langId)
+    public static function setLangId(int $langId)
     {
+        if (1 > $langId) {
+            self::$_lang_id =  FatUtility::int(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            return;
+        }
         self::$_lang_id = $langId;
     }
 
@@ -293,7 +296,7 @@ class CommonHelper extends FatUtility
         if (empty($opArr)) {
             trigger_error('Order Product Array should not be empty', E_USER_ERROR);
         }
-        
+
         $shippingAmount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_SHIPPING]['opcharge_amount'] : 0;
         $cartTotal = $opArr['op_qty'] * $opArr['op_unit_price'];
 
@@ -342,15 +345,15 @@ class CommonHelper extends FatUtility
             case 'SHIPPING':
                 $amount = $shippingAmount;
                 break;
-            case 'SHIPPING_API': 
+            case 'SHIPPING_API':
                 /* Charges If seller using admin api to ship*/
                 $amount = 0;
                 if (CommonHelper::canAvailShippingChargesBySeller($opArr['op_selprod_user_id'], $opArr['opshipping_by_seller_user_id']) && 0 < $opArr['opshipping_plugin_id'] && 1 > $opArr['opshipping_is_seller_plugin'] && 0 < $opArr['opshipping_plugin_charges']) {
-                    $shippingResp = OrderProduct::getShippingResponse($opArr['op_id'], OrderProduct::RESPONSE_TYPE_SHIPMENT);                   
+                    $shippingResp = OrderProduct::getShippingResponse($opArr['op_id'], OrderProduct::RESPONSE_TYPE_SHIPMENT);
                     if (!empty($shippingResp) && !empty($shippingResp['opr_response'])) {
                         $amount = $opArr['opshipping_plugin_charges'];
                     }
-                }              
+                }
                 break;
             case 'REWARDPOINT':
                 $amount = isset($opArr['charges'][OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT]['opcharge_amount']) ? $opArr['charges'][OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT]['opcharge_amount'] : 0;
@@ -402,7 +405,7 @@ class CommonHelper extends FatUtility
             $commissionCostValue = $commissionCostValue + $taxPerQty;
         }
 
-        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost && FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', FatUtility::VAR_INT, 0)) {
+        if ($requestRow['op_commission_include_shipping'] && $perUnitShippingCost && FatApp::getConfig('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', FatUtility::VAR_INT, 0) && CommonHelper::canAvailShippingChargesBySeller($requestRow['op_selprod_user_id'], $requestRow['opshipping_by_seller_user_id'])) {
             $commissionCostValue = $commissionCostValue + $perUnitShippingCost;
         }
 
@@ -761,8 +764,8 @@ class CommonHelper extends FatUtility
         /* header('Content-Transfer-Encoding: binary');
         header('Content-Type: application/octet-stream'); */
         header('Content-Encoding: UTF-8');
-        header('Content-type: application/csv; charset=UTF-8; encoding=UTF-8');      
-        if (strpos($_SERVER ['HTTP_USER_AGENT'], "MSIE") > 0) {
+        header('Content-type: application/csv; charset=UTF-8; encoding=UTF-8');
+        if (strpos($_SERVER['HTTP_USER_AGENT'], "MSIE") > 0) {
             header('Content-Disposition: attachment; filename="' . rawurlencode($output_file_name) . '"');
         } else {
             header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode($output_file_name));
@@ -802,8 +805,8 @@ class CommonHelper extends FatUtility
             /** modify header to be downloadable csv file **/
             header('Content-Description: File Transfer');
             header('Content-Encoding: UTF-8');
-            header('Content-type: application/csv; charset=UTF-8; encoding=UTF-8');           
-            if (strpos($_SERVER ['HTTP_USER_AGENT'], "MSIE") > 0) {
+            header('Content-type: application/csv; charset=UTF-8; encoding=UTF-8');
+            if (strpos($_SERVER['HTTP_USER_AGENT'], "MSIE") > 0) {
                 header('Content-Disposition: attachment; filename="' . rawurlencode($output_file_name) . '"');
             } else {
                 header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode($output_file_name));
@@ -1344,15 +1347,10 @@ class CommonHelper extends FatUtility
         return $urlString;
     }
 
-    public static function currencyDisclaimer($langId, $amount = 0)
+    public static function currencyDisclaimer($langId, $amount)
     {
-        $str = Labels::getLabel('LBL_Note_charged_in_currency_disclaimer_{default-currency-symbol}', $langId);
-        if ($amount) {
-            $str = str_replace("{default-currency-symbol}", static::displayMoneyFormat($amount, true, true), $str);
-        } else {
-            $str = str_replace("{default-currency-symbol}", ' $ ', $str);
-        }
-        return $str;
+        $str = Labels::getLabel('LBL_NOTE_CHARGED_IN_CURRENCY_DISCLAIMER_{DEFAULT-CURRENCY-SYMBOL}', $langId);
+        return CommonHelper::replaceStringData($str, ["{DEFAULT-CURRENCY-SYMBOL}" => static::displayMoneyFormat($amount, true, true)]);
     }
 
     public static function showProductDiscountedText(array $product, int $langId)
@@ -1422,7 +1420,7 @@ class CommonHelper extends FatUtility
         $string = preg_replace("/[\s-]+/", " ", $string);
         //Convert whitespaces and underscore to dash
         $string = preg_replace("/[\s_]/", "-", $string);
-
+        $string = str_replace('"', "", $string);
         $keyword = strtolower($string);
         $keyword = ucfirst(FatUtility::dashed2Camel($keyword));
 
@@ -1906,26 +1904,25 @@ class CommonHelper extends FatUtility
         return $str;
     }
 
-    public static function getUrlTypeData($url)
+    public static function segregateUrl(string $url): array
     {
         if (empty($url)) {
-            return false;
+            return [];
         }
 
         if (strpos($url, "?") !== false) {
             $url = str_replace('?', '/?', $url);
         }
-        $originalUrl = $url;
         $url = preg_replace('/https:/', 'http:', $url, 1);
         /* [ Check url rewritten by the system and "/" discarded in url rewrite*/
-        $systemUrl = UrlHelper::generateFullUrl();
+        $systemUrl = UrlHelper::generateFullUrl('', '', array(), CONF_WEBROOT_FRONTEND);
         $systemUrl = preg_replace('/https:/', 'http:', $systemUrl, 1);
         $systemUrl = substr($url, strlen($systemUrl));
         $systemUrl = rtrim($systemUrl, '/');
         $customUrl = array_filter(explode('/', $systemUrl));
         $customUrl = array_values($customUrl);
         if (empty($customUrl)) {
-            return false;
+            return [];
         }
         $srch = UrlRewrite::getSearchObject();
         $srch->doNotCalculateRecords();
@@ -1940,8 +1937,16 @@ class CommonHelper extends FatUtility
             $url = $row['urlrewrite_original'];
         }
 
+        return array_values(array_filter(explode('/', $url)));
+    }
 
-        $arr = array_values(array_filter(explode('/', $url)));
+    public static function getUrlTypeData($url)
+    {
+        $arr = self::segregateUrl($url);
+        if (empty($arr)) {
+            return false;
+        }
+
         $controller = (isset($arr[0])) ? $arr[0] : '';
         array_shift($arr);
         $action = (isset($arr[0])) ? $arr[0] : '';
@@ -2095,5 +2100,26 @@ class CommonHelper extends FatUtility
     public static function isFieldEncrypted($data)
     {
         return (strpos($data, '*') !== false);
+    }
+
+    public static function getDefaultFormLangId()
+    {
+        return FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+    }
+
+    public static function isSetCookie($cookieName)
+    {
+        if (isset($_COOKIE[$cookieName])) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function getCookie($cookieName)
+    {
+        if (isset($_COOKIE[$cookieName]) && !empty($_COOKIE[$cookieName])) {
+            return true;
+        }
+        return false;
     }
 }

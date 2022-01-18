@@ -454,9 +454,9 @@ class SubscriptionCheckoutController extends LoggedUserController
         $controller = $paymentMethod['plugin_code'] . 'Pay';
         $methodCode = Plugin::getAttributesById($plugin_id, 'plugin_code');
         $frm->setFormTagAttribute('data-method', $methodCode);
-        $frm->setFormTagAttribute('data-external', UrlHelper::generateUrl($controller, 'getExternalLibraries'));
+        $frm->setFormTagAttribute('data-external', UrlHelper::generateUrl($controller, 'getExternalLibraries', [], CONF_WEBROOT_FRONTEND));
 
-        $frm->setFormTagAttribute('action', UrlHelper::generateUrl($controller, 'charge', array($orderInfo['order_id'])));
+        $frm->setFormTagAttribute('action', UrlHelper::generateUrl($controller, 'charge', array($orderInfo['order_id'], [], CONF_WEBROOT_FRONTEND)));
         $frm->fill(
             array(
                 'order_id' => $order_id,
@@ -620,16 +620,16 @@ class SubscriptionCheckoutController extends LoggedUserController
         }
 
 
-
+        $_SESSION['order_type'] = Orders::ORDER_SUBSCRIPTION;
+        $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $plugin_id));
+        /*
         if ($plugin_id) {
             $_SESSION['order_type'] = Orders::ORDER_SUBSCRIPTION;
-            $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $plugin_id));
-            /*
+            $orderObj->updateOrderInfo($order_id, array('order_pmethod_id' => $plugin_id));            
             $this->scartObj->clear();
-            $this->scartObj->updateUserSubscriptionCart();
-            * 
-            */
+            $this->scartObj->updateUserSubscriptionCart();           
         }
+        */
 
         /* if ( !$orderObj->addOrderHistory( $order_id, 1, Labels::getLabel("LBL_-NA-",$this->siteLangId), true, $this->siteLangId ) ){
         Message::addErrorMessage( $orderObj->getError() );

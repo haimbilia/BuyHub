@@ -11,32 +11,36 @@ class EmptyCartItems extends MyAppModel
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
     }
 
-    public static function getSearchObject($langId = 0, $isActive = true)
+    public static function getSearchObject($langId = 0, $isActive = true, $setOrderBy = true)
     {
-        $srch = new SearchBase(static::DB_TBL);
+        $srch = new SearchBase(static::DB_TBL, 'eci');
 
         if ($langId > 0) {
             $srch->joinTable(
                 static::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
                 'emptycartitemlang_emptycartitem_id = emptycartitem_id
-			AND emptycartitemlang_lang_id = ' . $langId
+			AND emptycartitemlang_lang_id = ' . $langId,
+                'eci_l'
             );
         }
 
         if ($isActive) {
-            $srch->addCondition('emptycartitem_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('emptycartitem_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
-        $srch->addOrder(static::DB_TBL_PREFIX . 'active', 'DESC');
-        $srch->addOrder(static::DB_TBL_PREFIX . 'display_order');
+        if (true === $setOrderBy) {
+            $srch->addOrder(static::DB_TBL_PREFIX . 'active', 'DESC');
+            $srch->addOrder(static::DB_TBL_PREFIX . 'display_order');
+        }
         return $srch;
     }
 
     public function canRecordMarkDelete($id)
     {
+        $id = FatUtility::int($id);
         $srch = static::getSearchObject(0, false);
-        $srch->addCondition(static::DB_TBL_PREFIX . 'id', '=', $id);
+        $srch->addCondition(static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $id, 'AND', true);
         $srch->addFld(static::DB_TBL_PREFIX . 'id');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);

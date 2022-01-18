@@ -29,8 +29,7 @@ class OrderReturnRequestSearch extends SearchBase
             $this->joinTable(
                 Orders::DB_TBL_ORDER_PRODUCTS_LANG,
                 'LEFT OUTER JOIN',
-                'op.op_id = op_l.oplang_op_id
-			AND oplang_lang_id = ' . $langId,
+                'op.op_id = op_l.oplang_op_id AND oplang_lang_id = ' . $langId,
                 'op_l'
             );
         }
@@ -97,6 +96,11 @@ class OrderReturnRequestSearch extends SearchBase
             trigger_error(Labels::getLabel('MSG_joinSellerProducts_cannot_be_joined,_Please_first_use_joinOrderProducts()', $this->commonLangId), E_USER_ERROR);
         }
         $this->joinTable(SellerProduct::DB_TBL, 'LEFT OUTER JOIN', 'sp.selprod_id = op.op_selprod_id and op.op_is_batch = 0', 'sp');
+    }
+
+    public function joinShippingCharges()
+    {        
+        $this->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_SHIPPING, 'LEFT OUTER JOIN', 'ops.opshipping_op_id = op.op_id', 'ops');
     }
 
     public function addOrderProductCharges()

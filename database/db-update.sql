@@ -138,7 +138,7 @@ INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_i
 INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_STATISTICAL_ANALYSIS_COOKIES_INFORMATION", "1", "These cookies are used to measure and analyse our website audience (visitor volume, pages viewed, average browsing time, etc.) to help us improve its performance. By accepting these cookies, you are helping us to improve our website.", "2");
 
 INSERT IGNORE INTO `tbl_language_labels` (`label_id`, `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES (NULL, "LBL_PERSONALISE_COOKIES_INFORMATION", "1", "These cookies allow us to provide you with online or in-store recommendations of products, services and content that match your expectations and preferences. By accepting these cookies, you are opting for an enriched and personalized experience.", "2");
-ALTER TABLE `tbl_admin` CHANGE `admin_password` `admin_password_old` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+ALTER TABLE `tbl_admin` CHANGE `admin_password` `admin_password_old` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 ALTER TABLE `tbl_admin` ADD `admin_password` VARCHAR(100) NOT NULL AFTER `admin_password_old`;
 ALTER TABLE `tbl_user_credentials` CHANGE `credential_password` `credential_password_old` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 ALTER TABLE `tbl_user_credentials` ADD `credential_password` VARCHAR(100) NOT NULL AFTER `credential_password_old`;
@@ -1154,3 +1154,417 @@ UPDATE `tbl_admin` SET `admin_password_old` = '' WHERE `tbl_admin`.`admin_id` = 
 INSERT INTO `tbl_extra_pages` (`epage_id`, `epage_identifier`, `epage_type`, `epage_content_for`, `epage_active`, `epage_default`, `epage_default_content`) VALUES (NULL, 'Admin Zones', '45', '1', '1', '0', '<br />\r\n\r\n<h2>Zones Content File</h2> <br />\r\n\r\n<h3>Zone Identifier</h3>User defined unique identifier for the Zone. This works as a unique key for the system to identify a particular Zone. <br />\r\n<br />\r\n\r\n<h3>Zone name</h3>User defined name for the Zone.<br />\r\n<br />\r\n\r\n<h3>Active</h3>User defined field to mark a particular zone as active in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'Yes\'.');
 INSERT INTO `tbl_extra_pages_lang` (`epagelang_epage_id`, `epagelang_lang_id`, `epage_label`, `epage_content`) VALUES ((select epage_id from tbl_extra_pages where epage_type='45'), '1', 'Admin Zones', '<br />\r\n\r\n<h2>Zones Content File</h2> <br />\r\n\r\n<h3>Zone Identifier</h3>User defined unique identifier for the Zone. This works as a unique key for the system to identify a particular Zone. <br />\r\n<br />\r\n\r\n<h3>Zone name</h3>User defined name for the Zone.<br />\r\n<br />\r\n\r\n<h3>Active</h3>User defined field to mark a particular zone as active in the system or not. Possible inputs for this field are \'Yes\' &amp; \'No\'. Default value should be set as \'Yes\'.');
 
+-- ----- Task : 89922 Help Center -------- --
+CREATE TABLE `tbl_help_center` (
+    `hc_id` INT NOT NULL AUTO_INCREMENT,
+    `hc_controller` VARCHAR(100) NULL,
+    `hc_action` VARCHAR(50) NULL,
+    `hc_default_title` VARCHAR(100) NOT NULL,
+    `hc_default_description` TEXT NOT NULL,
+    PRIMARY KEY (`hc_id`)
+) ENGINE = InnoDB;
+
+ALTER TABLE `tbl_help_center`  ADD `hc_user_type` TINYINT NOT NULL  AFTER `hc_id`;
+ALTER TABLE `tbl_help_center` ADD UNIQUE( `hc_user_type`, `hc_controller`, `hc_action`);
+
+CREATE TABLE `tbl_help_center_lang` (
+    `hclang_hc_id` INT NOT NULL,
+    `hclang_lang_id` TINYINT NOT NULL,
+    `hclang_title` VARCHAR(100) NOT NULL,
+    `hclang_description` TEXT NOT NULL
+) ENGINE = InnoDB;
+
+ALTER TABLE `tbl_help_center_lang` ADD UNIQUE( `hclang_hc_id`, `hclang_lang_id`);
+-- ----- Task : 89922 Help Center -------- --
+
+-- ---- Email Functionality update ---- --
+ALTER TABLE `tbl_email_templates` ADD `etpl_priority` TINYINT NOT NULL COMMENT '5 means immediate, Others must be less than 5' AFTER `etpl_replacements`;
+
+DROP TABLE tbl_email_archives;
+CREATE TABLE `tbl_email_archives` (
+  `earch_id` int NOT NULL,
+  `earch_to_email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_to_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_cc_email` json DEFAULT NULL,
+  `earch_bcc_email` json DEFAULT NULL,
+  `earch_tpl_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_subject` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_body` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_attachments` json DEFAULT NULL,
+  `earch_priority` tinyint NOT NULL COMMENT '5 = immediate ,Others must be less than 5',
+  `earch_added` datetime NOT NULL,
+  `earch_sent_on` datetime DEFAULT NULL,
+  `earch_from_email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `earch_from_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_email_archives`
+  ADD PRIMARY KEY (`earch_id`);
+
+ALTER TABLE `tbl_email_archives`
+  MODIFY `earch_id` int NOT NULL AUTO_INCREMENT;
+
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'account_credited_debited';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'admin_forgot_password';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'admin_new_user_creation_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'abandoned_cart_deleted_discount_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'abandoned_cart_discount_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'abandoned_cart_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'admin_notification_abusive_review_posted';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'admin_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'ADMIN_ORDER_PAYMENT_TRANSFERRED_TO_BANK';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'affiliate_share_invitation_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'affiliate_welcome_registration';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'blog_comment_status_changed';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'blog_contribution_status_changed';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'buyer_notification_review_order_product';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'buyer_notification_review_status_updated';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'cancellation_request_approved_declined';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'cancel_subscription_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'catalog_request_message_user';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'child_order_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'COD_OTP_VERIFICATION';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'contact_us';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'customer_digital_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'customer_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'data_request_notification_to_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'failed_login_attempt';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'forgot_password';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'gdpr_request_status_update_notification_to_user';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'guest_welcome_registration';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'low_balance_promotional_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'low_balance_subscription_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'new_affiliate_registration_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'new_catalog_request_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'new_custom_catalog_request_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'new_registration_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'new_subscription_purchase';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'new_subscription_purchase_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'new_supplier_approval_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'order_cancellation_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'password_changed_successfully';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_bank_transfer_payment_status_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_bank_transfer_payment_status_buyer';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_payment_status_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_payment_status_buyer';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_payment_status_change_buyer';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'product_return';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'promotion_approval_required_to_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'promotion_request_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'reminder_for_items_in_cart';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'reminder_for_items_in_wishlist';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'report_shop';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'return_request_message_user';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'return_request_status_change_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'reward_points_credited_debited';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'seller_brand_request_admin_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'seller_brand_request_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'seller_catalog_request_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'seller_category_request_admin_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '1' WHERE `tbl_email_templates`.`etpl_code` = 'seller_custom_catalog_request_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'seller_custom_catalog_request_status_change';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'share_earn_invitation_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'send_message';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'subscription_free_package_reminder_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'subscription_renew_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'subscription_renew_user';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'subscription_reminder_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'supplier_request_status_change_buyer';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'taxapi_order_creation_failure';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'test_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'threshold_notification_vendor';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'threshold_notification_vendor_custom';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_admin_password_changed_successfully';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_change_email_request_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'user_discount_coupon_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_email_changed_notification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_email_verification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'user_send_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'user_signup_verification';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'vendor_bank_transfer_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'vendor_cod_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'vendor_digital_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'vendor_order_email';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` = 'welcome_registration';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'withdrawal_request_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '2' WHERE `tbl_email_templates`.`etpl_code` = 'withdrawal_request_approved_declined';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '3' WHERE `tbl_email_templates`.`etpl_code` = 'new_seller_approved_admin';
+UPDATE `tbl_email_templates` SET `etpl_priority` = '4' WHERE `tbl_email_templates`.`etpl_code` = 'primary_order_payment_status_change_admin';
+
+
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'Send Archive Emails', 'FatMailer/sendArchivedEmails', '5', '1');
+
+-- ---- Email Functionality update ---- --
+
+ALTER TABLE `tbl_zones_lang` CHANGE `zone_name` `zone_name` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+
+UPDATE `tbl_language_labels` SET `label_type`=1 WHERE `label_type`=0;
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_ACTION_BUTTONS', 1, 'Action', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM tbl_language_labels WHERE label_key = "VLBL_must_start_with_a_letter_and_can_contain_only_alphanumeric_characters._Length_must_be_between_4_to_20_characters";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_You_have_already_Bought_this_plan,_Please_choose_some_other_Plan";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_Do_you_want_to_replace_current_content_to_default_content";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_PRIMARY_LANGUAGE_DATA_NEEDS_TO_BE_FILLED_FOR_SYSTEM_TO_TRANSLATE_TO_OTHER_LANGUAGES";
+DELETE FROM tbl_language_labels WHERE label_key = 'LBL_PLEASE_ADD_"actionButtons-js"_CLASS_TO_FORM_TO_PERFORM_ACTION';
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_CHANGING_PARENT_CATEGORY_TO_INACTIVE_WILL_MAKE_ALL_OF_ITS_CHILD_CATEGORIES_INACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?";
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_CHANGING_CHILD_CATEGORY_TO_ACTIVE_WILL_MAKE_ALL_OF_ITS_PARENT_CATEGORIES_ACTIVE._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?";
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_START_WITH_LETTER_ONLY_ALPHANUMERIC', 1, 'Must Start With a Letter and Can Contain Only Alphanumeric Characters. Length Must Be Between 4 to 20 Characters', 1),
+('LBL_ALREADY_HAVE_THIS_PLAN,_Please_choose_some_other_Plan', 1, 'You Have Already Bought This Plan, Please Choose Some Other Plan', 1),
+('LBL_CONFIRM_REPLACE_CURRENT_TO_DEFAULT', 1, 'Do You Want to Replace Current Content to Default Content', 1),
+('LBL_PRIMARY_LANGUAGE_FIELD_DATA_REQUIRED', 1, 'Primary Language Data Needs to Be Filled for System to Translate to Other Languages', 1),
+('LBL_ACTION_BUTTONS_CLASS_REQUIREMENT', 1, 'Please Add "actionButtons-js" Class to Form to Perform Action', 1),
+('LBL_DISABLE_CHILD_CATEGORY_VALIDATION._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', 1, 'Changing Parent Category to Inactive Will Make All of Its Child Categories Inactive. Are You Sure You Want to Proceed?', 1),
+('LBL_ENABLE_PARENT_CATEGORIES_VALIDATION._ARE_YOU_SURE_YOU_WANT_TO_PROCEED?', 1, 'Changing Child Category to Active Will Make All of Its Parent Categories Active. Are You Sure You Want to Proceed?', 1),
+('LBL_SELECT_LABEL_TYPE', 1, 'Select label type', 1),
+('LBL_SEARCH_LABELS', 1, 'Search labels', 1),
+('LBL_CAPTION', 1, 'Caption', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO tbl_help_center (`hc_controller`, `hc_action`, `hc_default_title`, `hc_default_description`)
+  SELECT 'ImportExport', '', epage_identifier, epage_default_content FROM tbl_extra_pages WHERE `epage_type` = 29
+ON DUPLICATE KEY UPDATE hc_default_description = VALUES(hc_default_description);
+DELETE FROM `tbl_extra_pages` WHERE `epage_type` = 29;
+
+INSERT IGNORE INTO tbl_plugins_lang (`pluginlang_plugin_id`, `pluginlang_lang_id`, `plugin_name`)
+  SELECT plugin_id, 1, plugin_identifier FROM tbl_plugins
+ON DUPLICATE KEY UPDATE plugin_name = VALUES(plugin_name);
+
+DELETE FROM `tbl_language_labels` WHERE `label_key`  = 'LBL_ACTION_BUTTONS';
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('LBL_ACTION_BUTTONS', '1', 'Actions', '1') ON DUPLICATE KEY UPDATE label_caption = 'Actions';
+
+
+ALTER TABLE `tbl_blog_post_categories` ADD UNIQUE( `bpcategory_identifier`);
+CREATE TABLE `tbl_pages_language_data` (`plang_key` VARCHAR(100) NOT NULL ,  `plang_lang_id` INT NOT NULL ,  `plang_title` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,  `plang_summary` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,  `plang_warring_msg` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,  `plang_recommendations` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL) DEFAULT CHARSET=utf8mb4;
+ALTER TABLE `tbl_pages_language_data` ADD UNIQUE KEY( `plang_key`, `plang_lang_id`);
+ALTER TABLE `tbl_pages_language_data` ADD `plang_id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`plang_id`);
+ALTER TABLE `tbl_pages_language_data` ADD `plang_replacements` MEDIUMTEXT NOT NULL AFTER `plang_recommendations`;
+
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES
+(1, 'MANAGE_SHIPPING_ZONES', -1, 'Manage shipping zones', 'Shipping zones are the geographic areas where you offer shipping services', 'Zone must be linked with countries before setting shipping profiles', '', '{countriesPage}'),
+(2, 'MANAGE_STATES', -1, 'Manage states', 'Manage states of active countries where you want to do business', 'Note: For example, If USA is an active country, and California and Arizona are active states then you will be able to do business only in these two states within USA.', '', '');
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', '1', 'Checking this option will show this product in Featured products on the website.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Checking this option will show this product in Featured products on the website.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_COD_INFO', '1', 'Check this if option is available for COD. Only allowed if fulfllment method is Shipping.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Check this if option is available for COD. Only allowed if fulfllment method is Shipping.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_TAG_INFO', '1', 'This will be used by Buyer to search the product. Type the tag and click on enter to add another tag', '1') ON DUPLICATE KEY UPDATE label_caption = ' This will be used by Buyer to search the product. Type the tag and click on enter to add another tag';
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_BRANDS', '-1', 'Manage Brands', 'Add and manage product brands. Upload logos and banners to display on the brand detail page at the storefront.', 'Brands will be visible at storefront after they are linked with Product(s).', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_SHOPS', '-1', 'Manage Shops', 'View and manage sellers’ registered shops information.', 'Buyers look over shop details on the Shop detail page.', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_CATEGORIES', '-1', 'Manage Categories', 'Add and manage product categories. Upload category logos and banners to display on the category detail page at storefront.', 'Categories will be visible at storefront after they are linked with Product(s).', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_ORDER_CANCEL_REASONS', '-1', 'Manage Order Cancellation Reasons', 'Provide a comprehensive set of reasons to buyers when placing order cancellation requests.', '', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_ORDER_RETURN_REASONS', '-1', 'Manage Order Return Reasons', 'Provide a comprehensive set of reasons to buyers when placing order return requests.', '', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_ORDER_STATUS', '-1', 'Manage User Rewards', 'Improve your conversion rate and sales by rewarding your users with points that they can redeem when placing orders.', '', '', '');
+UPDATE `tbl_pages_language_data` SET `plang_title` = 'Manage Order Statuses', `plang_summary` = 'Customize, edit, add or delete order statuses to keep users informed of order updates and changes.' WHERE `tbl_pages_language_data`.`plang_key` = 'MANAGE_ORDER_STATUS';
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'MANAGE_USER_REWARDS', '-1', 'Manage User Rewards', 'Improve your conversion rate and sales by rewarding your users with points that they can redeem when placing orders.', '', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'TRANSACTIONS', '-1', 'Transactions', 'View details of the transactions of declined and canceled followed by the current status.', '', '', '');
+INSERT IGNORE INTO `tbl_pages_language_data` (`plang_id`, `plang_key`, `plang_lang_id`, `plang_title`, `plang_summary`, `plang_warring_msg`, `plang_recommendations`, `plang_replacements`) VALUES (NULL, 'DELETED_USERS', '-1', 'Deleted Users', 'Search deleted users using filters & hover over the user you want to restore by clicking on the button ‘Restore User’.', '', '', '');
+
+
+ALTER TABLE `tbl_product_specifics` ADD `product_warranty_unit` TINYINT NOT NULL AFTER `product_warranty`;
+UPDATE `tbl_product_specifics` SET `product_warranty_unit` = '1';
+ALTER TABLE `tbl_product_specifics` CHANGE `product_warranty` `product_warranty` INT NOT NULL;
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_NAME', '1', 'Name', '1') ON DUPLICATE KEY UPDATE label_caption = 'Name';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_VALUE', '1', 'Value', '1') ON DUPLICATE KEY UPDATE label_caption = 'Value';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SPECIFICATION_GROUP', '1', 'Group', '1') ON DUPLICATE KEY UPDATE label_caption = 'Group';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', '1', 'Attachment at inventory level', '1') ON DUPLICATE KEY UPDATE label_caption = 'Attachment at inventory level';
+
+-- ---- tags update ---- --
+ALTER TABLE `tbl_tags` CHANGE `tag_identifier` `tag_name` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `tbl_tags` ADD `tag_lang_id` INT NOT NULL AFTER `tag_name`;
+update tbl_tags set tag_lang_id = (SELECT conf_val FROM `tbl_configurations` where conf_name='CONF_ADMIN_DEFAULT_LANG');
+
+DELETE tag FROM tbl_tags tag   
+  LEFT JOIN tbl_product_to_tags ptag ON ptag.ptt_tag_id = tag_id
+      WHERE ptag.ptt_tag_id IS NULL;  
+ALTER TABLE tbl_tags DROP INDEX tag_identifier;
+ALTER TABLE tbl_tags ADD UNIQUE( tag_name, tag_lang_id);
+RENAME TABLE tbl_tags_lang TO tbl_tags_lang_bk;
+-- ---- tags update ]---- --
+
+DELETE FROM `tbl_language_labels` WHERE label_key='LBL_CUSTOMER_NAME';
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_Order_Payment_Status_Cancelled', 1, 'Cancelled', 1),
+('LBL_Order_Payment_Status_Pending', 1, 'Pending', 1),
+('LBL_Order_Payment_Status_Paid', 1, 'Paid', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_ALERT_STOCK_LEVEL', '1', 'Quantity At Which Stock Level Alerts Are Sent', '1') ON DUPLICATE KEY UPDATE label_caption = 'Quantity At Which Stock Level Alerts Are Sent';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('MSG_ALERT_STOCK_LEVEL_HINT_INFO', '1', 'An email notification will be sent out when available quantity is below or equal to the Quantity at which stock Level Alerts is set.', '1') ON DUPLICATE KEY UPDATE label_caption = 'An email notification will be sent out when available quantity is below or equal to the Quantity at which stock Level Alerts is set.';
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_PRESS_{KEY}_KEY_FOR_BROWSER_SEARCH', 1, 'Press {KEY} again to use native browser search.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+ALTER TABLE `tbl_pages_language_data` ADD `plang_helping_text` LONGTEXT NOT NULL AFTER `plang_replacements`;
+
+DELETE FROM tbl_configurations WHERE conf_name = "CONF_PRIMARY_APP_THEME_COLOR";
+DELETE FROM tbl_configurations WHERE conf_name = "CONF_PRIMARY_INVERSE_APP_THEME_COLOR";
+DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_APP_THEME_COLOR";
+DELETE FROM tbl_configurations WHERE conf_name = "CONF_SECONDARY_INVERSE_APP_THEME_COLOR";
+
+ALTER TABLE `tbl_upc_codes` DROP `upc_msrp`;
+ALTER TABLE `tbl_upc_codes` DROP `upc_code_id`;
+ALTER TABLE `tbl_product_to_options` ADD `prodoption_optionvalue_ids` TEXT NOT NULL AFTER `prodoption_option_id`;
+SET SESSION group_concat_max_len = 1000000;
+
+Update tbl_product_to_options as po inner join ( SELECT o.option_id,GROUP_CONCAT(optionvalue_id) as opv FROM tbl_options o inner join tbl_option_values ov on ov.optionvalue_option_id = o.option_id GROUP by o.option_id ) as temp ON temp.option_id = po.prodoption_option_id set po.prodoption_optionvalue_ids = temp.opv;
+
+INSERT IGNORE INTO `tbl_language_labels` (`label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 1, '{PACKAGE-NAME} - {PLAN-DAYS}', 1),
+('LBL_SELLER_AUTOSUGGEST_PLAN_NAME', 2, '{PACKAGE-NAME} - {PLAN-DAYS}', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_navigations` ADD UNIQUE(`nav_identifier`);
+
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_LANGUAGE_CODE_TO_SITE_URLS_EXAMPLES";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_THIS_IS_REQUIRED_FOR_TWITTER_CARD_CODE_SEO_UPDATE";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_THIS_IS_THE_SITE_TRACKER_SCRIPT,_used_to_track_and_analyze_data_about_how_people_are_getting_to_your_website._e.g.,_Google_Analytics.";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_THIS_WILL_UPDATE_YOUR_ROBOTS.txt_file._This_is_to_help_search_engines_index_your_site_more_appropriately.";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_UPDATE_SCHEMA_CODE_RELATED_INFORMATION.";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_THIS_IS_THE_CODE_PROVIDED_BY_GOOGLE_TAG_MANAGER_FOR_INTEGRATION.";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_THIS_IS_THE_CODE_PROVIDED_BY_HOTJAR_FOR_INTEGRATION.";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_UPLOAD_BINDSITEAUTHXML_FILE_PROVIDED_BY_BING_WEBMASTER_TOOL.";
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_UPLOAD_HTML_FILE_PROVIDED_BY_GOOGLE_WEBMASTER_TOOL.";
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_ENABLE_LANGUAGE_SPECIFIC_URLS', '1', 'Enable language specific storefront URLs', '1') ON DUPLICATE KEY UPDATE label_caption = 'Enable language specific storefront URLs';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_ENABLE_LANGUAGE_SPECIFIC_URLS_MSG', '1', 'Enables delivery a single page accessed at different language-specific URLs consistent with the language.\r\nDefault language page will remain blank, so that the URLs have no language segment at the beginning\r\n\r\nExample:\r\nDefault: www.mystore.com/\r\nSpanish: www.mystore.com/es', '1') ON DUPLICATE KEY UPDATE label_caption = 'Enables delivery a single page accessed at different language-specific URLs consistent with the language.\r\nDefault language page will remain blank, so that the URLs have no language segment at the beginning\r\nExample:\r\nDefault: www.mystore.com/\r\nSpanish: www.mystore.com/es';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_TWITTER_USERNAME_MSG', '1', 'Required to activate sharing on Twitter with rich photos, videos and media experiences related to product, categories or any URL', '1') ON DUPLICATE KEY UPDATE label_caption = 'Required to activate sharing on Twitter with rich photos, videos and media experiences related to product, categories or any URL';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_SITE_TRACKER_CODE_MSG', '1', 'Required to analyze the flow and activities of visitors on storefront', '1') ON DUPLICATE KEY UPDATE label_caption = 'Required to analyze the flow and activities of visitors on storefront';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_ROBOTS_TXT_MSG', '1', 'It tells search engine crawlers which storefront pages can be accessed or not.', '1') ON DUPLICATE KEY UPDATE label_caption = 'It tells search engine crawlers which storefront pages can be accessed or not.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_GOOGLE_TAG_MANAGER_MSG', '1', 'It eliminates the manual process of creating tags and allows you to create and monitor tags on a user interface.\r\tEnter the scripts requested below or first create a Google Tag Manager account.', '1') ON DUPLICATE KEY UPDATE label_caption = 'It eliminates the manual process of creating tags and allows you to create and monitor tags on a user interface.\r\tEnter the scripts requested below or first create a Google Tag Manager account.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_GOOGLE_TAG_HEAD_SCRIPT_MSG', '1', 'Code provided by google tag manager for integration.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Code provided by google tag manager for integration.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_GOOGLE_TAG_BODY_SCRIPT_MSG', '1', 'Code provided by google tag manager for integration.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Code provided by google tag manager for integration.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_DEFAULT_SCHEMA_MSG', '1', 'Schema markup is code that helps search engines to understand your content and better represent it in the search results.', '1') ON DUPLICATE KEY UPDATE label_caption = 'Schema markup is code that helps search engines to understand your content and better represent it in the search results.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_HOTJAR_MSG', '1', 'It help you understand how users really experience your store.\r\nEnter the script requested below or first create a Hotjar account.', '1') ON DUPLICATE KEY UPDATE label_caption = 'It help you understand how users really experience your store.\r\nEnter the script requested below or first create a Hotjar account';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_BING_WEBMASTER_MSG', '1', 'It help you track your store\'s search traffic and performance on Bing\r\n Add your store to Bing Webmaster', '1') ON DUPLICATE KEY UPDATE label_caption = 'It help you track your store\'s search traffic and performance on Bing\r\n Add your store to Bing Webmaster';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_GOOGLE_WEBMASTER_MSG', '1', 'It help you track your store\'s search traffic and performance on Google\r\n Add your store to Google Search Console.', '1') ON DUPLICATE KEY UPDATE label_caption = 'It help you track your store\'s search traffic and performance on Google\r\n Add your store to Google Search Console.';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_HTML_FILE_VERIFICATION_MSG', '1', '1. After you added your store to Google Search Console, you should see an option to download an HTML verification file in the Recommended verification method tab\r\n2. Now upload the downloaded HTML file here', '1') ON DUPLICATE KEY UPDATE label_caption = '1. After you added your store to Google Search Console, you should see an option to download an HTML verification file in the Recommended verification method tab\r\n2. Now upload the downloaded HTML file here';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_XML_FILE_VERIFICATION_MSG', '1', '1. After you added your store to Bing Webmaster Tool, you should see an option to download an XML verification file\r\n2. Now upload the downloaded XML file here\r\n', '1') ON DUPLICATE KEY UPDATE label_caption = '1. After you added your store to Bing Webmaster Tool, you should see an option to download an XML verification file\r\n2. Now upload the downloaded XML file here\r\n';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_XML_FILE_VERIFICATION_MSG', '1', '1. After you added your store to Bing Webmaster Tool, you should see an option to download an XML verification file\r\n2. Now upload the downloaded XML file here\r\n2. Now upload the downloaded HTML file here', '1') ON DUPLICATE KEY UPDATE label_caption = '1. After you added your store to Bing Webmaster Tool, you should see an option to download an XML verification file\r\n2. Now upload the downloaded XML file here\r\n2. Now upload the downloaded HTML file here';
+
+ALTER TABLE tbl_attached_files_temp CHANGE afile_record_id afile_record_id BIGINT NOT NULL;
+ALTER TABLE tbl_attached_files_temp CHANGE afile_record_subid afile_record_subid BIGINT NOT NULL;
+ALTER TABLE `tbl_attached_files_temp` ADD `afile_attribute_title` VARCHAR(250) NOT NULL AFTER `afile_name`, ADD `afile_attribute_alt` VARCHAR(250) NOT NULL AFTER `afile_attribute_title`, ADD `afile_aspect_ratio` INT NOT NULL AFTER `afile_attribute_alt`;
+ALTER TABLE `tbl_attached_files_temp` ADD `afile_updated_at` DATETIME NOT NULL AFTER `afile_display_order`;
+
+ALTER TABLE tbl_attached_files CHANGE afile_record_id afile_record_id BIGINT NOT NULL;
+ALTER TABLE tbl_attached_files CHANGE afile_record_subid afile_record_subid BIGINT NOT NULL;
+
+ALTER TABLE `tbl_badges` CHANGE `badge_condition_type` `badge_trigger_type` TINYINT NOT NULL DEFAULT '1';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('FRM_USED_%charsTyped%_of_%charsTotal%_CHARS_JS.', '1', 'used %charsTyped% of %charsTotal% chars.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+SELECT @i := 0;
+UPDATE tbl_collection_to_records SET ctr_display_order = (SELECT @i := @i + 1);
+-- ---------------TV-9.4.0.20211215----------------
+DELETE FROM tbl_language_labels WHERE label_key = "FRM_ENABLE_LANGUAGE_CODE_TO_SITE_URLS_&_LANGUAGE_SPECIFIC_URL_REWRITING";
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_FEATURED_SHOPS_WILL_BE_LISTED_ON_FEATURED_SHOPS_PAGE', '1', 'Featured Shops Will Be Listed On Featured Shops Page. Featured Shops Will Get Priority', 1) ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+/* Mark all ribbons shapes to rectangle */
+UPDATE `tbl_badges` SET badge_shape_type = 1 WHERE badge_type = 2;
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_PPC_PROMOTION_MANAGEMENT', '1', 'PPC Promotion Management', 1),
+('NAV_PPC_PROMOTION_MANAGEMENT', '1', 'PPC Promotion Management', 1) 
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+UPDATE `tbl_product_specifics` SET `product_warranty_unit` = '0';
+
+UPDATE tbl_configurations SET conf_val = 10 WHERE conf_name = 'conf_page_size';
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES ('LBL_ACTION_BUTTONS', '1', 'Action', 1) ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- -------------------TV-9.4.0.20211223-----------------------
+
+update `tbl_product_requests` set preq_ean_upc_code = Replace(preq_ean_upc_code, '|', ',');
+ALTER TABLE `tbl_product_requests` DROP `preq_specifications`;
+-- -------------------TV-9.4.0.20211228-----------------------
+
+UPDATE `tbl_countries` SET `country_language_id`=1 WHERE 1;
+
+DELETE FROM tbl_language_labels WHERE label_key = "LBL_ACTION";
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_CPC', 1, 'CPC', 1),
+('FRM_CPC', 1, 'CPC', 1),
+('LBL_PPC_cost_per_click_for_Product',1,'PPC cost per click for product',1),
+('LBL_PPC_COST_PER_CLICK_FOR_SHOP',1,'PPC cost per click for shop',1),
+('LBL_PPC_COST_PER_CLICK_FOR_SLIDES',1,'PPC cost per click for slides',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_PURCHASE', 1, 'Purchase', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_PURCHAHSE';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES 
+('MSG_SETUP_REAL-TIME_CURRENCY_EXCHANGE_RATES', 1, 'Setup real-time currency exchange rates', 1),
+('MSG_SETUP_SOCIAL_LOGIN_FOR_FASTER_LOGIN/REGISTRATION',1,'Setup social login such as Facebook, Google, Instagram, Apple for faster login or easy registration. ',1),
+('MSG_SETUP_CLOUD_MESSAGING_NOTIFICATION',1,'Setup default Firebase Cloud Messaging push notifications to drive user re-engagement and retention.',1),
+('MSG_SETUP_GOOGLE_FEED_TO_ADD_PRODUCT',1,'Setup google feed to add your products to Google Shopping.',1),
+('MSG_SETUP_SMS_NOTIFICATIONS_FOR_YOUR_CUSTOMERS',1,'Setup Twilio SMS Notifications to reach your customers over SMS.',1),
+('MSG_SETUP_PAYMENT_METHOD_TO_WITHDRAW_MONEY',1,'Setup payment method for seller to withdraw money.',1),
+('MSG_SETUP_API_FOR_AUTOMATIC_TAX_CALCULATIONS',1,'Setup Avalara or TaxJar for automatic tax calculations.',1),
+('MSG_SETUP_TO_SPLIT_PAYMENT_BETWEEN_SELLERS',1,'Setup the Stripe Connect to split payment between you and seller at checkout.',1),
+('MSG_SETUP_MULTI_CHANNEL_INVENTORY',1,'Setup EasyEcom for easy management of multi-channel inventory.',1),
+('MSG_SETUP_REGULAR_PAYMENT_METHODS',1,'Setup the Stripe Connect to split payment between you and seller at checkout.',1),
+('MSG_SETUP_SHIPPING_API_FOR_SHIPPING_SERVICES',1,'Setup shipping API to integrate USPS, UPS, FedEx, DHL and many more.',1),
+('MSG_SETUP_AUTOMATIC_SHIPMENT_TRACKING',1,'Setup automatic shipment tracking using AfterShip.',1),
+('MSG_MIGRATE_DATA_FROM_THIRD-PARTIES',1,'Migrate data from Shopify.',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES 
+('MSG_MANAGE_META_TAGS_FOR_PRODUCTS_LISTING_PAGE', 1, 'Create and manage meta tags for products\' catalog listing page.', 1),
+('MSG_MANAGE_META_TAGS_FOR_PRODUCTS_DETAIL_PAGE',1,'Create and manage meta tags for each product\'s detail page. ',1),
+('MSG_MANAGE_META_TAGS_FOR_SHOPS_LISTING_PAGE',1,'Create and manage meta tags for \'All Shops\'  listing page.',1),
+('MSG_MANAGE_METATAGS_FOR_SHOP_DETAIL_PAGE',1,'Create and manage metatags for each shop detail page.',1),
+('MSG_MANAGE_META_TAGS_FOR_ALL_THE_CMS_CONTENT_PAGES',1,'Create and manage meta tags for all the cms content pages.',1),
+('MSG_MANAGE_META_TAGS_FOR_DEFAULT_PAGE',1,'Create and manage meta tags for the default page title bar located at the top left of your browser window.',1),
+('MSG_MANAGE_METATAGS_FOR_EXTERNAL_PAGES_CREATED_IF_ANY',1,'Create and manage metatags for external pages created if any.',1),
+('MSG_MANAGE_META_TAGS_FOR_BRANDS_LISTING_PAGE',1,'Create and manage meta tags for all brands listing detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_EACH_BRAND_DETAIL_PAGE',1,'Create and manage metatags for each brand detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_PRODUCT_CATEGORY_DETAIL_PAGE',1,'Create and manage metatags for product category detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_BLOGS_DETAIL_PAGE',1,'Create and manage metatags for blogs\' detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_BLOG_CATEGORIES_DETAIL_PAGE',1,'Create and manage metatags for blog categories\' detail page.',1),
+('MSG_MANAGE_METATAGS_FOR_EACH_BLOG_POSTS',1,'Create and manage metatags for each blog posts',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_SR._NO', 1, 'Sr. No', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_RECOMENDED_TAG_PRODUCTS';
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_SMART_RECOMENDED_WEIGHTAGES';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_RECOMMENDED_TAG_PRODUCTS', 1, 'Recommended Tag Products', 1),
+('LBL_SMART_RECOMMENDED_WEIGHTAGES', 1, 'Smart Recommended Weightages', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_badges` ADD `badge_added_on` DATETIME NOT NULL AFTER `badge_updated_on`;
+
+DELETE FROM `tbl_language_labels` WHERE label_key = 'LBL_NOT_AVAILABLE';
+
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) 
+VALUES ('LBL_NOT_SERVICEABLE', 1, 'Not serviceable at your location', 1),
+('LBL_NOT_AVAILABLE', 1, 'Not Available', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+-- -------------------TV-9.4.0.20210107-----------------
+
+INSERT IGNORE INTO `tbl_configurations` (`conf_name`, `conf_val`, `conf_common`) 
+VALUES ('CONF_AUTO_CLOSE_SYSTEM_MESSAGES', 1, '0'),
+('CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES', 3, '0')
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
+-- -------------------TV-9.4.0.20220112-----------------
+
+ALTER TABLE `tbl_order_payments` DROP INDEX `op_gateway_txn_id`;
+ALTER TABLE `tbl_order_payments` DROP INDEX `opayment_order_id`;
+
+ALTER TABLE `tbl_order_payments` ADD UNIQUE( `opayment_order_id`, `opayment_gateway_txn_id`);

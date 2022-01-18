@@ -474,7 +474,7 @@
                 }
                 &:before {
                     #{$start-direction}: 7px;
-                    -webkit-transform: translateX(-15px * $transform-direction);
+                     
                     transform: translateX(-15px * $transform-direction);
                 }
             }

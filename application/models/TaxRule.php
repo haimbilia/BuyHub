@@ -1,15 +1,14 @@
 <?php
+
 class TaxRule extends MyAppModel
 {
+
     const DB_TBL = 'tbl_tax_rules';
     const DB_TBL_PREFIX = 'taxrule_';
-    
     const DB_RATES_TBL = 'tbl_tax_rule_rates';
     const DB_RATES_TBL_PREFIX = 'trr_';
-    
     const DB_DETAIL_TBL = 'tbl_tax_rule_details';
     const DB_DETAIL_TBL_PREFIX = 'taxruledet_';
-
     const TYPE_ALL_STATES = -1;
     const TYPE_INCLUDE_STATES = 1;
     const TYPE_EXCLUDE_STATES = 2;
@@ -21,32 +20,32 @@ class TaxRule extends MyAppModel
     }
 
     /**
-    * getSearchObject
-    *
-    * @return object
-    */
+     * getSearchObject
+     *
+     * @return object
+     */
     public static function getSearchObject(): object
     {
-        $srch = new SearchBase(static::DB_TBL, 'taxRule');        
+        $srch = new SearchBase(static::DB_TBL, 'taxRule');
         return $srch;
     }
-    
+
     /**
      * 
      * @return object
      */
     public static function getCombinedTaxSearchObject(): object
     {
-        $srch = new SearchBase(static::DB_DETAIL_TBL, 'tc');        
+        $srch = new SearchBase(static::DB_DETAIL_TBL, 'tc');
         return $srch;
     }
 
     /**
-    * getTypeOptions
-    *
-    * @param  int $langId
-    * @return array
-    */
+     * getTypeOptions
+     *
+     * @param  int $langId
+     * @return array
+     */
     public static function getTypeOptions(int $langId): array
     {
         return array(
@@ -54,8 +53,8 @@ class TaxRule extends MyAppModel
             self::TYPE_INCLUDE_STATES => Labels::getLabel('LBL_INCLUDE_STATES', $langId),
             self::TYPE_EXCLUDE_STATES => Labels::getLabel('LBL_EXCLUDE_STATES', $langId),
         );
-    } 
-    
+    }
+
     /**
      * 
      * @param int $langId
@@ -67,12 +66,12 @@ class TaxRule extends MyAppModel
         $srch->joinTable(TaxRule::DB_RATES_TBL, 'INNER JOIN', TaxRule::tblFld('id') . '=' . TaxRule::DB_RATES_TBL_PREFIX . TaxRule::tblFld('id'));
         $srch->joinTable(TaxStructure::DB_TBL, 'LEFT JOIN', 'taxstr_id = taxrule_taxstr_id');
         $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $langId);
-        $srch->addCondition('taxrule_id', '=', $this->getMainTableRecordId());
-        $srch->addCondition(TaxRule::DB_RATES_TBL_PREFIX . 'user_id', '=', $userId);        
+        $srch->addCondition('taxrule_id', '=', 'mysql_func_' . $this->getMainTableRecordId(), 'AND', true);
+        $srch->addCondition(TaxRule::DB_RATES_TBL_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'taxrule_taxcat_id', 'taxrule_taxstr_id', 'trr_rate', 'taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent', 'taxstr_is_combined'));
         return (array) FatApp::getDb()->fetch($srch->getResultSet());
     }
-    
+
     /**
      * 
      * @return bool
@@ -86,23 +85,23 @@ class TaxRule extends MyAppModel
         }
 
         if (!FatApp::getDb()->deleteRecords(
-                        self::DB_TBL,
-                        array(
-                            'smt' => self::DB_TBL_PREFIX . 'id=? ',
-                            'vals' => array($this->getMainTableRecordId())
-                        )
-                )) {
+            self::DB_TBL,
+            array(
+                'smt' => self::DB_TBL_PREFIX . 'id=? ',
+                'vals' => array($this->getMainTableRecordId())
+            )
+        )) {
             $this->error = FatApp::getDb()->getError();
             return false;
         }
 
         if (!FatApp::getDb()->deleteRecords(
-                        self::DB_RATES_TBL,
-                        array(
-                            'smt' => self::DB_RATES_TBL_PREFIX . self::DB_TBL_PREFIX . 'id=? ',
-                            'vals' => array($this->getMainTableRecordId())
-                        )
-                )) {
+            self::DB_RATES_TBL,
+            array(
+                'smt' => self::DB_RATES_TBL_PREFIX . self::DB_TBL_PREFIX . 'id=? ',
+                'vals' => array($this->getMainTableRecordId())
+            )
+        )) {
             $this->error = FatApp::getDb()->getError();
             return false;
         }
@@ -114,19 +113,19 @@ class TaxRule extends MyAppModel
         }
 
         if (!FatApp::getDb()->deleteRecords(
-                        self::DB_DETAIL_TBL,
-                        array(
-                            'smt' => self::DB_DETAIL_TBL_PREFIX . 'taxrule_id = ?',
-                            'vals' => array($this->getMainTableRecordId())
-                        )
-                )) {
+            self::DB_DETAIL_TBL,
+            array(
+                'smt' => self::DB_DETAIL_TBL_PREFIX . 'taxrule_id = ?',
+                'vals' => array($this->getMainTableRecordId())
+            )
+        )) {
             $this->error = FatApp::getDb()->getError();
             return false;
         }
 
         return true;
     }
-    
+
     /**
      * 
      * @param int $taxCatId
@@ -142,22 +141,22 @@ class TaxRule extends MyAppModel
             $srch->joinTable(TaxStructure::DB_TBL_LANG, 'LEFT JOIN', 'taxrule_taxstr_id = taxstrlang_taxstr_id and taxstrlang_lang_id = ' . $langId);
             $srch->addMultipleFields(array('taxrule_id', 'taxrule_name', 'taxrule_taxcat_id', 'taxrule_taxstr_id', 'trr_rate', 'taxstr_id', 'IFNULL(taxstr_name, taxstr_identifier) as taxstr_name', 'taxstr_parent', 'taxstr_is_combined'));
         }
-        $srch->addCondition('taxrule_taxcat_id', '=', $taxCatId);
+        $srch->addCondition('taxrule_taxcat_id', '=', 'mysql_func_' . $taxCatId, 'AND', true);
         $res = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($res);
     }
-    
+
     /**
      * 
      * @return array
      */
     public function getLocations(): array
     {
-        $srch = TaxRuleLocation::getSearchObject();        
-        $srch->addCondition('taxruleloc_taxrule_id', '=', $this->getMainTableRecordId());
-        return FatApp::getDb()->fetchAll($srch->getResultSet());        
-    }   
-    
+        $srch = TaxRuleLocation::getSearchObject();
+        $srch->addCondition('taxruleloc_taxrule_id', '=', 'mysql_func_' . $this->getMainTableRecordId(), 'AND', true);
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
+
     /**
      * 
      * @param type $rate
@@ -184,13 +183,12 @@ class TaxRule extends MyAppModel
     }
 
     /**
-    * groupDataByKey
-    *
-    * @param  array $data
-    * @param  string $key
-    * @return array
-    */
-    
+     * groupDataByKey
+     *
+     * @param  array $data
+     * @param  string $key
+     * @return array
+     */
     public static function groupDataByKey(array $data, string $key): array
     {
         $groupedData = [];
@@ -201,12 +199,12 @@ class TaxRule extends MyAppModel
         }
         return $groupedData;
     }
-    
+
     /**
      * 
      * @param int $userId
      * @return bool
-     */  
+     */
     public function deleteCombinedTaxes(int $userId = 0): bool
     {
         if (1 > $this->mainTableRecordId) {
@@ -215,18 +213,18 @@ class TaxRule extends MyAppModel
         }
 
         if (!FatApp::getDb()->deleteRecords(
-                        self::DB_DETAIL_TBL,
-                        array(
-                            'smt' => self::DB_DETAIL_TBL_PREFIX . 'taxrule_id = ? and ' . self::DB_DETAIL_TBL_PREFIX . 'user_id = ?',
-                            'vals' => array($this->getMainTableRecordId(), $userId)
-                        )
-                )) {
+            self::DB_DETAIL_TBL,
+            array(
+                'smt' => self::DB_DETAIL_TBL_PREFIX . 'taxrule_id = ? and ' . self::DB_DETAIL_TBL_PREFIX . 'user_id = ?',
+                'vals' => array($this->getMainTableRecordId(), $userId)
+            )
+        )) {
             $this->error = FatApp::getDb()->getError();
             return false;
         }
         return true;
     }
-    
+
     /**
      * 
      * @param array $data
@@ -254,4 +252,63 @@ class TaxRule extends MyAppModel
         return true;
     }
 
+    public function addUpdateLocationData($ruleId, $post)
+    {
+        $locObj = new TaxRuleLocation();
+        if (!$locObj->deleteLocations($ruleId)) {
+            return false;
+        }
+        foreach ($post['taxruleloc_from_state_id'] as $fromState) {
+            /* [ excluding all state if other states exist */
+            if (count($post['taxruleloc_from_state_id']) > 1 && $fromState == -1) {
+                continue;
+            }
+            /* ] */
+
+            foreach ($post['taxruleloc_to_state_id'] as $toState) {
+                /* [ excluding all state if other states exist */
+                if (count($post['taxruleloc_to_state_id']) > 1 && $toState == -1) {
+                    continue;
+                }
+                /* ] */
+
+                $isUnique = 1;
+                if ($post['taxruleloc_type'] == TaxRule::TYPE_EXCLUDE_STATES) {
+                    $isUnique = null;
+                }
+                $data = array(
+                    'taxruleloc_taxcat_id' => $post['taxrule_taxcat_id'],
+                    'taxruleloc_taxrule_id' => $ruleId,
+                    'taxruleloc_from_country_id' => $post['taxruleloc_from_country_id'],
+                    'taxruleloc_from_state_id' => $fromState,
+                    'taxruleloc_to_country_id' => $post['taxruleloc_to_country_id'],
+                    'taxruleloc_to_state_id' => $toState,
+                    'taxruleloc_type' => $post['taxruleloc_type'],
+                    /* 'taxruleloc_unique' => $isUnique */
+                );
+
+                if (!$locObj->updateLocations($data)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public function addUpdateCombinedData($combinedTaxes, $ruleId)
+    {
+        if (!empty($combinedTaxes)) {
+            $taxRuleObj = new TaxRule($ruleId);
+            if (!$taxRuleObj->deleteCombinedTaxes()) {
+                return false;
+            }
+            foreach ($combinedTaxes as $combinedTax) {
+                if (!$taxRuleObj->addUpdateCombinedTax($combinedTax)) {
+                    $this->error = $taxRuleObj->getError();
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

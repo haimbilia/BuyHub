@@ -1,8 +1,4 @@
-<?php
-
-use PhpParser\Node\Stmt\Label;
-
-defined('SYSTEM_INIT') or die('Invalid Usage.');
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 if (!$print) {
     $this->includeTemplate('_partial/seller/sellerDashboardNavigation.php'); ?>
@@ -89,7 +85,6 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                 <i class="fas fa-print"></i>
                             </a>
                             <?php
-
                             if (!in_array($orderDetail['op_status_id'], unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"))) && $orderDetail['opshipping_fulfillment_type'] == Shipping::FULFILMENT_SHIP && $shippedBySeller && is_object($shippingApiObj) && ('CashOnDelivery' == $orderDetail['plugin_code'] || Orders::ORDER_PAYMENT_PAID == $orderDetail['order_payment_status']) && false === OrderCancelRequest::getCancelRequestById($orderDetail['op_id'])) {
 
                                 $opId = $orderDetail['op_id'];
@@ -98,9 +93,9 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                     <a href="javascript:void(0)" onclick="shippingRatesForm(<?php echo $opId; ?>)" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_FETCH_SHIPPING_RATES', $siteLangId); ?>"><i class="fas fa-file-invoice"></i></a>
 
                                     <?php
-                                } else {
-                                    if ($shippingApiObj->getKey('plugin_id') == $orderDetail['opshipping_plugin_id']) {
-                                        if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && true === $shippingApiObj->canGenerateLabelSeprately()) {
+                                } else {                            
+                                    if ($shippingApiObj->getKey('plugin_id') == $orderDetail['opshipping_plugin_id']) {                                    
+                                        if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && true === $shippingApiObj->canGenerateLabelSeparately()) {
                                             $orderId = $orderDetail['order_id'];
                                     ?>
                                             <a href="javascript:void(0)" onclick='generateLabel(<?php echo $opId; ?>)' class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_GENERATE_LABEL', $siteLangId); ?>"><i class="fas fa-file-download"></i></a>
@@ -113,12 +108,12 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
                                                 <a target="_blank" href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewLabel', [$orderDetail['op_id']]); ?>" class="btn btn-outline-brand  btn-sm no-print" title="<?php echo Labels::getLabel('LBL_PREVIEW_LABEL', $siteLangId); ?>"><i class="fas fa-file-export"></i></a>
                                             <?php } ?>
                                         <?php
-                                        }
-
-                                        if (
-                                            (!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response'])) ||
-                                            (false === $shippingApiObj->canGenerateLabelSeprately() && empty($orderDetail['opship_order_number']))
-                                        ) {
+                                        } 
+                                        if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || ($shippingApiObj->canGenerateLabelFromShipment() || !empty($orderDetail['opship_tracking_number']) ) ) && empty($orderDetail['opship_order_number'])) {                                        
+                                        // if (
+                                        //     (!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response'])) ||
+                                        //     (false === $shippingApiObj->canGenerateLabelSeparately() && empty($orderDetail['opship_order_number']))
+                                        // ) {
                                             if (true === $shippingApiObj->canGenerateLabelFromShipment()) {
                                                 $label = Labels::getLabel('LBL_BUY_SHIPMENT_&_GENERATE_LABEL', $siteLangId);
                                             } else {

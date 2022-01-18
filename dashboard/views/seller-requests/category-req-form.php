@@ -12,7 +12,7 @@ $submitFld->setFieldTagAttribute('class', 'btn btn-brand');
 $submitFld->developerTags['noCaptionTag'] = true;
 ?>
 <div class="modal-header">
-	<h5 class="modal-title"><?php echo (FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_New_Category', $siteLangId) : Labels::getLabel('LBL_New_Category', $siteLangId) ?></h5>
+    <h5 class="modal-title"><?php echo (FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_Request_New_Category', $siteLangId) : Labels::getLabel('LBL_New_Category', $siteLangId) ?></h5>
 </div>
 <div class="modal-body">
     <div class="box__body">
@@ -66,7 +66,7 @@ $submitFld->developerTags['noCaptionTag'] = true;
                                 <?php foreach ($languages as $langId => $langName) {
                                     $layout = Language::getLayoutDirection($langId); ?>
                                     <div class="accordion mt-4" id="specification-accordion">
-                                        <h6 class="dropdown-toggle" data-toggle="collapse" data-target="#collapseOne<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>"><span onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
+                                        <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>"><span onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
                                                 <?php echo Labels::getLabel('LBL_Category_Name_for', $siteLangId) ?>
                                                 <?php echo $langName; ?>
                                             </span>
@@ -90,19 +90,19 @@ $submitFld->developerTags['noCaptionTag'] = true;
                                     </div>
                                 <?php } ?>
                             </div>
-                        </div>                    
+                        </div>
                     <?php } ?>
                     <div class="row">
-                            <div class="col-6">
-                                <div class="field-set">
-                                    <div class="field-wraper">
-                                        <div class="field_cover">
-                                            <?php echo $frm->getFieldHtml('btn_submit'); ?>
-                                        </div>
+                        <div class="col-6">
+                            <div class="field-set">
+                                <div class="field-wraper">
+                                    <div class="field_cover">
+                                        <?php echo $frm->getFieldHtml('btn_submit'); ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     <?php echo $frm->getFieldHtml('prodcat_id'); ?>
                     </form>
                     <?php echo $frm->getExternalJS(); ?>

@@ -40,7 +40,7 @@ class Slides extends MyAppModel
         }
 
         if ($isActive) {
-            $srch->addCondition('slide_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('slide_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
         return $srch;
     }
@@ -92,7 +92,7 @@ class Slides extends MyAppModel
         }
 
         return $srch;
-    }  
+    }
 
     public function joinBudget()
     {
@@ -102,11 +102,11 @@ class Slides extends MyAppModel
         $srch->addGroupBy('tpc.pclick_promotion_id');
         $srch->addMultipleFields(
             array(
-            'tpc.pclick_promotion_id',
-            "SUM(IF(`pclick_datetime`>CURRENT_DATE - INTERVAL 1 DAY,`pclick_cost`,0)) daily_cost,
+                'tpc.pclick_promotion_id',
+                "SUM(IF(`pclick_datetime`>CURRENT_DATE - INTERVAL 1 DAY,`pclick_cost`,0)) daily_cost,
    SUM(IF(`pclick_datetime`>CURRENT_DATE - INTERVAL 1 WEEK,`pclick_cost`,0)) weekly_cost,
    SUM(IF(`pclick_datetime`>CURRENT_DATE - INTERVAL 1 MONTH,`pclick_cost`,0)) monthly_cost",
-            "SUM(pclick_cost) as total_cost"
+                "SUM(pclick_cost) as total_cost"
             )
         );
 

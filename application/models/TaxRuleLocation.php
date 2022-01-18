@@ -33,7 +33,7 @@ class TaxRuleLocation extends MyAppModel
     public static function getLocationsByCatId(int $taxCatId = 0, bool $joinCountryState = false, $langId = 0): array
     {
         $srch = TaxRuleLocation::getSearchObject();
-        $srch->addCondition('taxruleloc_taxcat_id', '=', $taxCatId);
+        $srch->addCondition('taxruleloc_taxcat_id', '=', 'mysql_func_' .$taxCatId, 'AND', true);
         if ($joinCountryState) {
             $srch->joinTable(States::DB_TBL, 'LEFT OUTER JOIN', 'taxruleloc_from_state_id = from_st.state_id', 'from_st');
             $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 'from_st.state_id = from_st_l.statelang_state_id AND from_st_l.statelang_lang_id = ' . $langId, 'from_st_l');

@@ -123,6 +123,11 @@ trait SellerProducts
     public function sellerProductForm($product_id, $selprod_id = 0)
     {
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
+        
+        if(0 == $selprod_id && !Product::availableForAddToStore($product_id, $this->userParentId)){
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
+        }
+
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             Message::addErrorMessage(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
@@ -208,14 +213,13 @@ trait SellerProducts
         }
 
         if (0 == $selprod_id && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) && SellerProduct::getActiveCount($this->userParentId) >= SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed')) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_You_have_crossed_your_package_limit', $this->siteLangId), false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+            LibHelper::exitWithError(Labels::getLabel('MSG_You_have_crossed_your_package_limit', $this->siteLangId));
         }
 
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            LibHelper::exitWithError(Labels::getLabel('MSG_Please_buy_subscription', $this->siteLangId), false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+            LibHelper::exitWithError(Labels::getLabel('MSG_Please_buy_subscription', $this->siteLangId));
         }
+        
         if ($selprod_id == 0 && !UserPrivilege::canSellerAddProductInCatalog($product_id, $this->userParentId)) {
             LibHelper::exitWithError(Labels::getLabel('LBL_Please_Upgrade_your_package_to_add_new_products', $this->siteLangId), false);
         }
@@ -2687,9 +2691,9 @@ trait SellerProducts
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
-
+        $pagesize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $srch = SellerProduct::searchVolumeDiscountProducts($this->siteLangId, $selProdId, $keyword, $userId);
-
+        $srch->setPageSize($pagesize);
         $srch->setPageNumber($page);
         $srch->addOrder('voldiscount_id', 'DESC');
 
@@ -2708,7 +2712,7 @@ trait SellerProducts
         $this->set('pageCount', $srch->pages());
         $this->set('postedData', FatApp::getPostedData());
         $this->set('recordCount', $srch->recordCount());
-        $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
+        $this->set('pageSize', $pagesize);
         $this->_template->render(false, false);
     }
 

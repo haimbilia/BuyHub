@@ -79,7 +79,7 @@ class ImportexportCommon extends FatModel
             return false;
         }
         $importErrorLogFilesDir = ImportexportCommon::IMPORT_ERROR_LOG_PATH;
-        $errorLogFiles = array_diff(scandir($importErrorLogFilesDir), array( '..', '.' ));
+        $errorLogFiles = array_diff(scandir($importErrorLogFilesDir), array('..', '.'));
         foreach ($errorLogFiles as $fileName) {
             $file = $importErrorLogFilesDir . $fileName;
             $modifiedOn = filemtime($file);
@@ -122,7 +122,7 @@ class ImportexportCommon extends FatModel
                     $errMsg = (0 > FatUtility::float($columnValue)) ? Labels::getLabel("MSG_{column-name}_should_be_greater_than_0.", $langId) : false;
                     break;
             }
-            
+
             $errMsg = (false !== $errMsg) ? mb_strtolower($errMsg)  : $errMsg;
             return (false !== $errMsg) ? mb_convert_case(str_replace('{column-name}', $columnTitle, $errMsg), MB_CASE_TITLE, "UTF-8") : $errMsg;
         }
@@ -132,17 +132,17 @@ class ImportexportCommon extends FatModel
     public function isUploadedFileValidMimes($files)
     {
         $csvValidMimes = array(
-        'text/x-comma-separated-values',
-        'text/comma-separated-values',
-        'application/octet-stream',
-        'application/vnd.ms-excel',
-        'application/x-csv',
-        'text/x-csv',
-        'text/csv',
-        'application/csv',
-        'application/excel',
-        'application/vnd.msexcel',
-        'text/plain'
+            'text/x-comma-separated-values',
+            'text/comma-separated-values',
+            'application/octet-stream',
+            'application/vnd.ms-excel',
+            'application/x-csv',
+            'text/x-csv',
+            'text/csv',
+            'application/csv',
+            'application/excel',
+            'application/vnd.msexcel',
+            'text/plain'
         );
         return (isset($files['name'])
             && $files['error'] == 0
@@ -323,7 +323,7 @@ class ImportexportCommon extends FatModel
             }
             $arr['product_identifier'] = Labels::getLabel('LBL_Product_identifier', $langId);
         }
-        
+
         if ($this->isDefaultSheetData($langId) && $actionType != Importexport::ACTION_ADMIN_PRODUCTS) {
             if ($this->settings['CONF_USE_USER_ID']) {
                 $arr['product_seller_id'] = Labels::getLabel('LBL_User_ID', $langId);
@@ -364,7 +364,7 @@ class ImportexportCommon extends FatModel
             } else {
                 $arr['tax_category_identifier'] = Labels::getLabel('LBL_Tax_Category_Identifier', $langId);
             }
-            
+
             $shippedBy = FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0);
 
             if ((0 == $userId && $shippedBy) || !$shippedBy) {
@@ -374,7 +374,7 @@ class ImportexportCommon extends FatModel
                     $arr['shipping_profile_identifier'] = Labels::getLabel('LBL_SHIPPING_PROFILE_IDENTIFIER', $langId);
                 }
             }
-            
+
             if (FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1)) {
                 if ($this->settings['CONF_USE_SHIPPING_PACKAGE_ID']) {
                     $arr['product_ship_package_id'] = Labels::getLabel('LBL_SHIPPING_PACKAGE_ID', $langId);
@@ -418,15 +418,15 @@ class ImportexportCommon extends FatModel
             if ((0 == $userId && $shippedBy) || !$shippedBy) {
                 // $arr['ps_free'] = Labels::getLabel('LBL_Free_Shipping', $langId);
                 $arr['product_cod_enabled'] = Labels::getLabel('LBL_COD_available', $langId);
-            }            
-            
+            }
+
             $arr['product_featured'] = Labels::getLabel('LBL_Featured', $langId);
             $arr['product_approved'] = Labels::getLabel('LBL_Approved', $langId);
             $arr['product_active'] = Labels::getLabel('LBL_Active', $langId);
             $arr['product_deleted'] = Labels::getLabel('LBL_Deleted', $langId);
             $arr['product_attachements_with_inventory'] = Labels::getLabel('LBL_DOWNLOAD_ATTACHMENTS_AT_INVENTORY', $langId);
-        }        
-        
+        }
+
 
         return $arr;
     }
@@ -823,7 +823,7 @@ class ImportexportCommon extends FatModel
         $arr['tag_name'] = Labels::getLabel('LBL_Tag_Name', $langId);
         return $arr;
     }
-    
+
     public function getZoneColoumArr($langId, $userId = 0)
     {
         $arr = array();
@@ -860,6 +860,7 @@ class ImportexportCommon extends FatModel
         }
 
         $arr['country_name'] = Labels::getLabel('LBL_Country_Name', $langId);
+        $arr['country_code_alpha3'] = Labels::getLabel('FRM_COUNTRY_ALPHA3_CODE', $langId);
 
         if (!$userId) {
             if ($this->isDefaultSheetData($langId)) {
@@ -985,32 +986,32 @@ class ImportexportCommon extends FatModel
     public function getSettingsArr($siteConfiguration = false)
     {
         return array(
-        'CONF_USE_BRAND_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_BRAND_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_CATEGORY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_CATEGORY_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_PRODUCT_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_PRODUCT_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_USER_ID' => false,
-        'CONF_USE_OPTION_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_OPTION_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_OPTION_VALUE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_OPTION_VALUE_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_TAG_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_TAG_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_TAX_CATEOGRY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_TAX_CATEOGRY_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_PRODUCT_TYPE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_PRODUCT_TYPE_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_DIMENSION_UNIT_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_DIMENSION_UNIT_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_WEIGHT_UNIT_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_WEIGHT_UNIT_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_LANG_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_LANG_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_CURRENCY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_CURRENCY_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_PROD_CONDITION_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_PROD_CONDITION_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_PERSENT_OR_FLAT_CONDITION_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_PERSENT_OR_FLAT_CONDITION_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_STATE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_STATE_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_COUNTRY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_COUNTRY_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_POLICY_POINT_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_POLICY_POINT_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_POLICY_POINT_TYPE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_POLICY_POINT_TYPE_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_SHIPPING_COMPANY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_COMPANY_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_SHIPPING_DURATION_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_DURATION_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_SHIPPING_PROFILE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_PROFILE_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_SHIPPING_PACKAGE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_PACKAGE_ID', FatUtility::VAR_INT, 0) : false,
-        'CONF_USE_O_OR_1' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_O_OR_1', FatUtility::VAR_INT, 0) : false,
-        'CONF_PRODUCT_BRAND_MANDATORY' => ($siteConfiguration) ? FatApp::getConfig('CONF_PRODUCT_BRAND_MANDATORY', FatUtility::VAR_INT, false) : false,
-        'CONF_USE_ZONE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_ZONE_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_BRAND_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_BRAND_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_CATEGORY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_CATEGORY_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_PRODUCT_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_PRODUCT_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_USER_ID' => false,
+            'CONF_USE_OPTION_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_OPTION_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_OPTION_VALUE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_OPTION_VALUE_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_TAG_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_TAG_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_TAX_CATEOGRY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_TAX_CATEOGRY_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_PRODUCT_TYPE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_PRODUCT_TYPE_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_DIMENSION_UNIT_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_DIMENSION_UNIT_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_WEIGHT_UNIT_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_WEIGHT_UNIT_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_LANG_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_LANG_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_CURRENCY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_CURRENCY_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_PROD_CONDITION_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_PROD_CONDITION_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_PERSENT_OR_FLAT_CONDITION_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_PERSENT_OR_FLAT_CONDITION_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_STATE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_STATE_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_COUNTRY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_COUNTRY_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_POLICY_POINT_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_POLICY_POINT_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_POLICY_POINT_TYPE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_POLICY_POINT_TYPE_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_SHIPPING_COMPANY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_COMPANY_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_SHIPPING_DURATION_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_DURATION_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_SHIPPING_PROFILE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_PROFILE_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_SHIPPING_PACKAGE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_SHIPPING_PACKAGE_ID', FatUtility::VAR_INT, 0) : false,
+            'CONF_USE_O_OR_1' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_O_OR_1', FatUtility::VAR_INT, 0) : false,
+            'CONF_PRODUCT_BRAND_MANDATORY' => ($siteConfiguration) ? FatApp::getConfig('CONF_PRODUCT_BRAND_MANDATORY', FatUtility::VAR_INT, false) : false,
+            'CONF_USE_ZONE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_ZONE_ID', FatUtility::VAR_INT, 0) : false,
         );
     }
 
@@ -1178,7 +1179,7 @@ class ImportexportCommon extends FatModel
         $rs = $srch->getResultSet();
         return $row = $this->db->fetchAllAssoc($rs);
     }
-    
+
     public function getShippingPackageArr($byId = true, $taxCatIdOrIdentifier = false)
     {
         $srch = ShippingPackage::getSearchObject();
@@ -1497,16 +1498,16 @@ class ImportexportCommon extends FatModel
         if (!empty($userTempIdData) && $userTempIdData['pti_product_temp_id'] == $sellerTempId) {
             $productId = $userTempIdData['pti_product_id'];
         } else {
-            $row = Product::getAttributesById($sellerTempId, array( 'product_id', 'product_seller_id' ));
+            $row = Product::getAttributesById($sellerTempId, array('product_id', 'product_seller_id'));
 
             if (!empty($row) && $row['product_seller_id'] == $userId) {
                 $productId = $row['product_id'];
                 $tempData = array(
-                'pti_product_id' => $productId,
-                'pti_product_temp_id' => $sellerTempId,
-                'pti_user_id' => $userId,
+                    'pti_product_id' => $productId,
+                    'pti_product_temp_id' => $sellerTempId,
+                    'pti_user_id' => $userId,
                 );
-                $this->db->deleteRecords(Importexport::DB_TBL_TEMP_PRODUCT_IDS, array('smt' => 'pti_product_id = ? and pti_user_id = ?', 'vals' => array($productId, $userId) ));
+                $this->db->deleteRecords(Importexport::DB_TBL_TEMP_PRODUCT_IDS, array('smt' => 'pti_product_id = ? and pti_user_id = ?', 'vals' => array($productId, $userId)));
                 $this->db->insertFromArray(Importexport::DB_TBL_TEMP_PRODUCT_IDS, $tempData, false, array(), $tempData);
             }
         }
@@ -1539,11 +1540,11 @@ class ImportexportCommon extends FatModel
             if (!empty($row) && $row['selprod_user_id'] == $userId) {
                 $selprodId = $row['selprod_id'];
                 $tempData = array(
-                'spti_selprod_id' => $selprodId,
-                'spti_selprod_temp_id' => $sellerTempId,
-                'spti_user_id' => $userId,
+                    'spti_selprod_id' => $selprodId,
+                    'spti_selprod_temp_id' => $sellerTempId,
+                    'spti_user_id' => $userId,
                 );
-                $this->db->deleteRecords(Importexport::DB_TBL_TEMP_SELPROD_IDS, array('smt' => 'spti_selprod_id = ? and spti_user_id = ?', 'vals' => array($selprodId, $userId) ));
+                $this->db->deleteRecords(Importexport::DB_TBL_TEMP_SELPROD_IDS, array('smt' => 'spti_selprod_id = ? and spti_user_id = ?', 'vals' => array($selprodId, $userId)));
                 $this->db->insertFromArray(Importexport::DB_TBL_TEMP_SELPROD_IDS, $tempData, false, array(), $tempData);
             }
         }
@@ -1553,18 +1554,17 @@ class ImportexportCommon extends FatModel
     public function getProductInventoryColumnArr($langId)
     {
         return array(
-        Labels::getLabel("LBL_Seller_Product_Id", $langId),
-        Labels::getLabel("LBL_SKU", $langId),
-        Labels::getLabel("LBL_Product", $langId),
-        Labels::getLabel("LBL_Cost_Price", $langId),
-        Labels::getLabel("LBL_Price", $langId),
-        Labels::getLabel("LBL_Stock/Quantity", $langId)
+            Labels::getLabel("LBL_Seller_Product_Id", $langId),
+            Labels::getLabel("LBL_SKU", $langId),
+            Labels::getLabel("LBL_Product", $langId),
+            Labels::getLabel("LBL_Cost_Price", $langId),
+            Labels::getLabel("LBL_Price", $langId),
+            Labels::getLabel("LBL_Stock/Quantity", $langId)
         );
     }
-    
+
     public function setPluginId(int $pluginId)
     {
         $this->pluginId = $pluginId;
     }
-
 }

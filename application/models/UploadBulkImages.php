@@ -17,21 +17,23 @@ class UploadBulkImages extends FatModel
         $this->bulkRoot = CONF_UPLOADS_PATH . AttachedFile::FILETYPE_BULK_IMAGES_PATH;
     }
 
-    public function bulkMediaFileObject($loggedUserId = 0)
+    public function bulkMediaFileObject($loggedUserId = 0, $addOrder = true)
     {
         $srch = AttachedFile::getSearchObject();
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'credential_user_id = afile_record_id');
-        $srch->addCondition('afile_type', '=', AttachedFile::FILETYPE_BULK_IMAGES);
+        $srch->addCondition('afile_type', '=', 'mysql_func_' . AttachedFile::FILETYPE_BULK_IMAGES, 'AND', true);
 
         if (0 < $loggedUserId) {
-            $srch->addCondition('afile_record_id', '=', $loggedUserId);
+            $srch->addCondition('afile_record_id', '=', 'mysql_func_' . $loggedUserId, 'AND', true);
         }
 
         $srch->addMultipleFields(
-            array('afile_physical_path', 'afile_name', 'afile_record_id', 'credential_username', 'credential_email')
+            array('afile_physical_path', 'afile_name', 'afile_record_id', 'credential_username', 'credential_email', 'afile_id as listSerial')
         );
 
-        $srch->addOrder('afile_id', 'DESC');
+        if (true === $addOrder) {
+            $srch->addOrder('afile_id', 'DESC');
+        }
 
         return $srch;
     }
@@ -128,7 +130,7 @@ class UploadBulkImages extends FatModel
         $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
         $fileExt = strtolower($fileExt);
         if ('zip' != $fileExt) {
-            $this->error = Labels::getLabel('MSG_INVALID_FILE', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_FILE', $this->langId);
             return false;
         }
 
@@ -149,7 +151,7 @@ class UploadBulkImages extends FatModel
         }
 
         if (false === $fileHandlerObj->extractZip($path . $savedFile)) {
-            $this->error = Labels::getLabel('MSG_COULD_NOT_SAVE_FILE', $this->langId);
+            $this->error = Labels::getLabel('ERR_COULD_NOT_SAVE_FILE', $this->langId);
             return false;
         }
 

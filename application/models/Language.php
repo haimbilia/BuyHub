@@ -29,7 +29,6 @@ class Language extends MyAppModel
             return json_decode($languageGetAllNames, true);
         }
 
-        $siteDefaultLang = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
         $srch = new SearchBase(static::DB_TBL);
         $srch->addOrder(static::tblFld('id'));
         if ($active === true) {
@@ -49,9 +48,6 @@ class Language extends MyAppModel
         } else {
             $langData = FatApp::getDb()->fetchAll($srch->getResultSet(), static::tblFld('id'));
         }
-        $defaultLangData = $langData[$siteDefaultLang];
-        unset($langData[$siteDefaultLang]);
-        $langData = [$siteDefaultLang => $defaultLangData] + $langData;
 
         CacheHelper::create('languageGetAllNames' . $cacheKey, FatUtility::convertToJson($langData), CacheHelper::TYPE_LANGUAGE);
         return $langData;
@@ -98,11 +94,27 @@ class Language extends MyAppModel
         if ($getLayoutDirection) {
             return json_decode($getLayoutDirection, true);
         }
-
+        
         $langData = self::getAttributesById($langId, array('language_layout_direction'));
+        
         if (false != $langData) {
             CacheHelper::create('getLayoutDirection' . $langId, FatUtility::convertToJson($langData['language_layout_direction']), CacheHelper::TYPE_LANGUAGE);
             return $langData['language_layout_direction'];
         }
+    }
+
+    /**
+     * getDropDownList
+     *
+     * @param  int $langIdToRemove - default system lang
+     * @return array
+     */
+    public static function getDropDownList(int $langIdToRemove = 0): array
+    {
+        $arr = self::getAllNames();
+        if (0 < $langIdToRemove) {
+            unset($arr[$langIdToRemove]);
+        }
+        return (array) $arr;
     }
 }

@@ -26,7 +26,7 @@ class Extrapage extends MyAppModel
     public const CHECKOUT_PAGE_HEADER_BLOCK = 27;
     
     public const ADMIN_PRODUCTS_CATEGORIES_INSTRUCTIONS = 28;
-    public const GENERAL_SETTINGS_INSTRUCTIONS = 29;
+    // public const GENERAL_SETTINGS_INSTRUCTIONS = 29; /* Not Required this data moved to help center. */
     public const ADMIN_BRANDS_INSTRUCTIONS = 30;
     public const ADMIN_OPTIONS_INSTRUCTIONS = 31;
     public const ADMIN_TAGS_INSTRUCTIONS = 32;
@@ -102,7 +102,7 @@ class Extrapage extends MyAppModel
     public function updatePageContent($data = array())
     {
         if (!($this->mainTableRecordId > 0)) {
-            $this->error = Labels::getLabel('MSG_Invalid_Request', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_Invalid_Request', $this->commonLangId);
             return false;
         }
 

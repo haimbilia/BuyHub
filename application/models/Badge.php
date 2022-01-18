@@ -22,12 +22,15 @@ class Badge extends MyAppModel
         self::DB_TBL_PREFIX . 'id',
         self::DB_TBL_PREFIX . 'type',
         self::DB_TBL_PREFIX . 'condition_type',
+        self::DB_TBL_PREFIX . 'trigger_type',
         self::DB_TBL_PREFIX . 'shape_type',
         self::DB_TBL_PREFIX . 'display_inside',
         self::DB_TBL_PREFIX . 'color',
         self::DB_TBL_PREFIX . 'identifier',
         self::DB_TBL_PREFIX . 'required_approval',
-        self::DB_TBL_PREFIX . 'active'
+        self::DB_TBL_PREFIX . 'active',
+        self::DB_TBL_PREFIX . 'added_on',
+        self::DB_TBL_PREFIX . 'updated_on',
     ];
 
     public const LANG_ATTR = [
@@ -88,12 +91,12 @@ class Badge extends MyAppModel
     }
 
     /**
-     * getConditionTypeArr
+     * getTriggerCondTypeArr
      *
      * @param  int $langId
      * @return array
      */
-    public static function getConditionTypeArr(int $langId): array
+    public static function getTriggerCondTypeArr(int $langId): array
     {
         $arr = CacheHelper::get('getBadgeConditionTypeArr' . $langId, CONF_DEF_CACHE_TIME, '.txt');
         if (!$arr) {
@@ -267,7 +270,7 @@ class Badge extends MyAppModel
         $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
         $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');
         $srch->addCondition('bdg.badge_type', '=', Badge::TYPE_BADGE);
-        $srch->addCondition('bdg.badge_condition_type', '=', Badge::COND_MANUAL);
+        $srch->addCondition('bdg.badge_trigger_type', '=', Badge::COND_MANUAL);
         $srch->addDirectCondition('(bdg.badge_required_approval = ' . Badge::APPROVAL_OPEN . ' or (if(breq.breq_id > 0, breq.breq_status = ' . BadgeRequest::REQUEST_APPROVED . ', bdg.badge_required_approval = ' . Badge::APPROVAL_REQUIRED . ')))');
 
         $srch->doNotCalculateRecords();
@@ -312,7 +315,7 @@ class Badge extends MyAppModel
         $cnd = $srch->addCondition('blnk.blinkcond_to_date', '>=', $date);
         $cnd->attachCondition('blnk.blinkcond_to_date', '=', '0000-00-00 00:00:00');
         $srch->addCondition('bdg.badge_type', '=', Badge::TYPE_BADGE);
-        $srch->addCondition('bdg.badge_condition_type', '=', Badge::COND_MANUAL);
+        $srch->addCondition('bdg.badge_trigger_type', '=', Badge::COND_MANUAL);
         $srch->addDirectCondition('(bdg.badge_required_approval = ' . Badge::APPROVAL_OPEN . ' or (if(breq.breq_id > 0, breq.breq_status = ' . BadgeRequest::REQUEST_APPROVED . ', bdg.badge_required_approval = ' . Badge::APPROVAL_REQUIRED . ')))');
 
         $srch->doNotCalculateRecords();
@@ -385,7 +388,7 @@ class Badge extends MyAppModel
                 END)'
             );
 
-            $srch->addCondition('badge_condition_type', '=', Badge::COND_AUTO);
+            $srch->addCondition('badge_trigger_type', '=', Badge::COND_AUTO);
             $srch->addCondition('badge_type', '=', Badge::TYPE_BADGE);
             $srch->addCondition('badge_active', '=', applicationConstants::ACTIVE);
 
@@ -396,5 +399,51 @@ class Badge extends MyAppModel
             $shopAutoBadges = array_merge($shopAutoBadges, FatApp::getDb()->fetchAll($srch->getResultSet()));
         }
         return $shopAutoBadges;
+    }
+
+    public static function getTriggerCondTypeHtml(int $langId, int $type): string
+    {
+        $arr = self::getTriggerCondTypeArr($langId);
+        $msg = $arr[$type];
+        switch ($type) {
+            case self::COND_MANUAL:
+                $status = 'info';
+                break;
+            case self::COND_AUTO:
+                $status = 'success';
+                break;
+            
+            default:
+                $status = 'warning';
+                break;
+        }
+        return '<span class="font-' . $status . '">' . $msg . '</span>';
+    }
+
+    public static function getApprovalTypeHtml(int $langId, int $status, int $conditionType): string
+    {
+        $arr = self::getApprovalStatusArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case self::APPROVAL_OPEN:
+                $status = HtmlHelper::INFO;
+                break;
+            case self::APPROVAL_REQUIRED:
+                $status = HtmlHelper::DANGER;
+                break;
+
+            default:
+                $status = HtmlHelper::WARNING;
+                break;
+        }
+        $notAllowed = (Badge::COND_AUTO == $conditionType);
+        $msg = $notAllowed ? Labels::getLabel('LBL_NOT_ALLOWED') : $msg;
+        $status = $notAllowed ? HtmlHelper::WARNING : $status;
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
+
+    public static function getRibbbonShapeDesign(int $recordId)
+    {
+        # code...
     }
 }

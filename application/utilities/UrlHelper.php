@@ -21,10 +21,8 @@ class UrlHelper extends FatUtility
         return $pageURL;
     }
 
-    public static function generateUrl($controller = '', $action = '', $queryData = array(), $use_root_url = '', $url_rewriting = null, $encodeUrl = false, $getOriginalUrl = false, $useLangCode = true)
+    public static function generateUrl($controller = '', $action = '', $queryData = array(), $use_root_url = '', $url_rewriting = null, $encodeUrl = false, $getOriginalUrl = false, $useLangCode = true, $langId = SYSTEM_LANG_ID)
     {
-        $langId = SYSTEM_LANG_ID;
-        
         $useRootUrl = $use_root_url;
         if (true == $useLangCode && FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 1 && $langId  != FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)) {
             $use_root_url = rtrim($use_root_url, '/') . '/' . strtolower(LANG_CODES_ARR[$langId]) . '/';
@@ -72,9 +70,9 @@ class UrlHelper extends FatUtility
         return $url;
     }
 
-    public static function generateFullUrl($controller = '', $action = '', $queryData = array(), $use_root_url = '', $url_rewriting = null, $encodeUrl = false, $getOriginalUrl = false, $useLangCode = true)
+    public static function generateFullUrl($controller = '', $action = '', $queryData = array(), $use_root_url = '', $url_rewriting = null, $encodeUrl = false, $getOriginalUrl = false, $useLangCode = true, $langId = SYSTEM_LANG_ID)
     {
-        $url = self::generateUrl($controller, $action, $queryData, $use_root_url, $url_rewriting, false, $getOriginalUrl, $useLangCode);
+        $url = self::generateUrl($controller, $action, $queryData, $use_root_url, $url_rewriting, false, $getOriginalUrl, $useLangCode, $langId);
         $protocol = (FatApp::getConfig('CONF_USE_SSL') == 1) ? 'https://' : 'http://';
         if ($encodeUrl) {
             $url = urlencode($url);
@@ -206,5 +204,21 @@ class UrlHelper extends FatUtility
         }
 
         return false;
+    }
+
+    public static function getQueryStringArr($key = '')
+    {
+        $url = substr(strstr($_SERVER['REQUEST_URI'], '?'), 1);
+        $url = explode('&', $url);
+        $arr = [];
+        foreach ($url as $val) {
+            $index = strtolower(strstr($val, '=', true));
+            if (strtolower($key) == $index) {
+                return substr(strstr($val, '='), 1);
+            }
+
+            $arr[strstr($val, '=', true)] = substr(strstr($val, '='), 1);
+        }
+        return $arr;
     }
 }

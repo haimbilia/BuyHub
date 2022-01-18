@@ -20,15 +20,15 @@ class Brand extends MyAppModel
         $this->db = FatApp::getDb();
     }
 
-    public static function getSearchObject($langId = 0, $isDeleted = true, $isActive = false)
+    public static function getSearchObject($langId = 0, $isDeleted = true, $isActive = false, $addOrderBy = true)
     {
         $srch = new SearchBase(static::DB_TBL, 'b');
 
         if ($isDeleted == true) {
-            $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'deleted', '=', 0);
+            $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
         if ($isActive == true) {
-            $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($langId > 0) {
@@ -41,7 +41,9 @@ class Brand extends MyAppModel
             );
         }
 
-        $srch->addOrder('b.' . static::DB_TBL_PREFIX . 'active', 'DESC');
+        if (true === $addOrderBy) {
+            $srch->addOrder('b.' . static::DB_TBL_PREFIX . 'active', 'DESC');
+        }
         return $srch;
     }
 
@@ -119,7 +121,7 @@ class Brand extends MyAppModel
     public function canRecordMarkDelete($id)
     {
         $srch = $this->getSearchObject();
-        $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', $id);
+        $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $id, 'AND', true);
         $srch->addFld('b.' . static::DB_TBL_PREFIX . 'id');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -195,7 +197,7 @@ class Brand extends MyAppModel
     public static function getBrandName(int $brandId, int $langId, bool $isActive = true)
     {
         $srch = static::getListingObj($langId, null, $isActive);
-        $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', $brandId);
+        $srch->addCondition('b.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $brandId, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();

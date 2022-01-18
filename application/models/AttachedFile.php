@@ -73,8 +73,8 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_ORDER_FEEDBACK = 60;
     public const FILETYPE_BADGE = 61;
     public const FILETYPE_BADGE_REQUEST = 62;
-
-    public const FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW = 60;
+    public const FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW = 63;
+    public const FILETYPE_PRODUCT_IMAGE_TEMP = 64;
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
@@ -133,8 +133,7 @@ class AttachedFile extends MyAppModel
 
     public static function getSearchObject()
     {
-        $srch = new SearchBase(static::DB_TBL, 'ta');
-        return $srch;
+        return new SearchBase(static::DB_TBL, 'ta');
     }
 
 
@@ -152,14 +151,20 @@ class AttachedFile extends MyAppModel
 
     public static function getImgAttrTypeArray($langId)
     {
+        $imgAttrTypeCacheVar = CacheHelper::get('imgAttrTypeCacheVar' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($imgAttrTypeCacheVar) {
+            return json_decode($imgAttrTypeCacheVar);
+        }
+
         return $arr = array(
-            static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_Products', $langId),
-            static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_Brand_Logo', $langId),
-            static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_Brand_Banner', $langId),
-            /* static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_Categories', $langId), */
-            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_Category_Banner', $langId),
-            static::FILETYPE_BLOG_POST_IMAGE => Labels::getLabel('LBL_Blogs', $langId),
+            static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_PRODUCTS', $langId),
+            static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_BRAND_LOGO', $langId),
+            static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_BRAND_BANNER', $langId),
+            /* static::FILETYPE_CATEGORY_IMAGE => Labels::getLabel('LBL_CATEGORIES', $langId), */
+            static::FILETYPE_CATEGORY_BANNER => Labels::getLabel('LBL_CATEGORY_BANNER', $langId),
+            static::FILETYPE_BLOG_POST_IMAGE => Labels::getLabel('LBL_BLOGS', $langId),
         );
+        CacheHelper::create('imgAttrCacheVar' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
     }
 
@@ -180,12 +185,12 @@ class AttachedFile extends MyAppModel
             $compareSize = static::maxFileUploadInBytes();
         }
         if (filesize($fileTmpName) > $compareSize) {
-            $this->error = Labels::getLabel('MSG_INVALID_SIZE', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_SIZE', CommonHelper::getLangId());
             return false;
         }
 
         if (!is_uploaded_file($fileTmpName)) {
-            $this->error = Labels::getLabel('MSG_Unable_To_Upload_File', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_Unable_To_Upload_File', CommonHelper::getLangId());
             return false;
         }
 
@@ -201,6 +206,7 @@ class AttachedFile extends MyAppModel
         return true;
     }
 
+
     public static function getMultipleAttachments($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0, $size = 0, $haveSubIdZero = false)
     {
         $fileType = FatUtility::int($fileType);
@@ -210,30 +216,29 @@ class AttachedFile extends MyAppModel
 
         $srch = new SearchBase(static::DB_TBL);
         $srch->doNotCalculateRecords();
-        $srch->addCondition('afile_type', '=', $fileType);
-        $srch->addCondition('afile_record_id', '=', $recordId);
+        $srch->addCondition('afile_type', '=', 'mysql_func_' . $fileType, 'AND', true);
+        $srch->addCondition('afile_record_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if ($recordSubid || $recordSubid == -1 || $haveSubIdZero) {
             if ($recordSubid == -1) {
                 /* -1, becoz, needs to show, products universal image as well, in that case, value passed is as -1 */
                 $recordSubid = 0;
             }
-            $srch->addCondition('afile_record_subid', '=', $recordSubid);
-        }
-
-        if ($recordId == 0) {
-            $srch->addOrder('afile_id', 'desc');
-            $srch->addOrder('afile_display_order');
-        } else {
-            $srch->addOrder('afile_display_order');
+            $srch->addCondition('afile_record_subid', '=', 'mysql_func_' . $recordSubid, 'AND', true);
         }
 
         if ($langId > 0) {
-            $cnd = $srch->addCondition('afile_lang_id', '=', $langId);
+            $cnd = $srch->addCondition('afile_lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
             if ($displayUniversalImage) {
                 $cnd->attachCondition('afile_lang_id', '=', '0');
                 $srch->addOrder('afile_lang_id', 'DESC');
             }
+        }
+
+        $srch->addOrder('afile_display_order');
+
+        if ($recordId == 0) {
+            $srch->addOrder('afile_id', 'desc');
         }
 
         if ($screen > 0) {
@@ -241,12 +246,13 @@ class AttachedFile extends MyAppModel
         }
 
         if ($langId == 0) {
-            $srch->addCondition('afile_lang_id', '=', 0);
+            $srch->addCondition('afile_lang_id', '=', 'mysql_func_0', 'AND', true);
         }
 
         if ($size > 0) {
             $srch->setPageSize($size);
         }
+
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs, 'afile_id');
     }
@@ -283,19 +289,19 @@ class AttachedFile extends MyAppModel
             $fileExt = pathinfo($name, PATHINFO_EXTENSION);
             $fileExt = strtolower($fileExt);
             if (false === in_array($fileExt, applicationConstants::allowedFileExtensions())) {
-                $this->error = Labels::getLabel('MSG_INVALID_FILE_EXTENSION', $defaultLangIdForErrors);
+                $this->error = Labels::getLabel('ERR_INVALID_FILE_EXTENSION', $defaultLangIdForErrors);
                 return false;
             }
 
             if (strpos(CONF_UPLOADS_PATH, 's3://') === false) {
                 $fileMimeType = mime_content_type($file);
                 if (false === in_array($fileMimeType, applicationConstants::allowedMimeTypes())) {
-                    $this->error = Labels::getLabel('MSG_INVALID_FILE_MIME_TYPE', $defaultLangIdForErrors);
+                    $this->error = Labels::getLabel('ERR_INVALID_FILE_MIME_TYPE', $defaultLangIdForErrors);
                     return false;
                 }
             }
         } else {
-            $this->error = Labels::getLabel('MSG_NO_FILE_UPLOADED', $defaultLangIdForErrors);
+            $this->error = Labels::getLabel('ERR_NO_FILE_UPLOADED', $defaultLangIdForErrors);
             return false;
         }
     }
@@ -335,7 +341,7 @@ class AttachedFile extends MyAppModel
         }
 
         if (!move_uploaded_file($fl, $path . $saveName)) {
-            $this->error = Labels::getLabel('MSG_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
+            $this->error = Labels::getLabel('ERR_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
             return false;
         }
 
@@ -376,7 +382,7 @@ class AttachedFile extends MyAppModel
         }
 
         if (false === copy($file, $path . $saveName)) {
-            $this->error = Labels::getLabel('MSG_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
+            $this->error = Labels::getLabel('ERR_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
             return false;
         }
 
@@ -385,7 +391,7 @@ class AttachedFile extends MyAppModel
         return $this->updateFileToDb($fileType, $recordId, $recordSubid, $fileLoc, $name, $langId, $screen, $displayOrder, $uniqueRecord);
     }
 
-    private function updateFileToDb($fileType, $recordId, $recordSubid, $fileLoc, $name, $langId, $screen, $displayOrder, $uniqueRecord, $aspectRatio = 0)
+    protected function updateFileToDb($fileType, $recordId, $recordSubid, $fileLoc, $name, $langId, $screen, $displayOrder, $uniqueRecord, $aspectRatio = 0)
     {
         $defaultLangIdForErrors = ($langId == 0) ? $this->commonLangId : $langId;
         $this->assignValues(
@@ -421,7 +427,7 @@ class AttachedFile extends MyAppModel
         $this->setFldValue('afile_updated_at', date("Y-m-d H:i:s"));
 
         if (!$this->save()) {
-            $this->error = Labels::getLabel('MSG_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
+            $this->error = Labels::getLabel('ERR_COULD_NOT_SAVE_FILE', $defaultLangIdForErrors);
             return false;
         }
 
@@ -436,7 +442,7 @@ class AttachedFile extends MyAppModel
         }
 
         $this->setRecordModifiedTime($fileType, $recordId);
-        
+
         return $fileLoc;
     }
 
@@ -448,6 +454,7 @@ class AttachedFile extends MyAppModel
                 $path .= self::FILETYPE_PRODCAT_IMAGE_PATH;
                 break;
             case self::FILETYPE_PRODUCT_IMAGE:
+            case self::FILETYPE_PRODUCT_IMAGE_TEMP:
             case self::FILETYPE_CUSTOM_PRODUCT_IMAGE:
                 $path .= self::FILETYPE_PRODUCT_IMAGE_PATH;
                 break;
@@ -471,13 +478,14 @@ class AttachedFile extends MyAppModel
     public function saveImage($fl, $fileType, $recordId, $recordSubid, $name, $displayOrder = 0, $uniqueRecord = false, $lang_id = 0, $mimeType = '', $screen = 0, $aspectRatio = 0)
     {
         if (getimagesize($fl) === false && $mimeType != 'image/svg+xml') {
-            $this->error = Labels::getLabel('MSG_UNRECOGNISED_IMAGE_FILE', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_UNRECOGNISED_IMAGE_FILE', $this->commonLangId);
             return false;
         }
         return $this->saveAttachment($fl, $fileType, $recordId, $recordSubid, $name, $displayOrder, $uniqueRecord, $lang_id, $screen, $aspectRatio);
     }
 
-    public static function displayWebpImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true) {
+    public static function displayWebpImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
+    {
         ob_end_clean();
         ini_set('memory_limit', '-1');
         $noImage = 'images/defaults/' . $noImage;
@@ -497,7 +505,7 @@ class AttachedFile extends MyAppModel
             $filemtime = filemtime($imagePath);
             $_SERVER['REQUEST_URI'] = rtrim($_SERVER['REQUEST_URI'], '/') . '/?t=' . $filemtime;
         }
-        
+
         static::setHeaders();
         static::checkModifiedHeader($imagePath);
 
@@ -508,9 +516,9 @@ class AttachedFile extends MyAppModel
             $fileContent = FatCache::get($_SERVER['REQUEST_URI'], null, '.webp');
             if ($fileContent) {
                 static::loadImage($fileContent, $imagePath);
-            } 
+            }
         }
-        
+
         static::setLastModified($imagePath);
         static::setContentType($imagePath, 'image/webp');
 
@@ -518,15 +526,15 @@ class AttachedFile extends MyAppModel
         $h = FatUtility::int($h);
         list($width, $height) = getimagesize($imagePath);
         $ratio_orig = $width / $height;
-        
+
         $thumb = imagecreatetruecolor($w, $h);
         $newWidth = $w;
         $newHeight = $h;
-        if ($w/$h > $ratio_orig) {
-            $newWidth = $h*$ratio_orig;
-         } else {
-            $newHeight = $w/$ratio_orig;
-         }
+        if ($w / $h > $ratio_orig) {
+            $newWidth = $h * $ratio_orig;
+        } else {
+            $newHeight = $w / $ratio_orig;
+        }
 
         switch ($fileMimeType) {
             case 'image/png':
@@ -544,17 +552,17 @@ class AttachedFile extends MyAppModel
                 break;
         }
 
-        
+
         $color_fill = imagecolorallocate($thumb, 255, 255, 255);
         imagefill($thumb, 0, 0, $color_fill);
-        
-         if ($apply_watermark && !empty($imagePath)) {
+
+        if ($apply_watermark && !empty($imagePath)) {
             $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_WATERMARK_IMAGE, 0, 0, CommonHelper::getLangId());
             $wtrmrkFile = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
             if (!empty($wtrmrkFile)) {
                 $wtrmrkFile = $uploadedFilePath . $wtrmrkFile;
                 $stampMimeType = mime_content_type($wtrmrkFile);
-                
+
                 switch ($stampMimeType) {
                     case 'image/png':
                         $stamp = imagecreatefrompng($wtrmrkFile);
@@ -580,14 +588,13 @@ class AttachedFile extends MyAppModel
                 // Copy the stamp image onto our photo using the margin offsets and the photo 
                 // width to calculate positioning of the stamp. 
                 imagecopy($img, $stamp, imagesx($img) - $sx - $marge_right, imagesy($img) - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp));
-                
             }
         }
 
-        $xPosition = ($w - $newWidth)/2;
-        $yPosition = ($h - $newHeight)/2;
+        $xPosition = ($w - $newWidth) / 2;
+        $yPosition = ($h - $newHeight) / 2;
         imagecopyresampled($thumb, $img, $xPosition, $yPosition, 0, 0, $newWidth, $newHeight, $width, $height);
-        
+
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_end_clean();
             ob_start();
@@ -599,7 +606,7 @@ class AttachedFile extends MyAppModel
             FatCache::set($_SERVER['REQUEST_URI'], $imgData, '.jpg');
             static::loadImage($imgData, $imagePath);
         }
-        
+
         imagewebp($thumb, null, $imageQuality);
         imagedestroy($thumb);
         exit;
@@ -608,10 +615,11 @@ class AttachedFile extends MyAppModel
     /* always call this function using image controller and pass relavant arguments. */
     public static function displayImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
     {
-        if (substr($imageName, 0, 5) == 'webp/'){
+        if (substr($imageName, 0, 5) == 'webp/') {
             $imageName = substr($imageName, 5);
-            self::displayWebpImage($imageName, $w, $h, $noImage , $uploadedFilePath, $resizeType , $apply_watermark , $cache , $imageCompression);
-        }       
+            self::displayWebpImage($imageName, $w, $h, $noImage, $uploadedFilePath, $resizeType, $apply_watermark, $cache, $imageCompression);
+        }
+
         ob_end_clean();
         ini_set('memory_limit', '-1');
         $noImage = 'images/defaults/' . $noImage;
@@ -772,7 +780,8 @@ class AttachedFile extends MyAppModel
         return $img = new ImageResize($image_name);
     }
 
-    public static function displayOriginalImageWebp($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false){
+    public static function displayOriginalImageWebp($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false)
+    {
         ob_end_clean();
         ini_set('memory_limit', '-1');
         $noImage = 'images/defaults/' . $noImage;
@@ -810,9 +819,9 @@ class AttachedFile extends MyAppModel
         static::setContentType($imagePath, 'image/webp');
 
         list($width, $height) = getimagesize($imagePath);
-        
+
         $thumb = imagecreatetruecolor($width, $height);
-        
+
         switch ($fileMimeType) {
             case 'image/png':
                 $img = imagecreatefrompng($imagePath);
@@ -828,10 +837,10 @@ class AttachedFile extends MyAppModel
                 $img = imagecreatefromjpeg($imagePath);
                 break;
         }
-        
+
         $color_fill = imagecolorallocate($thumb, 255, 255, 255);
         imagefill($thumb, 0, 0, $color_fill);
-        imagecopyresampled($thumb, $img, 0, 0, 0, 0, $width, $height, $width, $height);  
+        imagecopyresampled($thumb, $img, 0, 0, 0, 0, $width, $height, $width, $height);
 
         if (CONF_USE_FAT_CACHE && $cache) {
             ob_end_clean();
@@ -852,10 +861,10 @@ class AttachedFile extends MyAppModel
 
     public static function displayOriginalImage($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false)
     {
-        if (substr($imageName, 0, 5) == 'webp/'){
+        if (substr($imageName, 0, 5) == 'webp/') {
             $imageName = substr($imageName, 5);
-            self::displayOriginalImageWebp($imageName, $noImage , $uploadedFilePath, $cache );
-        } 
+            self::displayOriginalImageWebp($imageName, $noImage, $uploadedFilePath, $cache);
+        }
         ob_end_clean();
         $noImage = 'images/defaults/' . $noImage;
         $uploadedFilePath = CONF_UPLOADS_PATH . trim($uploadedFilePath);
@@ -922,10 +931,10 @@ class AttachedFile extends MyAppModel
         // die(CONF_UPLOADS_PATH . $image_name);
         if (!empty($image_name) && file_exists(CONF_UPLOADS_PATH . $image_name)) {
             $image_name = CONF_UPLOADS_PATH . $image_name;
-            $mineType=  mime_content_type($image_name);            
+            $mineType =  mime_content_type($image_name);
             header('Content-Description: File Transfer');
-            header("Content-type: $mineType");           
-            if (strpos($_SERVER ['HTTP_USER_AGENT'], "MSIE") > 0) {
+            header("Content-type: $mineType");
+            if (strpos($_SERVER['HTTP_USER_AGENT'], "MSIE") > 0) {
                 header('Content-Disposition: attachment; filename="' . rawurlencode(basename($downloadFileName)) . '"');
             } else {
                 header('Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode(basename($downloadFileName)));
@@ -942,7 +951,7 @@ class AttachedFile extends MyAppModel
     public static function getTempImages($limit = false)
     {
         $srch = new SearchBase(AttachedFile::DB_TBL_TEMP, 'aft');
-        $srch->addCondition('aft.afile_downloaded', '=', applicationConstants::NO);
+        $srch->addCondition('aft.afile_downloaded', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         //$srch->addOrder('aft.afile_id', 'asc');
         $srch->addOrder('rand()');
         if ($limit > 0) {
@@ -1089,6 +1098,8 @@ class AttachedFile extends MyAppModel
         $langId = FatUtility::int($langId);
         $allowedFileTypes = [
             AttachedFile::FILETYPE_ADMIN_LOGO,
+            AttachedFile::FILETYPE_ADMIN_PROFILE_CROPED_IMAGE,
+            AttachedFile::FILETYPE_ADMIN_PROFILE_IMAGE,
             AttachedFile::FILETYPE_FRONT_LOGO,
             AttachedFile::FILETYPE_EMAIL_LOGO,
             AttachedFile::FILETYPE_FAVICON,
@@ -1104,11 +1115,13 @@ class AttachedFile extends MyAppModel
             AttachedFile::FILETYPE_APP_LOGO,
             AttachedFile::FILETYPE_PUSH_NOTIFICATION_IMAGE,
             AttachedFile::FILETYPE_BADGE_REQUEST,
+            AttachedFile::FILETYPE_BLOG_POST_IMAGE,
+            AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE,
         ];
         //if (!in_array($fileType, $allowedFileTypes) && (!$fileType || !$recordId)) {
         // Remove condition of $recordId for handle all data of add/edit product category in single form
         if (!in_array($fileType, $allowedFileTypes) && !$fileType) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->commonLangId);
             return false;
         }
 
@@ -1129,13 +1142,13 @@ class AttachedFile extends MyAppModel
             }
         }
 
-        if ($fileId) {
+        if (0 < $fileId) {
             /* delete single file */
             $deleteStatementArr = array('smt' => 'afile_type = ? AND afile_record_id = ? AND afile_id=?', 'vals' => array($fileType, $recordId, $fileId));
         }
-        
+
         $db = FatApp::getDb();
-        if (!$db->deleteRecords('tbl_attached_files', $deleteStatementArr)) {
+        if (!$db->deleteRecords(static::DB_TBL, $deleteStatementArr)) {
             $this->error = $db->getError();
             return false;
         }
@@ -1254,15 +1267,17 @@ class AttachedFile extends MyAppModel
         return readfile($path);
     }
 
-    public static function setNamePrefix($imageName = '', &$sizeType = ''){
-        if ('' != $sizeType && substr(strtoupper($sizeType), 0, 4) == 'WEBP'){
+    public static function setNamePrefix($imageName = '', &$sizeType = '')
+    {
+        if ('' != $sizeType && substr(strtoupper($sizeType), 0, 4) == 'WEBP') {
             $sizeType = substr($sizeType, 4);
-            return 'webp/'.$imageName;
+            return 'webp/' . $imageName;
         }
         return $imageName;
     }
 
-    public static function setRecordModifiedTime(int $fileType, int $recordId){
+    public static function setRecordModifiedTime(int $fileType, int $recordId)
+    {
         $recordObj = false;
         switch ($fileType) {
             case self::FILETYPE_PRODUCT_IMAGE:
@@ -1272,42 +1287,45 @@ class AttachedFile extends MyAppModel
             case self::FILETYPE_SHOP_BANNER:
             case self::FILETYPE_SHOP_BACKGROUND_IMAGE:
                 $recordObj = new Shop($recordId);
-                break;   
+                break;
             case self::FILETYPE_BRAND_LOGO:
             case self::FILETYPE_BRAND_IMAGE:
                 $recordObj = new Brand($recordId);
-                break; 
+                break;
             case self::FILETYPE_USER_IMAGE:
             case self::FILETYPE_USER_PROFILE_IMAGE:
                 $recordObj = new User($recordId);
-                break;            
+                break;
             case self::FILETYPE_BLOG_POST_IMAGE:
                 $recordObj = new BlogPost($recordId);
-                break;     
+                break;
             case self::FILETYPE_COLLECTION_IMAGE:
             case self::FILETYPE_COLLECTION_BG_IMAGE:
                 $recordObj = new Collections($recordId);
-                break;  
+                break;
             case self::FILETYPE_CATEGORY_ICON:
             case self::FILETYPE_CATEGORY_BANNER:
             case self::FILETYPE_CATEGORY_IMAGE:
-            case self::FILETYPE_PRODCAT_IMAGE:    
+            case self::FILETYPE_PRODCAT_IMAGE:
                 $recordObj = new ProductCategory($recordId);
                 break;
-            case self::FILETYPE_BADGE:    
+            case self::FILETYPE_BADGE:
                 $recordObj = new Badge($recordId);
                 break;
-            case self::FILETYPE_SHOP_COLLECTION_IMAGE:    
+            case self::FILETYPE_SHOP_COLLECTION_IMAGE:
                 $recordObj = new ShopCollection($recordId);
-                break; 
+                break;
             case self::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE:
-            case self::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE: 
-            case self::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE: 
+            case self::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE:
+            case self::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE:
                 $recordObj = new Extrapage($recordId);
-                break;            
+                break;
+            case self::FILETYPE_BANNER:
+                $recordObj = new Banner($recordId);
+                break;
         }
 
-        if(false != $recordObj){
+        if (false != $recordObj) {
             return $recordObj->updateModifiedTime();
         }
         return false;

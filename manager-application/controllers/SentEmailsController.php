@@ -1,0 +1,60 @@
+<?php
+
+class SentEmailsController extends ListingBaseController
+{
+    public function __construct($action)
+    {
+        parent::__construct($action);
+    }
+    
+    public function index()
+    {
+        $frm = $this->sentEmailSearchForm();
+        $this->set('srchFrm', $frm);
+        $this->_template->render();
+    }
+    
+    public function search()
+    {
+        if (!FatUtility::isAjaxCall()) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+        $srchFrm = $this->sentEmailSearchForm();
+        $post = $srchFrm->getFormDataFromArray(FatApp::getPostedData());
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = ($page <= 0) ? 1 : $page;
+        $pagesize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        
+        $sentEmailObj = new SentEmail();
+        $srch = $sentEmailObj->getSearchObject(true);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $rs = $srch->getResultSet();
+        $arrListing = FatApp::getDb()->fetchAll($rs);
+        
+        $this->set("arrListing", $arrListing);
+        $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
+        $this->set('page', $page);
+        $this->set('pageSize', $pagesize);
+        $this->set('postedData', $post);
+        
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+    
+    public function view($id)
+    {
+        $row_data = SentEmail::getAttributesById($id);
+        $this->set('data', $row_data);
+        $this->_template->render();
+    }
+    
+    private function sentEmailSearchForm()
+    {
+        $frm = new Form('sentEmailSrchForm');
+        $frm->addHiddenField('', 'page');
+        //$frm->addSubmitButton('', 'btn_search', 'Search');
+        return $frm;
+    }
+}

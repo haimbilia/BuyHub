@@ -1,9 +1,10 @@
 <?php
+
 class ShippingProfile extends MyAppModel
 {
+
     const DB_TBL = 'tbl_shipping_profile';
     const DB_TBL_PREFIX = 'shipprofile_';
-
     public const DB_TBL_LANG = 'tbl_shipping_profile_lang';
     public const DB_TBL_LANG_PREFIX = 'shipprofilelang_';
 
@@ -27,18 +28,18 @@ class ShippingProfile extends MyAppModel
             );
         }
         if ($isActive == true) {
-            $srch->addCondition('sprofile.' . static::DB_TBL_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('sprofile.' . static::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
         return $srch;
     }
 
-    public static function  getProfileArr(int $langId, $userId, $assoc = true, $isActive = false, $default = false)
+    public static function getProfileArr(int $langId, int $userId, $assoc = true, $isActive = false, $default = false)
     {
         $srch = self::getSearchObject($langId, $isActive);
         if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
-            $srch->addCondition('shipprofile_user_id', '=', 0);
+            $srch->addCondition('shipprofile_user_id', '=', 'mysql_func_0', 'AND', true);
         } else {
-            $srch->addCondition('shipprofile_user_id', '=', $userId);
+            $srch->addCondition('shipprofile_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         }
         $srch->addMultipleFields(array('shipprofile_id', 'IFNULL(shipprofile_name, shipprofile_identifier) as shipprofile_name'));
         $srch->addOrder('shipprofile_default', 'DESC');
@@ -47,9 +48,9 @@ class ShippingProfile extends MyAppModel
         $srch->doNotLimitRecords();
 
         if (true == $default) {
-            $srch->addCondition('shipprofile_default', '=', applicationConstants::YES);
+            $srch->addCondition('shipprofile_default', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         }
-        
+
         if ($assoc) {
             return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
         } else {
@@ -59,10 +60,11 @@ class ShippingProfile extends MyAppModel
 
     public static function getShipProfileIdByName($langId, $profileName, $userId = 0)
     {
+        $userId = FatUtility::int($userId);
         $srch = self::getSearchObject($langId);
         $cnd = $srch->addCondition('shipprofile_name', '=', trim($profileName));
         //$cnd->attachCondition('shipprofile_identifier', '=', trim($profileName));
-        $srch->addCondition('shipprofile_user_id', '=', $userId);
+        $srch->addCondition('shipprofile_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->addFld('shipprofile_id');
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -135,7 +137,7 @@ class ShippingProfile extends MyAppModel
     public static function getShippingZoneArr(int $userId): array
     {
         $shippingZoneSrch = ShippingZone::getSearchObject();
-        $shippingZoneSrch->addCondition('shipzone_user_id', '=', $userId);
+        $shippingZoneSrch->addCondition('shipzone_user_id', '=',  'mysql_func_' . $userId, 'AND', true);
         $rs = $shippingZoneSrch->getResultSet();
         return (array) FatApp::getDb()->fetchAll($rs);
     }
@@ -146,8 +148,8 @@ class ShippingProfile extends MyAppModel
         $shippingProfileId = FatUtility::int($shippingProfileId);
 
         $srSrch = ShippingRate::getSearchObject(CommonHelper::getLangId());
-        $srSrch->addCondition('shiprate_condition_type', '=', 0);
-        $srSrch->addCondition('shiprate_shipprozone_id', '=', $shipProZoneId);
+        $srSrch->addCondition('shiprate_condition_type', '=',  'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srSrch->addCondition('shiprate_shipprozone_id', '=',  'mysql_func_' . $shipProZoneId, 'AND', true);
         $rs = $srSrch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (!empty($row)) {
@@ -174,13 +176,14 @@ class ShippingProfile extends MyAppModel
     public static function getDefaultProfileId($userId, $shippingProfileId = 0)
     {
         $shippingProfileId = FatUtility::int($shippingProfileId);
+        $userId = FatUtility::int($userId);
 
         $srch = self::getSearchObject();
-        $srch->addCondition('shipprofile_user_id', '=', $userId);
-        $srch->addCondition('shipprofile_default', '=', 1);
+        $srch->addCondition('shipprofile_user_id', '=',  'mysql_func_' . $userId, 'AND', true);
+        $srch->addCondition('shipprofile_default', '=',  'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addFld('shipprofile_id');
         if (0 < $shippingProfileId) {
-            $srch->addCondition('shipprofile_id', '=', $shippingProfileId);
+            $srch->addCondition('shipprofile_id', '=',  'mysql_func_' . $shippingProfileId, 'AND', true);
         }
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
@@ -213,19 +216,19 @@ class ShippingProfile extends MyAppModel
             if (User::canAddCustomProduct()) {
                 $srch->addDirectCondition('((product_seller_id = 0 AND product_added_by_admin_id = ' . applicationConstants::YES . ' and psbs.psbs_user_id = ' . $userId . ') OR product_seller_id = ' . $userId . ')');
             } else {
-                $cnd = $srch->addCondition('psbs.psbs_user_id', '=', $userId);
-                $cnd->attachCondition('product_added_by_admin_id', '=', applicationConstants::YES, 'AND');
+                $cnd = $srch->addCondition('psbs.psbs_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+                $cnd->attachCondition('product_added_by_admin_id', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
             }
 
-            $srch->addCondition('product_type', '=', Product::PRODUCT_TYPE_PHYSICAL);
-            $srch->addCondition('product_deleted', '=', applicationConstants::NO);
+            $srch->addCondition('product_type', '=', 'mysql_func_' . Product::PRODUCT_TYPE_PHYSICAL, 'AND', true);
+            $srch->addCondition('product_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
             if (FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT')) {
                 $is_custom_or_catalog = FatApp::getPostedData('type', FatUtility::VAR_INT, -1);
                 if ($is_custom_or_catalog > -1) {
                     if ($is_custom_or_catalog > 0) {
-                        $srch->addCondition('product_seller_id', '>', 0);
+                        $srch->addCondition('product_seller_id', '>', 'mysql_func_0', 'AND', true);
                     } else {
-                        $srch->addCondition('product_seller_id', '=', 0);
+                        $srch->addCondition('product_seller_id', '=', 'mysql_func_0', 'AND', true);
                     }
                 }
             }
@@ -249,5 +252,24 @@ class ShippingProfile extends MyAppModel
             return $shippingProfileId;
         }
         return $row['shipprofile_id'];
+    }
+
+    public function getZones($profileIds)
+    {
+        if (empty($profileIds)) {
+            return array();
+        }
+        $zSrch = ShippingProfileZone::getSearchObject();
+        $zSrch->addCondition("shipprozone_shipprofile_id", "IN", $profileIds);
+        $zRs = $zSrch->getResultSet();
+        $zonesData = FatApp::getDb()->fetchAll($zRs);
+        $zones = array();
+        if (!empty($zonesData)) {
+            foreach ($zonesData as $zone) {
+                $profileId = $zone['shipprozone_shipprofile_id'];
+                $zones[$profileId][] = $zone;
+            }
+        }
+        return $zones;
     }
 }

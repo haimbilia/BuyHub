@@ -1,7 +1,5 @@
 <?php
 
-use Stripe\Order;
-
 class UserRewards extends MyAppModel
 {
     public const DB_TBL = 'tbl_user_reward_points';
@@ -63,7 +61,7 @@ class UserRewards extends MyAppModel
         }
 
         $srch = static::getSearchObject();
-        $srch->addCondition('urp.urp_id', '=', $urpId);
+        $srch->addCondition('urp.urp_id', '=', 'mysql_func_' . $urpId, 'AND', true);
         $rs = $srch->getResultSet();
 
         $result = FatApp::getDb()->fetch($rs);
@@ -94,7 +92,7 @@ class UserRewards extends MyAppModel
 
             $srch = new UserRewardSearch();
             $srch->joinUserRewardBreakup();
-            $srch->addCondition('urpbreakup_used', '=', 0);
+            $srch->addCondition('urpbreakup_used', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
             $srch->addCondition('urp_user_id', '=', $result['urp_user_id']);
             $cnd = $srch->addCondition('urp_date_expiry', '>=', date('Y-m-d'));
             $cnd->attachCondition('urp_date_expiry', '=', '0000-00-00');

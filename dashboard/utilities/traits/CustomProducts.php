@@ -681,34 +681,37 @@ trait CustomProducts
 
     public function countries_autocomplete()
     {
-        $pagesize = 10;
-        $post = FatApp::getPostedData();
-        $userId = $this->userParentId;
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+        $post = FatApp::getPostedData();      
         $srch = Countries::getSearchObject(true, $this->siteLangId);
         $srch->addOrder('country_name');
 
         $srch->addMultipleFields(array('country_id, country_name, country_code'));
 
         if (!empty($post['keyword'])) {
-            $cnd = $srch->addCondition('country_name', 'LIKE', '%' . $post['keyword'] . '%');
+            $srch->addCondition('country_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
         $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
+        $srch->setPageNumber($page);
 
-        $countries = $db->fetchAll($rs, 'country_id');
+        $countries = FatApp::getDb()->fetchAll($srch->getResultSet(), 'country_id');
         if (isset($post['includeEverywhere']) && $post['includeEverywhere']) {
             $everyWhereArr = array('country_id' => '-1', 'country_name' => Labels::getLabel('LBL_Everywhere_Else', $this->siteLangId));
             $countries[] = $everyWhereArr;
         }
 
-        $json = array();
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($countries as $key => $country) {
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $country['country_id'],
-                'name' => strip_tags(html_entity_decode(isset($country['country_name']) ? $country['country_name'] : $country['country_code'], ENT_QUOTES, 'UTF-8')),
-
+                'text' => strip_tags(html_entity_decode(isset($country['country_name']) ? $country['country_name'] : $country['country_code'], ENT_QUOTES, 'UTF-8')),
             );
         }
         die(json_encode($json));
@@ -921,18 +924,13 @@ trait CustomProducts
     {
         $post = FatApp::getPostedData();
 
-        $srch = Tag::getSearchObject();
-        $srch->addOrder('tag_identifier');
-        $srch->joinTable(
-            Tag::DB_TBL . '_lang',
-            'LEFT OUTER JOIN',
-            'taglang_tag_id = tag_id AND taglang_lang_id = ' . $this->siteLangId
-        );
-        $srch->addMultipleFields(array('tag_id, tag_name, tag_identifier'));
+        $srch = Tag::getSearchObject($this->siteLangId);
+        $srch->addOrder('tag_name');    
+        $srch->addMultipleFields(array('tag_id', 'tag_name'));
 
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('tag_name', 'LIKE', '%' . $post['keyword'] . '%');
-            $cnd->attachCondition('tag_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
+            $cnd->attachCondition('tag_name', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
 
         $rs = $srch->getResultSet();
@@ -942,8 +940,7 @@ trait CustomProducts
         foreach ($options as $key => $option) {
             $json[] = array(
                 'id' => $key,
-                'name' => strip_tags(html_entity_decode($option['tag_name'], ENT_QUOTES, 'UTF-8')),
-                'tag_identifier' => strip_tags(html_entity_decode($option['tag_identifier'], ENT_QUOTES, 'UTF-8'))
+                'name' => strip_tags(html_entity_decode($option['tag_name'], ENT_QUOTES, 'UTF-8')),        
             );
         }
         die(json_encode($json));
@@ -1056,7 +1053,7 @@ trait CustomProducts
         $frm = $this->getTagsForm($tag_id);
 
         if (0 < $tag_id) {
-            $data = Tag::getAttributesById($tag_id, array('tag_id', 'tag_identifier'));
+            $data = Tag::getAttributesById($tag_id, array('tag_id', 'tag_name'));
             if ($data === false) {
                 FatUtility::dieWithError($this->str_invalid_request);
             }
@@ -1126,6 +1123,7 @@ trait CustomProducts
         }
         unset($post['tag_id']);
         $post['tag_user_id'] = $this->userParentId;
+        $post['tag_lang_id'] = $this->siteLangId;        
         $record = new Tag($tag_id);
         $record->assignValues($post);
 
@@ -1234,7 +1232,7 @@ trait CustomProducts
 
         $frm = new Form('frmTag', array('id' => 'frmTag'));
         $frm->addHiddenField('', 'tag_id', $tag_id);
-        $frm->addRequiredField(Labels::getLabel("LBL_Tag_Identifier", $this->siteLangId), 'tag_identifier');
+        $frm->addRequiredField(Labels::getLabel("LBL_Tag_Name", $this->siteLangId), 'tag_name');
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel("LBL_Save_Changes", $this->siteLangId));
         return $frm;
     }
@@ -1434,7 +1432,7 @@ trait CustomProducts
         }
         if (!User::canAddCustomProduct()) {
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
         }
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
@@ -1865,6 +1863,7 @@ trait CustomProducts
 
     public function productOptionsAndTag($productId)
     {
+        
         if (!$this->isShopActive($this->userParentId, 0, true)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
@@ -1872,6 +1871,7 @@ trait CustomProducts
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
         }
+        
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
@@ -1881,15 +1881,17 @@ trait CustomProducts
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieWithError(Message::getHtml());
         }
-        $productTags = Product::getProductTags($productId);
+       
+        $productTags = Product::getProductTags($productId,$this->siteLangId);
         $productOptions = Product::getProductOptions($productId, $this->siteLangId);
         $productType = Product::getAttributesById($productId, 'product_type');
         $this->set('productTags', $productTags);
         $this->set('productOptions', $productOptions);
         $this->set('productId', $productId);
         $this->set('productType', $productType);
+       
         $this->_template->render(false, false, 'seller/product-options-and-tag.php');
-    }
+    }    
 
     public function upcListing($productId)
     {

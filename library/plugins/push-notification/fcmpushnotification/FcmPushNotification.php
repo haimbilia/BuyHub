@@ -65,12 +65,12 @@ class FcmPushNotification extends PushNotificationBase
         }
 
         if (empty($this->deviceTokens) || 1000 < count($this->deviceTokens)) {
-            $this->error = Labels::getLabel('LBL_ARRAY_MUST_CONTAIN_AT_LEAST_1_AND_AT_MOST_1000_REGISTRATION_TOKENS', $this->langId);
+            $this->error = Labels::getLabel('ERR_ARRAY_MUST_CONTAIN_AT_LEAST_1_AND_AT_MOST_1000_REGISTRATION_TOKENS', $this->langId);
             return $this->formatOutput(Plugin::RETURN_FALSE, $this->error);
         }
             
         if (empty($title) || empty($message)) {
-            $this->error = Labels::getLabel('LBL_INVALID_REQUEST', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return $this->formatOutput(Plugin::RETURN_FALSE, $this->error);
         }
 

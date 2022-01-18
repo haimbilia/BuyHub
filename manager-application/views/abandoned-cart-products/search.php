@@ -1,0 +1,31 @@
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$printData = false;
+if (!isset($tbody)) {
+    $printData = true;
+    $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);
+}
+
+$serialNo = ($page - 1) * $pageSize + 1;
+foreach ($arrListing as $sn => $row) {
+    $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo]);
+
+    foreach ($fields as $key => $val) {
+        $td = $tr->appendElement('td');
+        switch ($key) {
+            case 'listSerial':
+                $td->appendElement('plaintext', [], $serialNo);
+                break;
+            default:
+                $td->appendElement('plaintext', [], $row[$key], true);
+                break;
+        }
+    }
+    $serialNo++;
+}
+
+include(CONF_THEME_PATH . '_partial/listing/no-record-found.php');
+
+if ($printData) {
+    echo $tbody->getHtml();
+}

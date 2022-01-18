@@ -15,11 +15,11 @@ class TranslateApi
     {
         $this->subscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         if (empty($this->subscriptionKey)) {
-            $this->error = Labels::getLabel('MSG_YOU_HAVE_NOT_ENTERED_A_VALID_SUBSCRIPTION_KEY', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_YOU_HAVE_NOT_ENTERED_A_VALID_SUBSCRIPTION_KEY', CommonHelper::getLangId());
             return false;
         }
         if (empty($fromLang)) {
-            $this->error = Labels::getLabel('MSG_INVALID_SOURCE_LANGUAGE', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_SOURCE_LANGUAGE', CommonHelper::getLangId());
             return false;
         }
         $this->host = 'https://api.cognitive.microsofttranslator.com';
@@ -30,7 +30,7 @@ class TranslateApi
     public function translateData($to, $requestBody)
     {
         if (empty($to) || empty($requestBody)) {
-            $this->error = Labels::getLabel('MSG_INVALID_REQUEST_TYPE', CommonHelper::getLangId());
+            $this->error = Labels::getLabel('ERR_INVALID_REQUEST_TYPE', CommonHelper::getLangId());
             return false;
         }
 

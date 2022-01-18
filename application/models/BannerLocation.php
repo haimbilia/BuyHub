@@ -31,14 +31,6 @@ class BannerLocation extends MyAppModel
     public static function getSearchObject($langId = 0, $isActive = true, $deviceType = 0)
     {
         $srch = new SearchBase(static::DB_TBL, 'bl');
-
-        $srch->joinTable(
-            Collections::DB_TBL,
-            'LEFT OUTER JOIN',
-            'collections.collection_id = blocation_collection_id',
-            'collections'
-        );
-
         if ($langId > 0) {
             $srch->joinTable(
                 static::DB_TBL_LANG,
@@ -49,10 +41,8 @@ class BannerLocation extends MyAppModel
         }
 
         if ($isActive) {
-            $srch->addCondition('blocation_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('blocation_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
-        $srch->addCondition('collections.collection_deleted', 'is', 'mysql_func_NULL', 'AND', true);
-        $srch->addCondition('collections.collection_deleted', '=', applicationConstants::NO, 'OR');
 
         $deviceType = FatUtility::int($deviceType);
         if (1 > $deviceType) {
@@ -85,7 +75,7 @@ class BannerLocation extends MyAppModel
         $db = FatApp::getDb();
 
         $bannerSrch = Banner::getBannerLocationSrchObj(true);
-        $bannerSrch->addCondition('blocation_collection_id', '=', $collectionId);
+        $bannerSrch->addCondition('blocation_collection_id', '=', 'mysql_func_' . $collectionId, 'AND', true);
         $bannerSrch->doNotCalculateRecords();
         $bannerSrch->setPageSize(1);
         $rs = $bannerSrch->getResultSet();
@@ -101,7 +91,7 @@ class BannerLocation extends MyAppModel
         $bsrch->joinLocations(true);
         $bsrch->addPromotionTypeCondition();
         $bsrch->joinActiveUser();
-        $bsrch->joinUserWallet();     
+        $bsrch->joinUserWallet();
         $bsrch->addSkipExpiredPromotionAndBannerCondition();
         $bsrch->joinBudget();
         $bsrch->addMultipleFields(array('banner_id', 'banner_blocation_id', 'banner_type', 'banner_record_id', 'banner_url', 'banner_target', 'banner_title', 'promotion_id', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'banner_updated_on'));

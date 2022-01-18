@@ -199,7 +199,7 @@ class UserAuthentication extends FatModel
         $row = $db->fetch($rs);
         if (!empty($row)) {
             if ($row['user_is_buyer'] != applicationConstants::YES) {
-                $this->error = Labels::getLabel('MSG_Please_login_with_buyer_account', $this->commonLangId);
+                $this->error = Labels::getLabel('ERR_Please_login_with_buyer_account', $this->commonLangId);
                 return false;
             }
 
@@ -239,7 +239,7 @@ class UserAuthentication extends FatModel
 
         if (!$userObj->save()) {
             $db->rollbackTransaction();
-            $this->error = Labels::getLabel("MSG_USER_COULD_NOT_BE_SET", $this->commonLangId) . $userObj->getError();
+            $this->error = Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->commonLangId) . $userObj->getError();
             return false;
         }
         $userId = $userObj->getMainTableRecordId();
@@ -249,14 +249,14 @@ class UserAuthentication extends FatModel
 
         $pass = CommonHelper::getRandomPassword(8);
         if (!$userObj->setLoginCredentials($useremail, $useremail, $pass, $active, $verify)) {
-            $this->error = Labels::getLabel("MSG_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->commonLangId) . $userObj->getError();
+            $this->error = Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->commonLangId) . $userObj->getError();
             $db->rollbackTransaction();
             return false;
         }
 
         if (FatApp::getConfig('CONF_NOTIFY_ADMIN_REGISTRATION', FatUtility::VAR_INT, 1)) {
             if (!$userObj->notifyAdminRegistration($data, $this->commonLangId)) {
-                $this->error = Labels::getLabel("MSG_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_NOTIFICATION_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
                 $db->rollbackTransaction();
                 return false;
             }
@@ -269,7 +269,7 @@ class UserAuthentication extends FatModel
             $data['user_phone'] = !empty($uData['user_phone']) ? $uData['user_phone'] : '';
 
             if (!$userObj->guestUserWelcomeEmail($data, $this->commonLangId)) {
-                $this->error = Labels::getLabel("MSG_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
+                $this->error = Labels::getLabel("ERR_WELCOME_EMAIL_COULD_NOT_BE_SENT", $this->commonLangId);
                 $db->rollbackTransaction();
                 return false;
             }
@@ -323,7 +323,7 @@ class UserAuthentication extends FatModel
             $this->error = Labels::getLabel('ERR_LOGIN_ATTEMPT_LIMIT_EXCEEDED_PLEASE_TRY_LATER', $this->commonLangId);
             return false;
         }
-        
+
         $srch = User::getSearchObject(true, 0, false);
         $condition = $srch->addCondition('credential_username', '=', $username);
         $condition->attachCondition('credential_email', '=', $username, 'OR');
@@ -339,16 +339,16 @@ class UserAuthentication extends FatModel
         if (0 < $userType) {
             switch ($userType) {
                 case User::USER_TYPE_BUYER:
-                    $srch->addCondition('user_is_buyer', '=', applicationConstants::YES);
+                    $srch->addCondition('user_is_buyer', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                     break;
                 case User::USER_TYPE_SELLER:
-                    $srch->addCondition('user_is_supplier', '=', applicationConstants::YES);
+                    $srch->addCondition('user_is_supplier', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                     break;
                 case User::USER_TYPE_ADVERTISER:
-                    $srch->addCondition('user_is_advertiser', '=', applicationConstants::YES);
+                    $srch->addCondition('user_is_advertiser', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                     break;
                 case User::USER_TYPE_AFFILIATE:
-                    $srch->addCondition('user_is_affiliate', '=', applicationConstants::YES);
+                    $srch->addCondition('user_is_affiliate', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
                     break;
                 default:
                     $srch->addCondition('user_registered_initially_for', '=', $userType);
@@ -368,9 +368,9 @@ class UserAuthentication extends FatModel
 
         /* [To Do - need to remove credential_password_old in next release */
         if (false === $this->loginWithOtp) {
-           
-            if( $row['credential_verified'] == applicationConstants::YES  && !$isAdmin){
-                if( empty($row['credential_password'])){ 
+
+            if ($row['credential_verified'] == applicationConstants::YES  && !$isAdmin) {
+                if (empty($row['credential_password'])) {
                     ///Forced user to update password
                     $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->commonLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->commonLangId));
                     $this->error = $emailErrorMsg;
@@ -379,9 +379,8 @@ class UserAuthentication extends FatModel
                         $json['msg'] = $this->error;
                         $json['notVerified'] = 1;
                         die(json_encode($json));
-                    }                
+                    }
                     return false;
-
                 }
 
                 if (true == $encryptPassword) {
@@ -396,9 +395,8 @@ class UserAuthentication extends FatModel
                         $this->error = Labels::getLabel('ERR_INVALID_Password', $this->commonLangId);
                         return false;
                     }
-                }        
-            } 
-
+                }
+            }
         }
         /* [To Do - need to remove credential_password_old in next release */
 
@@ -434,7 +432,7 @@ class UserAuthentication extends FatModel
                 }
 
                 if (true === MOBILE_APP_API_CALL) {
-                    $this->error = Labels::getLabel('MSG_Your_Account_verification_is_pending', $this->commonLangId);
+                    $this->error = Labels::getLabel('ERR_Your_Account_verification_is_pending', $this->commonLangId);
                 }
 
                 if (FatUtility::isAjaxCall() || true === MOBILE_APP_API_CALL) {
@@ -455,7 +453,7 @@ class UserAuthentication extends FatModel
             if (0 < $rowUser['user_parent']) {
                 $parentUser = new User($rowUser['user_parent']);
                 $parentSrch = $parentUser->getUserSearchObj();
-                $parentSrch->addCondition('credential_active', '=', applicationConstants::ACTIVE);
+                $parentSrch->addCondition('credential_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                 $rs = $parentSrch->getResultSet();
                 $parentData = FatApp::getDb()->fetch($rs);
                 if (false == $parentData || null == $parentData) {
@@ -693,12 +691,12 @@ class UserAuthentication extends FatModel
         $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'email', '=', $email);
 
         if (true === $isActive) {
-            $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         } else {
             $srch->addFld(User::DB_TBL_CRED_PREFIX . 'active');
         }
         if (true === $isVerfied) {
-            $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'verified', '=', applicationConstants::YES);
+            $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         } else {
             $srch->addFld(User::DB_TBL_CRED_PREFIX . 'verified');
         }
@@ -733,19 +731,19 @@ class UserAuthentication extends FatModel
         $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', User::tblFld('id') . '=' . User::DB_TBL_CRED_PREFIX . 'user_id');
 
         if (true === $isActive) {
-            $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         } else {
             $srch->addFld(User::DB_TBL_CRED_PREFIX . 'active');
         }
 
         if (true === $isVerfied) {
-            $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'verified', '=', applicationConstants::YES);
+            $srch->addCondition(User::DB_TBL_CRED_PREFIX . 'verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         } else {
             $srch->addFld(User::DB_TBL_CRED_PREFIX . 'verified');
         }
 
         if (true === $addDeletedCheck) {
-            $srch->addCondition(User::DB_TBL_PREFIX . 'deleted', '=', applicationConstants::NO);
+            $srch->addCondition(User::DB_TBL_PREFIX . 'deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         $srch->addMultipleFields(
@@ -796,9 +794,10 @@ class UserAuthentication extends FatModel
 
     public function getUserResetPwdToken($userId)
     {
+        $userId = FatUtility::int($userId);
         $db = FatApp::getDb();
         $srch = new SearchBase(static::DB_TBL_USER_PRR);
-        $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'user_id', '=', $userId);
+        $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'expiry', '>', date('Y-m-d H:i:s'));
         $srch->addMultipleFields([static::DB_TBL_UPR_PREFIX . 'user_id', static::DB_TBL_UPR_PREFIX . 'token']);
         $srch->doNotCalculateRecords();
@@ -866,7 +865,7 @@ class UserAuthentication extends FatModel
         }
         $db = FatApp::getDb();
         $srch = new SearchBase(static::DB_TBL_USER_PRR);
-        $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'user_id', '=', $uId);
+        $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'user_id', '=', 'mysql_func_' .$uId, 'AND', true);
         $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'token', '=', $token);
         $srch->addCondition(static::DB_TBL_UPR_PREFIX . 'expiry', '>', date('Y-m-d H:i:s'));
         $srch->doNotCalculateRecords();
@@ -895,7 +894,7 @@ class UserAuthentication extends FatModel
         }
 
         if (!ValidateElement::password($pwd)) {
-            $this->error = Labels::getLabel('MSG_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_PASSWORD_MUST_BE_EIGHT_CHARACTERS_LONG_AND_ALPHANUMERIC', $this->commonLangId);
             return false;
         }
 

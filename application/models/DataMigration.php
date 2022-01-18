@@ -547,12 +547,12 @@ class DataMigration
                 $option['option_identifier'] = $option['option_name'] . "_" . $catId;
                 $optionId = $this->getOptionId($option['option_identifier'], $option['option_name'], $option['option_is_color'], $option['option_is_color'], $option['option_is_separate_images'], $this->langId);
                 if (0 > $optionId) {
-                    $this->error = Labels::getLabel('MSG_UNABLE_TO_CREATE_OR_GET_OPTION', $this->langId);
+                    $this->error = Labels::getLabel('ERR_UNABLE_TO_CREATE_OR_GET_OPTION', $this->langId);
                     $db->rollbackTransaction();
                     return false;
                 }
 
-                if (!$productObj->addUpdateProductOption($optionId)) {
+                if (!$productObj->addUpdateProductOption($optionId,'')) {
                     $this->error = $productObj->getError();
                     $db->rollbackTransaction();
                     return false;
@@ -782,7 +782,7 @@ class DataMigration
                 if (empty($productInfo)) {
                     continue;
                     /*
-                      $this->error = Labels::getLabel('MSG_SELLER_PRODUCT_NOT_FOUND', $this->langId);
+                      $this->error = Labels::getLabel('ERR_SELLER_PRODUCT_NOT_FOUND', $this->langId);
                       return false;
                      *
                      */
@@ -1249,14 +1249,13 @@ class DataMigration
 
         $srch = Tag::getSearchObject();
         $srch->addFld('tag_id');
-        $cnd = $srch->addCondition('tag_identifier', "=", $name);
+        $cnd = $srch->addCondition('tag_name', "=", $name);
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if (empty($row)) {
             $tagObj = new Tag();
             $tagSaveData = array(
-                'tag_identifier' => $name,
-                'tag_admin_id' => 1,
+                'tag_name' => $name,              
             );
             $tagObj->assignValues($tagSaveData);
             $data = $tagObj->getFlds();

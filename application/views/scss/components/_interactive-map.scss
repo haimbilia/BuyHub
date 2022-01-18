@@ -320,8 +320,9 @@
     border-radius: 30px;
     font-weight: 600;
     &:hover {
-        background: $brand-color;
-        color: $brand-color-inverse;
+        //background-color: $brand-color;
+        //color:lighten($brand-color, 55%);        
+        @include bg-brand();
     }
 }
 

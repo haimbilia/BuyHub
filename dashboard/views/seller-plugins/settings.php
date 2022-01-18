@@ -7,7 +7,10 @@ $frm->developerTags['colClassPrefix'] = 'col-md-';
 $frm->developerTags['fld_default_col'] = 12;
 
 $btnSubmit = $frm->getField('btn_submit');
-$btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
+if(null != $btnSubmit){
+   $btnSubmit->setFieldTagAttribute('class', "btn btn-brand");
+}
+
 ?>
 
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>

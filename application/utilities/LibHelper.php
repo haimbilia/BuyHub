@@ -7,12 +7,12 @@ class LibHelper extends FatUtility
     public const RC_CREATED = 201; /* A new resource was successfully created. */
     public const RC_BAD_REQUEST = 400; /* The request was invalid. */
     public const RC_UNAUTHORIZED = 401; /* The request did not include an authentication token or the authentication token was expired. */
-    PUBLIC CONST RC_FORBIDDEN = 403; /* The client did not have permission to access the requested resource.  */
-    PUBLIC CONST RC_NOT_FOUND = 404; /* The requested resource was not found.  */
-    PUBLIC CONST RC_METHOD_NOT_ALLOWED = 405; /* The HTTP method in the request was not supported by the resource. For example, the DELETE method cannot be used with the Agent API.  */
-    PUBLIC CONST RC_CONFLICT = 409; /* The request could not be completed due to a conflict. For example,  POST ContentStore Folder API cannot complete if the given file or folder name already exists in the parent location.  */
-    PUBLIC CONST RC_INTERNAL_SERVER_ERROR = 500; /* The request was not completed due to an internal error on the server side.  */
-    PUBLIC CONST RC_SERVICE_UNAVAILABLE = 503; /* The server was unavailable.  */
+    public const RC_FORBIDDEN = 403; /* The client did not have permission to access the requested resource.  */
+    public const RC_NOT_FOUND = 404; /* The requested resource was not found.  */
+    public const RC_METHOD_NOT_ALLOWED = 405; /* The HTTP method in the request was not supported by the resource. For example, the DELETE method cannot be used with the Agent API.  */
+    public const RC_CONFLICT = 409; /* The request could not be completed due to a conflict. For example,  POST ContentStore Folder API cannot complete if the given file or folder name already exists in the parent location.  */
+    public const RC_INTERNAL_SERVER_ERROR = 500; /* The request was not completed due to an internal error on the server side.  */
+    public const RC_SERVICE_UNAVAILABLE = 503; /* The server was unavailable.  */
     /* Response Codes */
 
     private const ENCRYPTION_KEY = '__^%&Q@$&*!@#$%^&*^__';
@@ -43,17 +43,22 @@ class LibHelper extends FatUtility
             FatUtility::dieJsonError($message);
         }
 
-        if (true === $json) {
+        $fOutMode = FatApp::getPostedData('fOutMode', FatUtility::VAR_STRING);
+        if (true === $json || 'json' == $fOutMode) {
             FatUtility::dieJsonError($message);
-        }
-
-        if (FatUtility::isAjaxCall() || $redirect === false) {
-            FatUtility::dieWithError($message);
         }
 
         if (true === $redirect) {
             Message::addErrorMessage($message);
+            return;
         }
+
+        if (method_exists('HtmlHelper', 'getErrorMessageHtml')) {
+            FatUtility::dieWithError(HtmlHelper::getErrorMessageHtml($message));
+        }
+
+        Message::addErrorMessage($message);
+        FatUtility::dieWithError(Message::getHtml());
     }
 
     public static function exitWithSuccess($message, $json = false, $redirect = false)
@@ -78,6 +83,12 @@ class LibHelper extends FatUtility
         if (true === $redirect) {
             Message::addMessage($message);
         }
+    }
+
+    public static function dieJsonSuccess($arr = [])
+    {
+        $arr['status'] = true;
+        FatUtility::dieJsonSuccess($arr);
     }
 
     public static function getCommonReplacementVarsArr($langId)
@@ -277,7 +288,7 @@ class LibHelper extends FatUtility
 
     public static function phoneNumberMasking(string $phone): string
     {
-        return substr($phone, 0, 4) . str_repeat('*',(strlen($phone) - 5)) . substr($phone, -1);
+        return substr($phone, 0, 4) . str_repeat('*', (strlen($phone) - 5)) . substr($phone, -1);
     }
 
     /**
@@ -311,7 +322,7 @@ class LibHelper extends FatUtility
 
         $msg = (0 < $status ? Labels::getLabel("MSG_SUCCESS", $langId) : Labels::getLabel("MSG_AN_UNKNOWN_ERROR_OCCURRED", $langId));
         $data['msg'] = array_key_exists('msg', $data) ? $data['msg'] : $msg;
-        
+
         $respData = [];
         if (array_key_exists('data', $data)) {
             $respData = empty($data['data']) && MOBILE_APP_API_CALL ? (object) [] : $data['data'];
@@ -327,5 +338,16 @@ class LibHelper extends FatUtility
         }
 
         CommonHelper::redirectUserReferer();
+    }
+
+    public static function getControllerName($titleCase = false)
+    {
+        if (false === $titleCase) {
+            return str_replace('Controller', '', FatApp::getController());
+        }
+
+        $arr = explode('-', FatUtility::camel2dashed(FatApp::getController()));
+        array_pop($arr);
+        return ucfirst(implode(' ', $arr));
     }
 }

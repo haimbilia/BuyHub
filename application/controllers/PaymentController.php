@@ -64,6 +64,7 @@ abstract class PaymentController extends MyAppController
     protected function paymentInitiated($orderId)
     {
         unset($_SESSION['shopping_cart']["order_id"]);
+        unset($_SESSION['subscription_shopping_cart']["order_id"]);
     }
 
 }

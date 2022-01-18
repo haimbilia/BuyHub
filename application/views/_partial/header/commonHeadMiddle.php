@@ -30,8 +30,10 @@ if ($canonicalUrl == '') {
 <?php $googleFontFamily = "'Poppins', sans-serif !important";
 $fontKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
 $googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');
-$themeColor = FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "rgb(255,58,89)");
-$themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, "rgb(255,255,255)");
+$themeColor = FatApp::getConfig('CONF_THEME_COLOR_RGB', FatUtility::VAR_STRING, "rgb(255,58,89)");
+$themeColor = (false === strpos($themeColor, 'rgb') ? 'rgb(' . $themeColor . ')' : $themeColor);
+$themeColorInverse = FatApp::getConfig('CONF_THEME_COLOR_INVERSE_RGB', FatUtility::VAR_STRING, "rgb(255,255,255)");
+$themeColorInverse = (false === strpos($themeColorInverse, 'rgb') ? 'rgb(' . $themeColorInverse . ')' : $themeColorInverse);
 if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
     $googleFontFamily =  '"' . str_replace("+", " ", explode('-', $googleFontFamily)[0]) . '" !important';
@@ -48,10 +50,10 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     }
 
     :root {
-        <?php if (CommonHelper::isAppUser()) { ?>--brand-color: #<?php echo FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-        --brand-color-inverse: #<?php echo FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-        --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
-        --secondary-color-inverse: #<?php echo FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+        <?php if (CommonHelper::isAppUser()) { ?>--brand-color: #<?php echo $themeColor; ?>;
+        --brand-color-inverse: #<?php echo FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''); ?>;
+        --secondary-color: #<?php echo FatApp::getConfig('CONF_SECONDARY_THEME_COLOR', FatUtility::VAR_STRING, ''); ?>;
+        --secondary-color-inverse: #<?php echo FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''); ?>;
         <?php } else { ?>--brand-color: <?php echo $themeColor; ?>;
         --brand-color-alpha: <?php echo strtr($themeColor, ["rgb(" => "", ")" => ""]); ?>;
         --brand-color-inverse: <?php echo $themeColorInverse; ?>;
@@ -60,6 +62,13 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
 </style>
 <script>
     <?php
+
+    $productSearchUrl = CacheHelper::get('productSearchUrl', CONF_DEF_CACHE_TIME, '.txt');
+    if (!$productSearchUrl) {
+        $productSearchUrl = UrlHelper::generateUrl('products', 'search');
+        CacheHelper::create('productSearchUrl', $productSearchUrl, CacheHelper::TYPE_META_TAGS);
+    }
+
     echo $str = 'var langLbl = ' . FatUtility::convertToJson($jsVariables, JSON_UNESCAPED_UNICODE) . ';
     var CONF_AUTO_CLOSE_SYSTEM_MESSAGES = ' . FatApp::getConfig("CONF_AUTO_CLOSE_SYSTEM_MESSAGES", FatUtility::VAR_INT, 0) . ';
     var CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES = ' . FatApp::getConfig("CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES", FatUtility::VAR_INT, 3) . ';
@@ -69,6 +78,7 @@ if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
     var currencySymbolRight = "' . $currencySymbolRight . '";   
     var className = "' . FatApp::getController() . '";
     var actionName = "' . FatApp::getAction() . '";
+    var productSearchUrl = "' . $productSearchUrl . '";   
     if( CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES <= 0  ){
         CONF_TIME_AUTO_CLOSE_SYSTEM_MESSAGES = 3;
     }';

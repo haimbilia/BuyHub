@@ -19,12 +19,13 @@ class Banner extends MyAppModel
 
     public const TYPE_BANNER = 1;
     public const TYPE_PPC = 2;
-	
-	public const REMOVED_OLD_IMAGE_TIME = 4;
+
+    public const REMOVED_OLD_IMAGE_TIME = 4;
 
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
+        $this->objMainTableRecord->setSensitiveFields([static::DB_TBL_PREFIX . 'id']);
     }
 
     public static function getBannerTypesArr($langId)
@@ -34,11 +35,11 @@ class Banner extends MyAppModel
             $langId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG');
         }
         return array(
-        static::TYPE_BANNER => Labels::getLabel('LBL_Banner', $langId),
-        static::TYPE_PPC => Labels::getLabel('LBL_Promotion', $langId),
+            static::TYPE_BANNER => Labels::getLabel('LBL_Banner', $langId),
+            static::TYPE_PPC => Labels::getLabel('LBL_Promotion', $langId),
         );
     }
-    
+
     public static function getSearchObject($langId = 0, $isActive = true)
     {
         $srch = new SearchBase(static::DB_TBL, 'b');
@@ -53,7 +54,7 @@ class Banner extends MyAppModel
         }
 
         if ($isActive) {
-            $srch->addCondition('banner_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('banner_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
         return $srch;
     }
@@ -62,7 +63,7 @@ class Banner extends MyAppModel
     {
         $srch = new SearchBase(static::DB_TBL_LOCATIONS, 'bl');
         if ($isActive) {
-            $srch->addCondition('blocation_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('blocation_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         $deviceType = FatUtility::int($deviceType);
@@ -82,11 +83,11 @@ class Banner extends MyAppModel
         unset($data['blocation_id']);
 
         $assignValues = array(
-        /* 'blocation_banner_width'=>$data['blocation_banner_width'],
-        'blocation_banner_height'=>$data['blocation_banner_height'], */
-        'blocation_active' => $data['blocation_active'],
-        'blocation_promotion_cost' => $data['blocation_promotion_cost'],
-        'blocation_identifier' => $data['blocation_identifier'],
+            /* 'blocation_banner_width'=>$data['blocation_banner_width'],
+            'blocation_banner_height'=>$data['blocation_banner_height'], */
+            'blocation_active' => $data['blocation_active'],
+            'blocation_promotion_cost' => $data['blocation_promotion_cost'],
+            'blocation_identifier' => $data['blocation_identifier'],
         );
         $where = array('smt' => 'blocation_id = ?', 'vals' => array($blocationId));
         if (!$db->updateFromArray(static::DB_TBL_LOCATIONS, $assignValues, $where)) {
@@ -103,9 +104,9 @@ class Banner extends MyAppModel
         }
 
         $bannerLogData = array(
-        'lbanner_banner_id' => $bannerId,
-        'lbanner_date' => date('Y-m-d'),
-        'lbanner_impressions' => 1,
+            'lbanner_banner_id' => $bannerId,
+            'lbanner_date' => date('Y-m-d'),
+            'lbanner_impressions' => 1,
         );
 
         $onDuplicateBannerLogData = array_merge($bannerLogData, array('lbanner_impressions' => 'mysql_func_lbanner_impressions+1'));
@@ -117,8 +118,8 @@ class Banner extends MyAppModel
         $where = array('smt' => 'banner_id = ?', 'vals' => array($banner_id));
         FatApp::getDb()->updateFromArray(static::DB_TBL, array('banner_updated_on' => date('Y-m-d  H:i:s')), $where);
     }
-	
-	public static function deleteImagesWithoutBannerId($fileType)
+
+    public static function deleteImagesWithoutBannerId($fileType)
     {
         $allowedFileTypes = [AttachedFile::FILETYPE_BANNER];
         if (empty($fileType) || !in_array($fileType, $allowedFileTypes)) {
@@ -134,8 +135,8 @@ class Banner extends MyAppModel
         }
         return true;
     }
-	
-	public function updateMedia($ImageIds)
+
+    public function updateMedia($ImageIds)
     {
         if (count($ImageIds) == 0) {
             return false;

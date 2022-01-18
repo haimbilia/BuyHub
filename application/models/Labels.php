@@ -1,5 +1,17 @@
 <?php
 
+/**
+ *
+ * ERR - ERROR Messages
+ * SUC- Success Messages
+ * LBL - LABLES (General labels)
+ * FRM - Form fields (Labels, Place holders)
+ * MSG - Messages
+ * VLBL- Form Validations
+ * TXT - Text
+ * NAV - Navigation
+ * CON - confiramtion
+ */
 class Labels extends MyAppModel
 {
     public const DB_TBL = 'tbl_language_labels';
@@ -32,31 +44,64 @@ class Labels extends MyAppModel
         );
     }
 
-    public static function getPrefixTypes($langId)
+    public static function getTypeBtnHtml(int $langId, int $status): string
     {
-        return
-            [
-                'GEN' => self::getLabel('GEN_GENERAL', $langId),
-                'TXT' => self::getLabel('GEN_TEXT', $langId),
-                'LBL' => self::getLabel('GEN_LABELS', $langId),
-                'MSG' => self::getLabel('GEN_SYSTEM_MESSAGES', $langId),
-                'APP' => self::getLabel('GEN_APP', $langId),
-                'API' => self::getLabel('GEN_THIRD_PARTY_API', $langId),
-                'BTN' => self::getLabel('GEN_BUTTONS', $langId),
-                'INV' => self::getLabel('GEN_ORDER_OR_INVOICES', $langId),
-                'VLBL' => self::getLabel('GEN_VALIDATION_LABELS', $langId),
-                'USER' => self::getLabel('GEN_USER_NOTIFICATION', $langId),
-                'L' => self::getLabel('GEN_LABELS', $langId),
-                'M' => self::getLabel('GEN_SYSTEM_MESSAGES', $langId),
-            ];
+        $arr = self::getTypeArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case static::TYPE_WEB:
+                $status = HtmlHelper::SUCCESS;
+                break;
+            case static::TYPE_APP:
+                $status = HtmlHelper::WARNING;
+                break;
+
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
     }
 
-    public static function getSearchObject($langId = 0, $attr = '')
+    public static function getPrefixTypes(int $langId)
+    {
+        $labelsPrefixes = CacheHelper::get('labelsPrefixes' . $langId, CONF_DEF_CACHE_TIME, '.txt');
+        if ($labelsPrefixes) {
+            return json_decode($labelsPrefixes);
+        }
+
+        $arr =
+            [
+                'GEN' => self::getLabel('GEN_GENERAL_LABELS', $langId),
+                'TXT' => self::getLabel('TXT_TEXT_MESSAGES', $langId),
+                'NAV' => self::getLabel('NAV_NAVIGATION_LABELS', $langId),
+                'LBL' => self::getLabel('LBL_GENERAL_LABELS', $langId),
+                'FRM' => self::getLabel('FRM_FORM_FIELDS_&_LABELS', $langId),
+                'MSG' => self::getLabel('MSG_SYSTEM_MESSAGES', $langId),
+                'APP' => self::getLabel('APP_APP_LABELS', $langId),
+                'API' => self::getLabel('API_API_LABELS', $langId),
+                'BTN' => self::getLabel('BTN_BUTTON_LABELS', $langId),
+                'INV' => self::getLabel('GEN_ORDER_OR_INVOICES', $langId),
+                'VLBL' => self::getLabel('VLBL_FORM_VALIDATION_LABELS', $langId),
+                'USER' => self::getLabel('USER_USER_NOTIFICATIONS', $langId),
+                'L' => self::getLabel('L_GENERAL_LABELS', $langId),
+                'M' => self::getLabel('M_SYSTEM_MESSAGES', $langId),
+                'ERR' => self::getLabel('ERR_ERROR_MESSAGES', $langId),
+                'SUC' => self::getLabel('SUC_SUCCESS_MESSAGES', $langId),
+                'CON' => self::getLabel('CON_CONFIRMATION_MESSAGES', $langId),
+            ];
+        CacheHelper::create('abusiveWordsTblHeadingCols' . $langId, json_encode($arr), CacheHelper::TYPE_LABELS);
+        return $arr;
+    }
+
+    public static function getSearchObject($langId = 0, $attr = '', $setOrderBy = true)
     {
         $langId = FatUtility::int($langId);
 
         $srch = new SearchBase(static::DB_TBL, 'lbl');
-        $srch->addOrder('lbl.' . static::DB_TBL_PREFIX . 'id', 'DESC');
+        if (true === $setOrderBy) {
+            $srch->addOrder('lbl.' . static::DB_TBL_PREFIX . 'id', 'DESC');
+        }
 
         $columns = array(
             'lbl.' . static::DB_TBL_PREFIX . 'id',
@@ -71,56 +116,54 @@ class Labels extends MyAppModel
         $srch->addMultipleFields($attr);
 
         if ($langId > 0) {
-            $srch->addCondition('lbl.' . static::DB_TBL_PREFIX . 'lang_id', '=', $langId);
+            $srch->addCondition('lbl.' . static::DB_TBL_PREFIX . 'lang_id', '=', 'mysql_func_' .$langId, 'AND', true);
         }
         return $srch;
     }
 
-    public static function getLabel($lblKey, $langId, $type = Labels::TYPE_WEB)
+    public static function getLabel(string $key, int $langId = 0, int $type = Labels::TYPE_WEB): string
     {
-        if (empty($lblKey)) {
-            return;
+        if (empty($key)) {
+            return '';
         }
 
-        if (preg_match('/\s/', $lblKey)) {
-            return $lblKey;
+        if (preg_match('/\s/', $key)) {
+            return $key;
         }
 
         $type = ($type != static::TYPE_APP) ? static::TYPE_WEB : static::TYPE_APP;
 
-        $langId = FatUtility::int($langId);
-        if ($langId == 0) {
-            $langId = CommonHelper::getLangId();
-        }
+        $langId = (0 < $langId) ? $langId : CommonHelper::getLangId();
+
+        $keyOriginal = $key;
+        $key = strtoupper($key);
 
         $cacheAvailable = static::isAPCUcacheAvailable();
         if ($cacheAvailable) {
-            $cacheKey = static::getAPCUcacheKey($lblKey, $langId);
+            $cacheKey = static::getAPCUcacheKey($key, $langId);
             if (apcu_exists($cacheKey)) {
-                return strip_tags(trim(apcu_fetch($cacheKey)));
+                return nl2br(strip_tags(trim(apcu_fetch($cacheKey))));
             }
         }
 
-        global $lang_array;
+        global $langArray;
 
-        if (isset($lang_array[$lblKey][$langId])) {
-            if (!empty($lang_array[$lblKey][$langId])) {
-                return strip_tags($lang_array[$lblKey][$langId]);
+        if (isset($langArray[$key][$langId])) {
+            if (!empty($langArray[$key][$langId])) {
+                return strip_tags($langArray[$key][$langId]);
             }
 
-            $arr = explode(' ', ucwords(str_replace('_', ' ', strtolower($lblKey))));
+            $arr = explode(' ', str_replace('_', ' ', strtolower($keyOriginal)));
             array_shift($arr);
-            return $lang_array[$lblKey][$langId] = strip_tags(implode(' ', $arr));
+            return $langArray[$key][$langId] = nl2br(strip_tags(ucfirst(implode(' ', $arr))));
         }
 
-        $key_original = $lblKey;
-        $key = strtoupper($lblKey);
 
         $str = '';
         if (FatApp::getConfig('CONF_READ_LABELS_FROM_FILE', FatUtility::VAR_INT, 1)) {
             global $langFileData;
             if (!isset($langFileData[$langId][$key])) {
-                $str = $langFileData[$langId][$key] = static::readDataFromFile($langId, $key_original, $type);
+                $str = $langFileData[$langId][$key] = static::readDataFromFile($langId, $keyOriginal, $type);
             } else {
                 if (array_key_exists($key, $langFileData[$langId])) {
                     $str = $langFileData[$langId][$key];
@@ -140,15 +183,15 @@ class Labels extends MyAppModel
                 if (isset($lbl[static::DB_TBL_PREFIX . 'caption']) && $lbl[static::DB_TBL_PREFIX . 'caption'] != '') {
                     $str = $lbl[static::DB_TBL_PREFIX . 'caption'];
                 } else {
-                    $arr = explode(' ', ucwords(str_replace('_', ' ', strtolower($lblKey))));
+                    $arr = explode(' ', str_replace('_', ' ', strtolower($keyOriginal)));
                     array_shift($arr);
-                    $str = implode(' ', $arr);
+                    $str = ucfirst(implode(' ', $arr));
                 }
             } else {
-                $arr = explode(' ', ucwords(str_replace('_', ' ', strtolower($key_original))));
+                $arr = explode(' ', str_replace('_', ' ', strtolower($keyOriginal)));
                 array_shift($arr);
 
-                $str = implode(' ', $arr);
+                $str = ucfirst(implode(' ', $arr));
                 $assignValues = array(
                     static::DB_TBL_PREFIX . 'key' => $key,
                     static::DB_TBL_PREFIX . 'caption' => $str,
@@ -165,12 +208,12 @@ class Labels extends MyAppModel
 
         if ($cacheAvailable) {
             apcu_store($cacheKey, $str);
-            return strip_tags($str);
+            return nl2br(strip_tags($str));
         }
 
-        global $lang_array;
-        $lang_array[$lblKey][$langId] = $str;
-        return strip_tags($str);
+        global $langArray;
+        $langArray[$key][$langId] = $str;
+        return nl2br(strip_tags($str));
     }
 
     public static function readDataFromFile($langId, $key, $type = Labels::TYPE_WEB, $returnVal = true)
@@ -300,10 +343,10 @@ class Labels extends MyAppModel
                 return false;
             }
         }
-        
-        if($type == Labels::TYPE_WEB){
+
+        if ($type == Labels::TYPE_WEB) {
             CacheHelper::clear(CacheHelper::TYPE_LABELS);
-        }       
+        }
 
         return true;
     }
@@ -321,5 +364,16 @@ class Labels extends MyAppModel
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAllAssoc($rs);
+    }
+
+    public static function displayPrefixType(string $key, int $langId)
+    {
+        $key =  strtoupper(strstr($key, '_', true));
+        $arr = self::getPrefixTypes($langId);
+        if (!array_key_exists($key, $arr)) {
+            return $key;
+        }
+
+        return $arr[$key];
     }
 }

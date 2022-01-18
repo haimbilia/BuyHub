@@ -1,0 +1,70 @@
+<!-- Styles -->
+<style>
+#chartdiv {
+  width: 100%;
+  height: 500px;
+}
+
+</style>
+
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+<!-- Chart code -->
+<script>
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+var chart = am4core.create("chartdiv", am4charts.XYChart);
+
+chart.data = [{
+  "name": "John",
+  "startTime": 8,
+  "endTime": 11,
+  "color": chart.colors.next()
+}, {
+  "name": "Joe",
+  "startTime": 10,
+  "endTime": 13,
+  "color": chart.colors.next()
+}, {
+  "name": "Susan",
+  "startTime": 11,
+  "endTime": 18,
+  "color": chart.colors.next()
+}, {
+  "name": "Eaton",
+  "startTime": 15,
+  "endTime": 19,
+  "color": chart.colors.next()
+}];
+
+var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "name";
+categoryAxis.renderer.inversed = true;
+categoryAxis.renderer.grid.template.location = 0;
+
+var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+valueAxis.renderer.minGridDistance = 50;
+
+var columnSeries = chart.series.push(new am4charts.ColumnSeries());
+columnSeries.dataFields.categoryY = "name";
+columnSeries.dataFields.valueX = "endTime";
+columnSeries.dataFields.openValueX = "startTime";
+columnSeries.columns.template.tooltipText = "[bold]{categoryY}[/]\nstarts at {openValueX}\nends at {valueX}";
+
+var columnTemplate = columnSeries.columns.template;
+columnTemplate.strokeOpacity = 0;
+columnTemplate.propertyFields.fill = "color";
+columnTemplate.height = am4core.percent(100);
+
+}); // end am4core.ready()
+</script>
+
+<!-- HTML -->
+<div id="chartdiv"></div>

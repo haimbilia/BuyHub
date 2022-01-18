@@ -16,7 +16,7 @@ class PushNotification extends MyAppModel
 
     public const NOTIFY_TO_BUYER = 1;
     public const NOTIFY_TO_SELLER = 2;
-    
+
     /**
      * __construct
      *
@@ -26,8 +26,9 @@ class PushNotification extends MyAppModel
     public function __construct(int $pushNotificationId = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $pushNotificationId);
+        $this->objMainTableRecord->setSensitiveFields([static::DB_TBL_PREFIX . 'id']);
     }
-    
+
     /**
      * getSearchObject
      *
@@ -39,12 +40,12 @@ class PushNotification extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'pn');
 
         if (true === $joinNotificationUsers) {
-            $srch->joinTable(static::DB_TBL_NOTIFICATION_TO_USER, 'LEFT OUTER JOIN', 'pnu.pntu_pnotification_id = pn.' . static::DB_TBL_PREFIX . 'id', 'pnu');
+            $srch->joinTable(static::DB_TBL_NOTIFICATION_TO_USER, 'LEFT JOIN', 'pnu.pntu_pnotification_id = pn.' . static::DB_TBL_PREFIX . 'id', 'pnu');
         }
 
         return $srch;
     }
-    
+
     /**
      * getStatusArr
      *
@@ -59,7 +60,7 @@ class PushNotification extends MyAppModel
             static::STATUS_COMPLETED => Labels::getLabel('LBL_COMPLETED', $langId)
         ];
     }
-    
+
     /**
      * getUserTypeArr
      *
@@ -73,7 +74,7 @@ class PushNotification extends MyAppModel
             static::NOTIFY_TO_SELLER => Labels::getLabel('LBL_SELLERS', $langId),
         ];
     }
-    
+
     /**
      * getDeviceTokensData
      *
@@ -122,7 +123,7 @@ class PushNotification extends MyAppModel
                 $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'uc.' . User::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
                 $joinUserAuth .= 'uauth.uauth_user_id = u.user_id';
                 break;
-            
+
             default:
                 return [
                     'lastUserAccessTime' => '',
@@ -145,11 +146,11 @@ class PushNotification extends MyAppModel
         } else {
             $srch->addCondition('uc.' . User::DB_TBL_CRED_PREFIX . 'active', '=', applicationConstants::YES);
             $srch->addCondition('uc.' . User::DB_TBL_CRED_PREFIX . 'verified', '=', applicationConstants::YES);
-        
+
             if (0 < $joinBuyers) {
                 $cnd = $srch->addCondition('u.' . User::DB_TBL_PREFIX . 'is_buyer', '=', applicationConstants::YES);
             }
-        
+
             if (0 < $joinSellers) {
                 if (0 < $joinBuyers) {
                     $cnd->attachCondition('u.' . User::DB_TBL_PREFIX . 'is_supplier', '=', applicationConstants::YES);
@@ -174,13 +175,13 @@ class PushNotification extends MyAppModel
         $srch->addGroupBy('uauth_fcm_id');
         $rs = $srch->getResultSet();
         $tokenData = FatApp::getDb()->fetchAll($rs);
-        
+
         $lastUserAccessTime = date('Y-m-d H:i:s');
         if (is_array($tokenData) && !empty($tokenData)) {
             $lastToken = end($tokenData);
             $lastUserAccessTime = $lastToken['uauth_last_access'];
         }
-        
+
         $deviceTokens = [];
         foreach ($tokenData as $data) {
             $deviceTokens[$data['uauth_device_os']][] = $data['uauth_fcm_id'];
@@ -191,7 +192,7 @@ class PushNotification extends MyAppModel
             'deviceTokens' => $deviceTokens
         ];
     }
-    
+
     /**
      * updateDetail
      *
@@ -206,7 +207,7 @@ class PushNotification extends MyAppModel
             'pnotification_id' => $recordId,
             'pnotification_status' => $status
         ];
-        
+
         if (!empty($lastUserAccessTime)) {
             $dataToSave['pnotification_uauth_last_access'] = $lastUserAccessTime;
         }
@@ -219,7 +220,7 @@ class PushNotification extends MyAppModel
         }
         return true;
     }
-    
+
     /**
      * send
      *
@@ -241,12 +242,12 @@ class PushNotification extends MyAppModel
             $error =  Labels::getLabel('MSG_PLUGIN_IS_NOT_ACTIVE', CommonHelper::getLangId());
             return false;
         }
-        
+
         $notificationObj = PluginHelper::callPlugin($keyName, [CommonHelper::getLangId()], $error, CommonHelper::getLangId(), false);
         if (false === $notificationObj) {
             return false;
         }
-        
+
         $limit = $keyName::LIMIT;
 
         $srchU = new SearchBase(static::DB_TBL_NOTIFICATION_TO_USER, 'pnu');
@@ -275,11 +276,11 @@ class PushNotification extends MyAppModel
             $userAuthType = $notificationDetail['pnotification_user_auth_type'];
 
             $joinNotificationUsers = (0 < $notificationDetail['pnotification_user_linked']) ? true : false;
-            
+
             $data = static::getDeviceTokensData($recordId, $joinBuyers, $joinSellers, $userAuthType, $joinNotificationUsers);
             $deviceTokens = $data['deviceTokens'];
             $lastUserAccessTime = $data['lastUserAccessTime'];
-            
+
             if (empty($deviceTokens) || 1 > count($deviceTokens)) {
                 static::updateDetail($recordId, static::STATUS_COMPLETED, $error);
                 continue;
@@ -321,5 +322,82 @@ class PushNotification extends MyAppModel
             // CommonHelper::printArray($response);
         }
         return true;
+    }
+
+    public static function getStatusHtml(int $langId, int $status): string
+    {
+        $arr = self::getStatusArr($langId);
+        $msg = $arr[$status];
+        switch ($status) {
+            case PushNotification::STATUS_PENDING:
+                $status = HtmlHelper::INFO;
+                break;
+            case PushNotification::STATUS_PROCESSING:
+                $status = HtmlHelper::WARNING;
+                break;
+            case PushNotification::STATUS_COMPLETED:
+                $status = HtmlHelper::SUCCESS;
+                break;
+
+            default:
+                $status = HtmlHelper::PRIMARY;
+                break;
+        }
+        return HtmlHelper::getStatusHtml($status, $msg);
+    }
+
+    public static function getAuthTypeHtml(int $langId, int $type): string
+    {
+        $arr = User::getUserAuthTypeArr($langId);
+        $msg = $arr[$type];
+        switch ($type) {
+            case User::AUTH_TYPE_GUEST:
+                $status = 'info';
+                break;
+            case User::AUTH_TYPE_REGISTERED:
+                $status = 'success';
+                break;
+
+            default:
+                $status = 'warning';
+                break;
+        }
+        return '<span class="font-' . $status . '">' . $msg . '</span>';
+    }
+
+    public static function getDeviceTypeHtml(int $langId, int $type): string
+    {
+        $arr = User::getDeviceTypeArr($langId);
+        $msg = $arr[$type];
+        switch ($type) {
+            case User::DEVICE_OS_ANDROID:
+                return '<i title="' . $msg . '" data-bs-toggle="tooltip">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#android-icon">
+                                </use>
+                            </svg>
+                        </i>';
+                break;
+            case User::DEVICE_OS_IOS:
+                return '<i title="' . $msg . '" data-bs-toggle="tooltip">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#apple-icon">
+                                </use>
+                            </svg>
+                        </i>';
+                break;
+
+            default:
+                return '<i title="' . $msg . '" data-bs-toggle="tooltip">
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#utility-icons">
+                                </use>
+                            </svg>
+                        </i>';
+                break;
+        }
     }
 }

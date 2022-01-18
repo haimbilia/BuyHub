@@ -13,6 +13,8 @@ class CacheHelper extends FatCache
     const TYPE_LANGUAGE = 8;
     const TYPE_GOOGLE_ANALYTICS = 9;
     const TYPE_COLLECTIONS = 10;
+    const TYPE_HELP_CENTER = 11;
+    const TYPE_META_TAGS = 12;
 
     public static function clear(int $type)
     {
@@ -58,5 +60,4 @@ class CacheHelper extends FatCache
     {
         return FatCache::get($key, $expiry, $extension);
     }
-
 }

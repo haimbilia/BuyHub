@@ -37,6 +37,9 @@ class SellerProduct extends MyAppModel
     public const UPDATE_OPTIONS_COUNT = 10;
     public const INVENTORY_RESTRICT_LIMIT = 20;
 
+    public const OPTION_NAME_SEPARATOR = ':';
+    public const MULTIPLE_OPTION_SEPARATOR = ' | ';
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -324,8 +327,8 @@ class SellerProduct extends MyAppModel
         $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'ptc.ptc_product_id = product_id', 'ptc');
         $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'c.prodcat_id = ptc.ptc_prodcat_id', 'c');
 
-        $srch->addCondition('c.prodcat_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('c.prodcat_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('c.prodcat_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('c.prodcat_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
 
         if (FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
             $srch->joinTable(Brand::DB_TBL, 'INNER JOIN', 'product_brand_id = brand.brand_id and brand.brand_active = ' . applicationConstants::YES . ' and brand.brand_deleted = ' . applicationConstants::NO, 'brand');
@@ -346,11 +349,11 @@ class SellerProduct extends MyAppModel
                 'IFNULL(m.splprice_price, selprod_price) AS theprice', 'selprod_min_order_qty', 'product_updated_on'
             ));
         }
-        $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', applicationConstants::YES);
-        $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('product_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('product_deleted', '=', applicationConstants::NO);
+        $srch->addCondition(Product::DB_TBL_PREFIX . 'active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('product_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('product_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addOrder('selprod_id', 'DESC');
         return $srch;
     }
@@ -365,7 +368,7 @@ class SellerProduct extends MyAppModel
         }
 
         $srch = static::searchUpsellProducts($lang_id);
-        $srch->addCondition(static::DB_TBL_UPSELL_PRODUCTS_PREFIX . 'sellerproduct_id', '=', $sellProdId);
+        $srch->addCondition(static::DB_TBL_UPSELL_PRODUCTS_PREFIX . 'sellerproduct_id', '=', 'mysql_func_' . $sellProdId, 'AND', true);
         if (true === MOBILE_APP_API_CALL) {
             if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
                 $this->joinFavouriteProducts($srch, $userId);
@@ -394,7 +397,7 @@ class SellerProduct extends MyAppModel
         $srch = new SearchBase(static::DB_TBL, 'sp');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        $srch->addCondition(static::tblFld('id'), '=', $recordId);
+        $srch->addCondition(static::tblFld('id'), '=', 'mysql_func_' . $recordId, 'AND', true);
 
         if (true === $joinSpecifics) {
             $srch->joinTable(
@@ -473,7 +476,7 @@ class SellerProduct extends MyAppModel
         $srch = new SearchBase(static::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
 
         if ($option_id) {
-            $srch->addCondition(static::DB_TBL_SELLER_PROD_OPTIONS_PREFIX . 'option_id', '=', $option_id);
+            $srch->addCondition(static::DB_TBL_SELLER_PROD_OPTIONS_PREFIX . 'option_id', '=', 'mysql_func_' . $option_id, 'AND', true);
         }
 
         if ($withAllJoins) {
@@ -489,7 +492,7 @@ class SellerProduct extends MyAppModel
             $srch->addMultipleFields(array('o.option_id', 'ov.optionvalue_id', 'IFNULL(option_name, option_identifier) as option_name', 'IFNULL(optionvalue_name, optionvalue_identifier) as optionvalue_name'));
         }
 
-        $srch->addCondition(static::DB_TBL_SELLER_PROD_OPTIONS_PREFIX . 'selprod_id', '=', $selprod_id);
+        $srch->addCondition(static::DB_TBL_SELLER_PROD_OPTIONS_PREFIX . 'selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
 
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -524,7 +527,7 @@ class SellerProduct extends MyAppModel
 
         $srch->addCondition('optionvalue_id', 'IN', $opValArr);
         if ($displayInFilterOnly) {
-            $srch->addCondition('option_display_in_filter', '=', applicationConstants::YES);
+            $srch->addCondition('option_display_in_filter', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         }
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -536,7 +539,7 @@ class SellerProduct extends MyAppModel
     {
         $selprod_id = FatUtility::int($selprod_id);
         $srch = new SearchBase(static::DB_TBL_SELLER_PROD_SPCL_PRICE);
-        $srch->addCondition('splprice_selprod_id', '=', $selprod_id);
+        $srch->addCondition('splprice_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addOrder('splprice_id');
@@ -550,7 +553,7 @@ class SellerProduct extends MyAppModel
         $splprice_id = FatUtility::int($splprice_id);
         $srch = new SearchBase(static::DB_TBL_SELLER_PROD_SPCL_PRICE, 'prodSp');
         $srch->joinTable(static::DB_TBL, 'INNER JOIN', 'prodSp.splprice_selprod_id = slrPrd.selprod_id', 'slrPrd');
-        $srch->addCondition('splprice_id', '=', $splprice_id);
+        $srch->addCondition('splprice_id', '=', 'mysql_func_' . $splprice_id, 'AND', true);
         $srch->addMultipleFields(array('prodSp.*', 'slrPrd.selprod_id', 'slrPrd.selprod_user_id'));
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
@@ -650,7 +653,7 @@ class SellerProduct extends MyAppModel
 			END
        		as matches FROM " . Commission::DB_TBL . " WHERE commsetting_deleted = 0 order by matches desc, commsetting_fees desc  limit 0,1";
         $rs = $db->query($sql);
-        if ($row = $db->fetch($rs)) {           
+        if ($row = $db->fetch($rs)) {
             return $row['commsetting_fees'];
         }
     }
@@ -676,10 +679,10 @@ class SellerProduct extends MyAppModel
             'splprice_selprod_id = selprod_id AND \'' . $forDate . '\' BETWEEN splprice_start_date AND splprice_end_date'
         );
 
-        $srch->addCondition(ProductGroup::DB_PRODUCT_TO_GROUP_PREFIX . 'prodgroup_id', '=', $prodgroup_id);
-        $srch->addCondition('p.product_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('p.product_approved', '=', Product::APPROVED);
-        $srch->addCondition('sp.selprod_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition(ProductGroup::DB_PRODUCT_TO_GROUP_PREFIX . 'prodgroup_id', '=', 'mysql_func_' . $prodgroup_id, 'AND', true);
+        $srch->addCondition('p.product_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('p.product_approved', '=', 'mysql_func_' . Product::APPROVED, 'AND', true);
+        $srch->addCondition('sp.selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('sp.selprod_available_from', '<=', $now);
 
         if ($lang_id > 0) {
@@ -717,11 +720,11 @@ class SellerProduct extends MyAppModel
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = p.product_id', 'p');
         $srch->joinTable(ProductGroup::DB_TBL, 'INNER JOIN', 'ptg.' . ProductGroup::DB_PRODUCT_TO_GROUP_PREFIX . 'prodgroup_id = pg.prodgroup_id', 'pg');
 
-        $srch->addCondition(ProductGroup::DB_PRODUCT_TO_GROUP_PREFIX . 'selprod_id', '=', $this->mainTableRecordId);
-        $srch->addCondition('pg.prodgroup_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('p.product_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('p.product_approved', '=', Product::APPROVED);
-        $srch->addCondition('sp.selprod_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition(ProductGroup::DB_PRODUCT_TO_GROUP_PREFIX . 'selprod_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
+        $srch->addCondition('pg.prodgroup_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('p.product_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('p.product_approved', '=', 'mysql_func_' . Product::APPROVED, 'AND', true);
+        $srch->addCondition('sp.selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
 
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -774,7 +777,7 @@ class SellerProduct extends MyAppModel
 
         $srch = static::searchRelatedProducts($lang_id, $criteria);
         if ($sellProdId > 0) {
-            $srch->addCondition(static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'sellerproduct_id', '=', $sellProdId);
+            $srch->addCondition(static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'sellerproduct_id', '=', 'mysql_func_' . $sellProdId, 'AND', true);
         }
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
@@ -821,17 +824,17 @@ class SellerProduct extends MyAppModel
 			AND ppointlang_lang_id = ' . $langId,
             'pp_l'
         );
-        $srch->addCondition('pp.ppoint_type', '=', $policy_type);
-        $srch->addCondition('sppolicy_selprod_id', '=', $selprod_id);
+        $srch->addCondition('pp.ppoint_type', '=', 'mysql_func_' . $policy_type, 'AND', true);
+        $srch->addCondition('sppolicy_selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
         $srch->addMultipleFields(array('ppoint_id', 'ifnull(ppoint_title,ppoint_identifier) ppoint_title'));
         $srch->doNotCalculateRecords();
         $srch->addOrder('pp.ppoint_display_order');
         if ($deleted == false) {
-            $srch->addCondition('pp.ppoint_deleted', '=', applicationConstants::NO);
+            $srch->addCondition('pp.ppoint_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         }
 
         if ($active == true) {
-            $srch->addCondition('pp.ppoint_active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('pp.ppoint_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         }
 
         if ($limit) {
@@ -847,7 +850,7 @@ class SellerProduct extends MyAppModel
         if (is_array($selProdId) && 0 < count($selProdId)) {
             $prodSrch->addCondition('selprod_id', 'IN', $selProdId);
         } else {
-            $prodSrch->addCondition('selprod_id', '=', $selProdId);
+            $prodSrch->addCondition('selprod_id', '=', 'mysql_func_' . FatUtility::int($selProdId), 'AND', true);
         }
         $prodSrch->addMultipleFields(array('selprod_id', 'product_id', 'product_identifier', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title'));
         $prodSrch->addGroupBy('selprod_id');
@@ -905,7 +908,7 @@ class SellerProduct extends MyAppModel
         $srch = new SellerProductVolumeDiscountSearch();
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array('voldiscount_min_qty', 'voldiscount_percentage'));
-        $srch->addCondition('voldiscount_selprod_id', '=', $this->mainTableRecordId);
+        $srch->addCondition('voldiscount_selprod_id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->addOrder('voldiscount_min_qty', 'ASC');
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetchAll($rs);
@@ -990,11 +993,11 @@ class SellerProduct extends MyAppModel
         $srch = static::getSearchObject();
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id and p.product_deleted = ' . applicationConstants::NO . ' and p.product_active = ' . applicationConstants::YES, 'p');
 
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('selprod_user_id', '=', $userId);
-        $srch->addCondition('selprod_active', '=', applicationConstants::YES);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
+        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         if ($selprodId) {
-            $srch->addCondition('selprod_id', '!=', $selprodId);
+            $srch->addCondition('selprod_id', '!=', 'mysql_func_' . $selprodId, 'AND', true);
         }
 
         $srch->addMultipleFields(array('selprod_id'));
@@ -1006,11 +1009,12 @@ class SellerProduct extends MyAppModel
 
     public function joinUserWishListProducts($srch, $user_id)
     {
+        $user_id = FatUtility::int($user_id);
         $wislistPSrchObj = new UserWishListProductSearch();
         $wislistPSrchObj->joinWishLists();
         $wislistPSrchObj->doNotCalculateRecords();
         $wislistPSrchObj->doNotLimitRecords();
-        $wislistPSrchObj->addCondition('uwlist_user_id', '=', $user_id);
+        $wislistPSrchObj->addCondition('uwlist_user_id', '=', 'mysql_func_' . $user_id, 'AND', true);
         $wislistPSrchObj->addMultipleFields(array('uwlp_selprod_id', 'uwlp_uwlist_id'));
         $wishListSubQuery = $wislistPSrchObj->getQuery();
         $srch->joinTable('(' . $wishListSubQuery . ')', 'LEFT OUTER JOIN', 'uwlp.uwlp_selprod_id = selprod_id', 'uwlp');
@@ -1057,11 +1061,11 @@ class SellerProduct extends MyAppModel
         return $frm;
     }
 
-    public static function searchSpecialPriceProductsObj($langId, $selProdId = 0, $keyword = '', $userId = 0)
+    public static function searchSpecialPriceProductsObj($langId, $selProdId = 0, $keyword = '', $userId = 0, $addOrderBy = true)
     {
-        $pageSize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
         $srch = static::getSearchObject($langId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
+        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'u.user_id = sp.selprod_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = sp.selprod_user_id', 'tuc');
         $srch->joinTable(static::DB_TBL_SELLER_PROD_SPCL_PRICE, 'INNER JOIN', 'spp.splprice_selprod_id = sp.selprod_id', 'spp');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
@@ -1069,12 +1073,12 @@ class SellerProduct extends MyAppModel
         $srch->addMultipleFields(
             array(
                 'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
-                'selprod_title', 'splprice_id', 'splprice_price','selprod_product_id','product_updated_on'
+                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
             )
         );
 
         if (0 < $selProdId) {
-            $srch->addCondition('selprod_id', '=', $selProdId);
+            $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
         }
         if (!empty($keyword)) {
             $cnd = $srch->addCondition('product_name', 'like', "%$keyword%");
@@ -1085,31 +1089,33 @@ class SellerProduct extends MyAppModel
             $srch->addCondition('selprod_user_id', '=', $userId);
         }
 
-        $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('product_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('product_deleted', '=', applicationConstants::NO);
-        $srch->addOrder('splprice_id', 'DESC');
-        $srch->setPageSize($pageSize);
+        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('product_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('product_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        if (true === $addOrderBy) {
+            $srch->addOrder('splprice_id', 'DESC');
+        }
         return $srch;
     }
 
-    public static function searchVolumeDiscountProducts($langId, $selProdId = 0, $keyword = '', $userId = 0)
+    public static function searchVolumeDiscountProducts($langId, $selProdId = 0, $keyword = '', $userId = 0, $addOrderBy = true)
     {
-        $pageSize = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
+            
         $srch = static::getSearchObject($langId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
+        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = sp.selprod_user_id', 'u');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'tuc.credential_user_id = sp.selprod_user_id', 'tuc');
         $srch->joinTable(SellerProductVolumeDiscount::DB_TBL, 'INNER JOIN', 'vd.voldiscount_selprod_id = sp.selprod_id', 'vd');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
         $srch->addMultipleFields(
             array(
-                'selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title', 'voldiscount_id','product_updated_on','selprod_product_id'
+                'selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title', 'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
             )
         );
 
         if (0 < $selProdId) {
-            $srch->addCondition('selprod_id', '=', $selProdId);
+            $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
         }
 
 
@@ -1122,23 +1128,38 @@ class SellerProduct extends MyAppModel
             $srch->addCondition('selprod_user_id', '=', $userId);
         }
 
-        $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        $srch->setPageSize($pageSize);
-        $srch->addOrder('voldiscount_id', 'DESC');
+        $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        if (true == $addOrderBy) {
+            $srch->addOrder('voldiscount_id', 'DESC');
+        }
         return $srch;
     }
 
-    public static function getSelProdDataById($selProdId, $langId = 0)
+    public static function getSelProdDataById($selProdId, $langId = 0, $joinProduct = false, $attr = [])
     {
+        $selProdId = FatUtility::int($selProdId);
         $srch = static::getSearchObject($langId);
-        $srch->addCondition('selprod_id', '=', $selProdId);
-        $rs = $srch->getResultSet();
-        return FatApp::getDb()->fetch($rs);
+        $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+
+        if (0 < count($attr)) {
+            $srch->addMultipleFields($attr);
+        }
+
+        if ($joinProduct) {
+            $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
+            if (0 < $langId) {
+                $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
+            }
+        }
+        return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
     public static function searchSellerProducts($langId, $userId, $keyword = '')
     {
+        $userId = FatUtility::int($userId);
         $srch = SellerProduct::getSearchObject($langId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id and p.product_deleted = ' . applicationConstants::NO . ' and p.product_active = ' . applicationConstants::YES, 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $langId, 'p_l');
@@ -1147,12 +1168,12 @@ class SellerProduct extends MyAppModel
             $cnd->attachCondition('selprod_title', 'LIKE', "%$keyword%");
             $cnd->attachCondition('product_identifier', 'LIKE', "%$keyword%");
         }
-        $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addOrder('selprod_active', 'DESC');
         $srch->addOrder('selprod_added_on', 'DESC');
         $srch->addOrder('selprod_id', 'DESC');
         $srch->addOrder('product_name');
-        $srch->addCondition('selprod_user_id', '=', $userId);
+        $srch->addCondition('selprod_user_id', '=', 'mysql_func_' . $userId, 'AND', true);
         return $srch;
     }
 
@@ -1213,8 +1234,8 @@ class SellerProduct extends MyAppModel
         $productId = FatUtility::int($productId);
         $srch = SellerProduct::getSearchObject();
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
-        $srch->addCondition('selprod_deleted', '=', 0);
-        $srch->addCondition('selprod_product_id', '=', $productId);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addCondition('selprod_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
         $srch->addFld('selprod_id');
         $rs = $srch->getResultSet();
         $record = FatApp::getDb()->fetch($rs);
@@ -1230,8 +1251,8 @@ class SellerProduct extends MyAppModel
         $loggedUserId = UserAuthentication::getLoggedUserId();
         $srch = new ProductSearch();
         $srch->joinProductShippedBySeller($loggedUserId);
-        $srch->addCondition('psbs_user_id', '=', $loggedUserId);
-        $srch->addCondition('product_id', '=', $productId);
+        $srch->addCondition('psbs_user_id', '=', 'mysql_func_' . $loggedUserId, 'AND', true);
+        $srch->addCondition('product_id', '=', 'mysql_func_' . $productId, 'AND', true);
         $srch->addFld('psbs_user_id');
         $rs = $srch->getResultSet();
         return FatApp::getDb()->fetch($rs);
@@ -1251,8 +1272,8 @@ class SellerProduct extends MyAppModel
     public static function getProdIdByPlugin(int $pluginId, int $pluginSelProdId): int
     {
         $srch = new SearchBase(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD);
-        $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_id', '=', $pluginId);
-        $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_selprod_id', '=', $pluginSelProdId);
+        $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_id', '=', 'mysql_func_' . $pluginId, 'AND', true);
+        $srch->addCondition(static::DB_SELLER_PROD_TO_PLUGIN_SELLER_PROD_PREFIX . 'plugin_selprod_id', '=', 'mysql_func_' . $pluginSelProdId, 'AND', true);
         $srch->addFld('spps_selprod_id');
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetch($rs);
@@ -1286,7 +1307,7 @@ class SellerProduct extends MyAppModel
         $optionSrch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'op.option_id = op_l.optionlang_option_id AND op_l.optionlang_lang_id = ' . $langId, 'op_l');
         $optionSrch->addMultipleFields(array('option_id', 'option_is_color', 'COALESCE(option_name,option_identifier) as option_name'));
         $optionSrch->addCondition('option_id', '!=', 'NULL');
-        $optionSrch->addCondition('selprodoption_selprod_id', '=', $selProdId);
+        $optionSrch->addCondition('selprodoption_selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
         $optionSrch->addGroupBy('option_id');
 
         $optionRs = $optionSrch->getResultSet();
@@ -1296,7 +1317,7 @@ class SellerProduct extends MyAppModel
             foreach ($optionRows as &$option) {
                 $optionValueSrch = clone $optionSrchObj;
                 $optionValueSrch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'opval.optionvalue_id = opval_l.optionvaluelang_optionvalue_id AND opval_l.optionvaluelang_lang_id = ' . $langId, 'opval_l');
-                $optionValueSrch->addCondition('product_id', '=', $productId);
+                $optionValueSrch->addCondition('product_id', '=', 'mysql_func_' . $productId, 'AND', true);
                 $optionValueSrch->addCondition('option_id', '=', $option['option_id']);
                 $optionValueSrch->addMultipleFields(array('COALESCE(product_name, product_identifier) as product_name', 'selprod_id', 'selprod_user_id', 'selprod_code', 'option_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name ', 'theprice', 'optionvalue_id', 'optionvalue_color_code'));
                 $optionValueSrch->addGroupBy('optionvalue_id');
@@ -1320,8 +1341,8 @@ class SellerProduct extends MyAppModel
 
         return $optionRows;
     }
-    
-    
+
+
     /**
      * rateObj
      *
@@ -1334,7 +1355,7 @@ class SellerProduct extends MyAppModel
         $avgRatingSrch->doNotCalculateRecords();
         $avgRatingSrch->doNotLimitRecords();
         $avgRatingSrch->addGroupBy('spr.spreview_selprod_id');
-        $avgRatingSrch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $avgRatingSrch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
         $avgRatingSrch->addMultipleFields(["ROUND(AVG(sprating_rating),2) as rating"]);
         return $avgRatingSrch;
     }
@@ -1348,7 +1369,7 @@ class SellerProduct extends MyAppModel
     public static function getRating(int $recordId): float
     {
         $avgRatingSrch = self::rateObj();
-        $avgRatingSrch->addCondition('spreview_selprod_id', '=', $recordId);
+        $avgRatingSrch->addCondition('spreview_selprod_id', '=', 'mysql_func_' . $recordId, 'AND', true);
         $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
         $avgRatingData = (array) FatApp::getDb()->fetch($avgRatingSrch->getResultSet());
         if (empty($avgRatingData)) {
@@ -1356,7 +1377,7 @@ class SellerProduct extends MyAppModel
         }
         return (float) $avgRatingData['rating'];
     }
-    
+
     /**
      * getProdRating
      *
@@ -1366,8 +1387,8 @@ class SellerProduct extends MyAppModel
     public static function getProdRating(int $recordId): float
     {
         $avgRatingSrch = self::rateObj();
-        $avgRatingSrch->addCondition('spreview_product_id', '=', $recordId);
-        $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_PRODUCT);
+        $avgRatingSrch->addCondition('spreview_product_id', '=', 'mysql_func_' . $recordId, 'AND', true);
+        $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_PRODUCT, 'AND', true);
         $avgRatingData = (array) FatApp::getDb()->fetch($avgRatingSrch->getResultSet());
         if (empty($avgRatingData)) {
             return 0;
@@ -1384,12 +1405,54 @@ class SellerProduct extends MyAppModel
     public static function getShopRating(int $recordId): float
     {
         $avgRatingSrch = self::rateObj();
-        $avgRatingSrch->addCondition('spreview_seller_user_id', '=', $recordId);
-        $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', RatingType::RATING_SHOP);
+        $avgRatingSrch->addCondition('spreview_seller_user_id', '=', 'mysql_func_' . $recordId, 'AND', true);
+        $avgRatingSrch->addCondition('sprating_ratingtype_id', '=', 'mysql_func_' . RatingType::RATING_SHOP, true);
         $avgRatingData = (array) FatApp::getDb()->fetch($avgRatingSrch->getResultSet());
         if (empty($avgRatingData)) {
             return 0;
         }
         return (float) $avgRatingData['rating'];
+    }
+    /**
+     * $optionId int|array
+     */
+
+    public static function isOptionLinked($optionId, int $productId = 0)
+    {
+        /* Get Linked Products [ */
+        $srch = SellerProduct::getSearchObject();
+        $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
+        if (0 < $productId) {
+            $srch->addCondition('selprod_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
+        }
+        if (is_array($optionId)) {
+            $srch->addCondition('tspo.selprodoption_option_id', 'IN', $optionId);
+        } else {
+            $srch->addCondition('tspo.selprodoption_option_id', '=', 'mysql_func_' . FatUtility::int($optionId), 'AND', true);
+        }
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addFld(array('selprod_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        return $row != false ? true : false;
+    }
+
+    public static function isOptionValueLinked(int $optionId, int $optionValueId, int $productId)
+    {
+        /* Get Linked Products [ */
+        $srch = SellerProduct::getSearchObject();
+        $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
+        $srch->addCondition('selprod_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
+        $srch->addCondition('tspo.selprodoption_option_id', '=', 'mysql_func_' . $optionId, 'AND', true);
+        $srch->addCondition('tspo.selprodoption_optionvalue_id', '=', 'mysql_func_' . $optionValueId, 'AND', true);
+        $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
+        $srch->addFld(array('selprod_id'));
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $rs = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($rs);
+        return $row != false ? true : false;
     }
 }

@@ -234,8 +234,9 @@
     }
     input[type="submit"] {
         font-size: 1em;
-        background: $brand-color;
-        color: $brand-color-inverse;
+        //background-color: $brand-color;
+        //color:lighten($brand-color, 55%);        
+        @include bg-brand();
         height: 2.5rem;
         width: 100%;
         max-width: 136px;

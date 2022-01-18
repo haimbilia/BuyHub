@@ -97,6 +97,7 @@ class HomeController extends MyAppController
         $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
         $geoAddress = Address::getYkGeoData();
         $cacheKey = $this->siteLangId . '-' . $this->siteCurrencyId . '-' . $apiCall . '-' . serialize($geoAddress);
+        $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
 
         $collectionTemplates = array();
         foreach ($collections as $collection) {
@@ -540,6 +541,8 @@ class HomeController extends MyAppController
         $apiCall = (true === MOBILE_APP_API_CALL) ? 1 : 0;
         $geoAddress = Address::getYkGeoData();
         $cacheKey = $langId . '_' . $this->siteCurrencyId . '_' . $apiCall . '_' . serialize($geoAddress);
+        $cacheKey .= FatApp::getConfig('LAST_FAV_MARK_TIME', FatUtility::VAR_INT, 0);
+
 
         $collectionCache = CacheHelper::get('collectionCache_' . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
 
@@ -1426,10 +1429,10 @@ class HomeController extends MyAppController
         ];
 
         $data['appThemeSetting'] = [
-            'primaryThemeColor' => FatApp::getConfig('CONF_PRIMARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
-            'primaryInverseThemeColor' => FatApp::getConfig('CONF_PRIMARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
-            'secondaryThemeColor' => FatApp::getConfig('CONF_SECONDARY_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
-            'secondaryInverseThemeColor' => FatApp::getConfig('CONF_SECONDARY_INVERSE_APP_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'primaryThemeColor' => FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'primaryInverseThemeColor' => FatApp::getConfig('CONF_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''),
+            'secondaryThemeColor' => FatApp::getConfig('CONF_SECONDARY_THEME_COLOR', FatUtility::VAR_STRING, ''),
+            'secondaryInverseThemeColor' => FatApp::getConfig('CONF_SECONDARY_THEME_COLOR_INVERSE', FatUtility::VAR_STRING, ''),
         ];
 
         $data['isWishlistEnable'] = FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1);

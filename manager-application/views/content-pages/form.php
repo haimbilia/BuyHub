@@ -1,0 +1,24 @@
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$formOnSubmit = 'saveRecord($("#frmCMSPage")); return(false);';
+$fld = $frm->getField('cpage_title');
+
+$fld = $frm->getField('urlrewrite_custom');
+$fld->setFieldTagAttribute('id', "urlrewrite_custom");
+$fld->htmlAfterField = '<span class="form-text text-muted">' . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Cms', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</span>';
+$fld->setFieldTagAttribute('onKeyup', "getSlugUrl(this,this.value)");
+
+$displayLangTab = false;
+$otherButtons = [
+    [
+        'attr' => [
+            'href' => 'javascript:void(0)',
+            'onclick' => 'editLangData(' . $recordId . ',' . array_key_first($languages) . ');',
+            'title' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
+        ],
+        'label' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
+        'isActive' => false
+    ]
+];
+
+$formTitle = Labels::getLabel('LBL_CONTENT_PAGE_SETUP', $siteLangId);
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');

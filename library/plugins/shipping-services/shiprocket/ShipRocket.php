@@ -275,7 +275,7 @@ class ShipRocket extends ShippingServicesBase
 
         $courierCompanies = isset($resp['data']['available_courier_companies']) ? $resp['data']['available_courier_companies'] : [];
         if (empty($courierCompanies)) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_FETCH_CARRIERS', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_FETCH_CARRIERS', $this->langId);
             return [];
         }
 
@@ -319,17 +319,22 @@ class ShipRocket extends ShippingServicesBase
      * @return int
      */
     private function getPickupLocation(int $shopId): int
-    {
-        $updatedOn = Shop::getAttributesById($shopId, 'shop_updated_on');
-        $pickupLocationId = $shopId . date('ym', strtotime($updatedOn));
-        $pickups = $this->getAllPickupLocations();
+    { 
+        if(0 < $this->orderDetail['opshipping_by_seller_user_id']){
+            $updatedOn = Shop::getAttributesById($shopId, 'shop_updated_on');
+            $pickupLocationId = $shopId . date('ym', strtotime($updatedOn));
+        }else{
+            $pickupLocationId = 0; // admin
+        }
+        
+        $pickups = $this->getAllPickupLocations(); 
 
         if (false !== array_search($pickupLocationId, array_column($pickups, 'pickup_location'))) {
             return (int) $pickupLocationId;
         }
         
-        if (false === $this->addPickupLocation($pickupLocationId)) {
-            return 0;
+        if (false === $this->addPickupLocation($pickupLocationId)) {            
+            return -1;
         }
         return $pickupLocationId;
     }
@@ -355,7 +360,7 @@ class ShipRocket extends ShippingServicesBase
 
         $resp = $this->getResponse();
         if (1 > $resp['success']) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_ADD_LOCATION', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_ADD_LOCATION', $this->langId);
             return 0;
         }
         return (int) $resp['address']['id'];
@@ -394,21 +399,24 @@ class ShipRocket extends ShippingServicesBase
             'COALESCE(state_name, state_identifier) as state_name',
             'country_name',
             'shop_postalcode',
-        ];
-        $address = Shop::getShopAddress($this->orderDetail['op_shop_id'], false, $this->langId, $attr);
+        ];       
+     
+        $address = $this->getShopAddress($this->orderDetail['opshipping_by_seller_user_id']);
 
         $requestParam = [
             'pickup_location' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
-            'name' => $this->orderDetail['op_shop_owner_name'],
-            'email' => $this->orderDetail['op_shop_owner_email'],
-            'phone' => $this->orderDetail['op_shop_owner_phone'],
-            'address' => $address['shop_address_line_1'],
-            'address_2' => $address['shop_address_line_2'],
-            'city' => $address['shop_city'],
-            'state' => $address['state_name'],
-            'country' => $address['country_name'],
-            'pin_code' => $address['shop_postalcode'],
+            'name' => $address['shop_name'],
+           // 'email' => $this->orderDetail['op_shop_owner_email'],
+            'phone' => $address['phone'],
+            'address' => $address['line1'],
+            'address_2' => $address['line2'],
+            'city' => $address['city'],
+            'state' => $address['state'],
+            'country' => $address['country'],
+            'pin_code' => $address['postalCode'],
         ];
+       
+       
         return $this->doRequest(self::REQUEST_ADD_PICKUP_LOCATION, $requestParam);
     }
     
@@ -445,13 +453,13 @@ class ShipRocket extends ShippingServicesBase
     {
         $this->orderDetail = $this->getSystemOrder($requestParam['op_id']);
         if (empty($this->orderDetail)) {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER', $this->langId);
             return false;
         }
 
         $pickupLocationId = $this->getPickupLocation($this->orderDetail['op_shop_id']);
-        if (1 > (int) $pickupLocationId) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_GET_PICKUP_LOCATION', $this->langId);
+        if (0 > $pickupLocationId) {
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_GET_PICKUP_LOCATION', $this->langId);
             return false;
         }
 
@@ -494,7 +502,7 @@ class ShipRocket extends ShippingServicesBase
             'reseller_name' => $this->orderDetail['op_shop_owner_name'],
             'company_name' =>  $this->orderDetail['op_shop_name'],
             'billing_customer_name' => User::getFirstName($this->orderDetail['buyer_user_name']),
-            "billing_last_name" => CommonHelper::getLastName($this->orderDetail['buyer_user_name']),
+            "billing_last_name" => User::getLastName($this->orderDetail['buyer_user_name']),
             'billing_address' => $billingAddress['oua_address1'],
             'billing_address_2' => $billingAddress['oua_address2'],
             'billing_city' => $billingAddress['oua_city'],
@@ -505,7 +513,7 @@ class ShipRocket extends ShippingServicesBase
             'billing_phone' => $this->orderDetail['buyer_phone'],
             'shipping_is_billing' => false,
             'shipping_customer_name' => User::getFirstName($this->orderDetail['buyer_user_name']),
-            "shipping_last_name" => CommonHelper::getLastName($this->orderDetail['buyer_user_name']),
+            "shipping_last_name" => User::getLastName($this->orderDetail['buyer_user_name']),
             'shipping_address' => $shippingAddress['oua_address1'],
             'shipping_address_2' => $shippingAddress['oua_address2'],
             'shipping_city' => $shippingAddress['oua_city'],
@@ -543,19 +551,20 @@ class ShipRocket extends ShippingServicesBase
             $this->error = $orderShipment['message'];
             return false;
         }
-
+       
         $requestParam = [
             'shipmentIdsArr' => [$orderShipment['shipment_id']],
             'courierId' => $this->orderDetail['opshipping_service_code'],
             'weight' => $this->convertToKg($this->orderDetail['op_product_weight']),
         ];
-        if (false === $this->doRequest(self::REQUEST_ASSIGN_AWB, $requestParam)) {
+        
+        if (false === $this->doRequest(self::REQUEST_ASSIGN_AWB, $requestParam)) {          
             return false;
         }
 
         $awbResp = $this->getResponse();
         if (applicationConstants::SUCCESS != $awbResp['awb_assign_status']) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_ASSIGN_AWB_FOR_THE_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_ASSIGN_AWB_FOR_THE_ORDER', $this->langId);
             return false;
         }
 
@@ -565,7 +574,7 @@ class ShipRocket extends ShippingServicesBase
 
         $labelResp = $this->getResponse();
         if (applicationConstants::SUCCESS != $labelResp['label_created']) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_BIND_LABEL', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_BIND_LABEL', $this->langId);
             return false;
         }
         $this->resp = [
@@ -597,7 +606,7 @@ class ShipRocket extends ShippingServicesBase
     /* public function returnShipment(): bool
     {
         if (!is_array($this->orderDetail) || 1 > count($this->orderDetail)) {
-            $this->error = Labels::getLabel('MSG_INVALID_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_INVALID_ORDER', $this->langId);
             return false;
         }
         $orderTimestamp = strtotime($this->orderDetail['order_date_added']);
@@ -610,7 +619,7 @@ class ShipRocket extends ShippingServicesBase
         $this->buyerReturnAddress = $shippingAddress;
         $pickupLocationId = $this->getReturnPickupLocation();
         if (1 > (int) $pickupLocationId) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_GET_PICKUP_LOCATION', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_GET_PICKUP_LOCATION', $this->langId);
             return false;
         }
 
@@ -646,7 +655,7 @@ class ShipRocket extends ShippingServicesBase
             'order_date' => date('Y-m-d H:i', $orderTimestamp),
             'channel_id' => isset($channel['id']) ? $channel['id'] : '',
             'pickup_customer_name' => User::getFirstName($this->orderDetail['buyer_user_name']),
-            'pickup_last_name' => CommonHelper::getLastName($this->orderDetail['buyer_user_name']),
+            'pickup_last_name' => User::getLastName($this->orderDetail['buyer_user_name']),
             'pickup_address' => $shippingAddress['oua_address1'],
             'pickup_address_2' => $shippingAddress['oua_address2'],
             'pickup_city' => $shippingAddress['oua_city'],
@@ -657,7 +666,7 @@ class ShipRocket extends ShippingServicesBase
             'pickup_phone' => $this->orderDetail['buyer_phone'],
             'pickup_location_id' => FatUtility::convertToType($pickupLocationId, FatUtility::VAR_STRING),
             'shipping_customer_name' => User::getFirstName($this->orderDetail['op_shop_owner_name']),
-            'shipping_last_name' => CommonHelper::getLastName($this->orderDetail['op_shop_owner_name']),
+            'shipping_last_name' => User::getLastName($this->orderDetail['op_shop_owner_name']),
             'shipping_address' => $shopAddress['shop_address_line_1'],
             'shipping_address_2' => $shopAddress['shop_address_line_2'],
             'shipping_city' => $shopAddress['shop_city'],
@@ -696,7 +705,7 @@ class ShipRocket extends ShippingServicesBase
     {
         $orderId = OrderProductShipment::getAttributesById($this->orderDetail['op_id'], 'opship_order_number');
         if (false == $orderId || empty($orderId)) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_LOCATE_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_LOCATE_ORDER', $this->langId);
             return false;
         }
         return $this->doRequest(self::REQUEST_CANCEL_ORDER, ['ids' => [$orderId]]);
@@ -710,7 +719,7 @@ class ShipRocket extends ShippingServicesBase
     public function fetchTrackingDetail(): array
     {
         if (empty($this->orderDetail)) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_LOAD_ORDER', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_LOAD_ORDER', $this->langId);
             return [];
         }
 
@@ -720,7 +729,7 @@ class ShipRocket extends ShippingServicesBase
 
         $trackingDetail = $this->getResponse();
         if (!array_key_exists('tracking_data', $trackingDetail)) {
-            $this->error = Labels::getLabel('MSG_UNABLE_TO_FETCH_TRACKING_DETAILS', $this->langId);
+            $this->error = Labels::getLabel('ERR_UNABLE_TO_FETCH_TRACKING_DETAILS', $this->langId);
             return [];
         }
 
@@ -822,9 +831,11 @@ class ShipRocket extends ShippingServicesBase
                     break;
             }
             return true;
-        } catch (Exception $e) {
+        } catch (Exception $e) { 
+            SystemLog::plugin(json_encode($requestParam), $e->getMessage(), 'ShipRocket'); 
             $this->error = $e->getMessage();
-        } catch (Error $e) {
+        } catch (Error $e) {       
+            SystemLog::plugin(json_encode($requestParam), $e->getMessage(), 'ShipRocket');
             $this->error = $e->getMessage();
         }
         return false;

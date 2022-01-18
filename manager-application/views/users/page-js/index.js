@@ -1,0 +1,96 @@
+$(document).ready(function () {
+    select2('searchFrmUserIdJs', fcom.makeUrl(controllerName, 'autoComplete'), {}, '', function () {
+        clearSearch();
+    });
+
+    //redirect user to login page
+    $(document).on('click', 'a#redirectJs', function (event) {
+        event.stopPropagation();
+    });
+
+});
+
+(function () {
+    addBankInfoForm = function (id) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bankInfoForm', [id]), '', function (t) {
+            $.ykmsg.close();
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+        });
+
+    };
+
+    setupBankInfo = function (frm) {
+        if (!$(frm).validate()) return;
+        var data = fcom.frmData(frm);
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'setupBankInfo'), data, function (t) {
+            fcom.removeLoader();
+        });
+    };
+
+    changeUserPassword = function (id) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changePasswordForm', [id]), '', function (t) {
+            $.ykmsg.close();
+            $.ykmodal(t.html, true);
+            fcom.removeLoader();
+        });
+    };
+
+    updatePassword = function (frm) {
+        if (!$(frm).validate()) return;
+        var data = fcom.frmData(frm);
+        $.ykmodal(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'updatePassword'), data, function (t) {
+            fcom.removeLoader();
+            $.ykmodal.close();
+        });
+    };
+
+    sendMailToUser = function (id) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'sendMailForm', [id]), '', function (t) {
+            $.ykmsg.close();
+            $.ykmodal(t.html, true);
+            fcom.removeLoader();
+        });
+    };
+
+    sendMail = function (frm) {
+        if (!$(frm).validate()) return;
+        var data = fcom.frmData(frm);
+        $.ykmodal(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'sendMail'), data, function (t) {
+            fcom.removeLoader();
+            $.ykmodal.close();
+        });
+    };
+
+    displayCookiesPerferences = function (id) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'cookiesPreferencesForm', [id]), '', function (t) {
+            $.ykmsg.close();
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+        });
+    };
+
+    markSellerAsBuyer = function (userId) {
+        if (!confirm(langLbl.confirmSellerAsBuyer)) {
+            return;
+        }
+        var userId = parseInt(userId);
+        if (1 > userId) {
+            fcom.displayErrorMessage(langLbl.invalidRequest);
+            return false;
+        }
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'markSellerAsBuyer'), { userId: userId }, function (t) {
+            reloadList();
+            fcom.removeLoader();
+        });
+    }
+
+    sendSetPasswordEmail = function (userId) {
+        fcom.displayProcessing();
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'resendSetPasswordEmail'), { userId: userId }, function (t) {
+            fcom.removeLoader();
+        });
+    };
+})();
