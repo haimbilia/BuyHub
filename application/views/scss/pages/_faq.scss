@@ -82,7 +82,7 @@ div.faqanswer {
         border-radius: $radius4;
         margin: 5px 0;
         padding: 0.5rem;
-        color: $body-color;
+        color: $txt-body;
         font-size: 0.8rem;
         display: inline-block;
         position: relative;
@@ -113,7 +113,7 @@ div.faqanswer {
         background: #ededed;
     }
     .category-q {
-        color: $body-color;
+        color: $txt-body;
         text-transform: uppercase;
         font-weight: 600;
         min-height: 43px;

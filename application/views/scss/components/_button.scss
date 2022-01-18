@@ -90,7 +90,7 @@
     &-outline-black {
         background: none;
         border-color: #000;
-        color: $body-color;
+        color: $txt-body;
         &:hover {
             color: currentColor;
         }
@@ -98,7 +98,7 @@
     &-outline-gray {
         background: none;
         border-color: $border-color;
-        color: $body-color;
+        color: $txt-body;
         &:hover {
             color: currentColor;
         }
@@ -128,7 +128,7 @@
     }
     &-link {
         text-decoration: none;
-        color: $body-color;
+        color: $txt-body;
         padding: 0;
         .arrow {
             display: inline-block;

@@ -2389,7 +2389,9 @@ strong {
         list-style: none;
         li {
             margin: 0.7rem 0;
-            &:last-child{ margin-bottom: 0;}
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
     }
 

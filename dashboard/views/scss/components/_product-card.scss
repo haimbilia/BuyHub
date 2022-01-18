@@ -225,13 +225,13 @@
         }
     }
     .products-category {
-        color: lighten($body-color, 50%);
+        color: lighten($txt-body, 50%);
         font-size: 0.8em;
         font-weight: 400;
     }
 
     .products-head-specification {
-        color: lighten($body-color, 50%);
+        color: lighten($txt-body, 50%);
         font-size: 1em;
         font-weight: 300;
     }
@@ -250,7 +250,7 @@
     }
     .products_ft_list {
         li {
-            color: lighten($body-color, 50%);
+            color: lighten($txt-body, 50%);
             font-size: 0.9em;
             font-weight: 300;
             margin: 4px 0;
@@ -544,7 +544,7 @@
             opacity: 0.8;
         }
         .item__specification {
-            color: lighten($body-color, 20%);
+            color: lighten($txt-body, 20%);
         }
         .item__sold_by {
         }

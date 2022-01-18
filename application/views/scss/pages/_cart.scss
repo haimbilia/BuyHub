@@ -149,7 +149,7 @@
     }
     .value {
         @extend .label;
-        color: $body-color;
+        color: $txt-body;
     }
 }
 .coupons {
@@ -352,7 +352,7 @@
     .coupon-code {
         padding: 0.3rem 1.2rem;
         border-radius: 2rem;
-        color: lighten($body-color, 50%);
+        color: lighten($txt-body, 50%);
         border: dashed 1px $border-color;
         display: inline-block;
         font-weight: 500;

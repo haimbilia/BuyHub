@@ -157,7 +157,7 @@
 
             &-link {
                 font-weight: 300;
-                color: $body-color;
+                color: $txt-body;
                 text-transform: none;
                 padding: 7px 0;
                 position: relative;
@@ -181,7 +181,7 @@
                 }
             }
             &-head {
-                color: $body-color;
+                color: $txt-body;
                 text-transform: uppercase;
                 font-weight: 600;
             }

@@ -64,7 +64,7 @@
     }
     &-foot {
         padding-bottom: 15px;
-        color: $body-color;
+        color: $txt-body;
     }
     &-img {
         --aspect-ratio: 1/1;
@@ -120,7 +120,7 @@
         }
     }
     &-category {
-        color: lighten($body-color, 50%);
+        color: lighten($txt-body, 50%);
         font-size: 0.8em;
         font-weight: 400;
     }
@@ -145,7 +145,7 @@
         }
     }
     .products-head-specification {
-        color: lighten($body-color, 50%);
+        color: lighten($txt-body, 50%);
         font-size: 1em;
         font-weight: 300;
     }
@@ -164,7 +164,7 @@
     }
     .products_ft_list {
         li {
-            color: lighten($body-color, 50%);
+            color: lighten($txt-body, 50%);
             font-size: 0.9em;
             font-weight: 300;
             margin: 4px 0;

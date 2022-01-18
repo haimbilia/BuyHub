@@ -69,7 +69,7 @@
         justify-content: center;
         width: 100%;
         height: 100%;
-        color: $body-color;
+        color: $txt-body;
         font-size: 1em;
         font-weight: 600;
         opacity: 1;
@@ -112,7 +112,7 @@
         width: 18px;
         height: 18px;
         margin-#{$end-direction}: 8px;
-        fill: $body-color;
+        fill: $txt-body;
     }
 }
 

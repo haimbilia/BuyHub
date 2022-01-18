@@ -94,7 +94,7 @@
         text-align: center;
     }
     .section__heading {
-        color: $body-color;
+        color: $txt-body;
         display: inline-block;
         font-weight: 300;
         h1,
@@ -204,7 +204,7 @@
     }
     ul {
         margin: 10px 0;
-        color: $body-color;
+        color: $txt-body;
         li {
             position: relative;
             padding: 5px 0;
@@ -260,7 +260,7 @@
             margin: 0;
         }
         span {
-            color: $body-color;
+            color: $txt-body;
         }
         &.logout {
             a {
@@ -305,7 +305,7 @@
         }
     }
     a {
-        color: $body-color;
+        color: $txt-body;
         display: block;
         overflow: hidden;
         position: relative;
@@ -396,7 +396,7 @@
         line-height: 30px;
         padding: 0 0 8px 18px;
         font-size: 0.875em;
-        color: $body-color;
+        color: $txt-body;
         &:before {
             position: absolute;
             #{$start-direction}: 0;
@@ -490,7 +490,7 @@
 }
 
 .links--inline {
-    color: $body-color;
+    color: $txt-body;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -512,17 +512,17 @@
 }
 
 .heading1 {
-    color: $body-color;
+    color: $txt-body;
     font-size: 2em;
 }
 
 .heading2 {
-    color: $body-color;
+    color: $txt-body;
     font-size: 1.8em;
 }
 
 .heading3 {
-    color: $body-color;
+    color: $txt-body;
     font-size: 1.3em;
 }
 

@@ -61,7 +61,7 @@
                 text-align: #{$start-direction};
                 &:after,
                 &:before {
-                    background: $body-color;
+                    background: $txt-body;
                     content: "";
                     height: 2px;
                     position: absolute;

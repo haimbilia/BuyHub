@@ -457,7 +457,7 @@
             width: 20px;
             height: 3px;
             margin: 0 auto 3px auto;
-            background: $body-color;
+            background: $txt-body;
             transition: all 0.15s ease;
             &:before,
             &:after {
@@ -465,7 +465,7 @@
                 display: block;
                 width: 4px;
                 height: 4px;
-                background: $body-color;
+                background: $txt-body;
                 content: "";
                 opacity: 0;
 
@@ -661,7 +661,7 @@
             content: "";
             height: 2px;
             width: 14px;
-            background-color: $body-color;
+            background-color: $txt-body;
             display: inline-block;
             vertical-align: middle;
         }

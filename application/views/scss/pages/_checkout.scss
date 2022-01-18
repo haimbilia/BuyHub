@@ -542,7 +542,7 @@
                     font-weight: 500;
                     font-size: 0.9rem;
                     line-height: 1.5;
-                    color: $body-color;
+                    color: $txt-body;
                     display: flex;
                     align-items: center;
                 }
@@ -643,7 +643,7 @@
     color: $txt-gray;
     strong {
         font-weight: 500;
-        color: $body-color;
+        color: $txt-body;
     }
     .list-group-item {
         padding: 1rem;
@@ -804,7 +804,7 @@
             .currency-value {
                 display: block;
                 font-weight: 600;
-                color: $body-color;
+                color: $txt-body;
                 font-size: 1.2rem;
             }
         }
@@ -867,7 +867,7 @@
     h6 {
         margin-bottom: 4px;
         font-size: 0.82rem;
-        color: $body-color;
+        color: $txt-body;
         text-transform: uppercase;
     }
 }

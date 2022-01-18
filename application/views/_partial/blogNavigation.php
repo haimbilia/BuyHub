@@ -39,7 +39,7 @@
              <button class="btn-blog-search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#blog-search" aria-controls="offcanvas-blog-search">
                  <i class="icn">
                      <svg class="svg" width="20" height="20">
-                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
+                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-blog.svg#magnifying">
                          </use>
                      </svg>
                  </i>

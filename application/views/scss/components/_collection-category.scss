@@ -55,7 +55,7 @@
     .category {
         background: $bg-white;
         border-radius: $radius4;
-        color: $body-color;
+        color: $txt-body;
         display: flex;
         flex-direction: column;
 
@@ -151,7 +151,7 @@
         display: flex;
         flex: 1;
         flex-wrap: wrap;
-        color: $body-color;
+        color: $txt-body;
         @include media-breakpoint-down(md) {
             & {
                 flex-wrap: nowrap;
@@ -211,7 +211,7 @@
 }
 
 .cg-main {
-    color: $body-color;
+    color: $txt-body;
     a {
         color: inherit;
     }
