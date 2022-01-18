@@ -13,9 +13,7 @@ $(function () {
 
 (function () {
     bindUserSelect2 = function (element, obj) {
-        select2(element, fcom.makeUrl('Users', 'autoComplete'), obj, '', function () {
-            clearSearch();
-        });
+        select2(element, fcom.makeUrl('Users', 'autoComplete'), obj);
     }
 
     setupStatus = function (frm) {

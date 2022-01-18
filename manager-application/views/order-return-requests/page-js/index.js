@@ -11,4 +11,12 @@ $(document).ready(function () {
     bindSellerProductsSelect2 = function () {
         select2("oProductJs", fcom.makeUrl('Orders', 'itemAutoComplete'), {return_order : 1});
     };
+    
+    viewAdminComment = function (orrequestId) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewAdminComment",[orrequestId]), '', function (t) {
+            $.ykmodal(t.html, true);
+            $.ykmsg.close();
+            fcom.removeLoader();
+        });
+    };
 })();
