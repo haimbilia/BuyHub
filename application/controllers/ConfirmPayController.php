@@ -56,7 +56,7 @@ class ConfirmPayController extends MyAppController
             }
             CommonHelper::redirectUserReferer();
         }
-
+        
         $orderPaymentFinancials = $orderObj->getOrderPaymentFinancials($orderId);
         if ($orderPaymentFinancials['order_payment_gateway_charge'] > 0) {
             $msg = Labels::getLabel('MSG_PAYMENT_CAN_BE_CHARGED_BY_PAYMENT_GATEWAY', $this->siteLangId);
@@ -77,7 +77,7 @@ class ConfirmPayController extends MyAppController
                 CommonHelper::redirectUserReferer();
             }
         }
-
+        
         if (false === MOBILE_APP_API_CALL && $orderId == $_SESSION['subscription_shopping_cart']["order_id"]) {
             $scartObj = new SubscriptionCart();
             $scartObj->clear();
