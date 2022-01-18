@@ -5,14 +5,10 @@ $(document).ready(function () {
 });
 (function () {
     bindUserSelect2 = function (element, obj) {
-        select2(element, fcom.makeUrl('Users', 'autoComplete'), obj, '', function () {
-            clearSearch();
-        });
+        select2(element, fcom.makeUrl('Users', 'autoComplete'), obj);
     }
 
     bindSellerProductsSelect2 = function () {
-        select2("oProductJs", fcom.makeUrl('Orders', 'itemAutoComplete'), {return_order : 1}, '', function () {
-            clearSearch();
-        });
+        select2("oProductJs", fcom.makeUrl('Orders', 'itemAutoComplete'), {return_order : 1});
     };
 })();
