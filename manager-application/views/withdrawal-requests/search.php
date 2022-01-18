@@ -18,7 +18,7 @@ foreach ($arrListing as $sn => $row) {
             case 'listSerial':
                 $td->appendElement('plaintext', $tdAttr,  '#' . str_pad($row["withdrawal_id"], 6, '0', STR_PAD_LEFT));
                 break;
-            case 'user_details':
+            case 'user_name':
                 $href = "javascript:void(0)";
                 $onclick = ($canViewUsers ? 'redirectUser('. $row['user_id'] . ')' : '');
                 $str = $this->includeTemplate('_partial/user/user-info-card.php', [

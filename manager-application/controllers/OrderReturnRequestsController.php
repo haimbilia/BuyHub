@@ -549,9 +549,9 @@ class OrderReturnRequestsController extends ListingBaseController {
 
         $arr = [
             'orrequest_reference' => Labels::getLabel('LBL_Refernce_No.', $this->siteLangId),
+            'product' => Labels::getLabel('LBL_Product', $this->siteLangId),
             'buyer_detail' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
             'vendor_detail' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
-            'product' => Labels::getLabel('LBL_Product', $this->siteLangId),
             'orrequest_qty' => Labels::getLabel('LBL_Qty', $this->siteLangId),
             'orrequest_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
             'orrequest_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
@@ -565,9 +565,9 @@ class OrderReturnRequestsController extends ListingBaseController {
     protected function getDefaultColumns(): array {
         return [
             'orrequest_reference',
+            'product',
             'buyer_detail',
             'vendor_detail',
-            'product',
             'orrequest_qty',
             'orrequest_date',
             'orrequest_status',

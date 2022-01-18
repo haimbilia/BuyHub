@@ -23,7 +23,8 @@
 			$td = $tr->appendElement('td');
 			switch ($key) {
 				case 'ocrequest_id':
-					$td->appendElement('plaintext', array(), str_pad($row[$key], 5, '0', STR_PAD_LEFT), true);
+					$listSerial = '#C'. str_pad( $row[$key], 5, '0', STR_PAD_LEFT );
+					$td->appendElement('plaintext', array(), $listSerial, true);
 					break;
 				case 'op_invoice_number':
                     $url = UrlHelper::generateUrl('Buyer', 'viewOrder', array($row['order_id'], $row['op_id']));

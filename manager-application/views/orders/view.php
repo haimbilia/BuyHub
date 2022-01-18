@@ -83,6 +83,13 @@
                                         <span class="value"><?php echo $order['buyer_email']; ?></span>
                                     </li>
                                 <?php } ?>
+
+                                <?php if (!empty($order['buyer_phone'])) { ?>
+                                    <li class="list-stats-item">
+                                        <span class="lable"><?php echo Labels::getLabel('LBL_Phone', $siteLangId); ?>:</span>
+                                        <span class="value"><?php echo ValidateElement::formatDialCode($order['buyer_phone_dcode']) . $order['buyer_phone']; ?></span>
+                                    </li>
+                                <?php } ?>
                             </ul>
                         </div>
                     </div>

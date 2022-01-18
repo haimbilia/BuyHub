@@ -37,4 +37,12 @@ $(function () {
             fcom.removeLoader();
         });
     };
+    
+    viewAdminComment = function (ocrequestId) {
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "viewAdminComment",[ocrequestId]), '', function (t) {
+            $.ykmodal(t.html, true);
+            $.ykmsg.close();
+            fcom.removeLoader();
+        });
+    };
 })();

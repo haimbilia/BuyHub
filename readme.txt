@@ -536,6 +536,7 @@ Bugs :
     => 061650 - Admin UI: Admin is not able to update the "shipping" status of the orders and the updated status is also not showing on the order details page
     => 061639 - Admin UI: Comments are also showing on the wrong side on the order details page
     => 061638 - Admin UI: Admin is not able to update the payment more than one-time if payment is not complete under the order details page
+    => 061587 - Admin UI: Multiple issues are faced under the "cancellation requests" option
 
 
 Known Issues and Problems :

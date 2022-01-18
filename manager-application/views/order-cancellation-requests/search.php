@@ -49,12 +49,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, '<div class="user-profile">' . $str . '</div>', true);
                 break;
             case 'reuqest_detail':
-                $data = [
-                    'order' => $row, 
-                    'siteLangId' => $siteLangId, 
-                    'horizontalAlignOptions' => true
-                ];
-                $html = $this->includeTemplate('order-cancellation-requests/_partial/cancellation-info-card.php', $data, false, true);
+                $html = $this->includeTemplate('_partial/product/order-product-info-card.php', ['order' => $row, 'siteLangId' => $siteLangId, 'horizontalAlignOptions' => true], false, true);
                 $td->appendElement('plaintext', $tdAttr, $html, true);
                 break;
             case 'amount':
@@ -74,8 +69,38 @@ foreach ($arrListing as $sn => $row) {
                     'recordId' => $row['ocrequest_id']
                 ];
 
+                $data['otherButtons'] = [
+                    [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'viewComment(' . $row['ocrequest_id'] . ')',
+                            'title' => Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId),
+                        ],
+                        'label' => '<i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#comment">
+                                            </use>
+                                        </svg>
+                                    </i>',
+                    ],
+                ];
+
                 if ($canEdit && $row['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_PENDING ) {
                     $data['editButton'] = [];
+                } else if ($row['ocrequest_status'] == OrderCancelRequest::CANCELLATION_REQUEST_STATUS_APPROVED && !empty($row['ocrequest_admin_comment'])) {
+                    $data['otherButtons'][] = [
+                        'attr' => [
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'viewAdminComment(' . $row['ocrequest_id'] . ')',
+                            'title' => Labels::getLabel('MSG_CLICK_TO_VIEW_ADMIN_COMMENTS', $siteLangId),
+                        ],
+                        'label' => '<i class="icn">
+                                        <svg class="svg" width="18" height="18">
+                                            <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#admin-reply">
+                                            </use>
+                                        </svg>
+                                    </i>',
+                    ];
                 }
                 
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
