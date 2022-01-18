@@ -6,10 +6,15 @@
 </div>
 <div class="modal-body form-edit layoutsJs">
     <div class="form-edit-body loaderContainerJs">
-        <div class="cms">
-
-            <?php echo $comment; ?>
-
-        </div>
+        <ul class="list-stats list-stats-double">
+            <li class="list-stats-item list-stats-item-full">
+                <span class="lable"><?php echo Labels::getLabel('LBL_REASON', $siteLangId); ?>:</span>
+                <span class="value"><?php echo $row['ocreason_title']; ?></span>
+            </li>
+            <li class="list-stats-item list-stats-item-full">
+                <span class="lable"><?php echo Labels::getLabel('LBL_COMMENT', $siteLangId); ?>:</span>
+                <span class="value"><?php echo $row['ocrequest_message']; ?></span>
+            </li>
+        </ul>
     </div>
 </div>

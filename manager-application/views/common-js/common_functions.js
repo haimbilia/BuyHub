@@ -276,6 +276,7 @@ select2 = function (
     if (0 < ele.closest(".form-group").length) {
         select2Selector.$container.addClass("w-100");
     }   
+    
     if(ele.attr('multiple') != undefined){
         select2Selector.$container.addClass("custom-select2-multiple");
     }else{

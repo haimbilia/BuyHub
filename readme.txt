@@ -536,7 +536,9 @@ Bugs :
     => 061650 - Admin UI: Admin is not able to update the "shipping" status of the orders and the updated status is also not showing on the order details page
     => 061639 - Admin UI: Comments are also showing on the wrong side on the order details page
     => 061638 - Admin UI: Admin is not able to update the payment more than one-time if payment is not complete under the order details page
-
+    => 061587 - Admin UI: Multiple issues are faced under the "cancellation requests" option
+    => 061583 - Admin UI: Clear functionality is not working properly under the "Order return requests" section
+    => 061577 - Admin UI: Options text of the "Transfer refund" field is larger than the sub-titles and comments are also not showing on the orders details page
 
 Known Issues and Problems :
     => 82248 : Renaming existing DPO Payment Gateway to Paygate as it belongs to South Africa linked with Dpo Group.

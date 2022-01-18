@@ -60,10 +60,10 @@ class OrderReturnRequestsController extends ListingBaseController {
     private function getFields() {
         return [
             'orrequest_id', 'orrequest_op_id', 'orrequest_qty', 'orrequest_type', 'orrequest_returnreason_id',
-            'orrequest_date', 'orrequest_status', 'orrequest_reference', 'buyer.user_name as user_name', 'buyer_cred.credential_username as credential_username',
+            'orrequest_date', 'orrequest_status', 'orrequest_reference', 'buyer.user_name as user_name', 'buyer.user_phone_dcode', 'buyer.user_phone', 'buyer_cred.credential_username as credential_username',
             'buyer_cred.credential_email as credential_email', 'seller.user_name as seller_name', 'seller_cred.credential_username as seller_username', 'seller_cred.credential_email as seller_email', 'op_product_name', 'op_selprod_title',
             'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_qty', 'op_unit_price', 'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'order_tax_charged', 'op_other_charges', 'op_refund_shipping', 'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 'op_commission_include_shipping', 'op_commission_include_tax', 'op_free_ship_upto', 'op_actual_shipping_charges',
-            'order_pmethod_id', 'op_rounding_off', 'selprod_product_id', 'order_user_id', 'op_selprod_user_id', 'op_shop_id', 'op_invoice_number', 'op_selprod_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id','buyer.user_updated_on AS user_updated_on','seller.user_id AS seller_id','buyer.user_id AS user_id','seller.user_updated_on AS seller_updated_on',
+            'order_pmethod_id', 'op_rounding_off', 'selprod_product_id', 'order_user_id', 'op_selprod_user_id', 'op_shop_id', 'op_invoice_number', 'op_selprod_id', 'op_selprod_user_id', 'opshipping_by_seller_user_id','buyer.user_updated_on AS user_updated_on','seller.user_id AS seller_id','buyer.user_id AS user_id','seller.user_updated_on AS seller_updated_on', 'orrequest_admin_comment'
         ];
     }
 
@@ -83,12 +83,12 @@ class OrderReturnRequestsController extends ListingBaseController {
         $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
-        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, current($allowedKeysForSorting));
+        $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'orrequest_date');
         if (!array_key_exists($sortBy, $fields)) {
-            $sortBy = current($allowedKeysForSorting);
+            $sortBy = 'orrequest_date';
         }
 
-        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING));
+        $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
 
@@ -172,7 +172,7 @@ class OrderReturnRequestsController extends ListingBaseController {
         $frm = new Form('frmRecordSearch');
 
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'orrequest_reference');
+            $this->addSortingElements($frm, 'orrequest_date', applicationConstants::SORT_DESC);
         }
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'orrequest_id');
@@ -525,8 +525,8 @@ class OrderReturnRequestsController extends ListingBaseController {
         $statusArr = OrderReturnRequest::getRequestStatusArr($langId);
         unset($statusArr[OrderReturnRequest::RETURN_REQUEST_STATUS_ESCALATED]);
         unset($statusArr[OrderReturnRequest::RETURN_REQUEST_STATUS_CANCELLED]);
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'orrequest_status', $statusArr);
-        $fld->requirements()->setRequired(true);
+        $statusFld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'orrequest_status', $statusArr, '', ['class' => 'fieldsVisibilityJs']);
+        $statusFld->requirements()->setRequired(true);
 
         $moveRefundLocationArr = PaymentMethods::moveRefundLocationsArr($this->siteLangId);
         if (false == $canRefundToCard) {
@@ -536,9 +536,34 @@ class OrderReturnRequestsController extends ListingBaseController {
         }
 
         $frm->addRadioButtons(Labels::getLabel('FRM_TRANSFER_REFUND', $this->siteLangId), 'orrequest_refund_in_wallet', $moveRefundLocationArr, PaymentMethods::MOVE_TO_ADMIN_WALLET, array('class' => 'list-inline'));
+        $fld1 = new FormFieldRequirement('orrequest_refund_in_wallet', Labels::getLabel('FRM_TRANSFER_REFUND', $langId));
+        $fld1->setRequired(false);
+        $reqFld1 = new FormFieldRequirement('orrequest_refund_in_wallet', Labels::getLabel('FRM_TRANSFER_REFUND', $langId));
+        $reqFld1->setRequired(true);
 
         $frm->addTextarea(Labels::getLabel('FRM_COMMENT', $this->siteLangId), 'orrequest_admin_comment');
+        $fld2 = new FormFieldRequirement('orrequest_admin_comment', Labels::getLabel('FRM_COMMENT', $langId));
+        $fld2->setRequired(false);
+        $reqFld2 = new FormFieldRequirement('orrequest_admin_comment', Labels::getLabel('FRM_COMMENT', $langId));
+        $reqFld2->setRequired(true);
+
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderReturnRequest::RETURN_REQUEST_STATUS_REFUNDED, 'eq', 'orrequest_refund_in_wallet', $reqFld1);
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING, 'eq', 'orrequest_refund_in_wallet', $fld1);
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderReturnRequest::RETURN_REQUEST_STATUS_WITHDRAWN, 'eq', 'orrequest_refund_in_wallet', $fld1);
+        
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderReturnRequest::RETURN_REQUEST_STATUS_REFUNDED, 'eq', 'orrequest_admin_comment', $reqFld2);
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderReturnRequest::RETURN_REQUEST_STATUS_PENDING, 'eq', 'orrequest_admin_comment', $fld2);
+        $statusFld->requirements()->addOnChangerequirementUpdate(OrderReturnRequest::RETURN_REQUEST_STATUS_WITHDRAWN, 'eq', 'orrequest_admin_comment', $fld2);
+
         return $frm;
+    }
+    
+    public function viewAdminComment($orrequestId)
+    {
+        $orrequestId = FatUtility::int($orrequestId);
+        $this->set('comment', OrderReturnRequest::getAttributesById($orrequestId, 'orrequest_admin_comment'));
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     protected function getFormColumns(): array {
@@ -549,9 +574,9 @@ class OrderReturnRequestsController extends ListingBaseController {
 
         $arr = [
             'orrequest_reference' => Labels::getLabel('LBL_Refernce_No.', $this->siteLangId),
+            'product' => Labels::getLabel('LBL_Product', $this->siteLangId),
             'buyer_detail' => Labels::getLabel('LBL_BUYER', $this->siteLangId),
             'vendor_detail' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
-            'product' => Labels::getLabel('LBL_Product', $this->siteLangId),
             'orrequest_qty' => Labels::getLabel('LBL_Qty', $this->siteLangId),
             'orrequest_date' => Labels::getLabel('LBL_Date', $this->siteLangId),
             'orrequest_status' => Labels::getLabel('LBL_Status', $this->siteLangId),
@@ -565,9 +590,9 @@ class OrderReturnRequestsController extends ListingBaseController {
     protected function getDefaultColumns(): array {
         return [
             'orrequest_reference',
+            'product',
             'buyer_detail',
             'vendor_detail',
-            'product',
             'orrequest_qty',
             'orrequest_date',
             'orrequest_status',

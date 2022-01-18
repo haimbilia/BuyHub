@@ -127,7 +127,10 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                                         </svg>
                                                     </i>',
                                     ],
-                                    [
+                                ];
+                                
+                                if (Orders::canUpdateStatus($op)) {
+                                    $data['otherButtons'][] = [
                                         'attr' => [
                                             'href' => 'javascript:void(0)',
                                             'onclick' => $fn,
@@ -140,8 +143,9 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                                                             </use>
                                                         </svg>
                                                     </i>',
-                                    ]
-                                ];
+                                    ];
+                                }
+
                                 $data['dropdownButtons']['otherButtons'] = [
                                     [
                                         'attr' => [

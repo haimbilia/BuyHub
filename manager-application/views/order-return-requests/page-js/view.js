@@ -1,15 +1,3 @@
-$(document).on('change', '.requestStatusJs', function () {
-    if (requestType == RETURN_REQUEST_TYPE_REFUND) {
-        if ($(this).val() == RETURN_REQUEST_STATUS_REFUNDED) {
-            $('.refundToWalletSectionJs').removeClass('hide');
-            $('.commentSectionJs').removeClass('hide');
-        } else {
-            $('.commentSectionJs').addClass('hide');
-            $('.refundToWalletSectionJs').addClass('hide');
-        }
-    }
-});
-
 (function () {
     searchMessages = function (frm, append = 0) {
         var dv = "#messagesList";

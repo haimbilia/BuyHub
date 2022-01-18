@@ -133,7 +133,7 @@ class WithdrawalRequestsController extends ListingBaseController {
         }
 
         if (isset($post['status']) && $post['status'] > 0) {
-            $srch->addCondition('tuwr.withdrawal_status', '=', $status);
+            $srch->addCondition('tuwr.withdrawal_status', '=', $post['status']);
         }
 
         if (isset($post['date_from']) && $post['date_from']) {
@@ -171,7 +171,7 @@ class WithdrawalRequestsController extends ListingBaseController {
                     'user_is_affiliate', 'user_id', 'user_updated_on', 'credential_username', 'credential_email'
                 )
         ); 
-        $srch->addOrder('withdrawal_id', 'DESC');
+        $srch->addOrder($sortBy, $sortOrder); 
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);  
@@ -324,7 +324,7 @@ class WithdrawalRequestsController extends ListingBaseController {
 
         $arr = [
             'listSerial' => Labels::getLabel('LBL_ID', $this->siteLangId),
-            'user_details' => Labels::getLabel('LBL_USER_DETAILS', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_USER_DETAILS', $this->siteLangId),
             'user_balance' => Labels::getLabel('LBL_BALANCE', $this->siteLangId),
             'withdrawal_amount' => Labels::getLabel('LBL_AMOUNT', $this->siteLangId),
             'withdrawal_payment_method' => Labels::getLabel('LBL_WITHDRAWAL_MODE', $this->siteLangId),
@@ -344,7 +344,7 @@ class WithdrawalRequestsController extends ListingBaseController {
     protected function getDefaultColumns(): array {
         return [
             'listSerial',
-            'user_details',
+            'user_name',
             'user_balance',
             'withdrawal_amount',
             'withdrawal_payment_method',
@@ -361,7 +361,7 @@ class WithdrawalRequestsController extends ListingBaseController {
      * @return array
      */
     protected function excludeKeysForSort($fields = []): array {
-        return array_diff($fields, ['user_details', 'user_balance', 'withdrawal_amount', 'withdrawal_payment_method', 'withdrawal_request_date', 'withdrawal_status'], Common::excludeKeysForSort());
+        return array_diff($fields, Common::excludeKeysForSort());
     }
 
 }
