@@ -151,7 +151,11 @@ class OrderPayment extends Orders
                     'opayment_date' => date('Y-m-d H:i:s')
                 )
             )) {
-                $this->error = FatApp::getDb()->getError();
+                $msg = FatApp::getDb()->getError();
+                if (false !== strpos(strtolower($msg), 'duplicate')) {
+                    $msg = Labels::getLabel('ERR_DUPLICATE_TRANSACTION');
+                }
+                $this->error = $msg;
                 return false;
             }
 

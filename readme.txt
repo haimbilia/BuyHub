@@ -530,6 +530,12 @@ Bugs :
     => 060758 - Admin UI: The whole table is not getting blurred while sorting the columns if the table contains more columns & the admin needs to scroll it horizontally
     => 060847 - Admin UI: Random behavior is showing while re-arranging the fields under the Blog post categories section
     => 060839 - Admin UI: Getting multiple issues under the "Blog Post Categories" section
+    => 061660 - Admin UI: Titles, shop rating, and images are missing on the product reviews page
+    => 061658 - Admin UI: "Invalid Request" error is showing while clicking on the "New" button on the product`s review page
+    => 061657 - Admin UI: Search is not working properly on the "Product Reviews" page
+    => 061650 - Admin UI: Admin is not able to update the "shipping" status of the orders and the updated status is also not showing on the order details page
+    => 061639 - Admin UI: Comments are also showing on the wrong side on the order details page
+    => 061638 - Admin UI: Admin is not able to update the payment more than one-time if payment is not complete under the order details page
 
 
 Known Issues and Problems :

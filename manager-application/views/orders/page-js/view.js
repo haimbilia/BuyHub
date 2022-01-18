@@ -119,6 +119,11 @@
         var op_id = $(frm.op_id).val();
         var data = fcom.frmData(frm);
         var orderStatusId = $(frm.op_status_id).val();
+        var oldStatus = $(frm.op_status_id).data('oldValue');
+        if (oldStatus == orderStatusId) {
+            $.ykmsg.error(langLbl.alreadySelected);
+            return;
+        }
 
         if (0 < $(".shippingUserJs").length && '' == $(".shippingUserJs").val()) {
             $.ykmsg.error(langLbl.shippingUser);
@@ -133,7 +138,9 @@
         if (0 < canShipByPlugin && 1 != manualShipping && orderShippedStatus == orderStatusId) {
             proceedToShipment(op_id);
         } else {
-            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) { });
+            fcom.updateWithAjax(fcom.makeUrl(controllerName, 'changeOrderStatus'), data, function (t) {
+                $("#allSellerJs").trigger('change');
+            });
         }
     };
 

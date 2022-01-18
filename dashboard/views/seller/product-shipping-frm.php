@@ -171,10 +171,10 @@ $btnSubmitFld->setFieldTagAttribute('class', "btn btn-brand");
                     dataType: 'json',
                     type: 'post',
                     success: function(json) {
-                        response($.map(json, function(item) {
+                        response($.map(json['results'], function(item) {
                             return {
-                                label: item['name'],
-                                value: item['name'],
+                                label: item['text'],
+                                value: item['text'],
                                 id: item['id']
                             };
                         }));

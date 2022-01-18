@@ -157,8 +157,8 @@
                 var ans = $.parseJSON(t);
                 for (i = 0; i < ans.length; i++) {            
                     listOptions.push({
-                        "id" : ans[i].id,
-                        "value" : ans[i].name+'('+ans[i].option_identifier+')',
+                        "id" : ans['results'][i].id,
+                        "value" : ans['results'][i].text,
                     });
                 }            
                 tagifyOption.settings.whitelist = listOptions;

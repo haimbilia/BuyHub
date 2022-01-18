@@ -17,6 +17,37 @@ $(function () {
 });
 
 (function () {
+    // hold onto the drop down menu                                             
+    var dropdownMenu;
+
+    // and when you show it, move it to the body                                     
+    $(window).on('shown.bs.dropdown', function (e) {
+        // e.preventDefault();
+        // grab the menu        
+        dropdownMenu = $(e.target).siblings('.dropdown-menu');
+
+        // detach it and append it to the body
+        $('body').append(dropdownMenu.detach());
+
+        // grab the new offset position
+        var eOffset = $(e.target).offset();
+
+        // make sure to place it where it would normally go (this could be improved)
+        dropdownMenu.css({
+            'display': 'block',
+            'top': eOffset.top + $(e.target).outerHeight(),
+            'left': eOffset.left
+        });
+    });
+
+    // and when you hide it, reattach the drop down, and hide it normally                                                   
+    $(window).on('hide.bs.dropdown', function (e) {
+        $(e.target).parent('.dropdown').append(dropdownMenu.detach());
+        dropdownMenu.hide();
+    });
+})();
+
+(function () {
     var screenHeight = $(window).height() - 100;
     window.onresize = function (event) {
         var screenHeight = $(window).height() - 100;
@@ -348,8 +379,8 @@ $(function () {
                 }
                 var width = selector.outerWidth();
                 var height = selector.outerHeight();
-                
-                $(this).css({'width' : width, 'height' : height});
+
+                $(this).css({ 'width': width, 'height': height });
             });
         }
     });

@@ -18,7 +18,7 @@
                                     $optionData = array();
                                     foreach($productOptions as $key=>$data){
                                         $optionData[$key]['id'] = $data['option_id'];
-                                        $optionData[$key]['value'] = $data['option_name'] .'('.$data['option_identifier'].')';
+                                        $optionData[$key]['value'] = $data['option_name'];
                                     }
                                     ?>
                                     <input type="text" name="option_groups" value='<?php echo htmlspecialchars(json_encode($optionData), ENT_QUOTES, 'UTF-8'); ?>'>
@@ -37,7 +37,7 @@
                 $tagData = array();
                 foreach($productTags as $key=>$data){
                     $tagData[$key]['id'] = $data['tag_id'];
-                    $tagData[$key]['value'] = $data['tag_identifier'];
+                    $tagData[$key]['value'] = $data['tag_name'];
                 }
             ?>
             <div class="col-md-6">                             
@@ -170,11 +170,12 @@ $("document").ready(function() {
                 var ans = $.parseJSON(t);
                 for (i = 0; i < ans.length; i++) {            
                     listOptions.push({
-                        "id" : ans[i].id,
-                        "value" : ans[i].name+'('+ans[i].option_identifier+')',
+                        "id" : ans['results'][i].id,
+                        "value" : ans['results'][i].text,
                     });
                 }            
                 tagifyOption.settings.whitelist = listOptions;
+                console.log(tagifyOption.loading(false).dropdown);
                 tagifyOption.loading(false).dropdown.show.call(tagifyOption, keyword);
             }); 
         }, 800);    
