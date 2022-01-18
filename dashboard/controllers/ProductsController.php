@@ -59,15 +59,9 @@ class ProductsController extends SellerBaseController
         if (1 > $langId) {
             $langId = CommonHelper::getDefaultFormLangId();
         }
-
-        $shippingObj = new Shipping($userId);
+        
         $frm = $this->getForm($langId, $productType, $recordId);
-        $profileFld = $frm->getField('shipping_profile');
-        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) || ($shippingObj->getShippingApiObj($userId) && !Shop::getAttributesByUserId($userId, 'shop_use_manual_shipping_rates') )) {                           
-            $frm->removeField($profileFld);
-        }else{
-            $profileFld->options = ShippingProfile::getProfileArr($langId, $userId, true, true);            
-        }   
+          
         $imgFrm = $this->getImageFrm();   
         $productOptions = [];
 
@@ -91,7 +85,7 @@ class ProductsController extends SellerBaseController
             $productData['record_id'] = $recordId;
 
             if ($productData['product_seller_id'] != $userId) {
-                FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+                FatUtility::dieWithError($this->str_invalid_request);
             }
 
             if (1 > $productType) {
@@ -235,7 +229,7 @@ class ProductsController extends SellerBaseController
 
     public function prodSpecifications()
     {
-        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         if (1 > $langId) {
             $langId = CommonHelper::getDefaultFormLangId();
@@ -246,7 +240,7 @@ class ProductsController extends SellerBaseController
                 LibHelper::exitWithError($this->str_invalid_request_id);
             }
             $prod = new Product($recordId);
-            $productSpecifications = $prod->getProdSpecificationsByLangId($langId);
+            $productSpecifications = $prod->getProdSpecificationsByLangId($langId);            
         }
         $this->set('productSpecifications', $productSpecifications);
         $this->set('langId', $langId);
@@ -260,7 +254,6 @@ class ProductsController extends SellerBaseController
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
         }
-
        
         if (!User::canAddCustomProduct()) {
             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access11', $this->siteLangId));
@@ -274,18 +267,16 @@ class ProductsController extends SellerBaseController
         }
 
         $frm = $this->getForm($langId, $productType, $recordId);
-        $post = $frm->getFormDataFromArray((FatApp::getPostedData() + ['lang_id' => 1]));
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
        
-        if (false === $post) {
-        
+        if (false === $post) {        
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
         /* [select2 data */
         $post['product_brand_id'] = FatApp::getPostedData('product_brand_id', FatUtility::VAR_INT, 0);
         $post['ptc_prodcat_id'] = FatApp::getPostedData('ptc_prodcat_id', FatUtility::VAR_INT, 0);
         $post['ptt_taxcat_id'] = FatApp::getPostedData('ptt_taxcat_id', FatUtility::VAR_INT, 0);
-        $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);
-        $post['product_seller_id'] = FatApp::getPostedData('product_seller_id', FatUtility::VAR_INT, 0);
+        $post['ps_from_country_id'] = FatApp::getPostedData('ps_from_country_id', FatUtility::VAR_INT, 0);       
         /* select2 data ] */
         
         $this->validateGetForm($post);
@@ -300,15 +291,9 @@ class ProductsController extends SellerBaseController
                 FatUtility::dieWithError($this->str_invalid_request);
             } 
             $isNewProduct = false; 
-        }else{
-            $post['product_seller_id'] = $this->userParentId;
         }        
-
-        /* TODO:
-          1) in case productid > 0 (edit product) need to check
-          a) product_attachements_with_inventory is yes and attachments/links added with product catalog then return with error to remove the links/files first.
-          b) a) product_attachements_with_inventory is no and attachments/links added with inventory then return with error to remove the links/files first.
-         */
+        
+        $post['product_seller_id'] = $this->userParentId;        
 
         $prodObj = new Product($recordId);
         $db = FatApp::getDb();
@@ -351,11 +336,13 @@ class ProductsController extends SellerBaseController
             LibHelper::exitWithError($prodObj->getError(), true);
         }
 
-        if (isset($post['shipping_profile'])) {
+        if (isset($post['shipping_profile'])) {            
             $shipProProdData = array(
                 'shippro_shipprofile_id' => !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($post['product_seller_id']),
-                'shippro_product_id' => $recordId
+                'shippro_product_id' => $recordId,
+                'shippro_user_id' => $post['product_seller_id'],
             );
+
             $spObj = new ShippingProfileProduct();
             if (!$spObj->addProduct($shipProProdData)) {
                 $db->rollbackTransaction();
@@ -709,7 +696,16 @@ class ProductsController extends SellerBaseController
 
     private function getForm($langId, $productType = 0, $recordId = 0)
     {
-        return $this->getCatalogForm($langId, $productType, $recordId);
+        $frm = $this->getCatalogForm($langId, $productType, $recordId);
+        $shippingObj = new Shipping($this->userParentId);
+        $profileFld = $frm->getField('shipping_profile');
+        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) || ($shippingObj->getShippingApiObj($this->userParentId) && !Shop::getAttributesByUserId($this->userParentId, 'shop_use_manual_shipping_rates') )) {                           
+            $frm->removeField($profileFld);
+        }else{
+            $profileFld->options = ShippingProfile::getProfileArr($langId, $this->userParentId, true, true);  
+        } 
+
+        return $frm;
     }
 
     protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
@@ -737,7 +733,7 @@ class ProductsController extends SellerBaseController
                     LibHelper::exitWithError($updateLangDataobj->getError(), true);
                 }
             }
-        }
+        }        
     }
 
     private function isShopActive($userId, $shopId = 0, $returnResult = false)

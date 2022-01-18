@@ -305,12 +305,12 @@ class ProductsController extends ListingBaseController
             $profSrch->addCondition('shippro_product_id', '=', $recordId);
             $profSrch->addCondition('shippro_user_id', '=', $productData['product_seller_id']);
             $profSrch->doNotCalculateRecords();
-            $profSrch->setPageSize(1);
-            $proRs = $profSrch->getResultSet();
-            $profileData = FatApp::getDb()->fetch($proRs);
+            $profSrch->setPageSize(1);   
+            $profileData = FatApp::getDb()->fetch($profSrch->getResultSet());
             if (!empty($profileData)) {
                 $productData['shipping_profile'] = $profileData['profile_id'];
             }
+           
             /* ] */
             $isSelProdCreatedBySeller = 0 < Product::getCatalogProductCount($recordId);
             $isProductAddedByAdmin = applicationConstants::YES == $productData['product_added_by_admin_id'];
@@ -473,7 +473,8 @@ class ProductsController extends ListingBaseController
         if (isset($post['shipping_profile'])) {
             $shipProProdData = array(
                 'shippro_shipprofile_id' => !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($post['product_seller_id']),
-                'shippro_product_id' => $recordId
+                'shippro_product_id' => $recordId,
+                'shippro_user_id' => $post['product_seller_id'],
             );
             $spObj = new ShippingProfileProduct();
             if (!$spObj->addProduct($shipProProdData)) {
@@ -920,7 +921,7 @@ class ProductsController extends ListingBaseController
 
     public function prodSpecifications()
     {
-        $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         if (1 > $langId) {
             $langId = CommonHelper::getDefaultFormLangId();
