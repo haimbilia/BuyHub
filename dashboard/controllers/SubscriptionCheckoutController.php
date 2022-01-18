@@ -456,7 +456,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $frm->setFormTagAttribute('data-method', $methodCode);
         $frm->setFormTagAttribute('data-external', UrlHelper::generateUrl($controller, 'getExternalLibraries', [], CONF_WEBROOT_FRONTEND));
 
-        $frm->setFormTagAttribute('action', UrlHelper::generateUrl($controller, 'charge', array($orderInfo['order_id'], [], CONF_WEBROOT_FRONTEND)));
+        $frm->setFormTagAttribute('action', UrlHelper::generateUrl($controller, 'charge', array($orderInfo['order_id']), CONF_WEBROOT_FRONTEND));
         $frm->fill(
             array(
                 'order_id' => $order_id,

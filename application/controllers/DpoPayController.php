@@ -164,7 +164,7 @@ class DpoPayController extends PaymentController
      */
     private function getPaymentForm($orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('DpoPay', 'charge', array($orderId)) : $this->plugin->getPaymenUrl();
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('DpoPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $this->plugin->getPaymenUrl();
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
 

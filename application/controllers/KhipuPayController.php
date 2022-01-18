@@ -182,7 +182,7 @@ class KhipuPayController extends PaymentController
      */
     private function getPaymentForm($orderId, bool $processRequest = false): object
     {
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('KhipuPay', 'charge', array($orderId)) : $this->initiatePayment->getPaymentUrl();
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl('KhipuPay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : $this->initiatePayment->getPaymentUrl();
         $frm = new Form('frmPaymentForm', array('action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');
         if (false === $processRequest) {

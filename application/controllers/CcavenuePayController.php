@@ -142,7 +142,7 @@ class CcavenuePayController extends PaymentController
         $paymentGatewayCharge = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
 
-        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId)) : UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'iframe', array($orderId));
+        $actionUrl = false === $processRequest ? UrlHelper::generateUrl(self::KEY_NAME . 'Pay', 'charge', array($orderId), CONF_WEBROOT_FRONTEND) : UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'iframe', array($orderId));
 
         $frm = new Form('frm-ccavenue', array('id' => 'frm-ccavenue', 'action' => $actionUrl, 'class' => "form form--normal"));
         $frm->addHiddenField('', 'orderId');

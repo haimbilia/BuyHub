@@ -5,7 +5,7 @@ class CustomController extends MyAppController
     public function contactUs()
     {
         $contactFrm = $this->contactUsForm();
-        
+
         $termsAndConditionsLinkHref = 'javascript:void(0)';
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_TERMS_AND_CONDITIONS_PAGE', FatUtility::VAR_INT, 0));
@@ -15,7 +15,7 @@ class CustomController extends MyAppController
         if (!empty($cpage) && is_array($cpage)) {
             $termsAndConditionsLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
         }
-        
+
         $privacyPolicyLinkHref = 'javascript:void(0)';
         $cPageSrch = ContentPage::getSearchObject($this->siteLangId);
         $cPageSrch->addCondition('cpage_id', '=', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_INT, 0));
@@ -24,8 +24,8 @@ class CustomController extends MyAppController
         $cpage = FatApp::getDb()->fetch($cPageSrch->getResultSet());
         if (!empty($cpage) && is_array($cpage)) {
             $privacyPolicyLinkHref = UrlHelper::generateUrl('Cms', 'view', array($cpage['cpage_id']));
-        } 
-        
+        }
+
         $this->set('contactFrm', $contactFrm);
         $this->set('siteLangId', $this->siteLangId);
         $this->set('termsAndConditionsLinkHref', $termsAndConditionsLinkHref);
@@ -37,7 +37,7 @@ class CustomController extends MyAppController
     {
         $frm = $this->contactUsForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        
+
         if (false === $post) {
             $message = $frm->getValidationErrors();
             if (true === MOBILE_APP_API_CALL) {
@@ -241,7 +241,7 @@ class CustomController extends MyAppController
         $this->set('siteLangId', $this->siteLangId);
         $this->set('faqCatIdArr', $faqCatId);
         $this->set('list', $records);
-        
+
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -296,7 +296,7 @@ class CustomController extends MyAppController
         $this->set('listCategories', $recordsCategories);
         $this->set('faqMainCat', $faqMainCat);
         $this->set('page', 'faq');
-        
+
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -412,7 +412,7 @@ class CustomController extends MyAppController
                 $srch->addCondition('faqcat_id', '=', $parameters[0]);
                 $srch->setPageSize(1);
                 $srch->doNotCalculateRecords();
-            
+
                 $rs = $srch->getResultSet();
                 $records = FatApp::getDb()->fetch($rs);
 
@@ -503,7 +503,7 @@ class CustomController extends MyAppController
             $cartObj->updateUserCart(); */
         }
         if (isset($_SESSION['order_type']) && $_SESSION['order_type'] == Orders::ORDER_SUBSCRIPTION) {
-            FatApp::redirectUser(UrlHelper::generateFullUrl('SubscriptionCheckout'));
+            FatApp::redirectUser(UrlHelper::generateFullUrl('SubscriptionCheckout', '', [], CONF_WEBROOT_DASHBOARD));
         }
 
         FatApp::redirectUser(UrlHelper::generateFullUrl('Checkout'));
@@ -547,16 +547,15 @@ class CustomController extends MyAppController
                 FatUtility::exitWithErrorCode(404);
             }
             $user = FatApp::getDb()->fetch($rs);
-            if($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION){
+            if ($orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
                 $cartObj = new SubscriptionCart($orderInfo['order_user_id'], $this->siteLangId);
                 $cartObj->clear();
-                $cartObj->updateUserSubscriptionCart();                
-            }else{
-                $cartObj = new Cart($orderInfo['order_user_id'], $this->siteLangId, $this->app_user['temp_user_id']); 
+                $cartObj->updateUserSubscriptionCart();
+            } else {
+                $cartObj = new Cart($orderInfo['order_user_id'], $this->siteLangId, $this->app_user['temp_user_id']);
                 $cartObj->clear();
                 $cartObj->updateUserCart();
             }
-            
         }
 
         $orderFulFillmentTypeArr = [];
@@ -783,7 +782,7 @@ class CustomController extends MyAppController
         $fld_phn->requirements()->setCustomErrorMessage(Labels::getLabel('LBL_Please_enter_valid_phone_number_format.', $this->siteLangId));
 
         $frm->addTextArea(Labels::getLabel('LBL_Your_Message', $this->siteLangId), 'message', '')->requirements()->setRequired();
-        
+
         CommonHelper::addCaptchaField($frm);
         $fld = $frm->addCheckBox('', 'agree', 1);
         $fld->requirements()->setRequired();
@@ -822,23 +821,23 @@ class CustomController extends MyAppController
     public function updateUserCookies()
     {
         $statisticalCookies = FatApp::getPostedData('statistical_cookies', FatUtility::VAR_INT, 0);
-        $personaliseCookies = FatApp::getPostedData('personalise_cookies', FatUtility::VAR_INT, 0);        
-        $userId = UserAuthentication::getLoggedUserId(true);        
-        if($userId > 0){          
+        $personaliseCookies = FatApp::getPostedData('personalise_cookies', FatUtility::VAR_INT, 0);
+        $userId = UserAuthentication::getLoggedUserId(true);
+        if ($userId > 0) {
             $user = new User($userId);
-            if(!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)){
+            if (!$user->saveUserCookiesPreferences($statisticalCookies, $personaliseCookies)) {
                 Message::addErrorMessage($user->getError());
                 FatUtility::dieJsonError(Message::getHtml());
-            }            
-        }else{  
+            }
+        } else {
             $_SESSION['cookies_enabled'] = true;
-            if($statisticalCookies == 1){
+            if ($statisticalCookies == 1) {
                 $_SESSION['yk_statistical_cookies'] = $statisticalCookies;
             }
-            if($personaliseCookies == 1){
+            if ($personaliseCookies == 1) {
                 $_SESSION['yk_personalise_cookies'] = $personaliseCookies;
-            }            
-        }        
+            }
+        }
 
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -896,7 +895,7 @@ class CustomController extends MyAppController
         setcookie('screenWidth', $width, 0, CONF_WEBROOT_FRONTEND);
         setcookie('screenHeight', $height, 0, CONF_WEBROOT_FRONTEND);
     }
-    
+
     public function cookiePreferencesData()
     {
         $this->_template->render(false, false);
