@@ -92,7 +92,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
                         if (0 != $row['product_seller_id']) {
                             $li = $ul->appendElement("li");
-                            $li->appendElement('a', array('class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "href" => UrlHelper::generateUrl('seller', 'customProductForm', array($row['product_id']))), '<i class="fa fa-edit"></i>', true);
+                            $li->appendElement('a', array('class' => '', 'title' => Labels::getLabel('LBL_Edit', $siteLangId), "href" => UrlHelper::generateUrl('products', 'form', array($row['product_id']))), '<i class="fa fa-edit"></i>', true);
 
                             $li = $ul->appendElement("li");
                             $li->appendElement("a", array('title' => Labels::getLabel('LBL_Product_Images', $siteLangId), 'onclick' => 'customProductImages(' . $row['product_id'] . ')', 'href' => 'javascript:void(0)'), '<i class="fas fa-images"></i>', true);

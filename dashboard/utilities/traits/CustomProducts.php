@@ -133,102 +133,102 @@ trait CustomProducts
         $this->_template->render(false, false);
     }
 
-    public function setupCustomProductLang()
-    {
-        $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
-        if (!User::canAddCustomProduct()) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-        }
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
-        }
-        $post = FatApp::getPostedData();
-        $lang_id = $post['lang_id'];
-        $product_id = FatUtility::int($post['product_id']);
+    // public function setupCustomProductLang()
+    // {
+    //     $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
+    //     if (!User::canAddCustomProduct()) {
+    //         FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //     }
+    //     if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+    //         FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+    //     }
+    //     $post = FatApp::getPostedData();
+    //     $lang_id = $post['lang_id'];
+    //     $product_id = FatUtility::int($post['product_id']);
 
-        if ($product_id == 0 || $lang_id == 0) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        /* Validate product belongs to current logged seller[ */
-        if ($product_id) {
-            $productRow = Product::getAttributesById($product_id, array('product_seller_id'));
-            if ($productRow['product_seller_id'] != $this->userParentId) {
-                FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            }
-        }
-        /* ] */
-        $frm = $this->getCustomProductLangForm($lang_id);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+    //     if ($product_id == 0 || $lang_id == 0) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     /* Validate product belongs to current logged seller[ */
+    //     if ($product_id) {
+    //         $productRow = Product::getAttributesById($product_id, array('product_seller_id'));
+    //         if ($productRow['product_seller_id'] != $this->userParentId) {
+    //             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //         }
+    //     }
+    //     /* ] */
+    //     $frm = $this->getCustomProductLangForm($lang_id);
+    //     $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
-        unset($post['product_id']);
-        unset($post['lang_id']);
-        $data_to_update = array(
-            'productlang_product_id' => $product_id,
-            'productlang_lang_id' => $lang_id,
-            'product_name' => $post['product_name'],
-            'product_description' => $post['product_description'],
-            'product_youtube_video' => $post['product_youtube_video'],
-        );
+    //     unset($post['product_id']);
+    //     unset($post['lang_id']);
+    //     $data_to_update = array(
+    //         'productlang_product_id' => $product_id,
+    //         'productlang_lang_id' => $lang_id,
+    //         'product_name' => $post['product_name'],
+    //         'product_description' => $post['product_description'],
+    //         'product_youtube_video' => $post['product_youtube_video'],
+    //     );
 
-        $prodObj = new Product($product_id);
-        if (!$prodObj->updateLangData($lang_id, $data_to_update)) {
-            Message::addErrorMessage($prodObj->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    //     $prodObj = new Product($product_id);
+    //     if (!$prodObj->updateLangData($lang_id, $data_to_update)) {
+    //         Message::addErrorMessage($prodObj->getError());
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData(Product::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($product_id)) {
-                Message::addErrorMessage($updateLangDataobj->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
+    //     $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+    //     if (0 < $autoUpdateOtherLangsData) {
+    //         $updateLangDataobj = new TranslateLangData(Product::DB_TBL_LANG);
+    //         if (false === $updateLangDataobj->updateTranslatedData($product_id)) {
+    //             Message::addErrorMessage($updateLangDataobj->getError());
+    //             FatUtility::dieWithError(Message::getHtml());
+    //         }
+    //     }
 
-        $newTabLangId = 0;
-        $languages = Language::getAllNames();
-        foreach ($languages as $langId => $langName) {
-            if (!$row = Product::getAttributesByLangId($langId, $product_id)) {
-                $newTabLangId = $langId;
-                break;
-            }
-        }
-        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->siteLangId));
-        $this->set('product_id', $product_id);
-        $this->set('lang_id', $newTabLangId);
+    //     $newTabLangId = 0;
+    //     $languages = Language::getAllNames();
+    //     foreach ($languages as $langId => $langName) {
+    //         if (!$row = Product::getAttributesByLangId($langId, $product_id)) {
+    //             $newTabLangId = $langId;
+    //             break;
+    //         }
+    //     }
+    //     $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->siteLangId));
+    //     $this->set('product_id', $product_id);
+    //     $this->set('lang_id', $newTabLangId);
 
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    //     $this->_template->render(false, false, 'json-success.php');
+    // }
 
-    public function customProductOptions($product_id)
-    {
-        $product_id = FatUtility::int($product_id);
-        if (!$product_id) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
-        }
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
-        }
+    // public function customProductOptions($product_id)
+    // {
+    //     $product_id = FatUtility::int($product_id);
+    //     if (!$product_id) {
+    //         FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Request', $this->siteLangId));
+    //     }
+    //     if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+    //         FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+    //     }
 
-        $prodCatId = 0;
-        $product = new Product();
-        $records = $product->getProductCategories($product_id);
-        if (!empty($records)) {
-            $prodcatArr = array_column($records, 'prodcat_id');
-            $prodCatId = reset($prodcatArr);
-        }
+    //     $prodCatId = 0;
+    //     $product = new Product();
+    //     $records = $product->getProductCategories($product_id);
+    //     if (!empty($records)) {
+    //         $prodcatArr = array_column($records, 'prodcat_id');
+    //         $prodCatId = reset($prodcatArr);
+    //     }
 
-        $customProductOptionFrm = $this->getCustomProductOptionForm();
-        $alertToShow = $this->CheckProductLinkWithCatBrand($product_id);
-        $this->set('alertToShow', $alertToShow);
-        $this->set('customProductOptionFrm', $customProductOptionFrm);
-        $this->set('product_id', $product_id);
-        $this->set('prodcat_id', $prodCatId);
-        $this->set('activeTab', 'OPTIONS');
-        $this->set('siteLangId', $this->siteLangId);
-        $this->_template->render(false, false);
-    }
+    //     $customProductOptionFrm = $this->getCustomProductOptionForm();
+    //     $alertToShow = $this->CheckProductLinkWithCatBrand($product_id);
+    //     $this->set('alertToShow', $alertToShow);
+    //     $this->set('customProductOptionFrm', $customProductOptionFrm);
+    //     $this->set('product_id', $product_id);
+    //     $this->set('prodcat_id', $prodCatId);
+    //     $this->set('activeTab', 'OPTIONS');
+    //     $this->set('siteLangId', $this->siteLangId);
+    //     $this->_template->render(false, false);
+    // }
 
     public function productOptions($productId = 0)
     {
@@ -1103,58 +1103,58 @@ trait CustomProducts
         $this->_template->render(false, false);
     }
 
-    public function setupTag()
-    {
-        $this->userPrivilege->canEditProductTags(UserAuthentication::getLoggedUserId());
-        $frm = $this->getTagsForm();
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+    // public function setupTag()
+    // {
+    //     $this->userPrivilege->canEditProductTags(UserAuthentication::getLoggedUserId());
+    //     $frm = $this->getTagsForm();
+    //     $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+    //     if (false === $post) {
+    //         Message::addErrorMessage(current($frm->getValidationErrors()));
+    //         FatUtility::dieJsonError(Message::getHtml());
+    //     }
 
-        $tag_id = $post['tag_id'];
-        if ($tag_id > 0) {
-            if (!UserPrivilege::canSellerUpdateTag($this->userParentId, $tag_id)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-        }
-        unset($post['tag_id']);
-        $post['tag_user_id'] = $this->userParentId;
-        $post['tag_lang_id'] = $this->siteLangId;        
-        $record = new Tag($tag_id);
-        $record->assignValues($post);
+    //     $tag_id = $post['tag_id'];
+    //     if ($tag_id > 0) {
+    //         if (!UserPrivilege::canSellerUpdateTag($this->userParentId, $tag_id)) {
+    //             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //             FatUtility::dieJsonError(Message::getHtml());
+    //         }
+    //     }
+    //     unset($post['tag_id']);
+    //     $post['tag_user_id'] = $this->userParentId;
+    //     $post['tag_lang_id'] = $this->siteLangId;        
+    //     $record = new Tag($tag_id);
+    //     $record->assignValues($post);
 
-        if (!$record->save()) {
-            Message::addErrorMessage($record->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+    //     if (!$record->save()) {
+    //         Message::addErrorMessage($record->getError());
+    //         FatUtility::dieJsonError(Message::getHtml());
+    //     }
 
-        $newTabLangId = 0;
-        if ($tag_id > 0) {
-            $languages = Language::getAllNames();
-            foreach ($languages as $langId => $langName) {
-                if (!$row = Tag::getAttributesByLangId($langId, $tag_id)) {
-                    $newTabLangId = $langId;
-                    break;
-                }
-            }
-        } else {
-            $tag_id = $record->getMainTableRecordId();
-            $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
-        }
+    //     $newTabLangId = 0;
+    //     if ($tag_id > 0) {
+    //         $languages = Language::getAllNames();
+    //         foreach ($languages as $langId => $langName) {
+    //             if (!$row = Tag::getAttributesByLangId($langId, $tag_id)) {
+    //                 $newTabLangId = $langId;
+    //                 break;
+    //             }
+    //         }
+    //     } else {
+    //         $tag_id = $record->getMainTableRecordId();
+    //         $newTabLangId = FatApp::getConfig('CONF_ADMIN_DEFAULT_LANG', FatUtility::VAR_INT, 1);
+    //     }
 
-        /* update product tags association and tag string in products lang table[ */
-        Tag::updateTagStrings($tag_id);
-        /* ] */
+    //     /* update product tags association and tag string in products lang table[ */
+    //     Tag::updateTagStrings($tag_id);
+    //     /* ] */
 
-        $this->set('msg', Labels::getLabel("MSG_Tag_Setup_Successful", $this->siteLangId));
-        $this->set('tagId', $tag_id);
-        $this->set('langId', $newTabLangId);
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    //     $this->set('msg', Labels::getLabel("MSG_Tag_Setup_Successful", $this->siteLangId));
+    //     $this->set('tagId', $tag_id);
+    //     $this->set('langId', $newTabLangId);
+    //     $this->_template->render(false, false, 'json-success.php');
+    // }
 
     /*...................................Product Shipping Rates..................................*/
     public function removeProductShippingRates($product_id, $userId = 0)
@@ -1480,235 +1480,235 @@ trait CustomProducts
         $this->_template->render();
     }
 
-    public function customProductGeneralForm($productId)
-    {
-        $productId = FatUtility::int($productId);
-        $userId = $this->userParentId;
-        if ($productId > 0) {
-            $productRow = Product::getAttributesById($productId, ['product_seller_id']);
-            if ($productRow && $productRow['product_seller_id'] != $userId) {
-                FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            }
-        }
+    // public function customProductGeneralForm($productId)
+    // {
+    //     $productId = FatUtility::int($productId);
+    //     $userId = $this->userParentId;
+    //     if ($productId > 0) {
+    //         $productRow = Product::getAttributesById($productId, ['product_seller_id']);
+    //         if ($productRow && $productRow['product_seller_id'] != $userId) {
+    //             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //         }
+    //     }
 
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $languages = Language::getAllNames();
-        $productFrm = $this->getCustomProductIntialSetUpFrm($productId);
-        $productType = Product::PRODUCT_TYPE_PHYSICAL;
-        $attachDownloadsWithInv = applicationConstants::YES;
+    //     $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+    //     $languages = Language::getAllNames();
+    //     $productFrm = $this->getCustomProductIntialSetUpFrm($productId);
+    //     $productType = Product::PRODUCT_TYPE_PHYSICAL;
+    //     $attachDownloadsWithInv = applicationConstants::YES;
 
-        if ($productId > 0) {
-            $prodData = Product::getAttributesById($productId);
-            foreach ($languages as $langId => $data) {
-                $prod = new Product();
-                $productLangData = $prod->getAttributesByLangId($langId, $productId);
-                if (!empty($productLangData)) {
-                    $prodData['product_name'][$langId] = $productLangData['product_name'];
-                    $prodData['product_youtube_video'][$langId] = $productLangData['product_youtube_video'];
-                    //$prodData['product_description'][$langId] = $productLangData['product_description'];
-                    $prodData['product_description_' . $langId] = $productLangData['product_description'];
-                }
-            }
+    //     if ($productId > 0) {
+    //         $prodData = Product::getAttributesById($productId);
+    //         foreach ($languages as $langId => $data) {
+    //             $prod = new Product();
+    //             $productLangData = $prod->getAttributesByLangId($langId, $productId);
+    //             if (!empty($productLangData)) {
+    //                 $prodData['product_name'][$langId] = $productLangData['product_name'];
+    //                 $prodData['product_youtube_video'][$langId] = $productLangData['product_youtube_video'];
+    //                 //$prodData['product_description'][$langId] = $productLangData['product_description'];
+    //                 $prodData['product_description_' . $langId] = $productLangData['product_description'];
+    //             }
+    //         }
 
-            $taxData = array();
-            $tax = Tax::getTaxCatObjByProductId($productId, $this->siteLangId);
-            if ($prodData && $prodData['product_seller_id'] > 0) {
-                $tax->addCondition('ptt_seller_user_id', '=', $prodData['product_seller_id']);
-            } else {
-                $tax->addCondition('ptt_seller_user_id', '=', 0);
-            }
+    //         $taxData = array();
+    //         $tax = Tax::getTaxCatObjByProductId($productId, $this->siteLangId);
+    //         if ($prodData && $prodData['product_seller_id'] > 0) {
+    //             $tax->addCondition('ptt_seller_user_id', '=', $prodData['product_seller_id']);
+    //         } else {
+    //             $tax->addCondition('ptt_seller_user_id', '=', 0);
+    //         }
 
-            $activatedTaxServiceId = Tax::getActivatedServiceId();
+    //         $activatedTaxServiceId = Tax::getActivatedServiceId();
 
-            $tax->addFld('ptt_taxcat_id');
-            if ($activatedTaxServiceId) {
-                $tax->addFld('concat(IFNULL(taxcat_name,taxcat_identifier), " (",taxcat_code,")")as taxcat_name');
-            } else {
-                $tax->addFld('IFNULL(taxcat_name,taxcat_identifier)as taxcat_name');
-            }
+    //         $tax->addFld('ptt_taxcat_id');
+    //         if ($activatedTaxServiceId) {
+    //             $tax->addFld('concat(IFNULL(taxcat_name,taxcat_identifier), " (",taxcat_code,")")as taxcat_name');
+    //         } else {
+    //             $tax->addFld('IFNULL(taxcat_name,taxcat_identifier)as taxcat_name');
+    //         }
 
-            $tax->doNotCalculateRecords();
-            $tax->setPageSize(1);
-            $tax->addOrder('ptt_seller_user_id', 'ASC');
-            $rs = $tax->getResultSet();
-            $taxData = FatApp::getDb()->fetch($rs);
-            if (!empty($taxData)) {
-                $prodData['ptt_taxcat_id'] = $taxData['ptt_taxcat_id'];
-                $prodData['taxcat_name'] = $taxData['taxcat_name'];
-            }
+    //         $tax->doNotCalculateRecords();
+    //         $tax->setPageSize(1);
+    //         $tax->addOrder('ptt_seller_user_id', 'ASC');
+    //         $rs = $tax->getResultSet();
+    //         $taxData = FatApp::getDb()->fetch($rs);
+    //         if (!empty($taxData)) {
+    //             $prodData['ptt_taxcat_id'] = $taxData['ptt_taxcat_id'];
+    //             $prodData['taxcat_name'] = $taxData['taxcat_name'];
+    //         }
 
-            $srch = Product::getSearchObject($this->siteLangId);
-            $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'tp.product_brand_id = brand.brand_id', 'brand');
-            $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'brandlang_brand_id = brand.brand_id AND brandlang_lang_id = ' . $this->siteLangId);
-            $srch->addMultipleFields(array('product_brand_id', 'IFNULL(brand_name,brand_identifier) as brand_name', 'IFNULL(brand.brand_active,1) AS brand_active', 'IFNULL(brand.brand_deleted,0) AS brand_deleted'));
-            $srch->addCondition('product_id', '=', $productId);
-            $srch->addHaving('brand_active', '=', applicationConstants::YES);
-            $srch->addHaving('brand_deleted', '=', applicationConstants::NO);
-            $srch->doNotCalculateRecords();
-            $srch->setPageSize(1);
-            $rs = $srch->getResultSet();
-            $brandData = FatApp::getDb()->fetch($rs);
-            if (!empty($brandData)) {
-                $prodData['product_brand_id'] = $brandData['product_brand_id'];
-                $prodData['brand_name'] = $brandData['brand_name'];
-            }
+    //         $srch = Product::getSearchObject($this->siteLangId);
+    //         $srch->joinTable(Brand::DB_TBL, 'LEFT OUTER JOIN', 'tp.product_brand_id = brand.brand_id', 'brand');
+    //         $srch->joinTable(Brand::DB_TBL_LANG, 'LEFT OUTER JOIN', 'brandlang_brand_id = brand.brand_id AND brandlang_lang_id = ' . $this->siteLangId);
+    //         $srch->addMultipleFields(array('product_brand_id', 'IFNULL(brand_name,brand_identifier) as brand_name', 'IFNULL(brand.brand_active,1) AS brand_active', 'IFNULL(brand.brand_deleted,0) AS brand_deleted'));
+    //         $srch->addCondition('product_id', '=', $productId);
+    //         $srch->addHaving('brand_active', '=', applicationConstants::YES);
+    //         $srch->addHaving('brand_deleted', '=', applicationConstants::NO);
+    //         $srch->doNotCalculateRecords();
+    //         $srch->setPageSize(1);
+    //         $rs = $srch->getResultSet();
+    //         $brandData = FatApp::getDb()->fetch($rs);
+    //         if (!empty($brandData)) {
+    //             $prodData['product_brand_id'] = $brandData['product_brand_id'];
+    //             $prodData['brand_name'] = $brandData['brand_name'];
+    //         }
 
-            $prod = new Product();
-            $productCategories = $prod->getProductCategories($productId);
-            if (!empty($productCategories)) {
-                $selectedCat = array_keys($productCategories);
-                $prodCat = new ProductCategory();
-                $selectedCatName = $prodCat->getParentTreeStructure($selectedCat[0], 0, '', $this->siteLangId);
-                $prodData['category_name'] = html_entity_decode($selectedCatName);
-                $prodData['ptc_prodcat_id'] = $selectedCat[0];
-            }
+    //         $prod = new Product();
+    //         $productCategories = $prod->getProductCategories($productId);
+    //         if (!empty($productCategories)) {
+    //             $selectedCat = array_keys($productCategories);
+    //             $prodCat = new ProductCategory();
+    //             $selectedCatName = $prodCat->getParentTreeStructure($selectedCat[0], 0, '', $this->siteLangId);
+    //             $prodData['category_name'] = html_entity_decode($selectedCatName);
+    //             $prodData['ptc_prodcat_id'] = $selectedCat[0];
+    //         }
 
-            $productFrm->fill($prodData);
-            $productType = $prodData['product_type'];
-            $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'];
-        }
+    //         $productFrm->fill($prodData);
+    //         $productType = $prodData['product_type'];
+    //         $attachDownloadsWithInv = $prodData['product_attachements_with_inventory'];
+    //     }
 
-        unset($languages[$siteDefaultLangId]);
-        $this->set('productFrm', $productFrm);
-        $this->set('siteDefaultLangId', $siteDefaultLangId);
-        $this->set('otherLanguages', $languages);
-        $this->set('productType', $productType);
-        $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
-        $this->_template->render(false, false);
-    }
+    //     unset($languages[$siteDefaultLangId]);
+    //     $this->set('productFrm', $productFrm);
+    //     $this->set('siteDefaultLangId', $siteDefaultLangId);
+    //     $this->set('otherLanguages', $languages);
+    //     $this->set('productType', $productType);
+    //     $this->set('attachDownloadsWithInv', $attachDownloadsWithInv);
+    //     $this->_template->render(false, false);
+    // }
 
-    public function setupCustomProduct()
-    {
-        $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
-        }
-        if (!User::canAddCustomProduct()) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-        }
-        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $frm = $this->getCustomProductIntialSetUpFrm($productId);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    // public function setupCustomProduct()
+    // {
+    //     $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
+    //     if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+    //         FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+    //     }
+    //     if (!User::canAddCustomProduct()) {
+    //         FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //     }
+    //     $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+    //     $frm = $this->getCustomProductIntialSetUpFrm($productId);
+    //     $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+    //     if (false === $post) {
+    //         Message::addErrorMessage(current($frm->getValidationErrors()));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        if ($post['product_brand_id'] < 1 && FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_Choose_Brand_From_List', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        if ($post['ptc_prodcat_id'] < 1) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_Choose_Category_From_List', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    //     if ($post['product_brand_id'] < 1 && FatApp::getConfig("CONF_PRODUCT_BRAND_MANDATORY", FatUtility::VAR_INT, 1)) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Please_Choose_Brand_From_List', $this->siteLangId));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     if ($post['ptc_prodcat_id'] < 1) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Please_Choose_Category_From_List', $this->siteLangId));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        if ($productId > 0) {
-            $prodSellerId = Product::getAttributesById($productId, 'product_seller_id');
-            if ($prodSellerId != $this->userParentId) {
-                FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            }
-        }
+    //     if ($productId > 0) {
+    //         $prodSellerId = Product::getAttributesById($productId, 'product_seller_id');
+    //         if ($prodSellerId != $this->userParentId) {
+    //             FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //         }
+    //     }
 
-        $data = $post;
-        if ($productId == 0) {
-            $data['product_seller_id'] = $this->userParentId;
-            $prodRequireAdminApproval = FatApp::getConfig("CONF_CUSTOM_PRODUCT_REQUIRE_ADMIN_APPROVAL", FatUtility::VAR_INT, 1);
-            $data['product_approved'] = ($prodRequireAdminApproval == 1) ? 0 : 1;
-        }
-        $prod = new Product($productId);
-        if (!$prod->saveProductData($data)) {
-            Message::addErrorMessage($prod->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        Product::updateMinPrices($productId);
+    //     $data = $post;
+    //     if ($productId == 0) {
+    //         $data['product_seller_id'] = $this->userParentId;
+    //         $prodRequireAdminApproval = FatApp::getConfig("CONF_CUSTOM_PRODUCT_REQUIRE_ADMIN_APPROVAL", FatUtility::VAR_INT, 1);
+    //         $data['product_approved'] = ($prodRequireAdminApproval == 1) ? 0 : 1;
+    //     }
+    //     $prod = new Product($productId);
+    //     if (!$prod->saveProductData($data)) {
+    //         Message::addErrorMessage($prod->getError());
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     Product::updateMinPrices($productId);
 
-        if (!$prod->saveProductLangData($post)) {
-            Message::addErrorMessage($prod->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    //     if (!$prod->saveProductLangData($post)) {
+    //         Message::addErrorMessage($prod->getError());
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        if (!$prod->saveProductCategory($post['ptc_prodcat_id'])) {
-            Message::addErrorMessage($prod->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    //     if (!$prod->saveProductCategory($post['ptc_prodcat_id'])) {
+    //         Message::addErrorMessage($prod->getError());
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        if (!$prod->saveProductTax($post['ptt_taxcat_id'], $this->userParentId)) {
-            Message::addErrorMessage($prod->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    //     if (!$prod->saveProductTax($post['ptt_taxcat_id'], $this->userParentId)) {
+    //         Message::addErrorMessage($prod->getError());
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        if ($productId == 0 && FatApp::getConfig("CONF_CUSTOM_PRODUCT_REQUIRE_ADMIN_APPROVAL", FatUtility::VAR_INT, 1)) {
-            $mailData = array(
-                'request_title' => $post['product_identifier'],
-                'brand_name' => (!empty($post['brand_name'])) ? $post['brand_name'] : ''
-            );
-            $email = new EmailHandler();
-            if (!$email->sendNewCatalogNotification($this->siteLangId, $mailData)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Email_could_not_be_sent', $this->siteLangId));
-                FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
-            }
+    //     if ($productId == 0 && FatApp::getConfig("CONF_CUSTOM_PRODUCT_REQUIRE_ADMIN_APPROVAL", FatUtility::VAR_INT, 1)) {
+    //         $mailData = array(
+    //             'request_title' => $post['product_identifier'],
+    //             'brand_name' => (!empty($post['brand_name'])) ? $post['brand_name'] : ''
+    //         );
+    //         $email = new EmailHandler();
+    //         if (!$email->sendNewCatalogNotification($this->siteLangId, $mailData)) {
+    //             Message::addErrorMessage(Labels::getLabel('MSG_Email_could_not_be_sent', $this->siteLangId));
+    //             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
+    //         }
 
-            /* send notification to admin [ */
-            $notificationData = array(
-                'notification_record_type' => Notification::TYPE_CATALOG,
-                'notification_record_id' => $prod->getMainTableRecordId(),
-                'notification_user_id' => $this->userParentId,
-                'notification_label_key' => Notification::NEW_CATALOG_REQUEST_NOTIFICATION,
-                'notification_added_on' => date('Y-m-d H:i:s'),
-            );
+    //         /* send notification to admin [ */
+    //         $notificationData = array(
+    //             'notification_record_type' => Notification::TYPE_CATALOG,
+    //             'notification_record_id' => $prod->getMainTableRecordId(),
+    //             'notification_user_id' => $this->userParentId,
+    //             'notification_label_key' => Notification::NEW_CATALOG_REQUEST_NOTIFICATION,
+    //             'notification_added_on' => date('Y-m-d H:i:s'),
+    //         );
 
-            if (!Notification::saveNotifications($notificationData)) {
-                Message::addErrorMessage(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-            /* ] */
-        }
+    //         if (!Notification::saveNotifications($notificationData)) {
+    //             Message::addErrorMessage(Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId));
+    //             FatUtility::dieJsonError(Message::getHtml());
+    //         }
+    //         /* ] */
+    //     }
 
-        $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->siteLangId));
-        $this->set('productId', $prod->getMainTableRecordId());
-        $this->set('productType', $post['product_type']);
-        $this->set('productTypeDigital', Product::PRODUCT_TYPE_DIGITAL);
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    //     $this->set('msg', Labels::getLabel('LBL_Product_Setup_Successful', $this->siteLangId));
+    //     $this->set('productId', $prod->getMainTableRecordId());
+    //     $this->set('productType', $post['product_type']);
+    //     $this->set('productTypeDigital', Product::PRODUCT_TYPE_DIGITAL);
+    //     $this->_template->render(false, false, 'json-success.php');
+    // }
 
-    public function productAttributeAndSpecificationsFrm($productId)
-    {
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
-        }
-        if (!User::canAddCustomProduct()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
-        }
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
-        }
-        $productId = FatUtility::int($productId);
-        if ($productId < 1) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    // public function productAttributeAndSpecificationsFrm($productId)
+    // {
+    //     if (!$this->isShopActive($this->userParentId, 0, true)) {
+    //         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
+    //     }
+    //     if (!User::canAddCustomProduct()) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
+    //     }
+    //     if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+    //         Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+    //         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+    //     }
+    //     $productId = FatUtility::int($productId);
+    //     if ($productId < 1) {
+    //         Message::addErrorMessage($this->str_invalid_request);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        $productFrm = $this->getProductAttributeAndSpecificationsFrm($productId);
-        $productData = Product::getAttributesById($productId);
-        $prodShippingDetails = Product::getProductShippingDetails($productId, $this->siteLangId, $productData['product_seller_id']);
-        $productData['ps_free'] = isset($prodShippingDetails['ps_free']) ? $prodShippingDetails['ps_free'] : 0;
-        $prodSpecificsDetails = Product::getProductSpecificsDetails($productId);
-        $productData['product_warranty'] = isset($prodSpecificsDetails['product_warranty']) ? $prodSpecificsDetails['product_warranty'] : '';
-        $productFrm->fill($productData);
+    //     $productFrm = $this->getProductAttributeAndSpecificationsFrm($productId);
+    //     $productData = Product::getAttributesById($productId);
+    //     $prodShippingDetails = Product::getProductShippingDetails($productId, $this->siteLangId, $productData['product_seller_id']);
+    //     $productData['ps_free'] = isset($prodShippingDetails['ps_free']) ? $prodShippingDetails['ps_free'] : 0;
+    //     $prodSpecificsDetails = Product::getProductSpecificsDetails($productId);
+    //     $productData['product_warranty'] = isset($prodSpecificsDetails['product_warranty']) ? $prodSpecificsDetails['product_warranty'] : '';
+    //     $productFrm->fill($productData);
 
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-        $languages = Language::getAllNames();
-        unset($languages[$siteDefaultLangId]);
-        $this->set('productFrm', $productFrm);
-        $this->set('productData', $productData);
-        $this->set('siteDefaultLangId', $siteDefaultLangId);
-        $this->set('otherLanguages', $languages);
-        $this->set('productId', $productId);
-        $this->_template->render(false, false, 'seller/product-attribute-and-specifications-frm.php');
-    }
+    //     $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+    //     $languages = Language::getAllNames();
+    //     unset($languages[$siteDefaultLangId]);
+    //     $this->set('productFrm', $productFrm);
+    //     $this->set('productData', $productData);
+    //     $this->set('siteDefaultLangId', $siteDefaultLangId);
+    //     $this->set('otherLanguages', $languages);
+    //     $this->set('productId', $productId);
+    //     $this->_template->render(false, false, 'seller/product-attribute-and-specifications-frm.php');
+    // }
 
     public function setUpProductAttributes()
     {
@@ -1763,83 +1763,83 @@ trait CustomProducts
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function prodSpecForm($productId)
-    {
-        if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $productId = FatUtility::int($productId);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-        $prodSpecId = FatApp::getPostedData('prodSpecId', FatUtility::VAR_INT, 0);
-        if ($productId < 1 || $langId < 1) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    // public function prodSpecForm($productId)
+    // {
+    //     if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     $productId = FatUtility::int($productId);
+    //     $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+    //     $prodSpecId = FatApp::getPostedData('prodSpecId', FatUtility::VAR_INT, 0);
+    //     if ($productId < 1 || $langId < 1) {
+    //         Message::addErrorMessage($this->str_invalid_request);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        $prodSpecData = array();
-        if ($prodSpecId > 0) {
-            if (!UserPrivilege::canEditSellerProductSpecification($prodSpecId, $productId)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                FatUtility::dieWithError(Message::getHtml());
-            }
-            $prodSpec = new ProdSpecification();
-            $prodSpecData = $prodSpec->getProdSpecification($prodSpecId, $productId, $langId, false);
-        }
-        $this->set('langId', $langId);
-        $this->set('prodSpecData', $prodSpecData);
-        $this->_template->render(false, false, 'seller/prod-spec-form.php');
-    }
+    //     $prodSpecData = array();
+    //     if ($prodSpecId > 0) {
+    //         if (!UserPrivilege::canEditSellerProductSpecification($prodSpecId, $productId)) {
+    //             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //             FatUtility::dieWithError(Message::getHtml());
+    //         }
+    //         $prodSpec = new ProdSpecification();
+    //         $prodSpecData = $prodSpec->getProdSpecification($prodSpecId, $productId, $langId, false);
+    //     }
+    //     $this->set('langId', $langId);
+    //     $this->set('prodSpecData', $prodSpecData);
+    //     $this->_template->render(false, false, 'seller/prod-spec-form.php');
+    // }
 
-    public function prodSpecificationsByLangId()
-    {
-        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-        if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        if ($productId < 1 || $langId < 1) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $prod = new Product($productId);
-        $productSpecifications = $prod->getProdSpecificationsByLangId($langId);
-        if ($productSpecifications === false) {
-            Message::addErrorMessage($prod->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $this->set('productSpecifications', $productSpecifications);
-        $this->set('langId', $langId);
-        $this->_template->render(false, false, 'seller/product-specifications.php');
-    }
+    // public function prodSpecificationsByLangId()
+    // {
+    //     $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+    //     $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+    //     if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     if ($productId < 1 || $langId < 1) {
+    //         Message::addErrorMessage($this->str_invalid_request);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     $prod = new Product($productId);
+    //     $productSpecifications = $prod->getProdSpecificationsByLangId($langId);
+    //     if ($productSpecifications === false) {
+    //         Message::addErrorMessage($prod->getError());
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     $this->set('productSpecifications', $productSpecifications);
+    //     $this->set('langId', $langId);
+    //     $this->_template->render(false, false, 'seller/product-specifications.php');
+    // }
 
-    public function setupProductSpecifications()
-    {
-        $post = FatApp::getPostedData();
-        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $prodSpecId = FatApp::getPostedData('prodSpecId', FatUtility::VAR_INT, 0);
-        if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
-        }
-        if ($prodSpecId > 0) {
-            if (!UserPrivilege::canEditSellerProductSpecification($prodSpecId, $productId)) {
-                Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-        $prod = new Product($productId);
-        if (!$prod->saveProductSpecifications($prodSpecId, $post['langId'], $post['prodspec_name'], $post['prodspec_value'], $post['prodspec_group'])) {
-            Message::addErrorMessage($prod->getError());
-            FatUtility::dieJsonError(Message::getHtml());
-        }
-        $this->set('msg', Labels::getLabel('LBL_Specification_added_successfully', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    // public function setupProductSpecifications()
+    // {
+    //     $post = FatApp::getPostedData();
+    //     $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+    //     $prodSpecId = FatApp::getPostedData('prodSpecId', FatUtility::VAR_INT, 0);
+    //     if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+    //         FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+    //     }
+    //     if ($prodSpecId > 0) {
+    //         if (!UserPrivilege::canEditSellerProductSpecification($prodSpecId, $productId)) {
+    //             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //             FatUtility::dieWithError(Message::getHtml());
+    //         }
+    //     }
+    //     $prod = new Product($productId);
+    //     if (!$prod->saveProductSpecifications($prodSpecId, $post['langId'], $post['prodspec_name'], $post['prodspec_value'], $post['prodspec_group'])) {
+    //         Message::addErrorMessage($prod->getError());
+    //         FatUtility::dieJsonError(Message::getHtml());
+    //     }
+    //     $this->set('msg', Labels::getLabel('LBL_Specification_added_successfully', $this->siteLangId));
+    //     $this->_template->render(false, false, 'json-success.php');
+    // }
 
     public function prodSpecGroupAutoComplete()
     {
@@ -1861,55 +1861,55 @@ trait CustomProducts
         die(json_encode($json));
     }
 
-    public function productOptionsAndTag($productId)
-    {
+    // public function productOptionsAndTag($productId)
+    // {
         
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
-        }
-        if (!User::canAddCustomProduct()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
-        }
+    //     if (!$this->isShopActive($this->userParentId, 0, true)) {
+    //         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
+    //     }
+    //     if (!User::canAddCustomProduct()) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
+    //     }
         
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
-        }
-        $productId = FatUtility::int($productId);
-        if ($productId < 1) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    //     if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+    //         Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+    //         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+    //     }
+    //     $productId = FatUtility::int($productId);
+    //     if ($productId < 1) {
+    //         Message::addErrorMessage($this->str_invalid_request);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
        
-        $productTags = Product::getProductTags($productId,$this->siteLangId);
-        $productOptions = Product::getProductOptions($productId, $this->siteLangId);
-        $productType = Product::getAttributesById($productId, 'product_type');
-        $this->set('productTags', $productTags);
-        $this->set('productOptions', $productOptions);
-        $this->set('productId', $productId);
-        $this->set('productType', $productType);
+    //     $productTags = Product::getProductTags($productId,$this->siteLangId);
+    //     $productOptions = Product::getProductOptions($productId, $this->siteLangId);
+    //     $productType = Product::getAttributesById($productId, 'product_type');
+    //     $this->set('productTags', $productTags);
+    //     $this->set('productOptions', $productOptions);
+    //     $this->set('productId', $productId);
+    //     $this->set('productType', $productType);
        
-        $this->_template->render(false, false, 'seller/product-options-and-tag.php');
-    }    
+    //     $this->_template->render(false, false, 'seller/product-options-and-tag.php');
+    // }    
 
-    public function upcListing($productId)
-    {
-        $productId = FatUtility::int($productId);
-        if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        if ($productId < 1) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '|');
-        $this->set('optionCombinations', $optionCombinations);
-        $this->set('productId', $productId);
-        $this->_template->render(false, false);
-    }
+    // public function upcListing($productId)
+    // {
+    //     $productId = FatUtility::int($productId);
+    //     if (!UserPrivilege::canSellerEditCustomProduct($this->userParentId, $productId)) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     if ($productId < 1) {
+    //         Message::addErrorMessage($this->str_invalid_request);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     $productOptions = Product::getProductOptions($productId, $this->siteLangId, true);
+    //     $optionCombinations = CommonHelper::combinationOfElementsOfArr($productOptions, 'optionValues', '|');
+    //     $this->set('optionCombinations', $optionCombinations);
+    //     $this->set('productId', $productId);
+    //     $this->_template->render(false, false);
+    // }
 
     public function updateProductTag()
     {
@@ -1964,57 +1964,57 @@ trait CustomProducts
         $this->_template->render(false, false, 'json-success.php');
     }
 
-    public function productShippingFrm($productId)
-    {
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
-        }
-        if (!User::canAddCustomProduct()) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
-        }
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
-        }
-        $productId = FatUtility::int($productId);
-        if ($productId < 1) {
-            Message::addErrorMessage($this->str_invalid_request);
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $productData = Product::getAttributesById($productId);
-        $shippedByUserId = $productData['product_seller_id'];
-        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
-            $shippedByUserId = 0;
-        }
+    // public function productShippingFrm($productId)
+    // {
+    //     if (!$this->isShopActive($this->userParentId, 0, true)) {
+    //         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
+    //     }
+    //     if (!User::canAddCustomProduct()) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
+    //     }
+    //     if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+    //         Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+    //         FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+    //     }
+    //     $productId = FatUtility::int($productId);
+    //     if ($productId < 1) {
+    //         Message::addErrorMessage($this->str_invalid_request);
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     $productData = Product::getAttributesById($productId);
+    //     $shippedByUserId = $productData['product_seller_id'];
+    //     if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+    //         $shippedByUserId = 0;
+    //     }
 
-        $productFrm = $this->getProductShippingFrm($productId);
+    //     $productFrm = $this->getProductShippingFrm($productId);
 
-        $prodShippingDetails = Product::getProductShippingDetails($productId, $this->siteLangId, $shippedByUserId);
-        if (isset($prodShippingDetails['ps_from_country_id'])) {
-            $productData['shipping_country'] = Countries::getCountryById($prodShippingDetails['ps_from_country_id'], $this->siteLangId, 'country_name');
-            $productData['ps_from_country_id'] = $prodShippingDetails['ps_from_country_id'];
-        }
-        $productData['ps_free'] = (isset($prodShippingDetails['ps_free'])) ? $prodShippingDetails['ps_free'] : 0;
+    //     $prodShippingDetails = Product::getProductShippingDetails($productId, $this->siteLangId, $shippedByUserId);
+    //     if (isset($prodShippingDetails['ps_from_country_id'])) {
+    //         $productData['shipping_country'] = Countries::getCountryById($prodShippingDetails['ps_from_country_id'], $this->siteLangId, 'country_name');
+    //         $productData['ps_from_country_id'] = $prodShippingDetails['ps_from_country_id'];
+    //     }
+    //     $productData['ps_free'] = (isset($prodShippingDetails['ps_free'])) ? $prodShippingDetails['ps_free'] : 0;
 
-        /* [ GET ATTACHED PROFILE ID */
-        $profSrch = ShippingProfileProduct::getSearchObject();
-        $profSrch->addCondition('shippro_product_id', '=', $productId);
-        $profSrch->addCondition('shippro_user_id', '=', $shippedByUserId);
-        $profSrch->doNotCalculateRecords();
-        $profSrch->setPageSize(1);
-        $proRs = $profSrch->getResultSet();
-        $profileData = FatApp::getDb()->fetch($proRs);
-        if (!empty($profileData)) {
-            $productData['shipping_profile'] = $profileData['profile_id'];
-        }
-        /* ]*/
+    //     /* [ GET ATTACHED PROFILE ID */
+    //     $profSrch = ShippingProfileProduct::getSearchObject();
+    //     $profSrch->addCondition('shippro_product_id', '=', $productId);
+    //     $profSrch->addCondition('shippro_user_id', '=', $shippedByUserId);
+    //     $profSrch->doNotCalculateRecords();
+    //     $profSrch->setPageSize(1);
+    //     $proRs = $profSrch->getResultSet();
+    //     $profileData = FatApp::getDb()->fetch($proRs);
+    //     if (!empty($profileData)) {
+    //         $productData['shipping_profile'] = $profileData['profile_id'];
+    //     }
+    //     /* ]*/
 
-        $productFrm->fill($productData);
-        $this->set('productFrm', $productFrm);
-        $this->set('productId', $productId);
-        $this->_template->render(false, false, 'seller/product-shipping-frm.php');
-    }
+    //     $productFrm->fill($productData);
+    //     $this->set('productFrm', $productFrm);
+    //     $this->set('productId', $productId);
+    //     $this->_template->render(false, false, 'seller/product-shipping-frm.php');
+    // }
 
     public function translatedProductData()
     {
@@ -2036,92 +2036,92 @@ trait CustomProducts
         $this->set('msg', Labels::getLabel('LBL_Product_Data_Translated_Successful', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
-    public function setUpProductShipping()
-    {
-        $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
-        }
-        if (!User::canAddCustomProduct()) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-        }
-        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+    // public function setUpProductShipping()
+    // {
+    //     $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
+    //     if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+    //         FatUtility::dieWithError(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+    //     }
+    //     if (!User::canAddCustomProduct()) {
+    //         FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //     }
+    //     $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
 
-        $prodType = Product::getAttributesById($productId, 'product_type');
-        if (!empty($prodType) && Product::PRODUCT_TYPE_DIGITAL == $prodType) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId));
-        }
+    //     $prodType = Product::getAttributesById($productId, 'product_type');
+    //     if (!empty($prodType) && Product::PRODUCT_TYPE_DIGITAL == $prodType) {
+    //         FatUtility::dieJsonError(Labels::getLabel('LBL_DIGITAL_PRODUCTS_ARE_NOT_ALLOWED', $this->siteLangId));
+    //     }
 
 
-        $frm = $this->getProductShippingFrm($productId);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
-        if (false === $post) {
-            Message::addErrorMessage(current($frm->getValidationErrors()));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $prodSellerId = Product::getAttributesById($productId, 'product_seller_id');
-        if ($prodSellerId != $this->userParentId) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-        }
+    //     $frm = $this->getProductShippingFrm($productId);
+    //     $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+    //     if (false === $post) {
+    //         Message::addErrorMessage(current($frm->getValidationErrors()));
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
+    //     $prodSellerId = Product::getAttributesById($productId, 'product_seller_id');
+    //     if ($prodSellerId != $this->userParentId) {
+    //         FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //     }
 
-        $prod = new Product($productId);
-        if (!$prod->saveProductData($post)) {
-            Message::addErrorMessage($prod->getError());
-            FatUtility::dieWithError(Message::getHtml());
-        }
+    //     $prod = new Product($productId);
+    //     if (!$prod->saveProductData($post)) {
+    //         Message::addErrorMessage($prod->getError());
+    //         FatUtility::dieWithError(Message::getHtml());
+    //     }
 
-        if (!FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
-            $psFree = isset($post['ps_free']) ? $post['ps_free'] : 0;
-            if (!$prod->saveProductSellerShipping($prodSellerId, $psFree, $post['ps_from_country_id'])) {
-                Message::addErrorMessage($prod->getError());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        } else {
-            if (!Product::isShipFromConfigured($productId)) {
-                if (!$prod->saveProductSellerShipping(0, 0, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0))) {
-                    Message::addErrorMessage($prod->getError());
-                    FatUtility::dieWithError(Message::getHtml());
-                }
-            }
-        }
+    //     if (!FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+    //         $psFree = isset($post['ps_free']) ? $post['ps_free'] : 0;
+    //         if (!$prod->saveProductSellerShipping($prodSellerId, $psFree, $post['ps_from_country_id'])) {
+    //             Message::addErrorMessage($prod->getError());
+    //             FatUtility::dieWithError(Message::getHtml());
+    //         }
+    //     } else {
+    //         if (!Product::isShipFromConfigured($productId)) {
+    //             if (!$prod->saveProductSellerShipping(0, 0, FatApp::getConfig('CONF_COUNTRY', FatUtility::VAR_INT, 0))) {
+    //                 Message::addErrorMessage($prod->getError());
+    //                 FatUtility::dieWithError(Message::getHtml());
+    //             }
+    //         }
+    //     }
 
-        $shipBy = $this->userParentId;
-        $shipProProdData = [];
-        if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
-            $shipBy = 0;
-            $shippingProfile = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true, true);
-            $shippingProfileId =  array_key_first($shippingProfile);
+    //     $shipBy = $this->userParentId;
+    //     $shipProProdData = [];
+    //     if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+    //         $shipBy = 0;
+    //         $shippingProfile = ShippingProfile::getProfileArr($this->siteLangId, 0, true, true, true);
+    //         $shippingProfileId =  array_key_first($shippingProfile);
 
-            $isShippingProfileLinked = ShippingProfileProduct::isShippingProfileLinked($productId);
-            if (!$isShippingProfileLinked) {
-                $shipProProdData = array(
-                    'shippro_shipprofile_id' => $shippingProfileId,
-                    'shippro_product_id' => $productId,
-                    'shippro_user_id' => $shipBy
-                );
-            }
-        } else {    
-            $shipProProdData = array(
-                'shippro_shipprofile_id' => isset($post['shipping_profile']) && !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($prodSellerId),
-                'shippro_product_id' => $productId,
-                'shippro_user_id' => $shipBy
-            );            
-        }
+    //         $isShippingProfileLinked = ShippingProfileProduct::isShippingProfileLinked($productId);
+    //         if (!$isShippingProfileLinked) {
+    //             $shipProProdData = array(
+    //                 'shippro_shipprofile_id' => $shippingProfileId,
+    //                 'shippro_product_id' => $productId,
+    //                 'shippro_user_id' => $shipBy
+    //             );
+    //         }
+    //     } else {    
+    //         $shipProProdData = array(
+    //             'shippro_shipprofile_id' => isset($post['shipping_profile']) && !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($prodSellerId),
+    //             'shippro_product_id' => $productId,
+    //             'shippro_user_id' => $shipBy
+    //         );            
+    //     }
 
-        if (!empty($shipProProdData)) {
-            $spObj = new ShippingProfileProduct();
-            if (!$spObj->addProduct($shipProProdData)) {
-                Message::addErrorMessage($spObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-        }
+    //     if (!empty($shipProProdData)) {
+    //         $spObj = new ShippingProfileProduct();
+    //         if (!$spObj->addProduct($shipProProdData)) {
+    //             Message::addErrorMessage($spObj->getError());
+    //             FatUtility::dieJsonError(Message::getHtml());
+    //         }
+    //     }
 
-        $productShiping = FatApp::getPostedData('product_shipping');
-        if (!empty($productShiping)) {
-            Product::addUpdateProductShippingRates($productId, $productShiping, $prodSellerId);
-        }
-        $this->set('msg', Labels::getLabel('LBL_Product_Shipping_Setup_Successful', $this->siteLangId));
-        $this->set('productId', $prod->getMainTableRecordId());
-        $this->_template->render(false, false, 'json-success.php');
-    }
+    //     $productShiping = FatApp::getPostedData('product_shipping');
+    //     if (!empty($productShiping)) {
+    //         Product::addUpdateProductShippingRates($productId, $productShiping, $prodSellerId);
+    //     }
+    //     $this->set('msg', Labels::getLabel('LBL_Product_Shipping_Setup_Successful', $this->siteLangId));
+    //     $this->set('productId', $prod->getMainTableRecordId());
+    //     $this->_template->render(false, false, 'json-success.php');
+    // }
 }

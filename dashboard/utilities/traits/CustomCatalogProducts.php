@@ -546,25 +546,25 @@ trait CustomCatalogProducts
         return $frm;
     }
 
-    public function customCatalogProductImages($preqId)
-    {
-        $this->userPrivilege->canViewSellerRequests(UserAuthentication::getLoggedUserId());
-        $this->canAddCustomCatalogProduct();
-        $preqId = FatUtility::int($preqId);
-        $productReqRow = ProductRequest::getAttributesById($preqId, array('preq_user_id', 'preq_content'));
-        $userArr = User::getAuthenticUserIds(UserAuthentication::getLoggedUserId(), $this->userParentId);
-        if (!in_array($productReqRow['preq_user_id'], $userArr)) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
-        }
+    // public function customCatalogProductImages($preqId)
+    // {
+    //     $this->userPrivilege->canViewSellerRequests(UserAuthentication::getLoggedUserId());
+    //     $this->canAddCustomCatalogProduct();
+    //     $preqId = FatUtility::int($preqId);
+    //     $productReqRow = ProductRequest::getAttributesById($preqId, array('preq_user_id', 'preq_content'));
+    //     $userArr = User::getAuthenticUserIds(UserAuthentication::getLoggedUserId(), $this->userParentId);
+    //     if (!in_array($productReqRow['preq_user_id'], $userArr)) {
+    //         FatUtility::dieWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+    //     }
 
-        $preqContent = $productReqRow['preq_content'];
-        $preqContentData = json_decode($preqContent, true);
-        $imagesFrm = $this->getCustomProductImagesFrm($preqId, $this->siteLangId);
-        $this->set('imagesFrm', $imagesFrm);
-        $this->set('preqId', $preqId);
-        $this->set('productType', $preqContentData['product_type']);
-        $this->_template->render(false, false);
-    }
+    //     $preqContent = $productReqRow['preq_content'];
+    //     $preqContentData = json_decode($preqContent, true);
+    //     $imagesFrm = $this->getCustomProductImagesFrm($preqId, $this->siteLangId);
+    //     $this->set('imagesFrm', $imagesFrm);
+    //     $this->set('preqId', $preqId);
+    //     $this->set('productType', $preqContentData['product_type']);
+    //     $this->_template->render(false, false);
+    // }
 
     public function deleteCustomCatalogProductImage($preq_id, $image_id)
     {
@@ -841,46 +841,46 @@ trait CustomCatalogProducts
         exit;
     }
 
-    public function loadCustomProductOptionss()
-    {
-        $this->canAddCustomCatalogProduct();
-        $post = FatApp::getPostedData();
-        if (empty($post['options'])) {
-            return false;
-        }
+    // public function loadCustomProductOptionss()
+    // {
+    //     $this->canAddCustomCatalogProduct();
+    //     $post = FatApp::getPostedData();
+    //     if (empty($post['options'])) {
+    //         return false;
+    //     }
 
-        $srch = Option::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('option_id, option_name, option_identifier'));
-        $srch->addCondition('option_id', 'IN', $post['options']);
-        $srch->addOrder('option_identifier');
+    //     $srch = Option::getSearchObject($this->siteLangId);
+    //     $srch->addMultipleFields(array('option_id, option_name, option_identifier'));
+    //     $srch->addCondition('option_id', 'IN', $post['options']);
+    //     $srch->addOrder('option_identifier');
 
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $tags = $db->fetchAll($rs, 'option_id');
-        $li = '';
-        foreach ($tags as $key => $tag) {
-            $li .= '<li id="product-option' . $tag['option_id'] . '"> <i class="remove_option-js remove_param fa fa-trash"></i> ';
-            $li .= $tag['option_name'] . ' (' . $tag['option_identifier'] . ')' . '<input type="hidden" value="' . $tag['option_id'] . '"  name="product_option[]"></li>';
-        }
+    //     $rs = $srch->getResultSet();
+    //     $db = FatApp::getDb();
+    //     $tags = $db->fetchAll($rs, 'option_id');
+    //     $li = '';
+    //     foreach ($tags as $key => $tag) {
+    //         $li .= '<li id="product-option' . $tag['option_id'] . '"> <i class="remove_option-js remove_param fa fa-trash"></i> ';
+    //         $li .= $tag['option_name'] . ' (' . $tag['option_identifier'] . ')' . '<input type="hidden" value="' . $tag['option_id'] . '"  name="product_option[]"></li>';
+    //     }
 
-        echo $li;
-        exit;
-    }
+    //     echo $li;
+    //     exit;
+    // }
 
-    public function getCustomCatalogShippingTab()
-    {
-        $shipping_rates = array();
-        $post = FatApp::getPostedData();
-        $userId = UserAuthentication::getLoggedUserId();
-        $preq_id = $post['preq_id'];
-        $this->set('siteLangId', $this->siteLangId);
-        $shipping_rates = array();
-        $shipping_rates = ProductRequest::getProductShippingRates($preq_id, $this->siteLangId, 0, $userId);
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('preq_id', $preq_id);
-        $this->set('shipping_rates', $shipping_rates);
-        $this->_template->render(false, false);
-    }
+    // public function getCustomCatalogShippingTab()
+    // {
+    //     $shipping_rates = array();
+    //     $post = FatApp::getPostedData();
+    //     $userId = UserAuthentication::getLoggedUserId();
+    //     $preq_id = $post['preq_id'];
+    //     $this->set('siteLangId', $this->siteLangId);
+    //     $shipping_rates = array();
+    //     $shipping_rates = ProductRequest::getProductShippingRates($preq_id, $this->siteLangId, 0, $userId);
+    //     $this->set('siteLangId', $this->siteLangId);
+    //     $this->set('preq_id', $preq_id);
+    //     $this->set('shipping_rates', $shipping_rates);
+    //     $this->_template->render(false, false);
+    // }
 
     public function approveCustomCatalogProducts($preqId = 0)
     {
@@ -959,28 +959,28 @@ trait CustomCatalogProducts
         return $frm;
     }
 
-    private function getCustomProductImagesFrm($preq_id = 0, $lang_id = 0)
-    {
-        $imgTypesArr = $this->getSeparateImageOptionsOfCustomProduct($preq_id, $lang_id);
-        $frm = new Form('imageFrm', array('id' => 'imageFrm'));
-        $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, 0, array('class' => 'option'), '');
-        $languagesAssocArr = Language::getAllNames();
+    // private function getCustomProductImagesFrm($preq_id = 0, $lang_id = 0)
+    // {
+    //     $imgTypesArr = $this->getSeparateImageOptionsOfCustomProduct($preq_id, $lang_id);
+    //     $frm = new Form('imageFrm', array('id' => 'imageFrm'));
+    //     $frm->addSelectBox(Labels::getLabel('LBL_Image_File_Type', $this->siteLangId), 'option_id', $imgTypesArr, 0, array('class' => 'option'), '');
+    //     $languagesAssocArr = Language::getAllNames();
 		
-		if(count($languagesAssocArr) > 1){
-			 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array('class' => 'language'), '');
-        } else  {
-			$lang_id = array_key_first($languagesAssocArr); 
-			$frm->addHiddenField('', 'lang_id', $lang_id);
-		}
+	// 	if(count($languagesAssocArr) > 1){
+	// 		 $frm->addSelectBox(Labels::getLabel('LBL_Language', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array('class' => 'language'), '');
+    //     } else  {
+	// 		$lang_id = array_key_first($languagesAssocArr); 
+	// 		$frm->addHiddenField('', 'lang_id', $lang_id);
+	// 	}
 		
-		$fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s)', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
-        $fldImg->htmlBeforeField = '<div class="filefield">';
-        $fldImg->htmlAfterField = '</div><span class="form-text text-muted">' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->siteLangId) . '</span>';
-        $frm->addHiddenField('', 'min_width', 500);
-        $frm->addHiddenField('', 'min_height', 500);
-        $frm->addHiddenField('', 'preq_id', $preq_id);
-        return $frm;
-    }
+	// 	$fldImg = $frm->addFileUpload(Labels::getLabel('LBL_Photo(s)', $this->siteLangId), 'prod_image', array('id' => 'prod_image'));
+    //     $fldImg->htmlBeforeField = '<div class="filefield">';
+    //     $fldImg->htmlAfterField = '</div><span class="form-text text-muted">' . Labels::getLabel('LBL_Please_keep_image_dimensions_greater_than_500_x_500', $this->siteLangId) . '</span>';
+    //     $frm->addHiddenField('', 'min_width', 500);
+    //     $frm->addHiddenField('', 'min_height', 500);
+    //     $frm->addHiddenField('', 'preq_id', $preq_id);
+    //     return $frm;
+    // }
 
     private function getSeparateImageOptionsOfCustomProduct($preq_id = 0, $lang_id = 0)
     {

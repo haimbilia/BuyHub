@@ -343,6 +343,16 @@ trait Options
         $srch->setPageNumber($page);
         $srch->setPageSize(20);
 
+        $disAllowOptions = FatApp::getPostedData('disAllowOptions');
+        if (is_array($disAllowOptions)) {
+            $srch->addCondition('option_id', 'NOT IN', $disAllowOptions);
+        }
+
+        $doNotIncludeImageOption = FatApp::getPostedData('doNotIncludeImageOption', FatUtility::VAR_INT, 0);
+        if (0 < $doNotIncludeImageOption) {
+            $srch->addCondition('option_is_separate_images', '=', applicationConstants::NO);
+        }
+
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('option_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('option_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
