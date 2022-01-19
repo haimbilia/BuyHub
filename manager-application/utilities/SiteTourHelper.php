@@ -126,7 +126,7 @@ class SiteTourHelper
             self::STEP_CONFIGURATION => [
                 'title' => 'Localization Settings',
                 'icon' => '',
-                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print'
+                'msg' => 'Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print',
             ],
             self::STEP_MEDIA => [
                 'title' => 'Media Settings',
@@ -193,23 +193,26 @@ class SiteTourHelper
             case self::STEP_CONFIGURATION:
                 $status = $this->validateGeneralConfiguration();
                 break;
-                /*  case self::STEP_ADD_PRODUCT:
-                $status = $this->validateAddProduct();
-                break; */
+            case self::STEP_MEDIA:
+                $status = $this->validateMedia();
+                break;
+            case self::STEP_COMMISION:
+                $status = $this->validateCommision();
+                break;
             case self::STEP_EMAIL_CONF:
                 $status = $this->validateEmailConfiguration();
                 break;
             case self::STEP_PAYMENT_METHOD:
-                $status = $this->validateEmailConfiguration();
+                $status = $this->validatePlugin(PluginCommon::TYPE_REGULAR_PAYMENT_METHOD);
                 break;
-            case self::STEP_SLIDES:
-                $status = $this->validateSlides();
+            case self::STEP_TAX_SERVICE:
+                $status = $this->validatePlugin(PluginCommon::TYPE_TAX_SERVICES);
                 break;
-            case self::STEP_NAVIGATION:
-                $status = $this->validateNavigation();
+            case self::STEP_SOCIAL_LOGIN:
+                $status = $this->validatePlugin(PluginCommon::TYPE_SOCIAL_LOGIN);
                 break;
-            case self::STEP_TAX:
-                $status = $this->validateTax();
+            case self::STEP_SHIPPING_SERVICE:
+                $status = $this->validatePlugin(PluginCommon::TYPE_SHIPPING_SERVICES);
                 break;
         }
 
@@ -254,7 +257,32 @@ class SiteTourHelper
 
     public function validateEmailConfiguration()
     {
-        if (empty(FatApp::getConfig('CONF_REPLY_TO_EMAIL', FatUtility::VAR_STRING, '')) && empty(FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '')) && empty(FatApp::getConfig('CONF_FROM_EMAIL', FatUtility::VAR_STRING, ''))) {
+        if (empty(FatApp::getConfig('CONF_REPLY_TO_EMAIL', FatUtility::VAR_STRING, '')) || empty(FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '')) || empty(FatApp::getConfig('CONF_FROM_EMAIL', FatUtility::VAR_STRING, ''))) {
+            return false;
+        }
+        return true;
+    }
+
+    public function validateMedia()
+    {
+        $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, CommonHelper::getLangId());
+        if (!empty($fileData) && 0 < $fileData['afile_id']) {
+            return true;
+        }
+        return false;
+    }
+
+    public function validateCommision()
+    {
+        if (empty(FatApp::getConfig('CONF_MAX_COMMISSION', FatUtility::VAR_INT, 0))) {
+            return false;
+        }
+        return true;
+    }
+
+    public function validatePlugin($type)
+    {
+        if (Plugin::isActiveByType($type)) {
             return true;
         }
         return false;
