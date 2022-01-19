@@ -92,136 +92,6 @@
                 outline-width: 0;
             }
         }
-        .dashboard-menu {
-            color: $txt-gray;
-            fill: currentColor;
-            .menu__item {
-                overflow: hidden;
-                transition: all 0.5s ease-in-out;
-                color: $txt-body;
-                .menu__item__inner {
-                    padding: 0px 0px;
-                    position: relative;
-                    line-height: 42px;
-                    &:before {
-                        position: absolute;
-                        content: " ";
-                        height: 0;
-                        width: 2px;
-                        #{$start-direction}: 0;
-                        top: 0;
-                        background-color: $brand-color;
-                        opacity: 0;
-                        transition: all 0.5s ease-in-out;
-                    }
-                    .menu-head {
-                        font-weight: 600;
-                        color: $txt-body;
-                        font-size: 0.875rem;
-                        padding-#{$start-direction}: 24px;
-                        position: relative;
-                        #{$start-direction}: 220px;
-                        text-transform: uppercase;
-                        opacity: 0;
-                        visibility: hidden;
-                        display: none;
-                        transition: all 0.7s ease-in-out;
-                        margin-top: 10px;
-                    }
-                    .menu-item__title {
-                        -ms-flex-preferred-size: 100%;
-                        flex-basis: 100%;
-                        padding-#{$end-direction}: 10px;
-                        position: relative;
-                        font-size: 0.8125rem;
-                        #{$start-direction}: 220px;
-                        opacity: 0;
-                        transition: all 0.7s ease-in-out;
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        .msg-count {
-                            text-align: center;
-                            border-radius: 50%;
-                            font-size: 0.75rem;
-                            width: 20px;
-                            height: 20px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            background: $brand-color;
-                            color: $brand-color-inverse;
-                        }
-                    }
-                }
-                &.is-active {
-                    background: $bg-brand-light;
-                    color: $brand-color;
-                    fill: $brand-color;
-                }
-            }
-            ul {
-                padding: 15px 0 0 0;
-                margin: 0;
-                li {
-                    &.is-active {
-                        .menu__item__inner {
-                            &:before {
-                                height: 100%;
-                                opacity: 1;
-                            }
-                        }
-                    }
-                }
-            }
-            a {
-                color: inherit;
-                &:hover {
-                    background: $bg-gray;
-                }
-            }
-            a {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                white-space: nowrap;
-            }
-            .is-active {
-                .menu-item__title {
-                    font-weight: 500;
-                }
-            }
-            .icn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                -ms-flex: 0 0 60px;
-                flex: 0 0 60px;
-                svg {
-                    width: 18px;
-                    height: 18px;
-                    fill: inherit;
-                }
-            }
-            .divider {
-                margin: 0px 0;
-            }
-            .accordianbody {
-                padding: 0;
-                display: none;
-                li {
-                    a {
-                        padding-#{$start-direction}: 70px;
-                        color: $txt-body;
-                        font-size: 0.8125rem;
-                        line-height: 2rem;
-                    }
-                    &.is-active a {
-                        color: $brand-color;
-                    }
-                }
-            }
-        }
     }
     &.sidebar-is-expanded {
         .sidebar {
@@ -267,5 +137,82 @@
                 padding-#{$start-direction}: 70px;
             }
         }
+    }
+}
+
+.dashboard-menu {
+    color: $txt-gray;
+    fill: currentColor;
+    &-item {
+        overflow: hidden;
+        transition: all 0.5s ease-in-out;
+        color: $txt-body;
+
+        &.is-active {
+            background: $bg-brand-light;
+            color: $brand-color;
+            fill: $brand-color;
+        }
+    }
+    &-btn {
+        background-color: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        flex: 0 0 100%;
+        text-align: #{$start-direction};
+        width: 100%;
+        margin: 0;
+        padding: 1rem 1rem;
+    }
+    &-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+    &-head {
+        margin-#{$start-direction}: 10px;
+        font-weight: 600;
+        color: $txt-body;
+        font-size: 0.875rem;
+        transition: all 0.7s ease-in-out;
+    }
+    .dropdown-toggle-custom-arrow {
+        #{$end-direction}: 25px;
+    }
+    .menu-sub {
+        padding: 0;
+        margin: 0;
+        &-item {
+            display: flex;
+            position: relative;
+            color: $txt-gray;
+            &:after {
+                content: "";
+                width: 5px;
+                height: 5px;
+                background: currentColor;
+                display: block;
+                position: absolute;
+                #{$start-direction}: 1rem;
+                top: 13px;
+                border-radius: 50%;
+            }
+        }
+        &-link {
+            flex: 0 0 100%;
+            padding: 0.5rem 2rem;
+            font-size: 0.8125rem;
+            &:hover {
+                background-color: $bg-gray;
+            }
+        }
+    }
+    .divider {
+        margin: 0px 0;
     }
 }
