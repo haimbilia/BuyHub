@@ -19,7 +19,7 @@ $displayMap = $frmType == Configurations::FORM_PRODUCT;
     <div class="card-head">
         <div class="card-head-label">
             <h3 class="card-head-title">
-                <?php echo $tabs[$frmType] . ' ' . Labels::getLabel('LBL_SETTINGS', $siteLangId); ?>
+                <?php echo $tabs[$frmType]; ?>
             </h3>
         </div>
         <div class="card-head-toolbar">

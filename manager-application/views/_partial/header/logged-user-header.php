@@ -1,7 +1,5 @@
 <div class="app">
-    <?php
-    $this->includeTemplate('_partial/header/left-navigation.php');
-    ?>
+    <?php $this->includeTemplate('_partial/navigation/left-navigation.php'); ?>
     <div class="wrap">
         <header class="main-header mainHeaderJs">
             <div class="container-fluid">
