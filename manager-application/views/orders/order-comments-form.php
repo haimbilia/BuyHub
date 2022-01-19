@@ -11,6 +11,7 @@ if ($manualFld != null) {
 }
 
 $statusFld = $frm->getField('op_status_id');
+$statusFld->setFieldTagAttribute('data-old-value', $statusFld->value);
 $statusFld->setFieldTagAttribute('class', 'statusJs fieldsVisibilityJs');
 $statusFld->developerTags['col'] = (null != $manualFld) ? 4 : 6;
 

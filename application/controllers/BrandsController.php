@@ -189,6 +189,11 @@ class BrandsController extends MyAppController
 
     public function autoComplete()
     {
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
         $pagesize = FatApp::getConfig('CONF_PAGE_SIZE');
         $post = FatApp::getPostedData();
         $fetchAllRecords = FatApp::getPostedData('fetchAllRecords', FatUtility::VAR_INT, 0);
@@ -202,24 +207,27 @@ class BrandsController extends MyAppController
             $cond->attachCondition('brand_identifier', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
         $srch->addCondition('brand_status', '=', Brand::BRAND_REQUEST_APPROVED);
-
-        //$srch->setPageSize($pagesize);
+       
         if($fetchAllRecords == 1){
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();
         }else{
+            $srch->setPageNumber($page);
             $srch->setPageSize($pagesize);
         }
         $rs = $srch->getResultSet();
         $db = FatApp::getDb();
-        $brands = $db->fetchAll($rs, 'brand_id');
-        $json = array();
+        $brands = $db->fetchAll($rs, 'brand_id');        
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($brands as $key => $brand) {
-            $json[] = array(
-            'id' => $key,
-            'name' => strip_tags(html_entity_decode($brand['brand_name'], ENT_QUOTES, 'UTF-8'))
+            $json['results'][] = array(
+                'id' => $key,
+                'text' => strip_tags(html_entity_decode($brand['brand_name'], ENT_QUOTES, 'UTF-8'))
             );
         }
+
         die(json_encode($json));
         /* $this->set('brands', $db->fetchAll($rs,'brand_id') );
         $this->_template->render(false,false); */

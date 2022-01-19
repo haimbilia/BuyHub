@@ -23,7 +23,7 @@
                         </div>
                         <?php if (1 < count($sellers)) { ?>
                             <div class="card-toolbar">
-                                <select class="form-select" onchange="getOrderParticulars(<?php echo $order['order_id'] ?>, this)">
+                                <select id='allSellerJs' class="form-select" onchange="getOrderParticulars(<?php echo $order['order_id'] ?>, this)">
                                     <option value=""><?php echo Labels::getLabel('LBL_ALL_SELLERS', $siteLangId); ?></option>
                                     <?php foreach ($sellers as $sellerId => $shopName) { ?>
                                         <option value="<?php echo $sellerId; ?>" <?php echo ($opSellerId == $sellerId ? 'selected="selected"' : ''); ?>><?php echo $shopName; ?></option>

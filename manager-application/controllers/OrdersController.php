@@ -249,12 +249,20 @@ class OrdersController extends ListingBaseController
         $allowedShippingUserStatuses = $orderObj->getAdminAllowedUpdateShippingUser();
         $displayShippingUserForm = (
             (
-                (in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])) ||
-                (in_array($opRow['op_status_id'], $allowedShippingUserStatuses))) &&
+                (
+                    in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])
+                ) ||
+                (
+                    in_array($opRow['op_status_id'], $allowedShippingUserStatuses)
+                )
+            ) &&
             $this->objPrivilege->canEditSellerOrders($this->admin_id, true) &&
             !$shippingHanldedBySeller &&
-            ($opRow['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL &&
-                $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED));
+            (
+                $opRow['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL &&
+                $opRow['order_payment_status'] != Orders::ORDER_PAYMENT_CANCELLED
+            )
+        );
 
 
         $frm = $this->getOrderCommentsForm($opRow, $processingStatuses);
@@ -294,7 +302,7 @@ class OrdersController extends ListingBaseController
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_STATUS', $this->siteLangId), 'op_status_id', $orderStatusArr, '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId));
         $fld->requirements()->setRequired();
 
-        $frm->addSelectBox(Labels::getLabel('FRM_NOTIFY_CUSTOMER', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), '', [], Labels::getLabel('FRM_SELECT', $this->siteLangId))->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_NOTIFY_CUSTOMER', $this->siteLangId), 'customer_notified', applicationConstants::getYesNoArr($this->siteLangId), '', [], '')->requirements()->setRequired();
         if (array_key_exists('opship_tracking_number', $orderData) && (empty($orderData['opship_tracking_number']) || $orderData['opshipping_plugin_code'] == 'ShipStationShipping') && $orderData['orderstatus_id'] !=  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
             $manualFld = $frm->addCheckBox(Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId), 'manual_shipping', 1, array(), false, 0);
             $manualShipUnReqObj = new FormFieldRequirement('manual_shipping', Labels::getLabel('FRM_SELF_SHIPPING', $this->siteLangId));
@@ -775,14 +783,10 @@ class OrdersController extends ListingBaseController
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->joinOrderUser();
         $srch->addCondition('op_id', '=', $opId);
-        $srch->addMultipleFields(['op.*', 'pm.*', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code','opshipping_by_seller_user_id','op_selprod_user_id','opshipping_carrier_code','optsu_user_id']);
+        $srch->addMultipleFields(['op.*', 'pm.*', 'order_language_id', 'ops_plugin.plugin_code as opshipping_plugin_code','opshipping_by_seller_user_id','op_selprod_user_id','opshipping_carrier_code','optsu_user_id', 'opship_tracking_number', 'orderstatus_id']);
         $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $orderDetail = array();
-        if ($rs) {
-            $orderDetail = FatApp::getDb()->fetch($rs);
-        }       
+        $srch->setPageSize(1);        
+        $orderDetail = FatApp::getDb()->fetch($srch->getResultSet());
 
         if (empty($orderDetail)) {
             LibHelper::exitWithError($this->str_invalid_request, true);
@@ -832,7 +836,7 @@ class OrdersController extends ListingBaseController
                 
                 if (0 < $manualShipping) {               
                     $updateData = [
-                        'opship_op_id' => $post['op_id'],
+                        'opship_op_id' => FatApp::getPostedData('op_id', FatUtility::VAR_INT),
                         "opship_tracking_number" => $post['tracking_number'],
                     ];
 

@@ -48,8 +48,8 @@ class AdminBaseController extends FatController
         $this->siteLangCode = CommonHelper::getLangCode();
         $this->siteLangCountryCode = CommonHelper::getLangCountryCode();
 
-        $adminLangLabelCache = FatCache::get('adminLangLabelCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
-        if (!$adminLangLabelCache) {
+        $curdLangLabelCache = FatCache::get('curdLangLabelCache' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (!$curdLangLabelCache) {
             $arr = [
                 'str_update_record' => Labels::getLabel('LBL_Record_Updated_Successfully', $this->siteLangId),
                 'str_invalid_request_id' => Labels::getLabel('LBL_Invalid_Request_Id', $this->siteLangId),
@@ -58,9 +58,9 @@ class AdminBaseController extends FatController
                 'str_invalid_Action' => Labels::getLabel('LBL_Invalid_Action', $this->siteLangId),
                 'str_setup_successful' => Labels::getLabel('LBL_Setup_Successful', $this->siteLangId)
             ];
-            FatCache::set('adminLangLabelCache' . $this->siteLangId, serialize($arr), '.txt');
+            FatCache::set('curdLangLabelCache' . $this->siteLangId, serialize($arr), '.txt');
         } else {
-            $arr =  unserialize($adminLangLabelCache);
+            $arr =  unserialize($curdLangLabelCache);
         }
 
         $this->str_update_record = $arr['str_update_record'];

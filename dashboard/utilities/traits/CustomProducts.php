@@ -681,34 +681,37 @@ trait CustomProducts
 
     public function countries_autocomplete()
     {
-        $pagesize = 10;
-        $post = FatApp::getPostedData();
-        $userId = $this->userParentId;
+        $pagesize = 20;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+        $post = FatApp::getPostedData();      
         $srch = Countries::getSearchObject(true, $this->siteLangId);
         $srch->addOrder('country_name');
 
         $srch->addMultipleFields(array('country_id, country_name, country_code'));
 
         if (!empty($post['keyword'])) {
-            $cnd = $srch->addCondition('country_name', 'LIKE', '%' . $post['keyword'] . '%');
+            $srch->addCondition('country_name', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
         $srch->setPageSize($pagesize);
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
+        $srch->setPageNumber($page);
 
-        $countries = $db->fetchAll($rs, 'country_id');
+        $countries = FatApp::getDb()->fetchAll($srch->getResultSet(), 'country_id');
         if (isset($post['includeEverywhere']) && $post['includeEverywhere']) {
             $everyWhereArr = array('country_id' => '-1', 'country_name' => Labels::getLabel('LBL_Everywhere_Else', $this->siteLangId));
             $countries[] = $everyWhereArr;
         }
 
-        $json = array();
+        $json = array(
+            'pageCount' => $srch->pages()
+        );
         foreach ($countries as $key => $country) {
-            $json[] = array(
+            $json['results'][] = array(
                 'id' => $country['country_id'],
-                'name' => strip_tags(html_entity_decode(isset($country['country_name']) ? $country['country_name'] : $country['country_code'], ENT_QUOTES, 'UTF-8')),
-
+                'text' => strip_tags(html_entity_decode(isset($country['country_name']) ? $country['country_name'] : $country['country_code'], ENT_QUOTES, 'UTF-8')),
             );
         }
         die(json_encode($json));
@@ -1860,6 +1863,7 @@ trait CustomProducts
 
     public function productOptionsAndTag($productId)
     {
+        
         if (!$this->isShopActive($this->userParentId, 0, true)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
@@ -1867,6 +1871,7 @@ trait CustomProducts
             Message::addErrorMessage(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'customProduct'));
         }
+        
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
@@ -1876,15 +1881,17 @@ trait CustomProducts
             Message::addErrorMessage($this->str_invalid_request);
             FatUtility::dieWithError(Message::getHtml());
         }
-        $productTags = Product::getProductTags($productId);
+       
+        $productTags = Product::getProductTags($productId,$this->siteLangId);
         $productOptions = Product::getProductOptions($productId, $this->siteLangId);
         $productType = Product::getAttributesById($productId, 'product_type');
         $this->set('productTags', $productTags);
         $this->set('productOptions', $productOptions);
         $this->set('productId', $productId);
         $this->set('productType', $productType);
+       
         $this->_template->render(false, false, 'seller/product-options-and-tag.php');
-    }
+    }    
 
     public function upcListing($productId)
     {

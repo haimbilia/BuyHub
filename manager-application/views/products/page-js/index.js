@@ -6,6 +6,6 @@ $(document).ready(function () {
         dropdownParent: $("#prodcatIdJs").parent(),
         allowClear: true,
         placeholder: $("#prodcatIdJs").attr('placeholder')
-    }).data("select2").$container.addClass("w-100");;
+    }).data("select2").$container.addClass("w-100 custom-select2-single");
     
 });

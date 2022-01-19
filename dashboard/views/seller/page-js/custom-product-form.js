@@ -325,8 +325,8 @@
                     dataType: 'json',
                     type: 'post',
                     success: function (json) {
-                        response($.map(json, function (item) {
-                            return { label: item['name'], value: item['name'], id: item['id'] };
+                        response($.map(json['results'], function (item) {
+                            return { label: item['text'], value: item['text'], id: item['id'] };
                         }));
                     },
                 });

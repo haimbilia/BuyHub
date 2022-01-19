@@ -55,7 +55,7 @@ if (!empty($order['payments'])) { ?>
                             ?>
                             <span class="badge <?php echo $cls; ?>"><?php echo $msg; ?></span>
                         </td>
-                        <td class="align-right">
+                        <td>
                             <?php echo HtmlHelper::getModalStructure("modal" . $key, Labels::getLabel('LBL_COMMENT', $siteLangId), nl2br($row['opayment_comments'])); ?>
                             <ul class="actions">
                                 <li data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_CLICK_TO_VIEW_COMMENTS', $siteLangId); ?>">
