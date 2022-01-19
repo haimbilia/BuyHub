@@ -143,6 +143,7 @@
 .dashboard-menu {
     color: $txt-gray;
     fill: currentColor;
+    font-size: 0.85rem;
     &-item {
         overflow: hidden;
         transition: all 0.5s ease-in-out;
@@ -176,7 +177,7 @@
     }
     &-head {
         margin-#{$start-direction}: 10px;
-        font-weight: 600;
+        font-weight: 500;
         color: $txt-body;
         font-size: 0.875rem;
         transition: all 0.7s ease-in-out;
@@ -198,7 +199,7 @@
                 background: currentColor;
                 display: block;
                 position: absolute;
-                #{$start-direction}: 1rem;
+                #{$start-direction}: 22px;
                 top: 13px;
                 border-radius: 50%;
             }
@@ -206,7 +207,8 @@
         &-link {
             flex: 0 0 100%;
             padding: 0.5rem 2rem;
-            font-size: 0.8125rem;
+            padding-#{$start-direction}: 44px;
+
             &:hover {
                 background-color: $bg-gray;
             }
