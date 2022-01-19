@@ -116,32 +116,7 @@
                                 <div class="form-group row">
                                     <label class="col-form-label col-lg-3 col-sm-12">Copy From Textarea</label>
                                     <div class="col-lg-6 col-md-9 col-sm-12">
-                                        <grammarly-extension class="_1KJtL" style="position: absolute; top: 0px; left: 0px; pointer-events: none;">
-                                            <div data-grammarly-part="highlights" class="u_fNK" style="position: absolute; top: 0px; left: 0px;">
-                                                <div style="box-sizing: content-box; top: 1px; left: 11px; width: 623px; height: 130.875px; position: relative; pointer-events: none; overflow: hidden; border: 0px; border-radius: 0px; padding: 0px; margin: 0px;">
-                                                    <div style="position: absolute; top: 0px; left: 0px;">
-                                                        <div style="height: 1171px; width: 2543px;"></div>
-                                                        <div style="position: absolute; top: 0px; left: 0px; height: 1171px; width: 2543px;"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div data-grammarly-part="button" class="u_fNK" style="position: absolute; top: 0px; left: 0px;">
-                                                <div style="box-sizing: content-box; top: 1px; left: 11px; width: 623px; height: 130.875px; position: relative; pointer-events: none; overflow: hidden; border: 0px; border-radius: 0px; padding: 0px; margin: 0px;">
-                                                    <div style="position: absolute; transform: translate(-100%, -100%); top: 122.425px; left: 610px; width: auto; height: auto; pointer-events: all;">
-                                                        <div style="display: flex; flex-direction: row;">
-                                                            <div style="position: relative;"></div>
-                                                            <div>
-                                                                <div class="_5WizN _1QzSN">
-                                                                    <div class="_3YmQx">
-                                                                        <div title="Protected by Grammarly" class="_3QdKe">&nbsp;</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </grammarly-extension>
+
                                         <textarea class="form-control" id="clipboard_2" rows="6" spellcheck="true">Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga.</textarea>
                                         <div class="space-10"></div>
                                         <a href="#" class="btn btn-secondary" data-clipboard="true" data-clipboard-target="#clipboard_2"><i class="la la-clipboard"></i> Copy to clipboard</a>
@@ -150,32 +125,7 @@
                                 <div class="form-group row">
                                     <label class="col-form-label col-lg-3 col-sm-12">Cut From Textarea</label>
                                     <div class="col-lg-6 col-md-9 col-sm-12">
-                                        <grammarly-extension class="_1KJtL" style="position: absolute; top: 0px; left: 0px; pointer-events: none;">
-                                            <div data-grammarly-part="highlights" class="u_fNK" style="position: absolute; top: 0px; left: 0px;">
-                                                <div style="box-sizing: content-box; top: 1px; left: 11px; width: 623px; height: 130.875px; position: relative; pointer-events: none; overflow: hidden; border: 0px; border-radius: 0px; padding: 0px; margin: 0px;">
-                                                    <div style="position: absolute; top: 0px; left: 0px;">
-                                                        <div style="height: 1171px; width: 2543px;"></div>
-                                                        <div style="position: absolute; top: 0px; left: 0px; height: 1171px; width: 2543px;"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div data-grammarly-part="button" class="u_fNK" style="position: absolute; top: 0px; left: 0px;">
-                                                <div style="box-sizing: content-box; top: 1px; left: 11px; width: 623px; height: 130.875px; position: relative; pointer-events: none; overflow: hidden; border: 0px; border-radius: 0px; padding: 0px; margin: 0px;">
-                                                    <div style="position: absolute; transform: translate(-100%, -100%); top: 122.425px; left: 610px; width: auto; height: auto; pointer-events: all;">
-                                                        <div style="display: flex; flex-direction: row;">
-                                                            <div style="position: relative;"></div>
-                                                            <div>
-                                                                <div class="_5WizN _1QzSN">
-                                                                    <div class="_3YmQx">
-                                                                        <div title="Protected by Grammarly" class="_3QdKe">&nbsp;</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </grammarly-extension>
+
                                         <textarea class="form-control" id="clipboard_3" rows="6" spellcheck="false">Mussum ipsum cacilds, vidis litro abertis. Consetis adipiscings elitis. Pra lá , depois divoltis porris, paradis. Paisis, filhis, espiritis santis. Mé faiz elementum girarzis, nisi eros vermeio, in elementis mé pra quem é amistosis quis leo. Manduma pindureta quium dia nois paga.</textarea>
                                         <div class="space-10"></div>
                                         <a href="#" class="btn btn-brand" data-clipboard="true" data-clipboard-action="cut" data-clipboard-target="#clipboard_3"><i class="la la-cut"></i> Cut to clipboard</a>

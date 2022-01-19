@@ -24,7 +24,7 @@ if (0 < $recordId) {
             </div>
         <?php } else { ?>
             <div class="onboarding">
-                <?php require_once(CONF_THEME_PATH . 'configurations/getting-started-left-nav.php'); ?>
+                <?php require_once(CONF_THEME_PATH . 'getting-started/left-nav.php'); ?>
                 <div class="onboarding-main">
                     <?php require_once(CONF_THEME_PATH . 'products/form-right.php'); ?>
                 </div>

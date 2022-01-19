@@ -21,13 +21,13 @@ class UploadBulkImagesController extends ListingBaseController
     {
         $frm = new Form('uploadBulkImages', array('id' => 'uploadBulkImages'));
 
-        $fldImg = $frm->addFileUpload(Labels::getLabel('LBL_File_to_be_uploaded:', $this->langId), 'bulk_images', array('id' => 'bulk_images', 'accept' => '.zip' ));
+        $fldImg = $frm->addFileUpload(Labels::getLabel('FRM_FILE_TO_BE_UPLOADED:', $this->langId), 'bulk_images', array('id' => 'bulk_images', 'accept' => '.zip'));
         $fldImg->requirement->setRequired(true);
         $fldImg->setFieldTagAttribute('onChange', '$("#uploadFileName").html(this.value)');
         $fldImg->htmlBeforeField = '<div class="filefield"><span class="filename" id="uploadFileName"></span>';
-        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('LBL_Browse_File', $this->langId) . '</label></div>';
+        $fldImg->htmlAfterField = '<label class="filelabel">' . Labels::getLabel('FRM_BROWSE_FILE', $this->langId) . '</label></div>';
 
-        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Submit', $this->langId));
+        $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SUBMIT', $this->langId));
         return $frm;
     }
 
@@ -73,12 +73,12 @@ class UploadBulkImagesController extends ListingBaseController
     {
         $frm = new Form('frmSearch', array('id' => 'frmSearch'));
         $frm->setRequiredStarWith('caption');
-        $frm->addTextBox(Labels::getLabel('LBL_Keyword', $this->siteLangId), 'keyword');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
 
-        $frm->addTextBox(Labels::getLabel('LBL_User', $this->siteLangId), 'user', '');
+        $frm->addTextBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'user', '');
 
-        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('LBL_Search', $this->siteLangId));
-        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('LBL_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
+        $fld_submit = $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SEARCH', $this->siteLangId));
+        $fld_cancel = $frm->addButton("", "btn_clear", Labels::getLabel('BTN_CLEAR', $this->siteLangId), array('onclick' => 'clearSearch();'));
         $fld_submit->attachField($fld_cancel);
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'afile_record_id');
@@ -142,7 +142,8 @@ class UploadBulkImagesController extends ListingBaseController
 
         if (empty($uploadDirsArr)) {
             LibHelper::exitWithError(
-                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId), true
+                Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId),
+                true
             );
         }
         $obj = new UploadBulkImages();

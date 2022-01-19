@@ -1,6 +1,6 @@
 <?php
-    $controller = strtolower($controller);
-    $action = strtolower($action); ?>
+$controller = strtolower($controller);
+$action = strtolower($action); ?>
 <sidebar class="sidebar no-print">
     <div class="logo-wrapper">
         <?php
@@ -10,7 +10,7 @@
         $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
         $uploadedTime = isset($fileData['afile_updated_at']) ? AttachedFile::setTimeParam($fileData['afile_updated_at']) : '';
         $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-        
+
         $ratio = '';
         if (isset($fileData['afile_aspect_ratio']) && $fileData['afile_aspect_ratio'] > 0 && isset($aspectRatioArr[$fileData['afile_aspect_ratio']])) {
             $ratio = $aspectRatioArr[$fileData['afile_aspect_ratio']];
@@ -18,9 +18,7 @@
         ?>
         <div class="logo-dashboard">
             <a href="<?php echo $logoUrl; ?>">
-                <img data-ratio="<?php echo $ratio; ?>" src="<?php echo $siteLogo; ?>"
-                    alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>"
-                    title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>">
+                <img data-ratio="<?php echo $ratio; ?>" src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>">
             </a>
         </div>
 
@@ -30,148 +28,121 @@
             $isOpened = 'is-opened';
         }
         ?>
-        <div class="js-hamburger hamburger-toggle <?php echo $isOpened; ?>"><span class="bar-top"></span><span
-                class="bar-mid"></span><span class="bar-bot"></span></div>
+        <div class="js-hamburger hamburger-toggle <?php echo $isOpened; ?>"><span class="bar-top"></span><span class="bar-mid"></span><span class="bar-bot"></span></div>
     </div>
-    <div class="sidebar__content custom-scrollbar scroll scroll-y" id="scrollElement-js" >
+    <div class="sidebar__content custom-scrollbar scroll scroll-y" id="scrollElement-js">
         <nav class="dashboard-menu">
             <ul>
                 <li class="menu__item">
-                    <div class="menu__item__inner"> <span
-                            class="menu-head"><?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?></span></div>
+                    <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?></span></div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'buyer' && ($action == 'orders' || $action == 'vieworder')) ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'buyer' && ($action == 'orders' || $action == 'vieworder')) ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Buyer', 'Orders'); ?>">
+                        <a title="<?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'Orders'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#order-rental">
                                     </use>
                                 </svg>
                             </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?></span>
+                            <span class="menu-item__title"><?php echo Labels::getLabel("LBL_Orders", $siteLangId); ?></span>
                         </a>
                     </div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'buyer' && ($action == 'mydownloads')) ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'buyer' && ($action == 'mydownloads')) ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_Downloads", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Buyer', 'MyDownloads'); ?>">
+                        <a title="<?php echo Labels::getLabel("LBL_Downloads", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'MyDownloads'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#downloads">
                                     </use>
                                 </svg>
                             </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel("LBL_Downloads", $siteLangId); ?></span>
+                            <span class="menu-item__title"><?php echo Labels::getLabel("LBL_Downloads", $siteLangId); ?></span>
                         </a>
                     </div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'buyer' && $action == 'ordercancellationrequests') ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'buyer' && $action == 'ordercancellationrequests') ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_Order_Cancellation_Requests", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Buyer', 'orderCancellationRequests'); ?>">
+                        <a title="<?php echo Labels::getLabel("LBL_Order_Cancellation_Requests", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'orderCancellationRequests'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#order-cancel-request">
                                     </use>
                                 </svg>
                             </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel("LBL_Order_Cancellation_Requests", $siteLangId); ?></span>
+                            <span class="menu-item__title"><?php echo Labels::getLabel("LBL_Order_Cancellation_Requests", $siteLangId); ?></span>
                         </a>
                     </div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'buyer' && ($action == 'orderreturnrequests' || $action == 'vieworderreturnrequest')) ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'buyer' && ($action == 'orderreturnrequests' || $action == 'vieworderreturnrequest')) ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_Return_Requests", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequests'); ?>">
+                        <a title="<?php echo Labels::getLabel("LBL_Return_Requests", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'orderReturnRequests'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#order-return-request">
                                     </use>
                                 </svg>
                             </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel("LBL_Return_Requests", $siteLangId); ?></span>
+                            <span class="menu-item__title"><?php echo Labels::getLabel("LBL_Return_Requests", $siteLangId); ?></span>
                         </a>
                     </div>
                 </li>
                 <li class="divider"></li>
                 <?php if (User::canViewBuyerTab()) { ?>
-                <li class="menu__item">
-                    <div class="menu__item__inner"> <span
-                            class="menu-head"><?php echo Labels::getLabel("LBL_Offers_&_Rewards", $siteLangId); ?></span>
-                    </div>
-                </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'buyer' && $action == 'offers') ? 'is-active' : ''; ?>">
-                    <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_My_Offers", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Buyer', 'offers'); ?>">
-                            <i class="icn shop">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-offers">
-                                    </use>
-                                </svg>
-                            </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel("LBL_My_Offers", $siteLangId); ?></span>
-                        </a>
-                    </div>
-                </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'buyer' && $action == 'rewardpoints') ? 'is-active' : ''; ?>">
-                    <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_Reward_Points", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Buyer', 'rewardPoints'); ?>">
-                            <i class="icn shop">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#reward-points">
-                                    </use>
-                                </svg>
-                            </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel("LBL_Reward_Points", $siteLangId); ?></span>
-                        </a>
-                    </div>
-                </li>
-                <?php if (FatApp::getConfig('CONF_ENABLE_REFERRER_MODULE', FatUtility::VAR_INT, 1)) { ?>
-                <li
-                    class="menu__item <?php echo ($controller == 'buyer' && $action == 'shareearn') ? 'is-active' : ''; ?>">
-                    <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_Share_and_Earn", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Buyer', 'shareEarn'); ?>">
-                            <i class="icn shop">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#share-earn">
-                                    </use>
-                                </svg>
-                            </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel("LBL_Share_and_Earn", $siteLangId); ?></span>
-                        </a>
-                    </div>
-                </li>
-                <?php } ?>
-                <li class="divider"></li>
+                    <li class="menu__item">
+                        <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Offers_&_Rewards", $siteLangId); ?></span>
+                        </div>
+                    </li>
+                    <li class="menu__item <?php echo ($controller == 'buyer' && $action == 'offers') ? 'is-active' : ''; ?>">
+                        <div class="menu__item__inner">
+                            <a title="<?php echo Labels::getLabel("LBL_My_Offers", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'offers'); ?>">
+                                <i class="icn shop">
+                                    <svg class="svg">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-offers">
+                                        </use>
+                                    </svg>
+                                </i>
+                                <span class="menu-item__title"><?php echo Labels::getLabel("LBL_My_Offers", $siteLangId); ?></span>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="menu__item <?php echo ($controller == 'buyer' && $action == 'rewardpoints') ? 'is-active' : ''; ?>">
+                        <div class="menu__item__inner">
+                            <a title="<?php echo Labels::getLabel("LBL_Reward_Points", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'rewardPoints'); ?>">
+                                <i class="icn shop">
+                                    <svg class="svg">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#reward-points">
+                                        </use>
+                                    </svg>
+                                </i>
+                                <span class="menu-item__title"><?php echo Labels::getLabel("LBL_Reward_Points", $siteLangId); ?></span>
+                            </a>
+                        </div>
+                    </li>
+                    <?php if (FatApp::getConfig('CONF_ENABLE_REFERRER_MODULE', FatUtility::VAR_INT, 1)) { ?>
+                        <li class="menu__item <?php echo ($controller == 'buyer' && $action == 'shareearn') ? 'is-active' : ''; ?>">
+                            <div class="menu__item__inner">
+                                <a title="<?php echo Labels::getLabel("LBL_Share_and_Earn", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Buyer', 'shareEarn'); ?>">
+                                    <i class="icn shop">
+                                        <svg class="svg">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#share-earn">
+                                            </use>
+                                        </svg>
+                                    </i>
+                                    <span class="menu-item__title"><?php echo Labels::getLabel("LBL_Share_and_Earn", $siteLangId); ?></span>
+                                </a>
+                            </div>
+                        </li>
+                    <?php } ?>
+                    <li class="divider"></li>
                 <?php } ?>
                 <li class="menu__item">
-                    <div class="menu__item__inner"><span
-                            class="menu-head"><?php echo Labels::getLabel("LBL_General", $siteLangId); ?></span></div>
+                    <div class="menu__item__inner"><span class="menu-head"><?php echo Labels::getLabel("LBL_General", $siteLangId); ?></span></div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'account' && ($action == 'messages' || strtolower($action) == 'viewmessages')) ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'account' && ($action == 'messages' || strtolower($action) == 'viewmessages')) ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>">
+                        <a title="<?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'Messages'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#messages">
@@ -180,115 +151,96 @@
                             </i>
                             <span class="menu-item__title"><?php echo Labels::getLabel("LBL_Messages", $siteLangId); ?>
                                 <?php if ($todayUnreadMessageCount > 0) { ?>
-                                <span
-                                    class="msg-count"><?php echo ($todayUnreadMessageCount < 9) ? $todayUnreadMessageCount : '9+' ; ?></span>
+                                    <span class="msg-count"><?php echo ($todayUnreadMessageCount < 9) ? $todayUnreadMessageCount : '9+'; ?></span>
                                 <?php } ?></span>
                         </a>
                     </div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'account' && $action == 'credits') ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'account' && $action == 'credits') ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_My_Credits", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Account', 'credits');?>">
+                        <a title="<?php echo Labels::getLabel("LBL_My_Credits", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'credits'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#my-credits">
                                     </use>
                                 </svg>
                             </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel('LBL_My_Credits', $siteLangId);?></span>
+                            <span class="menu-item__title"><?php echo Labels::getLabel('LBL_My_Credits', $siteLangId); ?></span>
                         </a>
                     </div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'account' && $action == 'wishlist') ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'account' && $action == 'wishlist') ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <?php 
-                            $label = Labels::getLabel("LBL_FAVORITES", $siteLangId);
-                            if (0 < FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1)) {
-                                $label = Labels::getLabel("LBL_WISHLIST", $siteLangId);
-                            }
+                        <?php
+                        $label = Labels::getLabel("LBL_FAVORITES", $siteLangId);
+                        if (0 < FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1)) {
+                            $label = Labels::getLabel("LBL_WISHLIST", $siteLangId);
+                        }
                         ?>
-                        <a title="<?php echo $label; ?>"
-                            href="<?php echo UrlHelper::generateUrl('Account', 'wishlist');?>">
+                        <a title="<?php echo $label; ?>" href="<?php echo UrlHelper::generateUrl('Account', 'wishlist'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#favorites">
                                     </use>
                                 </svg>
                             </i>
-                            <span class="menu-item__title"><?php echo $label;?></span>
+                            <span class="menu-item__title"><?php echo $label; ?></span>
                         </a>
                     </div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'savedproductssearch' && $action == 'listing') ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'savedproductssearch' && $action == 'listing') ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_Saved_Searches", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('SavedProductsSearch', 'listing');?>">
+                        <a title="<?php echo Labels::getLabel("LBL_Saved_Searches", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('SavedProductsSearch', 'listing'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#saved-searches">
                                     </use>
                                 </svg>
                             </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel('LBL_Saved_Searches', $siteLangId);?></span>
+                            <span class="menu-item__title"><?php echo Labels::getLabel('LBL_Saved_Searches', $siteLangId); ?></span>
                         </a>
                     </div>
                 </li>
                 <li class="divider"></li>
                 <li class="menu__item">
-                    <div class="menu__item__inner"> <span
-                            class="menu-head"><?php echo Labels::getLabel("LBL_Profile", $siteLangId); ?></span></div>
+                    <div class="menu__item__inner"> <span class="menu-head"><?php echo Labels::getLabel("LBL_Profile", $siteLangId); ?></span></div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'account' && $action == 'profileinfo') ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'account' && $action == 'profileinfo') ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_Account_Settings", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo'); ?>">
+                        <a title="<?php echo Labels::getLabel("LBL_Account_Settings", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'ProfileInfo'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#account-settings">
                                     </use>
                                 </svg>
                             </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel("LBL_Account_Settings", $siteLangId); ?></span>
+                            <span class="menu-item__title"><?php echo Labels::getLabel("LBL_Account_Settings", $siteLangId); ?></span>
                         </a>
                     </div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'account' && $action == 'myaddresses') ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'account' && $action == 'myaddresses') ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Account', 'myAddresses'); ?>">
+                        <a title="<?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'myAddresses'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#manage-address">
                                     </use>
                                 </svg>
                             </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?></span>
+                            <span class="menu-item__title"><?php echo Labels::getLabel("LBL_Manage_Addresses", $siteLangId); ?></span>
                         </a>
                     </div>
                 </li>
-                <li
-                    class="menu__item <?php echo ($controller == 'account' && $action == 'changeemailpassword') ? 'is-active' : ''; ?>">
+                <li class="menu__item <?php echo ($controller == 'account' && $action == 'changeemailpassword') ? 'is-active' : ''; ?>">
                     <div class="menu__item__inner">
-                        <a title="<?php echo Labels::getLabel("LBL_UPDATE_CREDENTIALS", $siteLangId); ?>"
-                            href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword');?>">
+                        <a title="<?php echo Labels::getLabel("LBL_UPDATE_CREDENTIALS", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>">
                             <i class="icn shop">
                                 <svg class="svg">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-sidebar.svg#update-credentials">
                                     </use>
                                 </svg>
                             </i>
-                            <span
-                                class="menu-item__title"><?php echo Labels::getLabel('LBL_UPDATE_CREDENTIALS', $siteLangId);?></span>
+                            <span class="menu-item__title"><?php echo Labels::getLabel('LBL_UPDATE_CREDENTIALS', $siteLangId); ?></span>
                         </a>
                     </div>
                 </li>

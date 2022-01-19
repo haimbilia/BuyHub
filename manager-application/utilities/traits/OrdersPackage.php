@@ -196,10 +196,10 @@ trait OrdersPackage
     {
         $frm = new Form('frmPayment');
         $frm->addHiddenField('', 'opayment_order_id', $orderId);
-        $frm->addTextArea(Labels::getLabel('FRM_Comments', $this->siteLangId), 'opayment_comments', '')->requirements()->setRequired();
-        $frm->addRequiredField(Labels::getLabel('FRM_Payment_Method', $this->siteLangId), 'opayment_method');
-        $frm->addRequiredField(Labels::getLabel('FRM_Txn_ID', $this->siteLangId), 'opayment_gateway_txn_id');
-        $frm->addRequiredField(Labels::getLabel('FRM_Amount', $this->siteLangId), 'opayment_amount')->requirements()->setFloatPositive(true);
+        $frm->addTextArea(Labels::getLabel('FRM_COMMENTS', $this->siteLangId), 'opayment_comments', '')->requirements()->setRequired();
+        $frm->addRequiredField(Labels::getLabel('FRM_PAYMENT_METHOD', $this->siteLangId), 'opayment_method');
+        $frm->addRequiredField(Labels::getLabel('FRM_TXN_ID', $this->siteLangId), 'opayment_gateway_txn_id');
+        $frm->addRequiredField(Labels::getLabel('FRM_AMOUNT', $this->siteLangId), 'opayment_amount')->requirements()->setFloatPositive(true);
         return $frm;
     }
 
