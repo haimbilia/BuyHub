@@ -5905,422 +5905,423 @@ class SellerController extends SellerBaseController
     }
 
     /* Digital downloads*/
-    public function downloadsForm()
-    {
-        $this->userPrivilege->canEditProducts();
-
-        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
-
-        if (1 > $productId && 1 > $preqId) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
-        }
-
-        $requstedProd = Product::CATALOG_TYPE_PRIMARY;
-        $recordId = $productId;
-
-        if (0 < $preqId) {
-            $recordId = $preqId;
-            $requstedProd = Product::CATALOG_TYPE_REQUEST;
-        }
-
-        $ddpObj = new DigitalDownloadPrivilages();
-        $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false);
-
-        $frm = DigitalDownload::getDownloadForm($this->siteLangId);
-
-        if (0 < $preqId) {
-            $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-        } else {
-            $optionArr = Product::getProductOptions($productId, $this->siteLangId, true);
-        }
-
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
-
-        $fld = $frm->getField('option_comb_id');
-        if (1 > count($optionCombinations)) {
-            $frm->removeField($fld);
-        } else {
-            $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
-            $fld->options = $optionCombinations;
-        }
-
-        $showFldAttachWithExistingOrders = false;
-
-        if (Product::CATALOG_TYPE_PRIMARY == $requstedProd) {
-            $showFldAttachWithExistingOrders = true;
-
-            $fld = $frm->getField('attach_with_existing_orders');
-
-            $product = $ddpObj->getProduct($recordId);
-
-            if (!is_array($product) && 1 > count($product)) {
-                if (1 === $product['product_attachements_with_inventory']) {
-                    $frm->removeField($fld);
-                    $showFldAttachWithExistingOrders = false;
-                }
-            }
-        }
-
-        $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
-
-        $msg = '';
-        $frmData = [
-            'product_id' => $productId,
-            'preq_id' => $preqId
-        ];
-
-        if (1 <= $linkId) {
-            $linkDetail = DigitalDownloadSearch::getLinkDetail($linkId);
-
-            $frmData['download_type'] = applicationConstants::DIGITAL_DOWNLOAD_LINK;
-            if (!empty($linkDetail)) {
-                $frmData['dd_link_id'] = $linkId;
-                $frmData['dd_link_ref_id'] = $linkDetail['pddr_id'];
-                $frmData['option_comb_id'] = $linkDetail['pddr_options_code'];
-                $frmData['lang_id'] = $linkDetail['pdl_lang_id'];
-                $frmData['product_downloadable_link'] = $linkDetail['pdl_download_link'];
-                $frmData['product_preview_link'] = $linkDetail['pdl_preview_link'];
-                $fld = $frm->getField('attachment_link_btn');
-                $fld->value = Labels::getLabel('LBL_Update', $this->siteLangId);
-            } else {
-                $msg = 'Invalid Link. Please refresh to get latest list!!!';
-            }
-        }
-
-        $frm->fill($frmData);
-
-        $this->set('downloadFrm', $frm);
-        $this->set('canDo', $canDo);
-        $this->set('siteLangId', $this->siteLangId);
-        $this->set('msg', $msg);
-        $this->_template->render(false, false, 'seller/download-setup-frm.php');
-    }
-
-    public function setupDigitalDownloads()
-    {
-        $this->userPrivilege->canEditProducts();
-
-        $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-
-        if (1 > $prodId && 1 > $preqId && 1 > $selProdId) {
-            FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-        }
-
-        $requstedProd = Product::CATALOG_TYPE_PRIMARY;
-        $recordId = $prodId;
-
-        $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
-
-        if (0 < $selProdId) {
-            $requstedProd = Product::CATALOG_TYPE_INVENTORY;
-            $recordId = $selProdId;
-        } else {
-            if (0 < $preqId) {
-                $recordId = $preqId;
-                $requstedProd = Product::CATALOG_TYPE_REQUEST;
-            }
-        }
-
-        $ddpObj = new DigitalDownloadPrivilages();
-
-        if (Product::CATALOG_TYPE_INVENTORY == $requstedProd) {
-            $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, true);
-
-            if (false === $canDo) {
-                FatUtility::dieJsonError($ddpObj->getError());
-            }
-            $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_code'));
-            if (!is_array($selProdData) && 1 > count($selProdData)) {
-                Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-
-            if ($selProdData['selprod_user_id'] !== $this->userParentId) {
-                Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-            $selProdOption = explode('_', $selProdData['selprod_code']);
-            array_shift($selProdOption);
-            if (0 < count($selProdOption)) {
-                $optionComb = implode('_', $selProdOption);
-            } else {
-                $optionComb = '0';
-            }
-        } else {
-            $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false);
-
-            if (false === $canDo) {
-                Message::addErrorMessage($ddpObj->getError());
-                FatUtility::dieJsonError(Message::getHtml());
-            }
-        }
-
-        $ddObj = new DigitalDownload();
-
-        $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
-
-        $refId = $ddObj->getReferenceId($recordId, $optionComb, $requstedProd);
-
-        if (1 > $refId) {
-            if (!$ddObj->saveReference($recordId, $optionComb, $requstedProd)) {
-                FatUtility::dieJsonError($ddObj->getError());
-            }
-            $refId = $ddObj->getMainTableRecordId();
-        }
-
-        if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
-            if (true == $this->setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)) {
-                FatUtility::dieJsonSuccess(Message::getHtml());
-            }
-        } else {
-            if (true == $this->setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)) {
-                FatUtility::dieJsonSuccess(Message::getHtml());
-            }
-        }
-
-        FatUtility::dieJsonError(Message::getHtml());
-    }
-
-    private function setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)
-    {
-        if ((!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name']))
-            && (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name']))
-        ) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
-            return false;
-        }
-
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        $isPreview = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
-        $refFileId = FatApp::getPostedData('ref_file_id', FatUtility::VAR_INT, 0);
-
-        $mainFileId = 0;
-
-        if (1 == $isPreview) {
-            if (array_key_exists('downloadable_file', $_FILES)) {
-                unset($_FILES['downloadable_file']);
-            }
-            $mainFileId = $refFileId;
-        }
-
-        if (
-            isset($_FILES['downloadable_file']['tmp_name'])
-            && is_uploaded_file($_FILES['downloadable_file']['tmp_name'])
-        ) {
-            $mainFileId = $this->setupDigitalMainFile($ddObj, $refId, $langId);
-
-            if (1 > $mainFileId) {
-                Message::addErrorMessage($ddObj->getError());
-                return false;
-            }
-
-            $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
-
-            Message::addMessage(Labels::getLabel('MSG_Main_file_Uploaded_Successfully', $this->siteLangId));
-            if (1 === $attachWithExistingOrders && Product::CATALOG_TYPE_REQUEST != $requstedProd) {
-                $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
-                $ddObj->attachFileWithOrderedProducts($mainFileId, $recordId, $requstedProd, $langId, $optionComb);
-            }
-        }
-
-        if (
-            isset($_FILES['preview_file']['tmp_name'])
-            && is_uploaded_file($_FILES['preview_file']['tmp_name'])
-        ) {
-            if (1 > $this->setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId)) {
-                Message::addErrorMessage($ddObj->getError());
-                return false;
-            }
-            Message::addMessage(Labels::getLabel('MSG_Preview_Uploaded_Successfully', $this->siteLangId));
-        }
-
-        return true;
-    }
-
-    private function setupDigitalMainFile($ddObj, $refId, $langId)
-    {
-        $fileId = $ddObj->saveAttachment(
-            $_FILES['downloadable_file']['tmp_name'],
-            $_FILES['downloadable_file']['name'],
-            $refId,
-            0,
-            $langId
-        );
-        if (1 > $fileId) {
-            return 0;
-        }
-
-        return $fileId;
-    }
-
-    private function setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId = 0)
-    {
-        $fileId = $ddObj->saveAttachment(
-            $_FILES['preview_file']['tmp_name'],
-            $_FILES['preview_file']['name'],
-            $refId,
-            $mainFileId,
-            $langId,
-            true
-        );
-
-        if (1 > $fileId) {
-            return 0;
-        }
-
-        return $fileId;
-    }
-
-    private function setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)
-    {
-        $downloadLink = FatApp::getPostedData('product_downloadable_link', null, '');
-        $previewLink = FatApp::getPostedData('product_preview_link', null, '');
-
-        if ('' == $downloadLink && '' == $previewLink) {
-            Message::addErrorMessage(Labels::getLabel('MSG_Please_add_link', $this->siteLangId));
-            return false;
-        }
-
-        $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
-        $ddLinkId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
-        $ddRefId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
-
-        if (!$ddObj->saveLink($refId, $langId, $downloadLink, $previewLink, $ddLinkId)) {
-            Message::addMessage($ddObj->getError());
-            return false;
-        }
-
-        if (1 <= $ddLinkId) {
-            $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($ddRefId);
-            $totalAttachmentCount = DigitalDownloadSearch::getTotalAttachmentsCount($ddRefId);
-
-            if (1 > $totalLinksCount && 1 > $totalAttachmentCount) {
-                $ddObj->deleteReference($ddRefId);
-            }
-        }
-
-        $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
-
-        Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->siteLangId));
-        if (0 === $attachWithExistingOrders && '' == $downloadLink) {
-            return true;
-        }
-
-        $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
-        $ddObj->attachLinkWithOrderedProducts($downloadLink, $recordId, $requstedProd, $langId, $optionComb);
-
-        return true;
-    }
-
-    public function getDigitalDownloadLinks()
-    {
-        $this->userPrivilege->canViewProducts();
-
-        $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
-        $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
-
-        if (1 > $prodId && 1 > $preqId) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
-        }
-
-        $recordId  = $prodId;
-        $prodRefType = 0;
-
-        if (0 < $preqId) {
-            $recordId  = $preqId;
-            $prodRefType = 1;
-        }
-
-        $optionCombi = FatApp::getPostedData('option_comb', null, '0');
-        $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
-
-        /* DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId); */
-
-        $ddpObj = new DigitalDownloadPrivilages();
-        $canDo = $ddpObj->canEdit($recordId, $prodRefType, $this->userParentId, $this->siteLangId, true);
-        $this->set('canDo', $canDo);
-
-        $rows = DigitalDownloadSearch::getLinks($recordId, $prodRefType, $optionCombi, $langId);
-
-        $this->set('links', $rows);
-        $languages = Language::getAllNames();
-        $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
-        $this->set('languages', $languages);
-
-        if (0 < $preqId) {
-            $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-        } else {
-            $optionArr = Product::getProductOptions($prodId, $this->siteLangId, true);
-        }
-
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
-
-        $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
-
-        $this->set('options', $optionCombinations);
-        echo $this->_template->render(false, false, 'seller/digital-download-links-list.php', true);
-    }
-
-    public function getDigitalDownloadAttachments()
-    {
-        $this->userPrivilege->canViewProducts();
-        $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
-        $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
-        $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
-        $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
-
-        if (1 > $productId && 1 > $preqId) {
-            FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
-        }
-
-        $recordId  = $productId;
-        $prodRefType = 0;
-        $isProductRequest = false;
-
-        if (0 < $preqId) {
-            $isProductRequest = true;
-            $recordId = $preqId;
-            $prodRefType = Product::CATALOG_TYPE_REQUEST;
-        }
-
-        /* DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId); */
-
-        $ddpObj = new DigitalDownloadPrivilages();
-        $canDo = $ddpObj->canEdit($recordId, $prodRefType, $this->userParentId, $this->siteLangId);
-        $this->set('canDo', $canDo);
-
-        $optionComb = FatApp::getPostedData('option_comb', null, 0);
-        $langId = FatApp::getPostedData('langId', null, 0);
-
-        $attachments = DigitalDownloadSearch::getAttachments($recordId, $prodRefType, $optionComb, $langId);
-        $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
-
-        $this->set('attachments', $attachments);
-        $languages = Language::getAllNames();
-        $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
-        $this->set('languages', $languages);
-
-        if (0 < $preqId) {
-            $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
-        } else {
-            $optionArr = Product::getProductOptions($productId, $this->siteLangId, true);
-        }
-        $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
-        $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
-
-        $this->set('options', $optionCombinations);
-        $this->set('isProductRequest', $isProductRequest);
-        $this->set('recordId', $recordId);
-
-        echo $this->_template->render(false, false, 'seller/digital-download-attachments-list.php', true);
-    }
+    // public function downloadsForm()
+    // {
+    //     $this->userPrivilege->canEditProducts();
+
+    //     $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+    //     $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
+    //     $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
+
+    //     if (1 > $productId && 1 > $preqId) {
+    //         FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
+    //     }
+
+    //     $requstedProd = Product::CATALOG_TYPE_PRIMARY;
+    //     $recordId = $productId;
+
+    //     if (0 < $preqId) {
+    //         $recordId = $preqId;
+    //         $requstedProd = Product::CATALOG_TYPE_REQUEST;
+    //     }
+
+    //     $ddpObj = new DigitalDownloadPrivilages();
+    //     $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false);
+
+    //     $frm = DigitalDownload::getDownloadForm($this->siteLangId);
+
+    //     if (0 < $preqId) {
+    //         $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
+    //     } else {
+    //         $optionArr = Product::getProductOptions($productId, $this->siteLangId, true);
+    //     }
+
+    //     $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
+
+    //     $fld = $frm->getField('option_comb_id');
+    //     if (1 > count($optionCombinations)) {
+    //         $frm->removeField($fld);
+    //     } else {
+    //         $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
+    //         $fld->options = $optionCombinations;
+    //     }
+
+    //     $showFldAttachWithExistingOrders = false;
+
+    //     if (Product::CATALOG_TYPE_PRIMARY == $requstedProd) {
+    //         $showFldAttachWithExistingOrders = true;
+
+    //         $fld = $frm->getField('attach_with_existing_orders');
+
+    //         $product = $ddpObj->getProduct($recordId);
+
+    //         if (!is_array($product) && 1 > count($product)) {
+    //             if (1 === $product['product_attachements_with_inventory']) {
+    //                 $frm->removeField($fld);
+    //                 $showFldAttachWithExistingOrders = false;
+    //             }
+    //         }
+    //     }
+
+    //     $this->set('showFldAttachWithExistingOrders', $showFldAttachWithExistingOrders);
+
+    //     $msg = '';
+    //     $frmData = [
+    //         'product_id' => $productId,
+    //         'preq_id' => $preqId
+    //     ];
+
+    //     if (1 <= $linkId) {
+    //         $linkDetail = DigitalDownloadSearch::getLinkDetail($linkId);
+
+    //         $frmData['download_type'] = applicationConstants::DIGITAL_DOWNLOAD_LINK;
+    //         if (!empty($linkDetail)) {
+    //             $frmData['dd_link_id'] = $linkId;
+    //             $frmData['dd_link_ref_id'] = $linkDetail['pddr_id'];
+    //             $frmData['option_comb_id'] = $linkDetail['pddr_options_code'];
+    //             $frmData['lang_id'] = $linkDetail['pdl_lang_id'];
+    //             $frmData['product_downloadable_link'] = $linkDetail['pdl_download_link'];
+    //             $frmData['product_preview_link'] = $linkDetail['pdl_preview_link'];
+    //             $fld = $frm->getField('attachment_link_btn');
+    //             $fld->value = Labels::getLabel('LBL_Update', $this->siteLangId);
+    //         } else {
+    //             $msg = 'Invalid Link. Please refresh to get latest list!!!';
+    //         }
+    //     }
+
+    //     $frm->fill($frmData);
+
+    //     $this->set('downloadFrm', $frm);
+    //     $this->set('canDo', $canDo);
+    //     $this->set('siteLangId', $this->siteLangId);
+    //     $this->set('msg', $msg);
+    //     $this->_template->render(false, false, 'seller/download-setup-frm.php');
+    // }
+
+    // public function setupDigitalDownloads()
+    // {
+    //     $this->userPrivilege->canEditProducts();
+
+    //     $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+    //     $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
+
+    //     $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
+
+    //     if (1 > $prodId && 1 > $preqId && 1 > $selProdId) {
+    //         FatUtility::dieJsonError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+    //     }
+
+    //     $requstedProd = Product::CATALOG_TYPE_PRIMARY;
+    //     $recordId = $prodId;
+
+    //     $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
+
+    //     if (0 < $selProdId) {
+    //         $requstedProd = Product::CATALOG_TYPE_INVENTORY;
+    //         $recordId = $selProdId;
+    //     } else {
+    //         if (0 < $preqId) {
+    //             $recordId = $preqId;
+    //             $requstedProd = Product::CATALOG_TYPE_REQUEST;
+    //         }
+    //     }
+
+    //     $ddpObj = new DigitalDownloadPrivilages();
+
+    //     if (Product::CATALOG_TYPE_INVENTORY == $requstedProd) {
+    //         $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, true);
+
+    //         if (false === $canDo) {
+    //             FatUtility::dieJsonError($ddpObj->getError());
+    //         }
+    //         $selProdData = SellerProduct::getAttributesById($recordId, array('selprod_user_id', 'selprod_code'));
+    //         if (!is_array($selProdData) && 1 > count($selProdData)) {
+    //             Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+    //             FatUtility::dieJsonError(Message::getHtml());
+    //         }
+
+    //         if ($selProdData['selprod_user_id'] !== $this->userParentId) {
+    //             Message::addErrorMessage(Labels::getLabel("MSG_INVALID_ACCESS", $this->siteLangId));
+    //             FatUtility::dieJsonError(Message::getHtml());
+    //         }
+    //         $selProdOption = explode('_', $selProdData['selprod_code']);
+    //         array_shift($selProdOption);
+    //         if (0 < count($selProdOption)) {
+    //             $optionComb = implode('_', $selProdOption);
+    //         } else {
+    //             $optionComb = '0';
+    //         }
+    //     } else {
+    //         $canDo = $ddpObj->canEdit($recordId, $requstedProd, $this->userParentId, $this->siteLangId, false);
+
+    //         if (false === $canDo) {
+    //             Message::addErrorMessage($ddpObj->getError());
+    //             FatUtility::dieJsonError(Message::getHtml());
+    //         }
+    //     }
+
+    //     $ddObj = new DigitalDownload();
+
+    //     $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 1);
+
+    //     $refId = $ddObj->getReferenceId($recordId, $optionComb, $requstedProd);
+
+    //     if (1 > $refId) {
+    //         if (!$ddObj->saveReference($recordId, $optionComb, $requstedProd)) {
+    //             FatUtility::dieJsonError($ddObj->getError());
+    //         }
+    //         $refId = $ddObj->getMainTableRecordId();
+    //     }
+
+    //     if (applicationConstants::DIGITAL_DOWNLOAD_LINK == $type) {
+    //         if (true == $this->setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)) {
+    //             FatUtility::dieJsonSuccess(Message::getHtml());
+    //         }
+    //     } else {
+    //         if (true == $this->setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)) {
+    //             FatUtility::dieJsonSuccess(Message::getHtml());
+    //         }
+    //     }
+
+    //     FatUtility::dieJsonError(Message::getHtml());
+    // }
+
+    // private function setupDigitalFile($ddObj, $refId, $recordId, $requstedProd)
+    // {
+    //     if ((!isset($_FILES['downloadable_file']['tmp_name']) || !is_uploaded_file($_FILES['downloadable_file']['tmp_name']))
+    //         && (!isset($_FILES['preview_file']['tmp_name']) || !is_uploaded_file($_FILES['preview_file']['tmp_name']))
+    //     ) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Please_select_a_file', $this->siteLangId));
+    //         return false;
+    //     }
+
+    //     $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+    //     $isPreview = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
+    //     $refFileId = FatApp::getPostedData('ref_file_id', FatUtility::VAR_INT, 0);
+
+    //     $mainFileId = 0;
+
+    //     if (1 == $isPreview) {
+    //         if (array_key_exists('downloadable_file', $_FILES)) {
+    //             unset($_FILES['downloadable_file']);
+    //         }
+    //         $mainFileId = $refFileId;
+    //     }
+
+    //     if (
+    //         isset($_FILES['downloadable_file']['tmp_name'])
+    //         && is_uploaded_file($_FILES['downloadable_file']['tmp_name'])
+    //     ) {
+    //         $mainFileId = $this->setupDigitalMainFile($ddObj, $refId, $langId);
+
+    //         if (1 > $mainFileId) {
+    //             Message::addErrorMessage($ddObj->getError());
+    //             return false;
+    //         }
+
+    //         $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
+
+    //         Message::addMessage(Labels::getLabel('MSG_Main_file_Uploaded_Successfully', $this->siteLangId));
+    //         if (1 === $attachWithExistingOrders && Product::CATALOG_TYPE_REQUEST != $requstedProd) {
+    //             $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
+    //             $ddObj->attachFileWithOrderedProducts($mainFileId, $recordId, $requstedProd, $langId, $optionComb);
+    //         }
+    //     }
+
+    //     if (
+    //         isset($_FILES['preview_file']['tmp_name'])
+    //         && is_uploaded_file($_FILES['preview_file']['tmp_name'])
+    //     ) {
+    //         if (1 > $this->setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId)) {
+    //             Message::addErrorMessage($ddObj->getError());
+    //             return false;
+    //         }
+    //         Message::addMessage(Labels::getLabel('MSG_Preview_Uploaded_Successfully', $this->siteLangId));
+    //     }
+
+    //     return true;
+    // }
+
+    // private function setupDigitalMainFile($ddObj, $refId, $langId)
+    // {
+    //     $fileId = $ddObj->saveAttachment(
+    //         $_FILES['downloadable_file']['tmp_name'],
+    //         $_FILES['downloadable_file']['name'],
+    //         $refId,
+    //         0,
+    //         $langId
+    //     );
+    //     if (1 > $fileId) {
+    //         return 0;
+    //     }
+
+    //     return $fileId;
+    // }
+
+    // private function setupDigitalPreviewFile($ddObj, $refId, $langId, $mainFileId = 0)
+    // {
+    //     $fileId = $ddObj->saveAttachment(
+    //         $_FILES['preview_file']['tmp_name'],
+    //         $_FILES['preview_file']['name'],
+    //         $refId,
+    //         $mainFileId,
+    //         $langId,
+    //         true
+    //     );
+
+    //     if (1 > $fileId) {
+    //         return 0;
+    //     }
+
+    //     return $fileId;
+    // }
+
+    // private function setupDigitalLink($ddObj, $refId, $recordId, $requstedProd)
+    // {
+    //     $downloadLink = FatApp::getPostedData('product_downloadable_link', null, '');
+    //     $previewLink = FatApp::getPostedData('product_preview_link', null, '');
+
+    //     if ('' == $downloadLink && '' == $previewLink) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_Please_add_link', $this->siteLangId));
+    //         return false;
+    //     }
+
+    //     $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
+    //     $ddLinkId = FatApp::getPostedData('dd_link_id', FatUtility::VAR_INT, 0);
+    //     $ddRefId = FatApp::getPostedData('dd_link_ref_id', FatUtility::VAR_INT, 0);
+
+    //     if (!$ddObj->saveLink($refId, $langId, $downloadLink, $previewLink, $ddLinkId)) {
+    //         Message::addMessage($ddObj->getError());
+    //         return false;
+    //     }
+
+    //     if (1 <= $ddLinkId) {
+    //         $totalLinksCount = DigitalDownloadSearch::getTotalLinksCount($ddRefId);
+    //         $totalAttachmentCount = DigitalDownloadSearch::getTotalAttachmentsCount($ddRefId);
+
+    //         if (1 > $totalLinksCount && 1 > $totalAttachmentCount) {
+    //             $ddObj->deleteReference($ddRefId);
+    //         }
+    //     }
+
+    //     $attachWithExistingOrders = FatApp::getPostedData('attach_with_existing_orders', FatUtility::VAR_INT, 0);
+
+    //     Message::addMessage(Labels::getLabel('LBL_Links_added_successfully', $this->siteLangId));
+    //     if (0 === $attachWithExistingOrders && '' == $downloadLink) {
+    //         return true;
+    //     }
+
+    //     $optionComb = FatApp::getPostedData('option_comb_id', null, 0);
+    //     $ddObj->attachLinkWithOrderedProducts($downloadLink, $recordId, $requstedProd, $langId, $optionComb);
+
+    //     return true;
+    // }
+
+    // public function getDigitalDownloadLinks()
+    // {
+    //     $this->userPrivilege->canViewProducts();
+
+    //     $prodId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+    //     $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
+    //     $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
+    //     $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
+
+    //     if (1 > $prodId && 1 > $preqId) {
+    //         FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
+    //     }
+
+    //     $recordId  = $prodId;
+    //     $prodRefType = 0;
+
+    //     if (0 < $preqId) {
+    //         $recordId  = $preqId;
+    //         $prodRefType = 1;
+    //     }
+
+    //     $optionCombi = FatApp::getPostedData('option_comb', null, '0');
+    //     $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
+
+    //     /* DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId); */
+
+    //     $ddpObj = new DigitalDownloadPrivilages();
+    //     $canDo = $ddpObj->canEdit($recordId, $prodRefType, $this->userParentId, $this->siteLangId, true);
+    //     $this->set('canDo', $canDo);
+
+    //     $rows = DigitalDownloadSearch::getLinks($recordId, $prodRefType, $optionCombi, $langId);
+
+    //     $this->set('links', $rows);
+    //     $languages = Language::getAllNames();
+    //     $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
+    //     $this->set('languages', $languages);
+
+    //     if (0 < $preqId) {
+    //         $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
+    //     } else {
+    //         $optionArr = Product::getProductOptions($prodId, $this->siteLangId, true);
+    //     }
+
+    //     $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
+
+    //     $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
+
+    //     $this->set('options', $optionCombinations);
+    //     echo $this->_template->render(false, false, 'seller/digital-download-links-list.php', true);
+    // }
+
+    // public function getDigitalDownloadAttachments()
+    // {
+    //     $this->userPrivilege->canViewProducts();
+    //     $productId = FatApp::getPostedData('product_id', FatUtility::VAR_INT, 0);
+    //     $preqId = FatApp::getPostedData('preq_id', FatUtility::VAR_INT, 0);
+    //     $selProdId = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
+    //     $linkId = FatApp::getPostedData('link_id', FatUtility::VAR_INT, 0);
+    //     $type = FatApp::getPostedData('download_type', FatUtility::VAR_INT, 0);
+
+    //     if (1 > $productId && 1 > $preqId) {
+    //         FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId) . __LINE__);
+    //     }
+
+    //     $recordId  = $productId;
+    //     $prodRefType = 0;
+    //     $isProductRequest = false;
+
+    //     if (0 < $preqId) {
+    //         $isProductRequest = true;
+    //         $recordId = $preqId;
+    //         $prodRefType = Product::CATALOG_TYPE_REQUEST;
+    //     }
+
+    //     /* DigitalDownload::canView($recordId, $prodRefType, $this->userParentId, $this->siteLangId); */
+
+    //     $ddpObj = new DigitalDownloadPrivilages();
+    //     $canDo = $ddpObj->canEdit($recordId, $prodRefType, $this->userParentId, $this->siteLangId);
+    //     $this->set('canDo', $canDo);
+
+    //     $optionComb = FatApp::getPostedData('option_comb', null, 0);
+    //     $langId = FatApp::getPostedData('langId', null, 0);
+
+    //     $attachments = DigitalDownloadSearch::getAttachments($recordId, $prodRefType, $optionComb, $langId);
+    //     $attachments = DigitalDownloadSearch::processAttachmentsWithPreview($attachments);
+
+    //     $this->set('attachments', $attachments);
+    //     $languages = Language::getAllNames();
+    //     $languages = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $languages;
+    //     $this->set('languages', $languages);
+
+    //     if (0 < $preqId) {
+    //         $optionArr = ProductRequest::getProductReqOptions($preqId, $this->siteLangId, true);
+    //     } else {
+    //         $optionArr = Product::getProductOptions($productId, $this->siteLangId, true);
+    //     }
+    //     $optionCombinations = CommonHelper::combinationOfElementsOfArr($optionArr, 'optionValues', '_');
+    //     $optionCombinations = array('0' => Labels::getLabel('LBL_All', $this->siteLangId)) + $optionCombinations;
+
+    //     $this->set('options', $optionCombinations);
+    //     $this->set('isProductRequest', $isProductRequest);
+    //     $this->set('recordId', $recordId);
+
+    //     echo $this->_template->render(false, false, 'seller/digital-download-attachments-list.php', true);
+    // }
 
     public function deleteDigitalLink()
     {
@@ -6386,56 +6387,56 @@ class SellerController extends SellerBaseController
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->siteLangId));
     }
 
-    public function deleteDigitalFile()
-    {
-        $this->userPrivilege->canEditProducts();
-        $refId = FatApp::getPostedData('ref_id', FatUtility::VAR_INT, 0);
-        $aFileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
+    // public function deleteDigitalFile()
+    // {
+    //     $this->userPrivilege->canEditProducts();
+    //     $refId = FatApp::getPostedData('ref_id', FatUtility::VAR_INT, 0);
+    //     $aFileId = FatApp::getPostedData('afile_id', FatUtility::VAR_INT, 0);
 
-        if (1 > $refId || 1 > $aFileId) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+    //     if (1 > $refId || 1 > $aFileId) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+    //         FatUtility::dieJsonError(Message::getHtml());
+    //     }
 
-        $isPreviewFile = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
-        $delFullRow = FatApp::getPostedData('frow', FatUtility::VAR_INT, 0);
+    //     $isPreviewFile = FatApp::getPostedData('is_preview', FatUtility::VAR_INT, 0);
+    //     $delFullRow = FatApp::getPostedData('frow', FatUtility::VAR_INT, 0);
 
-        $reference = DigitalDownload::getAttributesById($refId);
+    //     $reference = DigitalDownload::getAttributesById($refId);
 
-        if (false == $reference) {
-            Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
-            FatUtility::dieJsonError(Message::getHtml());
-        }
+    //     if (false == $reference) {
+    //         Message::addErrorMessage(Labels::getLabel('MSG_INVALID_REQUEST', $this->siteLangId));
+    //         FatUtility::dieJsonError(Message::getHtml());
+    //     }
 
-        $validateAllowedWithInventory = false;
+    //     $validateAllowedWithInventory = false;
 
-        if (Product::CATALOG_TYPE_INVENTORY == $reference['pddr_type']) {
-            $validateAllowedWithInventory = true;
-        }
+    //     if (Product::CATALOG_TYPE_INVENTORY == $reference['pddr_type']) {
+    //         $validateAllowedWithInventory = true;
+    //     }
 
-        $ddpObj = new DigitalDownloadPrivilages();
-        $canDo = $ddpObj->canEdit(
-            $reference['pddr_record_id'],
-            $reference['pddr_type'],
-            $this->userParentId,
-            $this->siteLangId,
-            $validateAllowedWithInventory
-        );
+    //     $ddpObj = new DigitalDownloadPrivilages();
+    //     $canDo = $ddpObj->canEdit(
+    //         $reference['pddr_record_id'],
+    //         $reference['pddr_type'],
+    //         $this->userParentId,
+    //         $this->siteLangId,
+    //         $validateAllowedWithInventory
+    //     );
 
-        /* $canDelete = DigitalDownload::canDelete($reference['pddr_record_id'], $reference['pddr_type'], $this->userParentId, $this->siteLangId, $validateAllowedWithInventory, true); */
+    //     /* $canDelete = DigitalDownload::canDelete($reference['pddr_record_id'], $reference['pddr_type'], $this->userParentId, $this->siteLangId, $validateAllowedWithInventory, true); */
 
-        if (false == $canDo) {
-            FatUtility::dieJsonError($ddpObj->getError());
-        }
+    //     if (false == $canDo) {
+    //         FatUtility::dieJsonError($ddpObj->getError());
+    //     }
 
-        $digDownload = new DigitalDownload();
+    //     $digDownload = new DigitalDownload();
 
-        if (!$digDownload->deleteAttachment($aFileId, $refId, $isPreviewFile, $delFullRow)) {
-            FatUtility::dieJsonError($digDownload->getError());
-        }
+    //     if (!$digDownload->deleteAttachment($aFileId, $refId, $isPreviewFile, $delFullRow)) {
+    //         FatUtility::dieJsonError($digDownload->getError());
+    //     }
 
-        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->siteLangId));
-    }
+    //     FatUtility::dieJsonSuccess(Labels::getLabel('LBL_Removed_successfully', $this->siteLangId));
+    // }
     /* Digital downloads*/
 
     public function getShopDetail(int $autoComplteRequest = 0)
