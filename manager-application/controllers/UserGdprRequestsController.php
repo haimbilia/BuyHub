@@ -94,11 +94,7 @@ class UserGdprRequestsController extends ListingBaseController
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
          
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
+        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet())); 
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
