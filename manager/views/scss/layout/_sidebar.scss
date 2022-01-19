@@ -55,6 +55,7 @@ $space: 25px;
         }
     }
     &-menu {
+        margin-top: 2rem;
         width: $side-bar-size;
         flex: 1;
         overflow: hidden;
@@ -150,8 +151,12 @@ $space: 25px;
     .sidebar-dropdown-menu {
         .nav {
             padding: 0;
+
             display: flex;
             flex-direction: column;
+            .nav {
+                margin-#{$start-direction}: 10px;
+            }
             &_item {
                 border: none;
                 font-size: 0.8rem;
@@ -250,9 +255,9 @@ $space: 25px;
                     padding-#{$start-direction}: 45px;
                     &::after {
                         content: "";
-                        width: 6px;
-                        height: 6px;
-                        background: rgba(255, 255, 255, 0.9);
+                        width: 5px;
+                        height: 5px;
+                        background: currentColor;
                         display: block;
                         position: absolute;
                         #{$start-direction}: 28px;

@@ -50,7 +50,7 @@
             $label = $newRecordBtnAttrs['label'] ?? $label;
         }
     ?>
-        <a href="<?php echo $href; ?>" class="btn btn-icon btn-outline-brand btn-add" onclick="<?php echo $onclick; ?>" title="<?php echo $title; ?>" data-bs-toggle='tooltip' data-placement='top'>
+        <a href="<?php echo $href; ?>" class="btn btn-icon btn-outline-brand" onclick="<?php echo $onclick; ?>" title="<?php echo $title; ?>" data-bs-toggle='tooltip' data-placement='top'>
             <?php echo $label; ?>
         </a>
     <?php

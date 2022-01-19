@@ -91,7 +91,7 @@ include(CONF_THEME_PATH . '_partial/listing/no-record-found.php'); ?>
                                 'title' => Labels::getLabel('BTN_ADD_META_TAG', $siteLangId),
                                 'onclick' => "metaTagForm(0,'" . $metaType . "',0)",
                             ],
-                            'label' => '<svg class="svg" width="18" height="18">
+                            'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                             <use 
                                                 xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
                                             </use>

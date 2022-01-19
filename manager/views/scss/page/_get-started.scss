@@ -183,6 +183,7 @@
 
     &-main {
         .card-foot {
+            z-index: 1;
             background-color: $bg-white;
             position: sticky;
             bottom: 0;
@@ -195,5 +196,14 @@
     .rocket {
         margin: 0 auto;
         text-align: center;
+    }
+}
+
+.onboarding-top {
+    display: flex;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    .pagers {
+        margin-#{$start-direction}: auto;
     }
 }

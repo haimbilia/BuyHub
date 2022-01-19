@@ -98,7 +98,13 @@
         .svg {
             // width: 12px;
             // height: 12px;
+            //margin-#{$end-direction}: 6px;
+        }
+        &-start {
             margin-#{$end-direction}: 6px;
+        }
+        &-end {
+            margin-#{$start-direction}: 6px;
         }
     }
     //size

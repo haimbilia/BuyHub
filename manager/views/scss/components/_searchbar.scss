@@ -4,12 +4,23 @@
         margin-bottom: 2rem;
     }
     &-body {
+        max-height: 250px;
+        overflow-y: auto;
+
+        .menu-section {
+            padding: 0.5rem 0;
+        }
+
+        .menu .sidebar-dropdown-menu .nav_link {
+            padding: 6px 13px;
+            &:after {
+                #{$start-direction}: -6px;
+            }
+        }
     }
 }
 
 .quick-search-list {
-    max-height: 330px;
-    overflow-y: auto;
     font-size: 0.8rem;
     &-item {
         list-style: none;
